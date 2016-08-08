@@ -1,4 +1,4 @@
-﻿<?
+<?
 // Contributed to the Sandcastle Help File Builder project by Thomas Levesque
 
 class Ranking

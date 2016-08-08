@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" EnableViewState="False" %>
+<%@ Page Language="C#" EnableViewState="False" %>
 
 <script runat="server">
 //===============================================================================================================
