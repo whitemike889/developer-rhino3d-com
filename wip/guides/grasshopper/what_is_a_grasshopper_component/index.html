@@ -13,14 +13,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/grasshopper/what_is_a_grasshopper_component/" />
   <meta property="og:title" content="What is a Grasshopper Component?" />
-  <meta property="og:description" content="This guide has yet to be authored or ported." />
+  <meta property="og:description" content="This guide gives an overview of custom Grasshopper components." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="What is a Grasshopper Component?" />
-  <meta name="twitter:description" value="This guide has yet to be authored or ported." />
+  <meta name="twitter:description" value="This guide gives an overview of custom Grasshopper components." />
   
     
       <meta name="twitter:image" content="/wip/images/grasshopper_logo_unfurl.png" />
@@ -29,7 +29,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -260,6 +260,74 @@ $(document).ready(function()
           
 
           
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#rhino-plugin-architecture">Rhino Plugin Architecture</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#net-component-library">.NET Component Library</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#assembly-references">Assembly References</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related topics</a>
+
+                
+
+              </li>
+            
+
+
+          
         
 
         <!-- </ul>
@@ -285,7 +353,97 @@ $(document).ready(function()
 
           <h1 id="what-is-a-grasshopper-component">What is a Grasshopper Component?</h1>
 
-<p>This guide has yet to be authored or ported.</p>
+<p>This guide gives an overview of custom Grasshopper components.</p>
+
+<p>This guide also explains the hierarchy of all assemblies involved with the Grasshopper plugin.  This is important for component developers so they know which Assembly References they need to have in order to compile a Grasshopper Component Library.  It also provides some background information which is useful when communicating with other developers.</p>
+
+<h2 id="rhino-plugin-architecture">Rhino Plugin Architecture</h2>
+
+<p>Grasshopper is a .NET (<a href="/wip/guides/rhinocommon/what_is_rhinocommon/">RhinoCommon</a>) plugin for Rhino 5 for Windows and later (<a href="http://www.grasshopper3d.com/page/grasshopper-for-mac">a version for Rhino 5 for Mac is currently in beta</a>).  It was written using Microsoft Visual Studio Professional using both VB.NET and C# source compiled against the .NET Framework.  It is recommended, though not required, that you target the same framework when developing Grasshopper Component Libraries.</p>
+
+<p>Our aim is to keep Grasshopper dependencies as conservative as possible.  However, it is possible that we will switch to a higher version number of Rhino or .NET if this new version fixes crucial bugs or exposes useful functions.</p>
+
+<h2 id="net-component-library">.NET Component Library</h2>
+
+<p>The Grasshopper project type is <em>Class Library</em>, meaning it cannot be run as a stand-alone application.  <em>Grasshopper.dll</em> is loaded by a <a href="/wip/guides/general/what_is_a_rhino_plugin/">Rhino plugin</a> called <em>GrasshopperPlugin.rhp</em>.</p>
+
+<h2 id="assembly-references">Assembly References</h2>
+
+<p>As a Class Library, Grasshopper references namespaces in addition to <em>RhinoCommon.dll</em>, some of these are standard namespaces provided by the .NET Framework, others are 3rd-party assemblies and others still are written by McNeel developers but are shipped separately for technical reasons. Some of these assemblies need to be referenced by Component developers, while others can be safely ignored.  The following table lists all assemblies referenced by <em>Grasshopper.dll</em>:</p>
+
+<div class="table-responsive" align="center">
+<table class="table">
+  <thead>
+    <tr style="border-bottom:1pt solid black;">
+      <th>Assembly</th>
+      <th>Author</th>
+      <th>Purpose</th>
+      <th>Required</th>
+    </tr>
+  </thead>
+  <tbody class="table-striped index_table">
+  <tr>
+    <td><i><a href="/wip/guides/rhinocommon/what_is_rhinocommon/">RhinoCommon.dll</a></i></td>
+	  <td><a href="http://www.mcneel.com">McNeel</a></td>
+	  <td>Rhinoceros .NET SDK</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td><i>GH_IO.dll</i></td>
+    <td><a href="http://www.mcneel.com">McNeel</a></td>
+    <td>Grasshopper Input/Output library required to read and write Grasshopper files.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td><i>GH_Util.dll</i></td>
+    <td><a href="http://www.mcneel.com">McNeel</a></td>
+    <td>Grasshopper utility library containing some peripheral algorithms.</td>
+    <td>Optional</td>
+  </tr>
+  <tr>
+    <td><i>QWhale.*.dll</i></td>
+    <td><a href="http://www.qwhale.net/">Quantum Whale</a></td>
+    <td>Syntax highlighter functionality.  Contains a total of 5 dlls.</td>
+    <td>Optional</td>
+  </tr>
+  <tr>
+    <td><i><a href="https://msdn.microsoft.com/en-us/library/system(v=vs.110).aspx">System</a></i></td>
+    <td><a href="https://www.microsoft.com/net">Microsoft</a></td>
+    <td>Base .NET Namespace.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td><i><a href="https://msdn.microsoft.com/en-us/library/system.drawing(v=vs.110).aspx">System.Drawing</a></i></td>
+    <td><a href="https://www.microsoft.com/net">Microsoft</a></td>
+    <td>.NET namespace involved with drawing shapes and text.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td><i><a href="https://msdn.microsoft.com/en-us/library/system.windows.forms(v=vs.110).aspx">System.Windows.Forms</a></i></td>
+    <td><a href="https://www.microsoft.com/net">Microsoft</a></td>
+    <td>.NET namespace involved with dialogs and controls.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td><i><a href="https://msdn.microsoft.com/en-us/library/system.collections.generic(v=vs.110).aspx">System.Collections.Generic</a></i></td>
+    <td><a href="https://www.microsoft.com/net">Microsoft</a></td>
+    <td>.NET namespace containing useful list classes.</td>
+    <td>Yes</td>
+  </tr>
+ </tbody>
+ </table>
+ </div>
+
+<hr />
+
+<h2 id="related-topics">Related topics</h2>
+
+<ul>
+  <li><a href="/wip/guides/general/rhino_developer_prerequisites/">Developer Prerequities</a></li>
+  <li><a href="/wip/guides/general/what_is_a_rhino_plugin/">What is a Rhino Plugin?</a></li>
+  <li><a href="/wip/guides/rhinocommon/what_is_rhinocommon/">What is RhinoCommon?</a></li>
+  <li><a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component</a></li>
+</ul>
 
         </article>
 
@@ -307,7 +465,7 @@ $(document).ready(function()
       
         <div class="row">
           <div class="col-md-4">
-            <p class="text">Author: <a href="mailto:steve@mcneel.com">steve@mcneel.com</a></p>
+            <p class="text">Author: <a href="mailto:david@mcneel.com">david@mcneel.com</a></p>
           </div>
           <div class="col-md-4 text-center">
             <span class="icon  icon--github">
