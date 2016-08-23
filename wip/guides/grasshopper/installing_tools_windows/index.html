@@ -13,14 +13,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/grasshopper/installing_tools_windows/" />
   <meta property="og:title" content="Installing Tools (Windows)" />
-  <meta property="og:description" content="This guide has yet to be authored or ported." />
+  <meta property="og:description" content="This guide covers all the necessary tools required to author custom Grasshopper components on Windows." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Installing Tools (Windows)" />
-  <meta name="twitter:description" value="This guide has yet to be authored or ported." />
+  <meta name="twitter:description" value="This guide covers all the necessary tools required to author custom Grasshopper components on Windows." />
   
     
       <meta name="twitter:image" content="/wip/images/grasshopper_logo_unfurl.png" />
@@ -260,6 +260,91 @@ $(document).ready(function()
           
 
           
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#prerequisites">Prerequisites</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#install-visual-studio">Install Visual Studio</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#grasshopper-assembly">Grasshopper Assembly</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#next-steps">Next Steps</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#footnotes">Footnotes</a>
+
+                
+
+              </li>
+            
+
+
+          
         
 
         <!-- </ul>
@@ -285,17 +370,85 @@ $(document).ready(function()
 
           <h1 id="installing-tools-windows">Installing Tools (Windows)</h1>
 
-<p>This guide has yet to be authored or ported.</p>
+<p>This guide covers all the necessary tools required to author custom Grasshopper components on Windows.</p>
+
+<p>By the end of this guide, you should have all the tools installed necessary for authoring, building, and debugging custom Grasshopper components in Rhino for Windows.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>This guide presumes you have an:</p>
+
+<ul>
+  <li>A PC running Microsoft Windows 7 or later.</li>
+  <li><a href="https://discourse.mcneel.com/t/welcome-to-serengeti/9612">RhinoWIP for Windows</a> (current in development)</li>
+</ul>
+
+<hr />
+
+<h2 id="install-visual-studio">Install Visual Studio</h2>
+
+<p><a href="https://www.visualstudio.com/en-us/visual-studio-homepage-vs.aspx">Visual Studio</a> is Microsoft’s flagship development platform and Integrated Development Environment (IDE).  Visual Studio now comes in three major “streams”: Visual Studio Code<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>, Visual Studio Online<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup>, and Visual Studio “proper”<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup>.  In order to author custom Grasshopper components, you will need Visual Studio “proper” (Visual Studio Code and Visual Studio Online are not supported).</p>
+
+<p>At the time of this writing, Visual Studio 2015 “proper” comes in <a href="https://www.visualstudio.com/vs-2015-product-editions">three editions</a>: Community, Professional, and Enterprise.  Any of these editions will work. Additionally, <a href="https://www.visualstudio.com/products/visual-studio-express-vs.aspx">Visual Studio Express 2015 for Windows Desktop</a> will work with more limited debugging support<sup id="fnref:4"><a href="#fn:4" class="footnote">4</a></sup>. Other Express versions, such as Express for Windows, Express for Web or Team Foundation Server 2015 Express, will not work.</p>
+
+<p><em>NOTE</em>: Grasshopper components can be authored in Visual Studio 2010, 2012, 2013, and 2015 both in C# and VB, and included in Ultimate, Professional, Premium, C# Express, Vb Express and Windows Desktop Express (where available).  For the purposes of this guide, we will presume you are using Visual Studio 2015 Community Edition.</p>
+
+<h4 id="step-by-step">Step-by-Step</h4>
 
 <ol>
-  <li>Open <em>Visual Studio</em></li>
-  <li>From the <em>Tools</em> menu, click <em>Extensions and Updates</em></li>
-  <li>In the Extensions and Updates dialog box, click <em>Online</em></li>
-  <li>In the Search box in the upper right corner, type “Grasshopper” then press Enter</li>
-  <li>Download the <em>Grasshopper Assembly</em> for the version of Rhino you are targeting</li>
+  <li><strong><a href="https://www.visualstudio.com/vs-2015-product-editions">Visual Studio 2015 Community Edition</a></strong> is free from Microsoft for students, open-source contributors, and small teams. <a href="https://www.visualstudio.com/en-us/support/legal/mt171547">Details here</a>.  Click the <strong>Community</strong> button to download the installer.</li>
+  <li>Run the <strong>Visual Studio installer</strong> you downloaded from Microsoft, in this case <strong><em>vs_community.exe</em></strong>.</li>
+  <li>Follow the onscreen prompts to install Visual Studio.  It is recommended that you install the <strong>Typical</strong> installation.  Depending on your internet connection, this can take minutes or hours.  When successfully installed, click the <strong>Launch</strong> button.</li>
 </ol>
 
-<p>Also, <a href="http://s3.amazonaws.com/files.na.mcneel.com/grasshopper/1.0/docs/en/GrasshopperSDK.chm">Download the Help File</a> to learn more.</p>
+<hr />
+
+<h2 id="grasshopper-assembly">Grasshopper Assembly</h2>
+
+<p>The <a href="https://visualstudiogallery.msdn.microsoft.com/dc7014d0-c37f-4148-ba47-5d537f6c5f22">Grasshopper Assembly templates</a> contains wizards to get you started creating components quickly.</p>
+
+<h4 id="step-by-step-1">Step-by-Step</h4>
+
+<ol>
+  <li>Launch <strong>Visual Studio</strong>.</li>
+  <li>Navigate to <strong>Tools</strong> &gt; <strong>Extensions and Updates…</strong></li>
+  <li>In the left-hand sidebar, expand the <strong>Online</strong> section, then select the <strong>Visual Studio Gallery</strong> entry…
+<img src="/wip/images/installing_tools_windows_grasshopper_01.png" alt="Extensions and Updates" /></li>
+  <li>In the <strong>Search</strong> field, search for <em>Grasshopper</em>.  This filters the gallery list below.</li>
+  <li>Find <strong>Grasshopper Assembly for v6</strong> and select it.</li>
+  <li>Click the <strong>Download</strong> button.  The extension installation should begin.</li>
+  <li>You must <strong>Accept</strong> the license agreement by clicking on the <strong>Install</strong> button.</li>
+  <li>If the installation is successful, you will be redirected to this developer website and the extension should appear in your list of <strong>Installed</strong> extensions.</li>
+</ol>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p><strong>Congratulations!</strong>  You have the tools to build custom Grasshopper components for Grasshopper for Windows.  <strong>Now what?</strong></p>
+
+<p>Check out the <a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component (Windows)</a> guide for instructions building - your guessed it - your first component.</p>
+
+<hr />
+
+<h2 id="footnotes">Footnotes</h2>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Visual Studio Code is Microsoft’s cross-platform source code editor for Windows, Linux, and OS X.  At the time of this writing, Visual Studio code does not yet support the features required to author Grasshopper components <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Visual Studio Online is Microsoft’s online counterpart to the desktop edition of Visual Studio (referred to as Visual Studio “proper” above).  We have not tested using Visual Studio Online to debug Grasshopper components as having a copy of Rhino and Grasshopper running would prove logistically difficult. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>Visual Studio “proper” is the desktop version of Visual Studio…we are only attaching the “proper” epithet to distinguish it from the Visual Studio Code and Visual Studio Online.  In subsequent guides this will be referred to as simply “Visual Studio.” <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:4">
+      <p>Visual Studio Express 2015 for Windows <strong>Desktop</strong> (also named “Express for Desktop” on some pages) offers a development platform that has a less strict licensing agreement policy than the Community edition. Please refer to the EULA for complete details, available during installation. In this edition, debugging of Rhino and Grasshopper can be started, but the location of the Rhino executable (rhino.exe), usually available in the Project property page, in the Debug tab, cannot be changed in the UI. After Wizard completion, the location of the Rhino executable can only be edited in the XML of the resulting <strong>.csproj</strong> file, in the main folder of the solution. <a href="#fnref:4" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 
         </article>
 
