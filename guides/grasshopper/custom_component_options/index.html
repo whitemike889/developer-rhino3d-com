@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Grasshopper Data Types</title>
-  <meta name="description" content="Grasshopper Data Types">
+  <title>Custom Component Options</title>
+  <meta name="description" content="Custom Component Options">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/grasshopper/grasshopper_data_types/" />
-  <meta property="og:title" content="Grasshopper Data Types" />
-  <meta property="og:description" content="This guide covers the basic data types that Grasshopper deals with." />
+  <meta property="og:url" content="/guides/grasshopper/custom_component_options/" />
+  <meta property="og:title" content="Custom Component Options" />
+  <meta property="og:description" content="This guide has yet to be authored or ported." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Grasshopper Data Types" />
-  <meta name="twitter:description" value="This guide covers the basic data types that Grasshopper deals with." />
+  <meta name="twitter:title" value="Custom Component Options" />
+  <meta name="twitter:description" value="This guide has yet to be authored or ported." />
   
     
       <meta name="twitter:image" content="/images/grasshopper_logo_unfurl.png" />
@@ -51,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/guides/grasshopper/grasshopper_data_types/">
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/grasshopper/custom_component_options/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -228,79 +228,11 @@
       
       
       <li>
-        <a href="#grasshopper-data-types">Grasshopper Data Types</a>
+        <a href="#custom-component-options">Custom Component Options</a>
 
         <ul class="nav nav-stacked"> -->
           <!-- Find the h2 group and any h3 subgroups -->
           
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#overview">Overview</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#what-to-do-with-unknowns">What to do with unknowns?</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#goo">Goo</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#conversion-methods">Conversion Methods</a>
-
-                
-
-              </li>
-            
-
 
           
         
@@ -322,121 +254,20 @@
               
               <li><a href="/guides/#grasshopper">Grasshopper</a></li>
               
-              <li class="active">In Depth</li>
+              <li class="active">Advanced</li>
               
           </ol>
 
-          <h1 id="grasshopper-data-types">Grasshopper Data Types</h1>
+          <h1 id="custom-component-options">Custom Component Options</h1>
 
-<p>This guide covers the basic data types that Grasshopper deals with.</p>
+<p>This guide has yet to be authored or ported.</p>
 
-<h2 id="overview">Overview</h2>
-
-<p>Grasshopper is an application that deals with a lot of different types of data. These data types can come from 6 different sources and some of them will not be known when Grasshopper is written and compiled. The six potential sources are:</p>
-
-<ol>
-  <li>Primitive types such as <code class="highlighter-rouge">Booleans</code>, <code class="highlighter-rouge">Integers</code>, <code class="highlighter-rouge">Colors</code>, <code class="highlighter-rouge">Strings</code>, etc. Grasshopper uses these types itself a lot.</li>
-  <li>Other .NET Framework types such as <code class="highlighter-rouge">System.Drawing.PointF</code> or <code class="highlighter-rouge">System.Collections.Generic.HashSet&lt;T&gt;</code>. Grasshopper does not use these types to during component-to-component communication, but someone else might.</li>
-  <li>RhinoCommon types such as <code class="highlighter-rouge">Point3d</code>, <code class="highlighter-rouge">Circle</code>, <code class="highlighter-rouge">Plane</code>, <code class="highlighter-rouge">Brep</code>, <code class="highlighter-rouge">Curve</code> etc. Many of these are used natively, but certainly not all of them.</li>
-  <li>Types defined in Grasshopper itself.</li>
-  <li>Types defined in components for Grasshopper.</li>
-  <li>Types defined in VB/C#/Python scripts that run inside Grasshopper.</li>
-</ol>
-
-<h2 id="what-to-do-with-unknowns">What to do with unknowns?</h2>
-
-<p>Although clearly some of these are known to the developer during the time of writing, not all of them can be.  Yet Grasshopper still needs to be able to interpret and use types it may know nothing about. Some of the things Grasshopper needs to be able to do with data of any type are:</p>
-
-<ol>
-  <li>Convert it to text so tooltips and panels can be populated with <em>useful</em> descriptions of data.</li>
-  <li>Convert it to and from other types.</li>
-  <li>Duplicate data so we can change it without affecting the original.</li>
-  <li>Test data for validity.</li>
-  <li>Save types to <em>*.gh</em> files and load them back in. (note: this works especially poorly at the moment.)</li>
-  <li>Preview geometric types in the viewport.</li>
-  <li>Bake geometric types to the Rhino document.</li>
-  <li>Transform geometric types.</li>
-  <li>Calculate bounding boxes of geometric types.</li>
-  <li>Be able to store null states of each type.</li>
-</ol>
-
-<p>To overcome the problem of (A) needing to do so many things while (B) knowing nothing about the types in advance an interface is defined in the Grasshopper SDK and all data which is stored inside parameters must implement this interface.  This allows Grasshopper to do the things from the second list to all the types from the first list.</p>
-
-<h2 id="goo">Goo</h2>
-
-<p>The <code class="highlighter-rouge">IGH_Goo</code> interface is is usually nothing more than a wrapper around the actual data which provides a bunch of functionality for whatever it wraps. For example take the primitive <code class="highlighter-rouge">Boolean</code> (or <code class="highlighter-rouge">bool</code> in C#).  It’s a structure so it can never be null, and it can only exist in either a <em>true</em> or a <em>false</em> state.</p>
-
-<p>Grasshopper uses booleans a lot so it provides an <code class="highlighter-rouge">IGH_Goo</code> implementation for <code class="highlighter-rouge">Boolean</code>. This wrapper class tells Grasshopper that a boolean value can be converted into an integer (false -&gt; 0, true -&gt; 1), into a colour (false -&gt; black, true -&gt; white), into a string (false -&gt; “false”, true -&gt; “true”) and so on. The wrapper class also knows how to write and read boolean values to and from <em>*.gh</em> files, and because we’re now dealing with a wrapper class we can have null instances in a collection of boolean values.  The wrapper <em>doesn’t</em> tell Grasshopper how to preview or bake booleans, because booleans are not a geometric type of data.</p>
-
-<p>Because so many data types are not in any way geometric, there is a second interface called <code class="highlighter-rouge">IGH_GeometricGoo</code> which extends <code class="highlighter-rouge">IGH_Goo</code> with stuff like transforming, bounding-boxing etc.</p>
-
-<p><em>Almost always</em> component developers and scripters can ignore any of the <code class="highlighter-rouge">IGH_Goo</code> types, because they are mostly used for internal bookkeeping.  However sometimes a developer will either want to access the functionality that goo provides or they wish to inject a new, previously unknown type of data into a Grasshopper file. In these cases some knowledge of <code class="highlighter-rouge">IGH_Goo</code> and its derived interface and classes is required.</p>
-
-<h2 id="conversion-methods">Conversion Methods</h2>
-
-<p>IGH_Goo requires that the implementor provides three different conversion methods:</p>
-
-<ol>
-  <li><code class="highlighter-rouge">CastFrom</code></li>
-  <li><code class="highlighter-rouge">CastTo</code></li>
-  <li><code class="highlighter-rouge">ScriptVariable</code></li>
-</ol>
-
-<p>As an elucidation, imagine the following conversation going on between Grasshopper (G), which is trying to push data of type A in one parameter into another parameter which only accepts data of type B…</p>
-
-<p>G:</p>
-
-<blockquote>
-  <p>“Hmm, two parameters that both store different types have been connected with a wire. That means the user wants to transfer all data from left to right, but I can’t simply copy it because the parameter on the right only accepts instances of type B.</p>
-</blockquote>
-
-<blockquote>
-  <p>First let me check if A is a more derived type of B, in which case I can just ‘trick’ the parameter into accepting the original data.”</p>
-</blockquote>
-
-<blockquote>
-  <p>“Nope, A is not a special flavour of B, which means some conversion needs to happen first…   Hey! You there! Mr. A! I need to move you over to this other place but they don’t take kindly to the likes of you. Is there any way I can persuade you to turn yourself into something more B-like?”</p>
-</blockquote>
-
-<p>A:</p>
-
-<blockquote>
-  <p>“Oh sorry, I have never heard of this B-thing you mentioned before, afraid I can’t help you out here.”</p>
-</blockquote>
-
-<p>G:</p>
-
-<blockquote>
-  <p>“Never mind, I’ll ask over there. Oy, B-man! Any chance of you letting me in on the secret about how to take this A thing over there and turn it into a B thing?”</p>
-</blockquote>
-
-<p>B:</p>
-
-<blockquote>
-  <p>“Yeah I know how to do that, but you’ll lose some information in the process.”</p>
-</blockquote>
-
-<p>G:</p>
-
-<blockquote>
-  <p>“That’s all right, something’s better than nothing.”</p>
-</blockquote>
-
-<p>B:</p>
-
-<blockquote>
-  <p>“All right, here you go, a B-ified version of the A data which is the best I can do under these imperfect circumstances.”</p>
-</blockquote>
-
-<p>G:</p>
-
-<blockquote>
-  <p>“Thanks! I’ll put it into this data tree over here right away.”</p>
-</blockquote>
-
-<p>More succinctly, Grasshopper calls the <code class="highlighter-rouge">CastTo&lt;B&gt;</code> method on the instance of A, asking it if it knows how to convert itself into a B type.  If that fails, it’ll construct a new empty B instance and ask it using the <code class="highlighter-rouge">CastFrom&lt;A&gt;</code> method whether it knows how to interpret the A data and mimic it.  If both these methods fail then Grasshopper will put up an error and leave that slot blank.</p>
-
-<p>The <code class="highlighter-rouge">ScriptVariable</code> method allows data to protect itself from potentially ill-informed programmers.  Using this method, Grasshopper tells some data that it’s about to be handed over to a script (ie. a VB/C#/Python component) and whether it would like to maybe provide a different kind of data instead.  For example a <code class="highlighter-rouge">GH_Boolean</code> might assume that the scripter does’t really care for all that <code class="highlighter-rouge">IGH_Goo</code> malarkey and instead of pumping a <code class="highlighter-rouge">GH_Boolean</code> instance into a script just the value on the inside is provided.</p>
+<div class="bs-callout bs-callout-danger">
+  <h4>UNDER CONSTRUCTION</h4>
+  <p>This guide has yet to be ported to this site.  Please check back soon for updates.  
+  In the meantime, you can view the original documentation here:
+  <a href="http://s3.amazonaws.com/files.na.mcneel.com/grasshopper/1.0/docs/en/GrasshopperSDK.chm">http://s3.amazonaws.com/files.na.mcneel.com/grasshopper/1.0/docs/en/GrasshopperSDK.chm</a></p>
+</div>
 
         </article>
 
@@ -466,7 +297,7 @@
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/grasshopper/grasshopper_data_types.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/grasshopper/custom_component_options.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
