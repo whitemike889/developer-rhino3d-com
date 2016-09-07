@@ -13,14 +13,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/grasshopper/simple_component/" />
   <meta property="og:title" content="Simple Component" />
-  <meta property="og:description" content="This guide has yet to be authored or ported." />
+  <meta property="og:description" content="This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Simple Component" />
-  <meta name="twitter:description" value="This guide has yet to be authored or ported." />
+  <meta name="twitter:description" value="This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component." />
   
     
       <meta name="twitter:image" content="/wip/images/grasshopper_logo_unfurl.png" />
@@ -260,6 +260,125 @@ $(document).ready(function()
           
 
           
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#prerequisites">Prerequisites</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#kernelghcomponent">Kernel.GH_Component</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-component-constructor">The Component Constructor</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#component-guids">Component Guids</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#parameter-registration">Parameter Registration</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-solver-routine">The Solver Routine</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related Topics</a>
+
+                
+
+              </li>
+            
+
+
+          
         
 
         <!-- </ul>
@@ -285,14 +404,452 @@ $(document).ready(function()
 
           <h1 id="simple-component">Simple Component</h1>
 
-<p>This guide has yet to be authored or ported.</p>
+<p>This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component.</p>
 
-<div class="bs-callout bs-callout-danger">
-  <h4>UNDER CONSTRUCTION</h4>
-  <p>This guide has yet to be ported to this site.  Please check back soon for updates.  
-  In the meantime, you can view the original documentation here:
-  <a href="http://s3.amazonaws.com/files.na.mcneel.com/grasshopper/1.0/docs/en/GrasshopperSDK.chm">http://s3.amazonaws.com/files.na.mcneel.com/grasshopper/1.0/docs/en/GrasshopperSDK.chm</a></p>
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>This guide presumes you have all the necessary tools installed and have managed to debug a simple boilerplate component.  If you are not there yet, please read <a href="/wip/guides/grasshopper/installing_tools_windows/">Installing Tools (Windows)</a> and <a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component (Windows)</a></p>
+
+<p>This guide will skip over any complicated issues (such as mathematics, geometry and data handling) in order to reduce the totality of new concepts.  You will however need to have a good understanding of basic OOP concepts such as classes, types and inheritance.  If you do not understand these essentials, we recommend you start with <a href="/wip/guides/general/rhino_developer_prerequisites/#programming-knowledge">some other reading material first</a>.</p>
+
+<h2 id="kernelghcomponent">Kernel.GH_Component</h2>
+
+<p>The Grasshopper component wizards (in both Visual Studio and Xamarin Studio) include an empty Grasshopper component template.  For the moment, let’s ignore this and construct a simple component “from scratch.”  This guide presumes that you already have a component library setup or are continuing from in the <em>HelloGrasshopper</em> solution from the <a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component (Windows)</a> guide.</p>
+
+<p>Add an empty class to your solution, call it <em>MyFirstComponent</em>.  At this point a new file should be created (<em>MyFirstComponent</em>).  At this point a new file should be created with (something close to) the following content:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
+  <li><a href="#vb" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">MyFirstComponent</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Class MyFirstComponent
+
+End Class
+</code></pre>
+
 </div>
+
+<p>Since we’ll be using primarily types from the <code class="highlighter-rouge">Grasshopper.Kernel</code> namespace.  We’ll import this namespace so that we have easy access to all types contained within it (unless otherwise specified, all further types discussed in this topic belong to <code class="highlighter-rouge">Grasshopper.Kernel</code>).  In C#, we can also remove some unnecessary using statements while we’re at it:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
+  <li><a href="#vb1" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs1"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Grasshopper.Kernel</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">MyFirstComponent</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">Imports Grasshopper.Kernel
+Class MyFirstComponent
+
+End Class
+</code></pre>
+
+</div>
+
+<p>The idea is that this class will be loaded by Grasshopper whenever this component library is loaded, but in order for that to happen we must make sure that this class is “visible” from outside this project. I.e., we need to make the accessor “public”:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
+  <li><a href="#vb2" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs2"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Grasshopper.Kernel</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+  <span class="c1">// If a class is not public, it won't be visible
+</span>  <span class="c1">// from where Grasshopper is sitting.
+</span>  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyFirstComponent</span>
+  <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+
+End Class
+</code></pre>
+
+</div>
+
+<p>Now, we need to derive our <code class="highlighter-rouge">MyFirstComponent</code> class from the <code class="highlighter-rouge">GH_Component</code> base class defined inside Grasshopper.  <code class="highlighter-rouge">GH_Component</code> takes care of almost all the complicated actions and mannerisms that constitute a component.  It will handle data conversion, GUI, menus, file Input/Output, Error trapping and much, much more.  This allows us to focus only on the unique aspects of our component. In order to derive from <code class="highlighter-rouge">GH_Component</code>, add this to the class…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
+  <li><a href="#vb3" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs3"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Grasshopper.Kernel</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyFirstComponent</span> <span class="p">:</span> <span class="n">GH_Component</span>
+  <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+End Class
+</code></pre>
+
+</div>
+
+<p>Deriving (inheriting) from <code class="highlighter-rouge">GH_Component</code> requires you to implement a number of methods.  (Visual Studio can insert default implementations for all of these via the <em>Implement Abstract Class</em> menu option when right-clicking <code class="highlighter-rouge">GH_Component</code>.  In Xamarin Studio, you can right-click <code class="highlighter-rouge">GH_Component</code> and select <em>Refactoring</em> &gt; <em>Implement abstract members</em>.)  At this point, you should have the following…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs4" data-toggle="pill">C#</a></li>
+  <li><a href="#vb4" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs4"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Grasshopper.Kernel</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyFirstComponent</span> <span class="p">:</span> <span class="n">GH_Component</span>
+  <span class="p">{</span>
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">SolveInstance</span><span class="p">(</span><span class="n">IGH_DataAccess</span> <span class="n">DA</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">override</span> <span class="n">Guid</span> <span class="n">ComponentGuid</span>
+    <span class="p">{</span>
+      <span class="k">get</span> <span class="p">{</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span> <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb4"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+  Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
+    'Don't worry about this just yet!
+  End Sub
+
+  Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+    'We'll get to it soon enough.
+  End Sub
+
+  Protected Overrides Sub SolveInstance(ByVal DA As IGH_DataAccess)
+    'I know it all looks scary.
+  End Sub
+
+  Public Overrides ReadOnly Property ComponentGuid() As System.Guid
+    Get
+      'But we'll deal with it one item at a time.  
+    End Get
+  End Property
+End Class
+</code></pre>
+
+</div>
+
+<h2 id="the-component-constructor">The Component Constructor</h2>
+
+<p>As we’ve seen in the previous section, Visual Studio (or Xamarin Studio) can populate the <code class="highlighter-rouge">MyFirstComponent</code> class with a collection of properties and methods that we need to implement.  There is however another method that requires our attention that is missing.  This is the constructor.  The constructor is a special method inside each class which gets called when the class is instantiated (or “constructed”).  This can happen only once (we feeble humans can only be born once as well after all) and it necessarily happens before anything else is allowed to happen. The <code class="highlighter-rouge">GH_Component</code> base class has a constructor which is not empty, so we have to call that constructor from within our constructor and supply it with all the information it needs.  Add the following code near the top of the <code class="highlighter-rouge">MyFirstComponent</code> class…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs5" data-toggle="pill">C#</a></li>
+  <li><a href="#vb5" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs5"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Grasshopper.Kernel</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">HelloGrasshopper</span>
+<span class="p">{</span>
+  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyFirstComponent</span> <span class="p">:</span> <span class="n">GH_Component</span>
+  <span class="p">{</span>
+    <span class="k">public</span> <span class="nf">MyFirstComponent</span><span class="p">()</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="s">"MyFirst"</span><span class="p">,</span> <span class="s">"MFC"</span><span class="p">,</span> <span class="s">"My first component"</span><span class="p">,</span> <span class="s">"Extra"</span><span class="p">,</span> <span class="s">"Simple"</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">...</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb5"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+  Public Sub New()
+    MyBase.New("MyFirst", "MFC", "My first component", "Extra", "Simple")
+  End Sub
+
+  ...
+</code></pre>
+
+</div>
+
+<p>As you can see we need to supply a set of text constants, which are used to name and identify our component within the Grasshopper GUI.  The text fields are…</p>
+
+<ul>
+  <li><em>name</em> is the name of our component. The name is what appears on tooltips and panel dropdowns.</li>
+  <li><em>abbreviation</em> is the abbreviation of our component.  The abbreviation is what is written on the component once it appears on the canvas.</li>
+  <li><em>description</em> is a description of our component. The description is used on tooltips to provide users with a more detailed idea about what this component is for.</li>
+  <li><em>category</em> is the tab category for the component. The category equals the name of the tab onto which the component will appear. If a non-existing category is supplied, a new Tab will be added to the Grasshopper GUI.</li>
+</ul>
+
+<p><img src="/wip/images/simple_component_01.png" alt="Component labels" /></p>
+
+<h2 id="component-guids">Component Guids</h2>
+
+<p>Every type of object inside a Grasshopper document must have a <code class="highlighter-rouge">ComponentGuid</code> associated with it.  When a Grasshopper file (*<em>.gh</em> or *<em>.ghx</em>) is written these Guids are used as markers, so it becomes clear what portions of the file belong to which object.  When the file is read back in, that marker is compared against the list of all cached components and if a match is found the appropriate component is asked to deserialize itself from the appropriate file portion.  When no matching component can be found it is assumed that whoever wrote the file had access to certain components that are not available locally, and that portion of the file is dutifully skipped.</p>
+
+<p>So, long story short, we need to invent a Guid (Globally Unique IDentifier) that will positively and unerringly indicate <em>this</em> component.  You can generate new Guids using an <a href="https://www.guidgenerator.com/">Online Guid Generator</a> or Microsoft’s popular <em>guidgen.exe</em>.  <strong>Never</strong> re-use a Guid and <strong>never</strong> edit one by hand.  Always generate a proper one using an official tool.</p>
+
+<p>Once you have a new Guid standing by, modify the <code class="highlighter-rouge">ComponentGuid</code> property to return it:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs6" data-toggle="pill">C#</a></li>
+  <li><a href="#vb6" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs6"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">public</span> <span class="k">override</span> <span class="n">Guid</span> <span class="n">ComponentGuid</span>
+<span class="p">{</span>
+  <span class="c1">// Don't copy this GUID, make a new one
+</span>  <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">Guid</span><span class="p">(</span><span class="s">"419c3a3a-cc48-4717-8cef-5f5647a5ecfc"</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb6"><code class="language-vbnet">...
+Public Overrides ReadOnly Property ComponentGuid() As System.Guid
+  Get
+    'Don't copy this GUID, make a new one
+    Return New Guid("419c3a3a-cc48-4717-8cef-5f5647a5ecfc")  
+  End Get
+End Property
+...
+</code></pre>
+
+</div>
+
+<h2 id="parameter-registration">Parameter Registration</h2>
+
+<p>Components have unique input and output parameters which are most often fixed.  We are ignoring those rare cases where a component either has no inputs or no outputs, or where there is a variable number of parameters.  There are two methods that allow you to define (or “register”) these parameters.  These routines are called from within the base class constructor and they are only called once.  Let’s have a look at the default implementation again:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs7" data-toggle="pill">C#</a></li>
+  <li><a href="#vb7" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs7"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb7"><code class="language-vbnet">...
+Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
+
+End Sub
+
+Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>Although it would technically be possible to manually register parameters, we highly recommend you use the methods on <code class="highlighter-rouge">pManager</code>.  <code class="highlighter-rouge">pManager</code> has methods for adding all the basic parameter types and it often even allows you to specify default values.</p>
+
+<p>In this example we’ll only create two parameters (one input, one output) and they will both be of type <code class="highlighter-rouge">String</code>…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs8" data-toggle="pill">C#</a></li>
+  <li><a href="#vb8" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs8"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddTextParameter</span><span class="p">(</span><span class="s">"String"</span><span class="p">,</span> <span class="s">"S"</span><span class="p">,</span> <span class="s">"String to reverse"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddTextParameter</span><span class="p">(</span><span class="s">"Reverse"</span><span class="p">,</span> <span class="s">"R"</span><span class="p">,</span> <span class="s">"Reversed string"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb8"><code class="language-vbnet">...
+Protected Overrides Sub RegisterInputParams(ByVal pManager As Grasshopper.Kernel.GH_Component.GH_InputParamManager)
+  pManager.AddTextParameter("String", "S", "String to reverse")
+End Sub
+
+Protected Overrides Sub RegisterOutputParams(ByVal pManager As Grasshopper.Kernel.GH_Component.GH_OutputParamManager)
+  pManager.AddTextParameter("Reverse", "R", "Reversed string")
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>When we compile this project (assuming it has been setup correctly), the component will already be available on the Grasshopper tabs and it can be placed onto the canvas:</p>
+
+<p><img src="/images/simple_component_02.png" alt="Sanity Check" /></p>
+
+<h2 id="the-solver-routine">The Solver Routine</h2>
+
+<p>Our new component sure looks perky and expensive, but it doesn’t do anything yet.  We still need to write the contents of the <code class="highlighter-rouge">SolveInstance()</code> subroutine, which is where all the action takes place.  The <code class="highlighter-rouge">SolveInstance()</code> method is called upon whenever the component needs to handle input data.  In this particular example, if we plug a list of twelve strings into the <code class="highlighter-rouge">[S]</code> parameter, <code class="highlighter-rouge">SolveInstance()</code> will be called twelve times.</p>
+
+<p>As you may already have guessed, the component we’re writing will reverse a given textual string from <code class="highlighter-rouge">[S]</code> and output the result to <code class="highlighter-rouge">[R]</code>. Since we’re operating on individual items of data (the default behaviour), all we need to do inside the <code class="highlighter-rouge">SolveInstance()</code> function is retrieve the current String from <code class="highlighter-rouge">[S]</code>, reverse it and assign it to <code class="highlighter-rouge">[R]</code>.  Now, String reversal is not a function that is directly available in the framework <code class="highlighter-rouge">String</code> type, so we need to actually do some thinking:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs9" data-toggle="pill">C#</a></li>
+  <li><a href="#vb9" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs9"><pre class="highlight"><code><span class="p">...</span>
+<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">SolveInstance</span><span class="p">(</span><span class="n">IGH_DataAccess</span> <span class="n">DA</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// Declare a variable for the input String
+</span>  <span class="kt">string</span> <span class="n">data</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+
+  <span class="c1">// Use the DA object to retrieve the data inside the first input parameter.
+</span>  <span class="c1">// If the retieval fails (for example if there is no data) we need to abort.
+</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">ref</span> <span class="n">data</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="c1">// If the retrieved data is Nothing, we need to abort.
+</span>  <span class="c1">// We're also going to abort on a zero-length String.
+</span>  <span class="k">if</span> <span class="p">(</span><span class="n">data</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+
+  <span class="c1">// Convert the String to a character array.
+</span>  <span class="kt">char</span><span class="p">[]</span> <span class="n">chars</span> <span class="p">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">ToCharArray</span><span class="p">();</span>
+
+  <span class="c1">// Reverse the array of character.
+</span>  <span class="n">System</span><span class="p">.</span><span class="n">Array</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">(</span><span class="n">chars</span><span class="p">);</span>
+
+  <span class="c1">// Use the DA object to assign a new String to the first output parameter.
+</span>  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">new</span> <span class="kt">string</span><span class="p">(</span><span class="n">chars</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</code></pre>
+  </div>
+
+  <pre class="tab-pane fade in" id="vb9"><code class="language-vbnet">...
+Protected Overrides Sub SolveInstance(ByVal DA As Grasshopper.Kernel.IGH_DataAccess)
+  'Declare a variable for the input String
+  Dim data As String = Nothing
+
+  'Use the DA object to retrieve the data inside the first input parameter.
+  'If the retieval fails (for example if there is no data) we need to abort.
+  If (Not DA.GetData(0, data)) Then Return
+
+  'If the retrieved data is Nothing, we need to abort.
+  'We're also going to abort on a zero-length String.
+  If (data Is Nothing) Then Return
+  If (data.Length = 0) Then Return
+
+  'Convert the String to a character array.
+  Dim chars As Char() = data.ToCharArray()
+
+  'Reverse the array of character.
+  Array.Reverse(chars)
+
+  'Use the DA object to assign a new String to the first output parameter.
+  DA.SetData(0, New String(chars))
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>Build, run, and …</p>
+
+<p><img src="/images/simple_component_03.png" alt="That was easy" /></p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/wip/guides/grasshopper/what_is_a_grasshopper_component">What is a Grasshopper Component?</a></li>
+  <li><a href="/wip/guides/grasshopper/installing_tools_windows/">Installing Tools (Windows)</a></li>
+  <li><a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component (Windows)</a></li>
+</ul>
 
         </article>
 
