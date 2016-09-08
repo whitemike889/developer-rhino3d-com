@@ -367,85 +367,81 @@ $(document).ready(function()
 
 <h2 id="implementation">Implementation</h2>
 
-<p>In the above image, the conduit overrode two event handlers; <code class="highlighter-rouge">CalculateBoundingBox</code> and <code class="highlighter-rouge">PostDrawObjects</code>. In RhinoCommon this conduit would look like:</p>
+<p>In the above image, the conduit overrode two event handlers; <code>CalculateBoundingBox</code> and <code>PostDrawObjects</code>. In RhinoCommon this conduit would look like:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="c1">// ..
-</span>  <span class="p">}</span>
+<pre><code class="language-cs">class MyConduit : Rhino.Display.DisplayConduit
+{
+  protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+  {
+    base.CalculateBoundingBox(e);
+    // ..
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PostDrawObjects</span><span class="p">(</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="c1">// ..
-</span>  <span class="p">}</span>
-<span class="p">}</span>
+  protected override void PostDrawObjects(DrawEventArgs e)
+  {
+    base.PreDrawObjects(e);
+    // ..
+  }
+}
 </code></pre>
-</div>
 
 <p>By default, conduits are not enabled but it is easily done by setting the Enabled property of the DisplayConduit to true:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="kt">var</span> <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MyConduit</span><span class="p">();</span>
-<span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+<pre><code class="language-cs">var conduit = new MyConduit();
+conduit.Enabled = true;
 </code></pre>
-</div>
 
-<p>Once our conduit is constructed and enabled, the overriden methods will be called whenever the Rhino pipeline raises the event for which our overridden method is registered.  In our case, this method will always be called once with the <code class="highlighter-rouge">CalculateBoundingBox</code> and the <code class="highlighter-rouge">PostDrawObjects</code> events have been raised (the events have the same name as the overridden methods).  Here’s a simple example:</p>
+<p>Once our conduit is constructed and enabled, the overriden methods will be called whenever the Rhino pipeline raises the event for which our overridden method is registered.  In our case, this method will always be called once with the <code>CalculateBoundingBox</code> and the <code>PostDrawObjects</code> events have been raised (the events have the same name as the overridden methods).  Here’s a simple example:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">.</span><span class="nf">Union</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
-  <span class="p">}</span>
+<pre><code class="language-cs">class MyConduit : Rhino.Display.DisplayConduit
+{
+  protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+  {
+    base.CalculateBoundingBox(e);
+    e.BoundingBox.Union(new Point3d(0,0,0);
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  protected override void PreDrawObjects(DrawEventArgs e)
+  {
+    base.PreDrawObjects(e);
+    e.Display.DrawPoint(new Point3d(0,0,0);
+  }
+}
 </code></pre>
-</div>
 
-<p>The code above simply draws a single point at the world origin. Since a point is 3D geometry, it is subject to z-depth clipping. This means that if the point resides outside the z-buffer region, it will not be visible (it will get <em>clipped</em>). By default, the clipping planes are set up to encompass the bounding box of the entire Rhino model.  If you are drawing stuff which is potentially outside this box, you should override <code class="highlighter-rouge">CalculateBoundingBox</code> to make sure your objects are not clipped.</p>
+<p>The code above simply draws a single point at the world origin. Since a point is 3D geometry, it is subject to z-depth clipping. This means that if the point resides outside the z-buffer region, it will not be visible (it will get <em>clipped</em>). By default, the clipping planes are set up to encompass the bounding box of the entire Rhino model.  If you are drawing stuff which is potentially outside this box, you should override <code>CalculateBoundingBox</code> to make sure your objects are not clipped.</p>
 
 <p>Let’s take a look at a more complex drawing routine:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">base</span><span class="p">.</span><span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-   <span class="n">e</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">.</span><span class="nf">Union</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">().</span><span class="n">Origin</span><span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cs">protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+{
+   base.CalculateBoundingBox(e);
+   e.BoundingBox.Union(e.Display.Viewport.ConstructionPlane().Origin);
+}
 
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">base</span><span class="p">.</span><span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+protected override void PreDrawObjects(DrawEventArgs e)
+{
+  base.PreDrawObjects(e);
 
-  <span class="kt">var</span> <span class="n">cPlane</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-  <span class="kt">var</span> <span class="n">xColor</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridXAxisLineColor</span><span class="p">;</span>
-  <span class="kt">var</span> <span class="n">yColor</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridYAxisLineColor</span><span class="p">;</span>
-  <span class="kt">var</span> <span class="n">zColor</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridZAxisLineColor</span><span class="p">;</span>
+  var cPlane = e.Display.Viewport.ConstructionPlane();
+  var xColor = Rhino.ApplicationSettings.AppearanceSettings.GridXAxisLineColor;
+  var yColor = Rhino.ApplicationSettings.AppearanceSettings.GridYAxisLineColor;
+  var zColor = Rhino.ApplicationSettings.AppearanceSettings.GridZAxisLineColor;
 
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">EnableDepthWriting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">EnableDepthTesting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+  e.Display.EnableDepthWriting(false);
+  e.Display.EnableDepthTesting(false);
 
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">XAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">xColor</span><span class="p">);</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">YAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">yColor</span><span class="p">);</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">cPlane</span><span class="p">.</span><span class="n">ZAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">zColor</span><span class="p">);</span>
+  e.Display.DrawPoint(cPlane.Origin, System.Drawing.Color.White);
+  e.Display.DrawArrow(new Line(cPlane.Origin, new Vector3d(cPlane.XAxis) * 10.0), xColor);
+  e.Display.DrawArrow(new Line(cPlane.Origin, new Vector3d(cPlane.YAxis) * 10.0), yColor);
+  e.Display.DrawArrow(new Line(cPlane.Origin, new Vector3d(cPlane.ZAxis) * 10.0), zColor);
 
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">EnableDepthWriting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-  <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">EnableDepthTesting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-<span class="p">}</span>
+  e.Display.EnableDepthWriting(false);
+  e.Display.EnableDepthTesting(false);
+}
 </code></pre>
-</div>
 
-<p>This piece of code draws a colored, c-plane axis system on top of all objects.  Because we disable DepthWriting and Testing before drawing my points and arrows, my objects are not obscured by the existing geometry (which was drawn in a channel previous to <code class="highlighter-rouge">PostDrawObjects</code>):</p>
+<p>This piece of code draws a colored, c-plane axis system on top of all objects.  Because we disable DepthWriting and Testing before drawing my points and arrows, my objects are not obscured by the existing geometry (which was drawn in a channel previous to <code>PostDrawObjects</code>):</p>
 
 <p><img src="/wip/images/display_conduits_03.png" alt="Resulting Frame" /></p>
 

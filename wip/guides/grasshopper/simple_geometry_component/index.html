@@ -380,7 +380,7 @@ $(document).ready(function()
 
 <p>We will not be dealing with any of the basics of component development.  Please make sure you have read the <a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component</a>, <a href="/wip/guides/grasshopper/simple_component">Simple Component</a>, and <a href="/wip/guides/grasshopper/simple_mathematics_component">Simple Mathematics Component</a> guides before starting this one.</p>
 
-<p>Before you start, create a new class that derives from <code class="highlighter-rouge">Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/wip/guides/grasshopper/simple_component">Simple Component</a> guide.</p>
+<p>Before you start, create a new class that derives from <code>Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/wip/guides/grasshopper/simple_component">Simple Component</a> guide.</p>
 
 <h2 id="input-parameters">Input Parameters</h2>
 
@@ -393,15 +393,14 @@ $(document).ready(function()
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddCircleParameter</span><span class="p">(</span><span class="s">"Circle"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">,</span> <span class="s">"The circle to slice"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddLineParameter</span><span class="p">(</span><span class="s">"Line"</span><span class="p">,</span> <span class="s">"L"</span><span class="p">,</span> <span class="s">"Slicing line"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">...</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">...
+protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+{
+  pManager.AddCircleParameter("Circle", "C", "The circle to slice", GH_ParamAccess.item);
+  pManager.AddLineParameter("Line", "L", "Slicing line", GH_ParamAccess.item);
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">...
 Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
@@ -413,9 +412,9 @@ End Sub
 
 </div>
 
-<p>The first parameter is of type <code class="highlighter-rouge">Param_Circle</code> and the data it contains will consist solely of <code class="highlighter-rouge">GH_Circle</code>.  <code class="highlighter-rouge">GH_Circle</code> is a class that wraps the <code class="highlighter-rouge">Rhino.Geometry.Circle</code> structure.  It provides methods that allow Grasshopper to incorporate RhinoCommon circles into the default GUI.  These methods include Archiving, Previewing, Baking and Casting (Converting) functions.  However, when accessing data inside a <code class="highlighter-rouge">Param_Circle</code> parameter, you are not limited to the <code class="highlighter-rouge">GH_Circle</code> type, as we shall see.</p>
+<p>The first parameter is of type <code>Param_Circle</code> and the data it contains will consist solely of <code>GH_Circle</code>.  <code>GH_Circle</code> is a class that wraps the <code>Rhino.Geometry.Circle</code> structure.  It provides methods that allow Grasshopper to incorporate RhinoCommon circles into the default GUI.  These methods include Archiving, Previewing, Baking and Casting (Converting) functions.  However, when accessing data inside a <code>Param_Circle</code> parameter, you are not limited to the <code>GH_Circle</code> type, as we shall see.</p>
 
-<p>The second parameter is of type <code class="highlighter-rouge">Param_Line</code> and it works very similar to the <code class="highlighter-rouge">Param_Circle</code> type discussed above.</p>
+<p>The second parameter is of type <code>Param_Line</code> and it works very similar to the <code>Param_Circle</code> type discussed above.</p>
 
 <h2 id="output-parameters">Output Parameters</h2>
 
@@ -428,15 +427,14 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs1"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddArcParameter</span><span class="p">(</span><span class="s">"Arc A"</span><span class="p">,</span> <span class="s">"A"</span><span class="p">,</span> <span class="s">"First Split result."</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddArcParameter</span><span class="p">(</span><span class="s">"Arc B"</span><span class="p">,</span> <span class="s">"B"</span><span class="p">,</span> <span class="s">"Second Split result."</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">...</span>
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">...
+protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+{
+  pManager.AddArcParameter("Arc A", "A", "First Split result.", GH_ParamAccess.item);
+  pManager.AddArcParameter("Arc B", "B", "Second Split result.", GH_ParamAccess.item);
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">...
 Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
@@ -450,7 +448,7 @@ End Sub
 
 <h2 id="solve-instance">Solve Instance</h2>
 
-<p>The <code class="highlighter-rouge">SolveInstance()</code> implementation for this component is responsible for the following steps:</p>
+<p>The <code>SolveInstance()</code> implementation for this component is responsible for the following steps:</p>
 
 <ol>
   <li>Declare placeholder variables for the input data.</li>
@@ -473,62 +471,61 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs2"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">SolveInstance</span><span class="p">(</span><span class="n">IGH_DataAccess</span> <span class="n">DA</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// 1. Declare placeholder variables and assign initial invalid data.
-</span>  <span class="c1">//    This way, if the input parameters fail to supply valid data, we know when to abort.
-</span>  <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Circle</span> <span class="n">circle</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Circle</span><span class="p">.</span><span class="n">Unset</span><span class="p">;</span>
-  <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Line</span> <span class="n">line</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Line</span><span class="p">.</span><span class="n">Unset</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">...
+protected override void SolveInstance(IGH_DataAccess DA)
+{
+  // 1. Declare placeholder variables and assign initial invalid data.
+  //    This way, if the input parameters fail to supply valid data, we know when to abort.
+  Rhino.Geometry.Circle circle = Rhino.Geometry.Circle.Unset;
+  Rhino.Geometry.Line line = Rhino.Geometry.Line.Unset;
 
-  <span class="c1">// 2. Retrieve input data.
-</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">ref</span> <span class="n">circle</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="k">ref</span> <span class="n">line</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  // 2. Retrieve input data.
+  if (!DA.GetData(0, ref circle)) { return; }
+  if (!DA.GetData(1, ref line)) { return; }
 
-  <span class="c1">// 3. Abort on invalid inputs.
-</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">circle</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(!</span><span class="n">line</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  // 3. Abort on invalid inputs.
+  if (!circle.IsValid) { return; }
+  if (!line.IsValid) { return; }
 
-  <span class="c1">// 4. Project line segment onto circle plane.
-</span>  <span class="n">line</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">PlanarProjection</span><span class="p">(</span><span class="n">circle</span><span class="p">.</span><span class="n">Plane</span><span class="p">));</span>
+  // 4. Project line segment onto circle plane.
+  line.Transform(Rhino.Geometry.Transform.PlanarProjection(circle.Plane));
 
-  <span class="c1">// 5. Test projected segment for validity.
-</span>  <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">Length</span> <span class="p">&lt;</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoMath</span><span class="p">.</span><span class="n">ZeroTolerance</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="nf">AddRuntimeMessage</span><span class="p">(</span><span class="n">GH_RuntimeMessageLevel</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="s">"Line could not be projected onto the Circle plane"</span><span class="p">);</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
+  // 5. Test projected segment for validity.
+  if (line.Length &lt; Rhino.RhinoMath.ZeroTolerance)
+  {
+    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Line could not be projected onto the Circle plane");
+    return;
+  }
 
-  <span class="c1">// 6. Solve intersections and 7. Abort if there are less than two intersections.
-</span>  <span class="kt">double</span> <span class="n">t1</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">t2</span><span class="p">;</span>
-  <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">p1</span><span class="p">;</span>
-  <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">p2</span><span class="p">;</span>
+  // 6. Solve intersections and 7. Abort if there are less than two intersections.
+  double t1;
+  double t2;
+  Rhino.Geometry.Point3d p1;
+  Rhino.Geometry.Point3d p2;
 
-  <span class="k">switch</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Intersect</span><span class="p">.</span><span class="n">Intersection</span><span class="p">.</span><span class="nf">LineCircle</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">circle</span><span class="p">,</span> <span class="k">out</span> <span class="n">t1</span><span class="p">,</span> <span class="k">out</span> <span class="n">p1</span><span class="p">,</span> <span class="k">out</span> <span class="n">t2</span><span class="p">,</span> <span class="k">out</span> <span class="n">p2</span><span class="p">))</span>
-  <span class="p">{</span>
-    <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Intersect</span><span class="p">.</span><span class="n">LineCircleIntersection</span><span class="p">.</span><span class="n">None</span><span class="p">:</span>
-      <span class="nf">AddRuntimeMessage</span><span class="p">(</span><span class="n">GH_RuntimeMessageLevel</span><span class="p">.</span><span class="n">Warning</span><span class="p">,</span> <span class="s">"No intersections were found"</span><span class="p">);</span>
-      <span class="k">return</span><span class="p">;</span>
+  switch (Rhino.Geometry.Intersect.Intersection.LineCircle(line, circle, out t1, out p1, out t2, out p2))
+  {
+    case Rhino.Geometry.Intersect.LineCircleIntersection.None:
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No intersections were found");
+      return;
 
-    <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Intersect</span><span class="p">.</span><span class="n">LineCircleIntersection</span><span class="p">.</span><span class="n">Single</span><span class="p">:</span>
-      <span class="nf">AddRuntimeMessage</span><span class="p">(</span><span class="n">GH_RuntimeMessageLevel</span><span class="p">.</span><span class="n">Warning</span><span class="p">,</span> <span class="s">"Only a single intersection was found"</span><span class="p">);</span>
-      <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
+    case Rhino.Geometry.Intersect.LineCircleIntersection.Single:
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only a single intersection was found");
+      return;
+  }
 
-  <span class="c1">// 8. Create slicing arcs.
-</span>  <span class="kt">double</span> <span class="n">ct</span><span class="p">;</span>
-  <span class="n">circle</span><span class="p">.</span><span class="nf">ClosestParameterTo</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="k">out</span> <span class="n">ct</span><span class="p">);</span>
+  // 8. Create slicing arcs.
+  double ct;
+  circle.ClosestParameterTo(p1, out ct);
 
-  <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Vector3d</span> <span class="n">tan</span> <span class="p">=</span> <span class="n">circle</span><span class="p">.</span><span class="nf">TangentAt</span><span class="p">(</span><span class="n">ct</span><span class="p">);</span>
+  Rhino.Geometry.Vector3d tan = circle.TangentAt(ct);
 
-  <span class="c1">// 9. Assign output arcs.
-</span>  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Arc</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">p2</span><span class="p">));</span>
-  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Arc</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="p">-</span><span class="n">tan</span><span class="p">,</span> <span class="n">p2</span><span class="p">));</span>
-<span class="p">}</span>
-<span class="p">...</span>
+  // 9. Assign output arcs.
+  DA.SetData(0, new Rhino.Geometry.Arc(p1, tan, p2));
+  DA.SetData(1, new Rhino.Geometry.Arc(p1, -tan, p2));
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">...
 Protected Overrides Sub SolveInstance(ByVal DA As Grasshopper.Kernel.IGH_DataAccess)
@@ -584,11 +581,11 @@ End Sub
 
 </div>
 
-<p>As I mentioned before, the first input parameter is of type <code class="highlighter-rouge">Param_Circle</code> and it contains data of type <code class="highlighter-rouge">GH_Circle</code>.  But when we’re accessing the parameter via the <code class="highlighter-rouge">DA.GetData(0, circle)</code> method, we’re using <code class="highlighter-rouge">Rhino.Geometry.Circle</code> instead of <code class="highlighter-rouge">GH_Circle</code>.  The <code class="highlighter-rouge">DA.GetData()</code> method is capable of converting data from the intrinsic parameter type into requested types, provided the conversion makes sense.  <code class="highlighter-rouge">GH_Circle</code> to <code class="highlighter-rouge">Rhino.Geometry.Circle</code> is a perfectly valid conversion, <code class="highlighter-rouge">GH_Circle</code> to <code class="highlighter-rouge">Rhino.Geometry.Transform</code> would not be.</p>
+<p>As I mentioned before, the first input parameter is of type <code>Param_Circle</code> and it contains data of type <code>GH_Circle</code>.  But when we’re accessing the parameter via the <code>DA.GetData(0, circle)</code> method, we’re using <code>Rhino.Geometry.Circle</code> instead of <code>GH_Circle</code>.  The <code>DA.GetData()</code> method is capable of converting data from the intrinsic parameter type into requested types, provided the conversion makes sense.  <code>GH_Circle</code> to <code>Rhino.Geometry.Circle</code> is a perfectly valid conversion, <code>GH_Circle</code> to <code>Rhino.Geometry.Transform</code> would not be.</p>
 
-<p>The Grasshopper Component SDK has been designed on the premise that the bulk of all components that operate on data only care about the data itself, not how it is wrapped up inside the Grasshopper data structures.  The conversion routines that translate <code class="highlighter-rouge">GH_Circle</code> data into <code class="highlighter-rouge">Rhino.Geometry.Circle</code> data (and obviously also <code class="highlighter-rouge">GH_Number</code> into <code class="highlighter-rouge">System.Double</code>, and <code class="highlighter-rouge">GH_Colour</code> into <code class="highlighter-rouge">System.Drawing.Color</code> etc.), have been highly optimised and should be used in almost all circumstances.</p>
+<p>The Grasshopper Component SDK has been designed on the premise that the bulk of all components that operate on data only care about the data itself, not how it is wrapped up inside the Grasshopper data structures.  The conversion routines that translate <code>GH_Circle</code> data into <code>Rhino.Geometry.Circle</code> data (and obviously also <code>GH_Number</code> into <code>System.Double</code>, and <code>GH_Colour</code> into <code>System.Drawing.Color</code> etc.), have been highly optimised and should be used in almost all circumstances.</p>
 
-<p>If however you feel the need to get access to the <code class="highlighter-rouge">GH_Circle</code> data directly, you can retrieve that instance in the same fashion:</p>
+<p>If however you feel the need to get access to the <code>GH_Circle</code> data directly, you can retrieve that instance in the same fashion:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
@@ -597,12 +594,11 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs3"><pre class="highlight"><code><span class="p">...</span>
-<span class="n">Grasshopper</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">GH_Circle</span> <span class="n">circle</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-<span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">circle</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">...</span>
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">...
+Grasshopper.Kernel.Data.GH_Circle circle = null;
+if (!DA.GetData(0, circle)) { return; }
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">...
 Dim circle As Grasshopper.Kernel.Data.GH_Circle = Nothing
@@ -612,7 +608,7 @@ If (Not DA.GetData(0, circle)) Then Return
 
 </div>
 
-<p>Note that a single instance of <code class="highlighter-rouge">GH_Circle</code> may be shared among any number of parameters in Grasshopper, and thus changing one will change data everywhere.  If you request <code class="highlighter-rouge">Rhino.Geometry.Circle</code>, <code class="highlighter-rouge">System.Double</code> or <code class="highlighter-rouge">System.Drawing.Color</code> instead of <code class="highlighter-rouge">GH_Circle</code>, <code class="highlighter-rouge">GH_Number</code> or <code class="highlighter-rouge">GH_Colour</code> you won’t have to worry about this pitfall since you will always be given an object that has been disassociated from the (potentially shared) wrapper type.</p>
+<p>Note that a single instance of <code>GH_Circle</code> may be shared among any number of parameters in Grasshopper, and thus changing one will change data everywhere.  If you request <code>Rhino.Geometry.Circle</code>, <code>System.Double</code> or <code>System.Drawing.Color</code> instead of <code>GH_Circle</code>, <code>GH_Number</code> or <code>GH_Colour</code> you won’t have to worry about this pitfall since you will always be given an object that has been disassociated from the (potentially shared) wrapper type.</p>
 
 <p>Similarly, you are allowed to store output data in different formats as well.  Instead of…</p>
 
@@ -623,16 +619,15 @@ If (Not DA.GetData(0, circle)) Then Return
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs4"><pre class="highlight"><code><span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Arc</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">p2</span><span class="p">));</span>
+  <pre class="tab-pane fade in active" id="cs4"><code class="language-cs">DA.SetData(0, new Rhino.Geometry.Arc(p1, tan, p2));
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb4"><code class="language-vbnet">DA.SetData(0, New Rhino.Geometry.Arc(p1, tan, p2))
 </code></pre>
 
 </div>
 
-<p>…you could also provide an instance of <code class="highlighter-rouge">Grasshopper.Kernel.Types.GH_Arc</code>:</p>
+<p>…you could also provide an instance of <code>Grasshopper.Kernel.Types.GH_Arc</code>:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs5" data-toggle="pill">C#</a></li>
@@ -641,10 +636,9 @@ If (Not DA.GetData(0, circle)) Then Return
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs5"><pre class="highlight"><code><span class="n">Grasshopper</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Types</span><span class="p">.</span><span class="n">GH_Arc</span> <span class="n">gh_arc</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Grasshopper</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">Types</span><span class="p">.</span><span class="nf">GH_Arc</span><span class="p">(</span><span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Arc</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">p2</span><span class="p">));</span>
-<span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">gh_arc</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs5"><code class="language-cs">Grasshopper.Kernel.Types.GH_Arc gh_arc = new Grasshopper.Kernel.Types.GH_Arc(new Rhino.Geometry.Arc(p1, tan, p2));
+DA.SetData(0, gh_arc);
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb5"><code class="language-vbnet">Dim gh_arc As New Grasshopper.Kernel.Types.GH_Arc(New Rhino.Geometry.Arc(p1, tan, p2))
 DA.SetData(0, gh_arc)

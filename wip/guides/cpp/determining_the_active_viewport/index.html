@@ -344,47 +344,46 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>Standard Rhino views are represented by the <code class="highlighter-rouge">CRhinoView</code> class.  Layout views are represented by the <code class="highlighter-rouge">CRhinoPageView</code> class.  This class is derived from <code class="highlighter-rouge">CRhinoView</code>.  A <code class="highlighter-rouge">CRhinoPageView</code> object maintains an array of <code class="highlighter-rouge">CRhinoDetailViewObject</code> objects - one for each detail in the layout.</p>
+<p>Standard Rhino views are represented by the <code>CRhinoView</code> class.  Layout views are represented by the <code>CRhinoPageView</code> class.  This class is derived from <code>CRhinoView</code>.  A <code>CRhinoPageView</code> object maintains an array of <code>CRhinoDetailViewObject</code> objects - one for each detail in the layout.</p>
 
-<p>To determine whether a layout or one if it’s details is active, get the UUID of the layout’s active detail object.  If the returned UUID is <code class="highlighter-rouge">nil</code>, then the layout itself is active.  Otherwise, the detail object that has the returned UUID is active.</p>
+<p>To determine whether a layout or one if it’s details is active, get the UUID of the layout’s active detail object.  If the returned UUID is <code>nil</code>, then the layout itself is active.  Otherwise, the detail object that has the returned UUID is active.</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( 0 == view )
+    return CRhinoCommand::failure;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">IsKindOf</span><span class="p">(</span><span class="n">RUNTIME_CLASS</span><span class="p">(</span><span class="n">CRhinoPageView</span><span class="p">))</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoPageView</span><span class="o">*</span> <span class="n">page_view</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">CRhinoPageView</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">view</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">page_view</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_wString</span> <span class="n">layout_name</span> <span class="o">=</span> <span class="n">page_view</span><span class="o">-&gt;</span><span class="n">MainViewport</span><span class="p">().</span><span class="n">Name</span><span class="p">();</span>
+  if( view-&gt;IsKindOf(RUNTIME_CLASS(CRhinoPageView)) )
+  {
+    CRhinoPageView* page_view = static_cast&lt;CRhinoPageView*&gt;(view);
+    if( page_view )
+    {
+      ON_wString layout_name = page_view-&gt;MainViewport().Name();
 
-      <span class="n">ON_UUID</span> <span class="n">active_detail_uuid</span> <span class="o">=</span> <span class="n">page_view</span><span class="o">-&gt;</span><span class="n">ActiveDetailObject</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">ON_UuidIsNotNil</span><span class="p">(</span><span class="n">active_detail_uuid</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_wString</span> <span class="n">detail_name</span> <span class="o">=</span> <span class="n">page_view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">Name</span><span class="p">();</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"The detail </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> on layout </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is active.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">detail_name</span><span class="p">,</span> <span class="n">layout_name</span> <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"The layout </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is active.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layout_name</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">ON_wString</span> <span class="n">viewport_name</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">Name</span><span class="p">();</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"The viewport </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is active.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">viewport_name</span> <span class="p">);</span>
-  <span class="p">}</span>
+      ON_UUID active_detail_uuid = page_view-&gt;ActiveDetailObject();
+      if( ON_UuidIsNotNil(active_detail_uuid) )
+      {
+        ON_wString detail_name = page_view-&gt;ActiveViewport().Name();
+        RhinoApp().Print( L"The detail \"%s\" on layout \"%s\" is active.\n", detail_name, layout_name );
+      }
+      else
+      {
+        RhinoApp().Print( L"The layout \"%s\" is active.\n", layout_name );
+      }
+    }
+  }
+  else
+  {
+    ON_wString viewport_name = view-&gt;ActiveViewport().Name();
+    RhinoApp().Print( L"The viewport \"%s\" is active.\n", viewport_name );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

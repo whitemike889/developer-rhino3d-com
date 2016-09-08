@@ -366,7 +366,7 @@ Global code end
 
 <p>When the error ocurred, Blah1 had already turned “Resume Next” mode on.  The next statement after the error raise is Print “Blah2 End” but that statement was never executed. This is because the error mode is on a per-procedure basis, not a global basis.</p>
 
-<p>Also, remember that the <code class="highlighter-rouge">Next</code> in “Resume Next” mode is the next statement.  Consider these two scripts:</p>
+<p>Also, remember that the <code>Next</code> in “Resume Next” mode is the next statement.  Consider these two scripts:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 Temp = CInt(Foo.Bar(123))
@@ -378,7 +378,7 @@ Blah CInt(Foo.Bar(123))
 Rhino.Print "Done"
 </code></pre>
 
-<p>They do not have the same semantics.  If <code class="highlighter-rouge">Foo.Bar</code> raises an error, then the first script passes <code class="highlighter-rouge">Empty</code> to <code class="highlighter-rouge">Blah</code>.  The second one never calls <code class="highlighter-rouge">Blah</code> at all if an error is raised, because it resumes to the next statement.</p>
+<p>They do not have the same semantics.  If <code>Foo.Bar</code> raises an error, then the first script passes <code>Empty</code> to <code>Blah</code>.  The second one never calls <code>Blah</code> at all if an error is raised, because it resumes to the next statement.</p>
 
 <p>You can get into similar trouble with other constructs.  For example, these do have the same semantics:</p>
 
@@ -393,7 +393,7 @@ If Blah Then Rhino.Print "Hello"
 Rhino.Print "Goodbye"
 </code></pre>
 
-<p>If <code class="highlighter-rouge">Blah</code> raises an error then it resumes on the <code class="highlighter-rouge">Rhino.Print "Hello"</code> in either case.</p>
+<p>If <code>Blah</code> raises an error then it resumes on the <code>Rhino.Print "Hello"</code> in either case.</p>
 
 <p>You can also get into trouble with loops:</p>
 

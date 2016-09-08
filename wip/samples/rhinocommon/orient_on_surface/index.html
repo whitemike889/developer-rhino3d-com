@@ -247,92 +247,91 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">OrientOnSrf</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Select objects to orient
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to orient"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result OrientOnSrf(Rhino.RhinoDoc doc)
+  {
+    // Select objects to orient
+    Rhino.Input.Custom.GetObject go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select objects to orient");
+    go.SubObjectSelect = false;
+    go.GroupSelect = true;
+    go.GetMultiple(1, 0);
+    if (go.CommandResult() != Rhino.Commands.Result.Success)
+      return go.CommandResult();
 
-    <span class="c1">// Point to orient from
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetPoint</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point to orient from"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Point to orient from
+    Rhino.Input.Custom.GetPoint gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("Point to orient from");
+    gp.Get();
+    if (gp.CommandResult() != Rhino.Commands.Result.Success)
+      return gp.CommandResult();
 
-    <span class="c1">// Define source plane
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">RhinoView</span> <span class="n">view</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">View</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">view</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">source_plane</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="n">source_plane</span><span class="p">.</span><span class="n">Origin</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    // Define source plane
+    Rhino.Display.RhinoView view = gp.View();
+    if (view == null)
+    {
+      view = doc.Views.ActiveView;
+      if (view == null)
+        return Rhino.Commands.Result.Failure;
+    }
+    Rhino.Geometry.Plane source_plane = view.ActiveViewport.ConstructionPlane();
+    source_plane.Origin = gp.Point();
 
-    <span class="c1">// Surface to orient on
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Surface to orient on"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">DeselectAllBeforePostSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">OneByOnePostSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Surface to orient on
+    Rhino.Input.Custom.GetObject gs = new Rhino.Input.Custom.GetObject();
+    gs.SetCommandPrompt("Surface to orient on");
+    gs.GeometryFilter = Rhino.DocObjects.ObjectType.Surface;
+    gs.SubObjectSelect = true;
+    gs.DeselectAllBeforePostSelect = false;
+    gs.OneByOnePostSelect = true;
+    gs.Get();
+    if (gs.CommandResult() != Rhino.Commands.Result.Success)
+      return gs.CommandResult();
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
-    <span class="c1">// get selected surface object
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="c1">// get selected surface (face)
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Surface</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">surface</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="c1">// Unselect surface
-</span>    <span class="n">obj</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    Rhino.DocObjects.ObjRef objref = gs.Object(0);
+    // get selected surface object
+    Rhino.DocObjects.RhinoObject obj = objref.Object();
+    if (obj == null)
+      return Rhino.Commands.Result.Failure;
+    // get selected surface (face)
+    Rhino.Geometry.Surface surface = objref.Surface();
+    if (surface == null)
+      return Rhino.Commands.Result.Failure;
+    // Unselect surface
+    obj.Select(false);
 
-    <span class="c1">// Point on surface to orient to
-</span>    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point on surface to orient to"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Point on surface to orient to
+    gp.SetCommandPrompt("Point on surface to orient to");
+    gp.Constrain(surface, false);
+    gp.Get();
+    if (gp.CommandResult() != Rhino.Commands.Result.Success)
+      return gp.CommandResult();
 
-    <span class="c1">// Do transformation
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">surface</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">(),</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">target_plane</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">surface</span><span class="p">.</span><span class="nf">FrameAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="k">out</span> <span class="n">target_plane</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="c1">// Build transformation
-</span>        <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span> <span class="n">xform</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">PlaneToPlane</span><span class="p">(</span><span class="n">source_plane</span><span class="p">,</span> <span class="n">target_plane</span><span class="p">);</span>
+    // Do transformation
+    Rhino.Commands.Result rc = Rhino.Commands.Result.Failure;
+    double u, v;
+    if (surface.ClosestPoint(gp.Point(), out u, out v))
+    {
+      Rhino.Geometry.Plane target_plane;
+      if (surface.FrameAt(u, v, out target_plane))
+      {
+        // Build transformation
+        Rhino.Geometry.Transform xform = Rhino.Geometry.Transform.PlaneToPlane(source_plane, target_plane);
 
-        <span class="c1">// Do the transformation. In this example, we will copy the original objects
-</span>        <span class="k">const</span> <span class="kt">bool</span> <span class="n">delete_original</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">xform</span><span class="p">,</span> <span class="n">delete_original</span><span class="p">);</span>
+        // Do the transformation. In this example, we will copy the original objects
+        const bool delete_original = false;
+        for (int i = 0; i &lt; go.ObjectCount; i++)
+          doc.Objects.Transform(go.Object(i), xform, delete_original);
 
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-        <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+        doc.Views.Redraw();
+        rc = Rhino.Commands.Result.Success;
+      }
+    }
+    return rc;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function OrientOnSrf(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -423,86 +422,85 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">OrientOnSrf</span><span class="p">():</span>
-    <span class="c"># Select objects to orient</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to orient"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GroupSelect</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def OrientOnSrf():
+    # Select objects to orient
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select objects to orient")
+    go.SubObjectSelect = False
+    go.GroupSelect = True
+    go.GetMultiple(1, 0)
+    if go.CommandResult()!=Rhino.Commands.Result.Success:
+        return go.CommandResult()
 
-    <span class="c"># Point to orient from</span>
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point to orient from"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Point to orient from
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.SetCommandPrompt("Point to orient from")
+    gp.Get()
+    if gp.CommandResult()!=Rhino.Commands.Result.Success:
+        return gp.CommandResult()
 
-    <span class="c"># Define source plane</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">View</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">view</span><span class="p">:</span>
-        <span class="n">view</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">view</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    # Define source plane
+    view = gp.View()
+    if not view:
+        view = doc.Views.ActiveView
+        if not view: return Rhino.Commands.Result.Failure
 
-    <span class="n">source_plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
-    <span class="n">source_plane</span><span class="o">.</span><span class="n">Origin</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+    source_plane = view.ActiveViewport.ConstructionPlane()
+    source_plane.Origin = gp.Point()
 
-    <span class="c"># Surface to orient on</span>
-    <span class="n">gs</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Surface to orient on"</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">DeselectAllBeforePostSelect</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">OneByOnePostSelect</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Surface to orient on
+    gs = Rhino.Input.Custom.GetObject()
+    gs.SetCommandPrompt("Surface to orient on")
+    gs.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
+    gs.SubObjectSelect = True
+    gs.DeselectAllBeforePostSelect = False
+    gs.OneByOnePostSelect = True
+    gs.Get()
+    if gs.CommandResult()!=Rhino.Commands.Result.Success:
+        return gs.CommandResult()
 
-    <span class="n">objref</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="c"># get selected surface object</span>
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="c"># get selected surface (face)</span>
-    <span class="n">surface</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">surface</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="c"># Unselect surface</span>
-    <span class="n">obj</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    objref = gs.Object(0)
+    # get selected surface object
+    obj = objref.Object()
+    if not obj: return Rhino.Commands.Result.Failure
+    # get selected surface (face)
+    surface = objref.Surface()
+    if not surface: return Rhino.Commands.Result.Failure
+    # Unselect surface
+    obj.Select(False)
 
-    <span class="c"># Point on surface to orient to</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point on surface to orient to"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Point on surface to orient to
+    gp.SetCommandPrompt("Point on surface to orient to")
+    gp.Constrain(surface, False)
+    gp.Get()
+    if gp.CommandResult()!=Rhino.Commands.Result.Success:
+        return gp.CommandResult()
 
-    <span class="c"># Do transformation</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="n">getrc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">())</span>
-    <span class="k">if</span> <span class="n">getrc</span><span class="p">:</span>
-        <span class="n">getrc</span><span class="p">,</span> <span class="n">target_plane</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">FrameAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">getrc</span><span class="p">:</span>
-            <span class="c"># Build transformation</span>
-            <span class="n">xform</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">PlaneToPlane</span><span class="p">(</span><span class="n">source_plane</span><span class="p">,</span> <span class="n">target_plane</span><span class="p">)</span>
-            <span class="c"># Do the transformation. In this example, we will copy the original objects</span>
-            <span class="n">delete_original</span> <span class="o">=</span> <span class="bp">False</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">ObjectCount</span><span class="p">):</span>
-                <span class="n">rhobj</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">rhobj</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="n">delete_original</span><span class="p">)</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-            <span class="n">rc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">rc</span>
+    # Do transformation
+    rc = Rhino.Commands.Result.Failure
+    getrc, u, v = surface.ClosestPoint(gp.Point())
+    if getrc:
+        getrc, target_plane = surface.FrameAt(u,v)
+        if getrc:
+            # Build transformation
+            xform = Rhino.Geometry.Transform.PlaneToPlane(source_plane, target_plane)
+            # Do the transformation. In this example, we will copy the original objects
+            delete_original = False
+            for i in range(go.ObjectCount):
+                rhobj = go.Object(i)
+                scriptcontext.doc.Objects.Transform(rhobj, xform, delete_original)
+            scriptcontext.doc.Views.Redraw()
+            rc = Rhino.Commands.Result.Success
+    return rc
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">OrientOnSrf</span><span class="p">()</span>
+if __name__=="__main__":
+    OrientOnSrf()
 </code></pre>
-</div>
 
 </div>
 

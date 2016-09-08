@@ -360,9 +360,9 @@ $(document).ready(function()
 <p>Grasshopper is an application that deals with a lot of different types of data. These data types can come from 6 different sources and some of them will not be known when Grasshopper is written and compiled. The six potential sources are:</p>
 
 <ol>
-  <li>Primitive types such as <code class="highlighter-rouge">Booleans</code>, <code class="highlighter-rouge">Integers</code>, <code class="highlighter-rouge">Colors</code>, <code class="highlighter-rouge">Strings</code>, etc. Grasshopper uses these types itself a lot.</li>
-  <li>Other .NET Framework types such as <code class="highlighter-rouge">System.Drawing.PointF</code> or <code class="highlighter-rouge">System.Collections.Generic.HashSet&lt;T&gt;</code>. Grasshopper does not use these types to during component-to-component communication, but someone else might.</li>
-  <li>RhinoCommon types such as <code class="highlighter-rouge">Point3d</code>, <code class="highlighter-rouge">Circle</code>, <code class="highlighter-rouge">Plane</code>, <code class="highlighter-rouge">Brep</code>, <code class="highlighter-rouge">Curve</code> etc. Many of these are used natively, but certainly not all of them.</li>
+  <li>Primitive types such as <code>Booleans</code>, <code>Integers</code>, <code>Colors</code>, <code>Strings</code>, etc. Grasshopper uses these types itself a lot.</li>
+  <li>Other .NET Framework types such as <code>System.Drawing.PointF</code> or <code>System.Collections.Generic.HashSet&lt;T&gt;</code>. Grasshopper does not use these types to during component-to-component communication, but someone else might.</li>
+  <li>RhinoCommon types such as <code>Point3d</code>, <code>Circle</code>, <code>Plane</code>, <code>Brep</code>, <code>Curve</code> etc. Many of these are used natively, but certainly not all of them.</li>
   <li>Types defined in Grasshopper itself.</li>
   <li>Types defined in components for Grasshopper.</li>
   <li>Types defined in VB/C#/Python scripts that run inside Grasshopper.</li>
@@ -389,22 +389,22 @@ $(document).ready(function()
 
 <h2 id="goo">Goo</h2>
 
-<p>The <code class="highlighter-rouge">IGH_Goo</code> interface is is usually nothing more than a wrapper around the actual data which provides a bunch of functionality for whatever it wraps. For example take the primitive <code class="highlighter-rouge">Boolean</code> (or <code class="highlighter-rouge">bool</code> in C#).  It’s a structure so it can never be null, and it can only exist in either a <em>true</em> or a <em>false</em> state.</p>
+<p>The <code>IGH_Goo</code> interface is is usually nothing more than a wrapper around the actual data which provides a bunch of functionality for whatever it wraps. For example take the primitive <code>Boolean</code> (or <code>bool</code> in C#).  It’s a structure so it can never be null, and it can only exist in either a <em>true</em> or a <em>false</em> state.</p>
 
-<p>Grasshopper uses booleans a lot so it provides an <code class="highlighter-rouge">IGH_Goo</code> implementation for <code class="highlighter-rouge">Boolean</code>. This wrapper class tells Grasshopper that a boolean value can be converted into an integer (false -&gt; 0, true -&gt; 1), into a colour (false -&gt; black, true -&gt; white), into a string (false -&gt; “false”, true -&gt; “true”) and so on. The wrapper class also knows how to write and read boolean values to and from <em>*.gh</em> files, and because we’re now dealing with a wrapper class we can have null instances in a collection of boolean values.  The wrapper <em>doesn’t</em> tell Grasshopper how to preview or bake booleans, because booleans are not a geometric type of data.</p>
+<p>Grasshopper uses booleans a lot so it provides an <code>IGH_Goo</code> implementation for <code>Boolean</code>. This wrapper class tells Grasshopper that a boolean value can be converted into an integer (false -&gt; 0, true -&gt; 1), into a colour (false -&gt; black, true -&gt; white), into a string (false -&gt; “false”, true -&gt; “true”) and so on. The wrapper class also knows how to write and read boolean values to and from <em>*.gh</em> files, and because we’re now dealing with a wrapper class we can have null instances in a collection of boolean values.  The wrapper <em>doesn’t</em> tell Grasshopper how to preview or bake booleans, because booleans are not a geometric type of data.</p>
 
-<p>Because so many data types are not in any way geometric, there is a second interface called <code class="highlighter-rouge">IGH_GeometricGoo</code> which extends <code class="highlighter-rouge">IGH_Goo</code> with stuff like transforming, bounding-boxing etc.</p>
+<p>Because so many data types are not in any way geometric, there is a second interface called <code>IGH_GeometricGoo</code> which extends <code>IGH_Goo</code> with stuff like transforming, bounding-boxing etc.</p>
 
-<p><em>Almost always</em> component developers and scripters can ignore any of the <code class="highlighter-rouge">IGH_Goo</code> types, because they are mostly used for internal bookkeeping.  However sometimes a developer will either want to access the functionality that goo provides or they wish to inject a new, previously unknown type of data into a Grasshopper file. In these cases some knowledge of <code class="highlighter-rouge">IGH_Goo</code> and its derived interface and classes is required.</p>
+<p><em>Almost always</em> component developers and scripters can ignore any of the <code>IGH_Goo</code> types, because they are mostly used for internal bookkeeping.  However sometimes a developer will either want to access the functionality that goo provides or they wish to inject a new, previously unknown type of data into a Grasshopper file. In these cases some knowledge of <code>IGH_Goo</code> and its derived interface and classes is required.</p>
 
 <h2 id="conversion-methods">Conversion Methods</h2>
 
 <p>IGH_Goo requires that the implementor provides three different conversion methods:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">CastFrom</code></li>
-  <li><code class="highlighter-rouge">CastTo</code></li>
-  <li><code class="highlighter-rouge">ScriptVariable</code></li>
+  <li><code>CastFrom</code></li>
+  <li><code>CastTo</code></li>
+  <li><code>ScriptVariable</code></li>
 </ol>
 
 <p>As an elucidation, imagine the following conversation going on between Grasshopper (G), which is trying to push data of type A in one parameter into another parameter which only accepts data of type B…</p>
@@ -459,9 +459,9 @@ $(document).ready(function()
   <p>“Thanks! I’ll put it into this data tree over here right away.”</p>
 </blockquote>
 
-<p>More succinctly, Grasshopper calls the <code class="highlighter-rouge">CastTo&lt;B&gt;</code> method on the instance of A, asking it if it knows how to convert itself into a B type.  If that fails, it’ll construct a new empty B instance and ask it using the <code class="highlighter-rouge">CastFrom&lt;A&gt;</code> method whether it knows how to interpret the A data and mimic it.  If both these methods fail then Grasshopper will put up an error and leave that slot blank.</p>
+<p>More succinctly, Grasshopper calls the <code>CastTo&lt;B&gt;</code> method on the instance of A, asking it if it knows how to convert itself into a B type.  If that fails, it’ll construct a new empty B instance and ask it using the <code>CastFrom&lt;A&gt;</code> method whether it knows how to interpret the A data and mimic it.  If both these methods fail then Grasshopper will put up an error and leave that slot blank.</p>
 
-<p>The <code class="highlighter-rouge">ScriptVariable</code> method allows data to protect itself from potentially ill-informed programmers.  Using this method, Grasshopper tells some data that it’s about to be handed over to a script (ie. a VB/C#/Python component) and whether it would like to maybe provide a different kind of data instead.  For example a <code class="highlighter-rouge">GH_Boolean</code> might assume that the scripter does’t really care for all that <code class="highlighter-rouge">IGH_Goo</code> malarkey and instead of pumping a <code class="highlighter-rouge">GH_Boolean</code> instance into a script just the value on the inside is provided.</p>
+<p>The <code>ScriptVariable</code> method allows data to protect itself from potentially ill-informed programmers.  Using this method, Grasshopper tells some data that it’s about to be handed over to a script (ie. a VB/C#/Python component) and whether it would like to maybe provide a different kind of data instead.  For example a <code>GH_Boolean</code> might assume that the scripter does’t really care for all that <code>IGH_Goo</code> malarkey and instead of pumping a <code>GH_Boolean</code> instance into a script just the value on the inside is provided.</p>
 
         </article>
 

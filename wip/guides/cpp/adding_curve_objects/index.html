@@ -374,22 +374,22 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>Curve objects can be added to Rhino by using the following functions found on <code class="highlighter-rouge">CRhinoDoc</code>:</p>
+<p>Curve objects can be added to Rhino by using the following functions found on <code>CRhinoDoc</code>:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code></li>
-  <li><code class="highlighter-rouge">CRhinoDoc::AddObject</code></li>
+  <li><code>CRhinoDoc::AddCurveObject</code></li>
+  <li><code>CRhinoDoc::AddObject</code></li>
 </ol>
 
-<p>For <code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code>, there are six overridden versions that will make curve objects from a variety of inputs, including:</p>
+<p>For <code>CRhinoDoc::AddCurveObject</code>, there are six overridden versions that will make curve objects from a variety of inputs, including:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">ON_Line</code>: line definition objects</li>
-  <li><code class="highlighter-rouge">ON_Polyline</code>: polyline definition objects</li>
-  <li><code class="highlighter-rouge">ON_Arc</code>: arc definition objects</li>
-  <li><code class="highlighter-rouge">ON_Circle</code>: circle definition objects</li>
-  <li><code class="highlighter-rouge">ON_BezierCurve</code>: bezier curve objects</li>
-  <li><code class="highlighter-rouge">ON_Curve</code>: <code class="highlighter-rouge">ON_Curve</code>-derived curve objects</li>
+  <li><code>ON_Line</code>: line definition objects</li>
+  <li><code>ON_Polyline</code>: polyline definition objects</li>
+  <li><code>ON_Arc</code>: arc definition objects</li>
+  <li><code>ON_Circle</code>: circle definition objects</li>
+  <li><code>ON_BezierCurve</code>: bezier curve objects</li>
+  <li><code>ON_Curve</code>: <code>ON_Curve</code>-derived curve objects</li>
 </ol>
 
 <h2 id="examples">Examples</h2>
@@ -398,64 +398,61 @@ $(document).ready(function()
 
 <h3 id="example-1">Example 1</h3>
 
-<p>In this example, we define a circle, using <code class="highlighter-rouge">ON_Circle</code>, and pass the definition off to <code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code>.</p>
+<p>In this example, we define a circle, using <code>ON_Circle</code>, and pass the definition off to <code>CRhinoDoc::AddCurveObject</code>.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_3dPoint</span> <span class="n">center</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-<span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">;</span>
+<pre><code class="language-cpp">ON_3dPoint center(0.0, 0.0, 0.0);
+double radius = 10.0;
 
-<span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">(</span> <span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
+ON_Circle circle( center, radius );
 
-<span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_object</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">circle</span> <span class="p">);</span>
-<span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+CRhinoCurveObject* curve_object = context.m_doc.AddCurveObject( circle );
+context.m_doc.Redraw();
 </code></pre>
-</div>
 
 <h3 id="example-2">Example 2</h3>
 
-<p>In this example, we first define a circle.  Then we create an <code class="highlighter-rouge">ON_ArcCurve</code> object from the circle definition. <code class="highlighter-rouge">ON_ArcCurve</code> is one of the many curve classes this is derived from <code class="highlighter-rouge">ON_Curve</code>. We then pass the <code class="highlighter-rouge">ON_ArcCurve</code> object off to <code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code>.</p>
+<p>In this example, we first define a circle.  Then we create an <code>ON_ArcCurve</code> object from the circle definition. <code>ON_ArcCurve</code> is one of the many curve classes this is derived from <code>ON_Curve</code>. We then pass the <code>ON_ArcCurve</code> object off to <code>CRhinoDoc::AddCurveObject</code>.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_3dPoint</span> <span class="n">center</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-<span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">;</span>
+<pre><code class="language-cpp">ON_3dPoint center(0, 0, 0);
+double radius = 10.0;
 
-<span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">(</span> <span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
+ON_Circle circle( center, radius );
 
-<span class="n">ON_ArcCurve</span> <span class="n">arc_curve</span><span class="p">(</span> <span class="n">circle</span> <span class="p">);</span>
+ON_ArcCurve arc_curve( circle );
 
-<span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_object</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">arc_curve</span> <span class="p">);</span>
-<span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+CRhinoCurveObject* curve_object = context.m_doc.AddCurveObject( arc_curve );
+context.m_doc.Redraw();
 </code></pre>
-</div>
 
 <h3 id="example-3">Example 3</h3>
 
-<p>In this example, we will add a circle curve the brute force way.  We first define a circle. Then we allocate a new <code class="highlighter-rouge">ON_ArcCurve</code> and pass the circle definition to its constructor.  We then allocate a new <code class="highlighter-rouge">CRhinoCurveObject</code> and assign our <code class="highlighter-rouge">ON_ArcCurve</code> object pointer to it.  Finally, we pass the pointer to the <code class="highlighter-rouge">CRhinoCurveObject</code> to <code class="highlighter-rouge">CRhinoDoc::AddObject</code>.</p>
+<p>In this example, we will add a circle curve the brute force way.  We first define a circle. Then we allocate a new <code>ON_ArcCurve</code> and pass the circle definition to its constructor.  We then allocate a new <code>CRhinoCurveObject</code> and assign our <code>ON_ArcCurve</code> object pointer to it.  Finally, we pass the pointer to the <code>CRhinoCurveObject</code> to <code>CRhinoDoc::AddObject</code>.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_3dPoint</span> <span class="n">center</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-<span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">;</span>
+<pre><code class="language-cpp">ON_3dPoint center(0.0, 0.0, 0.0);
+double radius = 10.0;
 
-<span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">(</span> <span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
+ON_Circle circle( center, radius );
 
-<span class="n">ON_ArcCurve</span><span class="o">*</span> <span class="n">arc_curve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_ArcCurve</span><span class="p">(</span> <span class="n">circle</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">arc_curve</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve_object</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Set the curve to the curve object. Note,
-</span>    <span class="c1">// curve_object will delete arc_curve.
-</span>    <span class="n">curve_object</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">arc_curve</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">curve_object</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="k">else</span>
-      <span class="k">delete</span> <span class="n">curve_object</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+ON_ArcCurve* arc_curve = new ON_ArcCurve( circle );
+if( arc_curve )
+{
+  CRhinoCurveObject* curve_object = new CRhinoCurveObject();
+  if( curve_object )
+  {
+    // Set the curve to the curve object. Note,
+    // curve_object will delete arc_curve.
+    curve_object-&gt;SetCurve( arc_curve );
+    if( context.m_doc.AddObject(curve_object) )
+      context.m_doc.Redraw();
+    else
+      delete curve_object;
+  }
+}
 </code></pre>
-</div>
 
 <h2 id="discussion">Discussion</h2>
 
-<p>What is interesting to note is that the code found in <a href="#example-3">Example 3</a> is essentially what Rhino does inside of <code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code>.  All of the <code class="highlighter-rouge">CRhinoDoc::AddCurveObject</code> overrides are simply provided to make it easier for SDK developers to add curves to Rhino.</p>
+<p>What is interesting to note is that the code found in <a href="#example-3">Example 3</a> is essentially what Rhino does inside of <code>CRhinoDoc::AddCurveObject</code>.  All of the <code>CRhinoDoc::AddCurveObject</code> overrides are simply provided to make it easier for SDK developers to add curves to Rhino.</p>
 
         </article>
 

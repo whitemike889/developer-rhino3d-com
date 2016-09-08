@@ -242,73 +242,72 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">CreateSurfacesExample</span><span class="p">(</span> <span class="n">CRhinoDoc</span><span class="o">&amp;</span> <span class="n">doc</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">bIsRational</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">dim</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">u_degree</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">v_degree</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">u_cv_count</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">v_cv_count</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<pre><code class="language-cpp">static bool CreateSurfacesExample( CRhinoDoc&amp; doc )
+{
+  const int bIsRational = false;
+  const int dim = 3;
+  const int u_degree = 2;
+  const int v_degree = 3;
+  const int u_cv_count = 3;
+  const int v_cv_count = 5;
 
-  <span class="c1">// The knot vectors do NOT have the 2 superfluous knots
-</span>  <span class="c1">// at the start and end of the knot vector.  If you are
-</span>  <span class="c1">// coming from a system that has the 2 superfluous knots,
-</span>  <span class="c1">// just ignore them when creating NURBS surfaces.
-</span>  <span class="kt">double</span> <span class="n">u_knot</span><span class="p">[</span> <span class="n">u_cv_count</span> <span class="o">+</span> <span class="n">u_degree</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">];</span>
-  <span class="kt">double</span> <span class="n">v_knot</span><span class="p">[</span> <span class="n">v_cv_count</span> <span class="o">+</span> <span class="n">v_degree</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">];</span>
+  // The knot vectors do NOT have the 2 superfluous knots
+  // at the start and end of the knot vector.  If you are
+  // coming from a system that has the 2 superfluous knots,
+  // just ignore them when creating NURBS surfaces.
+  double u_knot[ u_cv_count + u_degree - 1 ];
+  double v_knot[ v_cv_count + v_degree - 1 ];
 
-  <span class="c1">// make up a quadratic knot vector with no interior knots
-</span>  <span class="n">u_knot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_knot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">u_knot</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_knot</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+  // make up a quadratic knot vector with no interior knots
+  u_knot[0] = u_knot[1] = 0.0;
+  u_knot[2] = u_knot[3] = 1.0;
 
-  <span class="c1">// make up a cubic knot vector with one simple interior knot
-</span>  <span class="n">v_knot</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_knot</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_knot</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">v_knot</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">;</span>
-  <span class="n">v_knot</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_knot</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_knot</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+  // make up a cubic knot vector with one simple interior knot
+  v_knot[0] = v_knot[1] = v_knot[2] = 0.0;
+  v_knot[3] = 1.5;
+  v_knot[4] = v_knot[5] = v_knot[6] = 2.0;
 
-  <span class="c1">// Rational control points can be in either homogeneous
-</span>  <span class="c1">// or euclidean form. Non-rational control points do not
-</span>  <span class="c1">// need to specify a weight.  
-</span>  <span class="n">ON_3dPoint</span> <span class="n">CV</span><span class="p">[</span><span class="n">u_cv_count</span><span class="p">][</span><span class="n">v_cv_count</span><span class="p">];</span>
+  // Rational control points can be in either homogeneous
+  // or euclidean form. Non-rational control points do not
+  // need to specify a weight.  
+  ON_3dPoint CV[u_cv_count][v_cv_count];
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">u_cv_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">v_cv_count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">CV</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-      <span class="n">CV</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
-      <span class="n">CV</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">].</span><span class="n">z</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  int i, j;
+  for ( i = 0; i &lt; u_cv_count; i++ ) {
+    for ( j = 0; j &lt; v_cv_count; j++ ) {
+      CV[i][j].x = i;
+      CV[i][j].y = j;
+      CV[i][j].z = i-j;
+    }
+  }
 
-  <span class="n">ON_NurbsSurface</span> <span class="n">nurbs_surface</span><span class="p">(</span> <span class="n">dim</span><span class="p">,</span> <span class="n">bIsRational</span><span class="p">,</span>
-                        <span class="n">u_degree</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">v_degree</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
-                        <span class="n">u_cv_count</span><span class="p">,</span> <span class="n">v_cv_count</span> <span class="p">);</span>
+  ON_NurbsSurface nurbs_surface( dim, bIsRational,
+                        u_degree+1, v_degree+1,
+                        u_cv_count, v_cv_count );
 
-  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">KnotCount</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">u_knot</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
+  for ( i = 0; i &lt; nurbs_surface.KnotCount(0); i++ )
+    nurbs_surface.SetKnot( 0, i, u_knot[i] );
 
-  <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">KnotCount</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">v_knot</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
+  for ( j = 0; j &lt; nurbs_surface.KnotCount(1); j++ )
+    nurbs_surface.SetKnot( 1, j, v_knot[j] );
 
-  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">CVCount</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">CVCount</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">CV</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  for ( i = 0; i &lt; nurbs_surface.CVCount(0); i++ ) {
+    for ( j = 0; j &lt; nurbs_surface.CVCount(1); j++ ) {
+      nurbs_surface.SetCV( i, j, CV[i][j] );
+    }
+  }
 
-  <span class="kt">bool</span> <span class="n">ok</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">nurbs_surface</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">AddSurfaceObject</span><span class="p">(</span> <span class="n">nurbs_surface</span> <span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="n">ok</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="p">}</span>
+  bool ok = false;
+  if ( nurbs_surface.IsValid() )
+  {
+    doc.AddSurfaceObject( nurbs_surface );
+    doc.Redraw();
+    ok = true;
+  }
 
-  <span class="k">return</span> <span class="n">ok</span><span class="p">;</span>
-<span class="p">}</span>
+  return ok;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

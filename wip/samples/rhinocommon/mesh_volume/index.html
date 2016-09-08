@@ -247,41 +247,40 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">MeshVolume</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gm</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gm</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select solid meshes for volume calculation"</span><span class="p">);</span>
-    <span class="n">gm</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span><span class="p">;</span>
-    <span class="n">gm</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">ClosedMesh</span><span class="p">;</span>
-    <span class="n">gm</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gm</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">gm</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gm</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gm</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result MeshVolume(RhinoDoc doc)
+  {
+    var gm = new GetObject();
+    gm.SetCommandPrompt("Select solid meshes for volume calculation");
+    gm.GeometryFilter = ObjectType.Mesh;
+    gm.GeometryAttributeFilter = GeometryAttributeFilter.ClosedMesh;
+    gm.SubObjectSelect = false;
+    gm.GroupSelect = true;
+    gm.GetMultiple(1, 0);
+    if (gm.CommandResult() != Result.Success)
+      return gm.CommandResult();
 
-    <span class="kt">double</span> <span class="n">volume</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">volume_error</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref</span> <span class="k">in</span> <span class="n">gm</span><span class="p">.</span><span class="nf">Objects</span><span class="p">())</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">obj_ref</span><span class="p">.</span><span class="nf">Mesh</span><span class="p">()</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">mass_properties</span> <span class="p">=</span> <span class="n">VolumeMassProperties</span><span class="p">.</span><span class="nf">Compute</span><span class="p">(</span><span class="n">obj_ref</span><span class="p">.</span><span class="nf">Mesh</span><span class="p">());</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">mass_properties</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">volume</span> <span class="p">+=</span> <span class="n">mass_properties</span><span class="p">.</span><span class="n">Volume</span><span class="p">;</span>
-          <span class="n">volume_error</span> <span class="p">+=</span> <span class="n">mass_properties</span><span class="p">.</span><span class="n">VolumeError</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    double volume = 0.0;
+    double volume_error = 0.0;
+    foreach (var obj_ref in gm.Objects())
+    {
+      if (obj_ref.Mesh() != null)
+      {
+        var mass_properties = VolumeMassProperties.Compute(obj_ref.Mesh());
+        if (mass_properties != null)
+        {
+          volume += mass_properties.Volume;
+          volume_error += mass_properties.VolumeError;
+        }
+      }
+    }
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Total volume = {0:f} (+/- {1:f})"</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">volume_error</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    RhinoApp.WriteLine("Total volume = {0:f} (+/- {1:f})", volume, volume_error);
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function MeshVolume(ByVal doc As RhinoDoc) As Result
@@ -314,38 +313,37 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="n">ObjectType</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="n">Result</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino.Input.Custom import *
+from Rhino.DocObjects import ObjectType
+from Rhino.Geometry import *
+from Rhino.Commands import Result
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">gm</span> <span class="o">=</span> <span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select solid meshes for volume calculation"</span><span class="p">)</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Mesh</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">ClosedMesh</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">GroupSelect</span> <span class="o">=</span> <span class="bp">True</span>
-  <span class="n">gm</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">gm</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gm</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  gm = GetObject()
+  gm.SetCommandPrompt("Select solid meshes for volume calculation")
+  gm.GeometryFilter = ObjectType.Mesh
+  gm.GeometryAttributeFilter = GeometryAttributeFilter.ClosedMesh
+  gm.SubObjectSelect = False
+  gm.GroupSelect = True
+  gm.GetMultiple(1, 0)
+  if gm.CommandResult() != Result.Success:
+    return gm.CommandResult()
 
-  <span class="n">volume</span> <span class="o">=</span> <span class="mf">0.0</span>
-  <span class="n">volume_error</span> <span class="o">=</span> <span class="mf">0.0</span>
-  <span class="k">for</span> <span class="n">obj_ref</span> <span class="ow">in</span> <span class="n">gm</span><span class="o">.</span><span class="n">Objects</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Mesh</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">mass_properties</span> <span class="o">=</span> <span class="n">VolumeMassProperties</span><span class="o">.</span><span class="n">Compute</span><span class="p">(</span><span class="n">obj_ref</span><span class="o">.</span><span class="n">Mesh</span><span class="p">())</span>
-      <span class="k">if</span> <span class="n">mass_properties</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">volume</span> <span class="o">+=</span> <span class="n">mass_properties</span><span class="o">.</span><span class="n">Volume</span>
-        <span class="n">volume_error</span> <span class="o">+=</span> <span class="n">mass_properties</span><span class="o">.</span><span class="n">VolumeError</span>
+  volume = 0.0
+  volume_error = 0.0
+  for obj_ref in gm.Objects():
+    if obj_ref.Mesh() != None:
+      mass_properties = VolumeMassProperties.Compute(obj_ref.Mesh())
+      if mass_properties != None:
+        volume += mass_properties.Volume
+        volume_error += mass_properties.VolumeError
 
-  <span class="k">print</span> <span class="s">"Total volume = {0:f} (+/- {1:f})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="n">volume_error</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  print "Total volume = {0:f} (+/- {1:f})".format(volume, volume_error)
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

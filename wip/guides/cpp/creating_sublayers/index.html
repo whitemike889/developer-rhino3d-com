@@ -344,41 +344,40 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>All layers have a layer id field, or <code class="highlighter-rouge">ON_Layer::m_layer_id</code>, that uniquely identifies that layer.  Also, layers maintain a parent id field, or <code class="highlighter-rouge">ON_Layer::m_parent_layer_id</code>, that identifies the layer’s parent.  If a layer’s parent id is a <code class="highlighter-rouge">null</code> UUID, then the layer does not have a parent and, thus, is considered a root layer.</p>
+<p>All layers have a layer id field, or <code>ON_Layer::m_layer_id</code>, that uniquely identifies that layer.  Also, layers maintain a parent id field, or <code>ON_Layer::m_parent_layer_id</code>, that identifies the layer’s parent.  If a layer’s parent id is a <code>null</code> UUID, then the layer does not have a parent and, thus, is considered a root layer.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample demonstrates how to add a parent layer then then add a child layer to that parent.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoLayerTable</span><span class="o">&amp;</span> <span class="n">layer_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoLayerTable&amp; layer_table = context.m_doc.m_layer_table;
 
-  <span class="c1">// Define parent layer
-</span>  <span class="n">ON_Layer</span> <span class="n">parent_layer</span><span class="p">;</span>
-  <span class="n">parent_layer</span><span class="p">.</span><span class="n">m_name</span> <span class="o">=</span> <span class="s">L"Parent"</span><span class="p">;</span>
+  // Define parent layer
+  ON_Layer parent_layer;
+  parent_layer.m_name = L"Parent";
 
-  <span class="c1">// Add parent layer
-</span>  <span class="kt">int</span> <span class="n">parent_layer_index</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">AddLayer</span><span class="p">(</span> <span class="n">parent_layer</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">parent_layer_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the layer we just added
-</span>    <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">parent_layer_index</span><span class="p">];</span>
+  // Add parent layer
+  int parent_layer_index = layer_table.AddLayer( parent_layer );
+  if( parent_layer_index &gt;= 0 )
+  {
+    // Get the layer we just added
+    const CRhinoLayer&amp; layer = layer_table[parent_layer_index];
 
-    <span class="c1">// Define child layer
-</span>    <span class="n">ON_Layer</span> <span class="n">child_layer</span><span class="p">;</span>
-    <span class="n">child_layer</span><span class="p">.</span><span class="n">m_name</span> <span class="o">=</span> <span class="s">L"Child"</span><span class="p">;</span>
-    <span class="c1">// Assign parent layer's id as child's parent id
-</span>    <span class="n">child_layer</span><span class="p">.</span><span class="n">m_parent_layer_id</span> <span class="o">=</span> <span class="n">layer</span><span class="p">.</span><span class="n">m_layer_id</span><span class="p">;</span>
+    // Define child layer
+    ON_Layer child_layer;
+    child_layer.m_name = L"Child";
+    // Assign parent layer's id as child's parent id
+    child_layer.m_parent_layer_id = layer.m_layer_id;
 
-    <span class="c1">// Add child layer
-</span>    <span class="n">layer_table</span><span class="p">.</span><span class="n">AddLayer</span><span class="p">(</span> <span class="n">child_layer</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Add child layer
+    layer_table.AddLayer( child_layer );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

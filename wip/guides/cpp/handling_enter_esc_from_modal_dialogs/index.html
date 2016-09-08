@@ -327,24 +327,23 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>The first step is to, on your CDialog-drived class, override the <code class="highlighter-rouge">CWnd::PreTranslateMessage</code> virtual function.  This function is used translate window messages before they are dispatched to the <code class="highlighter-rouge">TranslateMessage</code> and <code class="highlighter-rouge">DispatchMessage</code> Windows functions.  Then, add the following block of code:</p>
+<p>The first step is to, on your CDialog-drived class, override the <code>CWnd::PreTranslateMessage</code> virtual function.  This function is used translate window messages before they are dispatched to the <code>TranslateMessage</code> and <code>DispatchMessage</code> Windows functions.  Then, add the following block of code:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">BOOL</span> <span class="n">CMyModalDialog</span><span class="o">::</span><span class="n">PreTranslateMessage</span><span class="p">(</span> <span class="n">MSG</span><span class="o">*</span> <span class="n">pMsg</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pMsg</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">pMsg</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">==</span> <span class="n">WM_KEYDOWN</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">pMsg</span><span class="o">-&gt;</span><span class="n">wParam</span> <span class="o">==</span> <span class="n">VK_RETURN</span> <span class="o">|</span> <span class="n">pMsg</span><span class="o">-&gt;</span><span class="n">wParam</span> <span class="o">==</span> <span class="n">VK_ESCAPE</span> <span class="p">)</span>
-        <span class="n">pMsg</span><span class="o">-&gt;</span><span class="n">wParam</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="c1">// Call the base class PreTranslateMessage. In this example,
-</span>  <span class="c1">// CRhinoDialog is the base class to CMyModalDialog.
-</span>  <span class="k">return</span> <span class="n">CRhinoDialog</span><span class="o">::</span><span class="n">PreTranslateMessage</span><span class="p">(</span> <span class="n">pMsg</span> <span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">BOOL CMyModalDialog::PreTranslateMessage( MSG* pMsg )
+{
+  if( pMsg )
+  {
+    if( pMsg-&gt;message == WM_KEYDOWN )
+    {
+      if( pMsg-&gt;wParam == VK_RETURN | pMsg-&gt;wParam == VK_ESCAPE )
+        pMsg-&gt;wParam = NULL;
+    }
+  }
+  // Call the base class PreTranslateMessage. In this example,
+  // CRhinoDialog is the base class to CMyModalDialog.
+  return CRhinoDialog::PreTranslateMessage( pMsg );
+}
 </code></pre>
-</div>
 
         </article>
 

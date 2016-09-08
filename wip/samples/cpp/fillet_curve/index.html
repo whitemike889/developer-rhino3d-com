@@ -242,58 +242,57 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span> <span class="n">point0</span><span class="p">(</span> <span class="mf">10.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="n">ON_3dPoint</span> <span class="n">point1</span><span class="p">(</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="n">ON_3dPoint</span> <span class="n">point2</span><span class="p">(</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_3dPoint point0( 10.0,  0.0, 0.0 );
+  ON_3dPoint point1( 10.0, 10.0, 0.0 );
+  ON_3dPoint point2(  0.0, 10.0, 0.0 );
 
-  <span class="c1">// Create the line curves to fillet
-</span>  <span class="n">ON_LineCurve</span> <span class="n">curve0</span><span class="p">(</span> <span class="n">point0</span><span class="p">,</span> <span class="n">point1</span> <span class="p">);</span>
-  <span class="n">ON_LineCurve</span> <span class="n">curve1</span><span class="p">(</span> <span class="n">point2</span><span class="p">,</span> <span class="n">point1</span> <span class="p">);</span>
+  // Create the line curves to fillet
+  ON_LineCurve curve0( point0, point1 );
+  ON_LineCurve curve1( point2, point1 );
 
-  <span class="c1">// Fillet at the end points of the line curves
-</span>  <span class="kt">double</span> <span class="n">curve0_t</span> <span class="o">=</span> <span class="n">curve0</span><span class="p">.</span><span class="n">Domain</span><span class="p">().</span><span class="n">Max</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">curve1_t</span> <span class="o">=</span> <span class="n">curve1</span><span class="p">.</span><span class="n">Domain</span><span class="p">().</span><span class="n">Max</span><span class="p">();</span>
+  // Fillet at the end points of the line curves
+  double curve0_t = curve0.Domain().Max();
+  double curve1_t = curve1.Domain().Max();
 
-  <span class="c1">// Fillet radius
-</span>  <span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+  // Fillet radius
+  double radius = 1.0;
 
-  <span class="c1">// Do the fillet calculation
-</span>  <span class="kt">double</span> <span class="n">t0</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">t1</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoGetFilletPoints</span><span class="p">(</span><span class="n">curve0</span><span class="p">,</span> <span class="n">curve1</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">curve0_t</span><span class="p">,</span> <span class="n">curve1_t</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">plane</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Trim back the two line curves
-</span>    <span class="n">ON_Interval</span> <span class="n">domain0</span><span class="p">(</span> <span class="n">curve0</span><span class="p">.</span><span class="n">Domain</span><span class="p">().</span><span class="n">Min</span><span class="p">(),</span> <span class="n">t0</span> <span class="p">);</span>
-    <span class="n">curve0</span><span class="p">.</span><span class="n">Trim</span><span class="p">(</span> <span class="n">domain0</span> <span class="p">);</span>
+  // Do the fillet calculation
+  double t0 = 0.0, t1 = 0.0;
+  ON_Plane plane;
+  if( RhinoGetFilletPoints(curve0, curve1, radius, curve0_t, curve1_t, t0, t1, plane) )
+  {
+    // Trim back the two line curves
+    ON_Interval domain0( curve0.Domain().Min(), t0 );
+    curve0.Trim( domain0 );
 
-    <span class="n">ON_Interval</span> <span class="n">domain1</span><span class="p">(</span> <span class="n">curve1</span><span class="p">.</span><span class="n">Domain</span><span class="p">().</span><span class="n">Min</span><span class="p">(),</span> <span class="n">t1</span> <span class="p">);</span>
-    <span class="n">curve1</span><span class="p">.</span><span class="n">Trim</span><span class="p">(</span> <span class="n">domain1</span> <span class="p">);</span>
+    ON_Interval domain1( curve1.Domain().Min(), t1 );
+    curve1.Trim( domain1 );
 
-    <span class="c1">// Compute the fillet curve
-</span>    <span class="n">ON_3dVector</span> <span class="n">radial0</span> <span class="o">=</span> <span class="n">curve0</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span> <span class="o">-</span> <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">();</span>
-    <span class="n">radial0</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+    // Compute the fillet curve
+    ON_3dVector radial0 = curve0.PointAt(t0) - plane.Origin();
+    radial0.Unitize();
 
-    <span class="n">ON_3dVector</span> <span class="n">radial1</span> <span class="o">=</span> <span class="n">curve1</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span> <span class="o">-</span> <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">();</span>
-    <span class="n">radial1</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+    ON_3dVector radial1 = curve1.PointAt(t1) - plane.Origin();
+    radial1.Unitize();
 
-    <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span> <span class="n">radial0</span> <span class="o">*</span> <span class="n">radial1</span> <span class="p">);</span>
-    <span class="n">ON_Plane</span> <span class="n">fillet_plane</span><span class="p">(</span> <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">(),</span> <span class="n">radial0</span><span class="p">,</span> <span class="n">radial1</span> <span class="p">);</span>
-    <span class="n">ON_Arc</span> <span class="n">fillet</span><span class="p">(</span> <span class="n">fillet_plane</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">(),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">angle</span> <span class="p">);</span>
+    double angle = acos( radial0 * radial1 );
+    ON_Plane fillet_plane( plane.Origin(), radial0, radial1 );
+    ON_Arc fillet( fillet_plane, plane.Origin(), radius, angle );
 
-    <span class="c1">// Add the geometry
-</span>    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">curve0</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">curve1</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">fillet</span> <span class="p">);</span>
+    // Add the geometry
+    context.m_doc.AddCurveObject( curve0 );
+    context.m_doc.AddCurveObject( curve1 );
+    context.m_doc.AddCurveObject( fillet );
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

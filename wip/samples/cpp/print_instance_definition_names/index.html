@@ -242,32 +242,31 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoInstanceDefinitionTable</span><span class="o">&amp;</span> <span class="n">idef_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_instance_definition_table</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">idef_count</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">.</span><span class="n">InstanceDefinitionCount</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">idef_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">"No instance definitions found.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  const CRhinoInstanceDefinitionTable&amp; idef_table = context.m_doc.m_instance_definition_table;
+  int idef_count = idef_table.InstanceDefinitionCount();
+  if (idef_count == 0)
+  {
+    RhinoApp().Print("No instance definitions found.\n");
+    return CRhinoCommand::nothing;
+  }
 
-  <span class="kt">int</span> <span class="n">num_printed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">idef_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">idef</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">IsDeleted</span><span class="p">()</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_wString</span> <span class="n">idef_name</span> <span class="o">=</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">Name</span><span class="p">();</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"Instance definition %d = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">num_printed</span><span class="p">,</span> <span class="n">idef_name</span><span class="p">);</span>
-      <span class="n">num_printed</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  int num_printed = 0;
+  for (int i = 0; i &lt; idef_count; i++)
+  {
+    const CRhinoInstanceDefinition* idef = idef_table[i];
+    if (idef != 0 &amp;&amp; idef-&gt;IsDeleted() == false)
+    {
+      ON_wString idef_name = idef-&gt;Name();
+      RhinoApp().Print(L"Instance definition %d = %s\n", num_printed, idef_name);
+      num_printed += 1;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

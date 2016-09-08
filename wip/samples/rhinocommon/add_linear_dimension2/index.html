@@ -247,38 +247,37 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddLinearDimension2</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Point3d</span> <span class="n">origin</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
-    <span class="n">Point3d</span> <span class="n">offset</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">11</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
-    <span class="n">Point3d</span> <span class="n">pt</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">((</span><span class="n">offset</span><span class="p">.</span><span class="n">X</span><span class="p">-</span><span class="n">origin</span><span class="p">.</span><span class="n">X</span><span class="p">)/</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddLinearDimension2(Rhino.RhinoDoc doc)
+  {
+    Point3d origin = new Point3d(1,1,0);
+    Point3d offset = new Point3d(11,1,0);
+    Point3d pt = new Point3d((offset.X-origin.X)/2,3,0);
 
-    <span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">Plane</span><span class="p">.</span><span class="n">WorldXY</span><span class="p">;</span>
-    <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span> <span class="p">=</span> <span class="n">origin</span><span class="p">;</span>
+    Plane plane = Plane.WorldXY;
+    plane.Origin = origin;
 
-    <span class="kt">double</span> <span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">;</span>
-    <span class="n">plane</span><span class="p">.</span><span class="nf">ClosestParameter</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">);</span>
-    <span class="n">Point2d</span> <span class="n">ext1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+    double u,v;
+    plane.ClosestParameter(origin, out u, out v);
+    Point2d ext1 = new Point2d(u, v);
 
-    <span class="n">plane</span><span class="p">.</span><span class="nf">ClosestParameter</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">);</span>
-    <span class="n">Point2d</span> <span class="n">ext2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+    plane.ClosestParameter(offset, out u, out v);
+    Point2d ext2 = new Point2d(u, v);
 
-    <span class="n">plane</span><span class="p">.</span><span class="nf">ClosestParameter</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">);</span>
-    <span class="n">Point2d</span> <span class="n">linePt</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+    plane.ClosestParameter(pt, out u, out v);
+    Point2d linePt = new Point2d(u, v);
 
-    <span class="n">LinearDimension</span> <span class="n">dimension</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">LinearDimension</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">ext1</span><span class="p">,</span> <span class="n">ext2</span><span class="p">,</span> <span class="n">linePt</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLinearDimension</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    LinearDimension dimension = new LinearDimension(plane, ext1, ext2, linePt);
+    if (doc.Objects.AddLinearDimension(dimension) != Guid.Empty)
+    {
+      doc.Views.Redraw();
+      return Rhino.Commands.Result.Success;
+    }
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddLinearDimension2(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -310,34 +309,33 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddLinearDimension2</span><span class="p">():</span>
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">offset</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">pt</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">((</span><span class="n">offset</span><span class="o">.</span><span class="n">X</span><span class="o">-</span><span class="n">origin</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="o">.</span><span class="n">WorldXY</span>
-    <span class="n">plane</span><span class="o">.</span><span class="n">Origin</span> <span class="o">=</span> <span class="n">origin</span>
+def AddLinearDimension2():
+    origin = Rhino.Geometry.Point3d(1,1,0)
+    offset = Rhino.Geometry.Point3d(11,1,0)
+    pt = Rhino.Geometry.Point3d((offset.X-origin.X)/2.0,3,0)
+    plane = Rhino.Geometry.Plane.WorldXY
+    plane.Origin = origin
 
-    <span class="n">rc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">ClosestParameter</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
-    <span class="n">ext1</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">ClosestParameter</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
-    <span class="n">ext2</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">ClosestParameter</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
-    <span class="n">linePt</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point2d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    rc, u, v = plane.ClosestParameter(origin)
+    ext1 = Rhino.Geometry.Point2d(u,v)
+    rc, u, v = plane.ClosestParameter(offset)
+    ext2 = Rhino.Geometry.Point2d(u,v)
+    rc, u, v = plane.ClosestParameter(pt)
+    linePt = Rhino.Geometry.Point2d(u,v)
 
-    <span class="n">dimension</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">LinearDimension</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">ext1</span><span class="p">,</span> <span class="n">ext2</span><span class="p">,</span> <span class="n">linePt</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddLinearDimension</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    dimension = Rhino.Geometry.LinearDimension(plane, ext1, ext2, linePt)
+    if scriptcontext.doc.Objects.AddLinearDimension(dimension)!=System.Guid.Empty:
+        scriptcontext.doc.Views.Redraw()
+        return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddLinearDimension2</span><span class="p">()</span>
+if __name__=="__main__":
+    AddLinearDimension2()
 </code></pre>
-</div>
 
 </div>
 

@@ -242,215 +242,214 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Helper function to calculate rail parameters
-</span><span class="kt">bool</span> <span class="nf">GetShapeParameterOnRail</span><span class="p">(</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">&amp;</span> <span class="n">shape</span><span class="p">,</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">&amp;</span> <span class="n">rail</span><span class="p">,</span>
-  <span class="kt">double</span> <span class="n">tol</span><span class="p">,</span>
-  <span class="kt">double</span><span class="o">&amp;</span> <span class="n">t</span>
-  <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_Interval</span> <span class="n">rail_domain</span> <span class="o">=</span> <span class="n">rail</span><span class="p">.</span><span class="n">Domain</span><span class="p">();</span>
+<pre><code class="language-cpp">// Helper function to calculate rail parameters
+bool GetShapeParameterOnRail(
+  const ON_Curve&amp; shape,
+  const ON_Curve&amp; rail,
+  double tol,
+  double&amp; t
+  )
+{
+  ON_Interval rail_domain = rail.Domain();
 
-  <span class="c1">// Test start point
-</span>  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">rail</span><span class="p">.</span><span class="n">GetClosestPoint</span><span class="p">(</span> <span class="n">shape</span><span class="p">.</span><span class="n">PointAtStart</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">,</span> <span class="n">tol</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rail</span><span class="p">.</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Max</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Test start point
+  bool rc = rail.GetClosestPoint( shape.PointAtStart(), &amp;t, tol );
+  if( rc )
+  {
+    if( rail.IsClosed() )
+    {
+      if( fabs(t - rail_domain.Max()) &lt; ON_SQRT_EPSILON )
+        t = rail_domain.Min();
+      if( fabs(t - rail_domain.Min()) &lt; ON_SQRT_EPSILON )
+        t = rail_domain.Min();
+    }
+    return true;
+  }
 
-  <span class="c1">// Test end point
-</span>  <span class="n">rc</span> <span class="o">=</span> <span class="n">rail</span><span class="p">.</span><span class="n">GetClosestPoint</span><span class="p">(</span> <span class="n">shape</span><span class="p">.</span><span class="n">PointAtEnd</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">,</span> <span class="n">tol</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rail</span><span class="p">.</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Max</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Test end point
+  rc = rail.GetClosestPoint( shape.PointAtEnd(), &amp;t, tol );
+  if( rc )
+  {
+    if( rail.IsClosed() )
+    {
+      if( fabs(t - rail_domain.Max()) &lt; ON_SQRT_EPSILON )
+        t = rail_domain.Min();
+      if( fabs(t - rail_domain.Min()) &lt; ON_SQRT_EPSILON )
+        t = rail_domain.Min();
+    }
+    return true;
+  }
 
-  <span class="c1">// Try intersecting...
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_X_EVENT</span><span class="o">&gt;</span> <span class="n">x</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">rail</span><span class="p">.</span><span class="n">IntersectCurve</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shape</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">IsPointEvent</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rail</span><span class="p">.</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Max</span><span class="p">())</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">rail_domain</span><span class="p">.</span><span class="n">Min</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Try intersecting...
+  ON_SimpleArray&lt;ON_X_EVENT&gt; x;
+  if( 1 == rail.IntersectCurve(&amp;shape, x, tol, 0.0) &amp;&amp; x[0].IsPointEvent() )
+  {
+    t = x[0].m_a[0];
+    if( rail.IsClosed() )
+    {
+      if( fabs(t - rail_domain.Max()) &lt; ON_SQRT_EPSILON )
+        t = rail_domain.Min();
+    }
+    return true;
+  }
 
-  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  return false;
+}
 
-<span class="c1">// RhinoSweep2 wrapper function
-</span><span class="kt">bool</span> <span class="nf">MySweep2</span><span class="p">(</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">Rail1</span><span class="p">,</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">Rail1_obj</span><span class="p">,</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">Rail2</span><span class="p">,</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">Rail2_obj</span><span class="p">,</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">sCurves</span><span class="p">,</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Brep</span><span class="o">*&gt;&amp;</span> <span class="n">Sweep2_Breps</span>
-  <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail1</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail1_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+// RhinoSweep2 wrapper function
+bool MySweep2(
+  const ON_Curve* Rail1,
+  const CRhinoObject* Rail1_obj,
+  const ON_Curve* Rail2,
+  const CRhinoObject* Rail2_obj,
+  ON_SimpleArray&lt;const ON_Curve*&gt; sCurves,
+  ON_SimpleArray&lt;ON_Brep*&gt;&amp; Sweep2_Breps
+  )
+{
+  if( 0 == Rail1 | 0 == Rail1_obj )
+    return false;
 
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail2</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail2_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  if( 0 == Rail2 | 0 == Rail2_obj )
+    return false;
 
-  <span class="n">CRhinoDoc</span><span class="o">*</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">doc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  CRhinoDoc* doc = RhinoApp().ActiveDoc();
+  if( 0 == doc )
+    return false;
 
-  <span class="c1">// Define a new class that contains sweep2 arguments
-</span>  <span class="n">CArgsRhinoSweep2</span> <span class="n">args</span><span class="p">;</span>
+  // Define a new class that contains sweep2 arguments
+  CArgsRhinoSweep2 args;
 
-  <span class="c1">// Set the 2 rails
-</span>  <span class="n">CRhinoPolyEdge</span> <span class="n">Edge1</span><span class="p">,</span> <span class="n">Edge2</span><span class="p">;</span>
-  <span class="n">Edge1</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">Rail1</span><span class="p">,</span> <span class="n">Rail1_obj</span> <span class="p">);</span>
-  <span class="n">Edge2</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">Rail2</span><span class="p">,</span> <span class="n">Rail2_obj</span> <span class="p">);</span>
+  // Set the 2 rails
+  CRhinoPolyEdge Edge1, Edge2;
+  Edge1.Create( Rail1, Rail1_obj );
+  Edge2.Create( Rail2, Rail2_obj );
 
-  <span class="c1">// Ok, we can at least do some rail direction matching
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoDoCurveDirectionsMatch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Edge1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Edge2</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">Edge2</span><span class="p">.</span><span class="n">Reverse</span><span class="p">();</span>
+  // Ok, we can at least do some rail direction matching
+  if( !RhinoDoCurveDirectionsMatch(&amp;Edge1, &amp;Edge2) )
+    Edge2.Reverse();
 
-  <span class="c1">// Add rails to sweep arguments
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_rail_curves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Edge1</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rail_curves</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">Edge2</span><span class="p">;</span>
+  // Add rails to sweep arguments
+  args.m_rail_curves[0] = &amp;Edge1;
+  args.m_rail_curves[1] = &amp;Edge2;
 
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rail_pick_points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_UNSET_POINT</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rail_pick_points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_UNSET_POINT</span><span class="p">;</span>
+  args.m_rail_pick_points[0] = ON_UNSET_POINT;
+  args.m_rail_pick_points[1] = ON_UNSET_POINT;
 
-  <span class="c1">// To create a closed sweep, you need to have:
-</span>  <span class="c1">//  1. Two closed rail curves and and a single shape curve, or
-</span>  <span class="c1">//  2. Set CArgsRhinoSweep2::m_bClosed = true
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_bClosed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  // To create a closed sweep, you need to have:
+  //  1. Two closed rail curves and and a single shape curve, or
+  //  2. Set CArgsRhinoSweep2::m_bClosed = true
+  args.m_bClosed = false;
 
-  <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">doc</span><span class="o">-&gt;</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
+  double tol = doc-&gt;AbsoluteTolerance();
 
-  <span class="c1">// Loop through sections to set parameters
-</span>  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sCurves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">sCurve</span> <span class="o">=</span> <span class="n">sCurves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">sCurve</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+  // Loop through sections to set parameters
+  for( int i = 0; i &lt; sCurves.Count(); i++ )
+  {
+    const ON_Curve* sCurve = sCurves[i];
+    if( 0 == sCurve )
+      continue;
 
-    <span class="c1">// Add to shapes
-</span>    <span class="n">args</span><span class="p">.</span><span class="n">m_shape_curves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">sCurve</span> <span class="p">);</span>
+    // Add to shapes
+    args.m_shape_curves.Append( sCurve );
 
-    <span class="c1">// Cook up some rail parameters
-</span>    <span class="kt">double</span> <span class="n">t0</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">GetShapeParameterOnRail</span><span class="p">(</span><span class="o">*</span><span class="n">sCurve</span><span class="p">,</span> <span class="n">Edge1</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">t0</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_rail_params</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Append</span><span class="p">(</span> <span class="n">t0</span> <span class="p">);</span>
+    // Cook up some rail parameters
+    double t0 = 0.0;
+    if( !GetShapeParameterOnRail(*sCurve, Edge1, tol, t0) )
+      return false;
+    args.m_rail_params[0].Append( t0 );
 
-    <span class="kt">double</span> <span class="n">t1</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">GetShapeParameterOnRail</span><span class="p">(</span><span class="o">*</span><span class="n">sCurve</span><span class="p">,</span> <span class="n">Edge2</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_rail_params</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Append</span><span class="p">(</span> <span class="n">t1</span> <span class="p">);</span>
-  <span class="p">}</span>
+    double t1 = 0.0;
+    if( !GetShapeParameterOnRail(*sCurve, Edge2, tol, t1) )
+      return false;
+    args.m_rail_params[1].Append( t1 );
+  }
 
-  <span class="c1">// Set the rest of parameters
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_simplify</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bSimpleSweep</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bSameHeight</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rebuild_count</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//Sample point count for rebuilding shapes
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_refit_tolerance</span> <span class="o">=</span> <span class="n">tol</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_sweep_tolerance</span> <span class="o">=</span> <span class="n">tol</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_angle_tolerance</span> <span class="o">=</span> <span class="n">doc</span><span class="o">-&gt;</span><span class="n">AngleToleranceRadians</span><span class="p">();</span>
+  // Set the rest of parameters
+  args.m_simplify = 0;
+  args.m_bSimpleSweep = false;
+  args.m_bSameHeight = false;
+  args.m_rebuild_count = -1; //Sample point count for rebuilding shapes
+  args.m_refit_tolerance = tol;
+  args.m_sweep_tolerance = tol;
+  args.m_angle_tolerance = doc-&gt;AngleToleranceRadians();
 
-  <span class="c1">// Sweep2
-</span>  <span class="k">return</span> <span class="n">RhinoSweep2</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">Sweep2_Breps</span><span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  // Sweep2
+  return RhinoSweep2(args, Sweep2_Breps) ? true : false;
+}
 
-<span class="c1">// Test command that uses the above functions.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select first rail curve
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go1</span><span class="p">;</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select first rail curve"</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go1</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go1</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+// Test command that uses the above functions.
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select first rail curve
+  CRhinoGetObject go1;
+  go1.SetCommandPrompt( L"Select first rail curve" );
+  go1.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go1.EnablePreSelect( false );
+  go1.GetObjects( 1, 1 );
+  if( go1.CommandResult() != success )
+    return go1.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">Rail1_obj</span> <span class="o">=</span> <span class="n">go1</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">Rail1</span> <span class="o">=</span> <span class="n">go1</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail1_obj</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail1</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObject* Rail1_obj = go1.Object(0).Object();
+  const ON_Curve* Rail1 = go1.Object(0).Curve();
+  if( 0 == Rail1_obj | 0 == Rail1 )
+    return failure;
 
-  <span class="c1">// Select second rail curve
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go2</span><span class="p">;</span>
-  <span class="n">go2</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select second rail curve"</span> <span class="p">);</span>
-  <span class="n">go2</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go2</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go2</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go2</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go2</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go2</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Select second rail curve
+  CRhinoGetObject go2;
+  go2.SetCommandPrompt( L"Select second rail curve" );
+  go2.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go2.EnablePreSelect( false );
+  go2.EnableDeselectAllBeforePostSelect( false );
+  go2.GetObjects( 1, 1 );
+  if( go2.CommandResult() != success )
+    return go2.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">Rail2_obj</span> <span class="o">=</span> <span class="n">go2</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">Rail2</span> <span class="o">=</span> <span class="n">go2</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail2_obj</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">Rail2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObject* Rail2_obj = go2.Object(0).Object();
+  const ON_Curve* Rail2 = go2.Object(0).Curve();
+  if( 0 == Rail2_obj | 0 == Rail2 )
+    return failure;
 
-  <span class="c1">// Select cross section curves
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">gx</span><span class="p">;</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select cross section curves"</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gx</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gx</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Select cross section curves
+  CRhinoGetObject gx;
+  gx.SetCommandPrompt( L"Select cross section curves" );
+  gx.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gx.EnablePreSelect( false );
+  gx.EnableDeselectAllBeforePostSelect( false );
+  gx.GetObjects( 1, 0 );
+  if( gx.CommandResult() != success )
+    return gx.CommandResult();
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">sCurves</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">gx</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">sCurve</span> <span class="o">=</span> <span class="n">gx</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">sCurve</span> <span class="p">)</span>
-      <span class="n">sCurves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">sCurve</span> <span class="p">);</span>
-  <span class="p">}</span>
+  ON_SimpleArray&lt;const ON_Curve*&gt; sCurves;
+  int i;
+  for( i = 0; i &lt; gx.ObjectCount(); i++ )
+  {
+    const ON_Curve* sCurve = gx.Object(i).Curve();
+    if( sCurve )
+      sCurves.Append( sCurve );
+  }
 
-  <span class="c1">// Call MySweep2 function
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Brep</span><span class="o">*&gt;</span> <span class="n">Sweep2_Breps</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">MySweep2</span><span class="p">(</span><span class="n">Rail1</span><span class="p">,</span> <span class="n">Rail1_obj</span><span class="p">,</span> <span class="n">Rail2</span><span class="p">,</span> <span class="n">Rail2_obj</span><span class="p">,</span> <span class="n">sCurves</span><span class="p">,</span> <span class="n">Sweep2_Breps</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Add to context then delete
-</span>    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Sweep2_Breps</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">Sweep2_Breps</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">brep</span> <span class="p">);</span>
-        <span class="k">delete</span> <span class="n">Sweep2_Breps</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="c1">// Don't leak...
-</span>        <span class="n">Sweep2_Breps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+  // Call MySweep2 function
+  ON_SimpleArray&lt;ON_Brep*&gt; Sweep2_Breps;
+  if( MySweep2(Rail1, Rail1_obj, Rail2, Rail2_obj, sCurves, Sweep2_Breps) )
+  {
+    // Add to context then delete
+    for( i = 0; i &lt; Sweep2_Breps.Count(); i++ )
+    {
+      ON_Brep* brep = Sweep2_Breps[i];
+      if( brep )
+      {
+        context.m_doc.AddBrepObject( *brep );
+        delete Sweep2_Breps[i]; // Don't leak...
+        Sweep2_Breps[i] = 0;
+      }
+    }
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

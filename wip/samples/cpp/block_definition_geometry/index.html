@@ -242,40 +242,39 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">L"Select instance"</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span><span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">instance_reference</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt(L"Select instance");
+  go.SetGeometryFilter(CRhinoGetObject::instance_reference);
+  go.GetObjects(1, 1);
+  if (go.CommandResult() != CRhinoCommand::success)
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoInstanceObject</span><span class="o">*</span> <span class="n">iref</span> <span class="o">=</span> <span class="n">CRhinoInstanceObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">());</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">iref</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoInstanceObject* iref = CRhinoInstanceObject::Cast(go.Object(0).Object());
+  if (iref == 0)
+    return CRhinoCommand::failure;
 
-  <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span> <span class="o">=</span> <span class="n">iref</span><span class="o">-&gt;</span><span class="n">InstanceDefinition</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">idef</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoInstanceDefinition* idef = iref-&gt;InstanceDefinition();
+  if (idef == 0)
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">objects</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">GetObjects</span><span class="p">(</span><span class="n">objects</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-      <span class="n">ON_UuidToString</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">().</span><span class="n">m_uuid</span><span class="p">,</span> <span class="n">str</span> <span class="p">);</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"Object %d = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  ON_SimpleArray&lt;const CRhinoObject*&gt; objects;
+  int count = idef-&gt;GetObjects(objects);
+  for (int i = 0; i &lt; count; i++ )
+  {
+    const CRhinoObject* obj = objects[i];
+    if (obj != 0)
+    {
+      ON_wString str;
+      ON_UuidToString( obj-&gt;Attributes().m_uuid, str );
+      RhinoApp().Print(L"Object %d = %s\n", i, str);
+    }
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

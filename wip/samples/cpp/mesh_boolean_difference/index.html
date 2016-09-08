@@ -242,110 +242,109 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go0</span><span class="p">;</span>
-  <span class="n">go0</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select first set of meshes"</span> <span class="p">);</span>
-  <span class="n">go0</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go0</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go0</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go0</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go0;
+  go0.SetCommandPrompt( L"Select first set of meshes" );
+  go0.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go0.GetObjects( 1, 0 );
+  if( go0.CommandResult() != success )
+    return go0.CommandResult();
 
-  <span class="n">CRhinoGetObject</span> <span class="n">go1</span><span class="p">;</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select second set of meshes"</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go1</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go1</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go1</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject go1;
+  go1.SetCommandPrompt( L"Select second set of meshes" );
+  go1.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go1.EnablePreSelect( false );
+  go1.EnableDeselectAllBeforePostSelect( false );
+  go1.GetObjects( 1, 0 );
+  if( go1.CommandResult() != success )
+    return go1.CommandResult();
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">DeleteList</span><span class="p">(</span> <span class="n">go0</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="o">+</span> <span class="n">go1</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  ON_SimpleArray&lt;const CRhinoObject*&gt; DeleteList( go0.ObjectCount() + go1.ObjectCount() );
+  int i = 0;
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*&gt;</span> <span class="n">InMeshes0</span><span class="p">(</span> <span class="n">go0</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_3dmObjectAttributes</span><span class="o">*&gt;</span> <span class="n">InAttributes0</span><span class="p">(</span> <span class="n">go0</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go0</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">go0</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">p</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  ON_SimpleArray&lt;const ON_Mesh*&gt; InMeshes0( go0.ObjectCount() );
+  ON_SimpleArray&lt;const ON_3dmObjectAttributes*&gt; InAttributes0( go0.ObjectCount() );
+  for( i = 0; i &lt; go0.ObjectCount(); i++ )
+  {
+    const CRhinoObject* p = go0.Object(i).Object();
+    if( !p )
+      return failure;
 
-    <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">ON_Mesh</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">mesh</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+    const ON_Mesh* mesh = ON_Mesh::Cast( p-&gt;Geometry() );
+    if( !mesh )
+      return failure;
 
-    <span class="n">InMeshes0</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">);</span>
-    <span class="n">InAttributes0</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">()</span> <span class="p">);</span>
+    InMeshes0.Append( mesh );
+    InAttributes0.Append( &amp;p-&gt;Attributes() );
 
-    <span class="n">DeleteList</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">p</span> <span class="p">);</span>
-  <span class="p">}</span>
+    DeleteList.Append( p );
+  }
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*&gt;</span> <span class="n">InMeshes1</span><span class="p">(</span> <span class="n">go1</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go1</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">go1</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">p</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  ON_SimpleArray&lt;const ON_Mesh*&gt; InMeshes1( go1.ObjectCount() );
+  for( i = 0; i &lt; go1.ObjectCount(); i++ )
+  {
+    const CRhinoObject* p = go1.Object(i).Object();
+    if( !p )
+      return failure;
 
-    <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">ON_Mesh</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">mesh</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+    const ON_Mesh* mesh = ON_Mesh::Cast( p-&gt;Geometry() );
+    if( !mesh )
+      return failure;
 
-    <span class="n">InMeshes1</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">);</span>
+    InMeshes1.Append( mesh );
 
-    <span class="n">DeleteList</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">p</span> <span class="p">);</span>
-  <span class="p">}</span>
+    DeleteList.Append( p );
+  }
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Mesh</span><span class="o">*&gt;</span> <span class="n">OutMeshes</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_3dmObjectAttributes</span><span class="o">*&gt;</span> <span class="n">OutAttributes</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">bResult</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoMeshBooleanDifference</span><span class="p">(</span>
-        <span class="n">InMeshes0</span><span class="p">,</span>
-        <span class="n">InMeshes1</span><span class="p">,</span>
-        <span class="n">ON_SQRT_EPSILON</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">ON_SQRT_EPSILON</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span>
-        <span class="o">&amp;</span><span class="n">bResult</span><span class="p">,</span>
-        <span class="n">OutMeshes</span><span class="p">,</span>
-        <span class="o">&amp;</span><span class="n">InAttributes0</span><span class="p">,</span>
-        <span class="o">&amp;</span><span class="n">OutAttributes</span>
-        <span class="p">);</span>
+  ON_SimpleArray&lt;ON_Mesh*&gt; OutMeshes;
+  ON_SimpleArray&lt;const ON_3dmObjectAttributes*&gt; OutAttributes;
+  bool bResult = false;
+  bool rc = RhinoMeshBooleanDifference(
+        InMeshes0,
+        InMeshes1,
+        ON_SQRT_EPSILON*10,
+        ON_SQRT_EPSILON*10,
+        &amp;bResult,
+        OutMeshes,
+        &amp;InAttributes0,
+        &amp;OutAttributes
+        );
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  if( !rc )
+    return failure;
 
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">OutMeshes</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">pMeshObj</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">OutAttributes</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">pMeshObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMeshObject</span><span class="p">(</span> <span class="o">*</span><span class="n">OutAttributes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">pMeshObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMeshObject</span><span class="p">();</span>
+  for( i = 0; i &lt; OutMeshes.Count(); i++ )
+  {
+    CRhinoMeshObject* pMeshObj = 0;
+    if( i &lt; OutAttributes.Count() )
+      pMeshObj = new CRhinoMeshObject( *OutAttributes[i] );
+    else
+      pMeshObj = new CRhinoMeshObject();
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">pMeshObj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">pMeshObj</span><span class="o">-&gt;</span><span class="n">SetMesh</span><span class="p">(</span> <span class="n">OutMeshes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">pMeshObj</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">delete</span> <span class="n">OutMeshes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="n">OutMeshes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
+    if( pMeshObj )
+    {
+      pMeshObj-&gt;SetMesh( OutMeshes[i] );
+      context.m_doc.AddObject( pMeshObj );
+    }
+    else
+    {
+      delete OutMeshes[i];
+    }
+    OutMeshes[i] = 0;
+  }
 
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">DeleteList</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">DeleteList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">DeleteObject</span><span class="p">(</span> <span class="n">DeleteList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-  <span class="p">}</span>
+  for( i = 0; i &lt; DeleteList.Count(); i++ )
+  {
+    if( DeleteList[i] )
+      context.m_doc.DeleteObject( DeleteList[i] );
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -323,7 +323,7 @@ $(document).ready(function()
 
 <h2 id="which-mesh">Which Mesh?</h2>
 
-<p>There is an <code class="highlighter-rouge">ON_Brep::GetMeshes()</code> routine of the C/C++ SDK.  You might find that very adequate meshes can be pulled from this routine when specifying <code class="highlighter-rouge">ON::render_mesh</code>.  You may have also noticed that you can also run this routine with an enumeration for an “analysis mesh,” a “default mesh,” a “preview mesh,” or “any mesh.”</p>
+<p>There is an <code>ON_Brep::GetMeshes()</code> routine of the C/C++ SDK.  You might find that very adequate meshes can be pulled from this routine when specifying <code>ON::render_mesh</code>.  You may have also noticed that you can also run this routine with an enumeration for an “analysis mesh,” a “default mesh,” a “preview mesh,” or “any mesh.”</p>
 
 <p>What are the differences between all of these options?</p>
 
@@ -332,11 +332,11 @@ $(document).ready(function()
 <p>Here is an overview of the mesh types:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">ON::render_mesh</code> is a mesh for, obviously, rendering.  This rendering can be for shaded or rendered display. It can also be used by rendering plugins.  The quality of these meshes is controlled by the Meshes page in the Document Properties dialog, but can also be overridden on a per-object basis.</li>
-  <li><code class="highlighter-rouge">ON::analysis_mesh</code> is used by analysis modes, such as curvature, draft angle, environment map, and zebra.</li>
-  <li><code class="highlighter-rouge">ON::preview_mesh</code> is used when you use the Mesh command and poke the preview button - the pipeline needs a way to display preview meshes and this is it.</li>
-  <li><code class="highlighter-rouge">ON::default</code> mesh returns <code class="highlighter-rouge">ON::render_mesh</code> if it exists.  Otherwise it returns <code class="highlighter-rouge">ON::analysis_mesh</code> if it exists.</li>
-  <li><code class="highlighter-rouge">ON::any_mesh</code> is only used when we want delete all meshes at one time.</li>
+  <li><code>ON::render_mesh</code> is a mesh for, obviously, rendering.  This rendering can be for shaded or rendered display. It can also be used by rendering plugins.  The quality of these meshes is controlled by the Meshes page in the Document Properties dialog, but can also be overridden on a per-object basis.</li>
+  <li><code>ON::analysis_mesh</code> is used by analysis modes, such as curvature, draft angle, environment map, and zebra.</li>
+  <li><code>ON::preview_mesh</code> is used when you use the Mesh command and poke the preview button - the pipeline needs a way to display preview meshes and this is it.</li>
+  <li><code>ON::default</code> mesh returns <code>ON::render_mesh</code> if it exists.  Otherwise it returns <code>ON::analysis_mesh</code> if it exists.</li>
+  <li><code>ON::any_mesh</code> is only used when we want delete all meshes at one time.</li>
 </ol>
 
 <p><strong>NOTE</strong>: render and analysis meshes do not appear automatically.  Some command must trigger their creation, whether its just setting viewport for rendered display or running an analysis command.  The can also be generated from plugins that call SDK functions.</p>

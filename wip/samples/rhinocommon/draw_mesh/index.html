@@ -247,87 +247,86 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DrawMesh</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select sphere"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DrawMesh(RhinoDoc doc)
+  {
+    var gs = new GetObject();
+    gs.SetCommandPrompt("select sphere");
+    gs.GeometryFilter = ObjectType.Surface;
+    gs.DisablePreSelect();
+    gs.SubObjectSelect = false;
+    gs.Get();
+    if (gs.CommandResult() != Result.Success)
+      return gs.CommandResult();
 
-    <span class="n">Sphere</span> <span class="n">sphere</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Surface</span><span class="p">().</span><span class="nf">TryGetSphere</span><span class="p">(</span><span class="k">out</span> <span class="n">sphere</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">sphere</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">mesh</span> <span class="p">=</span> <span class="n">Mesh</span><span class="p">.</span><span class="nf">CreateFromSphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Sphere sphere;
+    gs.Object(0).Surface().TryGetSphere(out sphere);
+    if (sphere.IsValid)
+    {
+      var mesh = Mesh.CreateFromSphere(sphere, 10, 10);
+      if (mesh == null)
+        return Result.Failure;
 
-      <span class="kt">var</span> <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DrawBlueMeshConduit</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span> <span class="p">{</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">};</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+      var conduit = new DrawBlueMeshConduit(mesh) {Enabled = true};
+      doc.Views.Redraw();
 
-      <span class="kt">var</span> <span class="n">in_str</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"press &lt;Enter&gt; to continue"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">in_str</span><span class="p">);</span>
+      var in_str = "";
+      Rhino.Input.RhinoGet.GetString("press &lt;Enter&gt; to continue", true, ref in_str);
 
-      <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+      conduit.Enabled = false;
+      doc.Views.Redraw();
+      return Result.Success;
+    }
+    else
+      return Result.Failure;
+  }
+}
 
-<span class="k">class</span> <span class="nc">DrawBlueMeshConduit</span> <span class="p">:</span> <span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">readonly</span> <span class="n">Mesh</span> <span class="n">m_mesh</span><span class="p">;</span>
-  <span class="k">readonly</span> <span class="n">Color</span> <span class="n">m_color</span><span class="p">;</span>
-  <span class="k">readonly</span> <span class="n">DisplayMaterial</span> <span class="n">m_material</span><span class="p">;</span>
-  <span class="k">readonly</span> <span class="n">BoundingBox</span> <span class="n">m_bbox</span><span class="p">;</span>
+class DrawBlueMeshConduit : DisplayConduit
+{
+  readonly Mesh m_mesh;
+  readonly Color m_color;
+  readonly DisplayMaterial m_material;
+  readonly BoundingBox m_bbox;
 
-  <span class="k">public</span> <span class="nf">DrawBlueMeshConduit</span><span class="p">(</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// set up as much data as possible so we do the minimum amount of work possible inside
-</span>    <span class="c1">// the actual display code
-</span>    <span class="n">m_mesh</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">;</span>
-    <span class="n">m_color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Blue</span><span class="p">;</span>
-    <span class="n">m_material</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DisplayMaterial</span><span class="p">();</span>
-    <span class="n">m_material</span><span class="p">.</span><span class="n">Diffuse</span> <span class="p">=</span> <span class="n">m_color</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">m_mesh</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">m_mesh</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-      <span class="n">m_bbox</span> <span class="p">=</span> <span class="n">m_mesh</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-  <span class="p">}</span>
+  public DrawBlueMeshConduit(Mesh mesh)
+  {
+    // set up as much data as possible so we do the minimum amount of work possible inside
+    // the actual display code
+    m_mesh = mesh;
+    m_color = System.Drawing.Color.Blue;
+    m_material = new DisplayMaterial();
+    m_material.Diffuse = m_color;
+    if (m_mesh != null &amp;&amp; m_mesh.IsValid)
+      m_bbox = m_mesh.GetBoundingBox(true);
+  }
 
-  <span class="c1">// this is called every frame inside the drawing code so try to do as little as possible
-</span>  <span class="c1">// in order to not degrade display speed. Don't create new objects if you don't have to as this
-</span>  <span class="c1">// will incur an overhead on the heap and garbage collection.
-</span>  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="c1">// Since we are dynamically drawing geometry, we needed to override
-</span>    <span class="c1">// CalculateBoundingBox. Otherwise, there is a good chance that our
-</span>    <span class="c1">// dynamically drawing geometry would get clipped.
-</span>
-    <span class="c1">// Union the mesh's bbox with the scene's bounding box
-</span>    <span class="n">e</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">.</span><span class="nf">Union</span><span class="p">(</span><span class="n">m_bbox</span><span class="p">);</span>
-  <span class="p">}</span>
+  // this is called every frame inside the drawing code so try to do as little as possible
+  // in order to not degrade display speed. Don't create new objects if you don't have to as this
+  // will incur an overhead on the heap and garbage collection.
+  protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+  {
+    base.CalculateBoundingBox(e);
+    // Since we are dynamically drawing geometry, we needed to override
+    // CalculateBoundingBox. Otherwise, there is a good chance that our
+    // dynamically drawing geometry would get clipped.
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">vp</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">Viewport</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">vp</span><span class="p">.</span><span class="n">DisplayMode</span><span class="p">.</span><span class="n">EnglishName</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()</span> <span class="p">==</span> <span class="s">"wireframe"</span><span class="p">)</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawMeshWires</span><span class="p">(</span><span class="n">m_mesh</span><span class="p">,</span> <span class="n">m_color</span><span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawMeshShaded</span><span class="p">(</span><span class="n">m_mesh</span><span class="p">,</span> <span class="n">m_material</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Union the mesh's bbox with the scene's bounding box
+    e.BoundingBox.Union(m_bbox);
+  }
+
+  protected override void PreDrawObjects(DrawEventArgs e)
+  {
+    base.PreDrawObjects(e);
+    var vp = e.Display.Viewport;
+    if (vp.DisplayMode.EnglishName.ToLower() == "wireframe")
+      e.Display.DrawMeshWires(m_mesh, m_color);
+    else
+      e.Display.DrawMeshShaded(m_mesh, m_material);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DrawMesh(ByVal doc As RhinoDoc) As Result
@@ -409,65 +408,64 @@ Friend Class DrawBlueMeshConduit
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">System</span>
-<span class="kn">import</span> <span class="nn">System.Drawing</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from scriptcontext import doc
+import Rhino
+import System
+import System.Drawing
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">gs</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"select sphere"</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">DisablePreSelect</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  gs = Rhino.Input.Custom.GetObject()
+  gs.SetCommandPrompt("select sphere")
+  gs.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
+  gs.DisablePreSelect()
+  gs.SubObjectSelect = False
+  gs.Get()
+  if gs.CommandResult() != Rhino.Commands.Result.Success:
+    return gs.CommandResult()
 
-  <span class="n">b</span><span class="p">,</span> <span class="n">sphere</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span><span class="o">.</span><span class="n">TryGetSphere</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">sphere</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Mesh</span><span class="o">.</span><span class="n">CreateFromSphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">mesh</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  b, sphere = gs.Object(0).Surface().TryGetSphere()
+  if sphere.IsValid:
+    mesh = Rhino.Geometry.Mesh.CreateFromSphere(sphere, 10, 10)
+    if mesh == None:
+      return Rhino.Commands.Result.Failure
 
-    <span class="n">conduit</span> <span class="o">=</span> <span class="n">DrawBlueMeshConduit</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
-    <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    conduit = DrawBlueMeshConduit(mesh)
+    conduit.Enabled = True
+    doc.Views.Redraw()
 
-    <span class="n">inStr</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"press &lt;Enter&gt; to continue"</span><span class="p">)</span>
+    inStr = rs.GetString("press &lt;Enter&gt; to continue")
 
-    <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    conduit.Enabled = False
+    doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
+  else:
+    return Rhino.Commands.Result.Failure
 
-<span class="k">class</span> <span class="nc">DrawBlueMeshConduit</span><span class="p">(</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DisplayConduit</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Blue</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DisplayMaterial</span><span class="p">()</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">Diffuse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span>
-    <span class="k">if</span> <span class="n">mesh</span> <span class="o">!=</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">mesh</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">bbox</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">GetBoundingBox</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+class DrawBlueMeshConduit(Rhino.Display.DisplayConduit):
+  def __init__(self, mesh):
+    self.mesh = mesh
+    self.color = System.Drawing.Color.Blue
+    self.material = Rhino.Display.DisplayMaterial()
+    self.material.Diffuse = self.color
+    if mesh != None and mesh.IsValid:
+      self.bbox = mesh.GetBoundingBox(True)
 
-  <span class="k">def</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calculateBoundingBoxEventArgs</span><span class="p">):</span>
-    <span class="c">#super.CalculateBoundingBox(calculateBoundingBoxEventArgs)</span>
-    <span class="n">calculateBoundingBoxEventArgs</span><span class="o">.</span><span class="n">BoundingBox</span><span class="o">.</span><span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
+  def CalculateBoundingBox(self, calculateBoundingBoxEventArgs):
+    #super.CalculateBoundingBox(calculateBoundingBoxEventArgs)
+    calculateBoundingBoxEventArgs.BoundingBox.Union(self.bbox)
 
-  <span class="k">def</span> <span class="nf">PreDrawObjects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawEventArgs</span><span class="p">):</span>
-    <span class="c">#base.PreDrawObjects(rawEventArgs)</span>
-    <span class="n">gvp</span> <span class="o">=</span> <span class="n">drawEventArgs</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">Viewport</span>
-    <span class="k">if</span> <span class="n">gvp</span><span class="o">.</span><span class="n">DisplayMode</span><span class="o">.</span><span class="n">EnglishName</span><span class="o">.</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">==</span> <span class="s">"wireframe"</span><span class="p">:</span>
-      <span class="n">drawEventArgs</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawMeshWires</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">drawEventArgs</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawMeshShaded</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="p">)</span>
+  def PreDrawObjects(self, drawEventArgs):
+    #base.PreDrawObjects(rawEventArgs)
+    gvp = drawEventArgs.Display.Viewport
+    if gvp.DisplayMode.EnglishName.ToLower() == "wireframe":
+      drawEventArgs.Display.DrawMeshWires(self.mesh, self.color)
+    else:
+      drawEventArgs.Display.DrawMeshShaded(self.mesh, self.material)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+    RunCommand()
 </code></pre>
-</div>
 
 </div>
 

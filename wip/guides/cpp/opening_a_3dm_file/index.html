@@ -344,49 +344,48 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>As each type of file, support by Rhino for opening or importing, has a different set of options, it not possible to write a single, generic file open function and hope to support all formats.  Thus, if you want to open or import a file from a plugin command, then simply script either Rhino’s <em>Open</em> or <em>Import</em> command using <code class="highlighter-rouge">CRhinoApp::RunScript()</code>.</p>
+<p>As each type of file, support by Rhino for opening or importing, has a different set of options, it not possible to write a single, generic file open function and hope to support all formats.  Thus, if you want to open or import a file from a plugin command, then simply script either Rhino’s <em>Open</em> or <em>Import</em> command using <code>CRhinoApp::RunScript()</code>.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following example command demonstrates how to open a Rhino 3DM file from a plugin command.  You can use this same technique to open other support file types, such as STL, IGES, DWG, and others.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Prompt the user for the name of a 3dm file to open
-</span>  <span class="n">ON_wString</span> <span class="n">filename</span><span class="p">;</span>
-  <span class="n">CWnd</span><span class="o">*</span> <span class="n">pParentWnd</span> <span class="o">=</span> <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Prompt the user for the name of a 3dm file to open
+  ON_wString filename;
+  CWnd* pParentWnd = CWnd::FromHandle( RhinoApp().MainWnd() );
 
-  <span class="n">CRhinoGetFileDialog</span> <span class="n">gf</span><span class="p">;</span>
-  <span class="n">gf</span><span class="p">.</span><span class="n">SetScriptMode</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="n">FALSE</span> <span class="o">:</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">DisplayFileDialog</span><span class="p">(</span> <span class="n">CRhinoGetFileDialog</span><span class="o">::</span><span class="n">open_rhino_only_dialog</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">pParentWnd</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  CRhinoGetFileDialog gf;
+  gf.SetScriptMode( context.IsInteractive() ? FALSE : TRUE );
+  BOOL rc = gf.DisplayFileDialog( CRhinoGetFileDialog::open_rhino_only_dialog, filename, pParentWnd );
+  if( !rc )
+    return CRhinoCommand::cancel;
 
-  <span class="c1">// Verify the file name string
-</span>  <span class="n">filename</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">FileName</span><span class="p">();</span>
-  <span class="n">filename</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">filename</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Verify the file name string
+  filename = gf.FileName();
+  filename.TrimLeftAndRight();
+  if( filename.IsEmpty() )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Verify the file
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">CRhinoFileUtilities</span><span class="o">::</span><span class="n">FileExists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"File not found.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Verify the file
+  if( !CRhinoFileUtilities::FileExists(filename) )
+  {
+    RhinoApp().Print( L"File not found.\n" );
+    return CRhinoCommand::failure;
+  }
 
-  <span class="c1">// Script Rhino's open command. Note, in case the file name
-</span>  <span class="c1">// string contains spaces, we will want to surround the string
-</span>  <span class="c1">// with double-quote characters so the command line parser
-</span>  <span class="c1">// will deal with the string property.
-</span>  <span class="n">ON_wString</span> <span class="n">script</span><span class="p">;</span>
-  <span class="n">script</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"_-Open </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="n">script</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // Script Rhino's open command. Note, in case the file name
+  // string contains spaces, we will want to surround the string
+  // with double-quote characters so the command line parser
+  // will deal with the string property.
+  ON_wString script;
+  script.Format( L"_-Open \"%s\"", filename );
+  RhinoApp().RunScript( script, 0 );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

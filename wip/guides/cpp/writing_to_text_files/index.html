@@ -349,17 +349,17 @@ $(document).ready(function()
 <p>With that said, there are a number of ways to read and write text files in C/C++.</p>
 
 <ol>
-  <li>Use the C-runtime library’s <code class="highlighter-rouge">fopen</code>, <code class="highlighter-rouge">fputs</code>, <code class="highlighter-rouge">fwrite</code> and <code class="highlighter-rouge">fclose</code> functions.</li>
-  <li>You can use the <code class="highlighter-rouge">iostream</code> library’s <code class="highlighter-rouge">ofstream</code> class.</li>
-  <li>You can use Win32’s <code class="highlighter-rouge">CreateFile</code>, <code class="highlighter-rouge">WriteFile</code>, and <code class="highlighter-rouge">CloseHandle</code> functions.</li>
-  <li>You can use MFC’s <code class="highlighter-rouge">CFile</code> and <code class="highlighter-rouge">CStdioFile</code> classes.</li>
+  <li>Use the C-runtime library’s <code>fopen</code>, <code>fputs</code>, <code>fwrite</code> and <code>fclose</code> functions.</li>
+  <li>You can use the <code>iostream</code> library’s <code>ofstream</code> class.</li>
+  <li>You can use Win32’s <code>CreateFile</code>, <code>WriteFile</code>, and <code>CloseHandle</code> functions.</li>
+  <li>You can use MFC’s <code>CFile</code> and <code>CStdioFile</code> classes.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>Here is a simple example that uses the C-runtime library.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<pre><code class="language-cpp">/*
 Description:
   Writes a string to a text file
 Parameters:
@@ -369,25 +369,24 @@ Parameters:
                   it will be overwritten.
 Returns:
   true if successful, false otherwise.
-*/</span>
-<span class="kt">bool</span> <span class="nf">WriteStringToFile</span><span class="p">(</span> <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">text</span><span class="p">,</span> <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">filename</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">text</span> <span class="o">&amp;&amp;</span> <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">filename</span> <span class="o">&amp;&amp;</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">_wfopen</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"w"</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">fp</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">size_t</span> <span class="n">num_write</span> <span class="o">=</span> <span class="n">wcslen</span><span class="p">(</span> <span class="n">text</span> <span class="p">);</span>
-      <span class="kt">size_t</span> <span class="n">num_written</span> <span class="o">=</span> <span class="n">fwrite</span><span class="p">(</span> <span class="n">text</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">wchar_t</span><span class="p">),</span> <span class="n">num_write</span><span class="p">,</span> <span class="n">fp</span> <span class="p">);</span>
-      <span class="n">fclose</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span> <span class="n">num_written</span> <span class="o">==</span> <span class="n">num_write</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+*/
+bool WriteStringToFile( const wchar_t* text, const wchar_t* filename )
+{
+  bool rc = false;
+  if( (text &amp;&amp; text[0]) &amp;&amp; (filename &amp;&amp; filename[0]) )
+  {
+    FILE* fp = _wfopen( filename, L"w" );
+    if( fp )
+    {
+      size_t num_write = wcslen( text );
+      size_t num_written = fwrite( text, sizeof(wchar_t), num_write, fp );
+      fclose( fp );
+      rc = ( num_written == num_write );
+    }
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

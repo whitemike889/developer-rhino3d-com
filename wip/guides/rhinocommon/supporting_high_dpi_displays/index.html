@@ -424,11 +424,11 @@ $(document).ready(function()
 
 <p>WinForms has its own scaling mechanism which calculates the scaling difference between the system that the form has been designed on and the system it is running on. Thus, <strong>always design your forms at default 96 DPI and then test at higher DPI settings</strong>.</p>
 
-<p>All container controls must be set to the same <code class="highlighter-rouge">AutoScaleMode = Font</code>. This will handle both DPI changes and changes to the system font size setting; DPI will only handle DPI changes, not changes to the system font size setting.</p>
+<p>All container controls must be set to the same <code>AutoScaleMode = Font</code>. This will handle both DPI changes and changes to the system font size setting; DPI will only handle DPI changes, not changes to the system font size setting.</p>
 
 <p>Make sure you <strong>use the default font size</strong>* on all your containers (forms, panels, tab page, user controls etc). 8.25 px. Preferably this should not be set in the <em>&lt;container&gt;.Designer.cs</em> file at all for all containers so that it uses the default font from the container class.</p>
 
-<p>All container controls must also be set with <code class="highlighter-rouge">AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F)</code>, assuming 96 DPI, in the <em>&lt;container&gt;.Designer.cs</em> file.</p>
+<p>All container controls must also be set with <code>AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F)</code>, assuming 96 DPI, in the <em>&lt;container&gt;.Designer.cs</em> file.</p>
 
 <p>If you need to set different font sizes on labels, textboxes, etc. set them per control instead of setting the font on the container class because WinForms uses the containers font setting to scale it’s contents.</p>
 
@@ -438,39 +438,37 @@ $(document).ready(function()
 
 <h3 id="rhino-specific">Rhino-Specific</h3>
 
-<p>The <code class="highlighter-rouge">RhinoWindows</code> assembly has a new <code class="highlighter-rouge">RhinoWindows.Forms.Dpi</code> class that is similar to the <code class="highlighter-rouge">CRhinoDpi</code> class in the Rhino C++ SDK. The class contains static functions to return the current DPI scale factor and to scale values per the current DPI scale factor. For example:</p>
+<p>The <code>RhinoWindows</code> assembly has a new <code>RhinoWindows.Forms.Dpi</code> class that is similar to the <code>CRhinoDpi</code> class in the Rhino C++ SDK. The class contains static functions to return the current DPI scale factor and to scale values per the current DPI scale factor. For example:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="c1">/// &lt;summary&gt;
+<pre><code class="language-cs">/// &lt;summary&gt;
 /// MainWindow Constructor
 /// &lt;/summary&gt;
-</span><span class="k">public</span> <span class="nf">MainWindow</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="c1">// This call is required by the Windows Form Designer. 
-</span>  <span class="nf">InitializeComponent</span><span class="p">();</span>
+public MainWindow()
+{
+  // This call is required by the Windows Form Designer. 
+  InitializeComponent();
 
-  <span class="kt">var</span> <span class="n">width</span> <span class="p">=</span> <span class="n">RhinoWindows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Dpi</span><span class="p">.</span><span class="nf">ScaleInt</span><span class="p">(</span><span class="n">m_toolbar</span><span class="p">.</span><span class="n">ImageScalingSize</span><span class="p">.</span><span class="n">Width</span><span class="p">);</span>
-  <span class="kt">var</span> <span class="n">height</span> <span class="p">=</span> <span class="n">RhinoWindows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Dpi</span><span class="p">.</span><span class="nf">ScaleInt</span><span class="p">(</span><span class="n">m_toolbar</span><span class="p">.</span><span class="n">ImageScalingSize</span><span class="p">.</span><span class="n">Height</span><span class="p">);</span>
-  <span class="n">m_toolbar</span><span class="p">.</span><span class="n">ImageScalingSize</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+  var width = RhinoWindows.Forms.Dpi.ScaleInt(m_toolbar.ImageScalingSize.Width);
+  var height = RhinoWindows.Forms.Dpi.ScaleInt(m_toolbar.ImageScalingSize.Height);
+  m_toolbar.ImageScalingSize = new Size(width, height);
   
-  <span class="c1">// ...
-</span></code></pre>
-</div>
+  // ...
+</code></pre>
 
-<p>Use the <code class="highlighter-rouge">DrawingUtilities::LoadBitmapWithScaleDown</code> and <code class="highlighter-rouge">DrawingUtilities::LoadIconWithScaleDown</code> static functions, found in the <code class="highlighter-rouge">Rhino.UI</code> assembly, to assist with loading bitmaps and icons from icon resources. For example:</p>
+<p>Use the <code>DrawingUtilities::LoadBitmapWithScaleDown</code> and <code>DrawingUtilities::LoadIconWithScaleDown</code> static functions, found in the <code>Rhino.UI</code> assembly, to assist with loading bitmaps and icons from icon resources. For example:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">Rhino.UI</span><span class="p">;</span>
+<pre><code class="language-cs">using Rhino.UI;
 
-<span class="c1">//...
-</span>
-<span class="kt">var</span> <span class="n">size</span> <span class="p">=</span> <span class="n">RhinoWindows</span><span class="p">.</span><span class="n">Forms</span><span class="p">.</span><span class="n">Dpi</span><span class="p">.</span><span class="nf">ScaleInt</span><span class="p">(</span><span class="m">32</span><span class="p">);</span>
-<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">icon</span> <span class="p">=</span> <span class="n">DrawingUtilities</span><span class="p">.</span><span class="nf">LoadIconWithScaleDown</span><span class="p">(</span><span class="s">"logo.ico"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">size</span><span class="p">,</span> <span class="nf">GetType</span><span class="p">().</span><span class="n">Assembly</span><span class="p">))</span>
-  <span class="n">m_image</span> <span class="p">=</span> <span class="n">icon</span><span class="p">.</span><span class="nf">ToBitmap</span><span class="p">();</span>
+//...
+
+var size = RhinoWindows.Forms.Dpi.ScaleInt(32);
+using (var icon = DrawingUtilities.LoadIconWithScaleDown("logo.ico", (int)size, GetType().Assembly))
+  m_image = icon.ToBitmap();
   
-<span class="c1">// ...
-</span></code></pre>
-</div>
+// ...
+</code></pre>
 
-<p>If the icon is not a standard size, <code class="highlighter-rouge">DrawingUtilities::LoadIconWithScaleDown</code> scales down a larger image.</p>
+<p>If the icon is not a standard size, <code>DrawingUtilities::LoadIconWithScaleDown</code> scales down a larger image.</p>
 
         </article>
 

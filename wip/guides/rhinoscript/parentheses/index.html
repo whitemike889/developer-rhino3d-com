@@ -377,7 +377,7 @@ MyOtherSub(MyArg1, MyArg2)
 
 <p>or…</p>
 
-<p>Pass an argument which would normally be <code class="highlighter-rouge">ByRef</code> as <code class="highlighter-rouge">ByVal</code>.  For example…</p>
+<p>Pass an argument which would normally be <code>ByRef</code> as <code>ByVal</code>.  For example…</p>
 
 <pre><code class="language-vbnet">'Arg1 is passed ByRef, Arg2 is passed ByVal.
 Result = MyFunction(Arg1, (Arg2))
@@ -390,22 +390,22 @@ Result = MyFunction(Arg1, (Arg2))
 <pre><code class="language-vbnet">Result = MyFunc(MyArg)
 </code></pre>
 
-<p>An argument list for a subroutine call, or a function call with no assignment, that uses the <code class="highlighter-rouge">Call</code> keyword must be surrounded by parentheses.  For example:</p>
+<p>An argument list for a subroutine call, or a function call with no assignment, that uses the <code>Call</code> keyword must be surrounded by parentheses.  For example:</p>
 
 <pre><code class="language-vbnet">Call MySub(MyArg)
 </code></pre>
 
 <p>If the above two rules do not apply, then the list must not be surrounded by parentheses.</p>
 
-<p>Finally, there is the <code class="highlighter-rouge">ByRef</code> rule: arguments are passed <code class="highlighter-rouge">ByRef</code> when possible.  But, if there are extra parentheses around a variable, then the variable is passed <code class="highlighter-rouge">ByVal</code>, not <code class="highlighter-rouge">ByRef</code>.</p>
+<p>Finally, there is the <code>ByRef</code> rule: arguments are passed <code>ByRef</code> when possible.  But, if there are extra parentheses around a variable, then the variable is passed <code>ByVal</code>, not <code>ByRef</code>.</p>
 
-<p>From these rules, it should be clear why the statement <code class="highlighter-rouge">MySub(MyArg)</code> is legal but <code class="highlighter-rouge">MyOtherSub(MyArg1, MyArg2)</code> is not. The first case appears to be a subroutine call with parentheses around the argument list, but that would violate the rules. Then why does this work?  In fact, it is a subroutine call with no parentheses around the argument list, but parentheses around the first argument.  This passes the argument by value. The second case is a clear violation of rules, and there is no way to make it legal, so an error is given.</p>
+<p>From these rules, it should be clear why the statement <code>MySub(MyArg)</code> is legal but <code>MyOtherSub(MyArg1, MyArg2)</code> is not. The first case appears to be a subroutine call with parentheses around the argument list, but that would violate the rules. Then why does this work?  In fact, it is a subroutine call with no parentheses around the argument list, but parentheses around the first argument.  This passes the argument by value. The second case is a clear violation of rules, and there is no way to make it legal, so an error is given.</p>
 
 <h2 id="examples">Examples</h2>
 
-<p>Here are some examples to what is legal and what is not in VBScript. Suppose <code class="highlighter-rouge">X</code> and <code class="highlighter-rouge">Y</code> are variables, <code class="highlighter-rouge">Func1</code> is a one argument procedure, and <code class="highlighter-rouge">Func2</code> is a two argument procedure.</p>
+<p>Here are some examples to what is legal and what is not in VBScript. Suppose <code>X</code> and <code>Y</code> are variables, <code>Func1</code> is a one argument procedure, and <code>Func2</code> is a two argument procedure.</p>
 
-<p>To pass <code class="highlighter-rouge">X</code> <code class="highlighter-rouge">ByRef</code> and <code class="highlighter-rouge">Y</code> <code class="highlighter-rouge">ByRef</code>:</p>
+<p>To pass <code>X</code> <code>ByRef</code> and <code>Y</code> <code>ByRef</code>:</p>
 
 <pre><code class="language-vbnet">Func1 X
 Call Func1(X)
@@ -415,7 +415,7 @@ Call Func2(X, Y)
 Z = Func2(X, Y)
 </code></pre>
 
-<p>To pass <code class="highlighter-rouge">X</code> <code class="highlighter-rouge">ByVal</code> and <code class="highlighter-rouge">Y</code> <code class="highlighter-rouge">ByRef</code>:</p>
+<p>To pass <code>X</code> <code>ByVal</code> and <code>Y</code> <code>ByRef</code>:</p>
 
 <pre><code class="language-vbnet">Func1(X)
 Call Func1((X))

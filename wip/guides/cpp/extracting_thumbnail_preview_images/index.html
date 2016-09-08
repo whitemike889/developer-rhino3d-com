@@ -346,59 +346,58 @@ $(document).ready(function()
 
 <p>When Rhino reads a 3dm file, it ignores the thumbnail preview image stored in the file (since it is never used).  Thus, if you want to obtain the thumbnail preview image for the current document, or any 3dm file, you will have to read the 3dm file yourself.  Fortunately, you only need to read a very small portion of the 3dm file to get the thumbnail preview image.</p>
 
-<p>Rhino stores a document’s thumbnail preview image as an <code class="highlighter-rouge">ON_WindowsBitmap</code>, which is just an uncompressed Windows device independent bitmap, or DIB. At the heart of <code class="highlighter-rouge">ON_WindowsBitmap</code> is simply a Windows <code class="highlighter-rouge">BITMAPINFO</code> structure.</p>
+<p>Rhino stores a document’s thumbnail preview image as an <code>ON_WindowsBitmap</code>, which is just an uncompressed Windows device independent bitmap, or DIB. At the heart of <code>ON_WindowsBitmap</code> is simply a Windows <code>BITMAPINFO</code> structure.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample code demonstrates how to read the thumbnail preview image from a 3dm file.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">Read3dmThumbnailPreviewImage</span><span class="p">(</span> <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ON_WindowsBitmap</span><span class="o">&amp;</span> <span class="n">bitmap</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">filename</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">bool Read3dmThumbnailPreviewImage( const wchar_t* filename, ON_WindowsBitmap&amp; bitmap )
+{
+  if( 0 == filename | 0 == filename[0] )
+    return false;
 
-  <span class="k">try</span>
-  <span class="p">{</span>
-    <span class="kt">FILE</span><span class="o">*</span> <span class="n">archive_fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"rb"</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">archive_fp</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  try
+  {
+    FILE* archive_fp = ON::OpenFile( filename, L"rb" );
+    if( 0 == archive_fp )
+      return false;
 
-    <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">read3dm</span><span class="p">,</span> <span class="n">archive_fp</span> <span class="p">);</span>
+    ON_BinaryFile archive( ON::read3dm, archive_fp );
 
-    <span class="c1">// STEP 1: REQUIRED - Read start section
-</span>    <span class="kt">int</span> <span class="n">file_version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">ON_String</span> <span class="n">strComments</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">Read3dmStartSection</span><span class="p">(</span><span class="o">&amp;</span><span class="n">file_version</span><span class="p">,</span> <span class="n">strComments</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span>
+    // STEP 1: REQUIRED - Read start section
+    int file_version = 0;
+    ON_String strComments;
+    if( !archive.Read3dmStartSection(&amp;file_version, strComments) )
+    {
+      ON::CloseFile( archive_fp );
+      return false;
+    }
 
-    <span class="c1">// STEP 2: REQUIRED - Read properties section
-</span>    <span class="n">ON_3dmProperties</span> <span class="n">properties</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">Read3dmProperties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span>
+    // STEP 2: REQUIRED - Read properties section
+    ON_3dmProperties properties;
+    if( !archive.Read3dmProperties(properties) )
+    {
+      ON::CloseFile( archive_fp );
+      return false;
+    }
 
-    <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
+    ON::CloseFile( archive_fp );
 
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">properties</span><span class="p">.</span><span class="n">m_PreviewImage</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    if( !properties.m_PreviewImage.IsValid() )
+      return false;
 
-    <span class="n">bitmap</span> <span class="o">=</span> <span class="n">properties</span><span class="p">.</span><span class="n">m_PreviewImage</span><span class="p">;</span>
-  <span class="p">}</span>
+    bitmap = properties.m_PreviewImage;
+  }
 
-  <span class="k">catch</span><span class="p">(...)</span> <span class="c1">// Handle all exceptions
-</span>  <span class="p">{</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="p">}</span>
+  catch(...) // Handle all exceptions
+  {
+    return false;
+  }
 
-  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+  return true;
+}
 </code></pre>
-</div>
 
         </article>
 

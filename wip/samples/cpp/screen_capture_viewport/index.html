@@ -242,72 +242,71 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CWnd</span><span class="o">*</span> <span class="n">pMainWnd</span> <span class="o">=</span> <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">pMainWnd</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CWnd* pMainWnd = CWnd::FromHandle( RhinoApp().MainWnd() );
+  if( 0 == pMainWnd )
+    return failure;
 
-  <span class="n">CRhinoGetFileDialog</span> <span class="n">gf</span><span class="p">;</span>
-  <span class="n">gf</span><span class="p">.</span><span class="n">SetScriptMode</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="n">FALSE</span> <span class="o">:</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">DisplayFileDialog</span><span class="p">(</span> <span class="n">CRhinoGetFileDialog</span><span class="o">::</span><span class="n">save_bitmap_dialog</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pMainWnd</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
+  CRhinoGetFileDialog gf;
+  gf.SetScriptMode( context.IsInteractive() ? FALSE : TRUE );
+  BOOL rc = gf.DisplayFileDialog( CRhinoGetFileDialog::save_bitmap_dialog, 0, pMainWnd );
+  if( !rc )
+    return cancel;
 
-  <span class="n">ON_wString</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">FileName</span><span class="p">();</span>
-  <span class="n">filename</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">filename</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  ON_wString filename = gf.FileName();
+  filename.TrimLeftAndRight();
+  if( filename.IsEmpty() )
+    return nothing;
 
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRect</span> <span class="n">rect</span><span class="p">;</span>
-    <span class="n">view</span><span class="o">-&gt;</span><span class="n">GetClientRect</span><span class="p">(</span> <span class="n">rect</span> <span class="p">);</span>
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( view )
+  {
+    CRect rect;
+    view-&gt;GetClientRect( rect );
 
-    <span class="n">CRhinoDib</span> <span class="n">dib</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">dib</span><span class="p">.</span><span class="n">CreateDib</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span> <span class="n">rect</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span> <span class="mi">24</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Set these flags as you wish.
-</span>      <span class="n">BOOL</span> <span class="n">bIgnoreHighlights</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-      <span class="n">BOOL</span> <span class="n">bDrawTitle</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-      <span class="n">BOOL</span> <span class="n">bDrawConstructionPlane</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-      <span class="n">BOOL</span> <span class="n">bDrawWorldAxes</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+    CRhinoDib dib;
+    if( dib.CreateDib(rect.Width(), rect.Height(), 24, true) )
+    {
+      // Set these flags as you wish.
+      BOOL bIgnoreHighlights = TRUE;
+      BOOL bDrawTitle = FALSE;
+      BOOL bDrawConstructionPlane = FALSE;
+      BOOL bDrawWorldAxes = FALSE;
 
-      <span class="n">CRhinoObjectIterator</span> <span class="n">it</span><span class="p">(</span> <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">normal_or_locked_objects</span><span class="p">,</span>
-                               <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">active_and_reference_objects</span>
-                               <span class="p">);</span>
+      CRhinoObjectIterator it( CRhinoObjectIterator::normal_or_locked_objects,
+                               CRhinoObjectIterator::active_and_reference_objects
+                               );
 
-      <span class="k">if</span><span class="p">(</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">DisplayMode</span><span class="p">()</span> <span class="o">==</span> <span class="n">ON</span><span class="o">::</span><span class="n">wireframe_display</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">DrawToDC</span><span class="p">(</span> <span class="n">it</span><span class="p">,</span> <span class="n">dib</span><span class="p">,</span> <span class="n">dib</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span> <span class="n">dib</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span>
-          <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">View</span><span class="p">(),</span>
-          <span class="n">bIgnoreHighlights</span><span class="p">,</span>
-          <span class="n">bDrawTitle</span><span class="p">,</span>
-          <span class="n">bDrawConstructionPlane</span><span class="p">,</span>
-          <span class="n">bDrawWorldAxes</span>
-          <span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">RenderToDC</span><span class="p">(</span> <span class="n">it</span><span class="p">,</span> <span class="n">dib</span><span class="p">,</span> <span class="n">dib</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span> <span class="n">dib</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span>
-          <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">View</span><span class="p">(),</span>
-          <span class="n">bIgnoreHighlights</span><span class="p">,</span>
-          <span class="n">bDrawTitle</span><span class="p">,</span>
-          <span class="n">bDrawConstructionPlane</span><span class="p">,</span>
-          <span class="n">bDrawWorldAxes</span><span class="p">,</span>
-          <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">GhostedShade</span><span class="p">()</span>
-          <span class="p">);</span>
-      <span class="p">}</span>
+      if( view-&gt;ActiveViewport().DisplayMode() == ON::wireframe_display )
+      {
+        context.m_doc.DrawToDC( it, dib, dib.Width(), dib.Height(),
+          view-&gt;ActiveViewport().View(),
+          bIgnoreHighlights,
+          bDrawTitle,
+          bDrawConstructionPlane,
+          bDrawWorldAxes
+          );
+      }
+      else
+      {
+        context.m_doc.RenderToDC( it, dib, dib.Width(), dib.Height(),
+          view-&gt;ActiveViewport().View(),
+          bIgnoreHighlights,
+          bDrawTitle,
+          bDrawConstructionPlane,
+          bDrawWorldAxes,
+          view-&gt;ActiveViewport().GhostedShade()
+          );
+      }
 
-      <span class="n">dib</span><span class="p">.</span><span class="n">WriteToFile</span><span class="p">(</span> <span class="n">filename</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      dib.WriteToFile( filename );
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

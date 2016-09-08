@@ -327,83 +327,81 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>Consider the following sample <code class="highlighter-rouge">CRhinoDisplayConduit</code> derived class:</p>
+<p>Consider the following sample <code>CRhinoDisplayConduit</code> derived class:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CTestHighlightCurveConduit</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoDisplayConduit</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CTestHighlightCurveConduit</span><span class="p">();</span>
+<pre><code class="language-cpp">class CTestHighlightCurveConduit : public CRhinoDisplayConduit
+{
+public:
+  CTestHighlightCurveConduit();
 
-  <span class="kt">bool</span> <span class="n">ExecConduit</span><span class="p">(</span>
-    <span class="n">CRhinoDisplayPipeline</span><span class="o">&amp;</span> <span class="n">dp</span><span class="p">,</span>
-    <span class="n">UINT</span> <span class="n">nChannel</span><span class="p">,</span>
-    <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">bTerminate</span>
-    <span class="p">);</span>
+  bool ExecConduit(
+    CRhinoDisplayPipeline&amp; dp,
+    UINT nChannel,
+    bool&amp; bTerminate
+    );
 
-<span class="k">public</span><span class="o">:</span>
-  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">m_runtime_object_serial_number</span><span class="p">;</span>
-<span class="p">};</span>
+public:
+  unsigned int m_runtime_object_serial_number;
+};
 
-<span class="n">CTestHighlightCurveConduit</span><span class="o">::</span><span class="n">CTestHighlightCurveConduit</span><span class="p">()</span>
-<span class="o">:</span> <span class="n">CRhinoDisplayConduit</span><span class="p">(</span> <span class="n">CSupportChannels</span><span class="o">::</span><span class="n">SC_DRAWOBJECT</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// TODO: initialize members here
-</span><span class="p">}</span>
+CTestHighlightCurveConduit::CTestHighlightCurveConduit()
+: CRhinoDisplayConduit( CSupportChannels::SC_DRAWOBJECT )
+{
+  // TODO: initialize members here
+}
 
-<span class="kt">bool</span> <span class="n">CTestHighlightCurveConduit</span><span class="o">::</span><span class="n">ExecConduit</span><span class="p">(</span>
-    <span class="n">CRhinoDisplayPipeline</span><span class="o">&amp;</span> <span class="n">dp</span><span class="p">,</span>
-    <span class="n">UINT</span> <span class="n">nChannel</span><span class="p">,</span>
-    <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">bTerminate</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">switch</span><span class="p">(</span> <span class="n">nChannel</span> <span class="p">)</span>
-  <span class="p">{</span>
-  <span class="k">case</span> <span class="n">CSupportChannels</span><span class="p">:</span><span class="o">:</span><span class="n">SC_DRAWOBJECT</span><span class="o">:</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">m_pChannelAttrs</span><span class="o">-&gt;</span><span class="n">m_pObject</span><span class="o">-&gt;</span><span class="n">m_runtime_object_serial_number</span> <span class="o">==</span> <span class="n">m_runtime_object_serial_number</span> <span class="p">)</span>
-        <span class="n">m_pDisplayAttrs</span><span class="o">-&gt;</span><span class="n">m_ObjectColor</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">180</span><span class="p">);</span> <span class="c1">// hot pink
-</span>    <span class="p">}</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+bool CTestHighlightCurveConduit::ExecConduit(
+    CRhinoDisplayPipeline&amp; dp,
+    UINT nChannel,
+    bool&amp; bTerminate
+    )
+{
+  switch( nChannel )
+  {
+  case CSupportChannels::SC_DRAWOBJECT:
+    {
+      if( m_pChannelAttrs-&gt;m_pObject-&gt;m_runtime_object_serial_number == m_runtime_object_serial_number )
+        m_pDisplayAttrs-&gt;m_ObjectColor = RGB(255, 105, 180); // hot pink
+    }
+    break;
+  }
 
-  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+  return true;
+}
 </code></pre>
-</div>
 
-<p>During the <code class="highlighter-rouge">SC_DRAWOBJECT</code> channel, the code looks for the target object.  If found, it overrides the object’s drawing color.</p>
+<p>During the <code>SC_DRAWOBJECT</code> channel, the code looks for the target object.  If found, it overrides the object’s drawing color.</p>
 
 <p>To use this conduit, you could write a command such as this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestHighlightCurve</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve to highlight"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestHighlightCurve::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve to highlight" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObject* obj = go.Object(0).Object();
+  if( 0 == obj )
+    return CRhinoCommand::failure;
 
-  <span class="n">CTestHighlightCurveConduit</span> <span class="n">conduit</span><span class="p">;</span>
-  <span class="n">conduit</span><span class="p">.</span><span class="n">m_runtime_object_serial_number</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">m_runtime_object_serial_number</span><span class="p">;</span>
-  <span class="n">conduit</span><span class="p">.</span><span class="n">Enable</span><span class="p">();</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  CTestHighlightCurveConduit conduit;
+  conduit.m_runtime_object_serial_number = obj-&gt;m_runtime_object_serial_number;
+  conduit.Enable();
+  context.m_doc.Redraw();
 
-  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Press &lt;Enter&gt; to continue"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Press &lt;Enter&gt; to continue" );
+  gs.GetString();
 
-  <span class="n">conduit</span><span class="p">.</span><span class="n">Disable</span><span class="p">();</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  conduit.Disable();
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

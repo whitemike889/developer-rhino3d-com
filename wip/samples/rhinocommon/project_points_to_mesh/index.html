@@ -247,34 +247,33 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ProjectPointsToMeshesEx</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"mesh"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">mesh</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Mesh</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ProjectPointsToMeshesEx(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("mesh", false, ObjectType.Mesh, out obj_ref);
+    if (rc != Result.Success) return rc;
+    var mesh = obj_ref.Mesh();
 
-    <span class="n">ObjRef</span><span class="p">[]</span> <span class="n">obj_ref_pts</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"points"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Point</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref_pts</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref_pt</span> <span class="k">in</span> <span class="n">obj_ref_pts</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">pt</span> <span class="p">=</span> <span class="n">obj_ref_pt</span><span class="p">.</span><span class="nf">Point</span><span class="p">().</span><span class="n">Location</span><span class="p">;</span>
-      <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">pt</span><span class="p">);</span>
-    <span class="p">}</span>
+    ObjRef[] obj_ref_pts;
+    rc = RhinoGet.GetMultipleObjects("points", false, ObjectType.Point, out obj_ref_pts);
+    if (rc != Result.Success) return rc;
+    var points = new List&lt;Point3d&gt;();
+    foreach (var obj_ref_pt in obj_ref_pts)
+    {
+      var pt = obj_ref_pt.Point().Location;
+      points.Add(pt);
+    }
 
-    <span class="kt">int</span><span class="p">[]</span> <span class="n">indices</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">prj_points</span> <span class="p">=</span> <span class="n">Intersection</span><span class="p">.</span><span class="nf">ProjectPointsToMeshesEx</span><span class="p">(</span><span class="k">new</span><span class="p">[]</span> <span class="p">{</span><span class="n">mesh</span><span class="p">},</span> <span class="n">points</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="k">out</span> <span class="n">indices</span><span class="p">);</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">prj_pt</span> <span class="k">in</span> <span class="n">prj_points</span><span class="p">)</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">prj_pt</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    int[] indices;
+    var prj_points = Intersection.ProjectPointsToMeshesEx(new[] {mesh}, points, new Vector3d(0, 1, 0), 0, out indices);
+    foreach (var prj_pt in prj_points) doc.Objects.AddPoint(prj_pt);
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ProjectPointsToMeshesEx(ByVal doc As RhinoDoc) As Result
@@ -307,37 +306,36 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">System.Collections.Generic</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry.Intersect</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from System.Collections.Generic import *
+from Rhino import *
+from Rhino.Commands import *
+from Rhino.Geometry import *
+from Rhino.Geometry.Intersect import *
+from Rhino.Input import *
+from Rhino.DocObjects import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"mesh"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Mesh</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">mesh</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Mesh</span><span class="p">()</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject("mesh", False, ObjectType.Mesh)
+  if rc != Result.Success: return rc
+  mesh = obj_ref.Mesh()
 
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref_pts</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetMultipleObjects</span><span class="p">(</span><span class="s">"points"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Point</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
-  <span class="k">for</span> <span class="n">obj_ref_pt</span> <span class="ow">in</span> <span class="n">obj_ref_pts</span><span class="p">:</span>
-    <span class="n">pt</span> <span class="o">=</span> <span class="n">obj_ref_pt</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span><span class="o">.</span><span class="n">Location</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+  rc, obj_ref_pts = RhinoGet.GetMultipleObjects("points", False, ObjectType.Point)
+  if rc != Result.Success: return rc
+  points = []
+  for obj_ref_pt in obj_ref_pts:
+    pt = obj_ref_pt.Point().Location
+    points.append(pt)
 
-  <span class="n">prj_points</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">Intersection</span><span class="o">.</span><span class="n">ProjectPointsToMeshesEx</span><span class="p">({</span><span class="n">mesh</span><span class="p">},</span> <span class="n">points</span><span class="p">,</span> <span class="n">Vector3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">prj_pt</span> <span class="ow">in</span> <span class="n">prj_points</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">prj_pt</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  prj_points, indices = Intersection.ProjectPointsToMeshesEx({mesh}, points, Vector3d(0, 1, 0), 0)
+  for prj_pt in prj_points:
+    doc.Objects.AddPoint(prj_pt)
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

@@ -374,7 +374,7 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>So you are interested in taking advantage <code class="highlighter-rouge">ON_Light::Attenuation</code> in your render plugin, and you need to clarify how you can use it.  Is the input vector supposed to represent the distance over which you want the light to attenuate to zero?</p>
+<p>So you are interested in taking advantage <code>ON_Light::Attenuation</code> in your render plugin, and you need to clarify how you can use it.  Is the input vector supposed to represent the distance over which you want the light to attenuate to zero?</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -390,9 +390,8 @@ $(document).ready(function()
 
 <p>Thus, you could create the input vector as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_3dVector</span> <span class="n">attenuation</span><span class="p">(</span> <span class="n">C</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">Q</span> <span class="p">);</span>
+<pre><code class="language-cpp">ON_3dVector attenuation( C, L, Q );
 </code></pre>
-</div>
 
 <p><strong>NOTE</strong>: Rhino’s user interface only uses constant attenuation so that adding a light reveals everything, no matter how far away the light source is from any given piece of geometry.</p>
 

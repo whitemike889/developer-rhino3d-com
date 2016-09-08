@@ -247,80 +247,79 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DrawShadedMeshConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="n">Mesh</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">public class DrawShadedMeshConduit : Rhino.Display.DisplayConduit
+{
+  public Rhino.Geometry.Mesh Mesh { get; set; }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">Mesh</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">BoundingBox</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">Mesh</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-      <span class="c1">// Unites a bounding box with the current display bounding box in
-</span>      <span class="c1">// order to ensure dynamic objects in "box" are drawn.
-</span>      <span class="n">e</span><span class="p">.</span><span class="nf">IncludeBoundingBox</span><span class="p">(</span><span class="n">bbox</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  protected override void CalculateBoundingBox(Rhino.Display.CalculateBoundingBoxEventArgs e)
+  {
+    if (null != Mesh)
+    {
+      Rhino.Geometry.BoundingBox bbox = Mesh.GetBoundingBox(false);
+      // Unites a bounding box with the current display bounding box in
+      // order to ensure dynamic objects in "box" are drawn.
+      e.IncludeBoundingBox(bbox);
+    }
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PostDrawObjects</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">Mesh</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayMaterial</span> <span class="n">material</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DisplayMaterial</span><span class="p">();</span>
-      <span class="n">material</span><span class="p">.</span><span class="n">Diffuse</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Blue</span><span class="p">;</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawMeshShaded</span><span class="p">(</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">material</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  protected override void PostDrawObjects(Rhino.Display.DrawEventArgs e)
+  {
+    if (null != Mesh)
+    {
+      Rhino.Display.DisplayMaterial material = new Rhino.Display.DisplayMaterial();
+      material.Diffuse = System.Drawing.Color.Blue;
+      e.Display.DrawMeshShaded(Mesh, material);
+    }
+  }
+}
 
-<span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ConduitDrawShadedMesh</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="nf">MeshBox</span><span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">500</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">mesh</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+partial class Examples
+{
+  public static Rhino.Commands.Result ConduitDrawShadedMesh(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.Mesh mesh = MeshBox(100, 500, 10);
+    if (null == mesh)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">DrawShadedMeshConduit</span> <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DrawShadedMeshConduit</span><span class="p">();</span>
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Mesh</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">;</span>
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    DrawShadedMeshConduit conduit = new DrawShadedMeshConduit();
+    conduit.Mesh = mesh;
+    conduit.Enabled = true;
+    doc.Views.Redraw();
 
-    <span class="kt">string</span> <span class="n">outputString</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Press &lt;Enter&gt; to continue"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">outputString</span><span class="p">);</span>
+    string outputString = string.Empty;
+    Rhino.Input.RhinoGet.GetString("Press &lt;Enter&gt; to continue", true, ref outputString);
 
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    conduit.Enabled = false;
+    doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="nf">MeshBox</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">z</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Mesh</span><span class="p">();</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">4</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">6</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">7</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Normals</span><span class="p">.</span><span class="nf">ComputeNormals</span><span class="p">();</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="nf">Compact</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">mesh</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  public static Rhino.Geometry.Mesh MeshBox(double x, double y, double z)
+  {
+    Rhino.Geometry.Mesh mesh = new Rhino.Geometry.Mesh();
+    mesh.Vertices.Add(0, 0, 0);
+    mesh.Vertices.Add(x, 0, 0);
+    mesh.Vertices.Add(x, y, 0);
+    mesh.Vertices.Add(0, y, 0);
+    mesh.Vertices.Add(0, 0, z);
+    mesh.Vertices.Add(x, 0, z);
+    mesh.Vertices.Add(x, y, z);
+    mesh.Vertices.Add(0, y, z);
+    mesh.Faces.AddFace(3, 2, 1, 0);
+    mesh.Faces.AddFace(4, 5, 6, 7);
+    mesh.Faces.AddFace(0, 1, 5, 4);
+    mesh.Faces.AddFace(1, 2, 6, 5);
+    mesh.Faces.AddFace(2, 3, 7, 6);
+    mesh.Faces.AddFace(3, 0, 4, 7);
+    mesh.Normals.ComputeNormals();
+    mesh.Compact();
+    if (mesh.IsValid)
+      return mesh;
+    return null;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ConduitDrawShadedMesh(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -369,9 +368,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

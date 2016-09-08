@@ -242,57 +242,56 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">AddAnnotationText</span><span class="p">(</span>
-      <span class="n">CRhinoDoc</span><span class="o">&amp;</span> <span class="n">doc</span><span class="p">,</span>       <span class="c1">// reference to active document
-</span>      <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="c1">// location of anotation text
-</span>      <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">text</span><span class="p">,</span>  <span class="c1">// the text
-</span>      <span class="kt">double</span> <span class="n">height</span><span class="p">,</span>        <span class="c1">// height of text item
-</span>      <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">font</span><span class="p">,</span>  <span class="c1">// font or face name
-</span>      <span class="kt">int</span> <span class="n">style</span>             <span class="c1">// style 0=normal, 1=bold,
-</span>      <span class="p">)</span>                     <span class="c1">//       2=italic, 3=bold and italic
-</span><span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">bool AddAnnotationText(
+      CRhinoDoc&amp; doc,       // reference to active document
+      const ON_3dPoint&amp; pt, // location of anotation text
+      const wchar_t* text,  // the text
+      double height,        // height of text item
+      const wchar_t* font,  // font or face name
+      int style             // style 0=normal, 1=bold,
+      )                     //       2=italic, 3=bold and italic
+{
+  bool rc = false;
 
-  <span class="n">ON_wString</span> <span class="n">wText</span><span class="p">(</span> <span class="n">text</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">wText</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  ON_wString wText( text );
+  if( wText.IsEmpty() )
+    return rc;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+  if( height &lt;= 0 )
+    height = 1.0;
 
-  <span class="n">ON_wString</span> <span class="n">wFont</span><span class="p">(</span> <span class="n">font</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">wFont</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">wFont</span> <span class="o">=</span> <span class="s">L"Arial"</span><span class="p">;</span>
+  ON_wString wFont( font );
+  if( wFont.IsEmpty() )
+    wFont = L"Arial";
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">style</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">style</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="p">)</span>
-    <span class="n">style</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  if( style &lt; 0 | style &gt; 3 )
+    style = 0;
 
-  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">RhinoActiveCPlane</span><span class="p">();</span>
-  <span class="n">plane</span><span class="p">.</span><span class="n">SetOrigin</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
+  ON_Plane plane = RhinoActiveCPlane();
+  plane.SetOrigin( pt );
 
-  <span class="n">ON_TextEntity2</span><span class="o">*</span> <span class="n">text_entity</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_TextEntity2</span><span class="p">;</span>
-  <span class="n">CRhinoAnnotationText</span><span class="o">*</span> <span class="n">text_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoAnnotationText</span><span class="p">;</span>
-  <span class="n">text_object</span><span class="o">-&gt;</span><span class="n">SetAnnotation</span><span class="p">(</span> <span class="n">text_entity</span> <span class="p">);</span>
-  <span class="n">text_object</span><span class="o">-&gt;</span><span class="n">SetTextHeight</span><span class="p">(</span> <span class="n">height</span> <span class="p">);</span>
-  <span class="n">text_object</span><span class="o">-&gt;</span><span class="n">SetString</span><span class="p">(</span> <span class="n">wText</span> <span class="p">);</span>
-  <span class="n">text_object</span><span class="o">-&gt;</span><span class="n">SetPlane</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">m_font_table</span><span class="p">.</span><span class="n">FindOrCreateFont</span><span class="p">(</span> <span class="n">wFont</span><span class="p">,</span> <span class="n">style</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">style</span> <span class="o">&amp;</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="n">text_object</span><span class="o">-&gt;</span><span class="n">SetFontIndex</span><span class="p">(</span> <span class="n">idx</span> <span class="p">);</span>
+  ON_TextEntity2* text_entity = new ON_TextEntity2;
+  CRhinoAnnotationText* text_object = new CRhinoAnnotationText;
+  text_object-&gt;SetAnnotation( text_entity );
+  text_object-&gt;SetTextHeight( height );
+  text_object-&gt;SetString( wText );
+  text_object-&gt;SetPlane( plane );
+  int idx = doc.m_font_table.FindOrCreateFont( wFont, style &amp; 1, style &amp; 2 );
+  text_object-&gt;SetFontIndex( idx );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">text_object</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">text_object</span><span class="p">;</span>
-    <span class="n">text_object</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  if( doc.AddObject(text_object) )
+  {
+    rc = true;
+    doc.Redraw();
+  }
+  else
+  {
+    delete text_object;
+    text_object = 0;
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

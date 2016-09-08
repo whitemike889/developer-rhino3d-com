@@ -242,42 +242,41 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoCommand::result rc = failure;
 
-  <span class="c1">// Get the active view
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the current cursor position
-</span>    <span class="n">POINT</span> <span class="n">point</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">GetCursorPos</span><span class="p">(</span><span class="o">&amp;</span><span class="n">point</span> <span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Convert the screen coordinates to client coordinates
-</span>      <span class="n">view</span><span class="o">-&gt;</span><span class="n">ScreenToClient</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">point</span> <span class="p">);</span>
+  // Get the active view
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( view )
+  {
+    // Get the current cursor position
+    POINT point;
+    if( GetCursorPos(&amp;point ) )
+    {
+      // Convert the screen coordinates to client coordinates
+      view-&gt;ScreenToClient( &amp;point );
 
-      <span class="c1">// Obtain the view's screen-to-world transformation
-</span>      <span class="n">ON_Xform</span> <span class="n">screen_to_world</span><span class="p">;</span>
-      <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">VP</span><span class="p">().</span><span class="n">GetXform</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">screen_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">screen_to_world</span> <span class="p">);</span>
+      // Obtain the view's screen-to-world transformation
+      ON_Xform screen_to_world;
+      view-&gt;ActiveViewport().VP().GetXform( ON::screen_cs, ON::world_cs, screen_to_world );
 
-      <span class="c1">// Create a 3-D point
-</span>      <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">(</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-      <span class="c1">// Transform it
-</span>      <span class="n">pt</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span> <span class="n">screen_to_world</span> <span class="p">);</span>
+      // Create a 3-D point
+      ON_3dPoint pt( point.x, point.y, 0 );
+      // Transform it
+      pt.Transform( screen_to_world );
 
-      <span class="c1">// Add it to the document
-</span>      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+      // Add it to the document
+      context.m_doc.AddPointObject( pt );
+      context.m_doc.Redraw();
 
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">success</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      rc = success;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

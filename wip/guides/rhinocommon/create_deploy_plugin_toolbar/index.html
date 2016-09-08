@@ -352,9 +352,8 @@ $(document).ready(function()
 
 <p>The first time a plugin is loaded, Rhino looks for an RUI file with the same name as the plugin. If it is found, it is copied to the following location and opened:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>%APPDATA%\McNeel\Rhinoceros\&lt;version&gt;\Plug-ins\&lt;plugin_name (plugin_uuid)&gt;\settings
+<pre><code>%APPDATA%\McNeel\Rhinoceros\&lt;version&gt;\Plug-ins\&lt;plugin_name (plugin_uuid)&gt;\settings
 </code></pre>
-</div>
 
 <p>It is copied, or staged, to ensure that the file is writable and to provide a way to revert to the original, or default, RUI file if needed.</p>
 
@@ -366,56 +365,55 @@ $(document).ready(function()
 
 <p>Finally, if you update your plugin, Rhino will not re-stage the RUI file because it already exists. You can get Rhino to re-stage the RUI file by deleting it in <strong>%APPDATA%</strong> and restarting which will cause Rhino to copy the file again since it no longer exists. This can be done programmatically by adding the following code to your plugin object’s <strong>OnLoad</strong> override.</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="c1">/// &lt;summary&gt;
+<pre><code class="language-cs">/// &lt;summary&gt;
 /// Called when the plugin is being loaded.
 /// &lt;/summary&gt;
-</span><span class="k">protected</span> <span class="k">override</span> <span class="n">LoadReturnCode</span> <span class="nf">OnLoad</span><span class="p">(</span><span class="k">ref</span> <span class="kt">string</span> <span class="n">errorMessage</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get the version number of our plugin, that was last used, from our settings file.
-</span>  <span class="kt">var</span> <span class="n">plugin_version</span> <span class="p">=</span> <span class="n">Settings</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"PlugInVersion"</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+protected override LoadReturnCode OnLoad(ref string errorMessage)
+{
+  // Get the version number of our plugin, that was last used, from our settings file.
+  var plugin_version = Settings.GetString("PlugInVersion", null);
 
-  <span class="k">if</span> <span class="p">(!</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">plugin_version</span><span class="p">))</span>
-  <span class="p">{</span>
-    <span class="c1">// If the version number of the plugin that was last used does not match the
-</span>    <span class="c1">// version number of this plugin, proceed.
-</span>    <span class="k">if</span> <span class="p">(</span><span class="m">0</span> <span class="p">!=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Compare</span><span class="p">(</span><span class="n">Version</span><span class="p">,</span> <span class="n">plugin_version</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="c1">// Build a path to the user's staged RUI file.
-</span>      <span class="kt">var</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-      <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">Environment</span><span class="p">.</span><span class="nf">GetFolderPath</span><span class="p">(</span><span class="n">Environment</span><span class="p">.</span><span class="n">SpecialFolder</span><span class="p">.</span><span class="n">ApplicationData</span><span class="p">));</span>
-      <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s">"\\McNeel\\Rhinoceros\\5.0\\Plug-ins\\"</span><span class="p">);</span>
-      <span class="n">sb</span><span class="p">.</span><span class="nf">AppendFormat</span><span class="p">(</span><span class="s">"{0} ({1})"</span><span class="p">,</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Id</span><span class="p">);</span>
-      <span class="n">sb</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s">"\\settings\\"</span><span class="p">);</span>
-      <span class="n">sb</span><span class="p">.</span><span class="nf">AppendFormat</span><span class="p">(</span><span class="s">"{0}.rui"</span><span class="p">,</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetName</span><span class="p">().</span><span class="n">Name</span><span class="p">);</span>
+  if (!string.IsNullOrEmpty(plugin_version))
+  {
+    // If the version number of the plugin that was last used does not match the
+    // version number of this plugin, proceed.
+    if (0 != string.Compare(Version, plugin_version, StringComparison.OrdinalIgnoreCase))
+    {
+      // Build a path to the user's staged RUI file.
+      var sb = new StringBuilder();
+      sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+      sb.Append("\\McNeel\\Rhinoceros\\5.0\\Plug-ins\\");
+      sb.AppendFormat("{0} ({1})", Name, Id);
+      sb.Append("\\settings\\");
+      sb.AppendFormat("{0}.rui", Assembly.GetName().Name);
 
-      <span class="kt">var</span> <span class="n">path</span> <span class="p">=</span> <span class="n">sb</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+      var path = sb.ToString();
 
-      <span class="c1">// Verify the RUI file exists.
-</span>      <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="nf">Exists</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="k">try</span>
-        <span class="p">{</span>
-          <span class="c1">// Delete the RUI file.
-</span>          <span class="n">File</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">catch</span>
-        <span class="p">{</span>
-          <span class="c1">// ignored
-</span>        <span class="p">}</span>
-      <span class="p">}</span>
+      // Verify the RUI file exists.
+      if (File.Exists(path))
+      {
+        try
+        {
+          // Delete the RUI file.
+          File.Delete(path);
+        }
+        catch
+        {
+          // ignored
+        }
+      }
 
-      <span class="c1">// Save the version number of this plugin to our settings file.
-</span>      <span class="n">Settings</span><span class="p">.</span><span class="nf">SetString</span><span class="p">(</span><span class="s">"PlugInVersion"</span><span class="p">,</span> <span class="n">Version</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      // Save the version number of this plugin to our settings file.
+      Settings.SetString("PlugInVersion", Version);
+    }
+  }
 
-  <span class="c1">// After successfully loading the plugin, if Rhino detects a plugin RUI
-</span>  <span class="c1">// file, it will automatically stage it, if it doesn't already exist.
-</span>
-  <span class="k">return</span> <span class="n">LoadReturnCode</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-<span class="p">}</span>
+  // After successfully loading the plugin, if Rhino detects a plugin RUI
+  // file, it will automatically stage it, if it doesn't already exist.
+
+  return LoadReturnCode.Success;
+}
 </code></pre>
-</div>
 
 
         </article>

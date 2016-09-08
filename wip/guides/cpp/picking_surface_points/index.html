@@ -364,75 +364,73 @@ $(document).ready(function()
 <p>There are a couple of ways to do this:</p>
 
 <ul>
-  <li>Use a <code class="highlighter-rouge">CRhinoGetObject</code> class.</li>
-  <li>Use a <code class="highlighter-rouge">CRhinoGetPoint</code> class.</li>
+  <li>Use a <code>CRhinoGetObject</code> class.</li>
+  <li>Use a <code>CRhinoGetPoint</code> class.</li>
 </ul>
 
 <h2 id="using-crhinogetobject">Using CRhinoGetObject</h2>
 
-<p>When picking objects with a <code class="highlighter-rouge">CRhinoGetObject</code> object, the <code class="highlighter-rouge">CRhinoObjRef</code> returned by the object contains picking information, such as the location of the pick…</p>
+<p>When picking objects with a <code>CRhinoGetObject</code> object, the <code>CRhinoObjRef</code> returned by the object contains picking information, such as the location of the pick…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestPick1</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select a surface or a polysurface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestPick1::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select a surface or a polysurface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object | CRhinoGetObject::polysrf_object );
+  go.EnablePreSelect( FALSE );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  const CRhinoObjRef&amp; ref = go.Object(0);
 
-  <span class="c1">// If the object was selected by picking a point on it, then
-</span>  <span class="c1">// SelectionPoint() returns true and the point where the selection
-</span>  <span class="c1">// occured.
-</span>  <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">ref</span><span class="p">.</span><span class="n">SelectionPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  // If the object was selected by picking a point on it, then
+  // SelectionPoint() returns true and the point where the selection
+  // occured.
+  ON_3dPoint pt;
+  if( ref.SelectionPoint(pt) )
+  {
+    context.m_doc.AddPointObject( pt );
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <h2 id="using-crhinogetpoint">Using CRhinoGetPoint</h2>
 
-<p>When picking points with a <code class="highlighter-rouge">CRhinoGetPoint</code> object, you can constrain the point picking to a surface…</p>
+<p>When picking points with a <code>CRhinoGetPoint</code> object, you can constrain the point picking to a surface…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestPick2</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select a surface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestPick2::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select a surface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.EnablePreSelect( FALSE );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const ON_BrepFace* face = ref.Face();
+  if( 0 == face )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select point on surface"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">face</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Select point on surface" );
+  gp.Constrain( *face );
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  ON_3dPoint pt = gp.Point();
+  context.m_doc.AddPointObject( pt );
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -247,24 +247,23 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">GetUUID</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj_ref</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result GetUUID(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select object", false, ObjectType.AnyObject, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    if (obj_ref == null)
+      return Result.Nothing;
 
-    <span class="kt">var</span> <span class="n">uuid</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">;</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"The object's unique id is {0}"</span><span class="p">,</span> <span class="n">uuid</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var uuid = obj_ref.ObjectId;
+    RhinoApp.WriteLine("The object's unique id is {0}", uuid.ToString());
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function GetUUID(ByVal doc As RhinoDoc) As Result
@@ -284,13 +283,12 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
 
-<span class="n">obj_id</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">obj_id</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span><span class="p">:</span>
-  <span class="k">print</span> <span class="s">"The object's unique id is {0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_id</span><span class="p">)</span>
+obj_id = rs.GetObject("Select object")
+if obj_id &lt;&gt; None:
+  print "The object's unique id is {0}".format(obj_id)
 </code></pre>
-</div>
 
 </div>
 

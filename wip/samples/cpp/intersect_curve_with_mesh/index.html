@@ -242,59 +242,58 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">gm</span><span class="p">;</span>
-  <span class="n">gm</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select mesh to intersect"</span> <span class="p">);</span>
-  <span class="n">gm</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">gm</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gm</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gm</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject gm;
+  gm.SetCommandPrompt( L"Select mesh to intersect" );
+  gm.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  gm.GetObjects( 1, 1 );
+  if( gm.CommandResult() != CRhinoCommand::success )
+    return gm.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">gm</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Mesh* mesh = gm.Object(0).Mesh();
+  if( 0 == mesh )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">gc</span><span class="p">;</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve to intersect with mesh"</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject gc;
+  gc.SetCommandPrompt( L"Select curve to intersect with mesh" );
+  gc.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gc.EnablePreSelect( false );
+  gc.EnableDeselectAllBeforePostSelect( false );
+  gc.GetObjects( 1, 1 );
+  if( gc.CommandResult() != CRhinoCommand::success )
+    return gc.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">gc</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* curve = gc.Object(0).Curve();
+  if( 0 == curve )
+    return CRhinoCommand::failure;
 
-  <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
+  double tol = context.m_doc.AbsoluteTolerance();
 
-  <span class="n">ON_PolylineCurve</span> <span class="n">pline</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoConvertCurveToPolyline</span><span class="p">(</span><span class="o">*</span><span class="n">curve</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pline</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_MeshTree</span><span class="o">*</span> <span class="n">mesh_tree</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">-&gt;</span><span class="n">MeshTree</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">mesh_tree</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_CMX_EVENT</span><span class="o">&gt;</span> <span class="n">cmx</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">mesh_tree</span><span class="o">-&gt;</span><span class="n">IntersectPolyline</span><span class="p">(</span><span class="n">pline</span><span class="p">.</span><span class="n">m_pline</span><span class="p">.</span><span class="n">Count</span><span class="p">(),</span> <span class="n">pline</span><span class="p">.</span><span class="n">m_pline</span><span class="p">.</span><span class="n">Array</span><span class="p">(),</span> <span class="n">cmx</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">cmx</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-          <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">cmx</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_M</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_P</span> <span class="p">);</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Objects do not intersect.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  ON_PolylineCurve pline;
+  if( RhinoConvertCurveToPolyline(*curve, 0, 0, 0, 0, 0.0, tol, 0.0, 0, pline) )
+  {
+    const ON_MeshTree* mesh_tree = mesh-&gt;MeshTree(true);
+    if( mesh_tree )
+    {
+      ON_SimpleArray&lt;ON_CMX_EVENT&gt; cmx;
+      if( mesh_tree-&gt;IntersectPolyline(pline.m_pline.Count(), pline.m_pline.Array(), cmx) )
+      {
+        int i;
+        for( i = 0; i &lt; cmx.Count(); i++ )
+          context.m_doc.AddPointObject( cmx[i].m_M[0].m_P );
+        context.m_doc.Redraw();
+      }
+      else
+      {
+        RhinoApp().Print( L"Objects do not intersect.\n" );
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

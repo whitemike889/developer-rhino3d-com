@@ -247,46 +247,45 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ReplaceHatchPattern</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span><span class="p">[]</span> <span class="n">obj_refs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select hatches to replace"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Hatch</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_refs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">obj_refs</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ReplaceHatchPattern(RhinoDoc doc)
+  {
+    ObjRef[] obj_refs;
+    var rc = RhinoGet.GetMultipleObjects("Select hatches to replace", false, ObjectType.Hatch, out obj_refs);
+    if (rc != Result.Success || obj_refs == null)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetString</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of replacement hatch pattern"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">hatch_name</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">StringResult</span><span class="p">();</span>
+    var gs = new GetString();
+    gs.SetCommandPrompt("Name of replacement hatch pattern");
+    gs.AcceptNothing(false);
+    gs.Get();
+    if (gs.CommandResult() != Result.Success)
+      return gs.CommandResult();
+    var hatch_name = gs.StringResult();
 
-    <span class="kt">var</span> <span class="n">pattern_index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">HatchPatterns</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">hatch_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+    var pattern_index = doc.HatchPatterns.Find(hatch_name, true);
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">pattern_index</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"The hatch pattern \"{0}\" not found  in the document."</span><span class="p">,</span> <span class="n">hatch_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (pattern_index &lt; 0)
+    {
+      RhinoApp.WriteLine("The hatch pattern \"{0}\" not found  in the document.", hatch_name);
+      return Result.Nothing;
+    }
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref</span> <span class="k">in</span> <span class="n">obj_refs</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">hatch_object</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Object</span><span class="p">()</span> <span class="k">as</span> <span class="n">HatchObject</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">hatch_object</span><span class="p">.</span><span class="n">HatchGeometry</span><span class="p">.</span><span class="n">PatternIndex</span> <span class="p">!=</span> <span class="n">pattern_index</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">hatch_object</span><span class="p">.</span><span class="n">HatchGeometry</span><span class="p">.</span><span class="n">PatternIndex</span> <span class="p">=</span> <span class="n">pattern_index</span><span class="p">;</span>
-        <span class="n">hatch_object</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    foreach (var obj_ref in obj_refs)
+    {
+      var hatch_object = obj_ref.Object() as HatchObject;
+      if (hatch_object.HatchGeometry.PatternIndex != pattern_index)
+      {
+        hatch_object.HatchGeometry.PatternIndex = pattern_index;
+        hatch_object.CommitChanges();
+      }
+    }
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ReplaceHatchPattern(ByVal doc As RhinoDoc) As Result
@@ -325,45 +324,44 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_refs</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select hatches to replace"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Hatch</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span> <span class="ow">or</span> <span class="n">obj_refs</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
+def RunCommand():
+  rc, obj_refs = RhinoGet.GetMultipleObjects("Select hatches to replace", False, ObjectType.Hatch)
+  if rc &lt;&gt; Result.Success or obj_refs == None:
+    return rc
 
-  <span class="n">gs</span> <span class="o">=</span> <span class="n">GetString</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of replacement hatch pattern"</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">AcceptNothing</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">hatch_name</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">StringResult</span><span class="p">()</span>
+  gs = GetString()
+  gs.SetCommandPrompt("Name of replacement hatch pattern")
+  gs.AcceptNothing(False)
+  gs.Get()
+  if gs.CommandResult() &lt;&gt; Result.Success:
+    return gs.CommandResult()
+  hatch_name = gs.StringResult()
 
-  <span class="n">pattern_index</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">HatchPatterns</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">hatch_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+  pattern_index = doc.HatchPatterns.Find(hatch_name, True)
 
-  <span class="k">if</span> <span class="n">pattern_index</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">RhinoApp</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"The hatch pattern </span><span class="se">\"</span><span class="s">{0}</span><span class="se">\"</span><span class="s"> not found  in the document."</span><span class="p">,</span> <span class="n">hatch_name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if pattern_index &lt; 0:
+    RhinoApp.WriteLine("The hatch pattern \"{0}\" not found  in the document.", hatch_name)
+    return Result.Nothing
 
-  <span class="k">for</span> <span class="n">obj_ref</span> <span class="ow">in</span> <span class="n">obj_refs</span><span class="p">:</span>
-    <span class="n">hatch_object</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">hatch_object</span><span class="o">.</span><span class="n">HatchGeometry</span><span class="o">.</span><span class="n">PatternIndex</span> <span class="o">&lt;&gt;</span> <span class="n">pattern_index</span><span class="p">:</span>
-      <span class="n">hatch_object</span><span class="o">.</span><span class="n">HatchGeometry</span><span class="o">.</span><span class="n">PatternIndex</span> <span class="o">=</span> <span class="n">pattern_index</span>
-      <span class="n">hatch_object</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+  for obj_ref in obj_refs:
+    hatch_object = obj_ref.Object()
+    if hatch_object.HatchGeometry.PatternIndex &lt;&gt; pattern_index:
+      hatch_object.HatchGeometry.PatternIndex = pattern_index
+      hatch_object.CommitChanges()
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

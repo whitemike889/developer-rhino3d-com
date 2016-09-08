@@ -323,69 +323,66 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>The Rhino C/C++ SDK provides the class <code class="highlighter-rouge">CRhinoGetObject</code> that will let you interactively select objects on the screen.  This is a large class with many options.  We recommend that you read through the header file, <em>rhinoSdkGetObject.h</em>, before using.</p>
+<p>The Rhino C/C++ SDK provides the class <code>CRhinoGetObject</code> that will let you interactively select objects on the screen.  This is a large class with many options.  We recommend that you read through the header file, <em>rhinoSdkGetObject.h</em>, before using.</p>
 
-<p>To use the <code class="highlighter-rouge">CRhinoGetObject</code> class, put one on the stack and call its <code class="highlighter-rouge">GetObjects()</code> member.  It is possible to derive custom classes from <code class="highlighter-rouge">CRhinoGetObject</code>.  But, the class is powerful enough that deriving new classes from it is usually unnecessary.</p>
+<p>To use the <code>CRhinoGetObject</code> class, put one on the stack and call its <code>GetObjects()</code> member.  It is possible to derive custom classes from <code>CRhinoGetObject</code>.  But, the class is powerful enough that deriving new classes from it is usually unnecessary.</p>
 
-<p>If an instance of <code class="highlighter-rouge">CRhinoGetObject</code> was successful in selecting one or more objects, then use its <code class="highlighter-rouge">Object()</code> member to retrieve information about the selected object.  The <code class="highlighter-rouge">Object()</code> member returns a <code class="highlighter-rouge">CRhinoObjRef</code> class which has several member functions to help you quickly get to the information you are looking for.</p>
+<p>If an instance of <code>CRhinoGetObject</code> was successful in selecting one or more objects, then use its <code>Object()</code> member to retrieve information about the selected object.  The <code>Object()</code> member returns a <code>CRhinoObjRef</code> class which has several member functions to help you quickly get to the information you are looking for.</p>
 
 <h2 id="samples">Samples</h2>
 
 <p>This sample selects a single object…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object"</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// TODO
-</span>  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select object" );
+CRhinoGet::result res = go.GetObjects( 1, 1 );
+if( res == CRhinoGet::object )
+{
+  const CRhinoObjRef&amp; obj_ref = go.Object( 0 );
+  const CRhinoObject* obj = obj_ref.Object();
+  if( obj )
+  {
+    // TODO
+  }
+}
 </code></pre>
-</div>
 
 <p>This sample selects one or more objects…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects"</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// TODO
-</span>    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select objects" );
+CRhinoGet::result res = go.GetObjects( 1, 0 );
+if( res == CRhinoGet::object )
+{
+  int i, count = go.ObjectCount();
+  for( i = 0; i &lt; count; i++ )
+  {
+    const CRhinoObjRef&amp; obj_ref = go.Object( 0 );
+    const CRhinoObject* obj = obj_ref.Object();
+    if( obj )
+    {
+      // TODO
+    }
+  }
+}
 </code></pre>
-</div>
 
 <p>This sample selects a single curve object…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// TODO
-</span>  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select curve" );
+go.SetGeometryFilter( CRhinoGetObject::curve_object );
+CRhinoGet::result res = go.GetObjects( 1, 1 );
+if( res == CRhinoGet::object )
+{
+  const CRhinoObjRef&amp; obj_ref = go.Object( 0 );
+  const ON_Curve* crv = obj_ref.Curve();
+  if( crv )
+  {
+    // TODO
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

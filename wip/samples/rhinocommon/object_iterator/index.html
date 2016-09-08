@@ -247,35 +247,34 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ObjectIterator</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">object_enumerator_settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectEnumeratorSettings</span><span class="p">();</span>
-    <span class="n">object_enumerator_settings</span><span class="p">.</span><span class="n">IncludeLights</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">object_enumerator_settings</span><span class="p">.</span><span class="n">IncludeGrips</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rhino_objects</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">GetObjectList</span><span class="p">(</span><span class="n">object_enumerator_settings</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ObjectIterator(RhinoDoc doc)
+  {
+    var object_enumerator_settings = new ObjectEnumeratorSettings();
+    object_enumerator_settings.IncludeLights = true;
+    object_enumerator_settings.IncludeGrips = false;
+    var rhino_objects = doc.Objects.GetObjectList(object_enumerator_settings);
 
-    <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">rhino_object</span> <span class="k">in</span> <span class="n">rhino_objects</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">rhino_object</span><span class="p">.</span><span class="nf">IsSelectable</span><span class="p">()</span> <span class="p">&amp;&amp;</span> <span class="n">rhino_object</span><span class="p">.</span><span class="nf">IsSelected</span><span class="p">(</span><span class="k">false</span><span class="p">)</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">rhino_object</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-        <span class="n">count</span><span class="p">++;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} object{1} selected"</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span>
-        <span class="n">count</span> <span class="p">==</span> <span class="m">1</span> <span class="p">?</span> <span class="s">""</span> <span class="p">:</span> <span class="s">"s"</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    int count = 0;
+    foreach (var rhino_object in rhino_objects)
+    {
+      if (rhino_object.IsSelectable() &amp;&amp; rhino_object.IsSelected(false) == 0)
+      {
+        rhino_object.Select(true);
+        count++;
+      }
+    }
+    if (count &gt; 0)
+    {
+      doc.Views.Redraw();
+      RhinoApp.WriteLine("{0} object{1} selected", count,
+        count == 1 ? "" : "s");
+    }
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ObjectIterator(ByVal doc As RhinoDoc) As Result
@@ -300,34 +299,33 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">object_enumerator_settings</span> <span class="o">=</span> <span class="n">ObjectEnumeratorSettings</span><span class="p">()</span>
-  <span class="n">object_enumerator_settings</span><span class="o">.</span><span class="n">IncludeLights</span> <span class="o">=</span> <span class="bp">True</span>
-  <span class="n">object_enumerator_settings</span><span class="o">.</span><span class="n">IncludeGrips</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">rhino_objects</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">GetObjectList</span><span class="p">(</span><span class="n">object_enumerator_settings</span><span class="p">)</span>
+def RunCommand():
+  object_enumerator_settings = ObjectEnumeratorSettings()
+  object_enumerator_settings.IncludeLights = True
+  object_enumerator_settings.IncludeGrips = False
+  rhino_objects = doc.Objects.GetObjectList(object_enumerator_settings)
 
-  <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">for</span> <span class="n">rhino_object</span> <span class="ow">in</span> <span class="n">rhino_objects</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">rhino_object</span><span class="o">.</span><span class="n">IsSelectable</span><span class="p">()</span> <span class="ow">and</span> <span class="n">rhino_object</span><span class="o">.</span><span class="n">IsSelected</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-      <span class="n">rhino_object</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-      <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+  count = 0
+  for rhino_object in rhino_objects:
+    if rhino_object.IsSelectable() and rhino_object.IsSelected(False) == 0:
+      rhino_object.Select(True)
+      count += 1;
 
-  <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="n">RhinoApp</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"{0} object{1} selected"</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span>
-      <span class="s">""</span> <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s">"s"</span><span class="p">)</span>
+  if count &gt; 0:
+    doc.Views.Redraw()
+    RhinoApp.WriteLine("{0} object{1} selected", count,
+      "" if count == 1 else "s")
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

@@ -340,185 +340,184 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>Imagine you would like to add a submenu to Rhino’s File menu.  You might start fiddling around with the <code class="highlighter-rouge">Insert­Plug­In­Menu­To­Rhino­Menu()</code> and ­<code class="highlighter-rouge">Insert­Plug­In­Item­To­Rhino­Menu()</code> functions but not seem to be getting anywhere.  <code class="highlighter-rouge">Insert­Plug­In­Menu­To­Rhino­Menu()</code> adds a menu into the Rhino’s main menu bar. <code class="highlighter-rouge">Insert­Plug­In­Item­To­RhinoMenu()</code> adds a menu item anywhere in the Rhino menu.  To solve this problem, you want a little of both…</p>
+<p>Imagine you would like to add a submenu to Rhino’s File menu.  You might start fiddling around with the <code>Insert­Plug­In­Menu­To­Rhino­Menu()</code> and ­<code>Insert­Plug­In­Item­To­Rhino­Menu()</code> functions but not seem to be getting anywhere.  <code>Insert­Plug­In­Menu­To­Rhino­Menu()</code> adds a menu into the Rhino’s main menu bar. <code>Insert­Plug­In­Item­To­RhinoMenu()</code> adds a menu item anywhere in the Rhino menu.  To solve this problem, you want a little of both…</p>
 
 <h2 id="solution">Solution</h2>
 
 <p>To insert a menu item, or a submenu, into Rhino’s menu, do the following:</p>
 
 <ol>
-  <li>Use <code class="highlighter-rouge">CRhinoApp::FindMenuItem</code> to search through Rhino’s menu structure for an existing menu item that’s where you want to insert your menu item.</li>
-  <li>Use <code class="highlighter-rouge">CRhinoPlugIn::InsertPlugInItemToRhinoMenu</code> to insert your menu into Rhino’s menu.</li>
+  <li>Use <code>CRhinoApp::FindMenuItem</code> to search through Rhino’s menu structure for an existing menu item that’s where you want to insert your menu item.</li>
+  <li>Use <code>CRhinoPlugIn::InsertPlugInItemToRhinoMenu</code> to insert your menu into Rhino’s menu.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following example command demonstrates how to add and remove a custom menu from Rhino’s menu:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">////////////////////////////////////////////////////////////////
+<pre><code class="language-cpp">////////////////////////////////////////////////////////////////
 // cmdMyMenu.cpp
-</span>
-<span class="cp">#include "StdAfx.h"
+
+#include "StdAfx.h"
 #include "MyTestPlugIn.h"
 #include "Resource.h"
-</span>
-<span class="c1">////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN MyMenu command
 //
-</span>
-<span class="k">class</span> <span class="nc">CCommandMyMenu</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoCommand</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CCommandMyMenu</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="o">~</span><span class="n">CCommandMyMenu</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="n">UUID</span> <span class="n">CommandUUID</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="k">static</span> <span class="k">const</span> <span class="n">GUID</span> <span class="n">MyMenuCommand_UUID</span> <span class="o">=</span>
-    <span class="p">{</span> <span class="o">&lt;</span><span class="n">TODO</span><span class="o">:</span> <span class="n">add</span> <span class="n">your</span> <span class="n">command</span> <span class="n">uuid</span> <span class="n">here</span><span class="o">&gt;</span> <span class="p">};</span>
-    <span class="k">return</span> <span class="n">MyMenuCommand_UUID</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"MyMenu"</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">LocalCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"MyMenu"</span><span class="p">;</span> <span class="p">}</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="p">);</span>
 
-  <span class="n">BOOL</span> <span class="n">LoadMyMenu</span><span class="p">();</span>
-  <span class="n">BOOL</span> <span class="n">UnloadMyMenu</span><span class="p">();</span>
+class CCommandMyMenu : public CRhinoCommand
+{
+public:
+  CCommandMyMenu() {}
+  ~CCommandMyMenu() {}
+  UUID CommandUUID()
+  {
+    static const GUID MyMenuCommand_UUID =
+    { &lt;TODO: add your command uuid here&gt; };
+    return MyMenuCommand_UUID;
+  }
+  const wchar_t* EnglishCommandName() { return L"MyMenu"; }
+  const wchar_t* LocalCommandName() { return L"MyMenu"; }
+  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
 
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">CMenu</span> <span class="n">m_menu</span><span class="p">;</span>
-<span class="p">};</span>
+  BOOL LoadMyMenu();
+  BOOL UnloadMyMenu();
 
-<span class="c1">// The one and only CCommandMyMenu object
-</span><span class="k">static</span> <span class="k">class</span> <span class="nc">CCommandMyMenu</span> <span class="n">theMyMenuCommand</span><span class="p">;</span>
+private:
+  CMenu m_menu;
+};
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandMyMenu</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">bVisible</span> <span class="o">=</span> <span class="p">(</span> <span class="n">m_menu</span><span class="p">.</span><span class="n">GetSafeHmenu</span><span class="p">()</span> <span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
+// The one and only CCommandMyMenu object
+static class CCommandMyMenu theMyMenuCommand;
 
-  <span class="n">ON_wString</span> <span class="n">prompt</span><span class="p">;</span>
-  <span class="n">prompt</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"%s is %s. New value"</span><span class="p">,</span>
-    <span class="n">EnglishCommandName</span><span class="p">(),</span>
-    <span class="n">bVisible</span> <span class="o">?</span> <span class="s">L"visible"</span> <span class="o">:</span> <span class="s">L"hidden"</span>
-    <span class="p">);</span>
+CRhinoCommand::result CCommandMyMenu::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  bool bVisible = ( m_menu.GetSafeHmenu() ) ? true : false;
 
-  <span class="n">CRhinoGetOption</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">prompt</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">s_opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Show"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">h_opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Hide"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">t_opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Toggle"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  ON_wString prompt;
+  prompt.Format( L"%s is %s. New value",
+    EnglishCommandName(),
+    bVisible ? L"visible" : L"hidden"
+    );
 
-  <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">opt</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  CRhinoGetOption go;
+  go.SetCommandPrompt( prompt );
+  int s_opt = go.AddCommandOption( RHCMDOPTNAME(L"Show") );
+  int h_opt = go.AddCommandOption( RHCMDOPTNAME(L"Hide") );
+  int t_opt = go.AddCommandOption( RHCMDOPTNAME(L"Toggle") );
+  go.GetOption();
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">opt</span><span class="o">-&gt;</span><span class="n">m_option_index</span> <span class="o">==</span> <span class="n">s_opt</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="nb">false</span> <span class="o">==</span> <span class="n">bVisible</span> <span class="p">)</span>
-      <span class="n">LoadMyMenu</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">opt</span><span class="o">-&gt;</span><span class="n">m_option_index</span> <span class="o">==</span> <span class="n">h_opt</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="nb">true</span> <span class="o">==</span> <span class="n">bVisible</span> <span class="p">)</span>
-      <span class="n">UnloadMyMenu</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="nb">true</span> <span class="o">==</span> <span class="n">bVisible</span> <span class="p">)</span>
-      <span class="n">UnloadMyMenu</span><span class="p">();</span>
-    <span class="k">else</span>
-      <span class="n">LoadMyMenu</span><span class="p">();</span>
-  <span class="p">}</span>
+  const CRhinoCommandOption* opt = go.Option();
+  if( 0 == opt )
+    return failure;
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  if( opt-&gt;m_option_index == s_opt )
+  {
+    if( false == bVisible )
+      LoadMyMenu();
+  }
+  else if( opt-&gt;m_option_index == h_opt )
+  {
+    if( true == bVisible )
+      UnloadMyMenu();
+  }
+  else
+  {
+    if( true == bVisible )
+      UnloadMyMenu();
+    else
+      LoadMyMenu();
+  }
 
-<span class="n">BOOL</span> <span class="n">CCommandMyMenu</span><span class="o">::</span><span class="n">LoadMyMenu</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="c1">// Switch the module state so resources are read
-</span>  <span class="c1">// from our plugin (DLL), not Rhino.
-</span>  <span class="n">AFX_MANAGE_STATE</span><span class="p">(</span> <span class="n">AfxGetStaticModuleState</span><span class="p">()</span> <span class="p">);</span>
+  return success;
+}
 
-  <span class="c1">// Try to load our menu resource from our plugin.
-</span>  <span class="c1">// Note, m_my_menu is a CMenu member variable.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">m_menu</span><span class="p">.</span><span class="n">GetSafeHmenu</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">m_menu</span><span class="p">.</span><span class="n">LoadMenu</span><span class="p">(</span><span class="n">IDR_MY_MENU</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="p">}</span>
+BOOL CCommandMyMenu::LoadMyMenu()
+{
+  // Switch the module state so resources are read
+  // from our plugin (DLL), not Rhino.
+  AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-  <span class="c1">// Find a location in Rhino's menu to insert our
-</span>  <span class="c1">// menu item. For this example, we will insert our
-</span>  <span class="c1">// menu on the "Tools" menu just below the "Commands"
-</span>  <span class="c1">// item.
-</span>  <span class="n">HMENU</span> <span class="n">hParent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="c1">//if( !RhinoApp().FindRhinoMenuItem(L"&amp;File::&amp;Print...Ctrl+P", hParent, index) )
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">FindRhinoMenuItem</span><span class="p">(</span><span class="s">L"Too&amp;ls::&amp;Commands"</span><span class="p">,</span> <span class="n">hParent</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_menu</span><span class="p">.</span><span class="n">DestroyMenu</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Try to load our menu resource from our plugin.
+  // Note, m_my_menu is a CMenu member variable.
+  if( 0 == m_menu.GetSafeHmenu() )
+  {
+    if( !m_menu.LoadMenu(IDR_MY_MENU) )
+      return FALSE;
+  }
 
-  <span class="c1">// Create and initialize a MENUITEMINFO struct.
-</span>  <span class="n">MENUITEMINFO</span> <span class="n">mi</span><span class="p">;</span>
-  <span class="n">memset</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">mi</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">cbSize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mi</span><span class="p">);</span>
+  // Find a location in Rhino's menu to insert our
+  // menu item. For this example, we will insert our
+  // menu on the "Tools" menu just below the "Commands"
+  // item.
+  HMENU hParent = 0;
+  int index = 0;
+  //if( !RhinoApp().FindRhinoMenuItem(L"&amp;File::&amp;Print...Ctrl+P", hParent, index) )
+  if( !RhinoApp().FindRhinoMenuItem(L"Too&amp;ls::&amp;Commands", hParent, index) )
+  {
+    m_menu.DestroyMenu();
+    return FALSE;
+  }
 
-  <span class="c1">// Fill in our menu info
-</span>  <span class="n">mi</span><span class="p">.</span><span class="n">fMask</span> <span class="o">=</span> <span class="n">MIIM_ID</span> <span class="o">|</span> <span class="n">MIIM_TYPE</span> <span class="o">|</span> <span class="n">MIIM_STATE</span> <span class="o">|</span> <span class="n">MIIM_SUBMENU</span><span class="p">;</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">wID</span> <span class="o">=</span> <span class="n">MF_POPUP</span><span class="p">;</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">fType</span> <span class="o">=</span> <span class="n">MFT_STRING</span><span class="p">;</span>
+  // Create and initialize a MENUITEMINFO struct.
+  MENUITEMINFO mi;
+  memset( &amp;mi, 0, sizeof(mi) );
+  mi.cbSize = sizeof(mi);
 
-  <span class="n">ON_wString</span> <span class="n">wstr</span> <span class="o">=</span> <span class="s">L"MyMenu"</span><span class="p">;</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">dwTypeData</span> <span class="o">=</span> <span class="n">wstr</span><span class="p">.</span><span class="n">Array</span><span class="p">();</span>
+  // Fill in our menu info
+  mi.fMask = MIIM_ID | MIIM_TYPE | MIIM_STATE | MIIM_SUBMENU;
+  mi.wID = MF_POPUP;
+  mi.fType = MFT_STRING;
 
-  <span class="n">mi</span><span class="p">.</span><span class="n">fState</span> <span class="o">=</span> <span class="n">MFS_ENABLED</span><span class="p">;</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">hSubMenu</span> <span class="o">=</span> <span class="n">m_menu</span><span class="p">.</span><span class="n">GetSafeHmenu</span><span class="p">();</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">hSubMenu</span> <span class="o">=</span> <span class="o">::</span><span class="n">GetSubMenu</span><span class="p">(</span> <span class="n">mi</span><span class="p">.</span><span class="n">hSubMenu</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">mi</span><span class="p">.</span><span class="n">wID</span> <span class="o">=</span> <span class="n">IDR_MY_MENU</span><span class="p">;</span>
+  ON_wString wstr = L"MyMenu";
+  mi.dwTypeData = wstr.Array();
 
-  <span class="c1">// Add our menu to Rhino's menu
-</span>  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">MyTestPlugIn</span><span class="p">().</span><span class="n">InsertPlugInItemToRhinoMenu</span><span class="p">(</span> <span class="n">hParent</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mi</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="n">m_menu</span><span class="p">.</span><span class="n">DestroyMenu</span><span class="p">();</span>
+  mi.fState = MFS_ENABLED;
+  mi.hSubMenu = m_menu.GetSafeHmenu();
+  mi.hSubMenu = ::GetSubMenu( mi.hSubMenu, 0 );
+  mi.wID = IDR_MY_MENU;
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Add our menu to Rhino's menu
+  BOOL rc = MyTestPlugIn().InsertPlugInItemToRhinoMenu( hParent, index + 1, &amp;mi );
+  if( !rc )
+    m_menu.DestroyMenu();
 
-<span class="n">BOOL</span> <span class="n">CCommandMyMenu</span><span class="o">::</span><span class="n">UnloadMyMenu</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+  return rc;
+}
 
-  <span class="c1">// Find our menu item in Rhino's menu.
-</span>  <span class="n">HMENU</span> <span class="n">hParent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">FindRhinoMenuItem</span><span class="p">(</span><span class="s">L"Too&amp;ls::MyMenu"</span><span class="p">,</span> <span class="n">hParent</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Remove our menu item.
-</span>    <span class="k">if</span><span class="p">(</span> <span class="o">::</span><span class="n">RemoveMenu</span><span class="p">(</span><span class="n">hParent</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">MF_BYPOSITION</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Redraw Rhino's menu bar.
-</span>      <span class="n">DrawMenuBar</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">);</span>
-      <span class="n">m_menu</span><span class="p">.</span><span class="n">DestroyMenu</span><span class="p">();</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+BOOL CCommandMyMenu::UnloadMyMenu()
+{
+  BOOL rc = FALSE;
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Find our menu item in Rhino's menu.
+  HMENU hParent = 0;
+  int index = 0;
+  if( RhinoApp().FindRhinoMenuItem(L"Too&amp;ls::MyMenu", hParent, index) )
+  {
+    // Remove our menu item.
+    if( ::RemoveMenu(hParent, index, MF_BYPOSITION) )
+    {
+      // Redraw Rhino's menu bar.
+      DrawMenuBar( RhinoApp().MainWnd() );
+      m_menu.DestroyMenu();
+      rc = TRUE;
+    }
+  }
 
-<span class="c1">//
+  return rc;
+}
+
+//
 // END MyMenu command
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span></code></pre>
-</div>
+</code></pre>
 
         </article>
 

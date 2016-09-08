@@ -242,24 +242,23 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_wString</span> <span class="n">prompt</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">entity_count</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">entity_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">prompt</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"Importing IGES entity %d of %d"</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">entity_count</span> <span class="p">);</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">prompt</span> <span class="p">);</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Wait</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_wString prompt;
+  int i, entity_count = 1000;
+  for( i = 0; i &lt; entity_count; i++ )
+  {
+    prompt.Format( L"Importing IGES entity %d of %d", i+1, entity_count );
+    RhinoApp().SetCommandPrompt( prompt );
+    RhinoApp().Wait(0);
 
-    <span class="c1">// TODO:
-</span>  <span class="p">}</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"IGES import successful.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
+    // TODO:
+  }
+  RhinoApp().Print( L"IGES import successful.\n" );
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

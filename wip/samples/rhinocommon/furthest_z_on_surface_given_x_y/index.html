@@ -247,107 +247,106 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">FurthestZOnSurfaceGivenXY</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="err">#</span><span class="n">region</span> <span class="n">user</span> <span class="n">input</span>
-    <span class="c1">// select a surface
-</span>    <span class="kt">var</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select surface"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="c1">// get the brep
-</span>    <span class="kt">var</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result FurthestZOnSurfaceGivenXY(RhinoDoc doc)
+  {
+    #region user input
+    // select a surface
+    var gs = new GetObject();
+    gs.SetCommandPrompt("select surface");
+    gs.GeometryFilter = ObjectType.Surface;
+    gs.DisablePreSelect();
+    gs.SubObjectSelect = false;
+    gs.Get();
+    if (gs.CommandResult() != Result.Success)
+      return gs.CommandResult();
+    // get the brep
+    var brep = gs.Object(0).Brep();
+    if (brep == null)
+      return Result.Failure;
 
-    <span class="c1">// get X and Y
-</span>    <span class="kt">double</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">,</span> <span class="n">y</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="s">"value of X coordinate"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">x</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="s">"value of Y coordinate"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">y</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="err">#</span><span class="n">endregion</span>
+    // get X and Y
+    double x = 0.0, y = 0.0;
+    var rc = RhinoGet.GetNumber("value of X coordinate", true, ref x);
+    if (rc != Result.Success)
+      return rc;
+    rc = RhinoGet.GetNumber("value of Y coordinate", true, ref y);
+    if (rc != Result.Success)
+      return rc;
+    #endregion
 
-    <span class="c1">// an earlier version of this sample used a curve-brep intersection to find Z
-</span>    <span class="c1">//var maxZ = maxZIntersectionMethod(brep, x, y, doc.ModelAbsoluteTolerance);
-</span>
-    <span class="c1">// projecting points is another way to find Z
-</span>    <span class="kt">var</span> <span class="n">max_z</span> <span class="p">=</span> <span class="nf">MaxZProjectionMethod</span><span class="p">(</span><span class="n">brep</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">);</span>
+    // an earlier version of this sample used a curve-brep intersection to find Z
+    //var maxZ = maxZIntersectionMethod(brep, x, y, doc.ModelAbsoluteTolerance);
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">max_z</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Maximum surface Z coordinate at X={0}, Y={1} is {2}"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_z</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_z</span><span class="p">.</span><span class="n">Value</span><span class="p">));</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"no maximum surface Z coordinate at X={0}, Y={1} found."</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    // projecting points is another way to find Z
+    var max_z = MaxZProjectionMethod(brep, x, y, doc.ModelAbsoluteTolerance);
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    if (max_z != null)
+    {
+      RhinoApp.WriteLine("Maximum surface Z coordinate at X={0}, Y={1} is {2}", x, y, max_z);
+      doc.Objects.AddPoint(new Point3d(x, y, max_z.Value));
+      doc.Views.Redraw();
+    }
+    else
+      RhinoApp.WriteLine("no maximum surface Z coordinate at X={0}, Y={1} found.", x, y);
 
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">double</span><span class="p">?</span> <span class="nf">MaxZProjectionMethod</span><span class="p">(</span><span class="n">Brep</span> <span class="n">brep</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">tolerance</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span><span class="p">?</span> <span class="n">max_z</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">breps</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Brep</span><span class="p">&gt;</span> <span class="p">{</span><span class="n">brep</span><span class="p">};</span>
-    <span class="kt">var</span> <span class="n">points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;</span> <span class="p">{</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">)};</span>
-    <span class="c1">// grab all the points projected in Z dir.  Aggregate finds furthest Z from XY plane
-</span>    <span class="k">try</span> <span class="p">{</span>
-      <span class="n">max_z</span> <span class="p">=</span> <span class="p">(</span><span class="k">from</span> <span class="n">pt</span> <span class="k">in</span> <span class="n">Intersection</span><span class="p">.</span><span class="nf">ProjectPointsToBreps</span><span class="p">(</span><span class="n">breps</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">tolerance</span><span class="p">)</span> <span class="k">select</span> <span class="n">pt</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span>
-              <span class="c1">// Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
-</span>              <span class="c1">// Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
-</span>              <span class="c1">// it could be MaxAbs()
-</span>              <span class="p">.</span><span class="nf">Aggregate</span><span class="p">((</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span> <span class="p">?</span> <span class="n">z1</span> <span class="p">:</span> <span class="n">z2</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">InvalidOperationException</span><span class="p">)</span> <span class="p">{</span><span class="cm">/*Sequence contains no elements*/</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">max_z</span><span class="p">;</span>
-  <span class="p">}</span>
+    return Result.Success;
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">double</span><span class="p">?</span> <span class="nf">MaxZIntersectionMethod</span><span class="p">(</span><span class="n">Brep</span> <span class="n">brep</span><span class="p">,</span> <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">,</span> <span class="kt">double</span> <span class="n">tolerance</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span><span class="p">?</span> <span class="n">max_z</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+  private static double? MaxZProjectionMethod(Brep brep, double x, double y, double tolerance)
+  {
+    double? max_z = null;
+    var breps = new List&lt;Brep&gt; {brep};
+    var points = new List&lt;Point3d&gt; {new Point3d(x, y, 0)};
+    // grab all the points projected in Z dir.  Aggregate finds furthest Z from XY plane
+    try {
+      max_z = (from pt in Intersection.ProjectPointsToBreps(breps, points, new Vector3d(0, 0, 1), tolerance) select pt.Z)
+              // Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
+              // Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
+              // it could be MaxAbs()
+              .Aggregate((z1, z2) =&gt; Math.Abs(z1) &gt; Math.Abs(z2) ? z1 : z2);
+    } catch (InvalidOperationException) {/*Sequence contains no elements*/}
+    return max_z;
+  }
 
-    <span class="kt">var</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">brep</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">max_dist_from_xy</span> <span class="p">=</span> <span class="p">(</span><span class="k">from</span> <span class="n">corner</span> <span class="k">in</span> <span class="n">bbox</span><span class="p">.</span><span class="nf">GetCorners</span><span class="p">()</span> <span class="k">select</span> <span class="n">corner</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span>
-                            <span class="c1">// furthest Z from XY plane.
-</span>                            <span class="c1">// Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
-</span>                            <span class="c1">// Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
-</span>                            <span class="c1">// it could be MaxAbs()
-</span>                            <span class="p">.</span><span class="nf">Aggregate</span><span class="p">((</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span> <span class="p">?</span> <span class="n">z1</span> <span class="p">:</span> <span class="n">z2</span><span class="p">);</span>
-    <span class="c1">// multiply distance by 2 to make sure line intersects completely
-</span>    <span class="kt">var</span> <span class="n">line_curve</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">LineCurve</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">max_dist_from_xy</span><span class="p">*</span><span class="m">2</span><span class="p">));</span>
+  private static double? MaxZIntersectionMethod(Brep brep, double x, double y, double tolerance)
+  {
+    double? max_z = null;
 
-    <span class="n">Curve</span><span class="p">[]</span> <span class="n">overlap_curves</span><span class="p">;</span>
-    <span class="n">Point3d</span><span class="p">[]</span> <span class="n">inter_points</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Intersection</span><span class="p">.</span><span class="nf">CurveBrep</span><span class="p">(</span><span class="n">line_curve</span><span class="p">,</span> <span class="n">brep</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="k">out</span> <span class="n">overlap_curves</span><span class="p">,</span> <span class="k">out</span> <span class="n">inter_points</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">overlap_curves</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">||</span> <span class="n">inter_points</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="c1">// grab all the points resulting frem the intersection.
-</span>        <span class="c1">//    1st set: points from overlapping curves,
-</span>        <span class="c1">//    2nd set: points when there was no overlap
-</span>        <span class="c1">//    .Aggregate: furthest Z from XY plane.
-</span>        <span class="n">max_z</span> <span class="p">=</span> <span class="p">(</span><span class="k">from</span> <span class="n">c</span> <span class="k">in</span> <span class="n">overlap_curves</span> <span class="k">select</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">PointAtEnd</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">PointAtStart</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span> <span class="p">?</span> <span class="n">c</span><span class="p">.</span><span class="n">PointAtEnd</span><span class="p">.</span><span class="n">Z</span> <span class="p">:</span> <span class="n">c</span><span class="p">.</span><span class="n">PointAtStart</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span>
-                <span class="p">.</span><span class="nf">Union</span>
-                <span class="p">(</span><span class="k">from</span> <span class="n">p</span> <span class="k">in</span> <span class="n">inter_points</span> <span class="k">select</span> <span class="n">p</span><span class="p">.</span><span class="n">Z</span><span class="p">)</span>
-                 <span class="c1">// Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
-</span>                 <span class="c1">// Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
-</span>                 <span class="c1">// it could be MaxAbs()
-</span>                <span class="p">.</span><span class="nf">Aggregate</span><span class="p">((</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z1</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span> <span class="p">?</span> <span class="n">z1</span> <span class="p">:</span> <span class="n">z2</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">max_z</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var bbox = brep.GetBoundingBox(true);
+    var max_dist_from_xy = (from corner in bbox.GetCorners() select corner.Z)
+                            // furthest Z from XY plane.
+                            // Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
+                            // Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
+                            // it could be MaxAbs()
+                            .Aggregate((z1, z2) =&gt; Math.Abs(z1) &gt; Math.Abs(z2) ? z1 : z2);
+    // multiply distance by 2 to make sure line intersects completely
+    var line_curve = new LineCurve(new Point3d(x, y, 0), new Point3d(x, y, max_dist_from_xy*2));
+
+    Curve[] overlap_curves;
+    Point3d[] inter_points;
+    if (Intersection.CurveBrep(line_curve, brep, tolerance, out overlap_curves, out inter_points))
+    {
+      if (overlap_curves.Length &gt; 0 || inter_points.Length &gt; 0)
+      {
+        // grab all the points resulting frem the intersection.
+        //    1st set: points from overlapping curves,
+        //    2nd set: points when there was no overlap
+        //    .Aggregate: furthest Z from XY plane.
+        max_z = (from c in overlap_curves select Math.Abs(c.PointAtEnd.Z) &gt; Math.Abs(c.PointAtStart.Z) ? c.PointAtEnd.Z : c.PointAtStart.Z)
+                .Union
+                (from p in inter_points select p.Z)
+                 // Here you might be tempted to use .Max() to get the largest Z value but that doesn't work because
+                 // Z might be negative.  This custom aggregate returns the max Z independant of the sign.  If it had a name
+                 // it could be MaxAbs()
+                .Aggregate((z1, z2) =&gt; Math.Abs(z1) &gt; Math.Abs(z2) ? z1 : z2);
+      }
+    }
+    return max_z;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function FurthestZOnSurfaceGivenXY(ByVal doc As RhinoDoc) As Result
@@ -451,35 +450,34 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="n">Intersect</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">,</span> <span class="n">Vector3d</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from Rhino.Geometry import Intersect, Point3d, Vector3d
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="c"># select a surface</span>
-  <span class="n">srfid</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">"select serface"</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">surface</span> <span class="o">|</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">polysurface</span><span class="p">)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">srfid</span><span class="p">:</span> <span class="k">return</span>
-  <span class="c"># get the brep</span>
-  <span class="n">brep</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercebrep</span><span class="p">(</span><span class="n">srfid</span><span class="p">)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">brep</span><span class="p">:</span> <span class="k">return</span>
+def RunCommand():
+  # select a surface
+  srfid = rs.GetObject("select serface", rs.filter.surface | rs.filter.polysurface)
+  if not srfid: return
+  # get the brep
+  brep = rs.coercebrep(srfid)
+  if not brep: return
 
-  <span class="n">x</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetReal</span><span class="p">(</span><span class="s">"value of x"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="n">y</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetReal</span><span class="p">(</span><span class="s">"value of y"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+  x = rs.GetReal("value of x", 0)
+  y = rs.GetReal("value of y", 0)
 
-  <span class="n">pts</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">Z</span><span class="p">),</span> <span class="n">point</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">Intersect</span><span class="o">.</span><span class="n">Intersection</span><span class="o">.</span><span class="n">ProjectPointsToBreps</span><span class="p">(</span>
-           <span class="p">[</span><span class="n">brep</span><span class="p">],</span> <span class="p">[</span><span class="n">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span> <span class="n">Vector3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">)]</span>
+  pts = [(abs(point.Z), point.Z) for point in Intersect.Intersection.ProjectPointsToBreps(
+           [brep], [Point3d(x, y, 0)], Vector3d(0, 0, 1), doc.ModelAbsoluteTolerance)]
 
-  <span class="n">pts</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  pts.sort(reverse=True)
 
-  <span class="k">if</span> <span class="n">pts</span> <span class="o">==</span> <span class="p">[]:</span>
-    <span class="k">print</span> <span class="s">"no Z for given X, Y"</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">rs</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">Point3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+  if pts == []:
+    print "no Z for given X, Y"
+  else:
+    rs.AddPoint(Point3d(x, y, pts[0][1]))
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

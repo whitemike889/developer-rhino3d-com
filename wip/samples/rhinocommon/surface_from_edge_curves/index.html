@@ -247,33 +247,32 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">EdgeSrf</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select 2, 3, or 4 open curves"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">OpenCurve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">4</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result EdgeSrf(RhinoDoc doc)
+  {
+    var go = new GetObject();
+    go.SetCommandPrompt("Select 2, 3, or 4 open curves");
+    go.GeometryFilter = ObjectType.Curve;
+    go.GeometryAttributeFilter = GeometryAttributeFilter.OpenCurve;
+    go.GetMultiple(2, 4);
+    if (go.CommandResult() != Result.Success)
+      return go.CommandResult();
 
-    <span class="kt">var</span> <span class="n">curves</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Objects</span><span class="p">().</span><span class="nf">Select</span><span class="p">(</span><span class="n">o</span> <span class="p">=&gt;</span> <span class="n">o</span><span class="p">.</span><span class="nf">Curve</span><span class="p">());</span>
+    var curves = go.Objects().Select(o =&gt; o.Curve());
 
-    <span class="kt">var</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">Brep</span><span class="p">.</span><span class="nf">CreateEdgeSurface</span><span class="p">(</span><span class="n">curves</span><span class="p">);</span>
+    var brep = Brep.CreateEdgeSurface(curves);
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
+    if (brep != null)
+    {
+      doc.Objects.AddBrep(brep);
+      doc.Views.Redraw();
+    }
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function EdgeSrf(ByVal doc As RhinoDoc) As Result
@@ -300,36 +299,35 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Commands import *
+from Rhino.DocObjects import *
+from Rhino.Geometry import *
+from Rhino.Input.Custom import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">go</span> <span class="o">=</span> <span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select 2, 3, or 4 open curves"</span><span class="p">)</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">OpenCurve</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  go = GetObject()
+  go.SetCommandPrompt("Select 2, 3, or 4 open curves")
+  go.GeometryFilter = ObjectType.Curve
+  go.GeometryAttributeFilter = GeometryAttributeFilter.OpenCurve
+  go.GetMultiple(2, 4)
+  if go.CommandResult() &lt;&gt; Result.Success:
+    return go.CommandResult()
 
-  <span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">go</span><span class="o">.</span><span class="n">Objects</span><span class="p">()]</span>
+  curves = [o.Curve() for o in go.Objects()]
 
-  <span class="n">brep</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">CreateEdgeSurface</span><span class="p">(</span><span class="n">curves</span><span class="p">)</span>
+  brep = Brep.CreateEdgeSurface(curves)
 
-  <span class="k">if</span> <span class="n">brep</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">)</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+  if brep &lt;&gt; None:
+    doc.Objects.AddBrep(brep)
+    doc.Views.Redraw()
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

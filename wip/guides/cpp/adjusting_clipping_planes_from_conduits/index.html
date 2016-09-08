@@ -323,55 +323,54 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>You may reason that it is necessary to change Rhino’s Z-Buffer range because when you draw using the <code class="highlighter-rouge">CRhinoDisplayConduit</code> class, as objects that are far from Rhino’s objects are being clipped.  However, the Z-Buffer range has nothing to do with whether or not objects get culled, or clipped, from the viewing frustum.  This behavior has to do with Rhino’s near and far clipping planes.  Rhino’s clipping planes are adjusted dynamically in order to maximize the precision within the Z-Buffer.  Additionally, Rhino does this by placing the near plane as close to the closest visible object in the frustum, and the far plane as far as the furthest visible object in the frustum.</p>
+<p>You may reason that it is necessary to change Rhino’s Z-Buffer range because when you draw using the <code>CRhinoDisplayConduit</code> class, as objects that are far from Rhino’s objects are being clipped.  However, the Z-Buffer range has nothing to do with whether or not objects get culled, or clipped, from the viewing frustum.  This behavior has to do with Rhino’s near and far clipping planes.  Rhino’s clipping planes are adjusted dynamically in order to maximize the precision within the Z-Buffer.  Additionally, Rhino does this by placing the near plane as close to the closest visible object in the frustum, and the far plane as far as the furthest visible object in the frustum.</p>
 
-<p>If you are adding or drawing objects that Rhino does not know about - that are not in the drawing database - then they will not be included in those calculations.  Thus, you must also implement the <code class="highlighter-rouge">SC_CALCBOUNDINGBOX</code> channel inside your conduit and add to the overall scene bounding box.  This will make Rhino adjust its clipping planes to include your objects.  For example…</p>
+<p>If you are adding or drawing objects that Rhino does not know about - that are not in the drawing database - then they will not be included in those calculations.  Thus, you must also implement the <code>SC_CALCBOUNDINGBOX</code> channel inside your conduit and add to the overall scene bounding box.  This will make Rhino adjust its clipping planes to include your objects.  For example…</p>
 
 <h2 id="example">Example</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CTestDisplayConduit</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoDisplayConduit</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CTestDisplayConduit</span><span class="p">();</span>
+<pre><code class="language-cpp">class CTestDisplayConduit : public CRhinoDisplayConduit
+{
+public:
+  CTestDisplayConduit();
 
-  <span class="kt">bool</span> <span class="n">ExecConduit</span><span class="p">(</span>
-    <span class="n">CRhinoDisplayPipeline</span><span class="o">&amp;</span> <span class="n">dp</span><span class="p">,</span>
-    <span class="n">UINT</span> <span class="n">nChannel</span><span class="p">,</span>
-    <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">bTerminate</span>
-    <span class="p">);</span>
+  bool ExecConduit(
+    CRhinoDisplayPipeline&amp; dp,
+    UINT nChannel,
+    bool&amp; bTerminate
+    );
 
-  <span class="c1">// TODO: add other methods and members here
-</span><span class="p">};</span>
+  // TODO: add other methods and members here
+};
 
-<span class="n">CTestDisplayConduit</span><span class="o">::</span><span class="n">CTestDisplayConduit</span><span class="p">()</span>
-<span class="o">:</span> <span class="n">CRhinoDisplayConduit</span><span class="p">(</span><span class="n">CSupportChannels</span><span class="o">::</span><span class="n">SC_PREDRAWOBJECTS</span><span class="o">|</span><span class="n">CSupportChannels</span><span class="o">::</span><span class="n">SC_CALCBOUNDINGBOX</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// TODO: initialize members here
-</span><span class="p">}</span>
+CTestDisplayConduit::CTestDisplayConduit()
+: CRhinoDisplayConduit(CSupportChannels::SC_PREDRAWOBJECTS|CSupportChannels::SC_CALCBOUNDINGBOX)
+{
+  // TODO: initialize members here
+}
 
-<span class="kt">bool</span> <span class="n">CTestDisplayConduit</span><span class="o">::</span><span class="n">ExecConduit</span><span class="p">(</span>
-    <span class="n">CRhinoDisplayPipeline</span><span class="o">&amp;</span> <span class="n">dp</span><span class="p">,</span>
-    <span class="n">UINT</span> <span class="n">nChannel</span><span class="p">,</span>
-    <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">bTerminate</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">switch</span><span class="p">(</span> <span class="n">nChannel</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">case</span> <span class="n">CSupportChannels</span><span class="p">:</span><span class="o">:</span><span class="n">SC_CALCBOUNDINGBOX</span><span class="o">:</span>
-    <span class="p">{</span>
-      <span class="n">m_pChannelAttrs</span><span class="o">-&gt;</span><span class="n">m_BoundingBox</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span> <span class="cm">/*YOUR_OBJECTS_BOUNDING_BOXES*/</span> <span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">case</span> <span class="n">CSupportChannels</span><span class="p">:</span><span class="o">:</span><span class="n">SC_PREDRAWOBJECTS</span><span class="o">:</span>
-    <span class="p">{</span>
-      <span class="c1">// TODO: add drawing code here
-</span>      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+bool CTestDisplayConduit::ExecConduit(
+    CRhinoDisplayPipeline&amp; dp,
+    UINT nChannel,
+    bool&amp; bTerminate
+    )
+{
+  switch( nChannel )
+  {
+    case CSupportChannels::SC_CALCBOUNDINGBOX:
+    {
+      m_pChannelAttrs-&gt;m_BoundingBox.Union( /*YOUR_OBJECTS_BOUNDING_BOXES*/ );
+      break;
+    }
+    case CSupportChannels::SC_PREDRAWOBJECTS:
+    {
+      // TODO: add drawing code here
+      break;
+    }
+  }
+  return true;
+}
 </code></pre>
-</div>
 
         </article>
 

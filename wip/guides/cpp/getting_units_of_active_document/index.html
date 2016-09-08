@@ -323,40 +323,37 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>There are two unit systems associated with a document, model and page units.  The <code class="highlighter-rouge">ON_UnitSystem</code> class makes it easy to work with custom units.  The Rhino document class contains two functions:</p>
+<p>There are two unit systems associated with a document, model and page units.  The <code>ON_UnitSystem</code> class makes it easy to work with custom units.  The Rhino document class contains two functions:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">const ON_UnitSystem&amp; ModelUnits() const;</code> and…</li>
-  <li><code class="highlighter-rouge">const ON_UnitSystem&amp; PageUnits() const;</code></li>
+  <li><code>const ON_UnitSystem&amp; ModelUnits() const;</code> and…</li>
+  <li><code>const ON_UnitSystem&amp; PageUnits() const;</code></li>
 </ol>
 
 <h2 id="how-to">How To</h2>
 
-<p>The unit system of the active document is stored on an <code class="highlighter-rouge">ON_3dmUnitsAndTolerances</code> class that is located on the <code class="highlighter-rouge">CRhinoDoc</code> object.</p>
+<p>The unit system of the active document is stored on an <code>ON_3dmUnitsAndTolerances</code> class that is located on the <code>CRhinoDoc</code> object.</p>
 
-<p>If you inside of a <code class="highlighter-rouge">CRhinoCommand</code>-derived object’s <code class="highlighter-rouge">RunCommand()</code> member, you can get the current units system as follows:</p>
+<p>If you inside of a <code>CRhinoCommand</code>-derived object’s <code>RunCommand()</code> member, you can get the current units system as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">const</span> <span class="n">CRhinoDocProperties</span><span class="o">&amp;</span> <span class="n">doc_props</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Properties</span><span class="p">();</span>
-<span class="k">const</span> <span class="n">ON_3dmUnitsAndTolerances</span><span class="o">&amp;</span> <span class="n">units</span> <span class="o">=</span> <span class="n">doc_props</span><span class="p">.</span><span class="n">ModelUnitsAndTolerances</span><span class="p">();</span>
-<span class="n">ON</span><span class="o">::</span><span class="n">unit_system</span> <span class="n">units_system</span> <span class="o">=</span> <span class="n">units</span><span class="p">.</span><span class="n">m_unit_system</span><span class="p">;</span>
+<pre><code class="language-cpp">const CRhinoDocProperties&amp; doc_props = context.m_doc.Properties();
+const ON_3dmUnitsAndTolerances&amp; units = doc_props.ModelUnitsAndTolerances();
+ON::unit_system units_system = units.m_unit_system;
 </code></pre>
-</div>
 
 <p>As a shortcut, you can do the following:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON</span><span class="o">::</span><span class="n">unit_system</span> <span class="n">units_system</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">UnitSystem</span><span class="p">();</span>
+<pre><code class="language-cpp">ON::unit_system units_system = context.m_doc.UnitSystem();
 </code></pre>
-</div>
 
-<p>If you outside of a <code class="highlighter-rouge">CRhinoCommand</code>-derived object’s <code class="highlighter-rouge">RunCommand()</code> member, you can get the current units system as follows:</p>
+<p>If you outside of a <code>CRhinoCommand</code>-derived object’s <code>RunCommand()</code> member, you can get the current units system as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoDoc</span><span class="o">*</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">();</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">doc</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON</span><span class="o">::</span><span class="n">unit_system</span> <span class="n">units_system</span> <span class="o">=</span> <span class="n">doc</span><span class="o">-&gt;</span><span class="n">UnitSystem</span><span class="p">();</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoDoc* doc = RhinoApp().ActiveDoc();
+if( doc )
+{
+  ON::unit_system units_system = doc-&gt;UnitSystem();
+}
 </code></pre>
-</div>
 
         </article>
 

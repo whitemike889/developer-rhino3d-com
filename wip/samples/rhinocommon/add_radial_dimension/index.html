@@ -247,54 +247,53 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddRadialDimension</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select curve for radius dimension"</span><span class="p">,</span>
-      <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">curve_parameter</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">CurveParameter</span><span class="p">(</span><span class="k">out</span> <span class="n">curve_parameter</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddRadialDimension(Rhino.RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select curve for radius dimension",
+      true, ObjectType.Curve, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    double curve_parameter;
+    var curve = obj_ref.CurveParameter(out curve_parameter);
+    if (curve == null)
+      return Result.Failure;
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span><span class="p">.</span><span class="nf">IsLinear</span><span class="p">()</span> <span class="p">||</span> <span class="n">curve</span><span class="p">.</span><span class="nf">IsPolyline</span><span class="p">())</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Curve must be non-linear."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (curve.IsLinear() || curve.IsPolyline())
+    {
+      RhinoApp.WriteLine("Curve must be non-linear.");
+      return Result.Nothing;
+    }
 
-    <span class="c1">// in this example just deal with planar curves
-</span>    <span class="k">if</span> <span class="p">(!</span><span class="n">curve</span><span class="p">.</span><span class="nf">IsPlanar</span><span class="p">())</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Curve must be planar."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // in this example just deal with planar curves
+    if (!curve.IsPlanar())
+    {
+      RhinoApp.WriteLine("Curve must be planar.");
+      return Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">point_on_curve</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">curve_parameter</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">curvature_vector</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">CurvatureAt</span><span class="p">(</span><span class="n">curve_parameter</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">len</span> <span class="p">=</span> <span class="n">curvature_vector</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="p">&lt;</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="n">SqrtEpsilon</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Curve is almost linear and therefore has no curvature."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    var point_on_curve = curve.PointAt(curve_parameter);
+    var curvature_vector = curve.CurvatureAt(curve_parameter);
+    var len = curvature_vector.Length;
+    if (len &lt; RhinoMath.SqrtEpsilon)
+    {
+      RhinoApp.WriteLine("Curve is almost linear and therefore has no curvature.");
+      return Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">center</span> <span class="p">=</span> <span class="n">point_on_curve</span> <span class="p">+</span> <span class="p">(</span><span class="n">curvature_vector</span><span class="p">/(</span><span class="n">len</span><span class="p">*</span><span class="n">len</span><span class="p">));</span>
-    <span class="n">Plane</span> <span class="n">plane</span><span class="p">;</span>
-    <span class="n">curve</span><span class="p">.</span><span class="nf">TryGetPlane</span><span class="p">(</span><span class="k">out</span> <span class="n">plane</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">radial_dimension</span> <span class="p">=</span>
-      <span class="k">new</span> <span class="nf">RadialDimension</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">point_on_curve</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">XAxis</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">Normal</span><span class="p">,</span> <span class="m">5.0</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddRadialDimension</span><span class="p">(</span><span class="n">radial_dimension</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var center = point_on_curve + (curvature_vector/(len*len));
+    Plane plane;
+    curve.TryGetPlane(out plane);
+    var radial_dimension =
+      new RadialDimension(center, point_on_curve, plane.XAxis, plane.Normal, 5.0);
+    doc.Objects.AddRadialDimension(radial_dimension);
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddRadialDimension(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -339,50 +338,49 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Geometry import *
+from Rhino.Input import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select curve for radius dimension"</span><span class="p">,</span>
-    <span class="bp">True</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">curve</span><span class="p">,</span> <span class="n">curve_parameter</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">CurveParameter</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">curve</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject("Select curve for radius dimension",
+    True, ObjectType.Curve)
+  if rc != Result.Success:
+    return rc
+  curve, curve_parameter = obj_ref.CurveParameter()
+  if curve == None:
+    return Result.Failure
 
-  <span class="k">if</span> <span class="n">curve</span><span class="o">.</span><span class="n">IsLinear</span><span class="p">()</span> <span class="ow">or</span> <span class="n">curve</span><span class="o">.</span><span class="n">IsPolyline</span><span class="p">():</span>
-    <span class="k">print</span> <span class="s">"Curve must be non-linear."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if curve.IsLinear() or curve.IsPolyline():
+    print "Curve must be non-linear."
+    return Result.Nothing
 
-  <span class="c"># in this example just deal with planar curves</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">curve</span><span class="o">.</span><span class="n">IsPlanar</span><span class="p">():</span>
-    <span class="k">print</span> <span class="s">"Curve must be planar."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  # in this example just deal with planar curves
+  if not curve.IsPlanar():
+    print "Curve must be planar."
+    return Result.Nothing
 
-  <span class="n">point_on_curve</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">curve_parameter</span><span class="p">)</span>
-  <span class="n">curvature_vector</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">CurvatureAt</span><span class="p">(</span><span class="n">curve_parameter</span><span class="p">)</span>
-  <span class="nb">len</span> <span class="o">=</span> <span class="n">curvature_vector</span><span class="o">.</span><span class="n">Length</span>
-  <span class="k">if</span> <span class="nb">len</span> <span class="o">&lt;</span> <span class="n">RhinoMath</span><span class="o">.</span><span class="n">SqrtEpsilon</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"Curve is almost linear and therefore has no curvature."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  point_on_curve = curve.PointAt(curve_parameter)
+  curvature_vector = curve.CurvatureAt(curve_parameter)
+  len = curvature_vector.Length
+  if len &lt; RhinoMath.SqrtEpsilon:
+    print "Curve is almost linear and therefore has no curvature."
+    return Result.Nothing
 
-  <span class="n">center</span> <span class="o">=</span> <span class="n">point_on_curve</span> <span class="o">+</span> <span class="p">(</span><span class="n">curvature_vector</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="o">*</span><span class="nb">len</span><span class="p">))</span>
-  <span class="n">_</span><span class="p">,</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">TryGetPlane</span><span class="p">()</span>
-  <span class="n">radial_dimension</span> <span class="o">=</span> \
-    <span class="n">RadialDimension</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">point_on_curve</span><span class="p">,</span> <span class="n">plane</span><span class="o">.</span><span class="n">XAxis</span><span class="p">,</span> <span class="n">plane</span><span class="o">.</span><span class="n">Normal</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddRadialDimension</span><span class="p">(</span><span class="n">radial_dimension</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  center = point_on_curve + (curvature_vector/(len*len))
+  _, plane = curve.TryGetPlane()
+  radial_dimension = \
+    RadialDimension(center, point_on_curve, plane.XAxis, plane.Normal, 5.0)
+  doc.Objects.AddRadialDimension(radial_dimension)
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__=="__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

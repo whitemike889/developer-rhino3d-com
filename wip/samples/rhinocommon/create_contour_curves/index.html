@@ -247,70 +247,69 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ContourCurves</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span><span class="p">;</span>
-    <span class="n">ObjRef</span><span class="p">[]</span> <span class="n">obj_refs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select objects to contour"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_refs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ContourCurves(RhinoDoc doc)
+  {
+    var filter = ObjectType.Surface | ObjectType.PolysrfFilter | ObjectType.Mesh;
+    ObjRef[] obj_refs;
+    var rc = RhinoGet.GetMultipleObjects("Select objects to contour", false, filter, out obj_refs);
+    if (rc != Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Contour plane base point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">base_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("Contour plane base point");
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var base_point = gp.Point();
 
-    <span class="n">gp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">base_point</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Direction perpendicular to contour planes"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">end_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    gp.DrawLineFromPoint(base_point, true);
+    gp.SetCommandPrompt("Direction perpendicular to contour planes");
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var end_point = gp.Point();
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">base_point</span><span class="p">.</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">end_point</span><span class="p">)</span> <span class="p">&lt;</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="n">ZeroTolerance</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+    if (base_point.DistanceTo(end_point) &lt; RhinoMath.ZeroTolerance)
+      return Result.Nothing;
 
-    <span class="kt">double</span> <span class="n">distance</span> <span class="p">=</span> <span class="m">1.0</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="s">"Distance between contours"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">distance</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    double distance = 1.0;
+    rc = RhinoGet.GetNumber("Distance between contours", false, ref distance);
+    if (rc != Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">interval</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">distance</span><span class="p">);</span>
+    var interval = Math.Abs(distance);
 
-    <span class="n">Curve</span><span class="p">[]</span> <span class="n">curves</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref</span> <span class="k">in</span> <span class="n">obj_refs</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">geometry</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">geometry</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Curve[] curves = null;
+    foreach (var obj_ref in obj_refs)
+    {
+      var geometry = obj_ref.Geometry();
+      if (geometry == null)
+        return Result.Failure;
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">geometry</span> <span class="k">is</span> <span class="n">Brep</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">curves</span> <span class="p">=</span> <span class="n">Brep</span><span class="p">.</span><span class="nf">CreateContourCurves</span><span class="p">(</span><span class="n">geometry</span> <span class="k">as</span> <span class="n">Brep</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">end_point</span><span class="p">,</span> <span class="n">interval</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">curves</span> <span class="p">=</span> <span class="n">Mesh</span><span class="p">.</span><span class="nf">CreateContourCurves</span><span class="p">(</span><span class="n">geometry</span> <span class="k">as</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">end_point</span><span class="p">,</span> <span class="n">interval</span><span class="p">);</span>
-      <span class="p">}</span>
+      if (geometry is Brep)
+      {
+        curves = Brep.CreateContourCurves(geometry as Brep, base_point, end_point, interval);
+      }
+      else
+      {
+        curves = Mesh.CreateContourCurves(geometry as Mesh, base_point, end_point, interval);
+      }
 
-      <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">curve</span> <span class="k">in</span> <span class="n">curves</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">curve_object_id</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curve</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">curve_object_id</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+      foreach (var curve in curves)
+      {
+        var curve_object_id = doc.Objects.AddCurve(curve);
+        doc.Objects.Select(curve_object_id);
+      }
+    }
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">curves</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    if (curves != null)
+      doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ContourCurves(ByVal doc As RhinoDoc) As Result
@@ -376,67 +375,66 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">System</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from System import *
+from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Geometry import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
+from Rhino.Commands import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="nb">filter</span> <span class="o">=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">PolysrfFilter</span> <span class="o">|</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Mesh</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_refs</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select objects to contour"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
+def RunCommand():
+  filter = ObjectType.Surface | ObjectType.PolysrfFilter | ObjectType.Mesh
+  rc, obj_refs = RhinoGet.GetMultipleObjects("Select objects to contour", False, filter)
+  if rc &lt;&gt; Result.Success:
+    return rc
 
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Contour plane base point"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">base_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+  gp = GetPoint()
+  gp.SetCommandPrompt("Contour plane base point")
+  gp.Get()
+  if gp.CommandResult() &lt;&gt; Result.Success:
+    return gp.CommandResult()
+  base_point = gp.Point()
 
-  <span class="n">gp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">base_point</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Direction perpendicular to contour planes"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">end_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+  gp.DrawLineFromPoint(base_point, True)
+  gp.SetCommandPrompt("Direction perpendicular to contour planes")
+  gp.Get()
+  if gp.CommandResult() &lt;&gt; Result.Success:
+    return gp.CommandResult()
+  end_point = gp.Point()
 
-  <span class="k">if</span> <span class="n">base_point</span><span class="o">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">end_point</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">RhinoMath</span><span class="o">.</span><span class="n">ZeroTolerance</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if base_point.DistanceTo(end_point) &lt; RhinoMath.ZeroTolerance:
+    return Result.Nothing
 
-  <span class="n">distance</span> <span class="o">=</span> <span class="mf">1.0</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetNumber</span><span class="p">(</span><span class="s">"Distance between contours"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
+  distance = 1.0
+  rc, distance = RhinoGet.GetNumber("Distance between contours", False, distance)
+  if rc &lt;&gt; Result.Success:
+    return rc
 
-  <span class="n">interval</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+  interval = Math.Abs(distance)
 
-  <span class="k">for</span> <span class="n">obj_ref</span> <span class="ow">in</span> <span class="n">obj_refs</span><span class="p">:</span>
-    <span class="n">geometry</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Geometry</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">geometry</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  for obj_ref in obj_refs:
+    geometry = obj_ref.Geometry()
+    if geometry == None:
+      return Result.Failure
 
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span> <span class="o">==</span> <span class="n">Brep</span><span class="p">:</span>
-      <span class="n">curves</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">CreateContourCurves</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">end_point</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">curves</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">CreateContourCurves</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">end_point</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>
+    if type(geometry) == Brep:
+      curves = Brep.CreateContourCurves(geometry, base_point, end_point, interval)
+    else:
+      curves = Mesh.CreateContourCurves(geometry, base_point, end_point, interval)
 
-    <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
-      <span class="n">curve_object_id</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span>
-      <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="n">curve_object_id</span><span class="p">)</span>
+    for curve in curves:
+      curve_object_id = doc.Objects.AddCurve(curve)
+      doc.Objects.Select(curve_object_id)
 
-  <span class="k">if</span> <span class="n">curves</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  if curves &lt;&gt; None:
+    doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

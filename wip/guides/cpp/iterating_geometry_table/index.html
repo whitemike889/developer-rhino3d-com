@@ -323,40 +323,39 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>The <code class="highlighter-rouge">CRhinoGetObject</code> class is useful when you need the user to interactively pick one or more objects.  But, it is not too useful if you need to walk through the entire document looking for objects.  This is where the <code class="highlighter-rouge">CRhinoObjectIterator</code> class comes in.</p>
+<p>The <code>CRhinoGetObject</code> class is useful when you need the user to interactively pick one or more objects.  But, it is not too useful if you need to walk through the entire document looking for objects.  This is where the <code>CRhinoObjectIterator</code> class comes in.</p>
 
-<p>The <code class="highlighter-rouge">CRhinoObjectIterator</code> class is used to iterate through the objects in a <code class="highlighter-rouge">CRhinoDoc</code> object.  You can limit the iteration by specifying one of five mutually exclusive object states and one of three mutually exclusive object categories.</p>
+<p>The <code>CRhinoObjectIterator</code> class is used to iterate through the objects in a <code>CRhinoDoc</code> object.  You can limit the iteration by specifying one of five mutually exclusive object states and one of three mutually exclusive object categories.</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestIterator</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-                  <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoObjectIterator</span> <span class="n">it</span><span class="p">(</span>
-        <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">undeleted_objects</span><span class="p">,</span>
-        <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">active_and_reference_objects</span>
-        <span class="p">);</span>
-  <span class="n">it</span><span class="p">.</span><span class="n">IncludeLights</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">it</span><span class="p">.</span><span class="n">IncludeGrips</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">pObject</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="n">First</span><span class="p">();</span> <span class="n">pObject</span><span class="p">;</span> <span class="n">pObject</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="n">Next</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">pObject</span><span class="o">-&gt;</span><span class="n">IsSelected</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pObject</span><span class="o">-&gt;</span><span class="n">IsSelectable</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="n">pObject</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
-    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-  <span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestIterator::RunCommand(
+                  const CRhinoCommandContext&amp; context )
+{
+  CRhinoObjectIterator it(
+        CRhinoObjectIterator::undeleted_objects,
+        CRhinoObjectIterator::active_and_reference_objects
+        );
+  it.IncludeLights( TRUE );
+  it.IncludeGrips( false );
+  int count = 0;
+  for( CRhinoObject* pObject = it.First(); pObject; pObject = it.Next() )
+  {
+    if( pObject-&gt;IsSelected() )
+      continue;
+    if( !pObject-&gt;IsSelectable() )
+      continue;
+    pObject-&gt;Select();
+    count++;
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  if( count )
+    context.m_doc.Redraw();
 
-  <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"%d object(s) selected.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">count</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  ::RhinoApp().Print( L"%d object(s) selected.\n", count );
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <p>For more information, see the <em>rhinoSdkDoc.h</em> SDK header file.</p>
 

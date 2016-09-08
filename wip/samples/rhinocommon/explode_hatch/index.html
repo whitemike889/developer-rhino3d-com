@@ -247,61 +247,60 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ExplodeHatch</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Hatch</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select hatch to explode"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">objref</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ExplodeHatch(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Hatch;
+    Rhino.DocObjects.ObjRef objref;
+    Rhino.Commands.Result rc = Rhino.Input.RhinoGet.GetOneObject("Select hatch to explode", false, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success || objref == null)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Hatch</span> <span class="n">hatch</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">()</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Hatch</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">hatch</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.Geometry.Hatch hatch = objref.Geometry() as Rhino.Geometry.Hatch;
+    if (null == hatch)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">GeometryBase</span><span class="p">[]</span> <span class="n">hatch_geom</span> <span class="p">=</span> <span class="n">hatch</span><span class="p">.</span><span class="nf">Explode</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">hatch_geom</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">hatch_geom</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="p">{</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">GeometryBase</span> <span class="n">geom</span> <span class="p">=</span> <span class="n">hatch_geom</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">geom</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">switch</span> <span class="p">(</span><span class="n">geom</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">)</span>
-          <span class="p">{</span>
-            <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Point</span><span class="p">:</span>
-              <span class="p">{</span>
-                <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point</span> <span class="n">point</span> <span class="p">=</span> <span class="n">geom</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">point</span><span class="p">)</span>
-                  <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">.</span><span class="n">Location</span><span class="p">);</span>
-              <span class="p">}</span>
-              <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">:</span>
-              <span class="p">{</span>
-                <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">geom</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">curve</span><span class="p">)</span>
-                  <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curve</span><span class="p">);</span>
-              <span class="p">}</span>
-              <span class="k">break</span><span class="p">;</span>
-            <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Brep</span><span class="p">:</span>
-              <span class="p">{</span>
-                <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">geom</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span><span class="p">;</span>
-                <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">brep</span><span class="p">)</span>
-                  <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-              <span class="p">}</span>
-              <span class="k">break</span><span class="p">;</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    Rhino.Geometry.GeometryBase[] hatch_geom = hatch.Explode();
+    if (null != hatch_geom)
+    {
+      for (int i = 0; i &lt; hatch_geom.Length; i++)
+      {
+        Rhino.Geometry.GeometryBase geom = hatch_geom[i];
+        if (null != geom)
+        {
+          switch (geom.ObjectType)
+          {
+            case Rhino.DocObjects.ObjectType.Point:
+              {
+                Rhino.Geometry.Point point = geom as Rhino.Geometry.Point;
+                if (null != point)
+                  doc.Objects.AddPoint(point.Location);
+              }
+              break;
+            case Rhino.DocObjects.ObjectType.Curve:
+              {
+                Rhino.Geometry.Curve curve = geom as Rhino.Geometry.Curve;
+                if (null != curve)
+                  doc.Objects.AddCurve(curve);
+              }
+              break;
+            case Rhino.DocObjects.ObjectType.Brep:
+              {
+                Rhino.Geometry.Brep brep = geom as Rhino.Geometry.Brep;
+                if (null != brep)
+                  doc.Objects.AddBrep(brep);
+              }
+              break;
+          }
+        }
+      }
+    }
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ExplodeHatch(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -348,32 +347,31 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">ExplodeHatch</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Hatch</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select hatch to explode"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def ExplodeHatch():
+    filter = Rhino.DocObjects.ObjectType.Hatch
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select hatch to explode", False, filter)
+    if rc != Rhino.Commands.Result.Success: return
 
-    <span class="n">hatch</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Geometry</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">hatch</span><span class="p">:</span> <span class="k">return</span>
+    hatch = objref.Geometry()
+    if not hatch: return
 
-    <span class="n">hatch_geom</span> <span class="o">=</span> <span class="n">hatch</span><span class="o">.</span><span class="n">Explode</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">hatch_geom</span><span class="p">:</span>
-      <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">hatch_geom</span><span class="p">:</span>
-          <span class="k">if</span> <span class="n">geom</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">==</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Point</span><span class="p">:</span>
-              <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-          <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">==</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">:</span>
-              <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-          <span class="k">elif</span> <span class="n">geom</span><span class="o">.</span><span class="n">ObjectType</span> <span class="o">==</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Brep</span><span class="p">:</span>
-              <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
-      <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    hatch_geom = hatch.Explode()
+    if hatch_geom:
+      for geom in hatch_geom:
+          if geom.ObjectType == Rhino.DocObjects.ObjectType.Point:
+              scriptcontext.doc.Objects.AddPoint(geom)
+          elif geom.ObjectType == Rhino.DocObjects.ObjectType.Curve:
+              scriptcontext.doc.Objects.AddCurve(geom)
+          elif geom.ObjectType == Rhino.DocObjects.ObjectType.Brep:
+              scriptcontext.doc.Objects.AddBrep(geom)
+      scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">ExplodeHatch</span><span class="p">()</span>
+if __name__=="__main__":
+    ExplodeHatch()
 </code></pre>
-</div>
 
 </div>
 

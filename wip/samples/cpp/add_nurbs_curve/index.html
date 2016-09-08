@@ -242,47 +242,46 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">TestNurbsCurve</span><span class="p">(</span><span class="n">CRhinoDoc</span><span class="o">&amp;</span> <span class="n">doc</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">degree</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">cv_count</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">knot_count</span> <span class="o">=</span> <span class="n">cv_count</span> <span class="o">+</span> <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">order</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<pre><code class="language-cpp">void TestNurbsCurve(CRhinoDoc&amp; doc)
+{
+  const int degree = 3;
+  const int cv_count = 6;
+  const int knot_count = cv_count + degree - 1;
+  const int order = degree + 1;
 
-  <span class="n">ON_3dPoint</span> <span class="n">cvs</span><span class="p">[</span><span class="n">cv_count</span><span class="p">];</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">20.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-  <span class="n">cvs</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+  ON_3dPoint cvs[cv_count];
+  cvs[0] = ON_3dPoint(0.0, 0.0, 0.0);
+  cvs[1] = ON_3dPoint(5.0, 10.0, 0.0);
+  cvs[2] = ON_3dPoint(10.0, 0.0, 0.0);
+  cvs[3] = ON_3dPoint(15.0, 10.0, 0.0);
+  cvs[4] = ON_3dPoint(20.0, 0.0, 0.0);
+  cvs[5] = ON_3dPoint(25.0, 10.0, 0.0);
 
-  <span class="kt">double</span> <span class="n">knots</span><span class="p">[</span><span class="n">knot_count</span><span class="p">];</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span>
-  <span class="n">knots</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span>
+  double knots[knot_count];
+  knots[0] = 0.0;
+  knots[1] = 0.0;
+  knots[2] = 0.0;
+  knots[3] = 1.0;
+  knots[4] = 2.0;
+  knots[5] = 3.0;
+  knots[6] = 3.0;
+  knots[7] = 3.0;
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">curve</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">cv_count</span><span class="p">);</span>
+  ON_NurbsCurve curve(3, FALSE, order, cv_count);
 
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">cv_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">curve</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">cvs</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  for (int i = 0; i &lt; cv_count; i++)
+    curve.SetCV(i, cvs[i]);
 
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">knot_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">curve</span><span class="p">.</span><span class="n">m_knot</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">knots</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  for (int i = 0; i &lt; knot_count; i++)
+    curve.m_knot[i] = knots[i];
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span><span class="n">curve</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  if( curve.IsValid() )
+  {
+    doc.AddCurveObject(curve);
+    doc.Redraw();
+  }
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

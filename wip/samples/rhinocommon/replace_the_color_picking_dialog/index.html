@@ -247,28 +247,27 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">static</span> <span class="n">ColorDialog</span> <span class="n">m_dlg</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  private static ColorDialog m_dlg = null;
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ReplaceColorDialog</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Dialogs</span><span class="p">.</span><span class="nf">SetCustomColorDialog</span><span class="p">(</span><span class="n">OnSetCustomColorDialog</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+  public static Result ReplaceColorDialog(RhinoDoc doc)
+  {
+    Dialogs.SetCustomColorDialog(OnSetCustomColorDialog);
+    return Result.Success;
+  }
 
-  <span class="k">static</span> <span class="k">void</span> <span class="nf">OnSetCustomColorDialog</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">GetColorEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_dlg</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ColorDialog</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">m_dlg</span><span class="p">.</span><span class="nf">ShowDialog</span><span class="p">(</span><span class="k">null</span><span class="p">)</span> <span class="p">==</span> <span class="n">DialogResult</span><span class="p">.</span><span class="n">Ok</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">c</span> <span class="p">=</span> <span class="n">m_dlg</span><span class="p">.</span><span class="n">Color</span><span class="p">;</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">SelectedColor</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="nf">FromArgb</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">Ab</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">Rb</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">Gb</span><span class="p">,</span> <span class="n">c</span><span class="p">.</span><span class="n">Bb</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  static void OnSetCustomColorDialog(object sender, GetColorEventArgs e)
+  {
+    m_dlg = new ColorDialog();
+    if (m_dlg.ShowDialog(null) == DialogResult.Ok)
+    {
+      var c = m_dlg.Color;
+      e.SelectedColor = System.Drawing.Color.FromArgb (c.Ab, c.Rb, c.Gb, c.Bb);
+    }
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared m_dlg As ColorDialog = Nothing
@@ -288,9 +287,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

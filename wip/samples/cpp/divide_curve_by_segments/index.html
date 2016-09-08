@@ -242,61 +242,60 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve to divide"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve to divide" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">cancel</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  if( go.Result() == CRhinoGet::cancel )
+    return CRhinoCommand::cancel;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="o">|</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  if( go.Result() != CRhinoGet::object | go.ObjectCount() &lt;= 0 )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  CRhinoObjRef&amp; objref = go.Object(0);
+  const ON_Curve* crv = objref.Curve();
+  if( !crv )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetInteger</span> <span class="n">gi</span><span class="p">;</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Number of segments"</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetDefaultInteger</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetUpperLimit</span><span class="p">(</span> <span class="mi">100</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">GetInteger</span><span class="p">();</span>
+  CRhinoGetInteger gi;
+  gi.SetCommandPrompt( L"Number of segments" );
+  gi.SetDefaultInteger( 2 );
+  gi.SetLowerLimit( 2 );
+  gi.SetUpperLimit( 100 );
+  gi.GetInteger();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">gi</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">cancel</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  if( gi.Result() == CRhinoGet::cancel )
+    return CRhinoCommand::cancel;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">gi</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">number</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  if( gi.Result() != CRhinoGet::number )
+    return CRhinoCommand::failure;
 
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">gi</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span> <span class="n">count</span> <span class="p">);</span>
-  <span class="n">t</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">count</span> <span class="p">);</span>
+  int count = gi.Number();
+  count++;
+  ON_SimpleArray&lt;double&gt; t( count );
+  t.SetCount( count );
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">param</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">count</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">param</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNormalizedArcLengthPoints</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  int i;
+  for( i = 0; i &lt; count; i++ )
+  {
+    double param = (double)i / ((double)count-1);
+    t[i] = param;
+  }
+  if( crv-&gt;GetNormalizedArcLengthPoints(count, (double*)&amp;t[0], (double*)&amp;t[0]) )
+  {
+    for( i = 0; i &lt; count; i++ )
+    {
+      ON_3dPoint pt = crv-&gt;PointAt( t[i] );
+      context.m_doc.AddPointObject( pt );
+    }
+    context.m_doc.Redraw();
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

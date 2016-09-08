@@ -242,29 +242,28 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// The following is a demonstration of how to interactively add a linear dimension object to Rhino.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoLinearDimension</span><span class="o">*</span> <span class="n">pDim</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<pre><code class="language-cpp">// The following is a demonstration of how to interactively add a linear dimension object to Rhino.
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoLinearDimension* pDim = 0;
 
-  <span class="n">CArgsRhinoDimLinear</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetFirstPointPrompt</span><span class="p">(</span> <span class="s">L"First dimension point"</span> <span class="p">);</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetSecondPointPrompt</span><span class="p">(</span> <span class="s">L"Second dimension point"</span> <span class="p">);</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetDragPointPrompt</span><span class="p">(</span> <span class="s">L"Dimension location"</span> <span class="p">);</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetIsInteractive</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span> <span class="p">);</span>
+  CArgsRhinoDimLinear args;
+  args.SetFirstPointPrompt( L"First dimension point" );
+  args.SetSecondPointPrompt( L"Second dimension point" );
+  args.SetDragPointPrompt( L"Dimension location" );
+  args.SetIsInteractive( context.IsInteractive() ? true : false );
 
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetDimLinear</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">pDim</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  CRhinoCommand::result rc = RhinoGetDimLinear( args, pDim, 0 );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">success</span> <span class="o">&amp;&amp;</span> <span class="n">pDim</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">pDim</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( rc == success &amp;&amp; pDim )
+  {
+    context.m_doc.AddObject( pDim, FALSE);
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

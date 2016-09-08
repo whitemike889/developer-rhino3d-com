@@ -350,15 +350,14 @@ $(document).ready(function()
 End Sub
 </code></pre>
 
-<p>Note how every line read from the text file is assigned to the <code class="highlighter-rouge">strLine</code> variable before it is printed.</p>
+<p>Note how every line read from the text file is assigned to the <code>strLine</code> variable before it is printed.</p>
 
 <p>Everything read from a text file using VBScript comes in as a string data type.  If you want something that you have read to be an integer or a floating point number, then you need to convert the string to that data type. For example, if you have a text file:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>7
+<pre><code>7
 3.14159
 Hello Rhino!
 </code></pre>
-</div>
 
 <p>If you use VBScript to read this file, all three lines are read in as strings.  If you want line one read as an integer and line read as a double, then you can use some of VBScript’s data conversion functions to convert the string to the proper data type.  For example:</p>
 
@@ -370,7 +369,7 @@ strThird  = objFile.ReadLine
 
 <p><strong>NOTE</strong>: the above example does have the limitation that you have to know what kind of data is on each line. If you don’t know what kind of data is on each line, then consider exporting a data type identifier along with the data from the program that generated the file.  This way, when you read a line from VBScript, you will know what kind of data you have.</p>
 
-<p>VBScript’s <code class="highlighter-rouge">VarType</code> function will return a value indicating the type of variable.  The possible values are:</p>
+<p>VBScript’s <code>VarType</code> function will return a value indicating the type of variable.  The possible values are:</p>
 
 <table rules="groups">
   <thead>
@@ -388,7 +387,7 @@ strThird  = objFile.ReadLine
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbEmpty</code></td>
+      <td style="text-align: left"><code>vbEmpty</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -399,7 +398,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Uninitialized (default)</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbNull</code></td>
+      <td style="text-align: left"><code>vbNull</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -410,7 +409,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Contains no valid data</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbInteger</code></td>
+      <td style="text-align: left"><code>vbInteger</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -421,7 +420,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Integer subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbLong</code></td>
+      <td style="text-align: left"><code>vbLong</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -432,7 +431,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Long subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbSingle</code></td>
+      <td style="text-align: left"><code>vbSingle</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -443,7 +442,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Single subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbSingle</code></td>
+      <td style="text-align: left"><code>vbSingle</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -454,7 +453,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Double subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbCurrency</code></td>
+      <td style="text-align: left"><code>vbCurrency</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -465,7 +464,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Currency subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbDate</code></td>
+      <td style="text-align: left"><code>vbDate</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -476,7 +475,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Date subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbString</code></td>
+      <td style="text-align: left"><code>vbString</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -487,7 +486,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">String subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbObject</code></td>
+      <td style="text-align: left"><code>vbObject</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -498,7 +497,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Object</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbError</code></td>
+      <td style="text-align: left"><code>vbError</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -509,7 +508,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Error subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbBoolean</code></td>
+      <td style="text-align: left"><code>vbBoolean</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -520,7 +519,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Boolean subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbVariant</code></td>
+      <td style="text-align: left"><code>vbVariant</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -531,7 +530,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Variant (used only for arrays of variants)</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbDataObject</code></td>
+      <td style="text-align: left"><code>vbDataObject</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -542,7 +541,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Data access object</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbDecimal</code></td>
+      <td style="text-align: left"><code>vbDecimal</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -553,7 +552,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Decimal subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbByte</code></td>
+      <td style="text-align: left"><code>vbByte</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -564,7 +563,7 @@ strThird  = objFile.ReadLine
       <td style="text-align: left">Byte subtype</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">vbArray</code></td>
+      <td style="text-align: left"><code>vbArray</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -592,13 +591,12 @@ strThird  = objFile.ReadLine
 
 <p>The text file above written to include the data’s type identifier would look like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>2;7
+<pre><code>2;7
 5;3.14159
 8;Hello Rhino!
 </code></pre>
-</div>
 
-<p>Now each line in the text file contains both the data type and the data.  Using VBScript’s <code class="highlighter-rouge">Split</code> function, we can separate the data type from the data.  Then, it is just a matter of testing for the types of data that our script supports and then performing the proper data conversion.  For example:</p>
+<p>Now each line in the text file contains both the data type and the data.  Using VBScript’s <code>Split</code> function, we can separate the data type from the data.  Then, it is just a matter of testing for the types of data that our script supports and then performing the proper data conversion.  For example:</p>
 
 <pre><code class="language-vbnet">Dim strLine, arrLine, nType, vaValue
 strLine = objFile.ReadLine

@@ -247,28 +247,27 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddCylinder</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">center_point</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">height_point</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Vector3d</span> <span class="n">zaxis</span> <span class="p">=</span> <span class="n">height_point</span> <span class="p">-</span> <span class="n">center_point</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Plane</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">);</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">radius</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Circle</span> <span class="n">circle</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Circle</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">radius</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Cylinder</span> <span class="n">cylinder</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Cylinder</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">cylinder</span><span class="p">.</span><span class="nf">ToBrep</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddCylinder(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.Point3d center_point = new Rhino.Geometry.Point3d(0, 0, 0);
+    Rhino.Geometry.Point3d height_point = new Rhino.Geometry.Point3d(0, 0, 10);
+    Rhino.Geometry.Vector3d zaxis = height_point - center_point;
+    Rhino.Geometry.Plane plane = new Rhino.Geometry.Plane(center_point, zaxis);
+    const double radius = 5;
+    Rhino.Geometry.Circle circle = new Rhino.Geometry.Circle(plane, radius);
+    Rhino.Geometry.Cylinder cylinder = new Rhino.Geometry.Cylinder(circle, zaxis.Length);
+    Rhino.Geometry.Brep brep = cylinder.ToBrep(true, true);
+    if (brep != null)
+    {
+      doc.Objects.AddBrep(brep);
+      doc.Views.Redraw();
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddCylinder(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -289,29 +288,28 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddCylinder</span><span class="p">():</span>
-    <span class="n">center_point</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">height_point</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">zaxis</span> <span class="o">=</span> <span class="n">height_point</span><span class="o">-</span><span class="n">center_point</span>
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">)</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">circle</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Circle</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-    <span class="n">cylinder</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Cylinder</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">zaxis</span><span class="o">.</span><span class="n">Length</span><span class="p">)</span>
-    <span class="n">brep</span> <span class="o">=</span> <span class="n">cylinder</span><span class="o">.</span><span class="n">ToBrep</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">brep</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">)</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def AddCylinder():
+    center_point = Rhino.Geometry.Point3d(0, 0, 0)
+    height_point = Rhino.Geometry.Point3d(0, 0, 10)
+    zaxis = height_point-center_point
+    plane = Rhino.Geometry.Plane(center_point, zaxis)
+    radius = 5
+    circle = Rhino.Geometry.Circle(plane, radius)
+    cylinder = Rhino.Geometry.Cylinder(circle, zaxis.Length)
+    brep = cylinder.ToBrep(True, True)
+    if brep:
+        if scriptcontext.doc.Objects.AddBrep(brep)!=System.Guid.Empty:
+            scriptcontext.doc.Views.Redraw()
+            return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddCylinder</span><span class="p">()</span>
+if __name__=="__main__":
+    AddCylinder()
 </code></pre>
-</div>
 
 </div>
 

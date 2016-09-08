@@ -374,15 +374,15 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>The VBScript <code class="highlighter-rouge">RegExp</code> object matches strings against special text patterns, called regular expressions.</p>
+<p>The VBScript <code>RegExp</code> object matches strings against special text patterns, called regular expressions.</p>
 
-<p>The <code class="highlighter-rouge">InStr</code> function can be used to search a string to see if it contains another string.  The <code class="highlighter-rouge">RegExp</code> object provides a far more sophisticated string searching facility by using regular expressions.</p>
+<p>The <code>InStr</code> function can be used to search a string to see if it contains another string.  The <code>RegExp</code> object provides a far more sophisticated string searching facility by using regular expressions.</p>
 
-<p>A regular expression is a string that describes a match pattern.  The match pattern provides a template that can be used to test another string, the search string, for a matching sub-string.  In its simplest form, the match pattern string is just a sequence of characters that must be matched.  For example, the pattern <code class="highlighter-rouge">"fred"</code> matches this exact sequence of characters and only this sequence.  More sophisticated regular expressions can match against items such as file names, path names, and Internet URLs.  Thus, the <code class="highlighter-rouge">RegExp</code> object is frequently used to validate data for correct form and syntax.</p>
+<p>A regular expression is a string that describes a match pattern.  The match pattern provides a template that can be used to test another string, the search string, for a matching sub-string.  In its simplest form, the match pattern string is just a sequence of characters that must be matched.  For example, the pattern <code>"fred"</code> matches this exact sequence of characters and only this sequence.  More sophisticated regular expressions can match against items such as file names, path names, and Internet URLs.  Thus, the <code>RegExp</code> object is frequently used to validate data for correct form and syntax.</p>
 
 <h2 id="using-regexp">Using RegExp</h2>
 
-<p>To test a search string against a match pattern, create a <code class="highlighter-rouge">RegExp</code> object and set the match pattern.  Then use the <code class="highlighter-rouge">.Test</code> method to test for a match.  For example:</p>
+<p>To test a search string against a match pattern, create a <code>RegExp</code> object and set the match pattern.  Then use the <code>.Test</code> method to test for a match.  For example:</p>
 
 <pre><code class="language-vbnet">Dim oRE, bMatch
 Set oRE = New RegExp
@@ -390,15 +390,15 @@ oRE.Pattern = "fred"
 bMatch = oRE.Test("His name was fred brown")
 </code></pre>
 
-<p>Regular expression objects are created using <code class="highlighter-rouge">the</code> New keyword.  This is an anomaly of VBScript, because it is the only object, apart from user-defined objects, that is created in this manner.  Once created in this way, the methods and properties of the object are accessed normally.</p>
+<p>Regular expression objects are created using <code>the</code> New keyword.  This is an anomaly of VBScript, because it is the only object, apart from user-defined objects, that is created in this manner.  Once created in this way, the methods and properties of the object are accessed normally.</p>
 
-<p>The <code class="highlighter-rouge">.Pattern</code> property defines the match pattern, and the <code class="highlighter-rouge">.Test</code> method tests the supplied string against this match pattern, returning True if the match pattern is found within the supplied string.  In the preceding example, <code class="highlighter-rouge">bMatch</code> is set to True as there is clearly a match.</p>
+<p>The <code>.Pattern</code> property defines the match pattern, and the <code>.Test</code> method tests the supplied string against this match pattern, returning True if the match pattern is found within the supplied string.  In the preceding example, <code>bMatch</code> is set to True as there is clearly a match.</p>
 
-<p>The <code class="highlighter-rouge">.Execute</code> method of the <code class="highlighter-rouge">RegExp</code> object also checks for a pattern match, but it returns a <code class="highlighter-rouge">Matches</code> collection object that contains detailed information on each pattern match.  The <code class="highlighter-rouge">Matches</code> object is a normal collection object containing a <code class="highlighter-rouge">.Count</code> property and a default <code class="highlighter-rouge">.Item</code> property.  Each item in the <code class="highlighter-rouge">Matches</code> object is a <code class="highlighter-rouge">Match</code> object that describes a specific pattern match.  After the <code class="highlighter-rouge">.Execute</code> method is invoked, the returned <code class="highlighter-rouge">Matches</code> object contains a <code class="highlighter-rouge">Match</code> object for each match located in the search string.</p>
+<p>The <code>.Execute</code> method of the <code>RegExp</code> object also checks for a pattern match, but it returns a <code>Matches</code> collection object that contains detailed information on each pattern match.  The <code>Matches</code> object is a normal collection object containing a <code>.Count</code> property and a default <code>.Item</code> property.  Each item in the <code>Matches</code> object is a <code>Match</code> object that describes a specific pattern match.  After the <code>.Execute</code> method is invoked, the returned <code>Matches</code> object contains a <code>Match</code> object for each match located in the search string.</p>
 
-<p>Each <code class="highlighter-rouge">Match</code> item has three properties.  The <code class="highlighter-rouge">.Value</code> property contains the actual text in the search string that was matched.  The <code class="highlighter-rouge">.FirstIndex</code> property contains the index of the first character of the match in the search string.  The <code class="highlighter-rouge">.Length</code> property contains the length of the matched string.  Unlike other VBScript string indexes, the <code class="highlighter-rouge">.FirstIndex</code> property uses 0 as the index of the first character in the string.  Therefore, always add one to this value before using it with other VBScript string functions.</p>
+<p>Each <code>Match</code> item has three properties.  The <code>.Value</code> property contains the actual text in the search string that was matched.  The <code>.FirstIndex</code> property contains the index of the first character of the match in the search string.  The <code>.Length</code> property contains the length of the matched string.  Unlike other VBScript string indexes, the <code>.FirstIndex</code> property uses 0 as the index of the first character in the string.  Therefore, always add one to this value before using it with other VBScript string functions.</p>
 
-<p>By default, the <code class="highlighter-rouge">.Execute</code> method only matches the first occurrence of the pattern.  If the <code class="highlighter-rouge">.Global</code> property is set to True, the method matches all the occurrences in the string and returns a <code class="highlighter-rouge">Match</code> object for each match.  For example:</p>
+<p>By default, the <code>.Execute</code> method only matches the first occurrence of the pattern.  If the <code>.Global</code> property is set to True, the method matches all the occurrences in the string and returns a <code>Match</code> object for each match.  For example:</p>
 
 <pre><code class="language-vbnet">Dim oRE, oMatches
 Set oRE = New RegExp
@@ -410,9 +410,9 @@ For Each oMatch In oMatches
 Next
 </code></pre>
 
-<p>This example lists all the matches against the pattern <code class="highlighter-rouge">"two"</code> in the specified string.</p>
+<p>This example lists all the matches against the pattern <code>"two"</code> in the specified string.</p>
 
-<p>Simple match patterns, such as those shown in the previous example, provide no additional functionality over that provided by the <code class="highlighter-rouge">InStr</code> function.  Much more powerful searches are available, however, by using the special regular expression features of the search pattern.  These are most easily explored using the sample script shown below:</p>
+<p>Simple match patterns, such as those shown in the previous example, provide no additional functionality over that provided by the <code>InStr</code> function.  Much more powerful searches are available, however, by using the special regular expression features of the search pattern.  These are most easily explored using the sample script shown below:</p>
 
 <pre><code class="language-vbnet">Sub TestRegExp(sPattern, sSearch)
 
@@ -437,33 +437,33 @@ Next
 End Sub
 </code></pre>
 
-<p>To use the script, call the subroutine two arguments.  Enter a match pattern as the first argument and a search string as the second argument.  If either argument contains spaces or special shell characters, enclose the argument in double quotes.  The script uses the <code class="highlighter-rouge">.Execute</code> method of the <code class="highlighter-rouge">RegExp</code> object to locate all matches and then displays these matches graphically.  Use this script to experiment with the various advanced regular expression features described in the following paragraphs.  (Several of the preceding <code class="highlighter-rouge">Rhino.Print</code> statements use the expression <code class="highlighter-rouge">Chr( )</code>.  This simply evaluates to a double quote character.)</p>
+<p>To use the script, call the subroutine two arguments.  Enter a match pattern as the first argument and a search string as the second argument.  If either argument contains spaces or special shell characters, enclose the argument in double quotes.  The script uses the <code>.Execute</code> method of the <code>RegExp</code> object to locate all matches and then displays these matches graphically.  Use this script to experiment with the various advanced regular expression features described in the following paragraphs.  (Several of the preceding <code>Rhino.Print</code> statements use the expression <code>Chr( )</code>.  This simply evaluates to a double quote character.)</p>
 
 <h2 id="regular-expression-syntax">Regular Expression syntax</h2>
 
-<p>Within the match pattern, letters, digits, and most punctuation simply match a corresponding character in the search string.  A sequence of these characters matches the equivalent sequence in the search string.  However, some characters within the match pattern have special meaning.  For example, the <code class="highlighter-rouge">"."</code> (period) character matches any character except a new-line character.  Thus, the match pattern <code class="highlighter-rouge">"a.c"</code> matches <code class="highlighter-rouge">"abc"</code> or <code class="highlighter-rouge">"adc"</code> or <code class="highlighter-rouge">"a$c"</code>. The match pattern <code class="highlighter-rouge">".."</code> matches any sequence of two characters.</p>
+<p>Within the match pattern, letters, digits, and most punctuation simply match a corresponding character in the search string.  A sequence of these characters matches the equivalent sequence in the search string.  However, some characters within the match pattern have special meaning.  For example, the <code>"."</code> (period) character matches any character except a new-line character.  Thus, the match pattern <code>"a.c"</code> matches <code>"abc"</code> or <code>"adc"</code> or <code>"a$c"</code>. The match pattern <code>".."</code> matches any sequence of two characters.</p>
 
-<p>The special character <code class="highlighter-rouge">"^"</code> matches the start of the string.  Thus, the match pattern <code class="highlighter-rouge">"^abc"</code> matches the string <code class="highlighter-rouge">"abc"</code>, but not <code class="highlighter-rouge">"123abc"</code> because this string does not begin with <code class="highlighter-rouge">"abc"</code>.  Similarly, the special character <code class="highlighter-rouge">"$"</code> matches the end of the string, and so the pattern <code class="highlighter-rouge">"red$"</code> matches the search string <code class="highlighter-rouge">"fred"</code>, but not <code class="highlighter-rouge">"fred brown"</code>.</p>
+<p>The special character <code>"^"</code> matches the start of the string.  Thus, the match pattern <code>"^abc"</code> matches the string <code>"abc"</code>, but not <code>"123abc"</code> because this string does not begin with <code>"abc"</code>.  Similarly, the special character <code>"$"</code> matches the end of the string, and so the pattern <code>"red$"</code> matches the search string <code>"fred"</code>, but not <code>"fred brown"</code>.</p>
 
-<p>Using both these characters allows a regular expression to match complete strings.  For example, the pattern <code class="highlighter-rouge">"abc"</code> matches <code class="highlighter-rouge">"123 abc that"</code> and any other string containing <code class="highlighter-rouge">"abc"</code>, whereas the pattern <code class="highlighter-rouge">"^abc$"</code> only matches the exact string <code class="highlighter-rouge">"abc"</code>.</p>
+<p>Using both these characters allows a regular expression to match complete strings.  For example, the pattern <code>"abc"</code> matches <code>"123 abc that"</code> and any other string containing <code>"abc"</code>, whereas the pattern <code>"^abc$"</code> only matches the exact string <code>"abc"</code>.</p>
 
-<p>The three characters <code class="highlighter-rouge">*</code>, <code class="highlighter-rouge">+</code>, and <code class="highlighter-rouge">?</code> are called modifiers.  These characters modify the preceding character.  The <code class="highlighter-rouge">*</code> modifier matches the preceding character zero or more times, the <code class="highlighter-rouge">+</code> modifier matches the preceding character one or more times, and the <code class="highlighter-rouge">"?"</code> modifier matches the preceding character zero or one time.  For example, the pattern “a+” matches any sequence of one or more <code class="highlighter-rouge">"a"</code> characters, whereas the pattern <code class="highlighter-rouge">"ab*c"</code> matches <code class="highlighter-rouge">"abc"</code>, <code class="highlighter-rouge">"abbbbbc"</code>, and <code class="highlighter-rouge">"ac"</code>, but not <code class="highlighter-rouge">"adc"</code> or <code class="highlighter-rouge">"ab"</code>.</p>
+<p>The three characters <code>*</code>, <code>+</code>, and <code>?</code> are called modifiers.  These characters modify the preceding character.  The <code>*</code> modifier matches the preceding character zero or more times, the <code>+</code> modifier matches the preceding character one or more times, and the <code>"?"</code> modifier matches the preceding character zero or one time.  For example, the pattern “a+” matches any sequence of one or more <code>"a"</code> characters, whereas the pattern <code>"ab*c"</code> matches <code>"abc"</code>, <code>"abbbbbc"</code>, and <code>"ac"</code>, but not <code>"adc"</code> or <code>"ab"</code>.</p>
 
-<p>A list of characters enclosed in brackets is called a range and matches a single character in the search string with any of the characters in brackets.  For example, the pattern <code class="highlighter-rouge">"[0123456789]"</code> matches any digit character in the search string.  Ranges such as this, where the characters are sequential, can be abbreviated as <code class="highlighter-rouge">"[0-9]"</code>.  For example, the pattern <code class="highlighter-rouge">"[0-9a-zA-Z_]"</code> matches a digit, letter (either upper or lower case), or the underscore character.  If the first character of the range is <code class="highlighter-rouge">"^"</code>, the range matches all those characters that are not listed.  For example, <code class="highlighter-rouge">"[^0-9]"</code> matches any non-digit character.</p>
+<p>A list of characters enclosed in brackets is called a range and matches a single character in the search string with any of the characters in brackets.  For example, the pattern <code>"[0123456789]"</code> matches any digit character in the search string.  Ranges such as this, where the characters are sequential, can be abbreviated as <code>"[0-9]"</code>.  For example, the pattern <code>"[0-9a-zA-Z_]"</code> matches a digit, letter (either upper or lower case), or the underscore character.  If the first character of the range is <code>"^"</code>, the range matches all those characters that are not listed.  For example, <code>"[^0-9]"</code> matches any non-digit character.</p>
 
-<p>Ranges can be combined with modifiers. For example, the pattern <code class="highlighter-rouge">"[0-9]+"</code> matches any sequence of one or more digit characters. The pattern <code class="highlighter-rouge">"[a-zA-Z][a-zA-Z_0-9]*"</code> matches a valid VBScript variable name, because it only matches sequences that start with a letter and are followed by zero or more letters, digits, or underscore characters.</p>
+<p>Ranges can be combined with modifiers. For example, the pattern <code>"[0-9]+"</code> matches any sequence of one or more digit characters. The pattern <code>"[a-zA-Z][a-zA-Z_0-9]*"</code> matches a valid VBScript variable name, because it only matches sequences that start with a letter and are followed by zero or more letters, digits, or underscore characters.</p>
 
-<p>To match a character an exact number of times, follow the character in the pattern by a count of matches required enclosed in braces.  For example, the pattern <code class="highlighter-rouge">"a{3}"</code> matches exactly three <code class="highlighter-rouge">"a"</code> characters, and it is equivalent to the pattern <code class="highlighter-rouge">"aaa"</code>.  If a comma follows the count, the character is matched at least that number of times. For example, <code class="highlighter-rouge">"a{5,}"</code> matches five or more <code class="highlighter-rouge">"a"</code> characters.  Finally, use two counts to specify a lower and upper bound. For example, the pattern <code class="highlighter-rouge">"a{4,8}"</code> matches between four and eight <code class="highlighter-rouge">"a"</code> characters.</p>
+<p>To match a character an exact number of times, follow the character in the pattern by a count of matches required enclosed in braces.  For example, the pattern <code>"a{3}"</code> matches exactly three <code>"a"</code> characters, and it is equivalent to the pattern <code>"aaa"</code>.  If a comma follows the count, the character is matched at least that number of times. For example, <code>"a{5,}"</code> matches five or more <code>"a"</code> characters.  Finally, use two counts to specify a lower and upper bound. For example, the pattern <code>"a{4,8}"</code> matches between four and eight <code>"a"</code> characters.</p>
 
-<p>As with other modifiers, the pattern count modifier can be combined with ranges.  For example, the pattern <code class="highlighter-rouge">"[0-9]{4}"</code> matches exactly four digits.</p>
+<p>As with other modifiers, the pattern count modifier can be combined with ranges.  For example, the pattern <code>"[0-9]{4}"</code> matches exactly four digits.</p>
 
-<p>Use parentheses in the match pattern to group individual items together.  Modifiers can then be applied to the entire group of items. For example, the pattern <code class="highlighter-rouge">"(abc)+"</code> matches any number of repeats of the sequence <code class="highlighter-rouge">"abc"</code>.  The pattern <code class="highlighter-rouge">"(a[0-9]c){1,2}"</code> matches strings such as <code class="highlighter-rouge">"a0c"</code> and <code class="highlighter-rouge">"a4ca5c"</code>.</p>
+<p>Use parentheses in the match pattern to group individual items together.  Modifiers can then be applied to the entire group of items. For example, the pattern <code>"(abc)+"</code> matches any number of repeats of the sequence <code>"abc"</code>.  The pattern <code>"(a[0-9]c){1,2}"</code> matches strings such as <code>"a0c"</code> and <code>"a4ca5c"</code>.</p>
 
-<p>There is a difference between matching the pattern <code class="highlighter-rouge">"abc"</code> and the pattern <code class="highlighter-rouge">"(abc)+"</code> using the <code class="highlighter-rouge">RegExp</code> object.  Matching the pattern <code class="highlighter-rouge">"abc"</code> against the search string <code class="highlighter-rouge">"abcabcabc"</code> generates three individual matches and results in three <code class="highlighter-rouge">Match</code> objects in the Matches collection.  Matching the pattern <code class="highlighter-rouge">"(abc)+"</code> against the same string generates one match that matches the entire string.</p>
+<p>There is a difference between matching the pattern <code>"abc"</code> and the pattern <code>"(abc)+"</code> using the <code>RegExp</code> object.  Matching the pattern <code>"abc"</code> against the search string <code>"abcabcabc"</code> generates three individual matches and results in three <code>Match</code> objects in the Matches collection.  Matching the pattern <code>"(abc)+"</code> against the same string generates one match that matches the entire string.</p>
 
-<p>The <code class="highlighter-rouge">"I"</code> vertical bar character separates lists of alternate sub-expressions.  For example, the pattern <code class="highlighter-rouge">"abIac"</code> matches the strings <code class="highlighter-rouge">"ab"</code> or <code class="highlighter-rouge">"ac"</code>. The vertical bar separates entire regular expressions.  The pattern <code class="highlighter-rouge">"^abIac$"</code> matches either the string <code class="highlighter-rouge">"ab"</code> at the start of the search string or the string <code class="highlighter-rouge">"ac"</code> at the end of the search string. Use parentheses to specify alternates within a larger pattern.  For example, the pattern <code class="highlighter-rouge">"^(abIac)$"</code> matches the exact strings <code class="highlighter-rouge">"ab"</code> or <code class="highlighter-rouge">"ac"</code> only.</p>
+<p>The <code>"I"</code> vertical bar character separates lists of alternate sub-expressions.  For example, the pattern <code>"abIac"</code> matches the strings <code>"ab"</code> or <code>"ac"</code>. The vertical bar separates entire regular expressions.  The pattern <code>"^abIac$"</code> matches either the string <code>"ab"</code> at the start of the search string or the string <code>"ac"</code> at the end of the search string. Use parentheses to specify alternates within a larger pattern.  For example, the pattern <code>"^(abIac)$"</code> matches the exact strings <code>"ab"</code> or <code>"ac"</code> only.</p>
 
-<p>To match any of the special characters literally in a pattern, they must be preceded by a back-slash character, which is known as an escape.  For example, to match a literal asterisk, use <code class="highlighter-rouge">"\*"</code> in the pattern.  To match a back-slash itself, use two back-slash characters in the match pattern.  The following characters must be escaped when used literally within a match pattern:</p>
+<p>To match any of the special characters literally in a pattern, they must be preceded by a back-slash character, which is known as an escape.  For example, to match a literal asterisk, use <code>"\*"</code> in the pattern.  To match a back-slash itself, use two back-slash characters in the match pattern.  The following characters must be escaped when used literally within a match pattern:</p>
 
 <pre><code class="language-regex">. (period) * + ? \ ( ) [ ] { } ^ $
 </code></pre>
@@ -471,36 +471,36 @@ End Sub
 <p>There are also several additional escape sequences that provide useful shorthand for more complex patterns:</p>
 
 <ul>
-  <li>The <code class="highlighter-rouge">"\d"</code> escape matches any digit, and it is equivalent to <code class="highlighter-rouge">"[0-9]"</code>. The <code class="highlighter-rouge">"\D"</code> escape matches any non-digit, and it is equivalent to <code class="highlighter-rouge">"[^0-9]"</code>.</li>
-  <li>The <code class="highlighter-rouge">"\w"</code> escape matches any word character and is equivalent to <code class="highlighter-rouge">"[0-9a-zA-Z_]"</code>, and the <code class="highlighter-rouge">"\W"</code> escape matches any non-word character.</li>
-  <li>The <code class="highlighter-rouge">"\b"</code> escape matches a word boundary, which is the boundary between any word character and a non-word character, whereas <code class="highlighter-rouge">"\B"</code> matches a non-word boundary.</li>
-  <li>The <code class="highlighter-rouge">"\s"</code> escape matches any whitespace character, including space, tab, new-line, and so on, whereas the <code class="highlighter-rouge">"\S"</code> escape matches any non-whitespace character.</li>
+  <li>The <code>"\d"</code> escape matches any digit, and it is equivalent to <code>"[0-9]"</code>. The <code>"\D"</code> escape matches any non-digit, and it is equivalent to <code>"[^0-9]"</code>.</li>
+  <li>The <code>"\w"</code> escape matches any word character and is equivalent to <code>"[0-9a-zA-Z_]"</code>, and the <code>"\W"</code> escape matches any non-word character.</li>
+  <li>The <code>"\b"</code> escape matches a word boundary, which is the boundary between any word character and a non-word character, whereas <code>"\B"</code> matches a non-word boundary.</li>
+  <li>The <code>"\s"</code> escape matches any whitespace character, including space, tab, new-line, and so on, whereas the <code>"\S"</code> escape matches any non-whitespace character.</li>
 </ul>
 
 <p>Finally, certain escapes can match non-printing characters, as follows:</p>
 
 <ul>
-  <li>The <code class="highlighter-rouge">"\f"</code> escape matches a form-feed character.</li>
-  <li>The <code class="highlighter-rouge">"\n"</code> escape matches a new-line character.</li>
-  <li>The <code class="highlighter-rouge">"\r"</code> escape matches a carriage-return character.</li>
-  <li>The <code class="highlighter-rouge">"\t"</code> escape matches a tab character.</li>
-  <li>The <code class="highlighter-rouge">"\v"</code> escape matches a vertical tab character.</li>
-  <li>The <code class="highlighter-rouge">"\onn"</code> escape matches a character whose octal code is <code class="highlighter-rouge">nn</code>.</li>
-  <li>The <code class="highlighter-rouge">"\xnn"</code> escape matches a character whose hexadecimal code is <code class="highlighter-rouge">nn</code>.</li>
+  <li>The <code>"\f"</code> escape matches a form-feed character.</li>
+  <li>The <code>"\n"</code> escape matches a new-line character.</li>
+  <li>The <code>"\r"</code> escape matches a carriage-return character.</li>
+  <li>The <code>"\t"</code> escape matches a tab character.</li>
+  <li>The <code>"\v"</code> escape matches a vertical tab character.</li>
+  <li>The <code>"\onn"</code> escape matches a character whose octal code is <code>nn</code>.</li>
+  <li>The <code>"\xnn"</code> escape matches a character whose hexadecimal code is <code>nn</code>.</li>
 </ul>
 
-<p>The special escape <code class="highlighter-rouge">"\n"</code>, where n is a digit, matches the search text previously matched by a sub-expression in parentheses.  Each sub-expression in a match pattern is numbered from left to right, and the escape <code class="highlighter-rouge">"\n"</code> matches the nth sub-expression.  For example, the pattern <code class="highlighter-rouge">"(..)\1"</code> matches any two character sequence that repeats twice, such as <code class="highlighter-rouge">"abab"</code>.  The first sub-expression matches the first two characters, <code class="highlighter-rouge">"ab"</code>, and the <code class="highlighter-rouge">"\1"</code> escape then matches these same two characters again.</p>
+<p>The special escape <code>"\n"</code>, where n is a digit, matches the search text previously matched by a sub-expression in parentheses.  Each sub-expression in a match pattern is numbered from left to right, and the escape <code>"\n"</code> matches the nth sub-expression.  For example, the pattern <code>"(..)\1"</code> matches any two character sequence that repeats twice, such as <code>"abab"</code>.  The first sub-expression matches the first two characters, <code>"ab"</code>, and the <code>"\1"</code> escape then matches these same two characters again.</p>
 
 <h2 id="regexp-example">RegExp Example</h2>
 
 <p>Regular expression match patterns provide a powerful way to validate the syntax of strings.  For example, a script can obtain strings from a formatted text file and parse it into recognizable tokens.  A regular expression can be used for this purpose.</p>
 
-<p>This script is simplistic in that it simply breaks apart each argument at the <code class="highlighter-rouge">"="</code> sign - no attempt is made to check if the name and value parts are valid.  The following regular expression matches these command line arguments:</p>
+<p>This script is simplistic in that it simply breaks apart each argument at the <code>"="</code> sign - no attempt is made to check if the name and value parts are valid.  The following regular expression matches these command line arguments:</p>
 
 <pre><code class="language-regex">[^=]+=.*
 </code></pre>
 
-<p>This match pattern is interpreted as follows: The range <code class="highlighter-rouge">"[^=]"</code> matches any character that is not an <code class="highlighter-rouge">"="</code> sign.  The <code class="highlighter-rouge">"+"</code> modifier following the range means that the pattern matches any set of one or more characters that are not <code class="highlighter-rouge">"="</code> signs.  The next <code class="highlighter-rouge">"="</code> sign in the pattern matches a literal <code class="highlighter-rouge">"="</code> sign (that is, the separator between the name and value parts).  Finally, the <code class="highlighter-rouge">".*"</code> pattern matches any sequence of zero or more characters.</p>
+<p>This match pattern is interpreted as follows: The range <code>"[^=]"</code> matches any character that is not an <code>"="</code> sign.  The <code>"+"</code> modifier following the range means that the pattern matches any set of one or more characters that are not <code>"="</code> signs.  The next <code>"="</code> sign in the pattern matches a literal <code>"="</code> sign (that is, the separator between the name and value parts).  Finally, the <code>".*"</code> pattern matches any sequence of zero or more characters.</p>
 
 <p>Parentheses can be used to make the meaning more clear.  For example:</p>
 
@@ -514,26 +514,25 @@ End Sub
 <pre><code class="language-regex">([a-zA-Z]\w*)=(.*)
 </code></pre>
 
-<p>Here, the pattern <code class="highlighter-rouge">"[a-zA-Z]"</code> matches any single letter. Then the pattern <code class="highlighter-rouge">"\w*"</code> matches zero or more letters, digits, or underscores, using the <code class="highlighter-rouge">"\w"</code> escape as a shorthand for <code class="highlighter-rouge">"[0-9a-zA-Z]"</code>.</p>
+<p>Here, the pattern <code>"[a-zA-Z]"</code> matches any single letter. Then the pattern <code>"\w*"</code> matches zero or more letters, digits, or underscores, using the <code>"\w"</code> escape as a shorthand for <code>"[0-9a-zA-Z]"</code>.</p>
 
 <p>The previous regular expression does not allow spaces before or after the name.  For example, only the first of these strings matches the expression:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curve=123456
+<pre><code>curve=123456
 curve = 575888
 curve  = 5544
 </code></pre>
-</div>
 
 <p>The following regular expression corrects this by adding optional leading and trailing whitespace around the name:</p>
 
 <pre><code class="language-regex">(\s*)([a-zA-Z]\w*)(\s*)=(.*)
 </code></pre>
 
-<p>The new addition, <code class="highlighter-rouge">"\s*"</code>, matches zero or more whitespace characters.</p>
+<p>The new addition, <code>"\s*"</code>, matches zero or more whitespace characters.</p>
 
 <h2 id="the-replace-method">The .Replace Method</h2>
 
-<p>Matching patterns against strings allows a script to determine if a string follows a specific syntax, as shown in the previous examples.  The <code class="highlighter-rouge">RegExp</code> object can also be used to assist in modifying the search string.  This facility is provided by the <code class="highlighter-rouge">.Replace</code> method, which takes two arguments: the search string and a replacement string, and returns a new string in which all matches in the search string are replaced by the replacement string.  For example:</p>
+<p>Matching patterns against strings allows a script to determine if a string follows a specific syntax, as shown in the previous examples.  The <code>RegExp</code> object can also be used to assist in modifying the search string.  This facility is provided by the <code>.Replace</code> method, which takes two arguments: the search string and a replacement string, and returns a new string in which all matches in the search string are replaced by the replacement string.  For example:</p>
 
 <pre><code class="language-vbnet">Set oRE = New RegExp
 oRE.Global = True
@@ -541,7 +540,7 @@ oRE.Pattern = "a"
 Wscript.Echo oRE.Replace("all a's are replaced", "X")
 </code></pre>
 
-<p>In this example, any <code class="highlighter-rouge">"a"</code> character in the search string is replaced by an <code class="highlighter-rouge">"X"</code> character.  The pattern and replacement strings do not need to be the same length.  For example:</p>
+<p>In this example, any <code>"a"</code> character in the search string is replaced by an <code>"X"</code> character.  The pattern and replacement strings do not need to be the same length.  For example:</p>
 
 <pre><code class="language-vbnet">oRE.Pattern = "\s+"
 Wscript.Echo oRE.Replace("compress  all      whitespace    ", " ")
@@ -549,7 +548,7 @@ Wscript.Echo oRE.Replace("compress  all      whitespace    ", " ")
 
 <p>Here, all sequences of whitespace are replaced by a single space character.</p>
 
-<p>Within the replacement string, the special character sequence <code class="highlighter-rouge">"$n"</code> is allowed.  If present, this sequence is replaced by the text matched by the nth sub-expression in the pattern.  For example:</p>
+<p>Within the replacement string, the special character sequence <code>"$n"</code> is allowed.  If present, this sequence is replaced by the text matched by the nth sub-expression in the pattern.  For example:</p>
 
 <pre><code class="language-vbnet">oRE.Pattern = "^\s*(\w+)\s*=\s*(\w+)\s*$"
 sSearch = "    this    = that"
@@ -558,17 +557,17 @@ Rhino.Print oRE.Replace(sSearch, "$1,$2")
 
 <p>This example works as follows:</p>
 
-<p>The pattern contains both the start of string <code class="highlighter-rouge">"^"</code> and end of string <code class="highlighter-rouge">"$"</code> characters.  This means that the pattern either matches the entire search string or not at all.</p>
+<p>The pattern contains both the start of string <code>"^"</code> and end of string <code>"$"</code> characters.  This means that the pattern either matches the entire search string or not at all.</p>
 
-<p>The pattern matches any whitespace and sequence of one or more word characters, more whitespace, an <code class="highlighter-rouge">"="</code> sign, more whitespace, another set of word characters, and finally more whitespace.</p>
+<p>The pattern matches any whitespace and sequence of one or more word characters, more whitespace, an <code>"="</code> sign, more whitespace, another set of word characters, and finally more whitespace.</p>
 
 <p>Both the word patterns are in parentheses, marking them as sub-expressions 1 and 2 respectively.</p>
 
-<p>When the <code class="highlighter-rouge">.Replace</code> method is invoked, it matches successfully against the entire search string.  This means that the replacement string replaces the entire contents of the search string, because this entire string matched the regular expression.  Thus, the string returned by <code class="highlighter-rouge">.Replace</code> is simply the replacement string.</p>
+<p>When the <code>.Replace</code> method is invoked, it matches successfully against the entire search string.  This means that the replacement string replaces the entire contents of the search string, because this entire string matched the regular expression.  Thus, the string returned by <code>.Replace</code> is simply the replacement string.</p>
 
-<p>The replacement string is <code class="highlighter-rouge">"$1,$2"</code>. As noted, the two sub-expressions in the pattern contain the two words matched in the search string, which in this case are <code class="highlighter-rouge">"this"</code> and <code class="highlighter-rouge">"that"</code>. Thus, the replacement string becomes <code class="highlighter-rouge">"this,that"</code>, and this is the value returned.</p>
+<p>The replacement string is <code>"$1,$2"</code>. As noted, the two sub-expressions in the pattern contain the two words matched in the search string, which in this case are <code>"this"</code> and <code>"that"</code>. Thus, the replacement string becomes <code>"this,that"</code>, and this is the value returned.</p>
 
-<p>The result of this processing is that the <code class="highlighter-rouge">RegExp</code> object has validated the search string against the match pattern and extracted the required elements from the search string.</p>
+<p>The result of this processing is that the <code>RegExp</code> object has validated the search string against the match pattern and extracted the required elements from the search string.</p>
 
         </article>
 

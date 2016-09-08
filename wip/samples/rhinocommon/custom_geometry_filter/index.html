@@ -247,71 +247,70 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">double</span> <span class="n">m_tolerance</span><span class="p">;</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">CustomGeometryFilter</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_tolerance</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  private static double m_tolerance;
+  public static Result CustomGeometryFilter(RhinoDoc doc)
+  {
+    m_tolerance = doc.ModelAbsoluteTolerance;
 
-    <span class="c1">// only use a custom geometry filter if no simpler filter does the job
-</span>
-    <span class="c1">// only curves
-</span>    <span class="kt">var</span> <span class="n">gc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select curve"</span><span class="p">);</span>
-    <span class="n">gc</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gc</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">gc</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">())</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"curve was selected"</span><span class="p">);</span>
+    // only use a custom geometry filter if no simpler filter does the job
 
-    <span class="c1">// only closed curves
-</span>    <span class="kt">var</span> <span class="n">gcc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select closed curve"</span><span class="p">);</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">ClosedCurve</span><span class="p">;</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gcc</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gcc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gcc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">gcc</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">())</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"closed curve was selected"</span><span class="p">);</span>
+    // only curves
+    var gc = new GetObject();
+    gc.SetCommandPrompt("select curve");
+    gc.GeometryFilter = ObjectType.Curve;
+    gc.DisablePreSelect();
+    gc.SubObjectSelect = false;
+    gc.Get();
+    if (gc.CommandResult() != Result.Success)
+      return gc.CommandResult();
+    if (null == gc.Object(0).Curve())
+      return Result.Failure;
+    Rhino.RhinoApp.WriteLine("curve was selected");
 
-    <span class="c1">// only circles with a radius of 10
-</span>    <span class="kt">var</span> <span class="n">gcc10</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gcc10</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select circle with radius of 10"</span><span class="p">);</span>
-    <span class="n">gc</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">gcc10</span><span class="p">.</span><span class="nf">SetCustomGeometryFilter</span><span class="p">(</span><span class="n">CircleWithRadiusOf10GeometryFilter</span><span class="p">);</span> <span class="c1">// custom geometry filter
-</span>    <span class="n">gcc10</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gcc10</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gcc10</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gcc10</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gcc10</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">gcc10</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">())</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"circle with radius of 10 was selected"</span><span class="p">);</span>
+    // only closed curves
+    var gcc = new GetObject();
+    gcc.SetCommandPrompt("select closed curve");
+    gcc.GeometryFilter = ObjectType.Curve;
+    gcc.GeometryAttributeFilter = GeometryAttributeFilter.ClosedCurve;
+    gcc.DisablePreSelect();
+    gcc.SubObjectSelect = false;
+    gcc.Get();
+    if (gcc.CommandResult() != Result.Success)
+      return gcc.CommandResult();
+    if (null == gcc.Object(0).Curve())
+      return Result.Failure;
+    Rhino.RhinoApp.WriteLine("closed curve was selected");
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    // only circles with a radius of 10
+    var gcc10 = new GetObject();
+    gcc10.SetCommandPrompt("select circle with radius of 10");
+    gc.GeometryFilter = ObjectType.Curve;
+    gcc10.SetCustomGeometryFilter(CircleWithRadiusOf10GeometryFilter); // custom geometry filter
+    gcc10.DisablePreSelect();
+    gcc10.SubObjectSelect = false;
+    gcc10.Get();
+    if (gcc10.CommandResult() != Result.Success)
+      return gcc10.CommandResult();
+    if (null == gcc10.Object(0).Curve())
+      return Result.Failure;
+    RhinoApp.WriteLine("circle with radius of 10 was selected");
 
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">CircleWithRadiusOf10GeometryFilter</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">rhObject</span><span class="p">,</span> <span class="n">GeometryBase</span> <span class="n">geometry</span><span class="p">,</span>
-    <span class="n">ComponentIndex</span> <span class="n">componentIndex</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">bool</span> <span class="n">is_circle_with_radius_of10</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">Circle</span> <span class="n">circle</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">geometry</span> <span class="k">is</span> <span class="n">Curve</span> <span class="p">&amp;&amp;</span> <span class="p">(</span><span class="n">geometry</span> <span class="k">as</span> <span class="n">Curve</span><span class="p">).</span><span class="nf">TryGetCircle</span><span class="p">(</span><span class="k">out</span> <span class="n">circle</span><span class="p">))</span>
-      <span class="n">is_circle_with_radius_of10</span> <span class="p">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">Radius</span> <span class="p">&lt;=</span> <span class="m">10.0</span> <span class="p">+</span> <span class="n">m_tolerance</span> <span class="p">&amp;&amp;</span> <span class="n">circle</span><span class="p">.</span><span class="n">Radius</span> <span class="p">&gt;=</span> <span class="m">10.0</span> <span class="p">-</span> <span class="n">m_tolerance</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">is_circle_with_radius_of10</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+
+  private static bool CircleWithRadiusOf10GeometryFilter (Rhino.DocObjects.RhinoObject rhObject, GeometryBase geometry,
+    ComponentIndex componentIndex)
+  {
+    bool is_circle_with_radius_of10 = false;
+    Circle circle;
+    if (geometry is Curve &amp;&amp; (geometry as Curve).TryGetCircle(out circle))
+      is_circle_with_radius_of10 = circle.Radius &lt;= 10.0 + m_tolerance &amp;&amp; circle.Radius &gt;= 10.0 - m_tolerance;
+    return is_circle_with_radius_of10;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared m_tolerance As Double
@@ -381,34 +380,33 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from scriptcontext import *
+import Rhino
 
-<span class="k">def</span> <span class="nf">circleWithRadiusOf10GeometryFilter</span> <span class="p">(</span><span class="n">rhObject</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">componentIndex</span><span class="p">):</span>
-  <span class="n">isCircleWithRadiusOf10</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">c</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercecurve</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">c</span><span class="p">:</span>
-    <span class="n">b</span><span class="p">,</span> <span class="n">circle</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">TryGetCircle</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
-    <span class="n">isCircleWithRadiusOf10</span> <span class="o">=</span> <span class="n">circle</span><span class="o">.</span><span class="n">Radius</span> <span class="o">&lt;=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">RhinoMath</span><span class="o">.</span><span class="n">ZeroTolerance</span> <span class="ow">and</span> <span class="n">circle</span><span class="o">.</span><span class="n">Radius</span> <span class="o">&gt;=</span> <span class="mf">10.0</span> <span class="o">-</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">RhinoMath</span><span class="o">.</span><span class="n">ZeroTolerance</span>
-  <span class="k">return</span> <span class="n">isCircleWithRadiusOf10</span>
+def circleWithRadiusOf10GeometryFilter (rhObject, geometry, componentIndex):
+  isCircleWithRadiusOf10 = False
+  c = rs.coercecurve(geometry)
+  if c:
+    b, circle = c.TryGetCircle()
+  if b:
+    isCircleWithRadiusOf10 = circle.Radius &lt;= 10.0 + Rhino.RhinoMath.ZeroTolerance and circle.Radius &gt;= 10.0 - Rhino.RhinoMath.ZeroTolerance
+  return isCircleWithRadiusOf10
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="c"># only use a custom geometry filter if no simpler filter does the job</span>
+def RunCommand():
+  # only use a custom geometry filter if no simpler filter does the job
 
-  <span class="c"># for curves - only a simple filter is needed</span>
-  <span class="k">if</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">"select curve"</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">curve</span><span class="p">):</span> <span class="c">#Rhino.DocObjects.ObjectType.Curve):</span>
-    <span class="k">print</span> <span class="s">"curve vas selected"</span>
+  # for curves - only a simple filter is needed
+  if rs.GetObject("select curve", rs.filter.curve): #Rhino.DocObjects.ObjectType.Curve):
+    print "curve vas selected"
 
-  <span class="c"># for circles with a radius of 10 - a custom geometry filter is needed</span>
-  <span class="k">if</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">"select circle with radius of 10"</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">curve</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">circleWithRadiusOf10GeometryFilter</span><span class="p">):</span>
-      <span class="k">print</span> <span class="s">"circle with radius of 10 was selected"</span>
+  # for circles with a radius of 10 - a custom geometry filter is needed
+  if rs.GetObject("select circle with radius of 10", rs.filter.curve, False, False, circleWithRadiusOf10GeometryFilter):
+      print "circle with radius of 10 was selected"
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__=="__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

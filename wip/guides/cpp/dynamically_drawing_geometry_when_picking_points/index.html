@@ -323,122 +323,120 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>When using Rhino, you have probably noticed that many of the object creation commands, such as <em>Line</em> and <em>Circle</em>, and transformation commands, such as <em>Move</em> and <em>Copy</em>, dynamically draw objects as they are being created or transformed.  This operation is performed by deriving a new class from Rhino’s point pick class, <code class="highlighter-rouge">CRhinoGetPoint</code>, and overriding two member functions: <code class="highlighter-rouge">OnMouseMove()</code> and <code class="highlighter-rouge">DynamicDraw()</code>.</p>
+<p>When using Rhino, you have probably noticed that many of the object creation commands, such as <em>Line</em> and <em>Circle</em>, and transformation commands, such as <em>Move</em> and <em>Copy</em>, dynamically draw objects as they are being created or transformed.  This operation is performed by deriving a new class from Rhino’s point pick class, <code>CRhinoGetPoint</code>, and overriding two member functions: <code>OnMouseMove()</code> and <code>DynamicDraw()</code>.</p>
 
-<p><code class="highlighter-rouge">OnMouseMove()</code> is called every time the mouse moves.  This is a great place to perform calculations, such as transformations.</p>
+<p><code>OnMouseMove()</code> is called every time the mouse moves.  This is a great place to perform calculations, such as transformations.</p>
 
-<p><code class="highlighter-rouge">DynamicDraw()</code> is called as the mouse moves, as well.  Every time the mouse moves, <code class="highlighter-rouge">DynamicDraw()</code> will be called once per viewport.</p>
+<p><code>DynamicDraw()</code> is called as the mouse moves, as well.  Every time the mouse moves, <code>DynamicDraw()</code> will be called once per viewport.</p>
 
-<p><strong>NOTE</strong>: Rhino calls <code class="highlighter-rouge">DynamicDraw()</code> happen after the call to <code class="highlighter-rouge">OnMouseMove()</code>.</p>
+<p><strong>NOTE</strong>: Rhino calls <code>DynamicDraw()</code> happen after the call to <code>OnMouseMove()</code>.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample demonstrates how to derive a new class from <code class="highlighter-rouge">CRhinoGetPoint</code> and override <code class="highlighter-rouge">OnMouseMove()</code> and <code class="highlighter-rouge">DynamicDraw()</code> to dynamically draw geometry.  In this sample, we are going to dynamically draw a circle while the user is specifying its radius.</p>
+<p>The following sample demonstrates how to derive a new class from <code>CRhinoGetPoint</code> and override <code>OnMouseMove()</code> and <code>DynamicDraw()</code> to dynamically draw geometry.  In this sample, we are going to dynamically draw a circle while the user is specifying its radius.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CGetCircleRadiusPoint</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CGetCircleRadiusPoint</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">SetCenterPoint</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_3dPoint</span> <span class="n">center_point</span> <span class="p">);</span>
-  <span class="kt">bool</span> <span class="n">CalculateCircle</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
+<pre><code class="language-cpp">class CGetCircleRadiusPoint : public CRhinoGetPoint
+{
+public:
+  CGetCircleRadiusPoint();
+  void SetCenterPoint( const ON_3dPoint center_point );
+  bool CalculateCircle( CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt );
 
-  <span class="kt">void</span> <span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-                    <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-                    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-                    <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">pt2d</span> <span class="p">);</span>
+  void OnMouseMove( CRhinoViewport&amp; vp,
+                    UINT flags,
+                    const ON_3dPoint&amp; pt,
+                    const CPoint* pt2d );
 
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hDC</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Circle</span><span class="o">&amp;</span> <span class="n">Circle</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">ON_Circle</span> <span class="n">m_circle</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">m_center_point</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">m_draw_circle</span><span class="p">;</span>
-<span class="p">};</span>
+  void DynamicDraw( HDC hDC, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt );
+  const ON_Circle&amp; Circle() const;
+private:
+  ON_Circle m_circle;
+  ON_3dPoint m_center_point;
+  bool m_draw_circle;
+};
 
-<span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">CGetCircleRadiusPoint</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">m_draw_circle</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+CGetCircleRadiusPoint::CGetCircleRadiusPoint()
+{
+  m_draw_circle = false;
+}
 
-<span class="kt">void</span> <span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">SetCenterPoint</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_3dPoint</span> <span class="n">center_point</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_center_point</span> <span class="o">=</span> <span class="n">center_point</span><span class="p">;</span>
-<span class="p">}</span>
+void CGetCircleRadiusPoint::SetCenterPoint( const ON_3dPoint center_point )
+{
+  m_center_point = center_point;
+}
 
-<span class="kt">bool</span> <span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">CalculateCircle</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="n">m_center_point</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">radius</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+bool CGetCircleRadiusPoint::CalculateCircle( CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt )
+{
+  double radius = m_center_point.DistanceTo( pt );
+  if( radius &lt; ON_SQRT_EPSILON )
+    return false;
 
-  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">ConstructionPlane</span><span class="p">().</span><span class="n">m_plane</span><span class="p">;</span>
-  <span class="n">plane</span><span class="p">.</span><span class="n">SetOrigin</span><span class="p">(</span> <span class="n">m_center_point</span> <span class="p">);</span>
-  <span class="n">m_circle</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">m_circle</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  ON_Plane plane = vp.ConstructionPlane().m_plane;
+  plane.SetOrigin( m_center_point );
+  m_circle.Create( plane, radius );
+  return m_circle.IsValid() ? true : false;
+}
 
-<span class="kt">void</span> <span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-                                         <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-                                         <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-                                         <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">pt2d</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_draw_circle</span> <span class="o">=</span> <span class="n">CalculateCircle</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">pt2d</span> <span class="p">);</span>
-<span class="p">}</span>
+void CGetCircleRadiusPoint::OnMouseMove( CRhinoViewport&amp; vp,
+                                         UINT flags,
+                                         const ON_3dPoint&amp; pt,
+                                         const CPoint* pt2d )
+{
+  m_draw_circle = CalculateCircle( vp, pt );
+  CRhinoGetPoint::OnMouseMove( vp, flags, pt, pt2d );
+}
 
-<span class="kt">void</span> <span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hDC</span><span class="p">,</span>
-                                         <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-                                         <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">m_draw_circle</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">TrackingColor</span><span class="p">();</span>
-    <span class="n">ON_Color</span> <span class="n">saved_color</span> <span class="o">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">SetDrawColor</span><span class="p">(</span> <span class="n">color</span> <span class="p">);</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">DrawCircle</span><span class="p">(</span> <span class="n">m_circle</span> <span class="p">);</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">SetDrawColor</span><span class="p">(</span> <span class="n">saved_color</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hDC</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">}</span>
-<span class="k">const</span> <span class="n">ON_Circle</span><span class="o">&amp;</span> <span class="n">CGetCircleRadiusPoint</span><span class="o">::</span><span class="n">Circle</span><span class="p">()</span> <span class="k">const</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="n">m_circle</span><span class="p">;</span>
-<span class="p">}</span>
+void CGetCircleRadiusPoint::DynamicDraw( HDC hDC,
+                                         CRhinoViewport&amp; vp,
+                                         const ON_3dPoint&amp; pt )
+{
+  if( m_draw_circle )
+  {
+    ON_Color color = RhinoApp().AppSettings().TrackingColor();
+    ON_Color saved_color = vp.SetDrawColor( color );
+    vp.DrawCircle( m_circle );
+    vp.SetDrawColor( saved_color );
+  }
+  CRhinoGetPoint::DynamicDraw( hDC, vp, pt );
+}
+const ON_Circle&amp; CGetCircleRadiusPoint::Circle() const
+{
+  return m_circle;
+}
 </code></pre>
-</div>
 
-<p>Finally, here is our <code class="highlighter-rouge">CRhinoGetPoint</code> derived class in action:</p>
+<p>Finally, here is our <code>CRhinoGetPoint</code> derived class in action:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Center point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Center point" );
+  gp.ConstrainToConstructionPlane( FALSE );
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">center_point</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint center_point = gp.Point();
 
-  <span class="n">CGetCircleRadiusPoint</span> <span class="n">gc</span><span class="p">;</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Radius"</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">center_point</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">center_point</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCenterPoint</span><span class="p">(</span> <span class="n">center_point</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CGetCircleRadiusPoint gc;
+  gc.SetCommandPrompt( L"Radius" );
+  gc.ConstrainToConstructionPlane( FALSE );
+  gc.SetBasePoint( center_point );
+  gc.DrawLineFromPoint( center_point, TRUE );
+  gc.SetCenterPoint( center_point );
+  gc.GetPoint();
+  if( gc.CommandResult() != CRhinoCommand::success )
+    return gc.CommandResult();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CalculateCircle</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">View</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">(),</span> <span class="n">gc</span><span class="p">.</span><span class="n">Point</span><span class="p">()</span> <span class="p">))</span>
-  <span class="p">{</span>
-    <span class="n">ON_Circle</span> <span class="n">circle</span> <span class="o">=</span> <span class="n">gc</span><span class="p">.</span><span class="n">Circle</span><span class="p">();</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">circle</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  if( gc.CalculateCircle( gc.View()-&gt;Viewport(), gc.Point() ))
+  {
+    ON_Circle circle = gc.Circle();
+    context.m_doc.AddCurveObject( circle );
+    context.m_doc.Redraw();
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

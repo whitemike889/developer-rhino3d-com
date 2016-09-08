@@ -247,65 +247,64 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">PrincipalCurvature</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface for curvature measurement"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span>
-      <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result PrincipalCurvature(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select surface for curvature measurement", true,
+      ObjectType.Surface, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var surface = obj_ref.Surface();
 
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select point on surface for curvature measurement"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">point_on_surface</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    var gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("Select point on surface for curvature measurement");
+    gp.Constrain(surface, false);
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var point_on_surface = gp.Point();
 
-    <span class="kt">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">surface</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">point_on_surface</span><span class="p">,</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    double u, v;
+    if (!surface.ClosestPoint(point_on_surface, out u, out v))
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">surface_curvature</span> <span class="p">=</span> <span class="n">surface</span><span class="p">.</span><span class="nf">CurvatureAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">surface_curvature</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var surface_curvature = surface.CurvatureAt(u, v);
+    if (surface_curvature == null)
+      return Result.Failure;
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Surface curvature evaluation at parameter: ({0}, {1})"</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+    RhinoApp.WriteLine("Surface curvature evaluation at parameter: ({0}, {1})", u, v);
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"  3-D Point: ({0}, {1}, {2})"</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Point</span><span class="p">.</span><span class="n">X</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Point</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Point</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
+    RhinoApp.WriteLine("  3-D Point: ({0}, {1}, {2})",
+      surface_curvature.Point.X,
+      surface_curvature.Point.Y,
+      surface_curvature.Point.Z);
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"  3-D Normal: ({0}, {1}, {2})"</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Normal</span><span class="p">.</span><span class="n">X</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Normal</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Normal</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
+    RhinoApp.WriteLine("  3-D Normal: ({0}, {1}, {2})",
+      surface_curvature.Normal.X,
+      surface_curvature.Normal.Y,
+      surface_curvature.Normal.Z);
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"  Maximum principal curvature: {0} ({1}, {2}, {3})"</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Kappa</span><span class="p">(</span><span class="m">0</span><span class="p">),</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">X</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">Y</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="n">Z</span><span class="p">));</span>
+    RhinoApp.WriteLine(string.Format("  Maximum principal curvature: {0} ({1}, {2}, {3})",
+      surface_curvature.Kappa(0),
+      surface_curvature.Direction(0).X,
+      surface_curvature.Direction(0).Y,
+      surface_curvature.Direction(0).Z));
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"  Minimum principal curvature: {0} ({1}, {2}, {3})"</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Kappa</span><span class="p">(</span><span class="m">1</span><span class="p">),</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">X</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">Y</span><span class="p">,</span>
-      <span class="n">surface_curvature</span><span class="p">.</span><span class="nf">Direction</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">Z</span><span class="p">));</span>
+    RhinoApp.WriteLine(string.Format("  Minimum principal curvature: {0} ({1}, {2}, {3})",
+      surface_curvature.Kappa(1),
+      surface_curvature.Direction(1).X,
+      surface_curvature.Direction(1).Y,
+      surface_curvature.Direction(1).Z));
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"  Gaussian curvature: {0}"</span><span class="p">,</span> <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Gaussian</span><span class="p">);</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"  Mean curvature: {0}"</span><span class="p">,</span> <span class="n">surface_curvature</span><span class="p">.</span><span class="n">Mean</span><span class="p">);</span>
+    RhinoApp.WriteLine("  Gaussian curvature: {0}", surface_curvature.Gaussian);
+    RhinoApp.WriteLine("  Mean curvature: {0}", surface_curvature.Mean);
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function PrincipalCurvature(ByVal doc As RhinoDoc) As Result
@@ -353,34 +352,33 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
 
-<span class="n">surface_id</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetSurfaceObject</span><span class="p">(</span><span class="s">"Select surface for curvature measurement"</span><span class="p">)</span>
-<span class="n">point</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetPointOnSurface</span><span class="p">(</span><span class="n">surface_id</span><span class="p">,</span>
-    <span class="s">"Select point on surface for curvature measurement"</span><span class="p">)</span>
-<span class="n">u</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">SurfaceClosestPoint</span><span class="p">(</span><span class="n">surface_id</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
+surface_id,_,_,_,_,_ = rs.GetSurfaceObject("Select surface for curvature measurement")
+point = rs.GetPointOnSurface(surface_id,
+    "Select point on surface for curvature measurement")
+u,v = rs.SurfaceClosestPoint(surface_id, point)
 
-<span class="c">#point, normal, kappa_u, direction_u, kappa_v, direction_v, gaussian, mean =</span>
-<span class="n">surface_curvature</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">SurfaceCurvature</span><span class="p">(</span><span class="n">surface_id</span><span class="p">,</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">))</span>
+#point, normal, kappa_u, direction_u, kappa_v, direction_v, gaussian, mean =
+surface_curvature = rs.SurfaceCurvature(surface_id, (u,v))
 
-<span class="n">point</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">kappa_u</span><span class="p">,</span> <span class="n">direction_u</span><span class="p">,</span> <span class="n">kappa_v</span><span class="p">,</span> <span class="n">direction_v</span><span class="p">,</span> <span class="n">gaussian</span><span class="p">,</span> <span class="n">mean</span> <span class="o">=</span> <span class="n">surface_curvature</span>
+point, normal, kappa_u, direction_u, kappa_v, direction_v, gaussian, mean = surface_curvature
 
-<span class="k">print</span> <span class="s">"Surface curvature evaluation at parameter: ({0}, {1})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+print "Surface curvature evaluation at parameter: ({0}, {1})".format(u,v)
 
-<span class="k">print</span> <span class="s">"  3-D Point: ({0}, {1}, {2})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+print "  3-D Point: ({0}, {1}, {2})".format(point.X, point.Y, point.Z)
 
-<span class="k">print</span> <span class="s">"  3-D Normal: ({0}, {1}, {2})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">normal</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">normal</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">normal</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+print "  3-D Normal: ({0}, {1}, {2})".format(normal.X, normal.Y, normal.Z)
 
-<span class="k">print</span> <span class="s">"  Maximum principal curvature: {0} ({1}, {2}, {3})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-  <span class="n">kappa_u</span><span class="p">,</span> <span class="n">direction_u</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">direction_u</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">direction_u</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+print "  Maximum principal curvature: {0} ({1}, {2}, {3})".format(
+  kappa_u, direction_u.X, direction_u.Y, direction_u.Z)
 
-<span class="k">print</span> <span class="s">"  Minimum principal curvature: {0} ({1}, {2}, {3})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-  <span class="n">kappa_v</span><span class="p">,</span> <span class="n">direction_v</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">direction_v</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">direction_v</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+print "  Minimum principal curvature: {0} ({1}, {2}, {3})".format(
+  kappa_v, direction_v.X, direction_v.Y, direction_v.Z)
 
-<span class="k">print</span> <span class="s">"  Gaussian curvature: {0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
-<span class="k">print</span> <span class="s">"  Mean curvature: {0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+print "  Gaussian curvature: {0}".format(gaussian)
+print "  Mean curvature: {0}".format(mean)
 </code></pre>
-</div>
 
 </div>
 

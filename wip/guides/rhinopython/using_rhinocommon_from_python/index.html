@@ -310,21 +310,20 @@ $(document).ready(function()
 
 <p>For example, you can implement some custom drawing while a user is picking a point with the following script.  This script draws a Red and Blue line connected to the point under the mouse cursor while the user is picking a point.</p>
 
-<div class="language-py highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">System.Drawing</span>
+<pre><code class="language-py">import Rhino
+import System.Drawing
 
-<span class="k">def</span> <span class="nf">GetPointDynamicDrawFunc</span><span class="p">(</span> <span class="n">sender</span><span class="p">,</span> <span class="n">args</span> <span class="p">):</span>
-  <span class="n">pt1</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-  <span class="n">pt2</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-  <span class="n">args</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">CurrentPoint</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Red</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-  <span class="n">args</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">pt2</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">CurrentPoint</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Blue</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+def GetPointDynamicDrawFunc( sender, args ):
+  pt1 = Rhino.Geometry.Point3d(0,0,0)
+  pt2 = Rhino.Geometry.Point3d(10,10,0)
+  args.Display.DrawLine(pt1, args.CurrentPoint, System.Drawing.Color.Red, 2)
+  args.Display.DrawLine(pt2, args.CurrentPoint, System.Drawing.Color.Blue, 2)
 
-<span class="c"># Create an instance of a GetPoint class and add a delegate for the DynamicDraw event</span>
-<span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-<span class="n">gp</span><span class="o">.</span><span class="n">DynamicDraw</span> <span class="o">+=</span> <span class="n">GetPointDynamicDrawFunc</span>
-<span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
+# Create an instance of a GetPoint class and add a delegate for the DynamicDraw event
+gp = Rhino.Input.Custom.GetPoint()
+gp.DynamicDraw += GetPointDynamicDrawFunc
+gp.Get()
 </code></pre>
-</div>
 
         </article>
 

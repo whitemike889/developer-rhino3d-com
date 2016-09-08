@@ -469,12 +469,12 @@ $(document).ready(function()
   <li><em>Test.vcxproj</em> is the project file that allows Visual C++ to build your plugin.</li>
   <li><em>stdafx.h</em> is the main project header.</li>
   <li><em>stdafx.cpp</em> is used to generate precompiled header.</li>
-  <li><em>TestApp.h</em> is the application class header that contains the <code class="highlighter-rouge">CTestApp</code> class declaration.</li>
-  <li><em>TestApp.cpp</em> is the application class implementation that contains the <code class="highlighter-rouge">CTestApp</code> member functions.</li>
-  <li><em>TestPlugIn.h</em> is the plugin class header that contains the <code class="highlighter-rouge">CTestPlugIn</code> class declaration.</li>
-  <li><em>TestPlugIn.cpp</em> is the plugin class implementation that contains the <code class="highlighter-rouge">CTestPlugIn</code> member functions.</li>
-  <li><em>cmdTest.cpp</em> is the sample <code class="highlighter-rouge">Test</code> Rhino command.</li>
-  <li><em>Resource.h</em> is the <code class="highlighter-rouge">#define</code> constant definitions for resources.</li>
+  <li><em>TestApp.h</em> is the application class header that contains the <code>CTestApp</code> class declaration.</li>
+  <li><em>TestApp.cpp</em> is the application class implementation that contains the <code>CTestApp</code> member functions.</li>
+  <li><em>TestPlugIn.h</em> is the plugin class header that contains the <code>CTestPlugIn</code> class declaration.</li>
+  <li><em>TestPlugIn.cpp</em> is the plugin class implementation that contains the <code>CTestPlugIn</code> member functions.</li>
+  <li><em>cmdTest.cpp</em> is the sample <code>Test</code> Rhino command.</li>
+  <li><em>Resource.h</em> is the <code>#define</code> constant definitions for resources.</li>
   <li><em>Test.rc</em> is the resource script.</li>
   <li><em>Test.def</em> is the module definition.</li>
 </ol>
@@ -501,7 +501,7 @@ $(document).ready(function()
   <li>
     <p>Open <em>TestPlugIn.cpp</em> and modify the following lines of code, providing your company name and other support information:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> RHINO_PLUG_IN_DEVELOPER_ORGANIZATION( L"My Company Name" );
+    <pre><code> RHINO_PLUG_IN_DEVELOPER_ORGANIZATION( L"My Company Name" );
  RHINO_PLUG_IN_DEVELOPER_ADDRESS( L"123 Developer Street\r\nCity State 12345-6789" );
  RHINO_PLUG_IN_DEVELOPER_COUNTRY( L"My Country" );
  RHINO_PLUG_IN_DEVELOPER_PHONE( L"123.456.7890" );
@@ -510,14 +510,12 @@ $(document).ready(function()
  RHINO_PLUG_IN_DEVELOPER_WEBSITE( L"http://www.mycompany.com" );
  RHINO_PLUG_IN_UPDATE_URL( L"http://www.mycompany.com/support" );
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>When finished, delete the following line of source code as the <code class="highlighter-rouge">#error</code> directive will prevent the project from building:</p>
+    <p>When finished, delete the following line of source code as the <code>#error</code> directive will prevent the project from building:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> #error Developer declarations block is incomplete!
+    <pre><code> #error Developer declarations block is incomplete!
 </code></pre>
-    </div>
   </li>
   <li>
     <p><em>NOTE</em>: If you do not delete this line, the plugin will build.  You are now ready to build the project by picking <em>Build Test</em> from the <em>Build</em> menu. If the build was successful, a plugin file named <em>Test_d.rhp</em> is created in the project’s <em>Debug</em> folder.</p>
@@ -530,103 +528,102 @@ $(document).ready(function()
   <li>From <em>Visual Studio</em>, navigate to <em>Debug</em> &gt; <em>Start Debugging</em>.  This will load Rhino.  The version of Rhino that is launched depends on the configuration that you build.  The wizard adds the following configurations to your project:
     <ul>
       <li><em>Debug</em>: The Debug configuration of your program is compiled with full symbolic debug information and no optimization.  Optimization complicates debugging, because the relationship between source code and generated instructions is more complex.  The <em>Debug</em> configuration also links with debug runtime libraries.  Plugins built with the <em>Debug</em> configuration will only load in the debug version of Rhino included with the Rhino C/C++ SDK.</li>
-      <li><em>PseudoDebug</em>: The <em>PseudoDebug</em> project is a <em>Release</em> project that disables optimizations and generates debugging information using the compiler’s <em>Program Database</em> (<code class="highlighter-rouge">/Zi</code>) option and the linker’s <em>Generate Debug Information</em> (<code class="highlighter-rouge">/DEBUG</code>) option.  These option settings let you use the debugger while you are developing your custom plugin. The <em>PseudoDebug</em> configuration also links with release runtime libraries.  Plugins built with the <em>PseudoDebug</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
+      <li><em>PseudoDebug</em>: The <em>PseudoDebug</em> project is a <em>Release</em> project that disables optimizations and generates debugging information using the compiler’s <em>Program Database</em> (<code>/Zi</code>) option and the linker’s <em>Generate Debug Information</em> (<code>/DEBUG</code>) option.  These option settings let you use the debugger while you are developing your custom plugin. The <em>PseudoDebug</em> configuration also links with release runtime libraries.  Plugins built with the <em>PseudoDebug</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
       <li><em>Release</em>: The <em>Release</em> configuration of your program contains no symbolic debug information and is fully optimized.  <em>Debug</em> information can be generated in PDB Files (C++) depending on the compiler options used.  Creating PDB files can be very useful if you later need to debug your release version.  The <em>Release</em> configuration also links with release runtime libraries.  Plugins built with the <em>Release</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
     </ul>
   </li>
   <li>For this guide, build the <em>Debug</em> configuration.</li>
   <li>From within Rhino, navigate to <em>Tools</em> &gt; <em>Options</em>.  Navigate to the <em>Plugins</em> page under <em>Rhino Options</em> and install your plugin.  <em>NOTE</em>: since the debug version of Rhino will only load debug plugins, no other plugins will show up in the list…
 <img src="/wip/images/your_first_plugin_windows_cpp_05.png" alt="Rhino Options" /></li>
-  <li>Once your plugin is loaded, close the options dialog and run your <code class="highlighter-rouge">Test</code> command.  You have finished creating your first plugin!</li>
+  <li>Once your plugin is loaded, close the options dialog and run your <code>Test</code> command.  You have finished creating your first plugin!</li>
 </ol>
 
 <h2 id="adding-a-command">Adding a Command</h2>
 
-<p>Rhino plugins can contain any number of commands.  Commands are created by deriving a new class from <code class="highlighter-rouge">CRhinoCommand</code>.  See <em>rhinoSdkCommand.h</em> for details on the <code class="highlighter-rouge">CRhinoCommand</code> class.</p>
+<p>Rhino plugins can contain any number of commands.  Commands are created by deriving a new class from <code>CRhinoCommand</code>.  See <em>rhinoSdkCommand.h</em> for details on the <code>CRhinoCommand</code> class.</p>
 
 <h3 id="example">Example</h3>
 
 <p>The following example code demonstrates a simple command class that essentially does nothing:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Do NOT put the definition of class CCommandTest in a header
+<pre><code class="language-cpp">// Do NOT put the definition of class CCommandTest in a header
 // file.  There is only ONE instance of a CCommandTest class
 // and that instance is the static theTestCommand that appears
 // immediately below the class definition.
-</span>
-<span class="k">class</span> <span class="nc">CCommandTest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoCommand</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="c1">// The one and only instance of CCommandTest is created below.
-</span>  <span class="c1">// No copy constructor or operator= is required.  Values of
-</span>  <span class="c1">// member variables persist for the duration of the application.
-</span>
-  <span class="c1">// CCommandTest::CCommandTest()
-</span>  <span class="c1">// is called exactly once when static theTestCommand is created.
-</span>  <span class="n">CCommandTest</span><span class="p">()</span> <span class="p">{}</span>
 
-  <span class="c1">// CCommandTest::~CCommandTest()
-</span>  <span class="c1">// is called exactly once when static theTestCommand is
-</span>  <span class="c1">// destroyed.  The destructor should not make any calls to
-</span>  <span class="c1">// the Rhino SDK.  If your command has persistent settings,
-</span>  <span class="c1">// then override CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
-</span>  <span class="o">~</span><span class="n">CCommandTest</span><span class="p">()</span> <span class="p">{}</span>
+class CCommandTest : public CRhinoCommand
+{
+public:
+  // The one and only instance of CCommandTest is created below.
+  // No copy constructor or operator= is required.  Values of
+  // member variables persist for the duration of the application.
 
-  <span class="c1">// Returns a unique UUID for this command.
-</span>  <span class="c1">// If you try to use an id that is already being used, then
-</span>  <span class="c1">// your command will not work.  Use GUIDGEN.EXE to make unique UUID.
-</span>  <span class="n">UUID</span> <span class="n">CommandUUID</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="c1">// {5333C9DE-5F01-45B8-9154-28B765E453E0}
-</span>    <span class="k">static</span> <span class="k">const</span> <span class="n">GUID</span> <span class="n">TestCommand_UUID</span> <span class="o">=</span>
-    <span class="p">{</span> <span class="mh">0x5333C9DE</span><span class="p">,</span> <span class="mh">0x5F01</span><span class="p">,</span> <span class="mh">0x45B8</span><span class="p">,</span> <span class="p">{</span> <span class="mh">0x91</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x28</span><span class="p">,</span> <span class="mh">0xB7</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0xE4</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0xE0</span> <span class="p">}</span> <span class="p">};</span>
-    <span class="k">return</span> <span class="n">TestCommand_UUID</span><span class="p">;</span>
-  <span class="p">}</span>
+  // CCommandTest::CCommandTest()
+  // is called exactly once when static theTestCommand is created.
+  CCommandTest() {}
 
-  <span class="c1">// Returns the English command name.
-</span>  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"Test"</span><span class="p">;</span> <span class="p">}</span>
+  // CCommandTest::~CCommandTest()
+  // is called exactly once when static theTestCommand is
+  // destroyed.  The destructor should not make any calls to
+  // the Rhino SDK.  If your command has persistent settings,
+  // then override CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
+  ~CCommandTest() {}
 
-  <span class="c1">// Returns the localized command name.
-</span>  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">LocalCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"Test"</span><span class="p">;</span> <span class="p">}</span>
+  // Returns a unique UUID for this command.
+  // If you try to use an id that is already being used, then
+  // your command will not work.  Use GUIDGEN.EXE to make unique UUID.
+  UUID CommandUUID()
+  {
+    // {5333C9DE-5F01-45B8-9154-28B765E453E0}
+    static const GUID TestCommand_UUID =
+    { 0x5333C9DE, 0x5F01, 0x45B8, { 0x91, 0x54, 0x28, 0xB7, 0x65, 0xE4, 0x53, 0xE0 } };
+    return TestCommand_UUID;
+  }
 
-  <span class="c1">// Rhino calls RunCommand to run the command.
-</span>  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="p">);</span>
-<span class="p">};</span>
+  // Returns the English command name.
+  const wchar_t* EnglishCommandName() { return L"Test"; }
 
-<span class="c1">// The one and only CCommandTest object.  
+  // Returns the localized command name.
+  const wchar_t* LocalCommandName() { return L"Test"; }
+
+  // Rhino calls RunCommand to run the command.
+  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
+};
+
+// The one and only CCommandTest object.  
 // Do NOT create any other instance of a CCommandTest class.
-</span><span class="k">static</span> <span class="k">class</span> <span class="nc">CCommandTest</span> <span class="n">theTestCommand</span><span class="p">;</span>
+static class CCommandTest theTestCommand;
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// CCommandTest::RunCommand() is called when the user runs the "Test"
-</span>  <span class="c1">// command or the "Test" command is run by a history operation.
-</span>
-  <span class="c1">// TODO: Add command code here.
-</span>
-  <span class="c1">// Rhino command that display a dialog box interface should also support
-</span>  <span class="c1">// a command-line, or scriptable interface.
-</span>
-  <span class="n">ON_wString</span> <span class="n">wStr</span><span class="p">;</span>
-  <span class="n">wStr</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"The </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> command is under construction.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">RhinoMessageBox</span><span class="p">(</span> <span class="n">wStr</span><span class="p">,</span> <span class="n">PlugIn</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">PlugInName</span><span class="p">(),</span> <span class="n">MB_OK</span> <span class="p">);</span>
-  <span class="k">else</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="n">wStr</span> <span class="p">);</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // CCommandTest::RunCommand() is called when the user runs the "Test"
+  // command or the "Test" command is run by a history operation.
 
-  <span class="c1">// TODO: Return one of the following values:
-</span>  <span class="c1">//   CRhinoCommand::success:  The command worked.
-</span>  <span class="c1">//   CRhinoCommand::failure:  The command failed because of invalid input, inability
-</span>  <span class="c1">//                            to compute the desired result, or some other reason
-</span>  <span class="c1">//                            computation reason.
-</span>  <span class="c1">//   CRhinoCommand::cancel:   The user interactively canceled the command
-</span>  <span class="c1">//                            (by pressing ESCAPE, clicking a CANCEL button, etc.)
-</span>  <span class="c1">//                            in a Get operation, dialog, time consuming computation, etc.
-</span>  <span class="c1">//   CRhinoCommand::nothing:  The command did nothing but CANCEL was not pressed.
-</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // TODO: Add command code here.
+
+  // Rhino command that display a dialog box interface should also support
+  // a command-line, or scriptable interface.
+
+  ON_wString wStr;
+  wStr.Format( L"The \"%s\" command is under construction.\n", EnglishCommandName() );
+  if( context.IsInteractive() )
+    RhinoMessageBox( wStr, PlugIn()-&gt;PlugInName(), MB_OK );
+  else
+    RhinoApp().Print( wStr );
+
+  // TODO: Return one of the following values:
+  //   CRhinoCommand::success:  The command worked.
+  //   CRhinoCommand::failure:  The command failed because of invalid input, inability
+  //                            to compute the desired result, or some other reason
+  //                            computation reason.
+  //   CRhinoCommand::cancel:   The user interactively canceled the command
+  //                            (by pressing ESCAPE, clicking a CANCEL button, etc.)
+  //                            in a Get operation, dialog, time consuming computation, etc.
+  //   CRhinoCommand::nothing:  The command did nothing but CANCEL was not pressed.
+
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <h3 id="notes">Notes</h3>
 
@@ -640,7 +637,7 @@ $(document).ready(function()
 
 <h3 id="rhino-command-generator">Rhino Command Generator</h3>
 
-<p>The <em>Rhino Command Generator</em> wizard is a standalone application that will generate new skeleton <code class="highlighter-rouge">CRhinoCommand</code>-derived class.  The generated source code is copied to the Windows clipboard so you can easily paste it into your source files.</p>
+<p>The <em>Rhino Command Generator</em> wizard is a standalone application that will generate new skeleton <code>CRhinoCommand</code>-derived class.  The generated source code is copied to the Windows clipboard so you can easily paste it into your source files.</p>
 
 <p>To use this tool in Visual Studio 2010:</p>
 

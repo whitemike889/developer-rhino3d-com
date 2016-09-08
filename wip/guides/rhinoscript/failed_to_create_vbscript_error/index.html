@@ -444,21 +444,18 @@ $(document).ready(function()
 
 <p>Rhino 3.0, 4.0, and 5 (32-bit) use the 32-bit version of the VBScript dynamic-link library, <em>vbscript.dll</em>. On English-language versions of 32-bit Windows, <em>vbscript.dll</em> is located here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>C:\Windows\System32
+<pre><code>C:\Windows\System32
 </code></pre>
-</div>
 
 <p>On English-language versions of 64-bit Windows, 32-bit <em>vbscript.dll</em> is located here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>C:\Windows\SysWOW64
+<pre><code>C:\Windows\SysWOW64
 </code></pre>
-</div>
 
 <p>Rhino 5 (64-bit) use the 64-bit version of <em>vbscript.dll</em>. On English-language versions of 64-bit Windows, <em>vbscript.dll</em> is located here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>C:\Windows\System32
+<pre><code>C:\Windows\System32
 </code></pre>
-</div>
 
 <p>If you search these folders and you are unable to locate <em>vbscript.dll</em>, then you will need to reinstall VBScript.</p>
 
@@ -479,21 +476,18 @@ $(document).ready(function()
 
 <p>Rhino 3.0, 4.0, and 5 (32-bit) use the 32-bit version of VBScript.  On English-language versions of 32-bit Windows, VBScript is registered here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
+<pre><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
 </code></pre>
-</div>
 
 <p>On English-language versions of 64-bit Windows, 32-bit VBScript is registered here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
+<pre><code>HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
 </code></pre>
-</div>
 
 <p>Rhino 5 (64-bit) use the 64-bit version of VBScript.  On English-language versions of 64-bit Windows, VBScript is registered here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
+<pre><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
 </code></pre>
-</div>
 
 <p>If, using <em>REGEDIT.EXE</em>, you search for these keys and you are unable to locate them, then you will need to reregister VBScript by following the directions below…</p>
 
@@ -504,8 +498,8 @@ $(document).ready(function()
 
 <ol>
   <li>Click Start &gt; All Programs &gt; Accessories &gt; Command Prompt. (Windows 7 users: right-click on Command Prompt and select “Run as administrator”).</li>
-  <li>In the command prompt window, change to the folder where <em>vbscript.dll</em> resides by typing either <code class="highlighter-rouge">CD C:\Windows\System32</code> or <code class="highlighter-rouge">CD C:\Windows\SysWOW64</code> and then press <kbd>Enter</kbd>.</li>
-  <li>In the command prompt window, type <code class="highlighter-rouge">REGSVR32 VBSCRIPT.DLL</code> and then press <kbd>Enter</kbd>.</li>
+  <li>In the command prompt window, change to the folder where <em>vbscript.dll</em> resides by typing either <code>CD C:\Windows\System32</code> or <code>CD C:\Windows\SysWOW64</code> and then press <kbd>Enter</kbd>.</li>
+  <li>In the command prompt window, type <code>REGSVR32 VBSCRIPT.DLL</code> and then press <kbd>Enter</kbd>.</li>
   <li>A message should appear stating “DllRegisterServer in VBSCRIPT.DLL succeeded”. If you see a message with error code 0x80004005, the command window was not opened as an administrator.  You might also need to disable anti-virus, personal security, and firewall applications before performing this task.</li>
 </ol>
 
@@ -523,43 +517,38 @@ $(document).ready(function()
 
 <p>It is likely that:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[HKEY_CLASSES_ROOT\CLSID{B54F3741-5B07-11cf-A4B0-00AA004A55E8}\InprocServer32]
+<pre><code>[HKEY_CLASSES_ROOT\CLSID{B54F3741-5B07-11cf-A4B0-00AA004A55E8}\InprocServer32]
 </code></pre>
-</div>
 
 <p>points to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>C:\Program Files\McAfee\VirusScan Enterprise\scriptcl.dll
+<pre><code>C:\Program Files\McAfee\VirusScan Enterprise\scriptcl.dll
 </code></pre>
-</div>
 
 <p>which is wrong.</p>
 
 <p>This causes VBScript to fail when any application tries to use it.  A complete uninstall of McAfee will leave this key unmodified, causing VBScript to fail since this McAfee dll no longer exists.</p>
 
 <p>Manually changing the registry key to the windows default:
-<code class="highlighter-rouge">
+<code>
 \[HKEY_CLASSES_ROOT\CLSID{B54F3741-5B07-11cf-A4B0-00AA004A55E8}\InprocServer32]
 </code>
 to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>\\C:\Windows\System32\vbscript.dll\\
+<pre><code>\\C:\Windows\System32\vbscript.dll\\
 </code></pre>
-</div>
 
 <p>fixes the problem for Rhino 5 for Windows (64-bit).</p>
 
 <p>For 32-bit Rhino 5 on 64-bit Windows, this key:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> \HKEY_CLASSES_ROOT\Wow6432Node\CLSID{B54F3741-5B07-11cf-A4B0-00AA004A55E8\InprocServer32}\\
+<pre><code> \HKEY_CLASSES_ROOT\Wow6432Node\CLSID{B54F3741-5B07-11cf-A4B0-00AA004A55E8\InprocServer32}\\
 </code></pre>
-</div>
 
 <p>should point to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> \\C:\Windows\SysWOW64\vbscript.dll\\
+<pre><code> \\C:\Windows\SysWOW64\vbscript.dll\\
 </code></pre>
-</div>
 
 <h2 id="security-settings">Security Settings</h2>
 
@@ -570,23 +559,21 @@ to:</p>
   <p>Modifying the registry incorrectly can have negative consequences on your system's stability and even damage the system.  You must be logged in as administrator or logged in as a user with administrator privileges for the computer to execute these steps.</p>
 </div>
 
-<p>Run <em>REGEDIT.EXE</em> and find the appropriate registry key in <code class="highlighter-rouge">HKEY_CLASSES_ROOT</code>, either:</p>
+<p>Run <em>REGEDIT.EXE</em> and find the appropriate registry key in <code>HKEY_CLASSES_ROOT</code>, either:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
+<pre><code>HKEY_CLASSES_ROOT\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
 </code></pre>
-</div>
 
 <p>or</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
+<pre><code>HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{B54F3741-5B07-11cf-A4B0-00AA004A55E8}
 </code></pre>
-</div>
 
 <p>Right-click on the key and pick Permissions… from the context menu.</p>
 
 <p>Users should have the Read permission checked.  If this is not the case, then the users permissions have been modified, which is causing RhinoScript to not be able to read this key.  Registry permissions issues are often caused by security policies have been pushed down onto the workstations that are members of an Active Directory domain.</p>
 
-<p>To set the permissions, navigate to the top of the hive, <code class="highlighter-rouge">HKEY_CLASSES_ROOT</code>, and try to set the proper permissions from there.  In doing this, all keys below this will inherit the permissions (and hopefully the problem will be solved).  If you are unable to do this, then you will need to contact your IT department and ask for assistance.</p>
+<p>To set the permissions, navigate to the top of the hive, <code>HKEY_CLASSES_ROOT</code>, and try to set the proper permissions from there.  In doing this, all keys below this will inherit the permissions (and hopefully the problem will be solved).  If you are unable to do this, then you will need to contact your IT department and ask for assistance.</p>
 
         </article>
 

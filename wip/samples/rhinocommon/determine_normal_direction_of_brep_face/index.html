@@ -247,51 +247,50 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DetermineNormalDirectionOfBrepFace</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// select a surface
-</span>    <span class="kt">var</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select surface"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">DisablePreSelect</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="c1">// get the selected face
-</span>    <span class="kt">var</span> <span class="n">face</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Face</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">face</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DetermineNormalDirectionOfBrepFace(RhinoDoc doc)
+  {
+    // select a surface
+    var gs = new GetObject();
+    gs.SetCommandPrompt("select surface");
+    gs.GeometryFilter = ObjectType.Surface;
+    gs.DisablePreSelect();
+    gs.SubObjectSelect = false;
+    gs.Get();
+    if (gs.CommandResult() != Result.Success)
+      return gs.CommandResult();
+    // get the selected face
+    var face = gs.Object(0).Face();
+    if (face == null)
+      return Result.Failure;
 
-    <span class="c1">// pick a point on the surface.  Constain
-</span>    <span class="c1">// picking to the face.
-</span>    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select point on surface"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // pick a point on the surface.  Constain
+    // picking to the face.
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("select point on surface");
+    gp.Constrain(face, false);
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
 
-    <span class="c1">// get the parameters of the point on the
-</span>    <span class="c1">// surface that is clesest to gp.Point()
-</span>    <span class="kt">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">face</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">(),</span> <span class="k">out</span> <span class="n">u</span><span class="p">,</span> <span class="k">out</span> <span class="n">v</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">direction</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">NormalAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">face</span><span class="p">.</span><span class="n">OrientationIsReversed</span><span class="p">)</span>
-        <span class="n">direction</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">();</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span>
-        <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span>
-          <span class="s">"Surface normal at uv({0:f},{1:f}) = ({2:f},{3:f},{4:f})"</span><span class="p">,</span>
-          <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">direction</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">direction</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">direction</span><span class="p">.</span><span class="n">Z</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // get the parameters of the point on the
+    // surface that is clesest to gp.Point()
+    double u, v;
+    if (face.ClosestPoint(gp.Point(), out u, out v))
+    {
+      var direction = face.NormalAt(u, v);
+      if (face.OrientationIsReversed)
+        direction.Reverse();
+      RhinoApp.WriteLine(
+        string.Format(
+          "Surface normal at uv({0:f},{1:f}) = ({2:f},{3:f},{4:f})",
+          u, v, direction.X, direction.Y, direction.Z));
+    }
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DetermineNormalDirectionOfBrepFace(ByVal doc As RhinoDoc) As Result
@@ -336,50 +335,49 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="n">Result</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from scriptcontext import *
+import Rhino
+from Rhino.Commands import Result
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="c"># select a surface</span>
-  <span class="n">gs</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"select surface"</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">DisablePreSelect</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  # select a surface
+  gs = Rhino.Input.Custom.GetObject()
+  gs.SetCommandPrompt("select surface")
+  gs.GeometryFilter = Rhino.DocObjects.ObjectType.Surface
+  gs.DisablePreSelect()
+  gs.SubObjectSelect = False
+  gs.Get()
+  if gs.CommandResult() != Result.Success:
+    return gs.CommandResult()
 
-  <span class="c"># get the selected face</span>
-  <span class="n">face</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">Face</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">face</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span>
+  # get the selected face
+  face = gs.Object(0).Face()
+  if face == None:
+    return
 
-  <span class="c"># pick a point on the surface.  Constain</span>
-  <span class="c"># picking to the face.</span>
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"select point on surface"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+  # pick a point on the surface.  Constain
+  # picking to the face.
+  gp = Rhino.Input.Custom.GetPoint()
+  gp.SetCommandPrompt("select point on surface")
+  gp.Constrain(face, False)
+  gp.Get()
+  if gp.CommandResult() != Result.Success:
+    return gp.CommandResult()
 
-  <span class="c"># get the parameters of the point on the</span>
-  <span class="c"># surface that is clesest to gp.Point()</span>
-  <span class="n">b</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">())</span>
-  <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
-    <span class="nb">dir</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">NormalAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">face</span><span class="o">.</span><span class="n">OrientationIsReversed</span><span class="p">:</span>
-      <span class="nb">dir</span><span class="o">.</span><span class="n">Reverse</span><span class="p">()</span>
-    <span class="k">print</span> <span class="s">"Surface normal at uv({0:f},{1:f}) = ({2:f},{3:f},{4:f})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+  # get the parameters of the point on the
+  # surface that is clesest to gp.Point()
+  b, u, v = face.ClosestPoint(gp.Point())
+  if b:
+    dir = face.NormalAt(u, v)
+    if face.OrientationIsReversed:
+      dir.Reverse()
+    print "Surface normal at uv({0:f},{1:f}) = ({2:f},{3:f},{4:f})".format(
+        u, v, dir.X, dir.Y, dir.Z)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

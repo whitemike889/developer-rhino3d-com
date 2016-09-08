@@ -247,56 +247,55 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">GetPointDynamicDraw</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Center point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">center_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">center_point</span> <span class="p">==</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Unset</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result GetPointDynamicDraw(RhinoDoc doc)
+  {
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("Center point");
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var center_point = gp.Point();
+    if (center_point == Point3d.Unset)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">gcp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetCircleRadiusPoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">);</span>
-    <span class="n">gcp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Radius"</span><span class="p">);</span>
-    <span class="n">gcp</span><span class="p">.</span><span class="nf">ConstrainToConstructionPlane</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="n">gcp</span><span class="p">.</span><span class="nf">SetBasePoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">gcp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">gcp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gcp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gcp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    var gcp = new GetCircleRadiusPoint(center_point);
+    gcp.SetCommandPrompt("Radius");
+    gcp.ConstrainToConstructionPlane(false);
+    gcp.SetBasePoint(center_point, true);
+    gcp.DrawLineFromPoint(center_point, true);
+    gcp.Get();
+    if (gcp.CommandResult() != Result.Success)
+      return gcp.CommandResult();
 
-    <span class="kt">var</span> <span class="n">radius</span> <span class="p">=</span> <span class="n">center_point</span><span class="p">.</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">gcp</span><span class="p">.</span><span class="nf">Point</span><span class="p">());</span>
-    <span class="kt">var</span> <span class="n">cplane</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCircle</span><span class="p">(</span><span class="k">new</span> <span class="nf">Circle</span><span class="p">(</span><span class="n">cplane</span><span class="p">,</span> <span class="n">center_point</span><span class="p">,</span> <span class="n">radius</span><span class="p">));</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var radius = center_point.DistanceTo(gcp.Point());
+    var cplane = doc.Views.ActiveView.ActiveViewport.ConstructionPlane();
+    doc.Objects.AddCircle(new Circle(cplane, center_point, radius));
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">GetCircleRadiusPoint</span> <span class="p">:</span> <span class="n">GetPoint</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="n">Point3d</span> <span class="n">m_center_point</span><span class="p">;</span>
+public class GetCircleRadiusPoint : GetPoint
+{
+  private Point3d m_center_point;
 
-  <span class="k">public</span> <span class="nf">GetCircleRadiusPoint</span><span class="p">(</span><span class="n">Point3d</span> <span class="n">centerPoint</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_center_point</span> <span class="p">=</span> <span class="n">centerPoint</span><span class="p">;</span>
-  <span class="p">}</span>
+  public GetCircleRadiusPoint(Point3d centerPoint)
+  {
+    m_center_point = centerPoint;
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="n">GetPointDrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">cplane</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">RhinoDoc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">radius</span> <span class="p">=</span> <span class="n">m_center_point</span><span class="p">.</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">CurrentPoint</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">circle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Circle</span><span class="p">(</span><span class="n">cplane</span><span class="p">,</span> <span class="n">m_center_point</span><span class="p">,</span> <span class="n">radius</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawCircle</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  protected override void OnDynamicDraw(GetPointDrawEventArgs e)
+  {
+    base.OnDynamicDraw(e);
+    var cplane = e.RhinoDoc.Views.ActiveView.ActiveViewport.ConstructionPlane();
+    var radius = m_center_point.DistanceTo(e.CurrentPoint);
+    var circle = new Circle(cplane, m_center_point, radius);
+    e.Display.DrawCircle(circle, System.Drawing.Color.Black);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function GetPointDynamicDraw(ByVal doc As RhinoDoc) As Result
@@ -348,52 +347,51 @@ Public Class GetCircleRadiusPoint
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">from</span> <span class="nn">System.Drawing</span> <span class="kn">import</span> <span class="o">*</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Geometry import *
+from Rhino.Commands import *
+from Rhino.Input.Custom import *
+from scriptcontext import doc
+from System.Drawing import *
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Center point"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">center_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">center_point</span> <span class="o">==</span> <span class="n">Point3d</span><span class="o">.</span><span class="n">Unset</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  gp = GetPoint()
+  gp.SetCommandPrompt("Center point")
+  gp.Get()
+  if gp.CommandResult() &lt;&gt; Result.Success:
+    return gp.CommandResult()
+  center_point = gp.Point()
+  if center_point == Point3d.Unset:
+    return Result.Failure
 
-  <span class="n">gcp</span> <span class="o">=</span> <span class="n">GetCircleRadiusPoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">)</span>
-  <span class="n">gcp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Radius"</span><span class="p">)</span>
-  <span class="n">gcp</span><span class="o">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-  <span class="n">gcp</span><span class="o">.</span><span class="n">SetBasePoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-  <span class="n">gcp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">center_point</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-  <span class="n">gcp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gcp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gcp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+  gcp = GetCircleRadiusPoint(center_point)
+  gcp.SetCommandPrompt("Radius")
+  gcp.ConstrainToConstructionPlane(False)
+  gcp.SetBasePoint(center_point, True)
+  gcp.DrawLineFromPoint(center_point, True)
+  gcp.Get()
+  if gcp.CommandResult() &lt;&gt; Result.Success:
+    return gcp.CommandResult()
 
-  <span class="n">radius</span> <span class="o">=</span> <span class="n">center_point</span><span class="o">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">gcp</span><span class="o">.</span><span class="n">Point</span><span class="p">())</span>
-  <span class="n">cplane</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCircle</span><span class="p">(</span><span class="n">Circle</span><span class="p">(</span><span class="n">cplane</span><span class="p">,</span> <span class="n">center_point</span><span class="p">,</span> <span class="n">radius</span><span class="p">))</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  radius = center_point.DistanceTo(gcp.Point())
+  cplane = doc.Views.ActiveView.ActiveViewport.ConstructionPlane()
+  doc.Objects.AddCircle(Circle(cplane, center_point, radius))
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">class</span> <span class="nc">GetCircleRadiusPoint</span> <span class="p">(</span><span class="n">GetPoint</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">centerPoint</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">m_center_point</span> <span class="o">=</span> <span class="n">centerPoint</span>
+class GetCircleRadiusPoint (GetPoint):
+  def __init__(self, centerPoint):
+    self.m_center_point = centerPoint
 
-  <span class="k">def</span> <span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
-    <span class="n">cplane</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">RhinoDoc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_center_point</span><span class="o">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">CurrentPoint</span><span class="p">)</span>
-    <span class="n">circle</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="n">cplane</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_center_point</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawCircle</span><span class="p">(</span><span class="n">circle</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">Black</span><span class="p">)</span>
+  def OnDynamicDraw(self, e):
+    cplane = e.RhinoDoc.Views.ActiveView.ActiveViewport.ConstructionPlane()
+    radius = self.m_center_point.DistanceTo(e.CurrentPoint)
+    circle = Circle(cplane, self.m_center_point, radius)
+    e.Display.DrawCircle(circle, Color.Black)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+    RunCommand()
 </code></pre>
-</div>
 
 </div>
 

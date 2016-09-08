@@ -247,32 +247,31 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">SetRhinoPageViewWidthAndHeight</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">width</span> <span class="p">=</span> <span class="m">1189</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">height</span> <span class="p">=</span> <span class="m">841</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">page_views</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">GetPageViews</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">page_number</span> <span class="p">=</span> <span class="p">(</span><span class="n">page_views</span><span class="p">==</span><span class="k">null</span><span class="p">)</span> <span class="p">?</span> <span class="m">1</span> <span class="p">:</span> <span class="n">page_views</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">pageview</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">AddPageView</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"A0_{0}"</span><span class="p">,</span><span class="n">page_number</span><span class="p">),</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result SetRhinoPageViewWidthAndHeight(RhinoDoc doc)
+  {
+    var width = 1189;
+    var height = 841;
+    var page_views = doc.Views.GetPageViews();
+    int page_number = (page_views==null) ? 1 : page_views.Length + 1;
+    var pageview = doc.Views.AddPageView(string.Format("A0_{0}",page_number), width, height);
 
-    <span class="kt">int</span> <span class="n">new_width</span> <span class="p">=</span> <span class="n">width</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetInteger</span><span class="p">(</span><span class="s">"new width"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">new_width</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">new_width</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    int new_width = width;
+    var rc = RhinoGet.GetInteger("new width", false, ref new_width);
+    if (rc != Result.Success || new_width &lt;= 0) return rc;
 
-    <span class="kt">int</span> <span class="n">new_height</span> <span class="p">=</span> <span class="n">height</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetInteger</span><span class="p">(</span><span class="s">"new height"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">new_height</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">new_height</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    int new_height = height;
+    rc = RhinoGet.GetInteger("new height", false, ref new_height);
+    if (rc != Result.Success || new_height &lt;= 0) return rc;
 
-    <span class="n">pageview</span><span class="p">.</span><span class="n">PageWidth</span> <span class="p">=</span> <span class="n">new_width</span><span class="p">;</span>
-    <span class="n">pageview</span><span class="p">.</span><span class="n">PageHeight</span> <span class="p">=</span> <span class="n">new_height</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    pageview.PageWidth = new_width;
+    pageview.PageHeight = new_height;
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function SetRhinoPageViewWidthAndHeight(ByVal doc As RhinoDoc) As Result
@@ -302,9 +301,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

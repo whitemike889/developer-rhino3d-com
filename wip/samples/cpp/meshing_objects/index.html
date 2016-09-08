@@ -242,55 +242,54 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select some geometry to mesh
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface or polysurface to mesh"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select some geometry to mesh
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface or polysurface to mesh" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object | CRhinoGetObject::polysrf_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">objects</span><span class="p">;</span>
-  <span class="n">objects</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">()</span> <span class="p">);</span>
+  ON_SimpleArray&lt;const CRhinoObject*&gt; objects;
+  objects.Append( go.Object(0).Object() );
 
-  <span class="c1">// RhinoMeshObjects need to know how to mesh the objects. This information is provided
-</span>  <span class="c1">// by passing the function a ON_MeshParameters object. For details on this class, see
-</span>  <span class="c1">// opennurbs_mesh.h.
-</span>
-  <span class="c1">// In this example, instead of making up our own default mesh parameters, we will just
-</span>  <span class="c1">// get some existing ones that we know work well.
-</span>  <span class="k">const</span> <span class="n">CRhinoAppRenderMeshSettings</span><span class="o">&amp;</span> <span class="n">rms</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">RenderMeshSettings</span><span class="p">();</span>
-  <span class="c1">//ON_MeshParameters mp = rms.QualityMeshParameters();
-</span>  <span class="n">ON_MeshParameters</span> <span class="n">mp</span> <span class="o">=</span> <span class="n">rms</span><span class="p">.</span><span class="n">FastMeshParameters</span><span class="p">();</span>
+  // RhinoMeshObjects need to know how to mesh the objects. This information is provided
+  // by passing the function a ON_MeshParameters object. For details on this class, see
+  // opennurbs_mesh.h.
 
-  <span class="c1">// Set the user interface style.
-</span>  <span class="kt">int</span> <span class="n">ui_style</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// simple ui
-</span>
-  <span class="n">ON_ClassArray</span><span class="o">&lt;</span><span class="n">CRhinoObjectMesh</span><span class="o">&gt;</span> <span class="n">meshes</span><span class="p">;</span>
+  // In this example, instead of making up our own default mesh parameters, we will just
+  // get some existing ones that we know work well.
+  const CRhinoAppRenderMeshSettings&amp; rms = RhinoApp().AppSettings().RenderMeshSettings();
+  //ON_MeshParameters mp = rms.QualityMeshParameters();
+  ON_MeshParameters mp = rms.FastMeshParameters();
 
-  <span class="c1">// Mesh the selected objects.
-</span>  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoMeshObjects</span><span class="p">(</span> <span class="n">objects</span><span class="p">,</span> <span class="n">mp</span><span class="p">,</span> <span class="n">ui_style</span><span class="p">,</span> <span class="n">meshes</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">meshes</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoObjectMesh</span><span class="o">&amp;</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">meshes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">mesh_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMeshObject</span><span class="p">(</span> <span class="n">mesh</span><span class="p">.</span><span class="n">m_mesh_attributes</span> <span class="p">);</span>
-      <span class="n">mesh_object</span><span class="o">-&gt;</span><span class="n">SetMesh</span><span class="p">(</span> <span class="n">mesh</span><span class="p">.</span><span class="n">m_mesh</span> <span class="p">);</span>
-      <span class="n">mesh</span><span class="p">.</span><span class="n">m_mesh</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">mesh_object</span> <span class="p">);</span>
-    <span class="p">}</span>
+  // Set the user interface style.
+  int ui_style = 0; // simple ui
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  ON_ClassArray&lt;CRhinoObjectMesh&gt; meshes;
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Mesh the selected objects.
+  CRhinoCommand::result rc = RhinoMeshObjects( objects, mp, ui_style, meshes );
+  if( rc == success )
+  {
+    int i;
+    for( i = 0; i &lt; meshes.Count(); i++ )
+    {
+      CRhinoObjectMesh&amp; mesh = meshes[i];
+      CRhinoMeshObject* mesh_object = new CRhinoMeshObject( mesh.m_mesh_attributes );
+      mesh_object-&gt;SetMesh( mesh.m_mesh );
+      mesh.m_mesh = 0;
+      context.m_doc.AddObject( mesh_object );
+    }
+
+    context.m_doc.Redraw();
+  }
+
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

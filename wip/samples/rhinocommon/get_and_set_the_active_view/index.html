@@ -247,43 +247,42 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">SetActiveView</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// view and view names
-</span>    <span class="kt">var</span> <span class="n">active_view_name</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result SetActiveView(RhinoDoc doc)
+  {
+    // view and view names
+    var active_view_name = doc.Views.ActiveView.ActiveViewport.Name;
 
-    <span class="kt">var</span> <span class="n">non_active_views</span> <span class="p">=</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span>
-      <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="n">Name</span> <span class="p">!=</span> <span class="n">active_view_name</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">ToDictionary</span><span class="p">(</span><span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">);</span>
+    var non_active_views =
+      doc.Views
+      .Where(v =&gt; v.ActiveViewport.Name != active_view_name)
+      .ToDictionary(v =&gt; v.ActiveViewport.Name, v =&gt; v);
 
-    <span class="c1">// get name of view to set active
-</span>    <span class="kt">var</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetString</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of view to set active"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetDefaultString</span><span class="p">(</span><span class="n">active_view_name</span><span class="p">);</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">view_name</span> <span class="k">in</span> <span class="n">non_active_views</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span>
-      <span class="n">gs</span><span class="p">.</span><span class="nf">AddOption</span><span class="p">(</span><span class="n">view_name</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // get name of view to set active
+    var gs = new GetString();
+    gs.SetCommandPrompt("Name of view to set active");
+    gs.AcceptNothing(true);
+    gs.SetDefaultString(active_view_name);
+    foreach (var view_name in non_active_views.Keys)
+      gs.AddOption(view_name);
+    var result = gs.Get();
+    if (gs.CommandResult() != Result.Success)
+      return gs.CommandResult();
 
-    <span class="kt">var</span> <span class="n">selected_view_name</span> <span class="p">=</span>
-      <span class="n">result</span> <span class="p">==</span> <span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span> <span class="p">?</span> <span class="n">gs</span><span class="p">.</span><span class="nf">Option</span><span class="p">().</span><span class="n">EnglishName</span> <span class="p">:</span> <span class="n">gs</span><span class="p">.</span><span class="nf">StringResult</span><span class="p">();</span>
+    var selected_view_name =
+      result == GetResult.Option ? gs.Option().EnglishName : gs.StringResult();
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">selected_view_name</span> <span class="p">!=</span> <span class="n">active_view_name</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">non_active_views</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">))</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span> <span class="p">=</span> <span class="n">non_active_views</span><span class="p">[</span><span class="n">selected_view_name</span><span class="p">];</span>
-      <span class="k">else</span>
-        <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"\"{0}\" is not a view name"</span><span class="p">,</span> <span class="n">selected_view_name</span><span class="p">);</span>
+    if (selected_view_name != active_view_name)
+      if (non_active_views.ContainsKey(selected_view_name))
+        doc.Views.ActiveView = non_active_views[selected_view_name];
+      else
+        RhinoApp.WriteLine("\"{0}\" is not a view name", selected_view_name);
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function SetActiveView(ByVal doc As RhinoDoc) As Result
@@ -320,47 +319,46 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Commands import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="c"># view and view names</span>
-  <span class="n">active_view_name</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">Name</span>
+def RunCommand():
+  # view and view names
+  active_view_name = doc.Views.ActiveView.ActiveViewport.Name
 
-  <span class="n">non_active_views</span> <span class="o">=</span> <span class="p">[(</span><span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">view</span><span class="p">)</span> <span class="k">for</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">Views</span>
-                      <span class="k">if</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">Name</span> <span class="o">&lt;&gt;</span> <span class="n">active_view_name</span><span class="p">]</span>
+  non_active_views = [(view.ActiveViewport.Name, view) for view in doc.Views
+                      if view.ActiveViewport.Name &lt;&gt; active_view_name]
 
-  <span class="c"># get name of view to set active</span>
-  <span class="n">gs</span> <span class="o">=</span> <span class="n">GetString</span><span class="p">()</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of view to set active"</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">AcceptNothing</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-  <span class="n">gs</span><span class="o">.</span><span class="n">SetDefaultString</span><span class="p">(</span><span class="n">active_view_name</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">view_name</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">non_active_views</span><span class="p">:</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">AddOption</span><span class="p">(</span><span class="n">view_name</span><span class="p">)</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+  # get name of view to set active
+  gs = GetString()
+  gs.SetCommandPrompt("Name of view to set active")
+  gs.AcceptNothing(True)
+  gs.SetDefaultString(active_view_name)
+  for view_name, _ in non_active_views:
+    gs.AddOption(view_name)
+  result = gs.Get()
+  if gs.CommandResult() != Result.Success:
+    return gs.CommandResult()
 
-  <span class="n">selected_view_name</span> <span class="o">=</span> <span class="s">"{0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">StringResult</span><span class="p">())</span>
-  <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">Option</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">selected_view_name</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">Option</span><span class="p">()</span><span class="o">.</span><span class="n">EnglishName</span>
+  selected_view_name = "{0}".format(gs.StringResult())
+  if gs.Option() &lt;&gt; None:
+      selected_view_name = gs.Option().EnglishName
 
-  <span class="k">if</span> <span class="n">selected_view_name</span> <span class="o">&lt;&gt;</span> <span class="n">active_view_name</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">selected_view_name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">non_active_views</span><span class="p">]:</span>
-      <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span> <span class="o">=</span> <span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="n">non_active_views</span>
-                              <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">selected_view_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">print</span> <span class="s">"</span><span class="se">\"</span><span class="s">{0}</span><span class="se">\"</span><span class="s"> is not a view name"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">selected_view_name</span><span class="p">)</span>
+  if selected_view_name &lt;&gt; active_view_name:
+    if selected_view_name in [seq[0] for seq in non_active_views]:
+      doc.Views.ActiveView = [seq[1] for seq in non_active_views
+                              if seq[0] == selected_view_name][0]
+    else:
+      print "\"{0}\" is not a view name".format(selected_view_name)
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

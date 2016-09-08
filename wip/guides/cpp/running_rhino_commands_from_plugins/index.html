@@ -367,42 +367,39 @@ $(document).ready(function()
 
 <p>Derive your command class from CRhinoScriptCommand instead of CRhinoCommand. In other words, instead of defining your command class like this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CCommandTest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoCommand</span>
+<pre><code class="language-cpp">class CCommandTest : public CRhinoCommand
 </code></pre>
-</div>
 
 <p>Define your command class like this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CCommandTest</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoScriptCommand</span>
+<pre><code class="language-cpp">class CCommandTest : public CRhinoScriptCommand
 </code></pre>
-</div>
 
-<p>Then, from within your command class’s <code class="highlighter-rouge">RunCommand()</code> member, you can call <code class="highlighter-rouge">CRhinoApp::RunScript()</code> to script the running of a Rhino command.  For example:</p>
+<p>Then, from within your command class’s <code>RunCommand()</code> member, you can call <code>CRhinoApp::RunScript()</code> to script the running of a Rhino command.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_-Line 0,0,0 10,10,10"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  RhinoApp().RunScript( L"_-Line 0,0,0 10,10,10", 0 );
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <h2 id="warning">Warning</h2>
 
 <p>This kind of command can be very dangerous.  Please be sure you understand the following:</p>
 
 <ol>
-  <li>If you are not very familiar with how C++ references work, you should only call <code class="highlighter-rouge">CRhinoApp::RunScript()</code> from within a <code class="highlighter-rouge">CRhinoScriptCommand</code> derived command.</li>
+  <li>If you are not very familiar with how C++ references work, you should only call <code>CRhinoApp::RunScript()</code> from within a <code>CRhinoScriptCommand</code> derived command.</li>
   <li>If you are very familiar with C++ references, then please observe the following rules:
     <ol>
-      <li>If you get a reference or pointer to any part of the Rhino run-time database, this reference or pointer will not be valid after you call <code class="highlighter-rouge">CRhinoApp::RunScript()</code>.</li>
-      <li>If you get a reference or a pointer, then call <code class="highlighter-rouge">CRhinoApp::RunScript()</code>, and then use the reference, Rhino will probably crash.</li>
-      <li>All pointers and references used by the command should be scoped such that they are only valid for the time between calls to <code class="highlighter-rouge">CRhinoApp::RunScript()</code>.</li>
+      <li>If you get a reference or pointer to any part of the Rhino run-time database, this reference or pointer will not be valid after you call <code>CRhinoApp::RunScript()</code>.</li>
+      <li>If you get a reference or a pointer, then call <code>CRhinoApp::RunScript()</code>, and then use the reference, Rhino will probably crash.</li>
+      <li>All pointers and references used by the command should be scoped such that they are only valid for the time between calls to <code>CRhinoApp::RunScript()</code>.</li>
     </ol>
   </li>
 </ol>
 
-<p>This is because <code class="highlighter-rouge">CRhinoApp::RunScript()</code> can change the dynamic arrays in the run-time database.  The result is that all pointers and references become invalid. Be sure to scope your variables between <code class="highlighter-rouge">CRhinoApp::RunScript()</code> calls.</p>
+<p>This is because <code>CRhinoApp::RunScript()</code> can change the dynamic arrays in the run-time database.  The result is that all pointers and references become invalid. Be sure to scope your variables between <code>CRhinoApp::RunScript()</code> calls.</p>
 
 <p><strong>NOTE</strong>: In a normal command, when the user enters a command beginning with a !, the command exits. There is no documented way to get this behavior from within a script command.</p>
 
@@ -410,36 +407,35 @@ $(document).ready(function()
 
 <p>Here’s good scoping practice when your command is a script command.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="p">{</span>
-    <span class="n">section</span> <span class="n">A</span>
-    <span class="p">...</span> <span class="k">do</span> <span class="n">some</span> <span class="n">stuff</span> <span class="p">...</span>
-  <span class="p">}</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(...);</span>
-  <span class="p">{</span>
-    <span class="n">section</span> <span class="n">B</span>
-    <span class="p">...</span> <span class="k">do</span> <span class="n">some</span> <span class="n">stuff</span> <span class="p">...</span>
-  <span class="p">}</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(...);</span>
-  <span class="p">{</span>
-    <span class="n">section</span> <span class="n">C</span>
-    <span class="p">...</span> <span class="k">do</span> <span class="n">some</span> <span class="n">stuff</span> <span class="p">...</span>
-  <span class="p">}</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(...);</span>
-  <span class="p">{</span>
-    <span class="n">section</span> <span class="n">D</span>
-    <span class="p">...</span> <span class="k">do</span> <span class="n">some</span> <span class="n">stuff</span> <span class="p">...</span>
-  <span class="p">}</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(...);</span>
-  <span class="p">{</span>
-    <span class="n">section</span> <span class="n">E</span>
-    <span class="p">...</span> <span class="k">do</span> <span class="n">some</span> <span class="n">stuff</span> <span class="p">...</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  {
+    section A
+    ... do some stuff ...
+  }
+  RhinoApp().RunScript(...);
+  {
+    section B
+    ... do some stuff ...
+  }
+  RhinoApp().RunScript(...);
+  {
+    section C
+    ... do some stuff ...
+  }
+  RhinoApp().RunScript(...);
+  {
+    section D
+    ... do some stuff ...
+  }
+  RhinoApp().RunScript(...);
+  {
+    section E
+    ... do some stuff ...
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <p>Never allow references and pointers from one section to be used in another section.</p>
 

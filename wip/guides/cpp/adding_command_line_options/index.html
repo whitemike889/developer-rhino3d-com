@@ -326,86 +326,85 @@ $(document).ready(function()
 <p>The Rhino C/C++ SDK has a number of CRhinoGet derived classes that you can use to interactively get information from the user.  Some of these classes include:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">CRhinoGetObject</code>: SDK user interface tool used to get objects.</li>
-  <li><code class="highlighter-rouge">CRhinoGetPoint</code>:  SDK user interface tool used to get points.</li>
-  <li><code class="highlighter-rouge">CRhinoGetString</code>: SDK user interface tool used to get strings.</li>
-  <li><code class="highlighter-rouge">CRhinoGetNumber</code>: SDK user interface tool used to get floating point values.</li>
-  <li><code class="highlighter-rouge">CRhinoGetInteger</code>: SDK user interface tool used to get integer values.</li>
-  <li><code class="highlighter-rouge">CRhinoGetAngle</code>: SDK user interface tool used to get angles.</li>
-  <li><code class="highlighter-rouge">CRhinoGetDistance</code>: SDK user interface tool used to get distances.</li>
-  <li><code class="highlighter-rouge">CRhinoGetOption</code>: SDK user interface tool used to get command line options.</li>
+  <li><code>CRhinoGetObject</code>: SDK user interface tool used to get objects.</li>
+  <li><code>CRhinoGetPoint</code>:  SDK user interface tool used to get points.</li>
+  <li><code>CRhinoGetString</code>: SDK user interface tool used to get strings.</li>
+  <li><code>CRhinoGetNumber</code>: SDK user interface tool used to get floating point values.</li>
+  <li><code>CRhinoGetInteger</code>: SDK user interface tool used to get integer values.</li>
+  <li><code>CRhinoGetAngle</code>: SDK user interface tool used to get angles.</li>
+  <li><code>CRhinoGetDistance</code>: SDK user interface tool used to get distances.</li>
+  <li><code>CRhinoGetOption</code>: SDK user interface tool used to get command line options.</li>
 </ul>
 
-<p>Each <code class="highlighter-rouge">CRhinoGet</code> derived classes can, in addition to its primary function, prompt the user for additional options.  These options display on the command following the developer specified prompt, and appear as clickable hyperlinks.</p>
+<p>Each <code>CRhinoGet</code> derived classes can, in addition to its primary function, prompt the user for additional options.  These options display on the command following the developer specified prompt, and appear as clickable hyperlinks.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following example code demonstrates how to add command line options to some user interaction.  In this example, we use the <code class="highlighter-rouge">CRhinoGetOption</code> class, which is only capable of displaying command line options.  But, we could have used any of the above <code class="highlighter-rouge">CRhinoGet</code> derived classes.</p>
+<p>The following example code demonstrates how to add command line options to some user interaction.  In this example, we use the <code>CRhinoGetOption</code> class, which is only capable of displaying command line options.  But, we could have used any of the above <code>CRhinoGet</code> derived classes.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestOptions</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommandOptionValue</span> <span class="n">list_items</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
-  <span class="n">list_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Item0"</span><span class="p">);</span>
-  <span class="n">list_items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Item1"</span><span class="p">);</span>
-  <span class="n">list_items</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Item2"</span><span class="p">);</span>
-  <span class="n">list_items</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Item3"</span><span class="p">);</span>
-  <span class="n">list_items</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Item4"</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestOptions::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoCommandOptionValue list_items[5];
+  list_items[0] = RHCMDOPTVALUE(L"Item0");
+  list_items[1] = RHCMDOPTVALUE(L"Item1");
+  list_items[2] = RHCMDOPTVALUE(L"Item2");
+  list_items[3] = RHCMDOPTVALUE(L"Item3");
+  list_items[4] = RHCMDOPTVALUE(L"Item4");
 
-  <span class="n">CRhinoGetOption</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Command options"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
+  CRhinoGetOption go;
+  go.SetCommandPrompt( L"Command options" );
+  go.AcceptNothing();
 
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">ClearCommandOptions</span><span class="p">();</span>
+  for(;;)
+  {
+    go.ClearCommandOptions();
 
-    <span class="kt">int</span> <span class="n">nval_option_index</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOptionInteger</span><span class="p">(</span>
-        <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Integer"</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">m_nVal</span><span class="p">,</span> <span class="s">L"integer value"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">99</span> <span class="p">);</span>
-    <span class="kt">int</span> <span class="n">dval_option_index</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOptionNumber</span><span class="p">(</span>
-        <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Double"</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">m_dVal</span><span class="p">,</span> <span class="s">L"double value"</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">99.9</span> <span class="p">);</span>
-    <span class="kt">int</span> <span class="n">bval_option_index</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOptionToggle</span><span class="p">(</span>
-        <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Boolean"</span><span class="p">),</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"False"</span><span class="p">),</span> <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"True"</span><span class="p">),</span>
-        <span class="n">m_bVal</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_bVal</span> <span class="p">);</span>
-    <span class="kt">int</span> <span class="n">list_option_index</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOptionList</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"List"</span><span class="p">),</span>
-        <span class="mi">5</span><span class="p">,</span> <span class="n">list_items</span><span class="p">,</span> <span class="n">m_list_index</span> <span class="p">);</span>
-    <span class="kt">int</span> <span class="n">test_option_index</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Test"</span><span class="p">)</span> <span class="p">);</span>
+    int nval_option_index = go.AddCommandOptionInteger(
+        RHCMDOPTNAME(L"Integer"), &amp;m_nVal, L"integer value", 1, 99 );
+    int dval_option_index = go.AddCommandOptionNumber(
+        RHCMDOPTNAME(L"Double"), &amp;m_dVal, L"double value", FALSE, 0.1, 99.9 );
+    int bval_option_index = go.AddCommandOptionToggle(
+        RHCMDOPTNAME(L"Boolean"), RHCMDOPTVALUE(L"False"), RHCMDOPTVALUE(L"True"),
+        m_bVal, &amp;m_bVal );
+    int list_option_index = go.AddCommandOptionList( RHCMDOPTNAME(L"List"),
+        5, list_items, m_list_index );
+    int test_option_index = go.AddCommandOption( RHCMDOPTNAME(L"Test") );
 
-    <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
+    CRhinoGet::result res = go.GetOption();
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">nothing</span> <span class="p">)</span>
-      <span class="k">break</span><span class="p">;</span>
+    if( res == CRhinoGet::nothing )
+      break;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">cancel</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+    if( res == CRhinoGet::cancel )
+      return CRhinoCommand::cancel;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">option</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+    if( res != CRhinoGet::option )
+      return CRhinoCommand::failure;
 
-    <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">option</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+    const CRhinoCommandOption* option = go.Option();
+    if( !option )
+      return CRhinoCommand::failure;
 
-    <span class="kt">int</span> <span class="n">option_index</span> <span class="o">=</span> <span class="n">option</span><span class="o">-&gt;</span><span class="n">m_option_index</span><span class="p">;</span>
+    int option_index = option-&gt;m_option_index;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">nval_option_index</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span> <span class="c1">// nothing to do
-</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">dval_option_index</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span> <span class="c1">// nothing to do
-</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">bval_option_index</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span> <span class="c1">// nothing to do
-</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">list_option_index</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_list_index</span> <span class="o">=</span> <span class="n">option</span><span class="o">-&gt;</span><span class="n">m_list_option_current</span><span class="p">;</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+    if( option_index == nval_option_index )
+      continue; // nothing to do
+
+    if( option_index == dval_option_index )
+      continue; // nothing to do
+
+    if( option_index == bval_option_index )
+      continue; // nothing to do
+
+    if( option_index == list_option_index )
+    {
+      m_list_index = option-&gt;m_list_option_current;
+      continue;
+    }
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -242,71 +242,70 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-      <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve to divide"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+      const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve to divide" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; objref = go.Object(0);
+  const ON_Curve* crv = objref.Curve();
+  if( !crv )
+    return CRhinoCommand::failure;
 
-  <span class="kt">double</span> <span class="n">crv_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetLength</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">crv_length</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv_length</span> <span class="o">&lt;</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  double crv_length = 0.0;
+  crv-&gt;GetLength( &amp;crv_length );
+  if( crv_length &lt; ON_ZERO_TOLERANCE )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_wString</span> <span class="n">s</span><span class="p">;</span>
-  <span class="n">s</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"Curve length is %g. Segment Length"</span><span class="p">,</span> <span class="n">crv_length</span> <span class="p">);</span>
+  ON_wString s;
+  s.Format( L"Curve length is %g. Segment Length", crv_length );
 
-  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">s</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetUpperLimit</span><span class="p">(</span> <span class="n">crv_length</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( s );
+  gn.SetLowerLimit( 0.0, TRUE );
+  gn.SetUpperLimit( crv_length, TRUE );
+  gn.GetNumber();
+  if( gn.CommandResult() != CRhinoCommand::success )
+    return gn.CommandResult();
 
-  <span class="kt">double</span> <span class="n">seg_length</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="kt">int</span> <span class="n">seg_count</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">floor</span><span class="p">(</span> <span class="n">crv_length</span> <span class="o">/</span> <span class="n">seg_length</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">fractional_end</span> <span class="o">=</span> <span class="p">(</span><span class="n">seg_count</span> <span class="o">*</span> <span class="n">seg_length</span><span class="p">)</span> <span class="o">/</span> <span class="n">crv_length</span><span class="p">;</span>
+  double seg_length = gn.Number();
+  int seg_count = (int)floor( crv_length / seg_length );
+  double fractional_end = (seg_count * seg_length) / crv_length;
 
-  <span class="kt">double</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">;</span>
-  <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetDomain</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">t0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t1</span> <span class="p">);</span>
-  <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNormalizedArcLengthPoint</span><span class="p">(</span> <span class="n">fractional_end</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t1</span> <span class="p">);</span>
+  double t0, t1;
+  crv-&gt;GetDomain( &amp;t0, &amp;t1 );
+  crv-&gt;GetNormalizedArcLengthPoint( fractional_end, &amp;t1 );
 
-  <span class="n">seg_count</span><span class="o">++</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span> <span class="n">seg_count</span> <span class="p">);</span>
-  <span class="n">t</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">seg_count</span> <span class="p">);</span>
+  seg_count++;
+  ON_SimpleArray&lt;double&gt; t( seg_count );
+  t.SetCount( seg_count );
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">seg_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">param</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">seg_count</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">param</span><span class="p">;</span>
-  <span class="p">}</span>
+  for( int i = 0; i &lt; seg_count; i++ )
+  {
+    double param = (double)i / ((double)seg_count-1);
+    t[i] = param;
+  }
 
-  <span class="n">ON_Interval</span> <span class="n">sub_domain</span><span class="p">(</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="p">);</span>
-  <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNormalizedArcLengthPoints</span><span class="p">(</span> <span class="n">seg_count</span><span class="p">,</span>
-      <span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-      <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0e-8</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sub_domain</span> <span class="p">);</span>
+  ON_Interval sub_domain( t0, t1 );
+  crv-&gt;GetNormalizedArcLengthPoints( seg_count,
+      (double*)&amp;t[0], (double*)&amp;t[0],
+      0.0, 1.0e-8, &amp;sub_domain );
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">seg_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="p">}</span>
+  for( int i = 0; i &lt; seg_count; i++ )
+  {
+    ON_3dPoint pt = crv-&gt;PointAt( t[i] );
+    context.m_doc.AddPointObject( pt );
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  context.m_doc.Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

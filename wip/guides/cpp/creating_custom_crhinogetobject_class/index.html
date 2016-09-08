@@ -323,72 +323,70 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>The <code class="highlighter-rouge">CRhinoGetObject</code> class that is used for interactively picking one or more objects is a large, full-featured class (see <em>rhinoSdkGetObject.h</em> for details). But, on occasion, the class does not offer enough options.  For example, <code class="highlighter-rouge">CRhinoGetObject</code> is capable of picking curve objects.  But, it is not capable of picking polyline curve objects that are closed.  When the required object filtering exceeds the capabilities of the base class, it’s time to derive your own.</p>
+<p>The <code>CRhinoGetObject</code> class that is used for interactively picking one or more objects is a large, full-featured class (see <em>rhinoSdkGetObject.h</em> for details). But, on occasion, the class does not offer enough options.  For example, <code>CRhinoGetObject</code> is capable of picking curve objects.  But, it is not capable of picking polyline curve objects that are closed.  When the required object filtering exceeds the capabilities of the base class, it’s time to derive your own.</p>
 
-<p><code class="highlighter-rouge">CRhinoGetObject</code> has a virtual function named <code class="highlighter-rouge">CustomGeometryFilter()</code> that is called after all obvious geometry filter checks have been performed.  Thus, if you derive a new class from <code class="highlighter-rouge">CRhinoGetObject</code> and override this virtual member, you can filter for most any geometric object or property.</p>
+<p><code>CRhinoGetObject</code> has a virtual function named <code>CustomGeometryFilter()</code> that is called after all obvious geometry filter checks have been performed.  Thus, if you derive a new class from <code>CRhinoGetObject</code> and override this virtual member, you can filter for most any geometric object or property.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following example code demonstrates deriving from <code class="highlighter-rouge">CRhinoGetObject</code>.  In this example, we want to allow the user to only select closed polylines…</p>
+<p>The following example code demonstrates deriving from <code>CRhinoGetObject</code>.  In this example, we want to allow the user to only select closed polylines…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CRhGetClosedPolylineObject</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetObject</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="kt">bool</span> <span class="n">CustomGeometryFilter</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geom</span><span class="p">,</span>
-        <span class="n">RHINO_COMPONENT_INDEX</span> <span class="n">idx</span>
-        <span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-<span class="p">};</span>
+<pre><code class="language-cpp">class CRhGetClosedPolylineObject : public CRhinoGetObject
+{
+public:
+  bool CustomGeometryFilter(
+        const CRhinoObject* obj,
+        const ON_Geometry* geom,
+        RHINO_COMPONENT_INDEX idx
+        ) const;
+};
 
-<span class="kt">bool</span> <span class="n">CRhGetClosedPolylineObject</span><span class="o">::</span><span class="n">CustomGeometryFilter</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geom</span><span class="p">,</span>
-        <span class="n">RHINO_COMPONENT_INDEX</span> <span class="n">idx</span>
-        <span class="p">)</span> <span class="k">const</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">geom</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// is it a polyline?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_PolylineCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">ON_PolylineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">IsPolyline</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="c1">// is is a polycurve that looks like a polyline?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_PolyCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">ON_PolyCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">IsPolyline</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="c1">// is it a [[rhino:nurbs|NURBs]] curve that looks like a polyline?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">ON_Curve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_NurbsCurve</span> <span class="n">n</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">n</span><span class="p">.</span><span class="n">IsClosed</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">n</span><span class="p">.</span><span class="n">IsPolyline</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="p">)</span>
-          <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+bool CRhGetClosedPolylineObject::CustomGeometryFilter(
+        const CRhinoObject* obj,
+        const ON_Geometry* geom,
+        RHINO_COMPONENT_INDEX idx
+        ) const
+{
+  if( geom )
+  {
+    // is it a polyline?
+    if( const ON_PolylineCurve* p = ON_PolylineCurve::Cast(geom) )
+    {
+      if( p-&gt;IsClosed() &amp;&amp; p-&gt;IsPolyline() &gt; 3 )
+        return true;
+    }
+    // is is a polycurve that looks like a polyline?
+    if( const ON_PolyCurve* p = ON_PolyCurve::Cast(geom) )
+    {
+      if( p-&gt;IsClosed() &amp;&amp; p-&gt;IsPolyline() &gt; 3 )
+        return true;
+    }
+    // is it a [[rhino:nurbs|NURBs]] curve that looks like a polyline?
+    if( const ON_Curve* p = ON_Curve::Cast(geom) )
+    {
+      ON_NurbsCurve n;
+      if( p-&gt;GetNurbForm(n) )
+      {
+        if( n.IsClosed() &amp;&amp; n.IsPolyline() &gt; 3 )
+          return true;
+      }
+    }
+  }
+  return false;
+}
 </code></pre>
-</div>
 
 <p>We can use the above class as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhGetClosedPolylineObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select closed polyline"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// TODO...
-</span><span class="p">}</span>
+<pre><code class="language-cpp">CRhGetClosedPolylineObject go;
+go.SetCommandPrompt( L"Select closed polyline" );
+go.SetGeometryFilter( CRhinoGetObject::curve_object );
+go.GetObjects( 1, 1 );
+if( go.CommandResult() == CRhinoCommand::success )
+{
+  // TODO...
+}
 </code></pre>
-</div>
 
         </article>
 

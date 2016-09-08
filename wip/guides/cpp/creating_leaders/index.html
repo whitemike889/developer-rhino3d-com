@@ -306,58 +306,57 @@ $(document).ready(function()
 
 <h2 id="how-to">How To</h2>
 
-<p>Leaders in Rhino are defined by the <code class="highlighter-rouge">ON_Leader2</code> class.  To construct a leader, you must provide:</p>
+<p>Leaders in Rhino are defined by the <code>ON_Leader2</code> class.  To construct a leader, you must provide:</p>
 
 <ol>
-  <li>A plane, or an <code class="highlighter-rouge">ON_Plane</code> object, which defines the plane in which the leader will be located.</li>
+  <li>A plane, or an <code>ON_Plane</code> object, which defines the plane in which the leader will be located.</li>
   <li>Two or more 2D points that line in the plane that you specified above.</li>
 </ol>
 
 <p>In the following sample code, we will construct a simple leader object.  The leader will reside in the world x-y plane and will have four points…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandLeader</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Some set of points that define the leader
-</span>  <span class="n">ON_3dPointArray</span> <span class="n">points</span><span class="p">;</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandLeader::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Some set of points that define the leader
+  ON_3dPointArray points;
+  points.Append( ON_3dPoint(1.0, 1.0, 0.0) );
+  points.Append( ON_3dPoint(5.0, 1.0, 0.0) );
+  points.Append( ON_3dPoint(5.0, 5.0, 0.0) );
+  points.Append( ON_3dPoint(9.0, 5.0, 0.0) );
 
-  <span class="c1">// The plane in which the leader resides
-</span>  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">ON_xy_plane</span><span class="p">;</span>
+  // The plane in which the leader resides
+  ON_Plane plane = ON_xy_plane;
 
-  <span class="c1">// Create the leader
-</span>  <span class="n">ON_Leader2</span> <span class="n">leader</span><span class="p">;</span>
-  <span class="n">leader</span><span class="p">.</span><span class="n">SetPlane</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>
+  // Create the leader
+  ON_Leader2 leader;
+  leader.SetPlane( plane );
 
-  <span class="c1">// Add the points to the leader
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Make sure the points are on the plane
-</span>    <span class="n">ON_2dPoint</span> <span class="n">p2</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">leader</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">ClosestPointTo</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">leader</span><span class="p">.</span><span class="n">m_points</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="n">p2</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="o">*</span><span class="n">leader</span><span class="p">.</span><span class="n">m_points</span><span class="p">.</span><span class="n">Last</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-        <span class="n">leader</span><span class="p">.</span><span class="n">m_points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">p2</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Add the points to the leader
+  int i;
+  for( i = 0; i &lt; points.Count(); i++ )
+  {
+    // Make sure the points are on the plane
+    ON_2dPoint p2;
+    if( leader.m_plane.ClosestPointTo(points[i], &amp;p2.x, &amp;p2.y) )
+    {
+      if( leader.m_points.Count() &lt; 1 | p2.DistanceTo(*leader.m_points.Last()) &gt; ON_SQRT_EPSILON )
+        leader.m_points.Append( p2 );
+    }
+  }
 
-  <span class="c1">// Create the leader object
-</span>  <span class="n">CRhinoAnnotationLeader</span><span class="o">*</span> <span class="n">leader_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoAnnotationLeader</span><span class="p">();</span>
-  <span class="c1">// Add our leader to the object
-</span>  <span class="n">leader_object</span><span class="o">-&gt;</span><span class="n">SetAnnotation</span><span class="p">(</span> <span class="n">leader</span> <span class="p">);</span>
+  // Create the leader object
+  CRhinoAnnotationLeader* leader_object = new CRhinoAnnotationLeader();
+  // Add our leader to the object
+  leader_object-&gt;SetAnnotation( leader );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">leader_object</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">else</span>
-    <span class="k">delete</span> <span class="n">leader_object</span><span class="p">;</span> <span class="c1">// error
-</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  if( context.m_doc.AddObject(leader_object) )
+    context.m_doc.Redraw();
+  else
+    delete leader_object; // error
+
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

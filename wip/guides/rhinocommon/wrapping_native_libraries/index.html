@@ -471,26 +471,24 @@ $(document).ready(function()
   <li>
     <p>Open the <strong>SampleLibrary.cpp</strong> file and take a look.  Nearly all of the code in this file is auto-generated boilerplate.  The only important section to pay attention to is:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> SAMPLELIBRARY_C_FUNCTION
+    <pre><code> SAMPLELIBRARY_C_FUNCTION
  double Add(int a, double b)
  {
    return a + b;
  }  
 </code></pre>
-    </div>
 
-    <p>…even if you are not a C/C++ programmer, this C function should be clear to you.  <code class="highlighter-rouge">Add</code> takes a native <code class="highlighter-rouge">int</code> and a native <code class="highlighter-rouge">double</code>, and returns the sum of the inputs as a native <code class="highlighter-rouge">double</code>.  Take note of the <code class="highlighter-rouge">SAMPLELIBRARY_C_FUNCTION</code> decoration above the implementation…we will talk about that in a moment.</p>
+    <p>…even if you are not a C/C++ programmer, this C function should be clear to you.  <code>Add</code> takes a native <code>int</code> and a native <code>double</code>, and returns the sum of the inputs as a native <code>double</code>.  Take note of the <code>SAMPLELIBRARY_C_FUNCTION</code> decoration above the implementation…we will talk about that in a moment.</p>
   </li>
-  <li>In the <strong>Header Files</strong> filter, find and open the <strong>SampleLibraryInclude.h</strong> header file.  The first thing to note is that there are two well <code class="highlighter-rouge">#defined</code> sections to this header: one that relates to Windows (<code class="highlighter-rouge">#if defined (_WIN32)</code>) and one that relates to Mac (<code class="highlighter-rouge">#if defined(__APPLE__)</code>).  The code in these #defines are basically telling the linker to export functions in a specific way.  The reason they are different on each platform is that Dynamic Link Libraries (DLLs) are implemented differently in Windows and OS X - each platform has a unique way of telling the linker what to do with the library.  How this works is not really important at this juncture, just know that these MACROs tell the linker to export the functions.  More importantly…</li>
+  <li>In the <strong>Header Files</strong> filter, find and open the <strong>SampleLibraryInclude.h</strong> header file.  The first thing to note is that there are two well <code>#defined</code> sections to this header: one that relates to Windows (<code>#if defined (_WIN32)</code>) and one that relates to Mac (<code>#if defined(__APPLE__)</code>).  The code in these #defines are basically telling the linker to export functions in a specific way.  The reason they are different on each platform is that Dynamic Link Libraries (DLLs) are implemented differently in Windows and OS X - each platform has a unique way of telling the linker what to do with the library.  How this works is not really important at this juncture, just know that these MACROs tell the linker to export the functions.  More importantly…</li>
   <li>
     <p>Take a look at the function declaration at the bottom of the file:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> SAMPLELIBRARY_C_FUNCTION
+    <pre><code> SAMPLELIBRARY_C_FUNCTION
  double Add(int a, double b);
 </code></pre>
-    </div>
 
-    <p>…is decorated with the same <code class="highlighter-rouge">SAMPLELIBRARY_C_FUNCTION</code>.</p>
+    <p>…is decorated with the same <code>SAMPLELIBRARY_C_FUNCTION</code>.</p>
   </li>
   <li>This is the decoration that tells the linker to make the function available to outside callers.  By decorating with this macro, the linker adds information to the DLL that makes these functions public.  Without this decoration, these functions would not be available outside the the assembly (.dll or .dylib).  By providing this decoration, we are doing the .NET equivalent of making them “public”.</li>
   <li>Do a “sanity check” and <strong>Build</strong> SampleLibrary to make sure that all your tools are working as expected.  SampleLibrary should build without errors as the native <em>SampleLibrary.dll</em> in the project <em>/bin</em> folder.  Ok, now that we know roughly what is in the native SampleLibrary on Windows, let’s take a look at it on Mac OS X…</li>
@@ -504,7 +502,7 @@ $(document).ready(function()
 <img src="/wip/images/wrapping_native_libraries_03.png" alt="SampleLibrary on OS X" /></li>
   <li>Instead of building a .dll, on OS X we are building <strong>libSampleLibrary.dylib</strong> which - despite the extension - amounts to exactly the same thing as a dll.  For all intents and purposes, SampleLibrary does exactly the same thing on OS X that it does on Windows and the source is the same.</li>
   <li><strong>Build</strong> SampleLibrary using Xcode to make sure that it builds successfully.</li>
-  <li><strong>Quit</strong> Xcode.  On OS X, we are actually going to use command line <code class="highlighter-rouge">xcodebuild</code> from Xamarin Studio to build our native library, but we’ll talk about that below.</li>
+  <li><strong>Quit</strong> Xcode.  On OS X, we are actually going to use command line <code>xcodebuild</code> from Xamarin Studio to build our native library, but we’ll talk about that below.</li>
 </ol>
 
 <p>Now that we have examined the simple native SampleLibrary, let’s turn our attention to the .NET portion of our wrapping code…</p>
@@ -525,11 +523,11 @@ $(document).ready(function()
   <li>Before we do anything, let’s build and test the plugin.  Build <strong>SampleRhino.Win</strong>.</li>
   <li>Load the <strong>SampleRhino.rhp</strong> in Rhino and run the <strong>SampleRhinoCommand</strong>.  You will be prompted to enter two numbers.  Once you have done that you should see the result in a dialog box…
 <img src="/wip/images/wrapping_native_libraries_05.png" alt="SampleRhino plugin test" /></li>
-  <li>The “additional” calculation for this command was all performed in the native C/C++ SampleLibrary.dll.  Return to <strong>Visual Studio</strong>.  Let’s take a look at how the <code class="highlighter-rouge">Add</code> function is being called.</li>
+  <li>The “additional” calculation for this command was all performed in the native C/C++ SampleLibrary.dll.  Return to <strong>Visual Studio</strong>.  Let’s take a look at how the <code>Add</code> function is being called.</li>
   <li>
-    <p>Open <strong>SampleRhinoCommand.cs</strong> and find the <code class="highlighter-rouge">RunCommand</code> method.  After prompting the user to enter two numbers, we see the following code</p>
+    <p>Open <strong>SampleRhinoCommand.cs</strong> and find the <code>RunCommand</code> method.  After prompting the user to enter two numbers, we see the following code</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> var result = RhinoMath.UnsetValue;
+    <pre><code> var result = RhinoMath.UnsetValue;
  try
  {
    result = UnsafeNativeMethods.Add(first, second);
@@ -540,49 +538,44 @@ $(document).ready(function()
    return Result.Failure;
  }
 </code></pre>
-    </div>
   </li>
-  <li>The <code class="highlighter-rouge">Add(first, second)</code> method is being called on the <code class="highlighter-rouge">UnsafeNativeMethods</code> class.  Open <strong>UnsafeNativeMethods.cs</strong>.  Let’s go through this class line-by-line.</li>
-  <li>The necessary functionality to use PInvoke is contained in the <code class="highlighter-rouge">System.Runtime.InteropServices</code> namespace, specifically the <code class="highlighter-rouge">DllImport</code> function.</li>
+  <li>The <code>Add(first, second)</code> method is being called on the <code>UnsafeNativeMethods</code> class.  Open <strong>UnsafeNativeMethods.cs</strong>.  Let’s go through this class line-by-line.</li>
+  <li>The necessary functionality to use PInvoke is contained in the <code>System.Runtime.InteropServices</code> namespace, specifically the <code>DllImport</code> function.</li>
   <li>
     <p><strong>UnsafeNativeMethods.cs</strong> contains the class:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> internal static class Import
+    <pre><code> internal static class Import
  {
    public const string lib = "SampleLibrary.dll";
  }
 </code></pre>
-    </div>
 
-    <p>…which declares a <code class="highlighter-rouge">lib</code> string member.  On Windows, it is necessary to explicitly state the name of the native dll being called (on OS X, a <em>.dll.config</em> file is used to point to a .dylib - see below).</p>
+    <p>…which declares a <code>lib</code> string member.  On Windows, it is necessary to explicitly state the name of the native dll being called (on OS X, a <em>.dll.config</em> file is used to point to a .dylib - see below).</p>
   </li>
   <li>
-    <p>The <code class="highlighter-rouge">UnsafeNativeMethods</code> class itself contains a single function…</p>
+    <p>The <code>UnsafeNativeMethods</code> class itself contains a single function…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> internal static extern double Add(int a, double b);
+    <pre><code> internal static extern double Add(int a, double b);
 </code></pre>
-    </div>
 
     <p>…does this look familiar?</p>
   </li>
   <li>
-    <p>The <code class="highlighter-rouge">Add</code> function is decorated with an <a href="https://msdn.microsoft.com/en-us/library/z0w1kczw.aspx">Attribute</a>:</p>
+    <p>The <code>Add</code> function is decorated with an <a href="https://msdn.microsoft.com/en-us/library/z0w1kczw.aspx">Attribute</a>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> [DllImport(Import.lib, CallingConvention = CallingConvention.Cdecl)]
+    <pre><code> [DllImport(Import.lib, CallingConvention = CallingConvention.Cdecl)]
 </code></pre>
-    </div>
 
-    <p>…this important bit of metadata tells the runtime to look in the native library and call the associated function with a specific language (C) calling convention when the <code class="highlighter-rouge">Add</code> method is called from .NET.  <strong>This is the point at which the link between the managed .NET code and the unmanaged C/C++ code is established.</strong></p>
+    <p>…this important bit of metadata tells the runtime to look in the native library and call the associated function with a specific language (C) calling convention when the <code>Add</code> method is called from .NET.  <strong>This is the point at which the link between the managed .NET code and the unmanaged C/C++ code is established.</strong></p>
   </li>
   <li>Since we are bridging the world of managed and unmanaged code, <strong>we need to be very careful about the types of variables we are using</strong>.  To illustrate this point, let’s change the code and see what happens…</li>
   <li>
-    <p>In <strong>UnsafeNativeMethods</strong> change the function declaration of <code class="highlighter-rouge">Add</code> to accept <code class="highlighter-rouge">double</code>s (instead of <code class="highlighter-rouge">int</code>s) as the first argument…</p>
+    <p>In <strong>UnsafeNativeMethods</strong> change the function declaration of <code>Add</code> to accept <code>double</code>s (instead of <code>int</code>s) as the first argument…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> internal static extern double Add(double a, double b);
+    <pre><code> internal static extern double Add(double a, double b);
 </code></pre>
-    </div>
   </li>
-  <li><strong>Build</strong> the plugin.  No errors or warnings, right?   Now run the plugin and test the <strong>SampleRhinoCommand</strong> with this change.  Try adding 2 + 2.  What happens?  <strong>2 + 2 no longer equals 4</strong>.  That’s bad (hopefully, Rhino did not crash).  The compiler did not detect the error we introduced.  Change the type of argument <code class="highlighter-rouge">a</code> back to an <code class="highlighter-rouge">int</code>, rather than a <code class="highlighter-rouge">double</code> and save the file.</li>
+  <li><strong>Build</strong> the plugin.  No errors or warnings, right?   Now run the plugin and test the <strong>SampleRhinoCommand</strong> with this change.  Try adding 2 + 2.  What happens?  <strong>2 + 2 no longer equals 4</strong>.  That’s bad (hopefully, Rhino did not crash).  The compiler did not detect the error we introduced.  Change the type of argument <code>a</code> back to an <code>int</code>, rather than a <code>double</code> and save the file.</li>
   <li><strong>You must ensure that the function in .NET exactly matches the function declaration in the header file made in the unmanaged code</strong> (in this case, in <em>SampleLibraryInclude.h</em>).  Managing these correspondences is challenging with all but the most trivial libraries.  In <a href="/wip/guides/rhinocommon/using_methodgen">Using methodgen</a>, we will discuss a way of generating these function signatures using a utility program we wrote to maintain RhinoCommon.  Before we do that, let’s turn our attention to…</li>
 </ol>
 
@@ -598,29 +591,27 @@ $(document).ready(function()
   <li>
     <p>There is one critical difference between how the Windows and OS X wrapping works and it has little to do with code.  As we saw above, <strong>UnsafeNativeMethods.cs</strong> contains the class:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> internal static class Import
+    <pre><code> internal static class Import
  {
    public const string lib = "SampleLibrary.dll";
  }
 </code></pre>
-    </div>
 
-    <p>…which declares a <code class="highlighter-rouge">lib</code> string member.  On Windows, it was necessary to explicitly state the name of the native dll being called.  On OS X, this works a little differently.  In order to understand what is different, let’s look at how <strong>SampleLibrary.dll</strong> gets built on OS X…</p>
+    <p>…which declares a <code>lib</code> string member.  On Windows, it was necessary to explicitly state the name of the native dll being called.  On OS X, this works a little differently.  In order to understand what is different, let’s look at how <strong>SampleLibrary.dll</strong> gets built on OS X…</p>
   </li>
-  <li>In the <a href="#mac">SampleLibrary (Mac) section above</a>, we built SampleLibrary using Xcode.  We mentioned in passing that we could build this using <code class="highlighter-rouge">xcodebuild</code> command line from Xamarin Studio.  Let’s take a look.</li>
+  <li>In the <a href="#mac">SampleLibrary (Mac) section above</a>, we built SampleLibrary using Xcode.  We mentioned in passing that we could build this using <code>xcodebuild</code> command line from Xamarin Studio.  Let’s take a look.</li>
   <li>In the <strong>Solution Explorer</strong>, <strong>double-click</strong> the name of the <strong>SampleRhino.Mac</strong> project to bring up the <strong>Project Options</strong> dialog.  Navigate to the <strong>Build</strong> &gt; <strong>Custom Commands</strong> section…
 <img src="/wip/images/wrapping_native_libraries_07.png" alt="SampleRhino.Mac Project Options" /></li>
   <li>There are 5 <strong>Custom Commands</strong>:
     <ol>
-      <li><strong>Before Build</strong>: This before build steps runs a python script called <em>build_native.py</em> that uses <code class="highlighter-rouge">xcodebuild</code> to build the <em>SampleLibrary.xcodeproj</em>, which builds <em>libSampleLibrary.dylib</em>.</li>
+      <li><strong>Before Build</strong>: This before build steps runs a python script called <em>build_native.py</em> that uses <code>xcodebuild</code> to build the <em>SampleLibrary.xcodeproj</em>, which builds <em>libSampleLibrary.dylib</em>.</li>
       <li>
         <p><strong>After Build 1</strong>: This after build step copies the <em>SampleLibrary.dll.config</em> file from the <em>/SampleLibrary</em> folder to the target folder.  <em>SampleLibrary.dll.config</em> creates a mapping between calls to <em>SampleLibrary.dll</em> and <em>libSampleLibrary.dylib</em>…</p>
 
-        <div class="highlighter-rouge"><pre class="highlight"><code> &lt;configuration&gt;
+        <pre><code> &lt;configuration&gt;
     &lt;dllmap dll=“SampleLibrary.dll” target="libSampleLibrary.dylib" /&gt;
  &lt;/configuration&gt;
 </code></pre>
-        </div>
 
         <p>On OS X, both the <em>.dll.config</em> file and the <em>.dylib</em> must be in the same folder as the calling .NET dll.</p>
       </li>
@@ -629,7 +620,7 @@ $(document).ready(function()
       <li><strong>After Clean 1</strong>: This after build step deletes the <em>SampleLibrary.dll.config</em> when a clean is performed.</li>
     </ol>
   </li>
-  <li>When you <strong>Build</strong> and run <strong>SampleRhino.Mac</strong> you can watch the build steps in the <strong>output</strong> (right) side of the <strong>Errors</strong> panel.  You may notice that <em>build_native.py</em> will only build <em>libSampleLibrary.dylib</em> if it does not find a previous version.  You can overwrite this with the <code class="highlighter-rouge">-o   --overwrite</code> command argument if you want to build the native library every time you build the .NET wrapping dll.</li>
+  <li>When you <strong>Build</strong> and run <strong>SampleRhino.Mac</strong> you can watch the build steps in the <strong>output</strong> (right) side of the <strong>Errors</strong> panel.  You may notice that <em>build_native.py</em> will only build <em>libSampleLibrary.dylib</em> if it does not find a previous version.  You can overwrite this with the <code>-o   --overwrite</code> command argument if you want to build the native library every time you build the .NET wrapping dll.</li>
 </ol>
 
 <hr />

@@ -247,48 +247,47 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddChildLayer</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get an existing layer
-</span>    <span class="kt">string</span> <span class="n">default_name</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="n">CurrentLayer</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddChildLayer(Rhino.RhinoDoc doc)
+  {
+    // Get an existing layer
+    string default_name = doc.Layers.CurrentLayer.Name;
 
-    <span class="c1">// Prompt the user to enter a layer name
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetString</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetString</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of existing layer"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetDefaultString</span><span class="p">(</span><span class="n">default_name</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Prompt the user to enter a layer name
+    Rhino.Input.Custom.GetString gs = new Rhino.Input.Custom.GetString();
+    gs.SetCommandPrompt("Name of existing layer");
+    gs.SetDefaultString(default_name);
+    gs.AcceptNothing(true);
+    gs.Get();
+    if (gs.CommandResult() != Rhino.Commands.Result.Success)
+      return gs.CommandResult();
 
-    <span class="c1">// Was a layer named entered?
-</span>    <span class="kt">string</span> <span class="n">layer_name</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">StringResult</span><span class="p">().</span><span class="nf">Trim</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">index</span><span class="p">&lt;</span><span class="m">0</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+    // Was a layer named entered?
+    string layer_name = gs.StringResult().Trim();
+    int index = doc.Layers.Find(layer_name, true);
+    if (index&lt;0)
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Layer</span> <span class="n">parent_layer</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    Rhino.DocObjects.Layer parent_layer = doc.Layers[index];
 
-    <span class="c1">// Create a child layer
-</span>    <span class="kt">string</span> <span class="n">child_name</span> <span class="p">=</span> <span class="n">parent_layer</span><span class="p">.</span><span class="n">Name</span> <span class="p">+</span> <span class="s">"_child"</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Layer</span> <span class="n">childlayer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="nf">Layer</span><span class="p">();</span>
-    <span class="n">childlayer</span><span class="p">.</span><span class="n">ParentLayerId</span> <span class="p">=</span> <span class="n">parent_layer</span><span class="p">.</span><span class="n">Id</span><span class="p">;</span>
-    <span class="n">childlayer</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="n">child_name</span><span class="p">;</span>
-    <span class="n">childlayer</span><span class="p">.</span><span class="n">Color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">;</span>
+    // Create a child layer
+    string child_name = parent_layer.Name + "_child";
+    Rhino.DocObjects.Layer childlayer = new Rhino.DocObjects.Layer();
+    childlayer.ParentLayerId = parent_layer.Id;
+    childlayer.Name = child_name;
+    childlayer.Color = System.Drawing.Color.Red;
 
-    <span class="n">index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">childlayer</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to add {0} layer."</span><span class="p">,</span> <span class="n">child_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    index = doc.Layers.Add(childlayer);
+    if (index &lt; 0)
+    {
+      Rhino.RhinoApp.WriteLine("Unable to add {0} layer.", child_name);
+      return Rhino.Commands.Result.Failure;
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddChildLayer(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -331,46 +330,45 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Drawing.Color</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Drawing.Color
 
-<span class="k">def</span> <span class="nf">AddChildLayer</span><span class="p">():</span>
-    <span class="c"># Get an existing layer</span>
-    <span class="n">default_name</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">CurrentLayer</span><span class="o">.</span><span class="n">Name</span>
-    <span class="c"># Prompt the user to enter a layer name</span>
-    <span class="n">gs</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetString</span><span class="p">()</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of existing layer"</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SetDefaultString</span><span class="p">(</span><span class="n">default_name</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">AcceptNothing</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def AddChildLayer():
+    # Get an existing layer
+    default_name = scriptcontext.doc.Layers.CurrentLayer.Name
+    # Prompt the user to enter a layer name
+    gs = Rhino.Input.Custom.GetString()
+    gs.SetCommandPrompt("Name of existing layer")
+    gs.SetDefaultString(default_name)
+    gs.AcceptNothing(True)
+    gs.Get()
+    if gs.CommandResult()!=Rhino.Commands.Result.Success:
+        return gs.CommandResult()
 
-    <span class="c"># Was a layer named entered?</span>
-    <span class="n">layer_name</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">StringResult</span><span class="p">()</span><span class="o">.</span><span class="n">Trim</span><span class="p">()</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">index</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+    # Was a layer named entered?
+    layer_name = gs.StringResult().Trim()
+    index = scriptcontext.doc.Layers.Find(layer_name, True)
+    if index&lt;0: return Rhino.Commands.Result.Cancel
 
-    <span class="n">parent_layer</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    parent_layer = scriptcontext.doc.Layers[index]
 
-    <span class="c"># Create a child layer</span>
-    <span class="n">child_name</span> <span class="o">=</span> <span class="n">parent_layer</span><span class="o">.</span><span class="n">Name</span> <span class="o">+</span> <span class="s">"_child"</span>
-    <span class="n">childlayer</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">Layer</span><span class="p">()</span>
-    <span class="n">childlayer</span><span class="o">.</span><span class="n">ParentLayerId</span> <span class="o">=</span> <span class="n">parent_layer</span><span class="o">.</span><span class="n">Id</span>
-    <span class="n">childlayer</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="n">child_name</span>
-    <span class="n">childlayer</span><span class="o">.</span><span class="n">Color</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Red</span>
+    # Create a child layer
+    child_name = parent_layer.Name + "_child"
+    childlayer = Rhino.DocObjects.Layer()
+    childlayer.ParentLayerId = parent_layer.Id
+    childlayer.Name = child_name
+    childlayer.Color = System.Drawing.Color.Red
 
-    <span class="n">index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">childlayer</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">index</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-      <span class="k">print</span> <span class="s">"Unable to add"</span><span class="p">,</span> <span class="n">child_name</span><span class="p">,</span> <span class="s">"layer."</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    index = scriptcontext.doc.Layers.Add(childlayer)
+    if index&lt;0:
+      print "Unable to add", child_name, "layer."
+      return Rhino.Commands.Result.Failure
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddChildLayer</span><span class="p">()</span>
+if __name__=="__main__":
+    AddChildLayer()
 </code></pre>
-</div>
 
 </div>
 

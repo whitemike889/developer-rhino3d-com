@@ -242,74 +242,73 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface or polysurface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-                        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface or polysurface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object |
+                        CRhinoGetObject::polysrf_object );
+  go.AcceptNothing();
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">object_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="n">object_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">object_ref</span><span class="p">.</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">object</span> <span class="o">|</span> <span class="o">!</span><span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; object_ref = go.Object(0);
+  const CRhinoObject* object = object_ref.Object();
+  const ON_Brep* brep = object_ref.Brep();
+  if( !object | !brep )
+    return failure;
 
-  <span class="n">object</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
+  object-&gt;Select( false );
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">curve_array</span><span class="p">(</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_E</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">);</span>
+  ON_SimpleArray&lt;const ON_Curve*&gt; curve_array( brep-&gt;m_E.Count() );
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_E</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_BrepEdge</span><span class="o">&amp;</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_E</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  for( int i = 0; i &lt; brep-&gt;m_E.Count(); i++ )
+  {
+    const ON_BrepEdge&amp; edge = brep-&gt;m_E[i];
 
-    <span class="c1">// Find only the naked edges
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">edge</span><span class="p">.</span><span class="n">m_ti</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">edge</span><span class="p">.</span><span class="n">m_c3i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">edge</span><span class="p">.</span><span class="n">DuplicateCurve</span><span class="p">();</span>
+    // Find only the naked edges
+    if( edge.m_ti.Count() == 1 &amp;&amp; edge.m_c3i &gt;= 0 )
+    {
+      ON_Curve* curve = edge.DuplicateCurve();
 
-      <span class="c1">// Make the curve direction go in the natural
-</span>      <span class="c1">// boundary loop direction so that the curve
-</span>      <span class="c1">// directions come out consistantly
-</span>      <span class="k">if</span><span class="p">(</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_T</span><span class="p">[</span><span class="n">edge</span><span class="p">.</span><span class="n">m_ti</span><span class="p">[</span><span class="mi">0</span><span class="p">]].</span><span class="n">m_bRev3d</span> <span class="p">)</span>
-        <span class="n">curve</span><span class="o">-&gt;</span><span class="n">Reverse</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_T</span><span class="p">[</span><span class="n">edge</span><span class="p">.</span><span class="n">m_ti</span><span class="p">[</span><span class="mi">0</span><span class="p">]].</span><span class="n">Face</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">m_bRev</span><span class="p">)</span>
-        <span class="n">curve</span><span class="o">-&gt;</span><span class="n">Reverse</span><span class="p">();</span>
+      // Make the curve direction go in the natural
+      // boundary loop direction so that the curve
+      // directions come out consistantly
+      if( brep-&gt;m_T[edge.m_ti[0]].m_bRev3d )
+        curve-&gt;Reverse();
+      if( brep-&gt;m_T[edge.m_ti[0]].Face()-&gt;m_bRev)
+        curve-&gt;Reverse();
 
-      <span class="n">curve_array</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">curve</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      curve_array.Append( curve );
+    }
+  }
 
-  <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">2.1</span> <span class="o">*</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">output_array</span><span class="p">;</span>
+  double tol = 2.1 * RhinoApp().ActiveDoc()-&gt;AbsoluteTolerance();
+  ON_SimpleArray&lt;ON_Curve*&gt; output_array;
 
-  <span class="c1">// Join the curves
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoMergeCurves</span><span class="p">(</span><span class="n">curve_array</span><span class="p">,</span> <span class="n">output_array</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">output_array</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">;</span>
-      <span class="n">curve_object</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">output_array</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">curve_object</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">curve_object</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
-      <span class="k">else</span>
-        <span class="k">delete</span> <span class="n">curve_object</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Join the curves
+  if( RhinoMergeCurves(curve_array, output_array, tol) )
+  {
+    for( int i = 0; i &lt; output_array.Count(); i++ )
+    {
+      CRhinoCurveObject* curve_object = new CRhinoCurveObject;
+      curve_object-&gt;SetCurve( output_array[i]);
+      if( context.m_doc.AddObject(curve_object) )
+        curve_object-&gt;Select();
+      else
+        delete curve_object;
+    }
+  }
 
-  <span class="c1">// Don't leak memory
-</span>  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">curve_array</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="k">delete</span> <span class="n">curve_array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  // Don't leak memory
+  for( int i = 0; i &lt; curve_array.Count(); i++ )
+    delete curve_array[i];
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  context.m_doc.Redraw();
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

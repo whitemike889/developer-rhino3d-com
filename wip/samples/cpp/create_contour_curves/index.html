@@ -242,118 +242,117 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-      <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">filter</span> <span class="o">=</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-                        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="o">|</span>
-                        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span><span class="p">;</span>
-  <span class="c1">// Prompt for object to contour
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object to contour"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">filter</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+      const CRhinoCommandContext&amp; context )
+{
+  unsigned int filter = CRhinoGetObject::surface_object |
+                        CRhinoGetObject::polysrf_object |
+                        CRhinoGetObject::mesh_object;
+  // Prompt for object to contour
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select object to contour" );
+  go.SetGeometryFilter( filter );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Validate selection
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Geometry</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">geom</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Validate selection
+  const CRhinoObjRef&amp; objref = go.Object(0);
+  const ON_Geometry* geom = objref.Geometry();
+  if( !geom )
+    return failure;
 
-  <span class="c1">// Prompt for base point
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Contour plane base point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for base point
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Contour plane base point" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">basept</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint basept = gp.Point();
 
-  <span class="c1">// Prompt for end point
-</span>  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">basept</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Direction perpendicular to contour planes"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for end point
+  gp.DrawLineFromPoint( basept, true );
+  gp.SetCommandPrompt( L"Direction perpendicular to contour planes" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// Verify base and end points are not the same
-</span>  <span class="n">ON_3dPoint</span> <span class="n">endpt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">basept</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">endpt</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Verify base and end points are not the same
+  ON_3dPoint endpt = gp.Point();
+  if( basept.DistanceTo(endpt) &lt; ON_ZERO_TOLERANCE )
+    return nothing;
 
-  <span class="c1">// Prompt for distance between contours
-</span>  <span class="n">CRhinoGetDistance</span> <span class="n">gd</span><span class="p">;</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Distance between contours"</span> <span class="p">);</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="mf">1.0</span> <span class="p">);</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">GetDistance</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gd</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gd</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for distance between contours
+  CRhinoGetDistance gd;
+  gd.SetCommandPrompt( L"Distance between contours" );
+  gd.SetDefaultNumber( 1.0 );
+  gd.GetDistance();
+  if( gd.CommandResult() != success )
+    return gd.CommandResult();
 
-  <span class="c1">// Make sure interval is reasonable
-</span>  <span class="kt">double</span> <span class="n">interval</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span> <span class="n">gd</span><span class="p">.</span><span class="n">Distance</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">interval</span> <span class="o">&lt;</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Make sure interval is reasonable
+  double interval = fabs( gd.Distance() );
+  if( interval &lt; ON_ZERO_TOLERANCE )
+    return nothing;
 
-  <span class="c1">// Create contour input
-</span>  <span class="n">CRhinoContourInput</span> <span class="n">contour</span><span class="p">;</span>
-  <span class="n">contour</span><span class="p">.</span><span class="n">m_geom</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">geom</span> <span class="p">);</span>
-  <span class="n">contour</span><span class="p">.</span><span class="n">m_basept</span> <span class="o">=</span> <span class="n">basept</span><span class="p">;</span>
-  <span class="n">contour</span><span class="p">.</span><span class="n">m_endpt</span> <span class="o">=</span> <span class="n">endpt</span><span class="p">;</span>
-  <span class="n">contour</span><span class="p">.</span><span class="n">m_interval</span> <span class="o">=</span> <span class="n">interval</span><span class="p">;</span>
-  <span class="n">contour</span><span class="p">.</span><span class="n">m_limit_range</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  // Create contour input
+  CRhinoContourInput contour;
+  contour.m_geom.Append( geom );
+  contour.m_basept = basept;
+  contour.m_endpt = endpt;
+  contour.m_interval = interval;
+  contour.m_limit_range = false;
 
-  <span class="c1">// Create arrays for contour output
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Polyline</span><span class="o">*&gt;</span> <span class="n">pline_array</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">crv_array</span><span class="p">;</span>
+  // Create arrays for contour output
+  ON_SimpleArray&lt;ON_Polyline*&gt; pline_array;
+  ON_SimpleArray&lt;ON_Curve*&gt; crv_array;
 
-  <span class="c1">// Make the contours. Note, this function allocates memory
-</span>  <span class="c1">// for new curves and polylines. Thus, we are responsible
-</span>  <span class="c1">// for clean up the memory.
-</span>  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">MakeRhinoContours</span><span class="p">(</span> <span class="n">contour</span><span class="p">,</span> <span class="n">pline_array</span><span class="p">,</span> <span class="n">crv_array</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">UnselectAll</span><span class="p">();</span>
+  // Make the contours. Note, this function allocates memory
+  // for new curves and polylines. Thus, we are responsible
+  // for clean up the memory.
+  bool rc = MakeRhinoContours( contour, pline_array, crv_array );
+  if( !rc )
+    return failure;
+  context.m_doc.UnselectAll();
 
-  <span class="c1">// Process crves created by contouring surfaces and polysurfaces
-</span>  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">crv_array</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">crv_array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crvobj</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">crvobj</span> <span class="p">)</span>
-        <span class="n">crvobj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
+  // Process crves created by contouring surfaces and polysurfaces
+  for( int i = 0; i &lt; crv_array.Count(); i++)
+  {
+    ON_Curve* crv = crv_array[i];
+    if( crv )
+    {
+      CRhinoCurveObject* crvobj = context.m_doc.AddCurveObject( *crv );
+      if( crvobj )
+        crvobj-&gt;Select();
 
-      <span class="c1">// CRhinoDoc::AddCurveObject() makes a copy of the input.
-</span>      <span class="c1">// Thus, we must delete crv, otherwise we will leak memory.
-</span>      <span class="k">delete</span> <span class="n">crv</span><span class="p">;</span>
-      <span class="n">crv_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      // CRhinoDoc::AddCurveObject() makes a copy of the input.
+      // Thus, we must delete crv, otherwise we will leak memory.
+      delete crv;
+      crv_array[i] = 0;
+    }
+  }
 
-  <span class="c1">// Process polylines created by contouring meshes
-</span>  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pline_array</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Polyline</span><span class="o">*</span> <span class="n">pline</span> <span class="o">=</span> <span class="n">pline_array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">pline</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crvobj</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="o">*</span><span class="n">pline</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">crvobj</span> <span class="p">)</span>
-        <span class="n">crvobj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
+  // Process polylines created by contouring meshes
+  for( int i = 0; i &lt; pline_array.Count(); i++)
+  {
+    ON_Polyline* pline = pline_array[i];
+    if( pline )
+    {
+      CRhinoCurveObject* crvobj = context.m_doc.AddCurveObject( *pline );
+      if( crvobj )
+        crvobj-&gt;Select();
 
-      <span class="c1">// CRhinoDoc::AddCurveObject() makes a copy of the input.
-</span>      <span class="c1">// Thus, we must delete pline, otherwise we will leak memory.
-</span>      <span class="k">delete</span> <span class="n">pline</span><span class="p">;</span>
-      <span class="n">pline_array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+      // CRhinoDoc::AddCurveObject() makes a copy of the input.
+      // Thus, we must delete pline, otherwise we will leak memory.
+      delete pline;
+      pline_array[i] = 0;
+    }
+  }
+  context.m_doc.Redraw();
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -325,9 +325,9 @@ $(document).ready(function()
 
 <p>The advanced display features in Rhino give the user almost unlimited control over how objects appear on the screen.  All of these features are also exposed to the C/C++ developer.</p>
 
-<p>Rhino maintains advanced display settings using the <code class="highlighter-rouge">CDisplayPipelineAttributes</code> class.  Rhino will maintain a number of these objects, one for each advanced display setting created by the user (i.e. Wireframe, Shaded, Rendered, Ghosted, X-Ray, etc.) or by 3rd party plugins.</p>
+<p>Rhino maintains advanced display settings using the <code>CDisplayPipelineAttributes</code> class.  Rhino will maintain a number of these objects, one for each advanced display setting created by the user (i.e. Wireframe, Shaded, Rendered, Ghosted, X-Ray, etc.) or by 3rd party plugins.</p>
 
-<p>The C/C++ developer can gain access to these objects using the Display Attributes Manager, which is implemented as a number of static functions found on the <code class="highlighter-rouge">CRhinoDisplayAttrsMgr</code> class.</p>
+<p>The C/C++ developer can gain access to these objects using the Display Attributes Manager, which is implemented as a number of static functions found on the <code>CRhinoDisplayAttrsMgr</code> class.</p>
 
 <p>The process for updating advanced display settings is similar to updating or modifying other objects in Rhino.</p>
 
@@ -339,99 +339,98 @@ $(document).ready(function()
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// The following example code demonstrates how to modify advanced display settings using
+<pre><code class="language-cpp">// The following example code demonstrates how to modify advanced display settings using
 // the Rhino SDK. In this example, a display mode's mesh wireframe thickness (in pixels)
 // will be modified.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Use the display attributes manager to build a list of display modes.
-</span>  <span class="c1">// Note, these are copies of the originals...
-</span>  <span class="n">DisplayAttrsMgrList</span> <span class="n">attrs_list</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">attrs_count</span> <span class="o">=</span> <span class="n">CRhinoDisplayAttrsMgr</span><span class="o">::</span><span class="n">GetDisplayAttrsList</span><span class="p">(</span> <span class="n">attrs_list</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">attrs_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Use the display attributes manager to build a list of display modes.
+  // Note, these are copies of the originals...
+  DisplayAttrsMgrList attrs_list;
+  int attrs_count = CRhinoDisplayAttrsMgr::GetDisplayAttrsList( attrs_list );
+  if( attrs_count == 0 )
+    return failure;
 
-  <span class="c1">// Construct an options picker so the user can pick which
-</span>  <span class="c1">// display mode they want modified
-</span>  <span class="n">CRhinoGetOption</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Display mode to modify mesh thickness"</span> <span class="p">);</span>
+  // Construct an options picker so the user can pick which
+  // display mode they want modified
+  CRhinoGetOption go;
+  go.SetCommandPrompt( L"Display mode to modify mesh thickness" );
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">opt_list</span><span class="p">(</span> <span class="n">attrs_count</span> <span class="p">);</span>
-  <span class="n">opt_list</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">attrs_count</span> <span class="p">);</span>
+  ON_SimpleArray&lt;int&gt; opt_list( attrs_count );
+  opt_list.SetCount( attrs_count );
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">attrs_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Verify the display mode had a valid
-</span>    <span class="c1">// CDisplayPipelineAttributes pointer
-</span>    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">attrs_list</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_pAttrs</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">opt_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="p">}</span>
+  for( int i = 0; i &lt; attrs_count; i++ )
+  {
+    // Verify the display mode had a valid
+    // CDisplayPipelineAttributes pointer
+    if( 0 == attrs_list[i].m_pAttrs )
+    {
+      opt_list[i] = 0;
+      continue;
+    }
 
-    <span class="c1">// Get the display attributes English name
-</span>    <span class="n">ON_wString</span> <span class="n">english_name</span> <span class="o">=</span> <span class="n">attrs_list</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_pAttrs</span><span class="o">-&gt;</span><span class="n">EnglishName</span><span class="p">();</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'_'</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L' '</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'-'</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L','</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'.'</span> <span class="p">);</span>
+    // Get the display attributes English name
+    ON_wString english_name = attrs_list[i].m_pAttrs-&gt;EnglishName();
+    english_name.Remove( L'_' );
+    english_name.Remove( L' ' );
+    english_name.Remove( L'-' );
+    english_name.Remove( L',' );
+    english_name.Remove( L'.' );
 
-    <span class="c1">// Get the display attributes localized name
-</span>    <span class="n">ON_wString</span> <span class="n">local_name</span> <span class="o">=</span> <span class="n">attrs_list</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_pAttrs</span><span class="o">-&gt;</span><span class="n">LocalName</span><span class="p">();</span>
-    <span class="n">local_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'_'</span> <span class="p">);</span>
-    <span class="n">local_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L' '</span> <span class="p">);</span>
-    <span class="n">local_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'-'</span> <span class="p">);</span>
-    <span class="n">local_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L','</span> <span class="p">);</span>
-    <span class="n">local_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">L'.'</span> <span class="p">);</span>
+    // Get the display attributes localized name
+    ON_wString local_name = attrs_list[i].m_pAttrs-&gt;LocalName();
+    local_name.Remove( L'_' );
+    local_name.Remove( L' ' );
+    local_name.Remove( L'-' );
+    local_name.Remove( L',' );
+    local_name.Remove( L'.' );
 
-    <span class="c1">// Add the command option
-</span>    <span class="n">opt_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">CRhinoCommandOptionName</span><span class="p">(</span><span class="n">english_name</span><span class="p">,</span> <span class="n">local_name</span><span class="p">)</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Add the command option
+    opt_list[i] = go.AddCommandOption( CRhinoCommandOptionName(english_name, local_name) );
+  }
 
-  <span class="c1">// Get the command option
-</span>  <span class="n">go</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Get the command option
+  go.GetOption();
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">opt</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoCommandOption* opt = go.Option();
+  if( 0 == opt )
+    return failure;
 
-  <span class="c1">// Figure out which command option was picked
-</span>  <span class="kt">int</span> <span class="n">attrs_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">opt_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">opt_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">opt</span><span class="o">-&gt;</span><span class="n">m_option_index</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">attrs_index</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Figure out which command option was picked
+  int attrs_index = -1;
+  for( int i = 0; i &lt; opt_list.Count(); i++ )
+  {
+    if( opt_list[i] == opt-&gt;m_option_index )
+    {
+      attrs_index = i;
+      break;
+    }
+  }
 
-  <span class="c1">// Validate...
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">attrs_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">|</span> <span class="n">attrs_index</span> <span class="o">&gt;=</span> <span class="n">attrs_count</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Validate...
+  if( attrs_index &lt; 0 | attrs_index &gt;= attrs_count )
+    return failure;
 
-  <span class="c1">// Get the display mode requested by the user
-</span>  <span class="n">DisplayAttrsMgrListDesc</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">attrs_list</span><span class="p">[</span><span class="n">attrs_index</span><span class="p">];</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">desc</span><span class="p">.</span><span class="n">m_pAttrs</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the display mode requested by the user
+  DisplayAttrsMgrListDesc desc = attrs_list[attrs_index];
+  if( 0 == desc.m_pAttrs )
+    return failure;
 
-  <span class="c1">// Modify the desired display mode. In this case, we
-</span>  <span class="c1">// will just set the mesh wireframe thickness to zero.
-</span>  <span class="n">desc</span><span class="p">.</span><span class="n">m_pAttrs</span><span class="o">-&gt;</span><span class="n">m_nMeshWireThickness</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  // Modify the desired display mode. In this case, we
+  // will just set the mesh wireframe thickness to zero.
+  desc.m_pAttrs-&gt;m_nMeshWireThickness = 0;
 
-  <span class="c1">// Use the display attributes manager to update the display mode.
-</span>  <span class="n">CRhinoDisplayAttrsMgr</span><span class="o">::</span><span class="n">UpdateAttributes</span><span class="p">(</span> <span class="n">desc</span> <span class="p">);</span>
+  // Use the display attributes manager to update the display mode.
+  CRhinoDisplayAttrsMgr::UpdateAttributes( desc );
 
-  <span class="c1">// Force the document to regenerate.
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Regen</span><span class="p">();</span>
+  // Force the document to regenerate.
+  context.m_doc.Regen();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

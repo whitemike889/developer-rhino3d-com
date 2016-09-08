@@ -247,31 +247,30 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddNurbsCurve</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Point3dList</span> <span class="n">points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="nf">Point3dList</span><span class="p">(</span><span class="m">5</span><span class="p">);</span>
-    <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span> <span class="n">nc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="n">points</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nc</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">nc</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-        <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddNurbsCurve(Rhino.RhinoDoc doc)
+  {
+    Rhino.Collections.Point3dList points = new Rhino.Collections.Point3dList(5);
+    points.Add(0, 0, 0);
+    points.Add(0, 2, 0);
+    points.Add(2, 3, 0);
+    points.Add(4, 2, 0);
+    points.Add(4, 0, 0);
+    Rhino.Geometry.NurbsCurve nc = Rhino.Geometry.NurbsCurve.Create(false, 3, points);
+    Rhino.Commands.Result rc = Rhino.Commands.Result.Failure;
+    if (nc != null &amp;&amp; nc.IsValid)
+    {
+      if (doc.Objects.AddCurve(nc) != Guid.Empty)
+      {
+        doc.Views.Redraw();
+        rc = Rhino.Commands.Result.Success;
+      }
+    }
+    return rc;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddNurbsCurve(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -294,30 +293,29 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddNurbsCurve</span><span class="p">():</span>
-    <span class="n">points</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Collections</span><span class="o">.</span><span class="n">Point3dList</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">points</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+def AddNurbsCurve():
+    points = Rhino.Collections.Point3dList(5)
+    points.Add(0, 0, 0)
+    points.Add(0, 2, 0)
+    points.Add(2, 3, 0)
+    points.Add(4, 2, 0)
+    points.Add(4, 0, 0)
 
-    <span class="n">nc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">NurbsCurve</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">points</span><span class="p">)</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="k">if</span> <span class="n">nc</span> <span class="ow">and</span> <span class="n">nc</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-            <span class="n">rc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">rc</span>
+    nc = Rhino.Geometry.NurbsCurve.Create(False, 3, points)
+    rc = Rhino.Commands.Result.Failure
+    if nc and nc.IsValid:
+        if scriptcontext.doc.Objects.AddCurve(nc)!=System.Guid.Empty:
+            scriptcontext.doc.Views.Redraw()
+            rc = Rhino.Commands.Result.Success
+    return rc
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddNurbsCurve</span><span class="p">()</span>
+if __name__=="__main__":
+    AddNurbsCurve()
 </code></pre>
-</div>
 
 </div>
 

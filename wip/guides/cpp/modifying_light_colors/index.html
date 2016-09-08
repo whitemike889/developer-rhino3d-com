@@ -344,48 +344,47 @@ $(document).ready(function()
 
 <h2 id="how-to">How To</h2>
 
-<p>Light objects are stored in a <code class="highlighter-rouge">CRhinoLightTable</code> object that is held by the active document object.  Thus, instead of using one of the <code class="highlighter-rouge">ModifyObject()</code> members found on <code class="highlighter-rouge">CRhinoDoc</code>, you need to use the <code class="highlighter-rouge">ModifyLight()</code> member found on <code class="highlighter-rouge">CRhinoLightTable</code> in order to modify an existing light object.</p>
+<p>Light objects are stored in a <code>CRhinoLightTable</code> object that is held by the active document object.  Thus, instead of using one of the <code>ModifyObject()</code> members found on <code>CRhinoDoc</code>, you need to use the <code>ModifyLight()</code> member found on <code>CRhinoLightTable</code> in order to modify an existing light object.</p>
 
-<p>For more details on <code class="highlighter-rouge">CRhinoLight</code> and <code class="highlighter-rouge">CRhinoLightTable</code>, see <em>rhinoSdkLight.h</em> included with the C/C++ SDK.</p>
+<p>For more details on <code>CRhinoLight</code> and <code>CRhinoLightTable</code>, see <em>rhinoSdkLight.h</em> included with the C/C++ SDK.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following example demonstrates how to modify the diffuse color of a light object…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Pick an existing light object
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select light to change color"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">light_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Pick an existing light object
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select light to change color" );
+  go.SetGeometryFilter( CRhinoGetObject::light_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// The the light object
-</span>  <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoLight</span><span class="o">*</span> <span class="n">light_obj</span> <span class="o">=</span> <span class="n">CRhinoLight</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">light_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // The the light object
+  CRhinoObjRef&amp; ref = go.Object(0);
+  const CRhinoLight* light_obj = CRhinoLight::Cast( ref.Object() );
+  if( !light_obj )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Prompt the user to pick a new color
-</span>  <span class="n">ON_Color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">light_obj</span><span class="o">-&gt;</span><span class="n">Light</span><span class="p">().</span><span class="n">Diffuse</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoColorDialog</span><span class="p">(</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">(),</span> <span class="n">color</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  // Prompt the user to pick a new color
+  ON_Color color = light_obj-&gt;Light().Diffuse();
+  if( !RhinoColorDialog(RhinoApp().MainWnd(), color) )
+    CRhinoCommand::cancel;
 
-  <span class="c1">// Copy the light object's underlying ON_Light
-</span>  <span class="n">ON_Light</span> <span class="n">light</span><span class="p">(</span> <span class="n">light_obj</span><span class="o">-&gt;</span><span class="n">Light</span><span class="p">()</span> <span class="p">);</span>
-  <span class="c1">// Modify the diffuse color
-</span>  <span class="n">light</span><span class="p">.</span><span class="n">SetDiffuse</span><span class="p">(</span> <span class="n">color</span> <span class="p">);</span>
+  // Copy the light object's underlying ON_Light
+  ON_Light light( light_obj-&gt;Light() );
+  // Modify the diffuse color
+  light.SetDiffuse( color );
 
-  <span class="c1">// Modify the light
-</span>  <span class="n">CRhinoLightTable</span><span class="o">&amp;</span> <span class="n">light_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_light_table</span><span class="p">;</span>
-  <span class="n">light_table</span><span class="p">.</span><span class="n">ModifyLight</span><span class="p">(</span> <span class="n">light</span><span class="p">,</span> <span class="n">light_obj</span><span class="o">-&gt;</span><span class="n">LightIndex</span><span class="p">()</span> <span class="p">);</span>
+  // Modify the light
+  CRhinoLightTable&amp; light_table = context.m_doc.m_light_table;
+  light_table.ModifyLight( light, light_obj-&gt;LightIndex() );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

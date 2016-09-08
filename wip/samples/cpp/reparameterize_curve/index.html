@@ -242,72 +242,71 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoCommand::result rc = CRhinoCommand::success;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve to reparameterize"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve to reparameterize" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  rc = go.CommandResult();
+  if( rc != CRhinoCommand::success )
+    return rc;
 
-  <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  CRhinoObjRef&amp; objref = go.Object(0);
+  const ON_Curve* pC = objref.Curve();
+  if( !pC )
+    return CRhinoCommand::failure;
 
-  <span class="kt">double</span> <span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">;</span>
-  <span class="n">pC</span><span class="o">-&gt;</span><span class="n">GetDomain</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">s0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s1</span> <span class="p">);</span>
+  double s0, s1;
+  pC-&gt;GetDomain( &amp;s0, &amp;s1 );
 
-  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Domain start"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">s0</span> <span class="p">)</span> <span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( L"Domain start" );
+  gn.SetDefaultNumber( s0 ) ;
+  gn.AcceptNothing();
+  gn.GetNumber();
+  rc = gn.CommandResult();
+  if( rc != CRhinoCommand::success )
+    return rc;
 
-  <span class="kt">double</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
+  double t0 = gn.Number();
 
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Domain end"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">s1</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="n">t0</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  gn.SetCommandPrompt( L"Domain end" );
+  gn.SetDefaultNumber( s1 );
+  gn.SetLowerLimit( t0, TRUE );
+  gn.AcceptNothing();
+  gn.GetNumber();
+  rc = gn.CommandResult();
+  if( rc != CRhinoCommand::success )
+    return rc;
 
-  <span class="kt">double</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
+  double t1 = gn.Number();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">s0</span> <span class="o">==</span> <span class="n">t0</span> <span class="o">&amp;&amp;</span> <span class="n">s1</span> <span class="o">==</span> <span class="n">t1</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  if( s0 == t0 &amp;&amp; s1 == t1 )
+    return CRhinoCommand::nothing;
 
-  <span class="n">ON_Curve</span> <span class="o">*</span><span class="n">pNC</span> <span class="o">=</span> <span class="n">pC</span><span class="o">-&gt;</span><span class="n">DuplicateCurve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pNC</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">pNC</span><span class="o">-&gt;</span><span class="n">SetDomain</span><span class="p">(</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="p">);</span>
-    <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">obj</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">pNC</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">objref</span><span class="p">,</span> <span class="n">obj</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-   <span class="p">}</span>
-   <span class="k">else</span>
-     <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  ON_Curve *pNC = pC-&gt;DuplicateCurve();
+  if( pNC )
+  {
+    pNC-&gt;SetDomain( t0, t1 );
+    CRhinoCurveObject* obj = new CRhinoCurveObject();
+    if( obj )
+    {
+      obj-&gt;SetCurve( pNC );
+      context.m_doc.ReplaceObject( objref, obj );
+      context.m_doc.Redraw();
+   }
+   else
+     rc = CRhinoCommand::failure;
+  }
+  else
+    rc = CRhinoCommand::failure;
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

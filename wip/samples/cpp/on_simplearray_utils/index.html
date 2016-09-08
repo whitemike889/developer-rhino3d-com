@@ -242,42 +242,41 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">SortDoubles</span><span class="p">(</span> <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bIncreasing</span> <span class="o">=</span> <span class="nb">true</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">arr</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">bIncreasing</span> <span class="p">)</span>
-      <span class="n">arr</span><span class="p">.</span><span class="n">QuickSort</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">ON_CompareIncreasing</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">arr</span><span class="p">.</span><span class="n">QuickSort</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">ON_CompareDecreasing</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">void SortDoubles( ON_SimpleArray&lt;double&gt;&amp; arr, bool bIncreasing = true )
+{
+  if( arr.Count() &gt; 1 )
+  {
+    if( bIncreasing )
+      arr.QuickSort( &amp;ON_CompareIncreasing&lt;double&gt; );
+    else
+      arr.QuickSort( &amp;ON_CompareDecreasing&lt;double&gt; );
+  }
+}
 
-<span class="kt">void</span> <span class="nf">CullDoubles</span><span class="p">(</span> <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">arr</span><span class="p">,</span> <span class="kt">double</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">arr</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">arr</span><span class="p">.</span><span class="n">QuickSort</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">ON_CompareIncreasing</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="p">);</span>
+void CullDoubles( ON_SimpleArray&lt;double&gt;&amp; arr, double tolerance = ON_ZERO_TOLERANCE )
+{
+  const int count = arr.Count();
+  if( count &gt; 1 )
+  {
+    arr.QuickSort( &amp;ON_CompareIncreasing&lt;double&gt; );
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">tolerance</span> <span class="o">&lt;</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-      <span class="n">tolerance</span> <span class="o">=</span> <span class="n">ON_ZERO_TOLERANCE</span><span class="p">;</span>
+    if( tolerance &lt; ON_ZERO_TOLERANCE )
+      tolerance = ON_ZERO_TOLERANCE;
 
-    <span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="o">*</span><span class="n">arr</span><span class="p">.</span><span class="n">Last</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">tolerance</span> <span class="p">)</span>
-        <span class="n">arr</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-      <span class="k">else</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
+    double d = *arr.Last();
+    int i;
+    for( i = count - 2; i &gt;= 0; i-- )
+    {
+      if( fabs(d - arr[i]) &lt;= tolerance )
+        arr.Remove(i);
+      else
+        d = arr[i];
+    }
 
-    <span class="n">arr</span><span class="p">.</span><span class="n">Shrink</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    arr.Shrink();
+  }
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -247,51 +247,50 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ObjectDisplayMode</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Brep</span><span class="p">;</span>
-    <span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select mesh or surface"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">Guid</span> <span class="n">viewportId</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ActiveViewportID</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ObjectDisplayMode(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = ObjectType.Mesh | ObjectType.Brep;
+    ObjRef objref;
+    Result rc = Rhino.Input.RhinoGet.GetOneObject("Select mesh or surface", true, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
+    Guid viewportId = doc.Views.ActiveView.ActiveViewportID;
 
-    <span class="n">ObjectAttributes</span> <span class="n">attr</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">().</span><span class="n">Attributes</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">attr</span><span class="p">.</span><span class="nf">HasDisplayModeOverride</span><span class="p">(</span><span class="n">viewportId</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Removing display mode override from object"</span><span class="p">);</span>
-      <span class="n">attr</span><span class="p">.</span><span class="nf">RemoveDisplayModeOverride</span><span class="p">(</span><span class="n">viewportId</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayModeDescription</span><span class="p">[]</span> <span class="n">modes</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayModeDescription</span><span class="p">.</span><span class="nf">GetDisplayModes</span><span class="p">();</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayModeDescription</span> <span class="n">mode</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">modes</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span>
-        <span class="n">mode</span> <span class="p">=</span> <span class="n">modes</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetOption</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetOption</span><span class="p">();</span>
-        <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select display mode"</span><span class="p">);</span>
-        <span class="kt">string</span><span class="p">[]</span> <span class="n">str_modes</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[</span><span class="n">modes</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">modes</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-          <span class="n">str_modes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">modes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">EnglishName</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="s">""</span><span class="p">).</span><span class="nf">Replace</span><span class="p">(</span><span class="s">"-"</span><span class="p">,</span> <span class="s">""</span><span class="p">);</span>
-        <span class="n">go</span><span class="p">.</span><span class="nf">AddOptionList</span><span class="p">(</span><span class="s">"DisplayMode"</span><span class="p">,</span> <span class="n">str_modes</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">Get</span><span class="p">()</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-          <span class="n">mode</span> <span class="p">=</span> <span class="n">modes</span><span class="p">[</span><span class="n">go</span><span class="p">.</span><span class="nf">Option</span><span class="p">().</span><span class="n">CurrentListOptionIndex</span><span class="p">];</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
-      <span class="n">attr</span><span class="p">.</span><span class="nf">SetDisplayModeOverride</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">viewportId</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">ModifyAttributes</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    ObjectAttributes attr = objref.Object().Attributes;
+    if (attr.HasDisplayModeOverride(viewportId))
+    {
+      RhinoApp.WriteLine("Removing display mode override from object");
+      attr.RemoveDisplayModeOverride(viewportId);
+    }
+    else
+    {
+      Rhino.Display.DisplayModeDescription[] modes = Rhino.Display.DisplayModeDescription.GetDisplayModes();
+      Rhino.Display.DisplayModeDescription mode = null;
+      if (modes.Length == 1)
+        mode = modes[0];
+      else
+      {
+        Rhino.Input.Custom.GetOption go = new Rhino.Input.Custom.GetOption();
+        go.SetCommandPrompt("Select display mode");
+        string[] str_modes = new string[modes.Length];
+        for (int i = 0; i &lt; modes.Length; i++)
+          str_modes[i] = modes[i].EnglishName.Replace(" ", "").Replace("-", "");
+        go.AddOptionList("DisplayMode", str_modes, 0);
+        if (go.Get() == Rhino.Input.GetResult.Option)
+          mode = modes[go.Option().CurrentListOptionIndex];
+      }
+      if (mode == null)
+        return Rhino.Commands.Result.Cancel;
+      attr.SetDisplayModeOverride(mode, viewportId);
+    }
+    doc.Objects.ModifyAttributes(objref, attr, false);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ObjectDisplayMode(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -336,44 +335,43 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">ObjectDisplayMode</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Brep</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Mesh</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select mesh or surface"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">viewportId</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span><span class="o">.</span><span class="n">ActiveViewportID</span>
+def ObjectDisplayMode():
+    filter = Rhino.DocObjects.ObjectType.Brep | Rhino.DocObjects.ObjectType.Mesh
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select mesh or surface", True, filter)
+    if rc != Rhino.Commands.Result.Success: return rc;
+    viewportId = scriptcontext.doc.Views.ActiveView.ActiveViewportID
 
-    <span class="n">attr</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span><span class="o">.</span><span class="n">Attributes</span>
-    <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">HasDisplayModeOverride</span><span class="p">(</span><span class="n">viewportId</span><span class="p">):</span>
-        <span class="k">print</span> <span class="s">"Removing display mode override from object"</span>
-        <span class="n">attr</span><span class="o">.</span><span class="n">RemoveDisplayModeOverride</span><span class="p">(</span><span class="n">viewportId</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">modes</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DisplayModeDescription</span><span class="o">.</span><span class="n">GetDisplayModes</span><span class="p">()</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="n">modes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetOption</span><span class="p">()</span>
-            <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select display mode"</span><span class="p">)</span>
-            <span class="n">str_modes</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">modes</span><span class="p">:</span>
-                <span class="n">s</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">EnglishName</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span><span class="s">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"-"</span><span class="p">,</span><span class="s">""</span><span class="p">)</span>
-                <span class="n">str_modes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-            <span class="n">go</span><span class="o">.</span><span class="n">AddOptionList</span><span class="p">(</span><span class="s">"DisplayMode"</span><span class="p">,</span> <span class="n">str_modes</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">GetResult</span><span class="o">.</span><span class="n">Option</span><span class="p">:</span>
-                <span class="n">mode</span> <span class="o">=</span> <span class="n">modes</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Option</span><span class="p">()</span><span class="o">.</span><span class="n">CurrentListOptionIndex</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">mode</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
-        <span class="n">attr</span><span class="o">.</span><span class="n">SetDisplayModeOverride</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">viewportId</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">ModifyAttributes</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    attr = objref.Object().Attributes
+    if attr.HasDisplayModeOverride(viewportId):
+        print "Removing display mode override from object"
+        attr.RemoveDisplayModeOverride(viewportId)
+    else:
+        modes = Rhino.Display.DisplayModeDescription.GetDisplayModes()
+        mode = None
+        if len(modes) == 1:
+            mode = modes[0]
+        else:
+            go = Rhino.Input.Custom.GetOption()
+            go.SetCommandPrompt("Select display mode")
+            str_modes = []
+            for m in modes:
+                s = m.EnglishName.replace(" ","").replace("-","")
+                str_modes.append(s)
+            go.AddOptionList("DisplayMode", str_modes, 0)
+            if go.Get()==Rhino.Input.GetResult.Option:
+                mode = modes[go.Option().CurrentListOptionIndex]
+        if not mode: return Rhino.Commands.Result.Cancel
+        attr.SetDisplayModeOverride(mode, viewportId)
+    scriptcontext.doc.Objects.ModifyAttributes(objref, attr, False)
+    scriptcontext.doc.Views.Redraw()
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">ObjectDisplayMode</span><span class="p">()</span>
+if __name__=="__main__":
+    ObjectDisplayMode()
 </code></pre>
-</div>
 
 </div>
 

@@ -247,106 +247,105 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">static</span> <span class="kt">double</span> <span class="n">m_distance</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-  <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">m_point_start</span><span class="p">;</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ArrayByDistance</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  static double m_distance = 1;
+  static Rhino.Geometry.Point3d m_point_start;
+  public static Rhino.Commands.Result ArrayByDistance(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef objref;
+    var rc = Rhino.Input.RhinoGet.GetOneObject("Select object", true, Rhino.DocObjects.ObjectType.AnyObject, out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">(</span><span class="s">"Start point"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">out</span> <span class="n">m_point_start</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    rc = Rhino.Input.RhinoGet.GetPoint("Start point", false, out m_point_start);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var obj = objref.Object();
+    if (obj == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="c1">// create an instance of a GetPoint class and add a delegate
-</span>    <span class="c1">// for the DynamicDraw event
-</span>    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">m_point_start</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">optdouble</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">OptionDouble</span><span class="p">(</span><span class="n">m_distance</span><span class="p">);</span>
-    <span class="kt">bool</span> <span class="n">constrain</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">optconstrain</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">OptionToggle</span><span class="p">(</span><span class="n">constrain</span><span class="p">,</span> <span class="s">"Off"</span><span class="p">,</span> <span class="s">"On"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionDouble</span><span class="p">(</span><span class="s">"Distance"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optdouble</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionToggle</span><span class="p">(</span><span class="s">"Constrain"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optconstrain</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="n">DynamicDraw</span> <span class="p">+=</span> <span class="n">ArrayByDistanceDraw</span><span class="p">;</span>
-    <span class="n">gp</span><span class="p">.</span><span class="n">Tag</span> <span class="p">=</span> <span class="n">obj</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">()</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_distance</span> <span class="p">=</span> <span class="n">optdouble</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">constrain</span> <span class="p">!=</span> <span class="n">optconstrain</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">constrain</span> <span class="p">=</span> <span class="n">optconstrain</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">constrain</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="kt">var</span> <span class="n">gp2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-          <span class="n">gp2</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">m_point_start</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-          <span class="n">gp2</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Second point on constraint line"</span><span class="p">);</span>
-          <span class="k">if</span> <span class="p">(</span><span class="n">gp2</span><span class="p">.</span><span class="nf">Get</span><span class="p">()</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Point</span><span class="p">)</span>
-            <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">m_point_start</span><span class="p">,</span> <span class="n">gp2</span><span class="p">.</span><span class="nf">Point</span><span class="p">());</span>
-          <span class="k">else</span>
-          <span class="p">{</span>
-            <span class="n">gp</span><span class="p">.</span><span class="nf">ClearCommandOptions</span><span class="p">();</span>
-            <span class="n">optconstrain</span><span class="p">.</span><span class="n">CurrentValue</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-            <span class="n">constrain</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-            <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionDouble</span><span class="p">(</span><span class="s">"Distance"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optdouble</span><span class="p">);</span>
-            <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionToggle</span><span class="p">(</span><span class="s">"Constrain"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optconstrain</span><span class="p">);</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-          <span class="n">gp</span><span class="p">.</span><span class="nf">ClearConstraints</span><span class="p">();</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    // create an instance of a GetPoint class and add a delegate
+    // for the DynamicDraw event
+    var gp = new Rhino.Input.Custom.GetPoint();
+    gp.DrawLineFromPoint(m_point_start, true);
+    var optdouble = new Rhino.Input.Custom.OptionDouble(m_distance);
+    bool constrain = false;
+    var optconstrain = new Rhino.Input.Custom.OptionToggle(constrain, "Off", "On");
+    gp.AddOptionDouble("Distance", ref optdouble);
+    gp.AddOptionToggle("Constrain", ref optconstrain);
+    gp.DynamicDraw += ArrayByDistanceDraw;
+    gp.Tag = obj;
+    while (gp.Get() == Rhino.Input.GetResult.Option)
+    {
+      m_distance = optdouble.CurrentValue;
+      if (constrain != optconstrain.CurrentValue)
+      {
+        constrain = optconstrain.CurrentValue;
+        if (constrain)
+        {
+          var gp2 = new Rhino.Input.Custom.GetPoint();
+          gp2.DrawLineFromPoint(m_point_start, true);
+          gp2.SetCommandPrompt("Second point on constraint line");
+          if (gp2.Get() == Rhino.Input.GetResult.Point)
+            gp.Constrain(m_point_start, gp2.Point());
+          else
+          {
+            gp.ClearCommandOptions();
+            optconstrain.CurrentValue = false;
+            constrain = false;
+            gp.AddOptionDouble("Distance", ref optdouble);
+            gp.AddOptionToggle("Constrain", ref optconstrain);
+          }
+        }
+        else
+        {
+          gp.ClearConstraints();
+        }
+      }
+    }
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_distance</span> <span class="p">=</span> <span class="n">optdouble</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">;</span>
-      <span class="kt">var</span> <span class="n">pt</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-      <span class="kt">var</span> <span class="n">vec</span> <span class="p">=</span> <span class="n">pt</span> <span class="p">-</span> <span class="n">m_point_start</span><span class="p">;</span>
-      <span class="kt">double</span> <span class="n">length</span> <span class="p">=</span> <span class="n">vec</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-      <span class="n">vec</span><span class="p">.</span><span class="nf">Unitize</span><span class="p">();</span>
-      <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">length</span> <span class="p">/</span> <span class="n">m_distance</span><span class="p">);</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">translate</span> <span class="p">=</span> <span class="n">vec</span> <span class="p">*</span> <span class="p">(</span><span class="n">i</span> <span class="p">*</span> <span class="n">m_distance</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">xf</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">Translation</span><span class="p">(</span><span class="n">translate</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
+    if (gp.CommandResult() == Rhino.Commands.Result.Success)
+    {
+      m_distance = optdouble.CurrentValue;
+      var pt = gp.Point();
+      var vec = pt - m_point_start;
+      double length = vec.Length;
+      vec.Unitize();
+      int count = (int)(length / m_distance);
+      for (int i = 1; i &lt; count; i++)
+      {
+        var translate = vec * (i * m_distance);
+        var xf = Rhino.Geometry.Transform.Translation(translate);
+        doc.Objects.Transform(obj, xf, false);
+      }
+      doc.Views.Redraw();
+    }
 
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-  <span class="p">}</span>
+    return gp.CommandResult();
+  }
 
-  <span class="c1">// this function is called whenever the GetPoint's DynamicDraw
-</span>  <span class="c1">// event occurs
-</span>  <span class="k">static</span> <span class="k">void</span> <span class="nf">ArrayByDistanceDraw</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetPointDrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">rhobj</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Source</span><span class="p">.</span><span class="n">Tag</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rhobj</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">vec</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">CurrentPoint</span> <span class="p">-</span> <span class="n">m_point_start</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">length</span> <span class="p">=</span> <span class="n">vec</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-    <span class="n">vec</span><span class="p">.</span><span class="nf">Unitize</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">length</span> <span class="p">/</span> <span class="n">m_distance</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">translate</span> <span class="p">=</span> <span class="n">vec</span> <span class="p">*</span> <span class="p">(</span><span class="n">i</span> <span class="p">*</span> <span class="n">m_distance</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">xf</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">Translation</span><span class="p">(</span><span class="n">translate</span><span class="p">);</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawObject</span><span class="p">(</span><span class="n">rhobj</span><span class="p">,</span> <span class="n">xf</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  // this function is called whenever the GetPoint's DynamicDraw
+  // event occurs
+  static void ArrayByDistanceDraw(object sender, Rhino.Input.Custom.GetPointDrawEventArgs e)
+  {
+    Rhino.DocObjects.RhinoObject rhobj = e.Source.Tag as Rhino.DocObjects.RhinoObject;
+    if (rhobj == null)
+      return;
+    var vec = e.CurrentPoint - m_point_start;
+    double length = vec.Length;
+    vec.Unitize();
+    int count = (int)(length / m_distance);
+    for (int i = 1; i &lt; count; i++)
+    {
+      var translate = vec * (i * m_distance);
+      var xf = Rhino.Geometry.Transform.Translation(translate);
+      e.Display.DrawObject(rhobj, xf);
+    }
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared m_distance As Double = 1
@@ -440,84 +439,83 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">dynamic_array</span><span class="p">():</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def dynamic_array():
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select object", True, Rhino.DocObjects.ObjectType.AnyObject)
+    if rc!=Rhino.Commands.Result.Success: return
 
-    <span class="n">rc</span><span class="p">,</span> <span class="n">pt_start</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"Start point"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+    rc, pt_start = Rhino.Input.RhinoGet.GetPoint("Start point", False)
+    if rc!=Rhino.Commands.Result.Success: return
 
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span> <span class="k">return</span>
+    obj = objref.Object()
+    if not obj: return
 
-    <span class="n">dist</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">"dynamic_array_distance"</span><span class="p">):</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"dynamic_array_distance"</span><span class="p">]</span>
-    <span class="c"># This is a function that is called whenever the GetPoint's</span>
-    <span class="c"># DynamicDraw event occurs</span>
-    <span class="k">def</span> <span class="nf">ArrayByDistanceDraw</span><span class="p">(</span> <span class="n">sender</span><span class="p">,</span> <span class="n">args</span> <span class="p">):</span>
-        <span class="n">rhobj</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">Source</span><span class="o">.</span><span class="n">Tag</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">rhobj</span><span class="p">:</span> <span class="k">return</span>
-        <span class="n">vec</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">CurrentPoint</span> <span class="o">-</span> <span class="n">pt_start</span>
-        <span class="n">length</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">Length</span>
-        <span class="n">vec</span><span class="o">.</span><span class="n">Unitize</span><span class="p">()</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="n">dist</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">count</span><span class="p">):</span>
-            <span class="n">translate</span> <span class="o">=</span> <span class="n">vec</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dist</span><span class="p">)</span>
-            <span class="n">xf</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">translate</span><span class="p">)</span>
-            <span class="n">args</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DrawObject</span><span class="p">(</span><span class="n">rhobj</span><span class="p">,</span> <span class="n">xf</span><span class="p">)</span>
+    dist = 1
+    if scriptcontext.sticky.has_key("dynamic_array_distance"):
+        dist = scriptcontext.sticky["dynamic_array_distance"]
+    # This is a function that is called whenever the GetPoint's
+    # DynamicDraw event occurs
+    def ArrayByDistanceDraw( sender, args ):
+        rhobj = args.Source.Tag
+        if not rhobj: return
+        vec = args.CurrentPoint - pt_start
+        length = vec.Length
+        vec.Unitize()
+        count = int(length / dist)
+        for i in range(1,count):
+            translate = vec * (i*dist)
+            xf = Rhino.Geometry.Transform.Translation(translate)
+            args.Display.DrawObject(rhobj, xf)
 
-    <span class="c"># Create an instance of a GetPoint class and add a delegate</span>
-    <span class="c"># for the DynamicDraw event</span>
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">pt_start</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="n">optdouble</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">OptionDouble</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
-    <span class="n">constrain</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">optconstrain</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">OptionToggle</span><span class="p">(</span><span class="n">constrain</span><span class="p">,</span><span class="s">"Off"</span><span class="p">,</span> <span class="s">"On"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionDouble</span><span class="p">(</span><span class="s">"Distance"</span><span class="p">,</span> <span class="n">optdouble</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionToggle</span><span class="p">(</span><span class="s">"Constrain"</span><span class="p">,</span> <span class="n">optconstrain</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">DynamicDraw</span> <span class="o">+=</span> <span class="n">ArrayByDistanceDraw</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Tag</span> <span class="o">=</span> <span class="n">obj</span>
-    <span class="k">while</span> <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">GetResult</span><span class="o">.</span><span class="n">Option</span><span class="p">:</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="n">optdouble</span><span class="o">.</span><span class="n">CurrentValue</span>
-        <span class="k">if</span> <span class="n">constrain</span><span class="o">!=</span><span class="n">optconstrain</span><span class="o">.</span><span class="n">CurrentValue</span><span class="p">:</span>
-            <span class="n">constrain</span> <span class="o">=</span> <span class="n">optconstrain</span><span class="o">.</span><span class="n">CurrentValue</span>
-            <span class="k">if</span> <span class="n">constrain</span><span class="p">:</span>
-                <span class="n">gp2</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-                <span class="n">gp2</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">pt_start</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-                <span class="n">gp2</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Second point on constraint line"</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">gp2</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">GetResult</span><span class="o">.</span><span class="n">Point</span><span class="p">:</span>
-                    <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">pt_start</span><span class="p">,</span> <span class="n">gp2</span><span class="o">.</span><span class="n">Point</span><span class="p">())</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">gp</span><span class="o">.</span><span class="n">ClearCommandOptions</span><span class="p">()</span>
-                    <span class="n">optconstrain</span><span class="o">.</span><span class="n">CurrentValue</span> <span class="o">=</span> <span class="bp">False</span>
-                    <span class="n">constrain</span> <span class="o">=</span> <span class="bp">False</span>
-                    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionDouble</span><span class="p">(</span><span class="s">"Distance"</span><span class="p">,</span> <span class="n">optdouble</span><span class="p">)</span>
-                    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionToggle</span><span class="p">(</span><span class="s">"Constrain"</span><span class="p">,</span> <span class="n">optconstrain</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">gp</span><span class="o">.</span><span class="n">ClearConstraints</span><span class="p">()</span>
-        <span class="k">continue</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"dynamic_array_distance"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span>
-        <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-        <span class="n">vec</span> <span class="o">=</span> <span class="n">pt</span> <span class="o">-</span> <span class="n">pt_start</span>
-        <span class="n">length</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">Length</span>
-        <span class="n">vec</span><span class="o">.</span><span class="n">Unitize</span><span class="p">()</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="n">dist</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
-            <span class="n">translate</span> <span class="o">=</span> <span class="n">vec</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dist</span><span class="p">)</span>
-            <span class="n">xf</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">translate</span><span class="p">)</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">xf</span><span class="p">,</span><span class="bp">False</span><span class="p">)</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    # Create an instance of a GetPoint class and add a delegate
+    # for the DynamicDraw event
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.DrawLineFromPoint(pt_start, True)
+    optdouble = Rhino.Input.Custom.OptionDouble(dist)
+    constrain = False
+    optconstrain = Rhino.Input.Custom.OptionToggle(constrain,"Off", "On")
+    gp.AddOptionDouble("Distance", optdouble)
+    gp.AddOptionToggle("Constrain", optconstrain)
+    gp.DynamicDraw += ArrayByDistanceDraw
+    gp.Tag = obj
+    while gp.Get()==Rhino.Input.GetResult.Option:
+        dist = optdouble.CurrentValue
+        if constrain!=optconstrain.CurrentValue:
+            constrain = optconstrain.CurrentValue
+            if constrain:
+                gp2 = Rhino.Input.Custom.GetPoint()
+                gp2.DrawLineFromPoint(pt_start, True)
+                gp2.SetCommandPrompt("Second point on constraint line")
+                if gp2.Get()==Rhino.Input.GetResult.Point:
+                    gp.Constrain(pt_start, gp2.Point())
+                else:
+                    gp.ClearCommandOptions()
+                    optconstrain.CurrentValue = False
+                    constrain = False
+                    gp.AddOptionDouble("Distance", optdouble)
+                    gp.AddOptionToggle("Constrain", optconstrain)
+            else:
+                gp.ClearConstraints()
+        continue
+    if gp.CommandResult()==Rhino.Commands.Result.Success:
+        scriptcontext.sticky["dynamic_array_distance"] = dist
+        pt = gp.Point()
+        vec = pt - pt_start
+        length = vec.Length
+        vec.Unitize()
+        count = int(length / dist)
+        for i in range(1, count):
+            translate = vec * (i*dist)
+            xf = Rhino.Geometry.Transform.Translation(translate)
+            scriptcontext.doc.Objects.Transform(obj,xf,False)
+        scriptcontext.doc.Views.Redraw()
 
 
-<span class="k">if</span><span class="p">(</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span> <span class="p">):</span>
-    <span class="n">dynamic_array</span><span class="p">()</span>
+if( __name__ == "__main__" ):
+    dynamic_array()
 </code></pre>
-</div>
 
 </div>
 

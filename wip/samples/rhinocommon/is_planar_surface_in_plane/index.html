@@ -247,42 +247,41 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">IsPlanarSurfaceInPlane</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"select surface"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result IsPlanarSurfaceInPlane(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("select surface", true, ObjectType.Surface, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var surface = obj_ref.Surface();
 
-    <span class="n">Point3d</span><span class="p">[]</span> <span class="n">corners</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetRectangle</span><span class="p">(</span><span class="k">out</span> <span class="n">corners</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    Point3d[] corners;
+    rc = RhinoGet.GetRectangle(out corners);
+    if (rc != Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">plane</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Plane</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="m">2</span><span class="p">]);</span>
+    var plane = new Plane(corners[0], corners[1], corners[2]);
 
-    <span class="kt">var</span> <span class="n">is_or_isnt</span> <span class="p">=</span> <span class="s">" not "</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nf">IsSurfaceInPlane</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">))</span>
-      <span class="n">is_or_isnt</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
+    var is_or_isnt = " not ";
+    if (IsSurfaceInPlane(surface, plane, doc.ModelAbsoluteTolerance))
+      is_or_isnt = "";
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Surface is{0} in plane."</span><span class="p">,</span> <span class="n">is_or_isnt</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    RhinoApp.WriteLine("Surface is{0} in plane.", is_or_isnt);
+    return Result.Success;
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsSurfaceInPlane</span><span class="p">(</span><span class="n">Surface</span> <span class="n">surface</span><span class="p">,</span> <span class="n">Plane</span> <span class="n">plane</span><span class="p">,</span> <span class="kt">double</span> <span class="n">tolerance</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">surface</span><span class="p">.</span><span class="nf">IsPlanar</span><span class="p">(</span><span class="n">tolerance</span><span class="p">))</span>
-      <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+  private static bool IsSurfaceInPlane(Surface surface, Plane plane, double tolerance)
+  {
+    if (!surface.IsPlanar(tolerance))
+      return false;
 
-    <span class="kt">var</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">surface</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">bbox</span><span class="p">.</span><span class="nf">GetCorners</span><span class="p">().</span><span class="nf">All</span><span class="p">(</span><span class="n">c</span> <span class="p">=&gt;</span> <span class="n">System</span><span class="p">.</span><span class="n">Math</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="p">&lt;=</span> <span class="n">tolerance</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var bbox = surface.GetBoundingBox(true);
+    return bbox.GetCorners().All(c =&gt; System.Math.Abs(plane.DistanceTo(c)) &lt;= tolerance);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function IsPlanarSurfaceInPlane(ByVal doc As RhinoDoc) As Result
@@ -321,44 +320,43 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">import</span> <span class="nn">math</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+from Rhino.Geometry import *
+import rhinoscriptsyntax as rs
+from scriptcontext import doc
+import math
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">surface_id</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetSurfaceObject</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-  <span class="k">if</span> <span class="n">surface_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span>
-  <span class="n">surface</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercesurface</span><span class="p">(</span><span class="n">surface_id</span><span class="p">)</span>
+def RunCommand():
+  surface_id = rs.GetSurfaceObject()[0]
+  if surface_id == None:
+    return
+  surface = rs.coercesurface(surface_id)
 
-  <span class="n">corners</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetRectangle</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">corners</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span>
+  corners = rs.GetRectangle()
+  if corners == None:
+    return
 
-  <span class="n">plane</span> <span class="o">=</span> <span class="n">Plane</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+  plane = Plane(corners[0], corners[1], corners[2])
 
-  <span class="n">is_or_isnt</span> <span class="o">=</span> <span class="s">""</span> <span class="k">if</span> <span class="n">IsSurfaceInPlane</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">)</span> <span class="k">else</span> <span class="s">" not "</span>
-  <span class="k">print</span> <span class="s">"Surface is{0} in plane."</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">is_or_isnt</span><span class="p">)</span>
+  is_or_isnt = "" if IsSurfaceInPlane(surface, plane, doc.ModelAbsoluteTolerance) else " not "
+  print "Surface is{0} in plane.".format(is_or_isnt)
 
-<span class="k">def</span> <span class="nf">IsSurfaceInPlane</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">):</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">surface</span><span class="o">.</span><span class="n">IsPlanar</span><span class="p">(</span><span class="n">tolerance</span><span class="p">):</span>
-    <span class="k">return</span> <span class="bp">False</span>
+def IsSurfaceInPlane(surface, plane, tolerance):
+  if not surface.IsPlanar(tolerance):
+    return False
 
-  <span class="n">bbox</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">GetBoundingBox</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="bp">True</span>
-  <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">bbox</span><span class="o">.</span><span class="n">GetCorners</span><span class="p">():</span>
-      <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">corner</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
-          <span class="n">rc</span> <span class="o">=</span> <span class="bp">False</span>
-          <span class="k">break</span>
+  bbox = surface.GetBoundingBox(True)
+  rc = True
+  for corner in bbox.GetCorners():
+      if math.fabs(plane.DistanceTo(corner)) &gt; tolerance:
+          rc = False
+          break
 
-  <span class="k">return</span> <span class="n">rc</span>
+  return rc
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+    RunCommand()
 </code></pre>
-</div>
 
 </div>
 

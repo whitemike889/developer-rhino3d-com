@@ -363,31 +363,31 @@ $(document).ready(function()
 <h2 id="windows">Windows</h2>
 
 <ol>
-  <li>Start in the <em>Rhino Python editor</em> using the <code class="highlighter-rouge">EditPythonScript</code> command.</li>
+  <li>Start in the <em>Rhino Python editor</em> using the <code>EditPythonScript</code> command.</li>
   <li>
     <p>Click on the <em>New</em> icon, and choose <em>Command</em> in the ensuing dialog.</p>
 
     <p><img src="/wip/images/creating_rhino_commands_using_python_01.png" alt="New Command" /></p>
   </li>
   <li>
-    <p>Enter the command name and the plugin name that you would like to have the command used in - the plugin can be a new one or an existing one.  You can add multiple commands to a plugin.  In this example, we used <code class="highlighter-rouge">MyNewCommand</code> in <em>MyNewPlugIn</em>.  A new script file is generated with the framework for the new command…</p>
+    <p>Enter the command name and the plugin name that you would like to have the command used in - the plugin can be a new one or an existing one.  You can add multiple commands to a plugin.  In this example, we used <code>MyNewCommand</code> in <em>MyNewPlugIn</em>.  A new script file is generated with the framework for the new command…</p>
 
     <p><img src="/wip/images/creating_rhino_commands_using_python_02.png" alt="New Script" /></p>
   </li>
-  <li>The code that the command calls is in the <code class="highlighter-rouge">def RunCommand( is_interactive ):</code> function.</li>
-  <li>Add your script code here - the template provides some dummy code and a couple of comments, all to be called from this part of the script.  The whole script can be in this one function or you can add other functions as you normally would, as needed.  Make sure to modify the initial <code class="highlighter-rouge">import</code> statements to suit the script you are writing - the automatic template <code class="highlighter-rouge">import</code>s are there for the example script provided.</li>
-  <li>Add this line at the bottom of the script <code class="highlighter-rouge">RunCommand(True)</code>.  This allows you to test the script from the editor, debug etc.  Just remember to comment that line before you distribute the script or try to use it as a command.  It is also possible to write a more “normal” script, test, etc. as needed in the usual way, then just copy and paste into this formatted command script template.</li>
+  <li>The code that the command calls is in the <code>def RunCommand( is_interactive ):</code> function.</li>
+  <li>Add your script code here - the template provides some dummy code and a couple of comments, all to be called from this part of the script.  The whole script can be in this one function or you can add other functions as you normally would, as needed.  Make sure to modify the initial <code>import</code> statements to suit the script you are writing - the automatic template <code>import</code>s are there for the example script provided.</li>
+  <li>Add this line at the bottom of the script <code>RunCommand(True)</code>.  This allows you to test the script from the editor, debug etc.  Just remember to comment that line before you distribute the script or try to use it as a command.  It is also possible to write a more “normal” script, test, etc. as needed in the usual way, then just copy and paste into this formatted command script template.</li>
   <li>
     <p>Note that, with Rhino for Windows, the script is automatically saved in a special location:</p>
 
     <p><img src="/wip/images/creating_rhino_commands_using_python_03.png" alt="Special Script Location" /></p>
 
-    <p>In order for this to run as a command in Rhino, the script location needs to be exactly right so that Rhino knows where to look.  On Windows, the path for a command script looks like this: <code class="highlighter-rouge">%APPDATA%\McNeel\Rhinoceros\5.0\Plug-ins\PythonPlugIns\MyNewPlugIn {146e099d-760d-4a6c-8662-96119f3fd62f}</code> …and it must keep that crazy name with the GUID in curly brackets, and the path that the editor set up when you created the command initially.</p>
+    <p>In order for this to run as a command in Rhino, the script location needs to be exactly right so that Rhino knows where to look.  On Windows, the path for a command script looks like this: <code>%APPDATA%\McNeel\Rhinoceros\5.0\Plug-ins\PythonPlugIns\MyNewPlugIn {146e099d-760d-4a6c-8662-96119f3fd62f}</code> …and it must keep that crazy name with the GUID in curly brackets, and the path that the editor set up when you created the command initially.</p>
 
     <p><img src="/wip/images/creating_rhino_commands_using_python_04.png" alt="Special Script Path" /></p>
   </li>
   <li>
-    <p><em>Optional</em>: To distribute the script as a plugin, simply share the entire folder. You can zip it up, if you like, and other users can easily extract the <code class="highlighter-rouge">MyNewPlugIn {146e099d-760d-4a6c-8662-96119f3fd62f}</code> folder and place it in <code class="highlighter-rouge">%APPDATA%\McNeel\Rhinoceros\5.0\Plug-ins\PythonPlugIns\</code> on their own computers.</p>
+    <p><em>Optional</em>: To distribute the script as a plugin, simply share the entire folder. You can zip it up, if you like, and other users can easily extract the <code>MyNewPlugIn {146e099d-760d-4a6c-8662-96119f3fd62f}</code> folder and place it in <code>%APPDATA%\McNeel\Rhinoceros\5.0\Plug-ins\PythonPlugIns\</code> on their own computers.</p>
 
     <p>Rhino should be closed when “installing” new plugins, otherwise it will need to be restarted before it recognises any new commands.</p>
 
@@ -399,15 +399,14 @@ $(document).ready(function()
 
 <p>This allows users to just double-click (or drag-and-drop) your plugin and, “hey presto”, it’s installed. It also gracefully handles upgrading to newer versions of your plugin.</p>
 
-<p>In the <strong><code class="highlighter-rouge">dev</code> sub-folder</strong> that is created in the plugin folder, create a <em>py</em> file named <code class="highlighter-rouge">__plugin__.py</code> that has only these lines:</p>
+<p>In the <strong><code>dev</code> sub-folder</strong> that is created in the plugin folder, create a <em>py</em> file named <code>__plugin__.py</code> that has only these lines:</p>
 
-<div class="language-py highlighter-rouge"><pre class="highlight"><code><span class="nb">id</span><span class="o">=</span><span class="s">"{146e099d-760d-4a6c-8662-96119f3fd62f}"</span>
-<span class="n">version</span><span class="o">=</span><span class="s">"1.0.0.1"</span>
-<span class="n">title</span><span class="o">=</span><span class="s">"MyNewCommand"</span>
+<pre><code class="language-py">id="{146e099d-760d-4a6c-8662-96119f3fd62f}"
+version="1.0.0.1"
+title="MyNewCommand"
 </code></pre>
-</div>
 
-<p>In the above <code class="highlighter-rouge">__plugin__.py</code>, the lines mean the following:</p>
+<p>In the above <code>__plugin__.py</code>, the lines mean the following:</p>
 
 <ul>
   <li>Line 1 has the UUID from the plugin, found in the folder name.</li>
@@ -415,7 +414,7 @@ $(document).ready(function()
   <li>Line 3 has the command name.</li>
 </ul>
 
-<p>With this file in place, you can zip the <strong>contents of the <code class="highlighter-rouge">dev</code> sub-folder</strong> and rename it to <code class="highlighter-rouge">MyNewPlugIn.rhi</code>.</p>
+<p>With this file in place, you can zip the <strong>contents of the <code>dev</code> sub-folder</strong> and rename it to <code>MyNewPlugIn.rhi</code>.</p>
 
 <div class="alert alert-info">
 
@@ -423,7 +422,7 @@ $(document).ready(function()
 
 </div>
 
-<p>Double-clicking this <code class="highlighter-rouge">*.rhi</code> file on another system (with Rhino closed) should install all the files in the correct location for that user.  Rhino should then see the command as a regular command.</p>
+<p>Double-clicking this <code>*.rhi</code> file on another system (with Rhino closed) should install all the files in the correct location for that user.  Rhino should then see the command as a regular command.</p>
 
 <div class="alert alert-info">
 
@@ -464,24 +463,23 @@ $(document).ready(function()
 
 <p>The Python script itself has to be set up and named correctly as well - this is done from a template on Rhino for Windows, but you will need to do it by hand, so to speak, on OS X.  The <em>py</em> file should be set up like this:</p>
 
-<div class="language-py highlighter-rouge"><pre class="highlight"><code><span class="c">#import statements as needed:</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span> <span class="kn">as</span> <span class="nn">sc</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="c">#this line with the name of the command:</span>
-<span class="n">__commandname__</span> <span class="o">=</span> <span class="s">"MyNewCommand"</span>
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">(</span> <span class="n">is_interactive</span> <span class="p">):</span>
-     <span class="c">#Your code in here</span>
-     <span class="n">obj</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-     <span class="k">if</span> <span class="n">obj</span><span class="p">:</span>
-         <span class="k">print</span> <span class="s">"Got an object"</span>
-     <span class="c">#etc...</span>
+<pre><code class="language-py">#import statements as needed:
+import rhinoscriptsyntax as rs
+import scriptcontext as sc
+import Rhino
+#this line with the name of the command:
+__commandname__ = "MyNewCommand"
+def RunCommand( is_interactive ):
+     #Your code in here
+     obj = rs.GetObject()
+     if obj:
+         print "Got an object"
+     #etc...
 </code></pre>
-</div>
 
 <p>This command script must be saved to:</p>
 
-<p><code class="highlighter-rouge">~/Library/Application Support/McNeel/Rhinoceros/MacPlugIns/PythonPlugIns/PlugInName{GUID}/dev</code></p>
+<p><code>~/Library/Application Support/McNeel/Rhinoceros/MacPlugIns/PythonPlugIns/PlugInName{GUID}/dev</code></p>
 
 <div class="alert alert-info">
 

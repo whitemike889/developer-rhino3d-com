@@ -242,70 +242,69 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve for curvature measurement"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve for curvature measurement" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv = go.Object(0).Curve();
+  if( 0 == crv )
+    return failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select point on curve for curvature measurement"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Select point on curve for curvature measurement" );
+  gp.Constrain( *crv );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint pt = gp.Point();
 
-  <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Failed to compute radius of curvature.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  double t = 0.0;
+  if( !crv-&gt;GetClosestPoint(pt, &amp;t) )
+  {
+    RhinoApp().Print( L"Failed to compute radius of curvature.\n" );
+    return failure;
+  }
 
-  <span class="n">ON_3dVector</span> <span class="n">tangent</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">TangentAt</span><span class="p">(</span> <span class="n">t</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">tangent</span><span class="p">.</span><span class="n">IsTiny</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Failed to compute radius of curvature. Curve may have stacked control points.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_3dVector tangent = crv-&gt;TangentAt( t );
+  if( tangent.IsTiny() )
+  {
+    RhinoApp().Print( L"Failed to compute radius of curvature. Curve may have stacked control points.\n" );
+    return failure;
+  }
 
-  <span class="n">ON_3dVector</span> <span class="n">curvature</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">CurvatureAt</span><span class="p">(</span> <span class="n">t</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="kt">double</span> <span class="n">k</span> <span class="o">=</span> <span class="n">curvature</span><span class="p">.</span><span class="n">Length</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Radius of curvature: infinite.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_3dVector curvature = crv-&gt;CurvatureAt( t );
+  const double k = curvature.Length();
+  if( k &lt; ON_SQRT_EPSILON )
+  {
+    RhinoApp().Print( L"Radius of curvature: infinite.\n" );
+    return failure;
+  }
 
-  <span class="n">ON_3dVector</span> <span class="n">radius_vector</span> <span class="o">=</span> <span class="n">curvature</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">k</span><span class="p">);</span>
-  <span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">circle</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">tangent</span><span class="p">,</span> <span class="n">pt</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">radius_vector</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Failed to compute radius of curvature.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_3dVector radius_vector = curvature / (k * k);
+  ON_Circle circle;
+  if ( !circle.Create(pt, tangent, pt + 2.0 * radius_vector) )
+  {
+    RhinoApp().Print( L"Failed to compute radius of curvature.\n" );
+    return failure;
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">circle</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.AddCurveObject( circle );
+  context.m_doc.AddPointObject( pt );
+  context.m_doc.Redraw();
 
-  <span class="n">ON_wString</span> <span class="n">wRadius</span><span class="p">;</span>
-  <span class="n">RhinoFormatNumber</span><span class="p">(</span> <span class="n">circle</span><span class="p">.</span><span class="n">Radius</span><span class="p">(),</span> <span class="n">wRadius</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Radius of curvature: %s.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">wRadius</span> <span class="p">);</span>
+  ON_wString wRadius;
+  RhinoFormatNumber( circle.Radius(), wRadius );
+  RhinoApp().Print( L"Radius of curvature: %s.\n", wRadius );
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -242,7 +242,7 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<pre><code class="language-cpp">/*
 Description:
   Intersects two meshes.
 Parameters:
@@ -254,92 +254,91 @@ Parameters:
   tolerance - [in]  The intersection tolerance.
 Returns:
   True if successful, false otherwise.
-*/</span>
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">MeshMeshIntersection</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">meshA</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">meshB</span><span class="p">,</span>
-        <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;&amp;</span> <span class="n">OutCurves</span><span class="p">,</span>
-        <span class="kt">double</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="n">ON_ZERO_TOLERANCE</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">meshA</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">meshB</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+*/
+static bool MeshMeshIntersection(
+        const ON_Mesh* meshA,
+        const ON_Mesh* meshB,
+        ON_SimpleArray&lt;ON_Curve*&gt;&amp; OutCurves,
+        double tolerance = ON_ZERO_TOLERANCE
+        )
+{
+  if( 0 == meshA | 0 == meshB )
+    return false;
 
-  <span class="n">ON_ClassArray</span><span class="o">&lt;</span><span class="n">ON_MMX_Polyline</span><span class="o">&gt;</span> <span class="n">transverse</span><span class="p">;</span>
-  <span class="n">ON_ClassArray</span><span class="o">&lt;</span><span class="n">ON_MMX_Polyline</span><span class="o">&gt;</span> <span class="n">overlap</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">ON_MeshMeshIntersect</span><span class="p">(</span> <span class="n">meshA</span><span class="p">,</span> <span class="n">meshB</span><span class="p">,</span> <span class="n">transverse</span><span class="p">,</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">tolerance</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  ON_ClassArray&lt;ON_MMX_Polyline&gt; transverse;
+  ON_ClassArray&lt;ON_MMX_Polyline&gt; overlap;
+  bool rc = ON_MeshMeshIntersect( meshA, meshB, transverse, overlap, tolerance, tolerance );
+  if( !rc )
+    return rc;
 
-  <span class="n">ON_ClassArray</span><span class="o">&lt;</span><span class="n">ON_MMX_Polyline</span><span class="o">&gt;&amp;</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">transverse</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-      <span class="n">arr</span> <span class="o">=</span> <span class="n">overlap</span><span class="p">;</span>
+  ON_ClassArray&lt;ON_MMX_Polyline&gt;&amp; arr = transverse;
+  int i, j, k;
+  for( i = 0; i &lt; 2; i++ )
+  {
+    if( i == 1 )
+      arr = overlap;
 
-    <span class="kt">int</span> <span class="n">ct</span> <span class="o">=</span> <span class="n">arr</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">ct</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_MMX_Polyline</span><span class="o">&amp;</span> <span class="n">mmxpline</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mmxpline</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
+    int ct = arr.Count();
+    for( j = 0; j &lt; ct; j++ )
+    {
+      ON_MMX_Polyline&amp; mmxpline = arr[j];
+      if( 0 == mmxpline.Count() )
+        continue;
 
-      <span class="n">ON_Polyline</span> <span class="n">polyline</span><span class="p">;</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">mmxpline</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">k</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">mmxpline</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">m_A</span><span class="p">.</span><span class="n">m_P</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-        <span class="kt">double</span> <span class="n">y</span> <span class="o">=</span> <span class="n">mmxpline</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">m_A</span><span class="p">.</span><span class="n">m_P</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
-        <span class="kt">double</span> <span class="n">z</span> <span class="o">=</span> <span class="n">mmxpline</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">m_A</span><span class="p">.</span><span class="n">m_P</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
-        <span class="n">polyline</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span> <span class="p">);</span>
-      <span class="p">}</span>
+      ON_Polyline polyline;
+      for( k = 0; k &lt; mmxpline.Count(); k++ )
+      {
+        double x = mmxpline[k].m_A.m_P.x;
+        double y = mmxpline[k].m_A.m_P.y;
+        double z = mmxpline[k].m_A.m_P.z;
+        polyline.Append( ON_3dPoint(x,y,z) );
+      }
 
-      <span class="k">if</span><span class="p">(</span> <span class="nb">false</span> <span class="o">==</span> <span class="n">polyline</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
+      if( false == polyline.IsValid() )
+        continue;
 
-      <span class="n">ON_PolylineCurve</span><span class="o">*</span> <span class="n">polyline_crv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_PolylineCurve</span><span class="p">(</span> <span class="n">polyline</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">polyline_crv</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
+      ON_PolylineCurve* polyline_crv = new ON_PolylineCurve( polyline );
+      if( 0 == polyline_crv )
+        continue;
 
-      <span class="n">OutCurves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">polyline_crv</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      OutCurves.Append( polyline_crv );
+    }
+  }
 
-  <span class="k">return</span> <span class="p">(</span> <span class="n">OutCurves</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  return ( OutCurves.Count() ) ? true : false;
+}
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select meshes to intersect"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select meshes to intersect" );
+  go.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go.GetObjects( 2, 2 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">meshA</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">meshB</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">meshA</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">meshA</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Mesh* meshA = go.Object(0).Mesh();
+  const ON_Mesh* meshB = go.Object(1).Mesh();
+  if( 0 == meshA | 0 == meshA )
+    return failure;
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">OutCurves</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">MeshMeshIntersection</span><span class="p">(</span> <span class="n">meshA</span><span class="p">,</span> <span class="n">meshB</span><span class="p">,</span> <span class="n">OutCurves</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">OutCurves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-      <span class="n">curve_obj</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">OutCurves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">curve_obj</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  ON_SimpleArray&lt;ON_Curve*&gt; OutCurves;
+  bool rc = MeshMeshIntersection( meshA, meshB, OutCurves );
+  if( rc )
+  {
+    int i;
+    for( i = 0; i &lt; OutCurves.Count(); i++ )
+    {
+      CRhinoCurveObject* curve_obj = new CRhinoCurveObject();
+      curve_obj-&gt;SetCurve( OutCurves[i] );
+      context.m_doc.AddObject( curve_obj );
+    }
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

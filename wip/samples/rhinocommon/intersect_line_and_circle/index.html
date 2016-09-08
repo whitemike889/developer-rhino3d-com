@@ -247,50 +247,49 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">IntersectLineCircle</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Circle</span> <span class="n">circle</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetCircle</span><span class="p">(</span><span class="k">out</span> <span class="n">circle</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCircle</span><span class="p">(</span><span class="n">circle</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result IntersectLineCircle(RhinoDoc doc)
+  {
+    Circle circle;
+    var rc = RhinoGet.GetCircle(out circle);
+    if (rc != Result.Success)
+      return rc;
+    doc.Objects.AddCircle(circle);
+    doc.Views.Redraw();
 
-    <span class="n">Line</span> <span class="n">line</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetLine</span><span class="p">(</span><span class="k">out</span> <span class="n">line</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLine</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    Line line;
+    rc = RhinoGet.GetLine(out line);
+    if (rc != Result.Success)
+      return rc;
+    doc.Objects.AddLine(line);
+    doc.Views.Redraw();
 
-    <span class="kt">double</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">;</span>
-    <span class="n">Point3d</span> <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">line_circle_intersect</span> <span class="p">=</span> <span class="n">Intersection</span><span class="p">.</span><span class="nf">LineCircle</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">circle</span><span class="p">,</span> <span class="k">out</span> <span class="n">t1</span><span class="p">,</span> <span class="k">out</span> <span class="n">point1</span><span class="p">,</span> <span class="k">out</span> <span class="n">t2</span><span class="p">,</span> <span class="k">out</span> <span class="n">point2</span><span class="p">);</span>
-    <span class="kt">string</span> <span class="n">msg</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="k">switch</span> <span class="p">(</span><span class="n">line_circle_intersect</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">case</span> <span class="n">LineCircleIntersection</span><span class="p">.</span><span class="n">None</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="p">=</span> <span class="s">"line does not intersect circle"</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="n">LineCircleIntersection</span><span class="p">.</span><span class="n">Single</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"line intersects circle at point ({0})"</span><span class="p">,</span> <span class="n">point1</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point1</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="n">LineCircleIntersection</span><span class="p">.</span><span class="n">Multiple</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"line intersects circle at points ({0}) and ({1})"</span><span class="p">,</span>
-          <span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point1</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point2</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    double t1, t2;
+    Point3d point1, point2;
+    var line_circle_intersect = Intersection.LineCircle(line, circle, out t1, out point1, out t2, out point2);
+    string msg = "";
+    switch (line_circle_intersect) {
+      case LineCircleIntersection.None:
+        msg = "line does not intersect circle";
+        break;
+      case LineCircleIntersection.Single:
+        msg = string.Format("line intersects circle at point ({0})", point1);
+        doc.Objects.AddPoint(point1);
+        break;
+      case LineCircleIntersection.Multiple:
+        msg = string.Format("line intersects circle at points ({0}) and ({1})",
+          point1, point2);
+        doc.Objects.AddPoint(point1);
+        doc.Objects.AddPoint(point2);
+        break;
+    }
+    RhinoApp.WriteLine(msg);
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function IntersectLineCircle(ByVal doc As RhinoDoc) As Result
@@ -332,9 +331,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

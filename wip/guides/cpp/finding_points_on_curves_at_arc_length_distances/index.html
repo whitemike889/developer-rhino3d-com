@@ -344,11 +344,11 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>The two functions on <code class="highlighter-rouge">ON_Curve</code> that are useful for determining the parameter of the point on a curve that is a prescribed arc length distance from the start of a curve are:</p>
+<p>The two functions on <code>ON_Curve</code> that are useful for determining the parameter of the point on a curve that is a prescribed arc length distance from the start of a curve are:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">ON_Curve::GetNormalizedArcLengthPoint</code></li>
-  <li><code class="highlighter-rouge">ON_Curve::GetNormalizedArcLengthPoints</code></li>
+  <li><code>ON_Curve::GetNormalizedArcLengthPoint</code></li>
+  <li><code>ON_Curve::GetNormalizedArcLengthPoints</code></li>
 </ul>
 
 <p>To use these functions, calculate a normalized arc length parameter.  That is, a parameter on the curve where 0.0 = the start of the curve, 0.5 = the midpoint of the curve, and 1.0 = the end of the curve.</p>
@@ -359,57 +359,56 @@ $(document).ready(function()
 
 <p>The following code sample demonstrates how to use these functions:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; obj_ref = go.Object(0);
+  const ON_Curve* crv = obj_ref.Curve();
+  if( 0 == crv )
+    return failure;
 
-  <span class="kt">double</span> <span class="n">crv_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetLength</span><span class="p">(</span><span class="o">&amp;</span><span class="n">crv_length</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  double crv_length = 0.0;
+  if( !crv-&gt;GetLength(&amp;crv_length) )
+    return failure;
 
-  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Length from start"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetUpperLimit</span><span class="p">(</span> <span class="n">crv_length</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( L"Length from start" );
+  gn.SetLowerLimit( 0.0, TRUE );
+  gn.SetUpperLimit( crv_length, TRUE );
+  gn.GetNumber();
+  if( gn.CommandResult() != success )
+    return gn.CommandResult();
 
-  <span class="c1">// Cook up a normalized arc length parameter,
-</span>  <span class="c1">// where 0.0 &lt;= s &lt;= 1.0.
-</span>  <span class="kt">double</span> <span class="n">length</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">()</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">length</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="p">)</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">length</span> <span class="o">==</span> <span class="n">crv_length</span> <span class="p">)</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">length</span> <span class="o">/</span> <span class="n">crv_length</span><span class="p">;</span>
+  // Cook up a normalized arc length parameter,
+  // where 0.0 &lt;= s &lt;= 1.0.
+  double length = fabs( gn.Number() );
+  double s = 0.0;
+  if( length == 0.0 )
+    s = 0.0;
+  else if( length == crv_length )
+    s = 1.0;
+  else
+    s = length / crv_length;
 
-  <span class="c1">// Get the parameter of the point on the curve that is a
-</span>  <span class="c1">// prescribed arc length from the start of the curve.
-</span>  <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNormalizedArcLengthPoint</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">t</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  // Get the parameter of the point on the curve that is a
+  // prescribed arc length from the start of the curve.
+  double t = 0.0;
+  if( crv-&gt;GetNormalizedArcLengthPoint(s, &amp;t) )
+  {
+    ON_3dPoint pt = crv-&gt;PointAt( t );
+    context.m_doc.AddPointObject( pt );
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

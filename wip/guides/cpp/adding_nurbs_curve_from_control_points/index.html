@@ -348,74 +348,72 @@ $(document).ready(function()
 
 <h2 id="method-1">Method 1</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPointArray</span> <span class="n">points</span><span class="p">;</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+        const CRhinoCommandContext&amp; context )
+{
+  ON_3dPointArray points;
+  points.Append( ON_3dPoint(0, 0, 0) );
+  points.Append( ON_3dPoint(0, 2, 0) );
+  points.Append( ON_3dPoint(2, 4, 0) );
+  points.Append( ON_3dPoint(4, 2, 0) );
+  points.Append( ON_3dPoint(4, 0, 0) );
 
-  <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">nc</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-  <span class="n">nc</span><span class="o">-&gt;</span><span class="n">CreateClampedUniformNurbs</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">(),</span> <span class="n">points</span> <span class="p">);</span>
+  ON_NurbsCurve* nc = ON_NurbsCurve::New();
+  nc-&gt;CreateClampedUniformNurbs( 3, 4, points.Count(), points );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">nc</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="o">*</span><span class="n">nc</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( nc-&gt;IsValid() )
+  {
+    context.m_doc.AddCurveObject( *nc );
+    context.m_doc.Redraw();
+  }
 
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  RhinoApp().ActiveDoc()-&gt;Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <h2 id="method-2">Method 2</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPointArray</span> <span class="n">points</span><span class="p">;</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+        const CRhinoCommandContext&amp; context )
+{
+  ON_3dPointArray points;
+  points.Append( ON_3dPoint(0, 0, 0) );
+  points.Append( ON_3dPoint(0, 2, 0) );
+  points.Append( ON_3dPoint(2, 4, 0) );
+  points.Append( ON_3dPoint(4, 2, 0) );
+  points.Append( ON_3dPoint(4, 0, 0) );
 
-  <span class="kt">int</span> <span class="n">dimension</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">bIsRat</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">cv_count</span> <span class="o">=</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
+  int dimension = 3;
+  bool bIsRat = false;
+  int order = 4;
+  int cv_count = points.Count();
 
-  <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">nc</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">dimension</span><span class="p">,</span> <span class="n">bIsRat</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">cv_count</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">nc</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  ON_NurbsCurve* nc = ON_NurbsCurve::New(dimension, bIsRat, order, cv_count);
+  if( !nc )
+        return CRhinoCommand::failure;
 
-  <span class="c1">//Set CV points
-</span>  <span class="n">nc</span><span class="o">-&gt;</span><span class="n">ReserveCVCapacity</span><span class="p">(</span> <span class="n">cv_count</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-        <span class="n">nc</span><span class="o">-&gt;</span><span class="n">SetCV</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-  <span class="p">}</span>
+  //Set CV points
+  nc-&gt;ReserveCVCapacity( cv_count );
+  for( int i = 0; i &lt; points.Count(); i++ )
+  {
+        nc-&gt;SetCV(i, points[i] );
+  }
 
-  <span class="c1">//Set Knots
-</span>  <span class="n">nc</span><span class="o">-&gt;</span><span class="n">ReserveKnotCapacity</span><span class="p">(</span> <span class="n">order</span><span class="o">+</span><span class="n">cv_count</span><span class="o">-</span><span class="mi">2</span> <span class="p">);</span>
-  <span class="n">ON_MakeClampedUniformKnotVector</span><span class="p">(</span> <span class="n">order</span><span class="p">,</span> <span class="n">cv_count</span><span class="p">,</span> <span class="n">nc</span><span class="o">-&gt;</span><span class="n">m_knot</span> <span class="p">);</span>
+  //Set Knots
+  nc-&gt;ReserveKnotCapacity( order+cv_count-2 );
+  ON_MakeClampedUniformKnotVector( order, cv_count, nc-&gt;m_knot );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">nc</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="o">*</span><span class="n">nc</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( nc-&gt;IsValid() )
+  {
+    context.m_doc.AddCurveObject( *nc );
+    context.m_doc.Redraw();
+  }
 
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  RhinoApp().ActiveDoc()-&gt;Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

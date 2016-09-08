@@ -247,37 +247,36 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ModifyObjectColor</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rhino_object</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">color</span> <span class="p">=</span> <span class="n">rhino_object</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ObjectColor</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">b</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">UI</span><span class="p">.</span><span class="n">Dialogs</span><span class="p">.</span><span class="nf">ShowColorDialog</span><span class="p">(</span><span class="k">ref</span> <span class="n">color</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">b</span><span class="p">)</span> <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ModifyObjectColor(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select object", false, ObjectType.AnyObject, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var rhino_object = obj_ref.Object();
+    var color = rhino_object.Attributes.ObjectColor;
+    bool b = Rhino.UI.Dialogs.ShowColorDialog(ref color);
+    if (!b) return Result.Cancel;
 
-    <span class="n">rhino_object</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ObjectColor</span> <span class="p">=</span> <span class="n">color</span><span class="p">;</span>
-    <span class="n">rhino_object</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ColorSource</span> <span class="p">=</span> <span class="n">ObjectColorSource</span><span class="p">.</span><span class="n">ColorFromObject</span><span class="p">;</span>
-    <span class="n">rhino_object</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
+    rhino_object.Attributes.ObjectColor = color;
+    rhino_object.Attributes.ColorSource = ObjectColorSource.ColorFromObject;
+    rhino_object.CommitChanges();
 
-    <span class="c1">// an object's color attributes can also be specified
-</span>    <span class="c1">// when the object is added to Rhino
-</span>    <span class="kt">var</span> <span class="n">sphere</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">Point3d</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="m">5.0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">attributes</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ObjectAttributes</span><span class="p">();</span>
-    <span class="n">attributes</span><span class="p">.</span><span class="n">ObjectColor</span> <span class="p">=</span> <span class="n">Color</span><span class="p">.</span><span class="n">CadetBlue</span><span class="p">;</span>
-    <span class="n">attributes</span><span class="p">.</span><span class="n">ColorSource</span> <span class="p">=</span> <span class="n">ObjectColorSource</span><span class="p">.</span><span class="n">ColorFromObject</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddSphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="n">attributes</span><span class="p">);</span>
+    // an object's color attributes can also be specified
+    // when the object is added to Rhino
+    var sphere = new Sphere(Point3d.Origin, 5.0);
+    var attributes = new ObjectAttributes();
+    attributes.ObjectColor = Color.CadetBlue;
+    attributes.ColorSource = ObjectColorSource.ColorFromObject;
+    doc.Objects.AddSphere(sphere, attributes);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ModifyObjectColor(ByVal doc As RhinoDoc) As Result
@@ -311,43 +310,42 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">System.Drawing</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.UI.Dialogs</span> <span class="kn">import</span> <span class="n">ShowColorDialog</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from System.Drawing import *
+from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Geometry import *
+from Rhino.Input import *
+from Rhino.Commands import *
+from Rhino.UI.Dialogs import ShowColorDialog
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select object"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">rhino_object</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-  <span class="n">color</span> <span class="o">=</span> <span class="n">rhino_object</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">ObjectColor</span>
-  <span class="n">b</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">ShowColorDialog</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span> <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject("Select object", False, ObjectType.AnyObject)
+  if rc &lt;&gt; Result.Success:
+    return rc
+  rhino_object = obj_ref.Object()
+  color = rhino_object.Attributes.ObjectColor
+  b, color = ShowColorDialog(color)
+  if not b: return Result.Cancel
 
-  <span class="n">rhino_object</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">ObjectColor</span> <span class="o">=</span> <span class="n">color</span>
-  <span class="n">rhino_object</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">ColorSource</span> <span class="o">=</span> <span class="n">ObjectColorSource</span><span class="o">.</span><span class="n">ColorFromObject</span>
-  <span class="n">rhino_object</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+  rhino_object.Attributes.ObjectColor = color
+  rhino_object.Attributes.ColorSource = ObjectColorSource.ColorFromObject
+  rhino_object.CommitChanges()
 
-  <span class="c"># an object's color attributes can also be specified</span>
-  <span class="c"># when the object is added to Rhino</span>
-  <span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">(</span><span class="n">Point3d</span><span class="o">.</span><span class="n">Origin</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
-  <span class="n">attributes</span> <span class="o">=</span> <span class="n">ObjectAttributes</span><span class="p">()</span>
-  <span class="n">attributes</span><span class="o">.</span><span class="n">ObjectColor</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">CadetBlue</span>
-  <span class="n">attributes</span><span class="o">.</span><span class="n">ColorSource</span> <span class="o">=</span> <span class="n">ObjectColorSource</span><span class="o">.</span><span class="n">ColorFromObject</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddSphere</span><span class="p">(</span><span class="n">sphere</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+  # an object's color attributes can also be specified
+  # when the object is added to Rhino
+  sphere = Sphere(Point3d.Origin, 5.0)
+  attributes = ObjectAttributes()
+  attributes.ObjectColor = Color.CadetBlue
+  attributes.ColorSource = ObjectColorSource.ColorFromObject
+  doc.Objects.AddSphere(sphere, attributes)
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

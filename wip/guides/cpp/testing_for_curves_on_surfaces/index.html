@@ -352,7 +352,7 @@ $(document).ready(function()
 
 <p>The following sample function does just this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Description:
+<pre><code class="language-cpp">// Description:
 //   Test to see if a curve lies on a surface.
 // Parameters:
 //   srf - [in] The surface
@@ -361,53 +361,52 @@ $(document).ready(function()
 // Returns:
 //   True if the curve (probably) lies on the surface.
 //   False otherwise.
-</span>
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">RhinoIsCurveOnSurface</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">ON_Surface</span><span class="o">&amp;</span> <span class="n">srf</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">&amp;</span> <span class="n">crv</span><span class="p">,</span>
-        <span class="kt">double</span> <span class="n">tol</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">srf</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="o">|</span> <span class="o">!</span><span class="n">crv</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nc</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span><span class="p">.</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+static bool RhinoIsCurveOnSurface(
+        const ON_Surface&amp; srf,
+        const ON_Curve&amp; crv,
+        double tol
+        )
+{
+  if( !srf.IsValid() | !crv.IsValid() )
+    return false;
 
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">span_count</span> <span class="o">=</span> <span class="n">nc</span><span class="p">.</span><span class="n">SpanCount</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">span_vector</span><span class="p">(</span> <span class="n">span_count</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">span_vector</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">span_count</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">GetSpanVector</span><span class="p">(</span> <span class="n">span_vector</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
+  ON_NurbsCurve nc;
+  if( !crv.GetNurbForm(nc) )
+    return false;
 
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="n">nc</span><span class="p">.</span><span class="n">Degree</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">span_count</span> <span class="o">&amp;&amp;</span> <span class="n">rc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Interval</span> <span class="n">span</span><span class="p">(</span> <span class="n">span_vector</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">span_vector</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">IsIncreasing</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">num_samples</span> <span class="o">&amp;&amp;</span> <span class="n">rc</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">crv_t</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">ParameterAt</span><span class="p">(</span> <span class="n">j</span> <span class="o">/</span> <span class="n">num_samples</span> <span class="p">);</span>
-        <span class="n">ON_3dPoint</span> <span class="n">crv_pt</span> <span class="o">=</span> <span class="n">nc</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">crv_t</span> <span class="p">);</span>
-        <span class="kt">double</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="n">srf</span><span class="p">.</span><span class="n">GetClosestPoint</span><span class="p">(</span> <span class="n">crv_pt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">ON_3dPoint</span> <span class="n">srf_pt</span> <span class="o">=</span> <span class="n">srf</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="p">);</span>
-          <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">crv_pt</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">srf_pt</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">tol</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  const int span_count = nc.SpanCount();
+  ON_SimpleArray&lt;double&gt; span_vector( span_count + 1 );
+  span_vector.SetCount( span_count + 1 );
+  nc.GetSpanVector( span_vector.Array() );
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  bool rc = true;
+  double num_samples = nc.Degree() * 2;
+  int i, j;
+  for( i = 0; i &lt; span_count &amp;&amp; rc; i++ )
+  {
+    ON_Interval span( span_vector[i], span_vector[i+1] );
+    rc = span.IsIncreasing();
+    if( rc )
+    {
+      for( j = 0; j &lt;= num_samples &amp;&amp; rc; j++ )
+      {
+        double crv_t = span.ParameterAt( j / num_samples );
+        ON_3dPoint crv_pt = nc.PointAt( crv_t );
+        double s = 0.0, t = 0.0;
+        rc = srf.GetClosestPoint( crv_pt, &amp;s, &amp;t );
+        if( rc )
+        {
+          ON_3dPoint srf_pt = srf.PointAt( s, t );
+          rc = ( fabs(crv_pt.DistanceTo(srf_pt)) &lt;= tol );
+        }
+      }
+    }
+  }
+
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

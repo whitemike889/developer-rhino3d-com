@@ -329,27 +329,26 @@ $(document).ready(function()
 
 <p>The following code sample demonstrates how to obtain an object’s unique identifier, or UUID, using C/C++:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestID</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestID::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select object" );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; ref = go.Object( 0 );
+  const CRhinoObject* obj = ref.Object();
+  if( !obj )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_UUID</span> <span class="n">uuid</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">().</span><span class="n">m_uuid</span><span class="p">;</span>
-  <span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-  <span class="n">ON_UuidToString</span><span class="p">(</span> <span class="n">uuid</span><span class="p">,</span> <span class="n">str</span> <span class="p">);</span>
-  <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"The object's unique identifier is </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">str</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  ON_UUID uuid = obj-&gt;Attributes().m_uuid;
+  ON_wString str;
+  ON_UuidToString( uuid, str );
+  ::RhinoApp().Print( L"The object's unique identifier is \"%s\".\n", str );
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

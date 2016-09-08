@@ -242,66 +242,65 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select an open mesh object
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select open mesh"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">open_mesh</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select an open mesh object
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select open mesh" );
+  go.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::open_mesh );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Validate the selection
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh</span>  <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Validate the selection
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const ON_Mesh* mesh = ref.Mesh();
+  if( 0 == mesh  )
+    return failure;
 
-  <span class="c1">// Get the mesh's topology
-</span>  <span class="k">const</span> <span class="n">ON_MeshTopology</span><span class="o">&amp;</span> <span class="n">mesh_top</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">-&gt;</span><span class="n">Topology</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">lines</span><span class="p">(</span> <span class="n">mesh_top</span><span class="p">.</span><span class="n">m_tope</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">);</span>
+  // Get the mesh's topology
+  const ON_MeshTopology&amp; mesh_top = mesh-&gt;Topology();
+  ON_SimpleArray&lt;const ON_Curve*&gt; lines( mesh_top.m_tope.Count() );
 
-  <span class="c1">// Find all of the mesh edges that have only a single mesh face
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mesh_top</span><span class="p">.</span><span class="n">m_tope</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_MeshTopologyEdge</span><span class="o">&amp;</span> <span class="n">mesh_edge</span> <span class="o">=</span> <span class="n">mesh_top</span><span class="p">.</span><span class="n">m_tope</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">mesh_edge</span><span class="p">.</span><span class="n">m_topf_count</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_3fPoint</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">mesh_top</span><span class="p">.</span><span class="n">TopVertexPoint</span><span class="p">(</span> <span class="n">mesh_edge</span><span class="p">.</span><span class="n">m_topvi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">ON_3fPoint</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">mesh_top</span><span class="p">.</span><span class="n">TopVertexPoint</span><span class="p">(</span> <span class="n">mesh_edge</span><span class="p">.</span><span class="n">m_topvi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="n">line</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_LineCurve</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">lines</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">line</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Find all of the mesh edges that have only a single mesh face
+  int i;
+  for( i = 0; i &lt; mesh_top.m_tope.Count(); i++ )
+  {
+    const ON_MeshTopologyEdge&amp; mesh_edge = mesh_top.m_tope[i];
+    if( mesh_edge.m_topf_count == 1 )
+    {
+      ON_3fPoint p0 = mesh_top.TopVertexPoint( mesh_edge.m_topvi[0] );
+      ON_3fPoint p1 = mesh_top.TopVertexPoint( mesh_edge.m_topvi[1] );
+      ON_LineCurve* line = new ON_LineCurve( ON_3dPoint(p0), ON_3dPoint(p1) );
+      lines.Append( line );
+    }
+  }
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">output</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">2.1</span> <span class="o">*</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
+  ON_SimpleArray&lt;ON_Curve*&gt; output;
+  double tolerance = 2.1 * context.m_doc.AbsoluteTolerance();
 
-  <span class="c1">// Join all of the line segments
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoMergeCurves</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">output</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">;</span>
-      <span class="n">crv</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">crv</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">crv</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
-      <span class="k">else</span>
-        <span class="k">delete</span> <span class="n">crv</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Join all of the line segments
+  if( RhinoMergeCurves(lines, output, tolerance) )
+  {
+    for( i = 0; i &lt; output.Count(); i++ )
+    {
+      CRhinoCurveObject* crv = new CRhinoCurveObject;
+      crv-&gt;SetCurve( output[i] );
+      if( context.m_doc.AddObject(crv) )
+        crv-&gt;Select();
+      else
+        delete crv;
+    }
+  }
 
-  <span class="c1">// Clean up so we don't leak memory
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lines</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="k">delete</span> <span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  // Clean up so we don't leak memory
+  for( i = 0; i &lt; lines.Count(); i++ )
+    delete lines[i];
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

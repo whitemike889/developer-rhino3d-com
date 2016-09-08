@@ -323,35 +323,34 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>When you run the Options command, all Rhino’s options or application settings that you see are maintained by a <code class="highlighter-rouge">CRhinoAppSettings</code> class stored on the Rhino application object.  This class is a container class as it holds several other <code class="highlighter-rouge">CRhinoApp_xxx_Settings</code> classes that help to organize all the options.</p>
+<p>When you run the Options command, all Rhino’s options or application settings that you see are maintained by a <code>CRhinoAppSettings</code> class stored on the Rhino application object.  This class is a container class as it holds several other <code>CRhinoApp_xxx_Settings</code> classes that help to organize all the options.</p>
 
 <p>The process for modifying any Rhino option is:</p>
 
 <ol>
-  <li>Find the container class in <code class="highlighter-rouge">CRhinoAppSettings</code> that holds the option you want to change.</li>
+  <li>Find the container class in <code>CRhinoAppSettings</code> that holds the option you want to change.</li>
   <li>Make a copy of that container class.</li>
   <li>Change the appropriate members.</li>
-  <li>Replace Rhino’s copy of that container class with yours by calling one of <code class="highlighter-rouge">CRhinoAppSettings</code>’ <code class="highlighter-rouge">Set_xxx_Settings()</code> member functions.</li>
+  <li>Replace Rhino’s copy of that container class with yours by calling one of <code>CRhinoAppSettings</code>’ <code>Set_xxx_Settings()</code> member functions.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample source code demonstrates how to show or hide Rhino’s status bar using the Rhino C/C++ SDK…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">ShowRhinoStatusBar</span><span class="p">(</span> <span class="n">BOOL</span> <span class="n">bShow</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Copy the CRhinoAppAppearanceSettings class
-</span>  <span class="n">CRhinoAppAppearanceSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">AppearanceSettings</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">settings</span><span class="p">.</span><span class="n">m_show_statusbar</span> <span class="o">!=</span> <span class="n">bShow</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Modify the desired setting
-</span>    <span class="n">settings</span><span class="p">.</span><span class="n">m_show_statusbar</span> <span class="o">=</span> <span class="n">bShow</span><span class="p">;</span>
-    <span class="c1">// Replace the CRhinoAppAppearanceSettings with the modified version
-</span>    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">SetAppearanceSettings</span><span class="p">(</span> <span class="n">settings</span> <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">void ShowRhinoStatusBar( BOOL bShow )
+{
+  // Copy the CRhinoAppAppearanceSettings class
+  CRhinoAppAppearanceSettings settings = RhinoApp().AppSettings().AppearanceSettings( true );
+  if( settings.m_show_statusbar != bShow )
+  {
+    // Modify the desired setting
+    settings.m_show_statusbar = bShow;
+    // Replace the CRhinoAppAppearanceSettings with the modified version
+    RhinoApp().AppSettings().SetAppearanceSettings( settings );
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

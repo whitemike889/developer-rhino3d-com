@@ -361,119 +361,117 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>If you are not interested in writing your own drawing routine and you want to just use Rhino’s built-in polyline drawing tool, then you can just use Rhino’s <code class="highlighter-rouge">RhinoGetPolyline</code> function.  See <em>rhinoSdkGetLine.h</em> for more information.</p>
+<p>If you are not interested in writing your own drawing routine and you want to just use Rhino’s built-in polyline drawing tool, then you can just use Rhino’s <code>RhinoGetPolyline</code> function.  See <em>rhinoSdkGetLine.h</em> for more information.</p>
 
-<p>If you need more control over how the polyline is define or how it is drawn, then you can derive your own class from <code class="highlighter-rouge">CRhinoGetPoint</code> and draw the polyline yourself.</p>
+<p>If you need more control over how the polyline is define or how it is drawn, then you can derive your own class from <code>CRhinoGetPoint</code> and draw the polyline yourself.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample code demonstrates a simple class, derived from <code class="highlighter-rouge">CRhinoGetPoint</code>, that dynamically draws a polyline based on the points picked by a user.</p>
+<p>The following sample code demonstrates a simple class, derived from <code>CRhinoGetPoint</code>, that dynamically draws a polyline based on the points picked by a user.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">/////////////////////////////////////////////////////////////////////////////
+<pre><code class="language-cpp">/////////////////////////////////////////////////////////////////////////////
 // CRhGetPoints declaration
-</span>
-<span class="k">class</span> <span class="nc">CRhGetPoints</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CRhGetPoints</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">GetPoints</span><span class="p">(</span> <span class="n">CRhinoHistory</span><span class="o">*</span> <span class="n">history</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bOnMouseUp</span> <span class="o">=</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">Points</span><span class="p">(</span> <span class="n">ON_3dPointArray</span><span class="o">&amp;</span> <span class="n">points</span> <span class="p">);</span>
 
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">ON_3dPointArray</span> <span class="n">m_P</span><span class="p">;</span>
-<span class="p">};</span>
+class CRhGetPoints : public CRhinoGetPoint
+{
+public:
+  CRhGetPoints();
+  void DynamicDraw( HDC hdc, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt );
+  CRhinoGet::result GetPoints( CRhinoHistory* history = NULL, bool bOnMouseUp = false );
+  int Points( ON_3dPointArray&amp; points );
 
-<span class="c1">/////////////////////////////////////////////////////////////////////////////
+public:
+  ON_3dPointArray m_P;
+};
+
+/////////////////////////////////////////////////////////////////////////////
 // CRhGetPoints definition
-</span>
-<span class="n">CRhGetPoints</span><span class="o">::</span><span class="n">CRhGetPoints</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">m_P</span><span class="p">.</span><span class="n">SetCapacity</span><span class="p">(</span> <span class="mi">64</span> <span class="p">);</span>
-<span class="p">}</span>
 
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">CRhGetPoints</span><span class="o">::</span><span class="n">GetPoints</span><span class="p">(</span> <span class="n">CRhinoHistory</span><span class="o">*</span> <span class="n">history</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bOnMouseUp</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_P</span><span class="p">.</span><span class="n">Empty</span><span class="p">();</span>
+CRhGetPoints::CRhGetPoints()
+{
+  m_P.SetCapacity( 64 );
+}
 
-  <span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"First point"</span> <span class="p">);</span>
+CRhinoGet::result CRhGetPoints::GetPoints( CRhinoHistory* history, bool bOnMouseUp )
+{
+  m_P.Empty();
 
-  <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">(</span> <span class="n">history</span><span class="p">,</span> <span class="n">bOnMouseUp</span> <span class="p">);</span>
+  SetCommandPrompt( L"First point" );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">point</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_P</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
+  CRhinoGet::result res = GetPoint( history, bOnMouseUp );
 
-    <span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Next point"</span> <span class="p">);</span>
-    <span class="n">PermitOrthoSnap</span><span class="p">();</span>
-    <span class="n">AcceptNothing</span><span class="p">();</span>
+  if( res == CRhinoGet::point )
+  {
+    m_P.Append( Point() );
 
-    <span class="k">for</span><span class="p">(</span> <span class="p">;;</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
+    SetCommandPrompt( L"Next point" );
+    PermitOrthoSnap();
+    AcceptNothing();
 
-      <span class="n">res</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">(</span> <span class="n">history</span><span class="p">,</span> <span class="n">bOnMouseUp</span> <span class="p">);</span>
+    for( ;; )
+    {
+      SetBasePoint( Point() );
 
-      <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">point</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">m_P</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="p">}</span>
+      res = GetPoint( history, bOnMouseUp );
 
-      <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">nothing</span> <span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">point</span><span class="p">;</span>
+      if( res == CRhinoGet::point )
+      {
+        m_P.Append( Point() );
+        continue;
+      }
 
-      <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">cancel</span> <span class="p">)</span>
-        <span class="n">m_P</span><span class="p">.</span><span class="n">Empty</span><span class="p">();</span>
+      else if( res == CRhinoGet::nothing )
+        res = CRhinoGet::point;
 
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      else if( res == CRhinoGet::cancel )
+        m_P.Empty();
 
-  <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-<span class="p">}</span>
+      break;
+    }
+  }
 
-<span class="kt">void</span> <span class="n">CRhGetPoints</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">m_P</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_P</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">v</span><span class="p">.</span><span class="n">DrawPoint</span><span class="p">(</span> <span class="n">m_P</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">v</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span> <span class="n">m_P</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">m_P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">v</span><span class="p">.</span><span class="n">DrawPoint</span><span class="p">(</span> <span class="n">m_P</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-    <span class="n">v</span><span class="p">.</span><span class="n">DrawPoint</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-    <span class="n">v</span><span class="p">.</span><span class="n">DrawLine</span><span class="p">(</span> <span class="n">m_P</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">pt</span><span class="p">);</span>
-<span class="p">}</span>
+  return res;
+}
 
-<span class="kt">int</span> <span class="n">CRhGetPoints</span><span class="o">::</span><span class="n">Points</span><span class="p">(</span> <span class="n">ON_3dPointArray</span><span class="o">&amp;</span> <span class="n">points</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">m_P</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">points</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">count</span><span class="p">,</span> <span class="n">m_P</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
-<span class="p">}</span>
+void CRhGetPoints::DynamicDraw( HDC hdc, CRhinoViewport&amp; v, const ON_3dPoint&amp; pt )
+{
+  if( m_P.Count() &gt; 0 )
+  {
+    int i;
+    for( i = 1; i &lt; m_P.Count(); i++ )
+    {
+      v.DrawPoint( m_P[i-1] );
+      v.DrawLine( m_P[i-1], m_P[i] );
+    }
+    v.DrawPoint( m_P[i-1] );
+    v.DrawPoint( pt );
+    v.DrawLine( m_P[i-1], pt );
+  }
+  CRhinoGetPoint::DynamicDraw( hdc, v, pt);
+}
+
+int CRhGetPoints::Points( ON_3dPointArray&amp; points )
+{
+  int count = m_P.Count();
+  if( count &gt; 0 )
+    points.Append( count, m_P.Array() );
+  return count;
+}
 </code></pre>
-</div>
 
 <p>You would use the above class as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhGetPoints</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">point</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// TODO...
-</span>  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhGetPoints gp;
+  CRhinoGet::result res = gp.GetPoints();
+  if( res == CRhinoGet::point )
+  {
+    // TODO...
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <h2 id="notes">Notes</h2>
 

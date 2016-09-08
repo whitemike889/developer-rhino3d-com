@@ -415,41 +415,40 @@ $(document).ready(function()
 
 <h3 id="lightweight-extrusions">Lightweight Extrusions</h3>
 
-<p>Lightweight Extrusion objects allow creation of simple extruded shapes using a much more lightweight representation than Brep (polysurface) objects. Lightweight Extrusions are represented by the <code class="highlighter-rouge">ON_Extrusion</code> class and have the object type of <code class="highlighter-rouge">ON::extrusion_object</code>.</p>
+<p>Lightweight Extrusion objects allow creation of simple extruded shapes using a much more lightweight representation than Brep (polysurface) objects. Lightweight Extrusions are represented by the <code>ON_Extrusion</code> class and have the object type of <code>ON::extrusion_object</code>.</p>
 
 <p>When reading 3DM files, in most cases, you will want to convert the Lightweight Extrusion object to a Brep, and then just pass the Brep to the Brep handling code that you’ve already written:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ONX_model</span> <span class="n">model</span> <span class="o">=</span> <span class="p">...</span>
-<span class="p">...</span>
-<span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ONX_Model_Object</span><span class="o">&amp;</span> <span class="n">model_object</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_object</span> <span class="p">)</span>
-    <span class="k">continue</span><span class="p">;</span>
+<pre><code class="language-cpp">ONX_model model = ...
+...
+for( int i = 0; i &lt; model.m_object_table.Count(); i++ )
+{
+  const ONX_Model_Object&amp; model_object = model.m_object_table[i];
+  if( 0 == model_object.m_object )
+    continue;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">extrusion_object</span> <span class="o">!=</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_object</span><span class="o">-&gt;</span><span class="n">ObjectType</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">continue</span><span class="p">;</span>
+  if( ON::extrusion_object != model_object.m_object-&gt;ObjectType() )
+    continue;
 
-  <span class="k">const</span> <span class="n">ON_Extrusion</span><span class="o">*</span> <span class="n">extrusion</span> <span class="o">=</span> <span class="n">ON_Extrusion</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_object</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">extrusion</span> <span class="p">)</span>
-    <span class="k">continue</span><span class="p">;</span>
+  const ON_Extrusion* extrusion = ON_Extrusion::Cast( model_object.m_object );
+  if( 0 == extrusion )
+    continue;
 
-  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="k">continue</span><span class="p">;</span>
+  ON_Brep* brep = ON_Brep::New();
+  if( 0 == brep )
+    continue;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="o">!=</span> <span class="n">extrusion</span><span class="o">-&gt;</span><span class="n">BrepForm</span><span class="p">(</span><span class="n">brep</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">brep</span><span class="p">;</span> <span class="c1">// don't leak...
-</span>    <span class="k">continue</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( brep != extrusion-&gt;BrepForm(brep, true) )
+  {
+    delete brep; // don't leak...
+    continue;
+  }
 
-  <span class="c1">// TODO: do something with brep here...
-</span>
-  <span class="k">delete</span> <span class="n">brep</span><span class="p">;</span> <span class="c1">// don't leak...
-</span><span class="p">}</span>
+  // TODO: do something with brep here...
+
+  delete brep; // don't leak...
+}
 </code></pre>
-</div>
 
 <h2 id="changed-features">Changed Features</h2>
 
@@ -459,29 +458,29 @@ $(document).ready(function()
   <li>Justification support for text added.</li>
   <li>Text fields added:
     <ul>
-      <li>Use <code class="highlighter-rouge">TextValue()</code> instead of <code class="highlighter-rouge">UserText()</code></li>
-      <li>Use <code class="highlighter-rouge">SetTextValue()</code> instead of <code class="highlighter-rouge">SetUserText()</code></li>
+      <li>Use <code>TextValue()</code> instead of <code>UserText()</code></li>
+      <li>Use <code>SetTextValue()</code> instead of <code>SetUserText()</code></li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">TextFormula()</code></li>
-  <li><code class="highlighter-rouge">SetTextFormula()</code></li>
+  <li><code>TextFormula()</code></li>
+  <li><code>SetTextFormula()</code></li>
   <li>Layout scaling added. Scale per detail/paperspace.
     <ul>
-      <li><code class="highlighter-rouge">AnnotativeScaling()</code></li>
-      <li><code class="highlighter-rouge">SetAnnotativeScaling()</code></li>
-      <li><code class="highlighter-rouge">ON_Annotation2::m_annotative_scale</code></li>
+      <li><code>AnnotativeScaling()</code></li>
+      <li><code>SetAnnotativeScaling()</code></li>
+      <li><code>ON_Annotation2::m_annotative_scale</code></li>
     </ul>
   </li>
   <li>Text Mask support added for text and dimensions
     <ul>
-      <li><code class="highlighter-rouge">DrawTextMask()</code></li>
-      <li><code class="highlighter-rouge">SetDrawTextMask()</code></li>
-      <li><code class="highlighter-rouge">MaskColorSource()</code></li>
-      <li><code class="highlighter-rouge">SetMaskColorSource()</code></li>
-      <li><code class="highlighter-rouge">MaskColor()</code></li>
-      <li><code class="highlighter-rouge">SetMaskColor()</code></li>
-      <li><code class="highlighter-rouge">MaskOffsetFactor()</code></li>
-      <li><code class="highlighter-rouge">SetMaskOffsetFactor()</code></li>
+      <li><code>DrawTextMask()</code></li>
+      <li><code>SetDrawTextMask()</code></li>
+      <li><code>MaskColorSource()</code></li>
+      <li><code>SetMaskColorSource()</code></li>
+      <li><code>MaskColor()</code></li>
+      <li><code>SetMaskColor()</code></li>
+      <li><code>MaskOffsetFactor()</code></li>
+      <li><code>SetMaskOffsetFactor()</code></li>
     </ul>
   </li>
 </ul>
@@ -491,9 +490,9 @@ $(document).ready(function()
 <ul>
   <li>Per dimstyle for dimensions and global for text now</li>
   <li>Document global settings for what scaling is done</li>
-  <li>New Rhino SDK class - <code class="highlighter-rouge">CRhinoAnnotationSettingsEx:</code>
+  <li>New Rhino SDK class - <code>CRhinoAnnotationSettingsEx:</code>
     <ul>
-      <li>Use <code class="highlighter-rouge">CRhinoDocProperties::GetON_3dmAnnotationSettings()</code> to access</li>
+      <li>Use <code>CRhinoDocProperties::GetON_3dmAnnotationSettings()</code> to access</li>
     </ul>
   </li>
 </ul>
@@ -504,15 +503,15 @@ $(document).ready(function()
   <li>Additions for worksessions and linked blocks.</li>
   <li>Added the concept of child dimstyles so that fields can be overridden:
     <ul>
-      <li><code class="highlighter-rouge">IsFieldOverride()</code></li>
-      <li><code class="highlighter-rouge">SetFieldOverride()</code></li>
-      <li><code class="highlighter-rouge">HasOverrides()</code></li>
-      <li><code class="highlighter-rouge">OverrideFields()</code></li>
-      <li><code class="highlighter-rouge">InheritFields()</code></li>
-      <li><code class="highlighter-rouge">IsChildDimstyle()</code></li>
-      <li><code class="highlighter-rouge">IsChildOf()</code></li>
-      <li><code class="highlighter-rouge">ParentId()</code></li>
-      <li><code class="highlighter-rouge">SetParentId()</code></li>
+      <li><code>IsFieldOverride()</code></li>
+      <li><code>SetFieldOverride()</code></li>
+      <li><code>HasOverrides()</code></li>
+      <li><code>OverrideFields()</code></li>
+      <li><code>InheritFields()</code></li>
+      <li><code>IsChildDimstyle()</code></li>
+      <li><code>IsChildOf()</code></li>
+      <li><code>ParentId()</code></li>
+      <li><code>SetParentId()</code></li>
     </ul>
   </li>
   <li>New support for Tolerances, Text Masks and Scaling per dimstyle.</li>

@@ -247,24 +247,23 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">TransformBrep</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">rhobj</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select brep"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Brep</span><span class="p">,</span> <span class="k">out</span> <span class="n">rhobj</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result TransformBrep(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef rhobj;
+    var rc = RhinoGet.GetOneObject("Select brep", true, Rhino.DocObjects.ObjectType.Brep, out rhobj);
+    if(rc!= Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="c1">// Simple translation transformation
-</span>    <span class="kt">var</span> <span class="n">xform</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">Translation</span><span class="p">(</span><span class="m">18</span><span class="p">,-</span><span class="m">18</span><span class="p">,</span><span class="m">25</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">rhobj</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Simple translation transformation
+    var xform = Rhino.Geometry.Transform.Translation(18,-18,25);
+    doc.Objects.Transform(rhobj, xform, true);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function TransformBrep(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -283,22 +282,21 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">TransformBrep</span><span class="p">():</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select brep"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Brep</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def TransformBrep():
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select brep", True, Rhino.DocObjects.ObjectType.Brep)
+    if rc!=Rhino.Commands.Result.Success: return
 
-    <span class="c"># Simple translation transformation</span>
-    <span class="n">xform</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="mi">25</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    # Simple translation transformation
+    xform = Rhino.Geometry.Transform.Translation(18,-18,25)
+    scriptcontext.doc.Objects.Transform(objref, xform, True)
+    scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">TransformBrep</span><span class="p">()</span>
+if __name__=="__main__":
+    TransformBrep()
 </code></pre>
-</div>
 
 </div>
 

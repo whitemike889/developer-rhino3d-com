@@ -242,33 +242,32 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+        const CRhinoCommandContext&amp; context )
+{
+  CRhinoCommand::result rc = CRhinoCommand::cancel;
 
-  <span class="c1">// Get the active view object
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get reference to the view's viewport object
-</span>    <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">();</span>
-    <span class="c1">// Create plane object based on viewport parameters
-</span>    <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">(</span> <span class="n">vp</span><span class="p">.</span><span class="n">Target</span><span class="p">(),</span> <span class="n">vp</span><span class="p">.</span><span class="n">VP</span><span class="p">().</span><span class="n">CameraX</span><span class="p">(),</span> <span class="n">vp</span><span class="p">.</span><span class="n">VP</span><span class="p">().</span><span class="n">CameraY</span><span class="p">()</span> <span class="p">);</span>
-    <span class="c1">// Copy viewport's cplane object
-</span>    <span class="n">ON_3dmConstructionPlane</span> <span class="n">cplane</span> <span class="o">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">ConstructionPlane</span><span class="p">();</span>
-    <span class="c1">// Set the cplane's plane object
-</span>    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span> <span class="o">=</span> <span class="n">plane</span><span class="p">;</span>
-    <span class="c1">// Push the new cplane onto the cplane stack
-</span>    <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">PushConstructionPlane</span><span class="p">(</span> <span class="n">cplane</span> <span class="p">);</span>
-    <span class="c1">// Redraw the view
-</span>    <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Get the active view object
+  CRhinoView* view = ::RhinoApp().ActiveView();
+  if( view )
+  {
+    // Get reference to the view's viewport object
+    CRhinoViewport&amp; vp = view-&gt;Viewport();
+    // Create plane object based on viewport parameters
+    ON_Plane plane( vp.Target(), vp.VP().CameraX(), vp.VP().CameraY() );
+    // Copy viewport's cplane object
+    ON_3dmConstructionPlane cplane = vp.ConstructionPlane();
+    // Set the cplane's plane object
+    cplane.m_plane = plane;
+    // Push the new cplane onto the cplane stack
+    view-&gt;Viewport().PushConstructionPlane( cplane );
+    // Redraw the view
+    view-&gt;Redraw();
+    rc = CRhinoCommand::success;
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

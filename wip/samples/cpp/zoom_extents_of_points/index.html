@@ -242,41 +242,40 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">void</span> <span class="nf">ZoomExtents</span><span class="p">(</span> <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPointArray</span><span class="o">&amp;</span> <span class="n">point_array</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span><span class="p">;</span>
+<pre><code class="language-cpp">static void ZoomExtents( CRhinoView* view, const ON_3dPointArray&amp; point_array )
+{
+  if( 0 == view )
+    return;
 
-  <span class="k">const</span> <span class="n">ON_Viewport</span><span class="o">&amp;</span> <span class="n">current_vp</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">VP</span><span class="p">();</span>
-  <span class="n">ON_Viewport</span> <span class="n">zoomed_vp</span><span class="p">;</span>
+  const ON_Viewport&amp; current_vp = view-&gt;ActiveViewport().VP();
+  ON_Viewport zoomed_vp;
 
-  <span class="n">ON_Xform</span> <span class="n">w2c</span><span class="p">;</span>
-  <span class="n">current_vp</span><span class="p">.</span><span class="n">GetXform</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">camera_cs</span><span class="p">,</span> <span class="n">w2c</span> <span class="p">);</span>
+  ON_Xform w2c;
+  current_vp.GetXform( ON::world_cs, ON::camera_cs, w2c );
 
-  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span> <span class="o">=</span> <span class="n">point_array</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">bbox</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">border</span> <span class="o">=</span> <span class="mf">1.1</span><span class="p">;</span>
+  ON_BoundingBox bbox = point_array.BoundingBox();
+  if( bbox.IsValid() )
+  {
+    double border = 1.1;
 
-    <span class="kt">double</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-    <span class="n">dx</span> <span class="o">*=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">border</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">);</span>
-    <span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span><span class="p">;</span>
-    <span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span> <span class="o">-=</span> <span class="n">dx</span><span class="p">;</span>
+    double dx = bbox.m_max.x - bbox.m_min.x;
+    dx *= 0.5 * (border - 1.0);
+    bbox.m_max.x += dx;
+    bbox.m_min.x -= dx;
 
-    <span class="kt">double</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
-    <span class="n">dy</span> <span class="o">*=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">border</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">);</span>
-    <span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span><span class="p">;</span>
-    <span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="n">dy</span><span class="p">;</span>
+    double dy = bbox.m_max.y - bbox.m_min.y;
+    dy *= 0.5 * (border - 1.0);
+    bbox.m_max.y += dy;
+    bbox.m_min.y -= dy;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">RhinoDollyExtents</span><span class="p">(</span><span class="n">current_vp</span><span class="p">,</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">zoomed_vp</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">SetVP</span><span class="p">(</span> <span class="n">zoomed_vp</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-      <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    if( RhinoDollyExtents(current_vp, bbox, zoomed_vp) )
+    {
+      view-&gt;ActiveViewport().SetVP( zoomed_vp, true );
+      view-&gt;Redraw();
+    }
+  }
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

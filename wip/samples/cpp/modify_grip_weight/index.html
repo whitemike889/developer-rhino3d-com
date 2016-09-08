@@ -242,64 +242,63 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Pick a grip object
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">RHSTR</span><span class="p">(</span><span class="s">L"Select control point for weight editing"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">grip_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableReferenceObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Pick a grip object
+  CRhinoGetObject go;
+  go.SetCommandPrompt( RHSTR(L"Select control point for weight editing") );
+  go.SetGeometryFilter( CRhinoGetObject::grip_object );
+  go.EnableReferenceObjectSelect( false );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Add the object to an xform object list
-</span>  <span class="n">CRhinoXformObjectList</span> <span class="n">objlist</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">objlist</span><span class="p">.</span><span class="n">AddObjects</span><span class="p">(</span><span class="n">go</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Add the object to an xform object list
+  CRhinoXformObjectList objlist;
+  if( objlist.AddObjects(go, true) &lt; 1 )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Get the grip's weight
-</span>  <span class="kt">double</span> <span class="n">weight</span> <span class="o">=</span> <span class="n">objlist</span><span class="p">.</span><span class="n">m_grips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">Weight</span><span class="p">();</span>
+  // Get the grip's weight
+  double weight = objlist.m_grips[0]-&gt;Weight();
 
-  <span class="c1">// Prompt for a new value
-</span>  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">RHSTR</span><span class="p">(</span><span class="s">L"New control point weight"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">weight</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
+  // Prompt for a new value
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( RHSTR(L"New control point weight") );
+  gn.SetDefaultNumber( weight );
+  gn.AcceptNothing();
 
-  <span class="c1">// Validate the results
-</span>  <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">number</span> <span class="p">)</span>
-    <span class="n">weight</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">nothing</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  // Validate the results
+  CRhinoGet::result res = gn.GetNumber();
+  if( res == CRhinoGet::number )
+    weight = gn.Number();
+  else if( res == CRhinoGet::nothing )
+    return CRhinoCommand::nothing;
+  else
+    return CRhinoCommand::cancel;
 
-  <span class="c1">// Do nothing if weights are the same
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">weight</span> <span class="o">==</span> <span class="n">objlist</span><span class="p">.</span><span class="n">m_grips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">Weight</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Do nothing if weights are the same
+  if( weight == objlist.m_grips[0]-&gt;Weight() )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Modify the grip's weight
-</span>  <span class="n">objlist</span><span class="p">.</span><span class="n">m_grips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">SetWeight</span><span class="p">(</span> <span class="n">weight</span> <span class="p">);</span>
+  // Modify the grip's weight
+  objlist.m_grips[0]-&gt;SetWeight( weight );
 
-  <span class="c1">// Get the grip object's owning object
-</span>  <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">old_object</span> <span class="o">=</span> <span class="n">objlist</span><span class="p">.</span><span class="n">m_grip_owners</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">old_object</span> <span class="o">&amp;&amp;</span> <span class="n">old_object</span><span class="o">-&gt;</span><span class="n">m_grips</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Create a new object based on the updated grip information
-</span>    <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">new_object</span> <span class="o">=</span> <span class="n">old_object</span><span class="o">-&gt;</span><span class="n">m_grips</span><span class="o">-&gt;</span><span class="n">NewObject</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">new_object</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Replace the old object with the new object
-</span>      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">old_object</span><span class="p">),</span> <span class="n">new_object</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Get the grip object's owning object
+  CRhinoObject* old_object = objlist.m_grip_owners[0];
+  if( old_object &amp;&amp; old_object-&gt;m_grips )
+  {
+    // Create a new object based on the updated grip information
+    CRhinoObject* new_object = old_object-&gt;m_grips-&gt;NewObject();
+    if( new_object )
+    {
+      // Replace the old object with the new object
+      context.m_doc.ReplaceObject( CRhinoObjRef(old_object), new_object );
+      context.m_doc.Redraw();
+    }
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -242,49 +242,48 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CArgsRhinoGetPlane</span> <span class="n">args</span><span class="p">;</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetFirstPointPromptCorners</span><span class="p">(</span> <span class="s">L"First corner of plane"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetSecondPointPromptCorners</span><span class="p">(</span> <span class="s">L"Other corner or length"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetFirstPointPrompt3Point</span><span class="p">(</span> <span class="s">L"Start of edge"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetSecondPointPrompt3Point</span><span class="p">(</span> <span class="s">L"End of edge"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetThirdPointPrompt3Point</span><span class="p">(</span> <span class="s">L"Width. Press Enter to use length"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetFirstPointPromptVertical</span><span class="p">(</span> <span class="s">L"Start of edge"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetSecondPointPromptVertical</span><span class="p">(</span> <span class="s">L"End of edge"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetThirdPointPromptVertical</span><span class="p">(</span> <span class="s">L"Height. Press Enter to use width"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetFirstPointPromptCenter</span><span class="p">(</span> <span class="s">L"Center of plane"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetSecondPointPromptCenter</span><span class="p">(</span> <span class="s">L"Other corner or length"</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetAllow3Point</span><span class="p">();</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetAllowCenter</span><span class="p">();</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetAllowVertical</span><span class="p">();</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetAllowRounded</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-<span class="n">args</span><span class="p">.</span><span class="n">SetAllowDeformable</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
+<pre><code class="language-cpp">CArgsRhinoGetPlane args;
+args.SetFirstPointPromptCorners( L"First corner of plane" );
+args.SetSecondPointPromptCorners( L"Other corner or length" );
+args.SetFirstPointPrompt3Point( L"Start of edge" );
+args.SetSecondPointPrompt3Point( L"End of edge" );
+args.SetThirdPointPrompt3Point( L"Width. Press Enter to use length" );
+args.SetFirstPointPromptVertical( L"Start of edge" );
+args.SetSecondPointPromptVertical( L"End of edge" );
+args.SetThirdPointPromptVertical( L"Height. Press Enter to use width" );
+args.SetFirstPointPromptCenter( L"Center of plane" );
+args.SetSecondPointPromptCenter( L"Other corner or length" );
+args.SetAllow3Point();
+args.SetAllowCenter();
+args.SetAllowVertical();
+args.SetAllowRounded( false );
+args.SetAllowDeformable( false );
 
-<span class="n">ON_3dPoint</span> <span class="n">corners</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetRectangle</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">corners</span> <span class="p">);</span>
+ON_3dPoint corners[4];
+CRhinoCommand::result rc = RhinoGetRectangle( args, corners );
 
-<span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-  <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+if( rc == CRhinoCommand::success)
+{
+  ON_3dPoint&amp; p0 = corners[0];
+  ON_3dPoint&amp; p1 = corners[1];
+  ON_3dPoint&amp; p3 = corners[3];
 
-  <span class="n">ON_Interval</span> <span class="n">domain0</span><span class="p">,</span> <span class="n">domain1</span><span class="p">;</span>
-  <span class="n">domain0</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">domain1</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span> <span class="p">);</span>
+  ON_Interval domain0, domain1;
+  domain0.Set( 0.0, p0.DistanceTo(p1) );
+  domain1.Set( 0.0, p0.DistanceTo(p3) );
 
-  <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">(</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p3</span> <span class="p">);</span>
+  ON_Plane plane( p0, p1, p3 );
 
-  <span class="n">ON_PlaneSurface</span> <span class="n">ps</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>
-  <span class="n">ps</span><span class="p">.</span><span class="n">SetExtents</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">domain0</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">ps</span><span class="p">.</span><span class="n">SetExtents</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">domain1</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">ps</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">domain0</span><span class="p">.</span><span class="n">Min</span><span class="p">(),</span> <span class="n">domain0</span><span class="p">.</span><span class="n">Max</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">ps</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">domain1</span><span class="p">.</span><span class="n">Min</span><span class="p">(),</span> <span class="n">domain1</span><span class="p">.</span><span class="n">Max</span><span class="p">()</span> <span class="p">);</span>
+  ON_PlaneSurface ps( plane );
+  ps.SetExtents( 0, domain0, true );
+  ps.SetExtents( 1, domain1, true );
+  ps.SetDomain( 0, domain0.Min(), domain0.Max() );
+  ps.SetDomain( 1, domain1.Min(), domain1.Max() );
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddSurfaceObject</span><span class="p">(</span> <span class="n">ps</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-<span class="p">}</span>
+  context.m_doc.AddSurfaceObject( ps );
+  context.m_doc.Redraw();
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

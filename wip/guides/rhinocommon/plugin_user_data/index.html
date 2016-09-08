@@ -351,17 +351,16 @@ $(document).ready(function()
 
 <p>To save document user data your plugin must override three PlugIn base class functions:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="n">PlugIn</span><span class="p">.</span><span class="n">ShouldCallWriteDocument</span>
-<span class="n">PlugIn</span><span class="p">.</span><span class="n">WriteDocument</span>
-<span class="n">PlugIn</span><span class="p">.</span><span class="n">ReadDocument</span>
+<pre><code class="language-cs">PlugIn.ShouldCallWriteDocument
+PlugIn.WriteDocument
+PlugIn.ReadDocument
 </code></pre>
-</div>
 
 <p>SDK references for these functions can be found <a href="/wip/api/RhinoCommon/html/Methods_T_Rhino_PlugIns_PlugIn.htm">here</a>.</p>
 
-<p>When Rhino writes a .3dm file, it goes through all the plugins that are currently loaded. First Rhino calls <code class="highlighter-rouge">ShouldCallWriteDocument()</code> to see if the plugin wants to save document user data.  If <code class="highlighter-rouge">ShouldWriteDocument()</code> returns true, Rhino saves information that identifies the plugin and then calls <code class="highlighter-rouge">WriteDocument()</code> when it is time for the plugin to save its “document” user data.</p>
+<p>When Rhino writes a .3dm file, it goes through all the plugins that are currently loaded. First Rhino calls <code>ShouldCallWriteDocument()</code> to see if the plugin wants to save document user data.  If <code>ShouldWriteDocument()</code> returns true, Rhino saves information that identifies the plugin and then calls <code>WriteDocument()</code> when it is time for the plugin to save its “document” user data.</p>
 
-<p>When Rhino reads a .3dm file and it encounters document user data, it uses the plugin identification information to load the plugin and then calls the plugin’s <code class="highlighter-rouge">ReadDocument()</code> to read the plugin’s “document” user data.</p>
+<p>When Rhino reads a .3dm file and it encounters document user data, it uses the plugin identification information to load the plugin and then calls the plugin’s <code>ReadDocument()</code> to read the plugin’s “document” user data.</p>
 
 <h2 id="object-user-data">Object User Data</h2>
 
@@ -377,127 +376,126 @@ $(document).ready(function()
 
 <p>It is <strong>recommended to typically use the User Strings or the UserDictionary on an object</strong> since the data is automatically serialized for you and it is easily shared between plugins and scripts.</p>
 
-<p>In the case that you want to write your own private custom user data, you would derive a class from <code class="highlighter-rouge">Rhino.DocObjects.Custom.UserData</code>. Here’s a sample:</p>
+<p>In the case that you want to write your own private custom user data, you would derive a class from <code>Rhino.DocObjects.Custom.UserData</code>. Here’s a sample:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Runtime.InteropServices</span><span class="p">;</span>
+<pre><code class="language-cs">using System;
+using Rhino;
+using System.Runtime.InteropServices;
 
-<span class="k">namespace</span> <span class="nn">examples_cs</span>
-<span class="p">{</span>
-  <span class="c1">// You must define a Guid attribute for your user data derived class
-</span>  <span class="c1">// in order to support serialization. Every custom user data class
-</span>  <span class="c1">// needs a custom Guid
-</span>  <span class="p">[</span><span class="nf">Guid</span><span class="p">(</span><span class="s">"DAAA9791-01DB-4F5F-B89B-4AE46767C783"</span><span class="p">)]</span>
-  <span class="k">public</span> <span class="k">class</span> <span class="nc">PhysicalData</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">UserData</span>
-  <span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Weight</span><span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">double</span> <span class="n">Density</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;}</span>
-
-
-    <span class="c1">// Your UserData class must have a public parameterless constructor
-</span>    <span class="k">public</span> <span class="nf">PhysicalData</span><span class="p">(){}</span>
-
-    <span class="k">public</span> <span class="nf">PhysicalData</span><span class="p">(</span><span class="kt">int</span> <span class="n">weight</span><span class="p">,</span> <span class="kt">double</span> <span class="n">density</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Weight</span> <span class="p">=</span> <span class="n">weight</span><span class="p">;</span>
-      <span class="n">Density</span> <span class="p">=</span> <span class="n">density</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">Description</span>
-    <span class="p">{</span>
-      <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="s">"Physical Properties"</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ToString</span><span class="p">()</span>
-    <span class="p">{</span>
-      <span class="k">return</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"weight={0}, density={1}"</span><span class="p">,</span> <span class="n">Weight</span><span class="p">,</span> <span class="n">Density</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnDuplicate</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">UserData</span> <span class="n">source</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">PhysicalData</span> <span class="n">src</span> <span class="p">=</span> <span class="n">source</span> <span class="k">as</span> <span class="n">PhysicalData</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">src</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">Weight</span> <span class="p">=</span> <span class="n">src</span><span class="p">.</span><span class="n">Weight</span><span class="p">;</span>
-        <span class="n">Density</span> <span class="p">=</span> <span class="n">src</span><span class="p">.</span><span class="n">Density</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="c1">// return true if you have information to save
-</span>    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">ShouldWrite</span>
-    <span class="p">{</span>
-      <span class="k">get</span>
-      <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Weight</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="n">Density</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-          <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">protected</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Read</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">FileIO</span><span class="p">.</span><span class="n">BinaryArchiveReader</span> <span class="n">archive</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">ArchivableDictionary</span> <span class="n">dict</span> <span class="p">=</span> <span class="n">archive</span><span class="p">.</span><span class="nf">ReadDictionary</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">dict</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="s">"Weight"</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">dict</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="s">"Density"</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="n">Weight</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">dict</span><span class="p">[</span><span class="s">"Weight"</span><span class="p">];</span>
-        <span class="n">Density</span> <span class="p">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">dict</span><span class="p">[</span><span class="s">"Density"</span><span class="p">];</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">protected</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Write</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">FileIO</span><span class="p">.</span><span class="n">BinaryArchiveWriter</span> <span class="n">archive</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// you can implement File IO however you want... but the dictionary class makes
-</span>      <span class="c1">// issues like versioning in the 3dm file a bit easier.  If you didn't want to use
-</span>      <span class="c1">// the dictionary for writing, your code would look something like.
-</span>      <span class="c1">//
-</span>      <span class="c1">//  archive.Write3dmChunkVersion(1, 0);
-</span>      <span class="c1">//  archive.WriteInt(Weight);
-</span>      <span class="c1">//  archive.WriteDouble(Density);
-</span>      <span class="kt">var</span> <span class="n">dict</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="nf">ArchivableDictionary</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"Physical"</span><span class="p">);</span>
-      <span class="n">dict</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">"Weight"</span><span class="p">,</span> <span class="n">Weight</span><span class="p">);</span>
-      <span class="n">dict</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">"Density"</span><span class="p">,</span> <span class="n">Density</span><span class="p">);</span>
-      <span class="n">archive</span><span class="p">.</span><span class="nf">WriteDictionary</span><span class="p">(</span><span class="n">dict</span><span class="p">);</span>
-      <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+namespace examples_cs
+{
+  // You must define a Guid attribute for your user data derived class
+  // in order to support serialization. Every custom user data class
+  // needs a custom Guid
+  [Guid("DAAA9791-01DB-4F5F-B89B-4AE46767C783")]
+  public class PhysicalData : Rhino.DocObjects.Custom.UserData
+  {
+    public int Weight{ get; set; }
+    public double Density {get; set;}
 
 
-  <span class="p">[</span><span class="nf">Guid</span><span class="p">(</span><span class="s">"ca9a110e-3969-49ec-9d59-a7c2ee0b85bd"</span><span class="p">)]</span>
-  <span class="k">public</span> <span class="k">class</span> <span class="nc">ex_userdataCommand</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Command</span>
-  <span class="p">{</span>
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">EnglishName</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="s">"cs_userdataCommand"</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+    // Your UserData class must have a public parameterless constructor
+    public PhysicalData(){}
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">RunCommand</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">RunMode</span> <span class="n">mode</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-      <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select Object"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    public PhysicalData(int weight, double density)
+    {
+      Weight = weight;
+      Density = density;
+    }
 
-      <span class="c1">// See if user data of my custom type is attached to the geomtry
-</span>      <span class="kt">var</span> <span class="n">ud</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">().</span><span class="n">UserData</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">PhysicalData</span><span class="p">))</span> <span class="k">as</span> <span class="n">PhysicalData</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">ud</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="c1">// No user data found; create one and add it
-</span>        <span class="kt">int</span> <span class="n">weight</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-        <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetInteger</span><span class="p">(</span><span class="s">"Weight"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">weight</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-          <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    public override string Description
+    {
+      get { return "Physical Properties"; }
+    }
 
-        <span class="n">ud</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PhysicalData</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="m">12.34</span><span class="p">);</span>
-        <span class="n">objref</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">().</span><span class="n">UserData</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">ud</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} = {1}"</span><span class="p">,</span> <span class="n">ud</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span> <span class="n">ud</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    public override string ToString()
+    {
+      return String.Format("weight={0}, density={1}", Weight, Density);
+    }
+
+    protected override void OnDuplicate(Rhino.DocObjects.Custom.UserData source)
+    {
+      PhysicalData src = source as PhysicalData;
+      if (src != null)
+      {
+        Weight = src.Weight;
+        Density = src.Density;
+      }
+    }
+
+    // return true if you have information to save
+    public override bool ShouldWrite
+    {
+      get
+      {
+        if (Weight &gt; 0 &amp;&amp; Density &gt; 0)
+          return true;
+        return false;
+      }
+    }
+
+    protected override bool Read(Rhino.FileIO.BinaryArchiveReader archive)
+    {
+      Rhino.Collections.ArchivableDictionary dict = archive.ReadDictionary();
+      if (dict.ContainsKey("Weight") &amp;&amp; dict.ContainsKey("Density"))
+      {
+        Weight = (int)dict["Weight"];
+        Density = (double)dict["Density"];
+      }
+      return true;
+    }
+    protected override bool Write(Rhino.FileIO.BinaryArchiveWriter archive)
+    {
+      // you can implement File IO however you want... but the dictionary class makes
+      // issues like versioning in the 3dm file a bit easier.  If you didn't want to use
+      // the dictionary for writing, your code would look something like.
+      //
+      //  archive.Write3dmChunkVersion(1, 0);
+      //  archive.WriteInt(Weight);
+      //  archive.WriteDouble(Density);
+      var dict = new Rhino.Collections.ArchivableDictionary(1, "Physical");
+      dict.Set("Weight", Weight);
+      dict.Set("Density", Density);
+      archive.WriteDictionary(dict);
+      return true;
+    }
+  }
+
+
+  [Guid("ca9a110e-3969-49ec-9d59-a7c2ee0b85bd")]
+  public class ex_userdataCommand : Rhino.Commands.Command
+  {
+    public override string EnglishName { get { return "cs_userdataCommand"; } }
+
+    protected override Rhino.Commands.Result RunCommand(RhinoDoc doc, Rhino.Commands.RunMode mode)
+    {
+      Rhino.DocObjects.ObjRef objref;
+      var rc = Rhino.Input.RhinoGet.GetOneObject("Select Object", false, Rhino.DocObjects.ObjectType.AnyObject, out objref);
+      if (rc != Rhino.Commands.Result.Success)
+        return rc;
+
+      // See if user data of my custom type is attached to the geomtry
+      var ud = objref.Geometry().UserData.Find(typeof(PhysicalData)) as PhysicalData;
+      if (ud == null)
+      {
+        // No user data found; create one and add it
+        int weight = 0;
+        rc = Rhino.Input.RhinoGet.GetInteger("Weight", false, ref weight);
+        if (rc != Rhino.Commands.Result.Success)
+          return rc;
+
+        ud = new PhysicalData(weight, 12.34);
+        objref.Geometry().UserData.Add(ud);
+      }
+      else
+      {
+        RhinoApp.WriteLine("{0} = {1}", ud.Description, ud);
+      }
+      return Rhino.Commands.Result.Success;
+    }
+  }
+}
 </code></pre>
-</div>
 
 <hr />
 

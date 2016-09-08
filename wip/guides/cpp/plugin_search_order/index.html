@@ -360,69 +360,69 @@ $(document).ready(function()
 <p>Rhino plugins are Windows Dynamic Link Libraries, or DLLs.  As such, Rhino uses Windows to load your plugin.  Rhino attempts to load your plugin, and any dependent DLLs, in the following manner:</p>
 
 <ol>
-  <li>Alternate Search Order - uses <code class="highlighter-rouge">LoadLibraryEx</code> with the <code class="highlighter-rouge">LOAD_WITH_ALTERED_SEARCH_PATH</code> flag.</li>
-  <li>Standard Search Order - uses <code class="highlighter-rouge">LoadLibrary</code>.</li>
+  <li>Alternate Search Order - uses <code>LoadLibraryEx</code> with the <code>LOAD_WITH_ALTERED_SEARCH_PATH</code> flag.</li>
+  <li>Standard Search Order - uses <code>LoadLibrary</code>.</li>
 </ol>
 
-<p><strong>NOTE</strong>: starting with Windows XP and later, the dynamic-link library (DLL) search order used by the system depends on the setting of the <code class="highlighter-rouge">HKLM\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode</code> value.  For Windows Server 2003: The default value is 1.  Windows XP: The default value is 0.</p>
+<p><strong>NOTE</strong>: starting with Windows XP and later, the dynamic-link library (DLL) search order used by the system depends on the setting of the <code>HKLM\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode</code> value.  For Windows Server 2003: The default value is 1.  Windows XP: The default value is 0.</p>
 
 <h2 id="alternate-search-order">Alternate Search Order</h2>
 
-<p>The <code class="highlighter-rouge">LoadLibraryEx</code> function supports an alternate search order if the call specifies <code class="highlighter-rouge">LOAD_WITH_ALTERED_SEARCH_PATH</code> and the <code class="highlighter-rouge">lpFileName</code> parameter specifies a path.  If <code class="highlighter-rouge">SafeDllSearchMode</code> is 1, the alternate search order is as follows:</p>
+<p>The <code>LoadLibraryEx</code> function supports an alternate search order if the call specifies <code>LOAD_WITH_ALTERED_SEARCH_PATH</code> and the <code>lpFileName</code> parameter specifies a path.  If <code>SafeDllSearchMode</code> is 1, the alternate search order is as follows:</p>
 
 <ol>
-  <li>The directory specified by <code class="highlighter-rouge">lpFileName</code>.</li>
-  <li>The system directory.  Use the <code class="highlighter-rouge">GetSystemDirectory</code> function to get the path of this directory.</li>
+  <li>The directory specified by <code>lpFileName</code>.</li>
+  <li>The system directory.  Use the <code>GetSystemDirectory</code> function to get the path of this directory.</li>
   <li>The 16-bit system directory.  There is no function that obtains the path of this directory, but it is searched.</li>
-  <li>The Windows directory.  Use the <code class="highlighter-rouge">GetWindowsDirectory</code> function to get the path of this directory.</li>
+  <li>The Windows directory.  Use the <code>GetWindowsDirectory</code> function to get the path of this directory.</li>
   <li>The current directory.</li>
-  <li>The directories that are listed in the <code class="highlighter-rouge">PATH</code> environment variable.</li>
+  <li>The directories that are listed in the <code>PATH</code> environment variable.</li>
 </ol>
 
-<p>If <code class="highlighter-rouge">SafeDllSearchMode</code> is 0, the alternate search order is as follows:</p>
+<p>If <code>SafeDllSearchMode</code> is 0, the alternate search order is as follows:</p>
 
 <ol>
-  <li>The directory specified by <code class="highlighter-rouge">lpFileName</code>.</li>
+  <li>The directory specified by <code>lpFileName</code>.</li>
   <li>The current directory.</li>
-  <li>The system directory.  Use the <code class="highlighter-rouge">GetSystemDirectory</code> function to get the path of this directory.</li>
+  <li>The system directory.  Use the <code>GetSystemDirectory</code> function to get the path of this directory.</li>
   <li>The 16-bit system directory. There is no function that obtains the path of this directory, but it is searched.</li>
-  <li>The Windows directory.  Use the <code class="highlighter-rouge">GetWindowsDirectory</code> function to get the path of this directory.</li>
-  <li>The directories that are listed in the <code class="highlighter-rouge">PATH</code> environment variable.</li>
+  <li>The Windows directory.  Use the <code>GetWindowsDirectory</code> function to get the path of this directory.</li>
+  <li>The directories that are listed in the <code>PATH</code> environment variable.</li>
 </ol>
 
 <h2 id="standard-search-order">Standard Search Order</h2>
 
-<p>If <code class="highlighter-rouge">SafeDllSearchMode</code> is 1, the search order is as follows:</p>
+<p>If <code>SafeDllSearchMode</code> is 1, the search order is as follows:</p>
 
 <ol>
   <li>The directory from which the application loaded.</li>
-  <li>The system directory.  Use the <code class="highlighter-rouge">GetSystemDirectory</code> function to get the path of this directory.</li>
+  <li>The system directory.  Use the <code>GetSystemDirectory</code> function to get the path of this directory.</li>
   <li>The 16-bit system directory.  There is no function that obtains the path of this directory, but it is searched.</li>
-  <li>The Windows directory.  Use the <code class="highlighter-rouge">GetWindowsDirectory</code> function to get the path of this directory.</li>
+  <li>The Windows directory.  Use the <code>GetWindowsDirectory</code> function to get the path of this directory.</li>
   <li>The current directory.</li>
-  <li>The directories that are listed in the <code class="highlighter-rouge">PATH</code> environment variable.</li>
+  <li>The directories that are listed in the <code>PATH</code> environment variable.</li>
 </ol>
 
-<p>If <code class="highlighter-rouge">SafeDllSearchMode</code> is 0, the search order is as follows:</p>
+<p>If <code>SafeDllSearchMode</code> is 0, the search order is as follows:</p>
 
 <ol>
   <li>The directory from which the application loaded.</li>
   <li>The current directory.</li>
-  <li>The system directory.  Use the <code class="highlighter-rouge">GetSystemDirectory</code> function to get the path of this directory.</li>
+  <li>The system directory.  Use the <code>GetSystemDirectory</code> function to get the path of this directory.</li>
   <li>The 16-bit system directory.  There is no function that obtains the path of this directory, but it is searched.</li>
-  <li>The Windows directory.  Use the <code class="highlighter-rouge">GetWindowsDirectory</code> function to get the path of this directory.</li>
-  <li>The directories that are listed in the <code class="highlighter-rouge">PATH</code> environment variable.</li>
+  <li>The Windows directory.  Use the <code>GetWindowsDirectory</code> function to get the path of this directory.</li>
+  <li>The directories that are listed in the <code>PATH</code> environment variable.</li>
 </ol>
 
-<p>Note, Windows 2000 does not support the <code class="highlighter-rouge">SafeDllSearchMode</code> value. T he search order for Windows 2000 is as follows:</p>
+<p>Note, Windows 2000 does not support the <code>SafeDllSearchMode</code> value. T he search order for Windows 2000 is as follows:</p>
 
 <ol>
   <li>The directory from which the application loaded.</li>
   <li>The current directory.</li>
-  <li>The system directory.  Use the <code class="highlighter-rouge">GetSystemDirectory</code> function to get the path of this directory.</li>
+  <li>The system directory.  Use the <code>GetSystemDirectory</code> function to get the path of this directory.</li>
   <li>The 16-bit system directory.  There is no function that obtains the path of this directory, but it is searched.</li>
-  <li>The Windows directory.  Use the <code class="highlighter-rouge">GetWindowsDirectory</code> function to get the path of this directory.</li>
-  <li>The directories that are listed in the <code class="highlighter-rouge">PATH</code> environment variable.</li>
+  <li>The Windows directory.  Use the <code>GetWindowsDirectory</code> function to get the path of this directory.</li>
+  <li>The directories that are listed in the <code>PATH</code> environment variable.</li>
 </ol>
 
 <h2 id="related-topics">Related Topics</h2>

@@ -433,16 +433,15 @@ $(document).ready(function()
 
 <p>Before launching into the adb tools, let’s make sure that the Android SDK and NDK are part of our bash terminal environment. Open your <em>.bash_profile</em> (in your <em>~</em> or home folder) with a trusty text editor (we recommend <a href="http://www.barebones.com/products/textwrangler/">TextWrangler</a> or <a href="http://www.barebones.com/products/bbedit/">BBEdit</a>). Add the following lines to your profile if they are not already there:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export ANDROID_SDK="/Users/you/Library/Developer/Xamarin/android-sdk-mac_x86/"
+<pre><code>export ANDROID_SDK="/Users/you/Library/Developer/Xamarin/android-sdk-mac_x86/"
 export ANDROID_NDK="/Users/you/Library/Developer/Xamarin/android-ndk/android-ndk-r8d/"
 export PATH="$PATH:$ANDROID_SDK/tools:$ANDROID_SDK/platform-tools:$ANDROID_NDK"
 export _JAVA_OPTIONS="-Xmx1g"
 </code></pre>
-</div>
 
-<p>The first two lines tell your bash environment where to look for the Android SDK and NDK. The <code class="highlighter-rouge">_JAVA_OPTIONS=”-Xmx1g”</code> increases the heap size that Xamarin Studio can use for Java native binaries.</p>
+<p>The first two lines tell your bash environment where to look for the Android SDK and NDK. The <code>_JAVA_OPTIONS=”-Xmx1g”</code> increases the heap size that Xamarin Studio can use for Java native binaries.</p>
 
-<p>Save your profile and launch a Terminal window. You should now be able to type adb shell. If you don’t have an Emulator running or a device plugged in, you will get an error: device not found response. That’s fine, it means adb shell is setup. Plugin a device or launch and emulator and try the <code class="highlighter-rouge">adb shell</code> command again. Now you should see something like the following in your terminal:</p>
+<p>Save your profile and launch a Terminal window. You should now be able to type adb shell. If you don’t have an Emulator running or a device plugged in, you will get an error: device not found response. That’s fine, it means adb shell is setup. Plugin a device or launch and emulator and try the <code>adb shell</code> command again. Now you should see something like the following in your terminal:</p>
 
 <p><img src="/wip/images/using_simulators_02.png" alt="adb shell" /></p>
 
@@ -462,7 +461,7 @@ export _JAVA_OPTIONS="-Xmx1g"
   <li>Click <strong>OK</strong> on everything and <strong>close the Control Panel</strong> if it’s still open.</li>
 </ol>
 
-<p>Open a <code class="highlighter-rouge">cmd.exe</code> prompt. Now type <code class="highlighter-rouge">adb shell</code>. Make sure you have an Emulator started or a device connected and you should see an adb shell tool similar to that shown above in the Mac instructions. You may use many standard linux commands to get around and mess with files. Note there are a number of special commands for pushing and pulling file on and off the device/emulator. See the <a href="http://developer.android.com/tools/help/adb.html">Android ADB documentation</a> for a handy list. Data for many apps is store in the <em>data/data/AppName/</em> folder.</p>
+<p>Open a <code>cmd.exe</code> prompt. Now type <code>adb shell</code>. Make sure you have an Emulator started or a device connected and you should see an adb shell tool similar to that shown above in the Mac instructions. You may use many standard linux commands to get around and mess with files. Note there are a number of special commands for pushing and pulling file on and off the device/emulator. See the <a href="http://developer.android.com/tools/help/adb.html">Android ADB documentation</a> for a handy list. Data for many apps is store in the <em>data/data/AppName/</em> folder.</p>
 
 <h3 id="resetting-emulators">Resetting Emulators</h3>
 

@@ -242,61 +242,60 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get reference to the document's layer table
-</span>  <span class="n">CRhinoLayerTable</span><span class="o">&amp;</span> <span class="n">layer_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">;</span>
-  <span class="c1">// Cook up an unused layer name
-</span>  <span class="n">ON_wString</span> <span class="n">unused_name</span><span class="p">;</span>
-  <span class="n">layer_table</span><span class="p">.</span><span class="n">GetUnusedLayerName</span><span class="p">(</span> <span class="n">unused_name</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Get reference to the document's layer table
+  CRhinoLayerTable&amp; layer_table = context.m_doc.m_layer_table;
+  // Cook up an unused layer name
+  ON_wString unused_name;
+  layer_table.GetUnusedLayerName( unused_name );
 
-  <span class="c1">// Prompt the user to enter a layer name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Name of layer to add"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetDefaultString</span><span class="p">(</span> <span class="n">unused_name</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt the user to enter a layer name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Name of layer to add" );
+  gs.SetDefaultString( unused_name );
+  gs.AcceptNothing( TRUE );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Was a layer named entered?
-</span>  <span class="n">ON_wString</span> <span class="n">layer_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">layer_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Layer name cannot be blank.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Was a layer named entered?
+  ON_wString layer_name = gs.String();
+  layer_name.TrimLeftAndRight();
+  if( layer_name.IsEmpty() )
+  {
+    RhinoApp().Print( L"Layer name cannot be blank.\n" );
+    return CRhinoCommand::cancel;
+  }
 
-  <span class="c1">// Is the layer name valid?
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoIsValidName</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> is not a valid layer name.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Is the layer name valid?
+  if( !RhinoIsValidName(layer_name) )
+  {
+    RhinoApp().Print( L"\"%s\" is not a valid layer name.\n", layer_name );
+    return CRhinoCommand::cancel;
+  }
 
-  <span class="c1">// Does a layer with the same name already exist?
-</span>  <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">FindLayer</span><span class="p">(</span> <span class="n">layer_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"A layer with the name </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> already exists.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Does a layer with the same name already exist?
+  int layer_index = layer_table.FindLayer( layer_name );
+  if( layer_index &gt;= 0 )
+  {
+    RhinoApp().Print( L"A layer with the name \"%s\" already exists.\n", layer_name );
+    return CRhinoCommand::cancel;
+  }
 
-  <span class="c1">// Create a new layer
-</span>  <span class="n">ON_Layer</span> <span class="n">layer</span><span class="p">;</span>
-  <span class="n">layer</span><span class="p">.</span><span class="n">SetLayerName</span><span class="p">(</span> <span class="n">layer_name</span> <span class="p">);</span>
-  <span class="c1">// Add the layer to the layer table
-</span>  <span class="n">layer_index</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">AddLayer</span><span class="p">(</span> <span class="n">layer</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to add </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> layer.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Create a new layer
+  ON_Layer layer;
+  layer.SetLayerName( layer_name );
+  // Add the layer to the layer table
+  layer_index = layer_table.AddLayer( layer );
+  if( layer_index &lt; 0 )
+  {
+    RhinoApp().Print( L"Unable to add \"%s\" layer.\n", layer_name );
+    return CRhinoCommand::failure;
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -242,128 +242,127 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//The following sample code demonstrates how to use the CArgsRhinoLoft class and the RhinoSdkLoftSurface function.
+<pre><code class="language-cpp">//The following sample code demonstrates how to use the CArgsRhinoLoft class and the RhinoSdkLoftSurface function.
 //The definitions of these can be found in rhinoSdkLoft.h.
 //Note, this example does not perform any curve sorting or direction matching.
 //This is the responsibility of the the SDK developer.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select curves to loft
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curves to loft"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">open_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select curves to loft
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curves to loft" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::open_curve );
+  go.EnableSubObjectSelect( FALSE );
+  go.GetObjects( 2, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Fill in loft arguments class
-</span>  <span class="n">CArgsRhinoLoft</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bAllowStartTangent</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bAllowEndTangent</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bUseStartpoint</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bUseEndpoint</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bClosed</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loft_type</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">ltTight</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_simplify_method</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">lsNone</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_start_condition</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">leNatural</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_end_condition</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">leNatural</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rebuild_point_count</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_refit_tolerance</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
+  // Fill in loft arguments class
+  CArgsRhinoLoft args;
+  args.m_bAllowStartTangent = FALSE;
+  args.m_bAllowEndTangent = FALSE;
+  args.m_bUseStartpoint = FALSE;
+  args.m_bUseEndpoint = FALSE;
+  args.m_bClosed = FALSE;
+  args.m_loft_type = CArgsRhinoLoft::ltTight;
+  args.m_simplify_method = CArgsRhinoLoft::lsNone;
+  args.m_start_condition = CArgsRhinoLoft::leNatural;
+  args.m_end_condition = CArgsRhinoLoft::leNatural;
+  args.m_rebuild_point_count = 10;
+  args.m_refit_tolerance = context.m_doc.AbsoluteTolerance();
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">object_count</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">SetCapacity</span><span class="p">(</span> <span class="n">object_count</span> <span class="p">);</span>
+  int i, object_count = go.ObjectCount();
+  args.m_loftcurves.SetCapacity( object_count );
 
-  <span class="c1">// Add loft curves
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">object_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoLoftCurve</span><span class="o">*</span> <span class="n">loft_curve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoLoftCurve</span><span class="p">;</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_curve</span> <span class="o">=</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">DuplicateCurve</span><span class="p">();</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_curve</span><span class="o">-&gt;</span><span class="n">RemoveShortSegments</span><span class="p">(</span> <span class="n">ON_ZERO_TOLERANCE</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_pick_point</span> <span class="o">=</span> <span class="n">ON_UNSET_POINT</span><span class="p">;</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_pick_t</span> <span class="o">=</span> <span class="n">ON_UNSET_VALUE</span><span class="p">;</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_trim</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_bClosed</span> <span class="o">=</span>
-          <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_curve</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-      <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_bPlanar</span> <span class="o">=</span>
-          <span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_curve</span><span class="o">-&gt;</span><span class="n">IsPlanar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">loft_curve</span><span class="o">-&gt;</span><span class="n">m_plane</span><span class="p">)</span><span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-      <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">loft_curve</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Add loft curves
+  for( i = 0; i &lt; object_count; i++ )
+  {
+    const ON_Curve* curve = go.Object(i).Curve();
+    if( curve )
+    {
+      CRhinoLoftCurve* loft_curve = new CRhinoLoftCurve;
+      loft_curve-&gt;m_curve = curve-&gt;DuplicateCurve();
+      loft_curve-&gt;m_curve-&gt;RemoveShortSegments( ON_ZERO_TOLERANCE, true );
+      loft_curve-&gt;m_pick_point = ON_UNSET_POINT;
+      loft_curve-&gt;m_pick_t = ON_UNSET_VALUE;
+      loft_curve-&gt;m_trim = 0;
+      loft_curve-&gt;m_bClosed =
+          loft_curve-&gt;m_curve-&gt;IsClosed() ? true : false;
+      loft_curve-&gt;m_bPlanar =
+          loft_curve-&gt;m_curve-&gt;IsPlanar(&amp;loft_curve-&gt;m_plane)? true : false;
+      args.m_loftcurves.Append( loft_curve );
+    }
+  }
 
-  <span class="c1">// Do the loft operation
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_NurbsSurface</span><span class="o">*&gt;</span> <span class="n">surface_list</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoSdkLoftSurface</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">surface_list</span> <span class="p">);</span>
+  // Do the loft operation
+  ON_SimpleArray&lt;ON_NurbsSurface*&gt; surface_list;
+  bool rc = RhinoSdkLoftSurface( args, surface_list );
 
-  <span class="c1">// Delete the loft curves used in the surface calculation
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="k">delete</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Empty</span><span class="p">();</span>
+  // Delete the loft curves used in the surface calculation
+  for( i = 0; i &lt; args.m_loftcurves.Count(); i++ )
+    delete args.m_loftcurves[i];
+  args.m_loftcurves.Empty();
 
-  <span class="c1">// If only one surface was calculated, add it to Rhino
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">surface_list</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoSurfaceObject</span><span class="o">*</span> <span class="n">surf_obj</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddSurfaceObject</span><span class="p">(</span><span class="o">*</span><span class="n">surface_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  // If only one surface was calculated, add it to Rhino
+  if( surface_list.Count() == 1 )
+  {
+    CRhinoSurfaceObject* surf_obj = context.m_doc.AddSurfaceObject(*surface_list[0]);
 
-    <span class="c1">// AddSurfaceObject make a copy...
-</span>    <span class="k">delete</span> <span class="n">surface_list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    // AddSurfaceObject make a copy...
+    delete surface_list[0];
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">surf_obj</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+    if( surf_obj )
+      context.m_doc.Redraw();
 
-    <span class="k">return</span> <span class="p">(</span> <span class="n">surf_obj</span> <span class="o">?</span> <span class="n">success</span> <span class="o">:</span> <span class="n">failure</span> <span class="p">);</span>
-  <span class="p">}</span>
+    return ( surf_obj ? success : failure );
+  }
 
-  <span class="c1">// If more than one surface was calculated, create a list of breps.
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Brep</span><span class="o">*&gt;</span> <span class="n">brep_list</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">surface_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">surface_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-      <span class="n">brep</span><span class="o">-&gt;</span><span class="n">NewFace</span><span class="p">(</span> <span class="o">*</span><span class="n">surface_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="k">delete</span> <span class="n">surface_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">brep_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">brep</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // If more than one surface was calculated, create a list of breps.
+  ON_SimpleArray&lt;ON_Brep*&gt; brep_list;
+  for( i = 0; i &lt; surface_list.Count(); i++)
+  {
+    if( surface_list[i]-&gt;IsValid() )
+    {
+      ON_Brep* brep = ON_Brep::New();
+      brep-&gt;NewFace( *surface_list[i] );
+      delete surface_list[i];
+      brep_list.Append( brep );
+    }
+  }
 
-  <span class="c1">// Try joining all breps
-</span>  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">RhinoJoinBreps</span><span class="p">(</span> <span class="n">brep_list</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">brep_object</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">brep</span> <span class="p">);</span>
+  // Try joining all breps
+  ON_Brep* brep = RhinoJoinBreps( brep_list, context.m_doc.AbsoluteTolerance() );
+  if( brep )
+  {
+    CRhinoBrepObject* brep_object = context.m_doc.AddBrepObject( *brep );
 
-    <span class="c1">// AddBrepObject makes a copy...
-</span>    <span class="k">delete</span> <span class="n">brep</span><span class="p">;</span>
+    // AddBrepObject makes a copy...
+    delete brep;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep_object</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+    if( brep_object )
+      context.m_doc.Redraw();
 
-    <span class="k">return</span> <span class="p">(</span> <span class="n">brep_object</span> <span class="o">?</span> <span class="n">success</span> <span class="o">:</span> <span class="n">failure</span> <span class="p">);</span>
-  <span class="p">}</span>
+    return ( brep_object ? success : failure );
+  }
 
-  <span class="c1">// Othewise just add the individual breps to Rhino.
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">brep_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">brep_object</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
+  // Othewise just add the individual breps to Rhino.
+  for( i = 0; i &lt; brep_list.Count(); i++ )
+  {
+    if( brep_list[i] )
+    {
+      CRhinoBrepObject* brep_object = context.m_doc.AddBrepObject( *brep_list[i] );
 
-      <span class="c1">// AddBrepObject make a copy...
-</span>      <span class="k">delete</span> <span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      // AddBrepObject make a copy...
+      delete brep_list[i];
+    }
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

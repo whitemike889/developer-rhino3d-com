@@ -242,46 +242,45 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">ReadNotesFromRhino3dmFile</span><span class="p">(</span> <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ON_wString</span><span class="o">&amp;</span> <span class="n">notes</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">filename</span> <span class="o">||</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">bool ReadNotesFromRhino3dmFile( const wchar_t* filename, ON_wString&amp; notes )
+{
+  if( 0 == filename || 0 == filename[0] )
+    return false;
 
-  <span class="c1">// STEP 1: Open the file
-</span>  <span class="kt">FILE</span><span class="o">*</span> <span class="n">archive_fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"rb"</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">archive_fp</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  // STEP 1: Open the file
+  FILE* archive_fp = ON::OpenFile( filename, L"rb" );
+  if( 0 == archive_fp )
+    return false;
 
-  <span class="c1">// STEP 2: Create a binary archive object
-</span>  <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">read3dm</span><span class="p">,</span> <span class="n">archive_fp</span> <span class="p">);</span>
+  // STEP 2: Create a binary archive object
+  ON_BinaryFile archive( ON::read3dm, archive_fp );
 
-  <span class="c1">// STEP 3: Read 3dm start section
-</span>  <span class="kt">int</span> <span class="n">file_version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">ON_String</span> <span class="n">start_section_comments</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">Read3dmStartSection</span><span class="p">(</span><span class="o">&amp;</span><span class="n">file_version</span><span class="p">,</span> <span class="n">start_section_comments</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="p">}</span>
+  // STEP 3: Read 3dm start section
+  int file_version = 0;
+  ON_String start_section_comments;
+  if( !archive.Read3dmStartSection(&amp;file_version, start_section_comments) )
+  {
+    ON::CloseFile( archive_fp );
+    return false;
+  }
 
-  <span class="c1">// STEP 4: Read 3dm properties section
-</span>  <span class="n">ON_3dmProperties</span> <span class="n">properties</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">Read3dmProperties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="p">}</span>
+  // STEP 4: Read 3dm properties section
+  ON_3dmProperties properties;
+  if( !archive.Read3dmProperties(properties) )
+  {
+    ON::CloseFile( archive_fp );
+    return false;
+  }
 
-  <span class="c1">// STEP 5: Close the file
-</span>  <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
+  // STEP 5: Close the file
+  ON::CloseFile( archive_fp );
 
-  <span class="c1">// return the notes
-</span>  <span class="n">notes</span> <span class="o">=</span> <span class="n">properties</span><span class="p">.</span><span class="n">m_Notes</span><span class="p">.</span><span class="n">m_notes</span><span class="p">;</span>
+  // return the notes
+  notes = properties.m_Notes.m_notes;
 
-  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+  return true;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

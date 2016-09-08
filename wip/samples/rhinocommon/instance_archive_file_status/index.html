@@ -247,49 +247,48 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">InstanceArchiveFileStatus</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinition</span> <span class="n">iDef</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span> <span class="n">iDefStatus</span> <span class="p">=</span> <span class="n">iDef</span><span class="p">.</span><span class="n">ArchiveFileStatus</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result InstanceArchiveFileStatus(Rhino.RhinoDoc doc)
+  {
+    for (int i = 0; i &lt; doc.InstanceDefinitions.Count; i++)
+    {
+      Rhino.DocObjects.InstanceDefinition iDef = doc.InstanceDefinitions[i];
+      Rhino.DocObjects.InstanceDefinitionArchiveFileStatus iDefStatus = iDef.ArchiveFileStatus;
 
-      <span class="kt">string</span> <span class="n">status</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-      <span class="k">switch</span> <span class="p">(</span><span class="n">iDefStatus</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">NotALinkedInstanceDefinition</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"not a linked instance definition."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileNotReadable</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file is not readable."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileNotFound</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file cannot be found."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileIsUpToDate</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file is up-to-date."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileIsNewer</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file is newer."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileIsOlder</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file is older."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinitionArchiveFileStatus</span><span class="p">.</span><span class="n">LinkedFileIsDifferent</span><span class="p">:</span>
-          <span class="n">status</span> <span class="p">=</span> <span class="s">"archive file is different."</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-      <span class="p">}</span>
+      string status = "Unknown";
+      switch (iDefStatus)
+      {
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.NotALinkedInstanceDefinition:
+          status = "not a linked instance definition.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileNotReadable:
+          status = "archive file is not readable.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileNotFound:
+          status = "archive file cannot be found.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileIsUpToDate:
+          status = "archive file is up-to-date.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileIsNewer:
+          status = "archive file is newer.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileIsOlder:
+          status = "archive file is older.";
+          break;
+        case Rhino.DocObjects.InstanceDefinitionArchiveFileStatus.LinkedFileIsDifferent:
+          status = "archive file is different.";
+          break;
+      }
 
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} - {1}"</span><span class="p">,</span> <span class="n">iDef</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">status</span><span class="p">);</span>
-    <span class="p">}</span>
+      Rhino.RhinoApp.WriteLine("{0} - {1}", iDef.Name, status);
+    }
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function InstanceArchiveFileStatus(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -323,9 +322,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

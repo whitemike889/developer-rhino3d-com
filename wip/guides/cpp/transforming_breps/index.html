@@ -333,76 +333,74 @@ $(document).ready(function()
 
 <h3 id="the-short-way">The Short Way</h3>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select brep"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">brep_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select brep" );
+  go.SetGeometryFilter( ON::brep_object );
+  go.GetObjects(1,1);
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="n">CRhinoObjRef</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  CRhinoObjRef ref = go.Object(0);
 
-  <span class="c1">// Simple translation transformation
-</span>  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">25</span><span class="p">)</span> <span class="p">);</span>
+  // Simple translation transformation
+  ON_Xform xform;
+  xform.Translation( ON_3dVector(18,-18,-25) );
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">TransformObject</span><span class="p">(</span> <span class="n">ref</span><span class="p">,</span> <span class="n">xform</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.TransformObject( ref, xform );
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 <h3 id="the-long-way">The Long Way</h3>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select brep"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">brep_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select brep" );
+  go.SetGeometryFilter( ON::brep_object );
+  go.GetObjects(1,1);
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">dupe</span> <span class="o">=</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">Duplicate</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const CRhinoObject* obj = ref.Object();
+  if( !obj )
+    return failure;
+  const ON_Brep* brep = ref.Brep();
+  if( !brep )
+    return failure;
+  ON_Brep* dupe = brep-&gt;Duplicate();
+  if( !dupe )
+    return failure;
 
-  <span class="c1">// Simple translation transformation
-</span>  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">25</span><span class="p">)</span> <span class="p">);</span>
+  // Simple translation transformation
+  ON_Xform xform;
+  xform.Translation( ON_3dVector(18,-18,-25) );
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe</span><span class="o">-&gt;</span><span class="n">Transform</span><span class="p">(</span> <span class="n">xform</span> <span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to transform object.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">delete</span> <span class="n">dupe</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( !dupe-&gt;Transform( xform ) )
+  {
+    RhinoApp().Print( L"Unable to transform object.\n" );
+    delete dupe;
+    return failure;
+  }
 
-  <span class="n">ON_3dmObjectAttributes</span> <span class="n">attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">dupe</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attribs</span> <span class="p">);</span>
+  ON_3dmObjectAttributes attribs = obj-&gt;Attributes();
+  context.m_doc.AddBrepObject( *dupe, &amp;attribs );
 
-  <span class="c1">// Since CRhinoDoc::AddBrepObject() make a copy of the input
-</span>  <span class="c1">// brep, we are responsible for deleting the original. Otherwise
-</span>  <span class="c1">// we will leak memory;
-</span>  <span class="k">delete</span> <span class="n">dupe</span><span class="p">;</span>
-  <span class="c1">// Delete the selected object
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">DeleteObject</span><span class="p">(</span> <span class="n">ref</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Since CRhinoDoc::AddBrepObject() make a copy of the input
+  // brep, we are responsible for deleting the original. Otherwise
+  // we will leak memory;
+  delete dupe;
+  // Delete the selected object
+  context.m_doc.DeleteObject( ref );
+  context.m_doc.Redraw();
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

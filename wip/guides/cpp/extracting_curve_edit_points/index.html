@@ -323,7 +323,7 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>You would like to extract a curve’s edit points - the points you see when you run the <em>EditPtOn</em> command, but you do not see any methods on <code class="highlighter-rouge">ON_Curve</code> or <code class="highlighter-rouge">ON_NurbsCurve</code> to do this.</p>
+<p>You would like to extract a curve’s edit points - the points you see when you run the <em>EditPtOn</em> command, but you do not see any methods on <code>ON_Curve</code> or <code>ON_NurbsCurve</code> to do this.</p>
 
 <h2 id="solution">Solution</h2>
 
@@ -331,40 +331,39 @@ $(document).ready(function()
 
 <p>The following code demonstrates to get obtain the edit points for a NURBS curve and then create point objects at those locations.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv = go.Object(0).Curve();
+  if( 0 == crv )
+    return failure;
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nc</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// For every control point, we can calculate
-</span>    <span class="c1">// a cooresponding edit point.
-</span>    <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">(</span> <span class="n">nc</span><span class="p">.</span><span class="n">CVCount</span><span class="p">()</span> <span class="p">);</span>
-    <span class="n">t</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">nc</span><span class="p">.</span><span class="n">CVCount</span><span class="p">()</span> <span class="p">);</span>
+  ON_NurbsCurve nc;
+  if( crv-&gt;GetNurbForm(nc) )
+  {
+    // For every control point, we can calculate
+    // a cooresponding edit point.
+    ON_SimpleArray&lt;double&gt; t( nc.CVCount() );
+    t.SetCount( nc.CVCount() );
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">nc</span><span class="p">.</span><span class="n">GetGrevilleAbcissae</span><span class="p">(</span><span class="n">t</span><span class="p">.</span><span class="n">Array</span><span class="p">())</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">nc</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    if( nc.GetGrevilleAbcissae(t.Array()) )
+    {
+      int i;
+      for( i = 0; i &lt; t.Count(); i++ )
+        context.m_doc.AddPointObject( nc.PointAt(t[i]) );
+      context.m_doc.Redraw();
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

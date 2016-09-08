@@ -242,65 +242,64 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Prompt for base point
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Base point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  // Prompt for base point
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Base point" );
+  gp.ConstrainToConstructionPlane( FALSE );
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="c1">// Get first picked point
-</span>  <span class="n">ON_3dPoint</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  // Get first picked point
+  ON_3dPoint origin = gp.Point();
 
-  <span class="c1">// Get view used during GetPoint
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// If scripted, get active view
-</span>    <span class="n">view</span> <span class="o">=</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Get view used during GetPoint
+  CRhinoView* view = gp.View();
+  if( !view )
+  {
+    // If scripted, get active view
+    view = ::RhinoApp().ActiveView();
+    if( !view )
+      return CRhinoCommand::failure;
+  }
 
-  <span class="c1">// Get view's construction plane and move it to the picked point
-</span>  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">().</span><span class="n">m_plane</span><span class="p">;</span>
-  <span class="n">plane</span><span class="p">.</span><span class="n">SetOrigin</span><span class="p">(</span> <span class="n">origin</span> <span class="p">);</span>
+  // Get view's construction plane and move it to the picked point
+  ON_Plane plane = view-&gt;Viewport().ConstructionPlane().m_plane;
+  plane.SetOrigin( origin );
 
-  <span class="c1">// Prompt for first reference point
-</span>  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"First reference point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">origin</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">origin</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>  <span class="c1">// Constrain picking to plane
-</span>  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for first reference point
+  gp.SetCommandPrompt( L"First reference point" );
+  gp.SetBasePoint( origin );
+  gp.DrawLineFromPoint( origin, TRUE );
+  gp.Constrain( plane );  // Constrain picking to plane
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="c1">// Get second picked point
-</span>  <span class="n">ON_3dPoint</span> <span class="n">refpt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  // Get second picked point
+  ON_3dPoint refpt = gp.Point();
 
-  <span class="c1">// Prompt for angle
-</span>  <span class="n">CRhinoGetAngle</span> <span class="n">ga</span><span class="p">;</span>
-  <span class="n">ga</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Second reference point"</span> <span class="p">);</span>
-  <span class="n">ga</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">origin</span> <span class="p">);</span>
-  <span class="n">ga</span><span class="p">.</span><span class="n">SetBase</span><span class="p">(</span> <span class="n">origin</span> <span class="p">);</span>
-  <span class="n">ga</span><span class="p">.</span><span class="n">SetReferencePoint</span><span class="p">(</span> <span class="n">refpt</span> <span class="p">);</span>
-  <span class="n">ga</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>  <span class="c1">// Constrain picking to plane
-</span>  <span class="n">ga</span><span class="p">.</span><span class="n">GetAngle</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">ga</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">ga</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for angle
+  CRhinoGetAngle ga;
+  ga.SetCommandPrompt( L"Second reference point" );
+  ga.SetBasePoint( origin );
+  ga.SetBase( origin );
+  ga.SetReferencePoint( refpt );
+  ga.Constrain( plane );  // Constrain picking to plane
+  ga.GetAngle();
+  if( ga.CommandResult() != CRhinoCommand::success )
+    return ga.CommandResult();
 
-  <span class="c1">// Results
-</span>  <span class="kt">double</span> <span class="n">radians</span> <span class="o">=</span> <span class="n">ga</span><span class="p">.</span><span class="n">Angle</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">degrees</span> <span class="o">=</span> <span class="n">radians</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.0</span><span class="o">/</span><span class="n">ON_PI</span><span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Angle = %f.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">degrees</span> <span class="p">);</span>
+  // Results
+  double radians = ga.Angle();
+  double degrees = radians * (180.0/ON_PI);
+  RhinoApp().Print( L"Angle = %f.\n", degrees );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

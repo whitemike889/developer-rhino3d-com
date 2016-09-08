@@ -247,39 +247,38 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">CreateMeshFromBrep</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or polysurface to mesh"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">brep</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result CreateMeshFromBrep(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select surface or polysurface to mesh", true, ObjectType.Surface | ObjectType.PolysrfFilter, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var brep = obj_ref.Brep();
+    if (null == brep)
+      return Result.Failure;
 
-    <span class="c1">// you could choose anyone of these for example
-</span>    <span class="kt">var</span> <span class="n">jagged_and_faster</span> <span class="p">=</span> <span class="n">MeshingParameters</span><span class="p">.</span><span class="n">Coarse</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">smooth_and_slower</span> <span class="p">=</span> <span class="n">MeshingParameters</span><span class="p">.</span><span class="n">Smooth</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">default_mesh_params</span> <span class="p">=</span> <span class="n">MeshingParameters</span><span class="p">.</span><span class="n">Default</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">minimal</span> <span class="p">=</span> <span class="n">MeshingParameters</span><span class="p">.</span><span class="n">Minimal</span><span class="p">;</span>
+    // you could choose anyone of these for example
+    var jagged_and_faster = MeshingParameters.Coarse;
+    var smooth_and_slower = MeshingParameters.Smooth;
+    var default_mesh_params = MeshingParameters.Default;
+    var minimal = MeshingParameters.Minimal;
 
-    <span class="kt">var</span> <span class="n">meshes</span> <span class="p">=</span> <span class="n">Mesh</span><span class="p">.</span><span class="nf">CreateFromBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">,</span> <span class="n">smooth_and_slower</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">meshes</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">meshes</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var meshes = Mesh.CreateFromBrep(brep, smooth_and_slower);
+    if (meshes == null || meshes.Length == 0)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">brep_mesh</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Mesh</span><span class="p">();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">mesh</span> <span class="k">in</span> <span class="n">meshes</span><span class="p">)</span>
-      <span class="n">brep_mesh</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">mesh</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddMesh</span><span class="p">(</span><span class="n">brep_mesh</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    var brep_mesh = new Mesh();
+    foreach (var mesh in meshes)
+      brep_mesh.Append(mesh);
+    doc.Objects.AddMesh(brep_mesh);
+    doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CreateMeshFromBrep(ByVal doc As RhinoDoc) As Result
@@ -316,42 +315,41 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="n">RhinoGet</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="n">Result</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="n">ObjectType</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+from Rhino.Geometry import *
+from Rhino.Input import RhinoGet
+from Rhino.Commands import Result
+from Rhino.DocObjects import ObjectType
+import rhinoscriptsyntax as rs
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">objRef</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or polysurface to mesh"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span>
-                                     <span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">PolysrfFilter</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">brep</span> <span class="o">=</span> <span class="n">objRef</span><span class="o">.</span><span class="n">Brep</span><span class="p">()</span>
-  <span class="k">if</span> <span class="bp">None</span> <span class="o">==</span> <span class="n">brep</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  rc, objRef = RhinoGet.GetOneObject("Select surface or polysurface to mesh", True,
+                                     ObjectType.Surface | ObjectType.PolysrfFilter)
+  if rc &lt;&gt; Result.Success:
+    return rc
+  brep = objRef.Brep()
+  if None == brep:
+    return Result.Failure
 
-  <span class="n">jaggedAndFaster</span> <span class="o">=</span> <span class="n">MeshingParameters</span><span class="o">.</span><span class="n">Coarse</span>
-  <span class="n">smoothAndSlower</span> <span class="o">=</span> <span class="n">MeshingParameters</span><span class="o">.</span><span class="n">Smooth</span>
-  <span class="n">defaultMeshParams</span> <span class="o">=</span> <span class="n">MeshingParameters</span><span class="o">.</span><span class="n">Default</span>
-  <span class="n">minimal</span> <span class="o">=</span> <span class="n">MeshingParameters</span><span class="o">.</span><span class="n">Minimal</span>
+  jaggedAndFaster = MeshingParameters.Coarse
+  smoothAndSlower = MeshingParameters.Smooth
+  defaultMeshParams = MeshingParameters.Default
+  minimal = MeshingParameters.Minimal
 
-  <span class="n">meshes</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">CreateFromBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">,</span> <span class="n">smoothAndSlower</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">meshes</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">meshes</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  meshes = Mesh.CreateFromBrep(brep, smoothAndSlower)
+  if meshes == None or meshes.Length == 0:
+    return Result.Failure
 
-  <span class="n">brepMesh</span> <span class="o">=</span> <span class="n">Mesh</span><span class="p">()</span>
-  <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">meshes</span><span class="p">:</span>
-    <span class="n">brepMesh</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddMesh</span><span class="p">(</span><span class="n">brepMesh</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+  brepMesh = Mesh()
+  for mesh in meshes:
+    brepMesh.Append(mesh)
+  doc.Objects.AddMesh(brepMesh)
+  doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

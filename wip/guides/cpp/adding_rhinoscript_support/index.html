@@ -387,8 +387,8 @@ $(document).ready(function()
 <p>With the Rhino C/C++ SDK, it is possible to write plugins that extend the RhinoScript scripting tool.  In order to do this, a plugin must do the following:</p>
 
 <ol>
-  <li>Create a COM object that implements the <code class="highlighter-rouge">IDispatch</code> interface.</li>
-  <li>Override the <code class="highlighter-rouge">CRhinoPlugIn::GetPlugInObjectInterface()</code> to give plugins, such as RhinoScript, access to this object.</li>
+  <li>Create a COM object that implements the <code>IDispatch</code> interface.</li>
+  <li>Override the <code>CRhinoPlugIn::GetPlugInObjectInterface()</code> to give plugins, such as RhinoScript, access to this object.</li>
 </ol>
 
 <h2 id="step-by-step">Step-by-Step</h2>
@@ -411,7 +411,7 @@ Once the Appwizard has completed creating the skeleton project, build the projec
 
 <ol>
   <li>Create a new MFC class by running the MFC Class Wizard.</li>
-  <li>Name the class <em>CTestScriptObject</em>.  This class should be derived from <code class="highlighter-rouge">CCmdTarget</code>.  Also, under <em>Automation</em>, select the <em>Automation</em> radio button.  <strong>NOTE</strong>: this COM object will not be creatable by type ID because Rhino plugins (DLLs) are dependent on Rhino.</li>
+  <li>Name the class <em>CTestScriptObject</em>.  This class should be derived from <code>CCmdTarget</code>.  Also, under <em>Automation</em>, select the <em>Automation</em> radio button.  <strong>NOTE</strong>: this COM object will not be creatable by type ID because Rhino plugins (DLLs) are dependent on Rhino.</li>
 </ol>
 
 <p><img src="/wip/images/adding_rhinoscript_support_02.png" alt="MFC Wizard" /></p>
@@ -428,99 +428,96 @@ Once the Appwizard has completed creating the skeleton project, build the projec
 
 <h3 id="implement-your-methods">Implement your methods</h3>
 
-<p>The <em>Add Method Wizard</em> will create a placeholder for our <code class="highlighter-rouge">AddPoint</code> method in <em>TestScriptObject.cpp</em>.  Add the following code to your new method:</p>
+<p>The <em>Add Method Wizard</em> will create a placeholder for our <code>AddPoint</code> method in <em>TestScriptObject.cpp</em>.  Add the following code to your new method:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">VARIANT</span> <span class="n">CTestScriptObject</span><span class="o">::</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">VARIANT</span><span class="o">*</span> <span class="n">vaPoint</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">VARIANT</span> <span class="n">vaResult</span><span class="p">;</span>
-  <span class="n">VariantInit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vaResult</span><span class="p">);</span>
-  <span class="n">V_VT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vaResult</span><span class="p">)</span> <span class="o">=</span> <span class="n">VT_NULL</span><span class="p">;</span>
+<pre><code class="language-cpp">VARIANT CTestScriptObject::AddPoint(VARIANT* vaPoint)
+{
+  VARIANT vaResult;
+  VariantInit(&amp;vaResult);
+  V_VT(&amp;vaResult) = VT_NULL;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">vaPoint</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">VariantToPoint</span><span class="p">(</span><span class="o">*</span><span class="n">vaPoint</span><span class="p">,</span> <span class="n">pt</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoDoc</span><span class="o">*</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">doc</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">CRhinoPointObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">doc</span><span class="o">-&gt;</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">doc</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-          <span class="n">ON_wString</span> <span class="n">wstr</span><span class="p">;</span>
-          <span class="n">ON_UuidToString</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">().</span><span class="n">m_uuid</span><span class="p">,</span> <span class="n">wstr</span> <span class="p">);</span>
-          <span class="n">CString</span> <span class="n">str</span><span class="p">(</span><span class="n">wstr</span><span class="p">);</span>
-          <span class="n">V_VT</span><span class="p">(</span><span class="o">&amp;</span><span class="n">vaResult</span><span class="p">)</span> <span class="o">=</span> <span class="n">VT_BSTR</span><span class="p">;</span>
-          <span class="n">vaResult</span><span class="p">.</span><span class="n">bstrVal</span> <span class="o">=</span> <span class="n">str</span><span class="p">.</span><span class="n">AllocSysString</span><span class="p">();</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  if( vaPoint )
+  {
+    ON_3dPoint pt;
+    if( VariantToPoint(*vaPoint, pt) )
+    {
+      CRhinoDoc* doc = RhinoApp().ActiveDoc();
+      if( doc )
+      {
+        CRhinoPointObject* obj = doc-&gt;AddPointObject( pt );
+        if( obj )
+        {
+          doc-&gt;Redraw();
+          ON_wString wstr;
+          ON_UuidToString( obj-&gt;Attributes().m_uuid, wstr );
+          CString str(wstr);
+          V_VT(&amp;vaResult) = VT_BSTR;
+          vaResult.bstrVal = str.AllocSysString();
+        }
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">vaResult</span><span class="p">;</span>
-<span class="p">}</span>
+  return vaResult;
+}
 </code></pre>
-</div>
 
-<p>In the above code, the <code class="highlighter-rouge">VARIANT*</code> argument is converted to an <code class="highlighter-rouge">ON_3dPoint</code> using the <code class="highlighter-rouge">VariantToPoint()</code> function.  One of the biggest challenges to creating RhinoScript accessible objects is converting the COM Variant data type to an opennurbs data type and back.  Fortunately, we have done all of the work for you.</p>
+<p>In the above code, the <code>VARIANT*</code> argument is converted to an <code>ON_3dPoint</code> using the <code>VariantToPoint()</code> function.  One of the biggest challenges to creating RhinoScript accessible objects is converting the COM Variant data type to an opennurbs data type and back.  Fortunately, we have done all of the work for you.</p>
 
-<p>Once the Variant has been converted to an <code class="highlighter-rouge">ON_3dPoint</code>, the code simply adds the point to Rhino.  But, just like RhinoScript’s <code class="highlighter-rouge">AddPoint</code> method, this method also returns the object’s unique identifier.</p>
+<p>Once the Variant has been converted to an <code>ON_3dPoint</code>, the code simply adds the point to Rhino.  But, just like RhinoScript’s <code>AddPoint</code> method, this method also returns the object’s unique identifier.</p>
 
 <h3 id="allow-access-to-your-object">Allow access to your object</h3>
 
-<p>Now that you have a COM object that implements <code class="highlighter-rouge">IDispatch</code> and has at least one method, we can allow access to it.  The easiest way is to put a copy of your new COM object on your plugin object as a data member.  For example:</p>
+<p>Now that you have a COM object that implements <code>IDispatch</code> and has at least one method, we can allow access to it.  The easiest way is to put a copy of your new COM object on your plugin object as a data member.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CTestScriptPlugIn</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoUtilityPlugIn</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CTestScriptPlugIn</span><span class="p">();</span>
-  <span class="o">~</span><span class="n">CTestScriptPlugIn</span><span class="p">();</span>
+<pre><code class="language-cpp">class CTestScriptPlugIn : public CRhinoUtilityPlugIn
+{
+public:
+  CTestScriptPlugIn();
+  ~CTestScriptPlugIn();
 
-  <span class="c1">// Required overrides
-</span>  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">PlugInName</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">PlugInVersion</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="n">GUID</span> <span class="n">PlugInID</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="n">BOOL</span> <span class="n">OnLoadPlugIn</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">OnUnloadPlugIn</span><span class="p">();</span>
+  // Required overrides
+  const wchar_t* PlugInName() const;
+  const wchar_t* PlugInVersion() const;
+  GUID PlugInID() const;
+  BOOL OnLoadPlugIn();
+  void OnUnloadPlugIn();
 
-  <span class="c1">// Optional overrides
-</span>  <span class="n">LPUNKNOWN</span> <span class="n">GetPlugInObjectInterface</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_UUID</span><span class="o">&amp;</span> <span class="n">iid</span> <span class="p">);</span>
+  // Optional overrides
+  LPUNKNOWN GetPlugInObjectInterface( const ON_UUID&amp; iid );
 
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">ON_wString</span> <span class="n">m_plugin_version</span><span class="p">;</span>
-  <span class="n">CTestScriptObject</span> <span class="n">m_object</span><span class="p">;</span>
-<span class="p">};</span>
+private:
+  ON_wString m_plugin_version;
+  CTestScriptObject m_object;
+};
 </code></pre>
-</div>
 
-<p>Then, allow access to the object by overriding the <code class="highlighter-rouge">GetPlugInObjectInterface()</code> virtual function.  For example:</p>
+<p>Then, allow access to the object by overriding the <code>GetPlugInObjectInterface()</code> virtual function.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">LPUNKNOWN</span> <span class="n">CTestScriptPlugIn</span><span class="o">::</span><span class="n">GetPlugInObjectInterface</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_UUID</span><span class="o">&amp;</span> <span class="n">iid</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">LPUNKNOWN</span> <span class="n">lpUnknown</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<pre><code class="language-cpp">LPUNKNOWN CTestScriptPlugIn::GetPlugInObjectInterface( const ON_UUID&amp; iid )
+{
+  LPUNKNOWN lpUnknown = 0;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">iid</span> <span class="o">==</span> <span class="n">IID_IUnknown</span> <span class="p">)</span>
-    <span class="n">lpUnknown</span> <span class="o">=</span> <span class="n">m_object</span><span class="p">.</span><span class="n">GetInterface</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">IID_IUnknown</span> <span class="p">);</span>
+  if( iid == IID_IUnknown )
+    lpUnknown = m_object.GetInterface( &amp;IID_IUnknown );
 
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">iid</span> <span class="o">==</span> <span class="n">IID_IDispatch</span> <span class="p">)</span>
-    <span class="n">lpUnknown</span> <span class="o">=</span> <span class="n">m_object</span><span class="p">.</span><span class="n">GetInterface</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">IID_IDispatch</span> <span class="p">);</span>
+  else if( iid == IID_IDispatch )
+    lpUnknown = m_object.GetInterface( &amp;IID_IDispatch );
 
-   <span class="k">if</span><span class="p">(</span> <span class="n">lpUnknown</span> <span class="p">)</span>
-    <span class="n">m_object</span><span class="p">.</span><span class="n">ExternalAddRef</span><span class="p">();</span>
+   if( lpUnknown )
+    m_object.ExternalAddRef();
 
-  <span class="k">return</span> <span class="n">lpUnknown</span><span class="p">;</span>
-<span class="p">}</span>
+  return lpUnknown;
+}
 </code></pre>
-</div>
 
-<p><strong>NOTE</strong>: RhinoScript will only request an <code class="highlighter-rouge">IDispatch</code> object from your plugin.  Also because our object is a data member of our plugin object, we must increment our object’s reference counter.  Otherwise, when VBScript releases our object, which will decrement the reference counter, our object will be destroyed.  This will cause your plugin to crash.</p>
+<p><strong>NOTE</strong>: RhinoScript will only request an <code>IDispatch</code> object from your plugin.  Also because our object is a data member of our plugin object, we must increment our object’s reference counter.  Otherwise, when VBScript releases our object, which will decrement the reference counter, our object will be destroyed.  This will cause your plugin to crash.</p>
 
 <h3 id="implement-your-rhinoscript-methods">Implement your RhinoScript Methods</h3>
 
 <p>Once you have implemented your methods, you can begin to test them.  Launch Rhino and use the <em>PlugInManager</em> command to install your new plugin.  Then, use RhinoScript’s EditScript dialog to test the methods in your plugin’s object.</p>
 
-<p>The following RhinoScript demonstrates how to get our plugins scriptable object and run the <code class="highlighter-rouge">AddPoint</code> method…</p>
+<p>The following RhinoScript demonstrates how to get our plugins scriptable object and run the <code>AddPoint</code> method…</p>
 
 <pre><code class="language-vbnet">Sub MyTest
   Dim objPlugIn, arrPoint, idPoint

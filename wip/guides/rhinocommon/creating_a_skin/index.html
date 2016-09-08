@@ -370,14 +370,14 @@ $(document).ready(function()
 <ol>
   <li>Launch <strong>Visual Studio</strong> and add a new Class Library project to your solution.</li>
   <li>In the new Class Library project, add a reference to <em>RhinoCommon.dll</em>, which is found in Rhino’s <em>System</em> folder. Note: make sure, after adding the reference, to set the properties of the reference to <strong>Copy Local = False</strong>.</li>
-  <li>Create a new class that inherits from <code class="highlighter-rouge">Rhino.Runtime.Skin</code>.</li>
+  <li>Create a new class that inherits from <code>Rhino.Runtime.Skin</code>.</li>
   <li>Add a post build event to the project to rename the assembly from <em>.dll</em> to <em>.rhs</em>:
-<code class="highlighter-rouge">(TargetPath)" "$(TargetDir)$(ProjectName).rhs" Erase "$(TargetPath)"</code></li>
+<code>(TargetPath)" "$(TargetDir)$(ProjectName).rhs" Erase "$(TargetPath)"</code></li>
 </ol>
 
 <h2 id="skin-class">Skin Class</h2>
 
-<p>The skin class can override basic properties, like the <code class="highlighter-rouge">ApplicationName</code>:</p>
+<p>The skin class can override basic properties, like the <code>ApplicationName</code>:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
@@ -385,22 +385,21 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">MySkin</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">class</span> <span class="nc">MyHippoSkin</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">Skin</span>
-  <span class="p">{</span>
-    <span class="k">protected</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">ApplicationName</span>
-    <span class="p">{</span>
-      <span class="k">get</span>
-      <span class="p">{</span>
-        <span class="k">return</span> <span class="s">"Hippopotamus"</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="c1">// You can override more methods and properties here
-</span><span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">namespace MySkin
+{
+  public class MyHippoSkin : Rhino.Runtime.Skin
+  {
+    protected override string ApplicationName
+    {
+      get
+      {
+        return "Hippopotamus";
+      }
+    }
+  }
+  // You can override more methods and properties here
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Namespace MySkin
     Public Class MyHippoSkin
@@ -467,9 +466,9 @@ End Namespace
 
 <h4 id="testing">Testing</h4>
 
-<p>You can now test your custom Skin by creating shortcut to your Rhino executable with <code class="highlighter-rouge">/scheme="&lt;scheme name from the previous step&gt;"</code> as command line argument.  For example:</p>
+<p>You can now test your custom Skin by creating shortcut to your Rhino executable with <code>/scheme="&lt;scheme name from the previous step&gt;"</code> as command line argument.  For example:</p>
 
-<p><code class="highlighter-rouge">"C:\Program Files\Rhinoceros 5 (64-bit)\System\Rhino.exe" /scheme=MySkin</code></p>
+<p><code>"C:\Program Files\Rhinoceros 5 (64-bit)\System\Rhino.exe" /scheme=MySkin</code></p>
 
 <h4 id="rhino-32-bit">Rhino 32-bit</h4>
 
@@ -512,9 +511,9 @@ End Namespace
 
 <h4 id="testing-1">Testing</h4>
 
-<p>You can now test your custom Skin by creating shortcut to your Rhino executable with <code class="highlighter-rouge">/scheme="&lt;scheme name from the previous step&gt;"</code> as command line argument. For example:</p>
+<p>You can now test your custom Skin by creating shortcut to your Rhino executable with <code>/scheme="&lt;scheme name from the previous step&gt;"</code> as command line argument. For example:</p>
 
-<p><code class="highlighter-rouge">"C:\Program Files (x86)\Rhinoceros 5\System\Rhino4.exe" /scheme=MySkin</code></p>
+<p><code>"C:\Program Files (x86)\Rhinoceros 5\System\Rhino4.exe" /scheme=MySkin</code></p>
 
         </article>
 

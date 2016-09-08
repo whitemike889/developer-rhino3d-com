@@ -391,13 +391,13 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>In VBScript, there are two kinds of procedures; the <code class="highlighter-rouge">Sub</code> procedure and the <code class="highlighter-rouge">Function</code> procedure.</p>
+<p>In VBScript, there are two kinds of procedures; the <code>Sub</code> procedure and the <code>Function</code> procedure.</p>
 
 <h2 id="sub-procedures">Sub Procedures</h2>
 
-<p>A <code class="highlighter-rouge">Sub</code> procedure is a series of VBScript statements (enclosed by <code class="highlighter-rouge">Sub</code> and <code class="highlighter-rouge">End Sub</code> statements) that perform actions but don’t return a value.  A <code class="highlighter-rouge">Sub</code> procedure can take arguments (constants, variables, or expressions that are passed by a calling procedure).  If a <code class="highlighter-rouge">Sub</code> procedure has no arguments, its <code class="highlighter-rouge">Sub</code> statement should include an empty set of parentheses <code class="highlighter-rouge">()</code>.</p>
+<p>A <code>Sub</code> procedure is a series of VBScript statements (enclosed by <code>Sub</code> and <code>End Sub</code> statements) that perform actions but don’t return a value.  A <code>Sub</code> procedure can take arguments (constants, variables, or expressions that are passed by a calling procedure).  If a <code>Sub</code> procedure has no arguments, its <code>Sub</code> statement should include an empty set of parentheses <code>()</code>.</p>
 
-<p>The following <code class="highlighter-rouge">Sub</code> procedure uses two intrinsic, or built-in, VBScript functions, MsgBox and InputBox, to prompt a user for information.  It then displays the results of a calculation based on that information. The calculation is performed in a <code class="highlighter-rouge">Function</code> procedure created using VBScript.  The <code class="highlighter-rouge">Function</code> procedure is shown after the following discussion.</p>
+<p>The following <code>Sub</code> procedure uses two intrinsic, or built-in, VBScript functions, MsgBox and InputBox, to prompt a user for information.  It then displays the results of a calculation based on that information. The calculation is performed in a <code>Function</code> procedure created using VBScript.  The <code>Function</code> procedure is shown after the following discussion.</p>
 
 <pre><code class="language-vbnet">Sub ConvertTemp()
 	temp = InputBox("Please enter the temperature in degrees F.", 1)
@@ -407,9 +407,9 @@ End Sub
 
 <h2 id="function-procedures">Function Procedures</h2>
 
-<p>A <code class="highlighter-rouge">Function</code> procedure is a series of VBScript statements enclosed by the <code class="highlighter-rouge">Function</code> and End <code class="highlighter-rouge">Function</code> statements.  A <code class="highlighter-rouge">Function</code> procedure is similar to a <code class="highlighter-rouge">Sub</code> procedure, but can also return a value.  A <code class="highlighter-rouge">Function</code> procedure can take arguments (constants, variables, or expressions that are passed to it by a calling procedure).  If a <code class="highlighter-rouge">Function</code> procedure has no arguments, its <code class="highlighter-rouge">Function</code> statement should include an empty set of parentheses.  A <code class="highlighter-rouge">Function</code> returns a value by assigning a value to its name in one or more statements of the procedure.  The return type of a <code class="highlighter-rouge">Function</code> is always a Variant.</p>
+<p>A <code>Function</code> procedure is a series of VBScript statements enclosed by the <code>Function</code> and End <code>Function</code> statements.  A <code>Function</code> procedure is similar to a <code>Sub</code> procedure, but can also return a value.  A <code>Function</code> procedure can take arguments (constants, variables, or expressions that are passed to it by a calling procedure).  If a <code>Function</code> procedure has no arguments, its <code>Function</code> statement should include an empty set of parentheses.  A <code>Function</code> returns a value by assigning a value to its name in one or more statements of the procedure.  The return type of a <code>Function</code> is always a Variant.</p>
 
-<p>In the following example, the Celsius <code class="highlighter-rouge">Function</code> calculates degrees Celsius from degrees Fahrenheit. When the <code class="highlighter-rouge">Function</code> is called from the <code class="highlighter-rouge">ConvertTemp</code> <code class="highlighter-rouge">Sub</code> procedure, a variable containing the argument value is passed to the <code class="highlighter-rouge">Function</code>.  The result of the calculation is returned to the calling procedure and displayed in a message box.</p>
+<p>In the following example, the Celsius <code>Function</code> calculates degrees Celsius from degrees Fahrenheit. When the <code>Function</code> is called from the <code>ConvertTemp</code> <code>Sub</code> procedure, a variable containing the argument value is passed to the <code>Function</code>.  The result of the calculation is returned to the calling procedure and displayed in a message box.</p>
 
 <pre><code class="language-vbnet">Sub ConvertTemp()
 	temp = InputBox("Please enter the temperature in degrees F.", 1)
@@ -423,18 +423,18 @@ End Function
 
 <h2 id="getting-data-in-and-out">Getting Data In and Out</h2>
 
-<p>Each piece of data is passed into your procedures using an argument.  Arguments serve as placeholders for the data you want to pass into your procedure.  You can name your arguments any valid variable name.  When you create a procedure using either the <code class="highlighter-rouge">Sub</code> statement or the <code class="highlighter-rouge">Function</code> statement, parentheses must be included after the name of the procedure.  Any arguments are placed inside these parentheses, separated by commas.  For example, in the following example, <code class="highlighter-rouge">fDegrees</code> is a placeholder for the value being passed into the Celsius function for conversion.</p>
+<p>Each piece of data is passed into your procedures using an argument.  Arguments serve as placeholders for the data you want to pass into your procedure.  You can name your arguments any valid variable name.  When you create a procedure using either the <code>Sub</code> statement or the <code>Function</code> statement, parentheses must be included after the name of the procedure.  Any arguments are placed inside these parentheses, separated by commas.  For example, in the following example, <code>fDegrees</code> is a placeholder for the value being passed into the Celsius function for conversion.</p>
 
 <pre><code class="language-vbnet">Function Celsius(fDegrees)
 	Celsius = (fDegrees - 32) * 5 / 9
 End Function
 </code></pre>
 
-<p>To get data out of a procedure, you must use a <code class="highlighter-rouge">Function</code>.  Remember, a <code class="highlighter-rouge">Function</code> procedure can return a value; a <code class="highlighter-rouge">Sub</code> procedure cannot.</p>
+<p>To get data out of a procedure, you must use a <code>Function</code>.  Remember, a <code>Function</code> procedure can return a value; a <code>Sub</code> procedure cannot.</p>
 
 <h2 id="sub-and-function">Sub and Function</h2>
 
-<p>A <code class="highlighter-rouge">Function</code> in your code must always be used on the right side of a variable assignment or in an expression.  For example:</p>
+<p>A <code>Function</code> in your code must always be used on the right side of a variable assignment or in an expression.  For example:</p>
 
 <pre><code class="language-vbnet">Temp = Celsius(fDegrees)
 </code></pre>
@@ -444,15 +444,15 @@ End Function
 <pre><code class="language-vbnet">MsgBox "The Celsius temperature is " &amp; Celsius(fDegrees) &amp; " degrees."
 </code></pre>
 
-<p>To call a <code class="highlighter-rouge">Sub</code> procedure from another procedure, type the name of the procedure along with values for any required arguments, each separated by a comma.  The <code class="highlighter-rouge">Call</code> statement is not required, but if you do use it, you must enclose any arguments in parentheses.</p>
+<p>To call a <code>Sub</code> procedure from another procedure, type the name of the procedure along with values for any required arguments, each separated by a comma.  The <code>Call</code> statement is not required, but if you do use it, you must enclose any arguments in parentheses.</p>
 
-<p>The following example shows two calls to the <code class="highlighter-rouge">MyProc</code> procedure.  One uses the <code class="highlighter-rouge">Call</code> statement in the code; the other does not. Both do exactly the same thing.</p>
+<p>The following example shows two calls to the <code>MyProc</code> procedure.  One uses the <code>Call</code> statement in the code; the other does not. Both do exactly the same thing.</p>
 
 <pre><code class="language-vbnet">Call MyProc(firstarg, secondarg)
 MyProc firstarg, secondarg
 </code></pre>
 
-<p>Notice that the parentheses are omitted in the call when the <code class="highlighter-rouge">Call</code> statement is not used.</p>
+<p>Notice that the parentheses are omitted in the call when the <code>Call</code> statement is not used.</p>
 
 <hr />
 

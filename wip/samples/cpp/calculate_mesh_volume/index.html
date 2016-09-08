@@ -242,55 +242,54 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select solid meshes for volume calculation"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">closed_mesh</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableGroupSelect</span><span class="p">();</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select solid meshes for volume calculation" );
+  go.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::closed_mesh );
+  go.EnableSubObjectSelect( FALSE );
+  go.EnableGroupSelect();
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*&gt;</span> <span class="n">meshes</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Mesh</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">)</span>
-      <span class="n">meshes</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">);</span>
-  <span class="p">}</span>
+  int i;
+  ON_SimpleArray&lt;const ON_Mesh*&gt; meshes;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const ON_Mesh* mesh = go.Object(i).Mesh();
+    if( mesh )
+      meshes.Append( mesh );
+  }
 
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">mesh_count</span> <span class="o">=</span> <span class="n">meshes</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh_count</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  const int mesh_count = meshes.Count();
+  if( 0 == mesh_count )
+    return nothing;
 
-  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mesh_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">meshes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">GetBoundingBox</span><span class="p">(</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">ON_3dPoint</span> <span class="n">base_point</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Center</span><span class="p">();</span>
+  ON_BoundingBox bbox;
+  for( i = 0; i &lt; mesh_count; i++ )
+    meshes[i]-&gt;GetBoundingBox( bbox, TRUE );
+  ON_3dPoint base_point = bbox.Center();
 
-  <span class="kt">double</span> <span class="n">total_volume</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">total_error_estimate</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mesh_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">error_estimate</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">volume</span> <span class="o">=</span> <span class="n">meshes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">Volume</span><span class="p">(</span> <span class="n">base_point</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">error_estimate</span> <span class="p">);</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Mesh%d = %f (+/- %f)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">error_estimate</span> <span class="p">);</span>
-    <span class="n">total_volume</span> <span class="o">+=</span> <span class="n">volume</span><span class="p">;</span>
-    <span class="n">total_error_estimate</span> <span class="o">+=</span> <span class="n">error_estimate</span><span class="p">;</span>
-  <span class="p">}</span>
+  double total_volume = 0.0;
+  double total_error_estimate = 0.0;
+  for( i = 0; i &lt; mesh_count; i++ )
+  {
+    double error_estimate = 0.0;
+    double volume = meshes[i]-&gt;Volume( base_point, &amp;error_estimate );
+    RhinoApp().Print( L"Mesh%d = %f (+/- %f)\n", i, volume, error_estimate );
+    total_volume += volume;
+    total_error_estimate += error_estimate;
+  }
 
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Total volume = %f (+/- %f)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                    <span class="n">total_volume</span><span class="p">,</span>
-                    <span class="n">total_error_estimate</span> <span class="p">);</span>
+  RhinoApp().Print( L"Total volume = %f (+/- %f)\n",
+                    total_volume,
+                    total_error_estimate );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

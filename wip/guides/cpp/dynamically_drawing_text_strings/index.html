@@ -323,69 +323,67 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>On occasion, it is useful to dynamically display some text while in the middle of a point picking operation.  Rhino’s <code class="highlighter-rouge">VariableFilletSrf</code> command is a good example of a command that does this.</p>
+<p>On occasion, it is useful to dynamically display some text while in the middle of a point picking operation.  Rhino’s <code>VariableFilletSrf</code> command is a good example of a command that does this.</p>
 
 <p>To add this capability to an plugin command, you need to:</p>
 
 <ol>
-  <li>Derive a new class from <code class="highlighter-rouge">CRhinoGetPoint</code>.</li>
-  <li>Override the <code class="highlighter-rouge">CRhinoGetPoint::DynamicDraw</code> virtual function.</li>
-  <li>From within the <code class="highlighter-rouge">DynamicDraw</code> override, call <code class="highlighter-rouge">CRhinoViewport::DrawString</code>.</li>
+  <li>Derive a new class from <code>CRhinoGetPoint</code>.</li>
+  <li>Override the <code>CRhinoGetPoint::DynamicDraw</code> virtual function.</li>
+  <li>From within the <code>DynamicDraw</code> override, call <code>CRhinoViewport::DrawString</code>.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following example code demonstrates how to derive a new class from <code class="highlighter-rouge">CRhinoGetPoint</code>, override the <code class="highlighter-rouge">CRhinoGetPoint::DynamicDraw</code> member, and draw text dynamically.</p>
+<p>The following example code demonstrates how to derive a new class from <code>CRhinoGetPoint</code>, override the <code>CRhinoGetPoint::DynamicDraw</code> member, and draw text dynamically.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CDrawStringGetPoint</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CDrawStringGetPoint</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">};</span>
+<pre><code class="language-cpp">class CDrawStringGetPoint : public CRhinoGetPoint
+{
+public:
+  CDrawStringGetPoint() {}
+  void DynamicDraw( HDC hdc, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt );
+};
 
-<span class="kt">void</span> <span class="n">CDrawStringGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Format active point as a string
-</span>  <span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-  <span class="n">RhinoFormatPoint</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="n">str</span> <span class="p">);</span>
+void CDrawStringGetPoint::DynamicDraw( HDC hdc, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt )
+{
+  // Format active point as a string
+  ON_wString str;
+  RhinoFormatPoint( pt, str );
 
-  <span class="c1">// Build world-to-screen coordinate transformation
-</span>  <span class="n">ON_Xform</span> <span class="n">w2s</span><span class="p">;</span>
-  <span class="n">vp</span><span class="p">.</span><span class="n">VP</span><span class="p">().</span><span class="n">GetXform</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">screen_cs</span><span class="p">,</span> <span class="n">w2s</span> <span class="p">);</span>
+  // Build world-to-screen coordinate transformation
+  ON_Xform w2s;
+  vp.VP().GetXform( ON::world_cs, ON::screen_cs, w2s );
 
-  <span class="c1">// Transform point from world to screen coordinates
-</span>  <span class="n">ON_3dPoint</span> <span class="n">screenpoint</span> <span class="o">=</span> <span class="n">w2s</span> <span class="o">*</span> <span class="n">pt</span><span class="p">;</span>
+  // Transform point from world to screen coordinates
+  ON_3dPoint screenpoint = w2s * pt;
 
-  <span class="c1">// Offset point so text does not overlap cursor
-</span>  <span class="n">screenpoint</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">5.0</span><span class="p">;</span>
-  <span class="n">screenpoint</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">;</span>
+  // Offset point so text does not overlap cursor
+  screenpoint.x += 5.0;
+  screenpoint.y += -5.0;
 
-  <span class="c1">// Draw string using the system font
-</span>  <span class="n">vp</span><span class="p">.</span><span class="n">DrawString</span><span class="p">(</span> <span class="n">str</span><span class="p">,</span> <span class="n">str</span><span class="p">.</span><span class="n">Length</span><span class="p">(),</span> <span class="n">screenpoint</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="s">L"System"</span> <span class="p">);</span>
+  // Draw string using the system font
+  vp.DrawString( str, str.Length(), screenpoint, false, 0, 12, L"System" );
 
-  <span class="c1">// Allow base class to draw
-</span>  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">}</span>
+  // Allow base class to draw
+  CRhinoGetPoint::DynamicDraw( hdc, vp, pt );
+}
 </code></pre>
-</div>
 
-<p>You can use the above class as you would a <code class="highlighter-rouge">CRhinoGetPoint</code> object.  Just create a new <code class="highlighter-rouge">CDrawStringGetPoint</code> object, initialize the class by calling base class members, and call it’s <code class="highlighter-rouge">GetPoint</code> member.  For example:</p>
+<p>You can use the above class as you would a <code>CRhinoGetPoint</code> object.  Just create a new <code>CDrawStringGetPoint</code> object, initialize the class by calling base class members, and call it’s <code>GetPoint</code> member.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CDrawStringGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Pick test point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CDrawStringGetPoint gp;
+  gp.SetCommandPrompt( L"Pick test point" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// TODO...
-</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // TODO...
+
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

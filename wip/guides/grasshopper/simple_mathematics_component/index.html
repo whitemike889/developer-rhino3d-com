@@ -397,11 +397,11 @@ $(document).ready(function()
 
 <p>We will not be dealing with any of the basics of component development.  Please start with the <a href="/wip/guides/grasshopper/your_first_component_windows">Your First Component</a> guide and the <a href="/wip/guides/grasshopper/simple_component">Simple Component</a> guide before starting this one.</p>
 
-<p>Before you start, create a new class that derives from <code class="highlighter-rouge">Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/wip/guides/grasshopper/simple_component">Simple Component</a> guide.</p>
+<p>Before you start, create a new class that derives from <code>Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/wip/guides/grasshopper/simple_component">Simple Component</a> guide.</p>
 
 <h2 id="input-parameters">Input parameters</h2>
 
-<p>This component will require two input parameters, one of which has a default value.  We’ll need to register these parameters inside the <code class="highlighter-rouge">RegisterInputParams()</code> method:</p>
+<p>This component will require two input parameters, one of which has a default value.  We’ll need to register these parameters inside the <code>RegisterInputParams()</code> method:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
@@ -410,15 +410,14 @@ $(document).ready(function()
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddNumberParameter</span><span class="p">(</span><span class="s">"Angle"</span><span class="p">,</span> <span class="s">"A"</span><span class="p">,</span> <span class="s">"The angle to measure"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddBooleanParameter</span><span class="p">(</span><span class="s">"Radians"</span><span class="p">,</span> <span class="s">"R"</span><span class="p">,</span> <span class="s">"Work in Radians"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span> <span class="c1">// The default value is 'true'
-</span><span class="p">}</span>
-<span class="p">...</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">...
+protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+{
+  pManager.AddNumberParameter("Angle", "A", "The angle to measure", GH_ParamAccess.item);
+  pManager.AddBooleanParameter("Radians", "R", "Work in Radians", GH_ParamAccess.item, true); // The default value is 'true'
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">...
 Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
@@ -430,11 +429,11 @@ End Sub
 
 </div>
 
-<p>The first parameter is of type Double meaning it accepts floating point values.  It only has a name, abbreviation, description and access level defined.  The second parameter is of type <code class="highlighter-rouge">bool</code> and it will accept <code class="highlighter-rouge">true</code> and <code class="highlighter-rouge">false</code> values.  The <code class="highlighter-rouge">pManager</code> object allows us to specify a single default value for many parameter types.</p>
+<p>The first parameter is of type Double meaning it accepts floating point values.  It only has a name, abbreviation, description and access level defined.  The second parameter is of type <code>bool</code> and it will accept <code>true</code> and <code>false</code> values.  The <code>pManager</code> object allows us to specify a single default value for many parameter types.</p>
 
 <p>The order in which we register the parameters is also the order in which they’ll appear on the component.  We should not change the order (or the types, or the number) of the parameters once the component has been released to the world.  Every Grasshopper file that was saved with one of our components will expect to be deserialized by the exact same component layout.  If you add an additional parameter to an component and someone tries to open a file which was saved while an older version of that component, it will fail to deserialize as the data in the file no longer matches the new layout.  An exception will be thrown and Grasshopper will short circuit that particular instance.  The entire component and all connections to it will be missing when the file is eventually displayed to the user.</p>
 
-<p><em>If you must</em> change the parameter layout of a component, you should create a completely new <code class="highlighter-rouge">GH_Component</code> class with a different <code class="highlighter-rouge">ComponentGuid</code>, while maintaining the old component type for legacy file purposes.  You can hide components from the Grasshopper GUI by overriding the <code class="highlighter-rouge">Exposure</code> property of the <code class="highlighter-rouge">GH_Component</code> class and changing the return value to <code class="highlighter-rouge">GH_Exposure.hidden</code>:</p>
+<p><em>If you must</em> change the parameter layout of a component, you should create a completely new <code>GH_Component</code> class with a different <code>ComponentGuid</code>, while maintaining the old component type for legacy file purposes.  You can hide components from the Grasshopper GUI by overriding the <code>Exposure</code> property of the <code>GH_Component</code> class and changing the return value to <code>GH_Exposure.hidden</code>:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
@@ -443,12 +442,11 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs1"><pre class="highlight"><code><span class="k">public</span> <span class="k">override</span> <span class="n">Grasshopper</span><span class="p">.</span><span class="n">Kernel</span><span class="p">.</span><span class="n">GH_Exposure</span> <span class="n">Exposure</span>
-<span class="p">{</span>
-  <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">GH_Exposure</span><span class="p">.</span><span class="n">hidden</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">public override Grasshopper.Kernel.GH_Exposure Exposure
+{
+  get { return GH_Exposure.hidden; }
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">Public Overrides ReadOnly Property Exposure() As Grasshopper.Kernel.GH_Exposure
   Get
@@ -461,7 +459,7 @@ End Property
 
 <h2 id="output-parameters">Output Parameters</h2>
 
-<p>Our component will also need three output parameters.  Output parameters differ from input parameters in that they have much fewer options.  Users cannot add expressions to them, there are no default values, they don’t support persistent data.  Outputs are always cleared when the component expires, and they are slowly filled out from within the <code class="highlighter-rouge">SolveInstance()</code> routine.</p>
+<p>Our component will also need three output parameters.  Output parameters differ from input parameters in that they have much fewer options.  Users cannot add expressions to them, there are no default values, they don’t support persistent data.  Outputs are always cleared when the component expires, and they are slowly filled out from within the <code>SolveInstance()</code> routine.</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
@@ -470,16 +468,15 @@ End Property
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs2"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddNumberParameter</span><span class="p">(</span><span class="s">"Sin"</span><span class="p">,</span> <span class="s">"sin"</span><span class="p">,</span> <span class="s">"The sine of the Angle."</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddNumberParameter</span><span class="p">(</span><span class="s">"Cos"</span><span class="p">,</span> <span class="s">"cos"</span><span class="p">,</span> <span class="s">"The cosine of the Angle."</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddNumberParameter</span><span class="p">(</span><span class="s">"Tan"</span><span class="p">,</span> <span class="s">"tan"</span><span class="p">,</span> <span class="s">"The tangent of the Angle."</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="p">...</span>
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">...
+protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+{
+  pManager.AddNumberParameter("Sin", "sin", "The sine of the Angle.", GH_ParamAccess.item);
+  pManager.AddNumberParameter("Cos", "cos", "The cosine of the Angle.", GH_ParamAccess.item);
+  pManager.AddNumberParameter("Tan", "tan", "The tangent of the Angle.", GH_ParamAccess.item);
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">...
 Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
@@ -494,7 +491,7 @@ End Sub
 
 <h2 id="solveinstance">SolveInstance</h2>
 
-<p>The <code class="highlighter-rouge">SolveInstance()</code> implementation for this component is hardly any more complicated than it was for the <a href="/wip/guides/grasshopper/simple_component/#the-solver-routine">Simple Component</a>.  The only difference is that we now have more than one parameter on each side.</p>
+<p>The <code>SolveInstance()</code> implementation for this component is hardly any more complicated than it was for the <a href="/wip/guides/grasshopper/simple_component/#the-solver-routine">Simple Component</a>.  The only difference is that we now have more than one parameter on each side.</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
@@ -503,40 +500,39 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs3"><pre class="highlight"><code><span class="p">...</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">SolveInstance</span><span class="p">(</span><span class="n">IGH_DataAccess</span> <span class="n">DA</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Declare variables to contain all inputs.
-</span>  <span class="c1">// We can assign some initial values that are either sensible or indicative.
-</span>  <span class="kt">double</span> <span class="n">angle</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">radians</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">...
+protected override void SolveInstance(IGH_DataAccess DA)
+{
+  // Declare variables to contain all inputs.
+  // We can assign some initial values that are either sensible or indicative.
+  double angle = double.NaN;
+  bool radians = false;
 
-  <span class="c1">// Use the DA object to retrieve the data inside the input parameters.
-</span>  <span class="c1">// If the retrieval fails (for example if there is no data) we need to abort.
-</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">ref</span> <span class="n">angle</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="k">ref</span> <span class="n">radians</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  // Use the DA object to retrieve the data inside the input parameters.
+  // If the retrieval fails (for example if there is no data) we need to abort.
+  if (!DA.GetData(0, ref angle)) { return; }
+  if (!DA.GetData(1, ref radians)) { return; }
 
-  <span class="c1">// If the angle value is not a valid number, we should abort.
-</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoMath</span><span class="p">.</span><span class="nf">IsValidDouble</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  // If the angle value is not a valid number, we should abort.
+  if (!Rhino.RhinoMath.IsValidDouble(angle)) { return; }
 
-  <span class="c1">// If the user wants to work in degrees rather than radians,
-</span>  <span class="c1">// we assume that angle is defined in degrees.
-</span>  <span class="c1">// We need to convert it into Radians again.
-</span>  <span class="k">if</span> <span class="p">(!</span><span class="n">radians</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">angle</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoMath</span><span class="p">.</span><span class="nf">ToRadians</span><span class="p">(</span><span class="n">angle</span><span class="p">);</span>
-  <span class="p">}</span>
+  // If the user wants to work in degrees rather than radians,
+  // we assume that angle is defined in degrees.
+  // We need to convert it into Radians again.
+  if (!radians)
+  {
+    angle = Rhino.RhinoMath.ToRadians(angle);
+  }
 
-  <span class="c1">// Now we are ready to assign the outputs via the DA object.
-</span>  <span class="c1">// Since the Sin(), Cos() and Tan() never fail, we might as well
-</span>  <span class="c1">// combine them with the assignment.
-</span>  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Sin</span><span class="p">(</span><span class="n">angle</span><span class="p">));</span>
-  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Cos</span><span class="p">(</span><span class="n">angle</span><span class="p">));</span>
-  <span class="n">DA</span><span class="p">.</span><span class="nf">SetData</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="n">Math</span><span class="p">.</span><span class="nf">Tan</span><span class="p">(</span><span class="n">angle</span><span class="p">));</span>
-<span class="p">}</span>
-<span class="p">...</span>
+  // Now we are ready to assign the outputs via the DA object.
+  // Since the Sin(), Cos() and Tan() never fail, we might as well
+  // combine them with the assignment.
+  DA.SetData(0, Math.Sin(angle));
+  DA.SetData(1, Math.Cos(angle));
+  DA.SetData(2, Math.Tan(angle));
+}
+...
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">...
 Protected Overrides Sub SolveInstance(ByVal DA As Grasshopper.Kernel.IGH_DataAccess)

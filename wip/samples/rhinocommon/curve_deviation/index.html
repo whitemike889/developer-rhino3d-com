@@ -247,114 +247,113 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DeviationConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Curve</span> <span class="n">m_curve_a</span><span class="p">;</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Curve</span> <span class="n">m_curve_b</span><span class="p">;</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Point3d</span> <span class="n">m_min_dist_point_a</span> <span class="p">;</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Point3d</span> <span class="n">m_min_dist_point_b</span> <span class="p">;</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Point3d</span> <span class="n">m_max_dist_point_a</span> <span class="p">;</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">Point3d</span> <span class="n">m_max_dist_point_b</span> <span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">class DeviationConduit : Rhino.Display.DisplayConduit
+{
+  private readonly Curve m_curve_a;
+  private readonly Curve m_curve_b;
+  private readonly Point3d m_min_dist_point_a ;
+  private readonly Point3d m_min_dist_point_b ;
+  private readonly Point3d m_max_dist_point_a ;
+  private readonly Point3d m_max_dist_point_b ;
 
-  <span class="k">public</span> <span class="nf">DeviationConduit</span><span class="p">(</span><span class="n">Curve</span> <span class="n">curveA</span><span class="p">,</span> <span class="n">Curve</span> <span class="n">curveB</span><span class="p">,</span> <span class="n">Point3d</span> <span class="n">minDistPointA</span><span class="p">,</span> <span class="n">Point3d</span> <span class="n">minDistPointB</span><span class="p">,</span> <span class="n">Point3d</span> <span class="n">maxDistPointA</span><span class="p">,</span> <span class="n">Point3d</span> <span class="n">maxDistPointB</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_curve_a</span> <span class="p">=</span> <span class="n">curveA</span><span class="p">;</span>
-    <span class="n">m_curve_b</span> <span class="p">=</span> <span class="n">curveB</span><span class="p">;</span>
-    <span class="n">m_min_dist_point_a</span> <span class="p">=</span> <span class="n">minDistPointA</span><span class="p">;</span>
-    <span class="n">m_min_dist_point_b</span> <span class="p">=</span> <span class="n">minDistPointB</span><span class="p">;</span>
-    <span class="n">m_max_dist_point_a</span> <span class="p">=</span> <span class="n">maxDistPointA</span><span class="p">;</span>
-    <span class="n">m_max_dist_point_b</span> <span class="p">=</span> <span class="n">maxDistPointB</span><span class="p">;</span>
-  <span class="p">}</span>
+  public DeviationConduit(Curve curveA, Curve curveB, Point3d minDistPointA, Point3d minDistPointB, Point3d maxDistPointA, Point3d maxDistPointB)
+  {
+    m_curve_a = curveA;
+    m_curve_b = curveB;
+    m_min_dist_point_a = minDistPointA;
+    m_min_dist_point_b = minDistPointB;
+    m_max_dist_point_a = maxDistPointA;
+    m_max_dist_point_b = maxDistPointB;
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">DrawForeground</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawCurve</span><span class="p">(</span><span class="n">m_curve_a</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawCurve</span><span class="p">(</span><span class="n">m_curve_b</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>
+  protected override void DrawForeground(Rhino.Display.DrawEventArgs e)
+  {
+    e.Display.DrawCurve(m_curve_a, Color.Red);
+    e.Display.DrawCurve(m_curve_b, Color.Red);
 
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">m_min_dist_point_a</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">LawnGreen</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">m_min_dist_point_b</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">LawnGreen</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawLine</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">m_min_dist_point_a</span><span class="p">,</span> <span class="n">m_min_dist_point_b</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">LawnGreen</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">m_max_dist_point_a</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">m_max_dist_point_b</span><span class="p">,</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawLine</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">m_max_dist_point_a</span><span class="p">,</span> <span class="n">m_max_dist_point_b</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    e.Display.DrawPoint(m_min_dist_point_a, Color.LawnGreen);
+    e.Display.DrawPoint(m_min_dist_point_b, Color.LawnGreen);
+    e.Display.DrawLine(new Line(m_min_dist_point_a, m_min_dist_point_b), Color.LawnGreen);
+    e.Display.DrawPoint(m_max_dist_point_a, Color.Red);
+    e.Display.DrawPoint(m_max_dist_point_b, Color.Red);
+    e.Display.DrawLine(new Line(m_max_dist_point_a, m_max_dist_point_b), Color.Red);
+  }
+}
 
-<span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">CrvDeviation</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">UnselectAll</span><span class="p">();</span>
+partial class Examples
+{
+  public static Result CrvDeviation(RhinoDoc doc)
+  {
+    doc.Objects.UnselectAll();
 
-    <span class="n">ObjRef</span> <span class="n">obj_ref1</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc1</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"first curve"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref1</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc1</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc1</span><span class="p">;</span>
-    <span class="n">Curve</span> <span class="n">curve_a</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj_ref1</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="n">curve_a</span> <span class="p">=</span> <span class="n">obj_ref1</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve_a</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    ObjRef obj_ref1;
+    var rc1 = RhinoGet.GetOneObject("first curve", true, ObjectType.Curve, out obj_ref1);
+    if (rc1 != Result.Success)
+      return rc1;
+    Curve curve_a = null;
+    if (obj_ref1 != null)
+      curve_a = obj_ref1.Curve();
+    if (curve_a == null)
+      return Result.Failure;
 
-    <span class="c1">// Since you already selected a curve if you don't unselect it
-</span>    <span class="c1">// the next GetOneObject won't stop as it considers that curve
-</span>    <span class="c1">// input, i.e., curveA and curveB will point to the same curve.
-</span>    <span class="c1">// Another option would be to use an instance of Rhino.Input.Custom.GetObject
-</span>    <span class="c1">// instead of Rhino.Input.RhinoGet as GetObject has a DisablePreSelect() method.
-</span>    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">UnselectAll</span><span class="p">();</span>
+    // Since you already selected a curve if you don't unselect it
+    // the next GetOneObject won't stop as it considers that curve
+    // input, i.e., curveA and curveB will point to the same curve.
+    // Another option would be to use an instance of Rhino.Input.Custom.GetObject
+    // instead of Rhino.Input.RhinoGet as GetObject has a DisablePreSelect() method.
+    doc.Objects.UnselectAll();
 
-    <span class="n">ObjRef</span> <span class="n">obj_ref2</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc2</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"second curve"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref2</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc2</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc2</span><span class="p">;</span>
-    <span class="n">Curve</span> <span class="n">curve_b</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj_ref2</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="n">curve_b</span> <span class="p">=</span> <span class="n">obj_ref2</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve_b</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    ObjRef obj_ref2;
+    var rc2 = RhinoGet.GetOneObject("second curve", true, ObjectType.Curve, out obj_ref2);
+    if (rc2 != Result.Success)
+      return rc2;
+    Curve curve_b = null;
+    if (obj_ref2 != null)
+      curve_b = obj_ref2.Curve();
+    if (curve_b == null)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">tolerance</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">;</span>
+    var tolerance = doc.ModelAbsoluteTolerance;
 
-    <span class="kt">double</span> <span class="n">max_distance</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">max_distance_parameter_a</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">max_distance_parameter_b</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">min_distance</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">min_distance_parameter_a</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">min_distance_parameter_b</span><span class="p">;</span>
+    double max_distance;
+    double max_distance_parameter_a;
+    double max_distance_parameter_b;
+    double min_distance;
+    double min_distance_parameter_a;
+    double min_distance_parameter_b;
 
-    <span class="n">DeviationConduit</span> <span class="n">conduit</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">Curve</span><span class="p">.</span><span class="nf">GetDistancesBetweenCurves</span><span class="p">(</span><span class="n">curve_a</span><span class="p">,</span> <span class="n">curve_b</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="k">out</span> <span class="n">max_distance</span><span class="p">,</span>
-              <span class="k">out</span> <span class="n">max_distance_parameter_a</span><span class="p">,</span> <span class="k">out</span> <span class="n">max_distance_parameter_b</span><span class="p">,</span>
-              <span class="k">out</span> <span class="n">min_distance</span><span class="p">,</span> <span class="k">out</span> <span class="n">min_distance_parameter_a</span><span class="p">,</span> <span class="k">out</span> <span class="n">min_distance_parameter_b</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to find overlap intervals."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">min_distance</span> <span class="p">&lt;=</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="n">ZeroTolerance</span><span class="p">)</span>
-        <span class="n">min_distance</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-      <span class="kt">var</span> <span class="n">max_dist_pt_a</span> <span class="p">=</span> <span class="n">curve_a</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">max_distance_parameter_a</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">max_dist_pt_b</span> <span class="p">=</span> <span class="n">curve_b</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">max_distance_parameter_b</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">min_dist_pt_a</span> <span class="p">=</span> <span class="n">curve_a</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">min_distance_parameter_a</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">min_dist_pt_b</span> <span class="p">=</span> <span class="n">curve_b</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">min_distance_parameter_b</span><span class="p">);</span>
+    DeviationConduit conduit;
+    if (!Curve.GetDistancesBetweenCurves(curve_a, curve_b, tolerance, out max_distance,
+              out max_distance_parameter_a, out max_distance_parameter_b,
+              out min_distance, out min_distance_parameter_a, out min_distance_parameter_b))
+    {
+      RhinoApp.WriteLine("Unable to find overlap intervals.");
+      return Result.Success;
+    }
+    else
+    {
+      if (min_distance &lt;= RhinoMath.ZeroTolerance)
+        min_distance = 0.0;
+      var max_dist_pt_a = curve_a.PointAt(max_distance_parameter_a);
+      var max_dist_pt_b = curve_b.PointAt(max_distance_parameter_b);
+      var min_dist_pt_a = curve_a.PointAt(min_distance_parameter_a);
+      var min_dist_pt_b = curve_b.PointAt(min_distance_parameter_b);
 
-      <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DeviationConduit</span><span class="p">(</span><span class="n">curve_a</span><span class="p">,</span> <span class="n">curve_b</span><span class="p">,</span> <span class="n">min_dist_pt_a</span><span class="p">,</span> <span class="n">min_dist_pt_b</span><span class="p">,</span> <span class="n">max_dist_pt_a</span><span class="p">,</span> <span class="n">max_dist_pt_b</span><span class="p">)</span> <span class="p">{</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">};</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+      conduit = new DeviationConduit(curve_a, curve_b, min_dist_pt_a, min_dist_pt_b, max_dist_pt_a, max_dist_pt_b) {Enabled = true};
+      doc.Views.Redraw();
 
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Minimum deviation = {0}   pointA({1}), pointB({2})"</span><span class="p">,</span> <span class="n">min_distance</span><span class="p">,</span> <span class="n">min_dist_pt_a</span><span class="p">,</span> <span class="n">min_dist_pt_b</span><span class="p">);</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Maximum deviation = {0}   pointA({1}), pointB({2})"</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">,</span> <span class="n">max_dist_pt_a</span><span class="p">,</span> <span class="n">max_dist_pt_b</span><span class="p">);</span>
-    <span class="p">}</span>
+      RhinoApp.WriteLine("Minimum deviation = {0}   pointA({1}), pointB({2})", min_distance, min_dist_pt_a, min_dist_pt_b);
+      RhinoApp.WriteLine("Maximum deviation = {0}   pointA({1}), pointB({2})", max_distance, max_dist_pt_a, max_dist_pt_b);
+    }
 
-    <span class="kt">var</span> <span class="n">str</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Press Enter when done"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">str</span><span class="p">);</span>
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    var str = "";
+    RhinoGet.GetString("Press Enter when done", true, ref str);
+    conduit.Enabled = false;
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CrvDeviation(ByVal doc As RhinoDoc) As Result
@@ -431,36 +430,35 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+import scriptcontext
+import Rhino
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">crvA</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetCurveObject</span><span class="p">(</span><span class="s">"first curve"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-  <span class="n">crvA</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercecurve</span><span class="p">(</span><span class="n">crvA</span><span class="p">)</span>
-  <span class="n">crvB</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetCurveObject</span><span class="p">(</span><span class="s">"second curve"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-  <span class="n">crvB</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercecurve</span><span class="p">(</span><span class="n">crvB</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">crvA</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">crvB</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  crvA = rs.GetCurveObject("first curve")[0]
+  crvA = rs.coercecurve(crvA)
+  crvB = rs.GetCurveObject("second curve")[0]
+  crvB = rs.coercecurve(crvB)
+  if crvA == None or crvB == None:
+      return Rhino.Commands.Result.Failure
 
-  <span class="n">maxa</span><span class="p">,</span> <span class="n">maxb</span><span class="p">,</span> <span class="n">maxd</span><span class="p">,</span> <span class="n">mina</span><span class="p">,</span> <span class="n">minb</span><span class="p">,</span> <span class="n">mind</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">CurveDeviation</span><span class="p">(</span><span class="n">crvA</span><span class="p">,</span> <span class="n">crvB</span><span class="p">)</span>
+  maxa, maxb, maxd, mina, minb, mind = rs.CurveDeviation(crvA, crvB)
 
-  <span class="k">if</span> <span class="n">mind</span> <span class="o">&lt;=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">RhinoMath</span><span class="o">.</span><span class="n">ZeroTolerance</span><span class="p">:</span>
-      <span class="n">mind</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">maxDistPtA</span> <span class="o">=</span> <span class="n">crvA</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">maxa</span><span class="p">)</span>
-  <span class="n">maxDistPtB</span> <span class="o">=</span> <span class="n">crvB</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">maxb</span><span class="p">)</span>
-  <span class="n">minDistPtA</span> <span class="o">=</span> <span class="n">crvA</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">mina</span><span class="p">)</span>
-  <span class="n">minDistPtB</span> <span class="o">=</span> <span class="n">crvB</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">minb</span><span class="p">)</span>
+  if mind &lt;= Rhino.RhinoMath.ZeroTolerance:
+      mind = 0.0;
+  maxDistPtA = crvA.PointAt(maxa)
+  maxDistPtB = crvB.PointAt(maxb)
+  minDistPtA = crvA.PointAt(mina)
+  minDistPtB = crvB.PointAt(minb)
 
-  <span class="k">print</span> <span class="s">"Minimum deviation = {0}   pointA({1}, {2}, {3}), pointB({4}, {5}, {6})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-    <span class="n">mind</span><span class="p">,</span> <span class="n">minDistPtA</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">minDistPtA</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">minDistPtA</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="n">minDistPtB</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">minDistPtB</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">minDistPtB</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
-  <span class="k">print</span> <span class="s">"Maximum deviation = {0}   pointA({1}, {2}, {3}), pointB({4}, {5}, {6})"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-    <span class="n">maxd</span><span class="p">,</span> <span class="n">maxDistPtA</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">maxDistPtA</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">maxDistPtA</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="n">maxDistPtB</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">maxDistPtB</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">maxDistPtB</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+  print "Minimum deviation = {0}   pointA({1}, {2}, {3}), pointB({4}, {5}, {6})".format(
+    mind, minDistPtA.X, minDistPtA.Y, minDistPtA.Z, minDistPtB.X, minDistPtB.Y, minDistPtB.Z)
+  print "Maximum deviation = {0}   pointA({1}, {2}, {3}), pointB({4}, {5}, {6})".format(
+    maxd, maxDistPtA.X, maxDistPtA.Y, maxDistPtA.Z, maxDistPtB.X, maxDistPtB.Y, maxDistPtB.Z)
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__=="__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

@@ -242,45 +242,44 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Pick a point
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Pick point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Pick a point
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Pick point" );
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="c1">// Get the view the point was picked in
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Get the view the point was picked in
+  CRhinoView* view = gp.View();
+  if( 0 == view )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Obtain the view's world-to-screen transformation
-</span>  <span class="n">ON_Xform</span> <span class="n">world_to_screen</span><span class="p">;</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">VP</span><span class="p">().</span><span class="n">GetXform</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">screen_cs</span><span class="p">,</span> <span class="n">world_to_screen</span> <span class="p">);</span>
+  // Obtain the view's world-to-screen transformation
+  ON_Xform world_to_screen;
+  view-&gt;ActiveViewport().VP().GetXform( ON::world_cs, ON::screen_cs, world_to_screen );
 
-  <span class="c1">// Get the picked point
-</span>  <span class="n">ON_3dPoint</span> <span class="n">picked_pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  // Get the picked point
+  ON_3dPoint picked_pt = gp.Point();
 
-  <span class="c1">// Create a 3-D point
-</span>  <span class="n">ON_3dPoint</span> <span class="n">screen_pt</span> <span class="o">=</span> <span class="n">picked_pt</span><span class="p">;</span>
-  <span class="c1">// Transform it
-</span>  <span class="n">screen_pt</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span> <span class="n">world_to_screen</span> <span class="p">);</span>
+  // Create a 3-D point
+  ON_3dPoint screen_pt = picked_pt;
+  // Transform it
+  screen_pt.Transform( world_to_screen );
 
-  <span class="c1">// Create a Windows 2-D point from the transformed point
-</span>  <span class="n">POINT</span> <span class="n">pt2d</span><span class="p">;</span>
-  <span class="n">pt2d</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">screen_pt</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-  <span class="n">pt2d</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">screen_pt</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+  // Create a Windows 2-D point from the transformed point
+  POINT pt2d;
+  pt2d.x = (int)screen_pt.x;
+  pt2d.y = (int)screen_pt.y;
 
-  <span class="c1">// TODO...
-</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Screen point = %d, %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pt2d</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt2d</span><span class="p">.</span><span class="n">y</span> <span class="p">);</span>
+  // TODO...
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  RhinoApp().Print( L"Screen point = %d, %d\n", pt2d.x, pt2d.y );
+
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

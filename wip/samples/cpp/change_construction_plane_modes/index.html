@@ -242,58 +242,57 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandCPlaneMode</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">BOOL</span> <span class="n">bUPlane</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">ModelAidSettings</span><span class="p">().</span><span class="n">m_uplane_mode</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandCPlaneMode::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  BOOL bUPlane = RhinoApp().AppSettings().ModelAidSettings().m_uplane_mode;
 
-  <span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">bUPlane</span> <span class="p">)</span>
-    <span class="n">str</span> <span class="o">=</span> <span class="s">L"Universal construction planes enabled. New value"</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="n">str</span> <span class="o">=</span> <span class="s">L"Standard construction planes enabled. New value"</span><span class="p">;</span>
+  ON_wString str;
+  if( bUPlane )
+    str = L"Universal construction planes enabled. New value";
+  else
+    str = L"Standard construction planes enabled. New value";
 
-  <span class="n">CRhinoGetOption</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="n">str</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">c_option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"CPlane"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">u_option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"UPlane"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">t_option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Toggle"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetOption go;
+  go.SetCommandPrompt( str );
+  int c_option = go.AddCommandOption( RHCMDOPTNAME(L"CPlane") );
+  int u_option = go.AddCommandOption( RHCMDOPTNAME(L"UPlane") );
+  int t_option = go.AddCommandOption( RHCMDOPTNAME(L"Toggle") );
+  go.GetOption();
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">option</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoCommandOption* option = go.Option();
+  if( 0 == option )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoAppModelAidSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">ModelAidSettings</span><span class="p">();</span>
+  CRhinoAppModelAidSettings settings = RhinoApp().AppSettings().ModelAidSettings();
 
-  <span class="kt">int</span> <span class="n">option_index</span> <span class="o">=</span> <span class="n">option</span><span class="o">-&gt;</span><span class="n">m_option_index</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">c_option</span> <span class="o">==</span> <span class="n">option_index</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">bUPlane</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">settings</span><span class="p">.</span><span class="n">m_uplane_mode</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">SetModelAidSettings</span><span class="p">(</span> <span class="n">settings</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">u_option</span> <span class="o">==</span> <span class="n">option_index</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">bUPlane</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">settings</span><span class="p">.</span><span class="n">m_uplane_mode</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">SetModelAidSettings</span><span class="p">(</span> <span class="n">settings</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">t_option</span> <span class="o">==</span> <span class="n">option_index</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">settings</span><span class="p">.</span><span class="n">m_uplane_mode</span> <span class="o">=</span> <span class="o">!</span><span class="n">bUPlane</span><span class="p">;</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">SetModelAidSettings</span><span class="p">(</span> <span class="n">settings</span> <span class="p">);</span>
-  <span class="p">}</span>
+  int option_index = option-&gt;m_option_index;
+  if( c_option == option_index )
+  {
+    if( bUPlane )
+    {
+      settings.m_uplane_mode = FALSE;
+      RhinoApp().AppSettings().SetModelAidSettings( settings );
+    }
+  }
+  else if( u_option == option_index )
+  {
+    if( !bUPlane )
+    {
+      settings.m_uplane_mode = TRUE;
+      RhinoApp().AppSettings().SetModelAidSettings( settings );
+    }
+  }
+  else if( t_option == option_index )
+  {
+    settings.m_uplane_mode = !bUPlane;
+    RhinoApp().AppSettings().SetModelAidSettings( settings );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

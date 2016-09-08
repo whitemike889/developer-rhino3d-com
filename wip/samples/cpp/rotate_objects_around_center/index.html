@@ -242,67 +242,66 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select objects to rotate
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects to rotate"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select objects to rotate
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects to rotate" );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Rotation angle (in degrees)
-</span>  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Rotation angle"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">m_angle</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Rotation angle (in degrees)
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( L"Rotation angle" );
+  gn.SetDefaultNumber( m_angle );
+  gn.GetNumber();
+  if( gn.CommandResult() != success )
+    return gn.CommandResult();
 
-  <span class="c1">// Validate input
-</span>  <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">angle</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Validate input
+  double angle = gn.Number();
+  if( angle == 0 )
+    return nothing;
 
-  <span class="n">m_angle</span> <span class="o">=</span> <span class="n">angle</span><span class="p">;</span>
+  m_angle = angle;
 
-  <span class="c1">// Get the active view's construction plane
-</span>  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">RhinoActiveCPlane</span><span class="p">();</span>
+  // Get the active view's construction plane
+  ON_Plane plane = RhinoActiveCPlane();
 
-  <span class="c1">// Do not split objects that get kinky
-</span>  <span class="c1">// when they are transformed.
-</span>  <span class="n">CRhinoKeepKinkySurfaces</span> <span class="n">keep_kinky_srfs</span><span class="p">;</span>
+  // Do not split objects that get kinky
+  // when they are transformed.
+  CRhinoKeepKinkySurfaces keep_kinky_srfs;
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get an object reference
-</span>    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    // Get an object reference
+    const CRhinoObjRef&amp; ref = go.Object(i);
 
-    <span class="c1">// Get the real object
-</span>    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+    // Get the real object
+    const CRhinoObject* obj = ref.Object();
+    if( !obj )
+      continue;
 
-    <span class="c1">// Get the object's tight bounding box
-</span>    <span class="n">ON_BoundingBox</span> <span class="n">bbox</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">GetTightBoundingBox</span><span class="p">(</span><span class="n">bbox</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+    // Get the object's tight bounding box
+    ON_BoundingBox bbox;
+    if( !obj-&gt;GetTightBoundingBox(bbox, false, 0) )
+      continue;
 
-    <span class="c1">// Create transformation matrix
-</span>    <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-    <span class="n">xform</span><span class="p">.</span><span class="n">Rotation</span><span class="p">(</span> <span class="n">m_angle</span> <span class="o">*</span> <span class="n">ON_PI</span> <span class="o">/</span> <span class="mf">180.0</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">zaxis</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Center</span><span class="p">()</span> <span class="p">);</span>
+    // Create transformation matrix
+    ON_Xform xform;
+    xform.Rotation( m_angle * ON_PI / 180.0, plane.zaxis, bbox.Center() );
 
-    <span class="c1">// Transform the object
-</span>    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">TransformObject</span><span class="p">(</span> <span class="n">obj</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Transform the object
+    context.m_doc.TransformObject( obj, xform, true, true, true );
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

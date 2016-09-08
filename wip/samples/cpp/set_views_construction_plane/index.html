@@ -242,53 +242,52 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-          <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+          const CRhinoCommandContext&amp; context )
+{
+  CRhinoView* view = ::RhinoApp().ActiveView();
+  if( !view )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetOption</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select a construction plane"</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">back_option</span>   <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Back"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">bottom_option</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Bottom"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">front_option</span>  <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Front"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">left_option</span>   <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Left"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">right_option</span>  <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Right"</span><span class="p">)</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">top_option</span>    <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOption</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Top"</span><span class="p">)</span> <span class="p">);</span>
+  CRhinoGetOption go;
+  go.SetCommandPrompt( L"Select a construction plane" );
+  int back_option   = go.AddCommandOption( RHCMDOPTNAME(L"Back") );
+  int bottom_option = go.AddCommandOption( RHCMDOPTNAME(L"Bottom") );
+  int front_option  = go.AddCommandOption( RHCMDOPTNAME(L"Front") );
+  int left_option   = go.AddCommandOption( RHCMDOPTNAME(L"Left") );
+  int right_option  = go.AddCommandOption( RHCMDOPTNAME(L"Right") );
+  int top_option    = go.AddCommandOption( RHCMDOPTNAME(L"Top") );
 
-  <span class="n">go</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  go.GetOption();
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">opt</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoCommandOption* opt = go.Option();
+  if( !opt )
+    return CRhinoCommand::failure;
 
-  <span class="kt">int</span> <span class="n">option_index</span> <span class="o">=</span> <span class="n">opt</span><span class="o">-&gt;</span><span class="n">m_option_index</span><span class="p">;</span>
-  <span class="n">ON_3dmConstructionPlane</span> <span class="n">cplane</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">back_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="o">-</span><span class="n">ON_xaxis</span> <span class="p">,</span><span class="n">ON_zaxis</span> <span class="p">);</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">bottom_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="o">-</span><span class="n">ON_xaxis</span><span class="p">,</span> <span class="n">ON_yaxis</span> <span class="p">);</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">front_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="n">ON_xaxis</span><span class="p">,</span> <span class="n">ON_zaxis</span> <span class="p">);</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">left_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="o">-</span><span class="n">ON_yaxis</span><span class="p">,</span> <span class="n">ON_zaxis</span> <span class="p">);</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">right_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="n">ON_yaxis</span><span class="p">,</span> <span class="n">ON_zaxis</span> <span class="p">);</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">option_index</span> <span class="o">==</span> <span class="n">top_option</span> <span class="p">)</span>
-    <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromPoints</span><span class="p">(</span> <span class="n">ON_origin</span><span class="p">,</span> <span class="n">ON_xaxis</span><span class="p">,</span> <span class="n">ON_yaxis</span> <span class="p">);</span>
-  <span class="k">else</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  int option_index = opt-&gt;m_option_index;
+  ON_3dmConstructionPlane cplane = view-&gt;Viewport().ConstructionPlane();
+  if( option_index == back_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, -ON_xaxis ,ON_zaxis );
+  else if( option_index == bottom_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, -ON_xaxis, ON_yaxis );
+  else if( option_index == front_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, ON_xaxis, ON_zaxis );
+  else if( option_index == left_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, -ON_yaxis, ON_zaxis );
+  else if( option_index == right_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, ON_yaxis, ON_zaxis );
+  else if( option_index == top_option )
+    cplane.m_plane.CreateFromPoints( ON_origin, ON_xaxis, ON_yaxis );
+  else
+    return CRhinoCommand::failure;
 
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">PushConstructionPlane</span><span class="p">(</span> <span class="n">cplane</span> <span class="p">);</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  view-&gt;Viewport().PushConstructionPlane( cplane );
+  view-&gt;Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

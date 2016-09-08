@@ -327,118 +327,117 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>To allow the line curve to control the surface, you will need to create a <code class="highlighter-rouge">CRhinoMorphControl</code> object.  A <code class="highlighter-rouge">CRhinoMorphControl</code> object has a <code class="highlighter-rouge">ON_MorphControl</code> object, as its data member, which contains the definition of the controlling object (in this case, line).</p>
+<p>To allow the line curve to control the surface, you will need to create a <code>CRhinoMorphControl</code> object.  A <code>CRhinoMorphControl</code> object has a <code>ON_MorphControl</code> object, as its data member, which contains the definition of the controlling object (in this case, line).</p>
 
-<p>Once you have properly defined the <code class="highlighter-rouge">ON_MorphControl</code> object and created the runtime <code class="highlighter-rouge">CRhinoMorphControl</code> object, you can use the RhinoCaptureObject API function to setup the “capture.”</p>
+<p>Once you have properly defined the <code>ON_MorphControl</code> object and created the runtime <code>CRhinoMorphControl</code> object, you can use the RhinoCaptureObject API function to setup the “capture.”</p>
 
 <p>The following example code demonstrates how you might write a command that allows a surface to be controlled by a line…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_Workspace</span> <span class="n">ws</span><span class="p">;</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_Workspace ws;
+  CRhinoCommand::result rc = CRhinoCommand::success;
 
-  <span class="c1">// Get the captive object
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select captive surface or polysurface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">!=</span> <span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  // Get the captive object
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select captive surface or polysurface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object | CRhinoGetObject::polysrf_object );
+  go.GetObjects( 1, 1 );
+  rc = go.CommandResult();
+  if( CRhinoCommand::success != rc )
+    return rc;
 
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">captive</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">captive</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObject* captive = go.Object(0).Object();
+  if( 0 == captive )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Define the control line
-</span>  <span class="n">ON_Line</span> <span class="n">line</span><span class="p">;</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetLine</span><span class="p">(</span> <span class="n">CArgsRhinoGetLine</span><span class="p">(),</span> <span class="n">line</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">!=</span> <span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  // Define the control line
+  ON_Line line;
+  rc = RhinoGetLine( CArgsRhinoGetLine(), line );
+  if( CRhinoCommand::success != rc )
+    return rc;
 
-  <span class="c1">// Get the curve parameters
-</span>  <span class="kt">int</span> <span class="n">degree</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">cv_count</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoGetOption</span> <span class="n">gl</span><span class="p">;</span>
-    <span class="n">gl</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"NURBS Parameters"</span> <span class="p">);</span>
-    <span class="n">gl</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">d_opt</span> <span class="o">=</span> <span class="n">gl</span><span class="p">.</span><span class="n">AddCommandOptionInteger</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Degree"</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">degree</span><span class="p">,</span> <span class="s">L"Curve degree"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">100.0</span> <span class="p">);</span>
-    <span class="kt">int</span> <span class="n">p_opt</span> <span class="o">=</span> <span class="n">gl</span><span class="p">.</span><span class="n">AddCommandOptionInteger</span><span class="p">(</span> <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"PointCount"</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">cv_count</span><span class="p">,</span> <span class="s">L"Number of control points"</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">100.0</span> <span class="p">);</span>
-    <span class="n">gl</span><span class="p">.</span><span class="n">GetOption</span><span class="p">();</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">gl</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">!=</span> <span class="n">rc</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  // Get the curve parameters
+  int degree = 3;
+  int cv_count = 4;
+  for(;;)
+  {
+    CRhinoGetOption gl;
+    gl.SetCommandPrompt( L"NURBS Parameters" );
+    gl.AcceptNothing();
+    int d_opt = gl.AddCommandOptionInteger( RHCMDOPTNAME(L"Degree"), &amp;degree, L"Curve degree", 1.0, 100.0 );
+    int p_opt = gl.AddCommandOptionInteger( RHCMDOPTNAME(L"PointCount"), &amp;cv_count, L"Number of control points", 2.0, 100.0 );
+    gl.GetOption();
+    rc = gl.CommandResult();
+    if( CRhinoCommand::success != rc )
+      return rc;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">nothing</span> <span class="o">==</span> <span class="n">gl</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">break</span><span class="p">;</span>
+    if( CRhinoGet::nothing == gl.Result() )
+      break;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">cv_count</span> <span class="o">&lt;=</span> <span class="n">degree</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">option</span> <span class="o">!=</span> <span class="n">gl</span><span class="p">.</span><span class="n">Result</span><span class="p">()</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="k">const</span> <span class="n">CRhinoCommandOption</span><span class="o">*</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Option</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">opt</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">d_opt</span> <span class="o">==</span> <span class="n">opt</span><span class="o">-&gt;</span><span class="n">m_option_index</span> <span class="p">)</span>
-        <span class="n">cv_count</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="k">else</span>
-        <span class="n">degree</span> <span class="o">=</span> <span class="n">cv_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    if( cv_count &lt;= degree )
+    {
+      if( CRhinoGet::option != gl.Result() )
+        continue;
+      const CRhinoCommandOption* opt = go.Option();
+      if( 0 == opt )
+        continue;
+      if( d_opt == opt-&gt;m_option_index )
+        cv_count = degree + 1;
+      else
+        degree = cv_count - 1;
+    }
+  }
 
-  <span class="c1">// Set up morph control
-</span>  <span class="n">ON_MorphControl</span><span class="o">*</span> <span class="n">control</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_MorphControl</span><span class="p">();</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_varient</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 1= curve
-</span>
-  <span class="c1">// Specify the source line curve
-</span>  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">MakeClampedUniformKnotVector</span><span class="p">();</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">line</span><span class="p">.</span><span class="n">from</span> <span class="p">);</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">line</span><span class="p">.</span><span class="n">to</span> <span class="p">);</span>
+  // Set up morph control
+  ON_MorphControl* control = new ON_MorphControl();
+  control-&gt;m_varient = 1; // 1= curve
 
-  <span class="c1">// Specify the destination NURBS curve
-</span>  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cv_count</span> <span class="p">);</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">MakeClampedUniformKnotVector</span><span class="p">();</span>
-  <span class="kt">double</span><span class="o">*</span> <span class="n">g</span> <span class="o">=</span> <span class="n">ws</span><span class="p">.</span><span class="n">GetDoubleMemory</span><span class="p">(</span> <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">m_cv_count</span> <span class="p">);</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">GetGrevilleAbcissae</span><span class="p">(</span> <span class="n">g</span> <span class="p">);</span>
-  <span class="n">ON_Interval</span> <span class="n">d</span> <span class="o">=</span> <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">m_cv_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">NormalizedParameterAt</span><span class="p">(</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-    <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">);</span>
-  <span class="p">}</span>
+  // Specify the source line curve
+  control-&gt;m_nurbs_curve0.Create( 3, false, 2, 2 );
+  control-&gt;m_nurbs_curve0.MakeClampedUniformKnotVector();
+  control-&gt;m_nurbs_curve0.SetCV( 0, line.from );
+  control-&gt;m_nurbs_curve0.SetCV( 1, line.to );
 
-  <span class="c1">// Make sure domains match
-</span>  <span class="n">s</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">Length</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">ON_SQRT_EPSILON</span> <span class="p">)</span>
-    <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">s</span> <span class="p">);</span>
-  <span class="n">d</span> <span class="o">=</span> <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve0</span><span class="p">.</span><span class="n">Domain</span><span class="p">();</span>
-  <span class="n">control</span><span class="o">-&gt;</span><span class="n">m_nurbs_curve</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+  // Specify the destination NURBS curve
+  control-&gt;m_nurbs_curve.Create( 3, false, degree + 1, cv_count );
+  control-&gt;m_nurbs_curve.MakeClampedUniformKnotVector();
+  double* g = ws.GetDoubleMemory( control-&gt;m_nurbs_curve.m_cv_count );
+  control-&gt;m_nurbs_curve.GetGrevilleAbcissae( g );
+  ON_Interval d = control-&gt;m_nurbs_curve.Domain();
+  double s = 0.0;
+  int i;
+  for( i = 0; i &lt; control-&gt;m_nurbs_curve.m_cv_count; i++ )
+  {
+    s = d.NormalizedParameterAt( g[i] );
+    control-&gt;m_nurbs_curve.SetCV( i, line.PointAt(s) );
+  }
 
-  <span class="c1">// Create the morph control object
-</span>  <span class="n">CRhinoMorphControl</span><span class="o">*</span> <span class="n">control_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMorphControl</span><span class="p">();</span>
-  <span class="n">control_object</span><span class="o">-&gt;</span><span class="n">SetControl</span><span class="p">(</span> <span class="n">control</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">control_object</span> <span class="p">);</span>
+  // Make sure domains match
+  s = line.Length();
+  if( s &gt; ON_SQRT_EPSILON )
+    control-&gt;m_nurbs_curve0.SetDomain( 0.0, s );
+  d = control-&gt;m_nurbs_curve0.Domain();
+  control-&gt;m_nurbs_curve.SetDomain( d[0], d[1] );
 
-  <span class="c1">// Set up the capture
-</span>  <span class="n">RhinoCaptureObject</span><span class="p">(</span> <span class="n">control_object</span><span class="p">,</span> <span class="k">const_cast</span><span class="o">&lt;</span><span class="n">CRhinoObject</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">captive</span><span class="p">)</span> <span class="p">);</span>
+  // Create the morph control object
+  CRhinoMorphControl* control_object = new CRhinoMorphControl();
+  control_object-&gt;SetControl( control );
+  context.m_doc.AddObject( control_object );
 
-  <span class="c1">// Clean up display
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">UnselectAll</span><span class="p">();</span>
+  // Set up the capture
+  RhinoCaptureObject( control_object, const_cast&lt;CRhinoObject*&gt;(captive) );
 
-  <span class="c1">// Turn on the control grips
-</span>  <span class="n">control_object</span><span class="o">-&gt;</span><span class="n">EnableGrips</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">(</span> <span class="n">CRhinoView</span><span class="o">::</span><span class="n">mark_display_hint</span> <span class="p">);</span>
+  // Clean up display
+  context.m_doc.UnselectAll();
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Turn on the control grips
+  control_object-&gt;EnableGrips( true );
+  context.m_doc.Redraw( CRhinoView::mark_display_hint );
+
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

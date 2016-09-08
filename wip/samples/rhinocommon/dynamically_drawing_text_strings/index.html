@@ -247,32 +247,31 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DrawString</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetDrawStringPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DrawString(RhinoDoc doc)
+  {
+    var gp = new GetDrawStringPoint();
+    gp.SetCommandPrompt("Point");
+    gp.Get();
+    return gp.CommandResult();
+  }
+}
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">GetDrawStringPoint</span> <span class="p">:</span> <span class="n">GetPoint</span>
-<span class="p">{</span>
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="n">GetPointDrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">xform</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">GetTransform</span><span class="p">(</span><span class="n">CoordinateSystem</span><span class="p">.</span><span class="n">World</span><span class="p">,</span> <span class="n">CoordinateSystem</span><span class="p">.</span><span class="n">Screen</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">current_point</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">CurrentPoint</span><span class="p">;</span>
-    <span class="n">current_point</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">xform</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">screen_point</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Point2d</span><span class="p">(</span><span class="n">current_point</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">current_point</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">msg</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"screen {0:F}, {1:F}"</span><span class="p">,</span> <span class="n">current_point</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">current_point</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">Draw2dText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Blue</span><span class="p">,</span> <span class="n">screen_point</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+public class GetDrawStringPoint : GetPoint
+{
+  protected override void OnDynamicDraw(GetPointDrawEventArgs e)
+  {
+    base.OnDynamicDraw(e);
+    var xform = e.Viewport.GetTransform(CoordinateSystem.World, CoordinateSystem.Screen);
+    var current_point = e.CurrentPoint;
+    current_point.Transform(xform);
+    var screen_point = new Point2d(current_point.X, current_point.Y);
+    var msg = string.Format("screen {0:F}, {1:F}", current_point.X, current_point.Y);
+    e.Display.Draw2dText(msg, System.Drawing.Color.Blue, screen_point, false);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DrawString(ByVal doc As RhinoDoc) As Result
@@ -298,35 +297,34 @@ Public Class GetDrawStringPoint
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">System.Drawing</span> <span class="kn">import</span> <span class="n">Color</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Geometry import *
+from Rhino.Commands import *
+from Rhino.Input.Custom import *
+from System.Drawing import Color
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">GetDrawStringPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  gp = GetDrawStringPoint()
+  gp.SetCommandPrompt("Point")
+  gp.Get()
+  return gp.CommandResult()
 
-<span class="k">class</span> <span class="nc">GetDrawStringPoint</span><span class="p">(</span><span class="n">GetPoint</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">OnDynamicDraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
-    <span class="n">xform</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">Viewport</span><span class="o">.</span><span class="n">GetTransform</span><span class="p">(</span>
-      <span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">World</span><span class="p">,</span> <span class="n">CoordinateSystem</span><span class="o">.</span><span class="n">Screen</span><span class="p">)</span>
+class GetDrawStringPoint(GetPoint):
+  def OnDynamicDraw(self, e):
+    xform = e.Viewport.GetTransform(
+      CoordinateSystem.World, CoordinateSystem.Screen)
 
-    <span class="n">current_point</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">CurrentPoint</span>
-    <span class="n">current_point</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">xform</span><span class="p">)</span>
-    <span class="n">screen_point</span> <span class="o">=</span> <span class="n">Point2d</span><span class="p">(</span><span class="n">current_point</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">current_point</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
+    current_point = e.CurrentPoint
+    current_point.Transform(xform)
+    screen_point = Point2d(current_point.X, current_point.Y)
 
-    <span class="n">msg</span> <span class="o">=</span> <span class="s">"screen {0}, {1}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">screen_point</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">screen_point</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">Draw2dText</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">Blue</span><span class="p">,</span> <span class="n">screen_point</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+    msg = "screen {0}, {1}".format(screen_point.X, screen_point.Y)
+    e.Display.Draw2dText(msg, Color.Blue, screen_point, False)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

@@ -340,52 +340,51 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>You have drawn an ellipse in Rhino, using the <em>Ellipse</em> command.  While reading the <em>.3dm</em> file, using openNURBS, the ellipse is classified as as <code class="highlighter-rouge">ON::curve_object</code>.  How does one get the ellipse’s construction data, such as center point, major and minor axes, etc?</p>
+<p>You have drawn an ellipse in Rhino, using the <em>Ellipse</em> command.  While reading the <em>.3dm</em> file, using openNURBS, the ellipse is classified as as <code>ON::curve_object</code>.  How does one get the ellipse’s construction data, such as center point, major and minor axes, etc?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>Unlike some curve types (e.g. Lines, Arcs, Polylines, etc.) which have their own <code class="highlighter-rouge">ON_Curve</code>-derived classes, there is no special class that is used to represent elliptical curves.  Ellipses and elliptical arcs are simply NURBS, or <code class="highlighter-rouge">ON_NurbsCurve</code>, curves.</p>
+<p>Unlike some curve types (e.g. Lines, Arcs, Polylines, etc.) which have their own <code>ON_Curve</code>-derived classes, there is no special class that is used to represent elliptical curves.  Ellipses and elliptical arcs are simply NURBS, or <code>ON_NurbsCurve</code>, curves.</p>
 
-<p>To test to see if a curve is an ellipse or an elliptical arc, first try to cast the <code class="highlighter-rouge">ON_Curve</code> object as an <code class="highlighter-rouge">ON_NurbsCurve</code> object.  If successful, then use <code class="highlighter-rouge">ON_NurbsCurve::IsEllipse()</code> to verify the NURBS curve is an ellipse and to obtain its construction data.</p>
+<p>To test to see if a curve is an ellipse or an elliptical arc, first try to cast the <code>ON_Curve</code> object as an <code>ON_NurbsCurve</code> object.  If successful, then use <code>ON_NurbsCurve::IsEllipse()</code> to verify the NURBS curve is an ellipse and to obtain its construction data.</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ONX_Model</span> <span class="n">model</span><span class="p">;</span>
+<pre><code class="language-cpp">ONX_Model model;
 
-<span class="c1">//...
-</span>
-<span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="c1">//...;
-</span>
-<span class="c1">//...
-</span>
-<span class="k">const</span> <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">nurb</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">curve</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">nurb</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_Ellipse</span> <span class="n">ellipse</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_settings</span><span class="p">.</span><span class="n">m_ModelUnitsAndTolerances</span><span class="p">.</span><span class="n">m_absolute_tolerance</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">nurb</span><span class="o">-&gt;</span><span class="n">IsEllipse</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ellipse</span><span class="p">,</span> <span class="n">tolerance</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Center
-</span>    <span class="n">ON_3dPoint</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">ellipse</span><span class="p">.</span><span class="n">plane</span><span class="p">.</span><span class="n">origin</span><span class="p">;</span>
+//...
 
-    <span class="c1">// Major and minor axes
-</span>    <span class="n">ON_3dVector</span> <span class="n">xaxis</span> <span class="o">=</span> <span class="n">ellipse</span><span class="p">.</span><span class="n">radius</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ellipse</span><span class="p">.</span><span class="n">plane</span><span class="p">.</span><span class="n">xaxis</span><span class="p">;</span>
-    <span class="n">ON_3dVector</span> <span class="n">yaxis</span> <span class="o">=</span> <span class="n">ellipse</span><span class="p">.</span><span class="n">radius</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ellipse</span><span class="p">.</span><span class="n">plane</span><span class="p">.</span><span class="n">yaxis</span><span class="p">;</span>
+const ON_Curve* curve = //...;
 
-    <span class="c1">// Quad points
-</span>    <span class="n">ON_3dPoint</span> <span class="n">p0</span><span class="p">(</span> <span class="n">origin</span> <span class="o">-</span> <span class="n">xaxis</span> <span class="p">);</span>
-    <span class="n">ON_3dPoint</span> <span class="n">p1</span><span class="p">(</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">xaxis</span> <span class="p">);</span>
-    <span class="n">ON_3dPoint</span> <span class="n">p2</span><span class="p">(</span> <span class="n">origin</span> <span class="o">-</span> <span class="n">yaxis</span> <span class="p">);</span>
-    <span class="n">ON_3dPoint</span> <span class="n">p3</span><span class="p">(</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">yaxis</span> <span class="p">);</span>
+//...
 
-    <span class="c1">// Foci
-</span>    <span class="n">ON_3dPoint</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">;</span>
-    <span class="n">ellipse</span><span class="p">.</span><span class="n">GetFoci</span><span class="p">(</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+const ON_NurbsCurve* nurb = ON_NurbsCurve::Cast( curve );
+if( nurb )
+{
+  ON_Ellipse ellipse;
+  double tolerance = model.m_settings.m_ModelUnitsAndTolerances.m_absolute_tolerance;
+  bool rc = nurb-&gt;IsEllipse( 0, &amp;ellipse, tolerance );
+  if( rc )
+  {
+    // Center
+    ON_3dPoint origin = ellipse.plane.origin;
+
+    // Major and minor axes
+    ON_3dVector xaxis = ellipse.radius[0] * ellipse.plane.xaxis;
+    ON_3dVector yaxis = ellipse.radius[1] * ellipse.plane.yaxis;
+
+    // Quad points
+    ON_3dPoint p0( origin - xaxis );
+    ON_3dPoint p1( origin + xaxis );
+    ON_3dPoint p2( origin - yaxis );
+    ON_3dPoint p3( origin + yaxis );
+
+    // Foci
+    ON_3dPoint f1, f2;
+    ellipse.GetFoci( f1, f2 );
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

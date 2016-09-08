@@ -247,157 +247,156 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ShowSurfaceDirection</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or polysurface for direction display"</span><span class="p">,</span>
-      <span class="k">false</span><span class="p">,</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span><span class="p">,</span>
-      <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ShowSurfaceDirection(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef objref;
+    var rc = Rhino.Input.RhinoGet.GetOneObject("Select surface or polysurface for direction display",
+      false,
+      Rhino.DocObjects.ObjectType.Surface | Rhino.DocObjects.ObjectType.PolysrfFilter,
+      out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var brep = objref.Brep();
+    if (brep == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="kt">bool</span> <span class="n">bIsSolid</span> <span class="p">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">IsSolid</span><span class="p">;</span>
+    bool bIsSolid = brep.IsSolid;
 
-    <span class="n">TestSurfaceDirConduit</span> <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TestSurfaceDirConduit</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    TestSurfaceDirConduit conduit = new TestSurfaceDirConduit(brep);
+    conduit.Enabled = true;
+    doc.Views.Redraw();
 
-    <span class="kt">var</span> <span class="n">gf</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetOption</span><span class="p">();</span>
-    <span class="n">gf</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Press enter when done"</span><span class="p">);</span>
-    <span class="n">gf</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">bIsSolid</span><span class="p">)</span>
-      <span class="n">gf</span><span class="p">.</span><span class="nf">AddOption</span><span class="p">(</span><span class="s">"Flip"</span><span class="p">);</span>
+    var gf = new Rhino.Input.Custom.GetOption();
+    gf.SetCommandPrompt("Press enter when done");
+    gf.AcceptNothing(true);
+    if (!bIsSolid)
+      gf.AddOption("Flip");
 
-    <span class="k">for</span> <span class="p">(;</span> <span class="p">;</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="n">gf</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">conduit</span><span class="p">.</span><span class="n">Flip</span> <span class="p">=</span> <span class="p">!</span><span class="n">conduit</span><span class="p">.</span><span class="n">Flip</span><span class="p">;</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Nothing</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="n">bIsSolid</span> <span class="p">&amp;&amp;</span> <span class="n">conduit</span><span class="p">.</span><span class="n">Flip</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">brep</span><span class="p">.</span><span class="nf">Flip</span><span class="p">();</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">brep</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
+    for (; ; )
+    {
+      var res = gf.Get();
+      if (res == Rhino.Input.GetResult.Option)
+      {
+        conduit.Flip = !conduit.Flip;
+        doc.Views.Redraw();
+        continue;
+      }
+      if (res == Rhino.Input.GetResult.Nothing)
+      {
+        if (!bIsSolid &amp;&amp; conduit.Flip)
+        {
+          brep.Flip();
+          doc.Objects.Replace(objref, brep);
+        }
+      }
+      break;
+    }
 
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    conduit.Enabled = false;
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 
-<span class="k">class</span> <span class="nc">TestSurfaceDirConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">readonly</span> <span class="n">Brep</span> <span class="n">m_brep</span><span class="p">;</span>
-  <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;</span> <span class="n">m_points</span><span class="p">;</span>
-  <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3d</span><span class="p">&gt;</span> <span class="n">m_normals</span><span class="p">;</span>
+class TestSurfaceDirConduit : Rhino.Display.DisplayConduit
+{
+  readonly Brep m_brep;
+  readonly List&lt;Point3d&gt; m_points;
+  readonly List&lt;Vector3d&gt; m_normals;
 
-  <span class="k">public</span> <span class="nf">TestSurfaceDirConduit</span><span class="p">(</span><span class="n">Brep</span> <span class="n">brep</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_brep</span> <span class="p">=</span> <span class="n">brep</span><span class="p">;</span>
-    <span class="n">Flip</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+  public TestSurfaceDirConduit(Brep brep)
+  {
+    m_brep = brep;
+    Flip = false;
 
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">SURFACE_ARROW_COUNT</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">face_count</span> <span class="p">=</span> <span class="n">m_brep</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">capacity</span> <span class="p">=</span> <span class="n">face_count</span> <span class="p">*</span> <span class="n">SURFACE_ARROW_COUNT</span> <span class="p">*</span> <span class="n">SURFACE_ARROW_COUNT</span><span class="p">;</span>
-    <span class="n">m_points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;(</span><span class="n">capacity</span><span class="p">);</span>
-    <span class="n">m_normals</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Vector3d</span><span class="p">&gt;(</span><span class="n">capacity</span><span class="p">);</span>
+    const int SURFACE_ARROW_COUNT = 5;
+    int face_count = m_brep.Faces.Count;
+    int capacity = face_count * SURFACE_ARROW_COUNT * SURFACE_ARROW_COUNT;
+    m_points = new List&lt;Point3d&gt;(capacity);
+    m_normals = new List&lt;Vector3d&gt;(capacity);
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">face_count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">face</span> <span class="p">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">Faces</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="kt">var</span> <span class="n">loop</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="n">OuterLoop</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">loop</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
+    for (int i = 0; i &lt; face_count; i++)
+    {
+      var face = brep.Faces[i];
+      var loop = face.OuterLoop;
+      if (loop == null)
+        continue;
 
-      <span class="kt">var</span> <span class="n">udomain</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">Domain</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">vdomain</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">Domain</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">loop_bbox</span> <span class="p">=</span> <span class="n">loop</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">loop_bbox</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">Interval</span> <span class="n">domain</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Interval</span><span class="p">(</span><span class="n">loop_bbox</span><span class="p">.</span><span class="n">Min</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">loop_bbox</span><span class="p">.</span><span class="n">Max</span><span class="p">.</span><span class="n">X</span><span class="p">);</span>
-        <span class="n">domain</span> <span class="p">=</span> <span class="n">Interval</span><span class="p">.</span><span class="nf">FromIntersection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">udomain</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">domain</span><span class="p">.</span><span class="n">IsIncreasing</span><span class="p">)</span>
-          <span class="n">udomain</span> <span class="p">=</span> <span class="n">domain</span><span class="p">;</span>
-        <span class="n">domain</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Interval</span><span class="p">(</span><span class="n">loop_bbox</span><span class="p">.</span><span class="n">Min</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">loop_bbox</span><span class="p">.</span><span class="n">Max</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
-        <span class="n">domain</span> <span class="p">=</span> <span class="n">Interval</span><span class="p">.</span><span class="nf">FromIntersection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">vdomain</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">domain</span><span class="p">.</span><span class="n">IsIncreasing</span><span class="p">)</span>
-          <span class="n">vdomain</span> <span class="p">=</span> <span class="n">domain</span><span class="p">;</span>
-      <span class="p">}</span>
+      var udomain = face.Domain(0);
+      var vdomain = face.Domain(1);
+      var loop_bbox = loop.GetBoundingBox(true);
+      if (loop_bbox.IsValid)
+      {
+        Interval domain = new Interval(loop_bbox.Min.X, loop_bbox.Max.X);
+        domain = Interval.FromIntersection(domain, udomain);
+        if (domain.IsIncreasing)
+          udomain = domain;
+        domain = new Interval(loop_bbox.Min.Y, loop_bbox.Max.Y);
+        domain = Interval.FromIntersection(domain, vdomain);
+        if (domain.IsIncreasing)
+          vdomain = domain;
+      }
 
-      <span class="kt">bool</span> <span class="n">bUntrimmed</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="n">IsSurface</span><span class="p">;</span>
-      <span class="kt">bool</span> <span class="n">bRev</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="n">OrientationIsReversed</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">double</span> <span class="n">u</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">u</span> <span class="p">&lt;</span> <span class="n">SURFACE_ARROW_COUNT</span><span class="p">;</span> <span class="n">u</span> <span class="p">+=</span> <span class="m">1.0</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">d</span> <span class="p">=</span> <span class="n">u</span> <span class="p">/</span> <span class="p">(</span><span class="n">SURFACE_ARROW_COUNT</span> <span class="p">-</span> <span class="m">1.0</span><span class="p">);</span>
-        <span class="kt">double</span> <span class="n">s</span> <span class="p">=</span> <span class="n">udomain</span><span class="p">.</span><span class="nf">ParameterAt</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
+      bool bUntrimmed = face.IsSurface;
+      bool bRev = face.OrientationIsReversed;
+      for (double u = 0; u &lt; SURFACE_ARROW_COUNT; u += 1.0)
+      {
+        double d = u / (SURFACE_ARROW_COUNT - 1.0);
+        double s = udomain.ParameterAt(d);
 
-        <span class="kt">var</span> <span class="n">intervals</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">TrimAwareIsoIntervals</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">bUntrimmed</span> <span class="p">||</span> <span class="n">intervals</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">for</span> <span class="p">(</span><span class="kt">double</span> <span class="n">v</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">v</span> <span class="p">&lt;</span> <span class="n">SURFACE_ARROW_COUNT</span><span class="p">;</span> <span class="n">v</span> <span class="p">+=</span> <span class="m">1.0</span><span class="p">)</span>
-          <span class="p">{</span>
-            <span class="n">d</span> <span class="p">=</span> <span class="n">v</span> <span class="p">/</span> <span class="p">(</span><span class="n">SURFACE_ARROW_COUNT</span> <span class="p">-</span> <span class="m">1.0</span><span class="p">);</span>
-            <span class="kt">double</span> <span class="n">t</span> <span class="p">=</span> <span class="n">vdomain</span><span class="p">.</span><span class="nf">ParameterAt</span><span class="p">(</span><span class="n">d</span><span class="p">);</span>
-            <span class="kt">bool</span> <span class="n">bAdd</span> <span class="p">=</span> <span class="n">bUntrimmed</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="p">!</span><span class="n">bAdd</span> <span class="p">&amp;&amp;</span> <span class="n">k</span> <span class="p">&lt;</span> <span class="n">intervals</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">k</span><span class="p">++)</span>
-            <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span><span class="n">intervals</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="nf">IncludesParameter</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
-                <span class="n">bAdd</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">bAdd</span><span class="p">)</span>
-            <span class="p">{</span>
-              <span class="kt">var</span> <span class="n">pt</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
-              <span class="kt">var</span> <span class="n">vec</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">NormalAt</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
-              <span class="n">m_points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">pt</span><span class="p">);</span>
-              <span class="k">if</span> <span class="p">(</span><span class="n">bRev</span><span class="p">)</span>
-                <span class="n">vec</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">();</span>
-              <span class="n">m_normals</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span>
-            <span class="p">}</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+        var intervals = face.TrimAwareIsoIntervals(1, s);
+        if (bUntrimmed || intervals.Length &gt; 0)
+        {
+          for (double v = 0; v &lt; SURFACE_ARROW_COUNT; v += 1.0)
+          {
+            d = v / (SURFACE_ARROW_COUNT - 1.0);
+            double t = vdomain.ParameterAt(d);
+            bool bAdd = bUntrimmed;
+            for (int k = 0; !bAdd &amp;&amp; k &lt; intervals.Length; k++)
+            {
+              if (intervals[k].IncludesParameter(t))
+                bAdd = true;
+            }
+            if (bAdd)
+            {
+              var pt = face.PointAt(s, t);
+              var vec = face.NormalAt(s, t);
+              m_points.Add(pt);
+              if (bRev)
+                vec.Reverse();
+              m_normals.Add(vec);
+            }
+          }
+        }
+      }
+    }
+  }
 
-  <span class="k">public</span> <span class="kt">bool</span> <span class="n">Flip</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+  public bool Flip { get; set; }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">DrawOverlay</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">m_points</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">color</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">TrackingColor</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">m_points</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">%</span> <span class="m">100</span> <span class="p">==</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">InterruptDrawing</span><span class="p">())</span>
-          <span class="k">break</span><span class="p">;</span>
+  protected override void DrawOverlay(Rhino.Display.DrawEventArgs e)
+  {
+    if (m_points.Count &gt; 0)
+    {
+      var color = Rhino.ApplicationSettings.AppearanceSettings.TrackingColor;
+      for (int i = 0; i &lt; m_points.Count; i++)
+      {
+        if (i % 100 == 0 &amp;&amp; e.Display.InterruptDrawing())
+          break;
 
-        <span class="kt">var</span> <span class="n">pt</span> <span class="p">=</span> <span class="n">m_points</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="kt">var</span> <span class="n">dir</span> <span class="p">=</span> <span class="n">m_normals</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">Flip</span><span class="p">)</span>
-          <span class="n">dir</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">();</span>
-        <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawDirectionArrow</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">color</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+        var pt = m_points[i];
+        var dir = m_normals[i];
+        if (Flip)
+          dir.Reverse();
+        e.Display.DrawDirectionArrow(pt, dir, color);
+      }
+    }
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ShowSurfaceDirection(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -543,9 +542,8 @@ Friend Class TestSurfaceDirConduit
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

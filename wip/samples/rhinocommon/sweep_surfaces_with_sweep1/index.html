@@ -247,51 +247,50 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">Sweep1</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">rail_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select rail curve"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">rail_ref</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="p">!=</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result Sweep1(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef rail_ref;
+    var rc = RhinoGet.GetOneObject("Select rail curve", false, Rhino.DocObjects.ObjectType.Curve, out rail_ref);
+    if(rc!=Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">rail_crv</span> <span class="p">=</span> <span class="n">rail_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rail_crv</span><span class="p">==</span><span class="k">null</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var rail_crv = rail_ref.Curve();
+    if( rail_crv==null )
+      return Rhino.Commands.Result.Failure;
 
-    <span class="kt">var</span> <span class="n">gx</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gx</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select cross section curves"</span><span class="p">);</span>
-    <span class="n">gx</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">gx</span><span class="p">.</span><span class="nf">EnablePreSelect</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">gx</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">gx</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">gx</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    var gx = new Rhino.Input.Custom.GetObject();
+    gx.SetCommandPrompt("Select cross section curves");
+    gx.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    gx.EnablePreSelect(false, true);
+    gx.GetMultiple(1,0);
+    if( gx.CommandResult() != Rhino.Commands.Result.Success )
+      return gx.CommandResult();
 
-    <span class="kt">var</span> <span class="n">cross_sections</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">&gt;();</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="p">&lt;</span><span class="n">gx</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">crv</span> <span class="p">=</span> <span class="n">gx</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">Curve</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">cross_sections</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">crv</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">cross_sections</span><span class="p">.</span><span class="n">Count</span><span class="p">&lt;</span><span class="m">1</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var cross_sections = new List&lt;Rhino.Geometry.Curve&gt;();
+    for( int i=0; i&lt;gx.ObjectCount; i++ )
+    {
+      var crv = gx.Object(i).Curve();
+      if( crv!= null)
+        cross_sections.Add(crv);
+    }
+    if( cross_sections.Count&lt;1 )
+      return Rhino.Commands.Result.Failure;
 
-    <span class="kt">var</span> <span class="n">sweep</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">SweepOneRail</span><span class="p">();</span>
-    <span class="n">sweep</span><span class="p">.</span><span class="n">AngleToleranceRadians</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAngleToleranceRadians</span><span class="p">;</span>
-    <span class="n">sweep</span><span class="p">.</span><span class="n">ClosedSweep</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">sweep</span><span class="p">.</span><span class="n">SweepTolerance</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">;</span>
-    <span class="n">sweep</span><span class="p">.</span><span class="nf">SetToRoadlikeTop</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">breps</span> <span class="p">=</span> <span class="n">sweep</span><span class="p">.</span><span class="nf">PerformSweep</span><span class="p">(</span><span class="n">rail_crv</span><span class="p">,</span> <span class="n">cross_sections</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="p">&lt;</span><span class="n">breps</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">breps</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var sweep = new Rhino.Geometry.SweepOneRail();
+    sweep.AngleToleranceRadians = doc.ModelAngleToleranceRadians;
+    sweep.ClosedSweep = false;
+    sweep.SweepTolerance = doc.ModelAbsoluteTolerance;
+    sweep.SetToRoadlikeTop();
+    var breps = sweep.PerformSweep(rail_crv, cross_sections);
+    for( int i=0; i&lt;breps.Length; i++ )
+      doc.Objects.AddBrep(breps[i]);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function Sweep1(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -341,32 +340,31 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">Sweep1</span><span class="p">():</span>
-    <span class="n">rail</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">"Select rail curve"</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">curve</span><span class="p">)</span>
-    <span class="n">rail_crv</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">coercecurve</span><span class="p">(</span><span class="n">rail</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">rail_crv</span><span class="p">:</span> <span class="k">return</span>
+def Sweep1():
+    rail = rs.GetObject("Select rail curve", rs.filter.curve)
+    rail_crv = rs.coercecurve(rail)
+    if not rail_crv: return
 
-    <span class="n">cross_sections</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="s">"Select cross section curves"</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="nb">filter</span><span class="o">.</span><span class="n">curve</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">cross_sections</span><span class="p">:</span> <span class="k">return</span>
-    <span class="n">cross_sections</span> <span class="o">=</span> <span class="p">[</span><span class="n">rs</span><span class="o">.</span><span class="n">coercecurve</span><span class="p">(</span><span class="n">crv</span><span class="p">)</span> <span class="k">for</span> <span class="n">crv</span> <span class="ow">in</span> <span class="n">cross_sections</span><span class="p">]</span>
+    cross_sections = rs.GetObjects("Select cross section curves", rs.filter.curve)
+    if not cross_sections: return
+    cross_sections = [rs.coercecurve(crv) for crv in cross_sections]
 
-    <span class="n">sweep</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">SweepOneRail</span><span class="p">()</span>
-    <span class="n">sweep</span><span class="o">.</span><span class="n">AngleToleranceRadians</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">ModelAngleToleranceRadians</span>
-    <span class="n">sweep</span><span class="o">.</span><span class="n">ClosedSweep</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">sweep</span><span class="o">.</span><span class="n">SweepTolerance</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span>
-    <span class="n">sweep</span><span class="o">.</span><span class="n">SetToRoadlikeTop</span><span class="p">()</span>
-    <span class="n">breps</span> <span class="o">=</span> <span class="n">sweep</span><span class="o">.</span><span class="n">PerformSweep</span><span class="p">(</span><span class="n">rail_crv</span><span class="p">,</span> <span class="n">cross_sections</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">brep</span> <span class="ow">in</span> <span class="n">breps</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    sweep = Rhino.Geometry.SweepOneRail()
+    sweep.AngleToleranceRadians = scriptcontext.doc.ModelAngleToleranceRadians
+    sweep.ClosedSweep = False
+    sweep.SweepTolerance = scriptcontext.doc.ModelAbsoluteTolerance
+    sweep.SetToRoadlikeTop()
+    breps = sweep.PerformSweep(rail_crv, cross_sections)
+    for brep in breps: scriptcontext.doc.Objects.AddBrep(brep)
+    scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">Sweep1</span><span class="p">()</span>
+if __name__ == "__main__":
+    Sweep1()
 </code></pre>
-</div>
 
 </div>
 

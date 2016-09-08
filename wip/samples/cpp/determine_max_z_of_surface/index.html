@@ -242,106 +242,105 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">ON_wString</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  double x = 0.0, y = 0.0;
+  ON_wString sx, sy, sz;
 
-  <span class="c1">// Pick a brep to evaluate
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface or polysurface to evaluate"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span><span class="o">|</span><span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Pick a brep to evaluate
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface or polysurface to evaluate" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object|CRhinoGetObject::polysrf_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Get the brep geometry
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the brep geometry
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const ON_Brep* brep = ref.Brep();
+  if( !brep )
+    return failure;
 
-  <span class="c1">// Prompt for an X coordinate value
-</span>  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Value of X coordinate"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">x</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for an X coordinate value
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( L"Value of X coordinate" );
+  gn.SetDefaultNumber( x );
+  gn.GetNumber();
+  if( gn.CommandResult() != success )
+    return gn.CommandResult();
 
-  <span class="n">x</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="n">RhinoFormatNumber</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">sx</span> <span class="p">);</span>
+  x = gn.Number();
+  RhinoFormatNumber( x, sx );
 
-  <span class="c1">// Prompt for a Y coordinate value
-</span>  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Value of Y coordinate"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="n">y</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for a Y coordinate value
+  gn.SetCommandPrompt( L"Value of Y coordinate" );
+  gn.SetDefaultNumber( y );
+  gn.GetNumber();
+  if( gn.CommandResult() != success )
+    return gn.CommandResult();
 
-  <span class="n">y</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="n">RhinoFormatNumber</span><span class="p">(</span> <span class="n">y</span><span class="p">,</span> <span class="n">sy</span> <span class="p">);</span>
+  y = gn.Number();
+  RhinoFormatNumber( y, sy );
 
-  <span class="c1">// Now that we have all of the input, we want to intersect
-</span>  <span class="c1">// a line curve with the brep. To determine the magnitude of
-</span>  <span class="c1">// the line, we will first get the brep's bounding box.
-</span>  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">brep</span><span class="o">-&gt;</span><span class="n">GetTightBoundingBox</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Now that we have all of the input, we want to intersect
+  // a line curve with the brep. To determine the magnitude of
+  // the line, we will first get the brep's bounding box.
+  ON_BoundingBox bbox;
+  if( !brep-&gt;GetTightBoundingBox(bbox) )
+    return failure;
 
-  <span class="c1">// Calculate the height of the bounding box
-</span>  <span class="n">ON_3dVector</span> <span class="n">v</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Corner</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Corner</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  // Calculate the height of the bounding box
+  ON_3dVector v = bbox.Corner(0,0,1) - bbox.Corner(0,0,0);
 
-  <span class="c1">// Starting point of line
-</span>  <span class="n">ON_3dPoint</span> <span class="n">p0</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
+  // Starting point of line
+  ON_3dPoint p0( x, y, 0.0 );
 
-  <span class="c1">// Ending point of line. To make sure the line
-</span>  <span class="c1">// completely intersects the brep, we will double
-</span>  <span class="c1">// the height.
-</span>  <span class="n">ON_3dPoint</span> <span class="n">p1</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">v</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">);</span>
+  // Ending point of line. To make sure the line
+  // completely intersects the brep, we will double
+  // the height.
+  ON_3dPoint p1( x, y, v.Length() * 2 );
 
-  <span class="c1">// Create the line curve
-</span>  <span class="n">ON_LineCurve</span> <span class="n">line</span><span class="p">(</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="p">);</span>
+  // Create the line curve
+  ON_LineCurve line( p0, p1 );
 
-  <span class="c1">// Intersect the line with the brep
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">curves</span><span class="p">;</span>
-  <span class="n">ON_3dPointArray</span> <span class="n">points</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoCurveBrepIntersect</span><span class="p">(</span> <span class="n">line</span><span class="p">,</span> <span class="o">*</span><span class="n">brep</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">(),</span> <span class="n">curves</span><span class="p">,</span> <span class="n">points</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="nb">false</span> <span class="o">==</span> <span class="n">rc</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"No maximum surface Z coordinate at %s,%s found.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Intersect the line with the brep
+  ON_SimpleArray&lt;ON_Curve*&gt; curves;
+  ON_3dPointArray points;
+  bool rc = RhinoCurveBrepIntersect( line, *brep, context.m_doc.AbsoluteTolerance(), curves, points );
+  if( false == rc | 0 == points.Count() )
+  {
+    RhinoApp().Print( L"No maximum surface Z coordinate at %s,%s found.\n", sx, sy );
+    return nothing;
+  }
 
-  <span class="c1">// Because it is possible that our line might intersect
-</span>  <span class="c1">// the brep in more than one place, find the intersection
-</span>  <span class="c1">// point that is farthest from our input coordinate.
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">p0</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">points</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">pt</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="p">}</span>
+  // Because it is possible that our line might intersect
+  // the brep in more than one place, find the intersection
+  // point that is farthest from our input coordinate.
+  int i;
+  ON_3dPoint pt = p0;
+  for( i = 0; i &lt; points.Count(); i++ )
+  {
+    if( p0.DistanceTo(points[i]) &gt; p0.DistanceTo(pt) )
+      pt = points[i];
+  }
 
-  <span class="c1">// Print results
-</span>  <span class="n">RhinoFormatNumber</span><span class="p">(</span> <span class="n">pt</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">sz</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Maximum surface Z coordinate at %s,%s is %s.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span> <span class="p">);</span>
+  // Print results
+  RhinoFormatNumber( pt.z, sz );
+  RhinoApp().Print( L"Maximum surface Z coordinate at %s,%s is %s.\n", sx, sy, sz );
 
-  <span class="c1">// Optional, add a point object
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
+  // Optional, add a point object
+  context.m_doc.AddPointObject( pt );
 
-  <span class="c1">// Delete any overlap intersection curves that might have been calculated
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">curves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">curves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="n">curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Delete any overlap intersection curves that might have been calculated
+  for( i = 0; i &lt; curves.Count(); i++ )
+  {
+    delete curves[i];
+    curves[i] = 0;
+  }
+  context.m_doc.Redraw();
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

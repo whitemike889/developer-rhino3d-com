@@ -247,57 +247,56 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddLayer</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Cook up an unused layer name
-</span>    <span class="kt">string</span> <span class="n">unused_name</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="nf">GetUnusedLayerName</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddLayer(Rhino.RhinoDoc doc)
+  {
+    // Cook up an unused layer name
+    string unused_name = doc.Layers.GetUnusedLayerName(false);
 
-    <span class="c1">// Prompt the user to enter a layer name
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetString</span> <span class="n">gs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetString</span><span class="p">();</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of layer to add"</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">SetDefaultString</span><span class="p">(</span><span class="n">unused_name</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="n">gs</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Prompt the user to enter a layer name
+    Rhino.Input.Custom.GetString gs = new Rhino.Input.Custom.GetString();
+    gs.SetCommandPrompt("Name of layer to add");
+    gs.SetDefaultString(unused_name);
+    gs.AcceptNothing(true);
+    gs.Get();
+    if (gs.CommandResult() != Rhino.Commands.Result.Success)
+      return gs.CommandResult();
 
-    <span class="c1">// Was a layer named entered?
-</span>    <span class="kt">string</span> <span class="n">layer_name</span> <span class="p">=</span> <span class="n">gs</span><span class="p">.</span><span class="nf">StringResult</span><span class="p">().</span><span class="nf">Trim</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">layer_name</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Layer name cannot be blank."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Was a layer named entered?
+    string layer_name = gs.StringResult().Trim();
+    if (string.IsNullOrEmpty(layer_name))
+    {
+      Rhino.RhinoApp.WriteLine("Layer name cannot be blank.");
+      return Rhino.Commands.Result.Cancel;
+    }
 
-    <span class="c1">// Is the layer name valid?
-</span>    <span class="k">if</span> <span class="p">(!</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Layer</span><span class="p">.</span><span class="nf">IsValidName</span><span class="p">(</span><span class="n">layer_name</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">layer_name</span> <span class="p">+</span> <span class="s">" is not a valid layer name."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Is the layer name valid?
+    if (!Rhino.DocObjects.Layer.IsValidName(layer_name))
+    {
+      Rhino.RhinoApp.WriteLine(layer_name + " is not a valid layer name.");
+      return Rhino.Commands.Result.Cancel;
+    }
 
-    <span class="c1">// Does a layer with the same name already exist?
-</span>    <span class="kt">int</span> <span class="n">layer_index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">layer_index</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"A layer with the name {0} already exists."</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Does a layer with the same name already exist?
+    int layer_index = doc.Layers.Find(layer_name, true);
+    if (layer_index &gt;= 0)
+    {
+      Rhino.RhinoApp.WriteLine("A layer with the name {0} already exists.", layer_name);
+      return Rhino.Commands.Result.Cancel;
+    }
 
-    <span class="c1">// Add a new layer to the document
-</span>    <span class="n">layer_index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Layers</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">layer_index</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to add {0} layer."</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Add a new layer to the document
+    layer_index = doc.Layers.Add(layer_name, System.Drawing.Color.Black);
+    if (layer_index &lt; 0)
+    {
+      Rhino.RhinoApp.WriteLine("Unable to add {0} layer.", layer_name);
+      return Rhino.Commands.Result.Failure;
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddLayer(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -345,53 +344,52 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span><span class="o">,</span> <span class="nn">System.Drawing.Color</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid, System.Drawing.Color
 
-<span class="k">def</span> <span class="nf">AddLayer</span><span class="p">():</span>
-    <span class="c"># Cook up an unused layer name</span>
-    <span class="n">unused_name</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">GetUnusedLayerName</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+def AddLayer():
+    # Cook up an unused layer name
+    unused_name = scriptcontext.doc.Layers.GetUnusedLayerName(False)
 
-    <span class="c"># Prompt the user to enter a layer name</span>
-    <span class="n">gs</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetString</span><span class="p">()</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Name of layer to add"</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">SetDefaultString</span><span class="p">(</span><span class="n">unused_name</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">AcceptNothing</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">gs</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gs</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Prompt the user to enter a layer name
+    gs = Rhino.Input.Custom.GetString()
+    gs.SetCommandPrompt("Name of layer to add")
+    gs.SetDefaultString(unused_name)
+    gs.AcceptNothing(True)
+    gs.Get()
+    if gs.CommandResult()!=Rhino.Commands.Result.Success:
+        return gs.CommandResult()
 
-    <span class="c"># Was a layer named entered?</span>
-    <span class="n">layer_name</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">StringResult</span><span class="p">()</span><span class="o">.</span><span class="n">Trim</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">layer_name</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Layer name cannot be blank."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+    # Was a layer named entered?
+    layer_name = gs.StringResult().Trim()
+    if not layer_name:
+        print "Layer name cannot be blank."
+        return Rhino.Commands.Result.Cancel
 
-    <span class="c"># Is the layer name valid?</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">Layer</span><span class="o">.</span><span class="n">IsValidName</span><span class="p">(</span><span class="n">layer_name</span><span class="p">):</span>
-        <span class="k">print</span> <span class="n">layer_name</span><span class="p">,</span> <span class="s">"is not a valid layer name."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+    # Is the layer name valid?
+    if not Rhino.DocObjects.Layer.IsValidName(layer_name):
+        print layer_name, "is not a valid layer name."
+        return Rhino.Commands.Result.Cancel
 
-    <span class="c"># Does a layer with the same name already exist?</span>
-    <span class="n">layer_index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">layer_index</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"A layer with the name"</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">,</span> <span class="s">"already exists."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+    # Does a layer with the same name already exist?
+    layer_index = scriptcontext.doc.Layers.Find(layer_name, True)
+    if layer_index&gt;=0:
+        print "A layer with the name", layer_name, "already exists."
+        return Rhino.Commands.Result.Cancel
 
-    <span class="c"># Add a new layer to the document</span>
-    <span class="n">layer_index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Layers</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">layer_name</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Black</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">layer_index</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Unable to add"</span><span class="p">,</span> <span class="n">layer_name</span><span class="p">,</span> <span class="s">"layer."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    # Add a new layer to the document
+    layer_index = scriptcontext.doc.Layers.Add(layer_name, System.Drawing.Color.Black)
+    if layer_index&lt;0:
+        print "Unable to add", layer_name, "layer."
+        return Rhino.Commands.Result.Failure
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    return Rhino.Commands.Result.Success
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddLayer</span><span class="p">()</span>
+if __name__=="__main__":
+    AddLayer()
 </code></pre>
-</div>
 
 </div>
 

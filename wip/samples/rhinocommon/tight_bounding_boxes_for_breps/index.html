@@ -247,73 +247,72 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">TightBoundingBox</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span>
-      <span class="s">"Select surface to split"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">surface</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result TightBoundingBox(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject(
+      "Select surface to split", true, ObjectType.Surface, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var surface = obj_ref.Surface();
+    if (surface == null)
+      return Result.Failure;
 
-    <span class="n">obj_ref</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span>
-      <span class="s">"Select cutting curve"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    obj_ref = null;
+    rc = RhinoGet.GetOneObject(
+      "Select cutting curve", true, ObjectType.Curve, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var curve = obj_ref.Curve();
+    if (curve == null)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">brep_face</span> <span class="p">=</span> <span class="n">surface</span> <span class="k">as</span> <span class="n">BrepFace</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep_face</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var brep_face = surface as BrepFace;
+    if (brep_face == null)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">split_brep</span> <span class="p">=</span> <span class="n">brep_face</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span>
-      <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Curve</span><span class="p">&gt;</span> <span class="p">{</span><span class="n">curve</span><span class="p">},</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">split_brep</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to split surface."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    var split_brep = brep_face.Split(
+      new List&lt;Curve&gt; {curve}, doc.ModelAbsoluteTolerance);
+    if (split_brep == null)
+    {
+      RhinoApp.WriteLine("Unable to split surface.");
+      return Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">meshes</span> <span class="p">=</span> <span class="n">Mesh</span><span class="p">.</span><span class="nf">CreateFromBrep</span><span class="p">(</span><span class="n">split_brep</span><span class="p">);</span>
+    var meshes = Mesh.CreateFromBrep(split_brep);
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">mesh</span> <span class="k">in</span> <span class="n">meshes</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-      <span class="k">switch</span> <span class="p">(</span><span class="n">bbox</span><span class="p">.</span><span class="nf">IsDegenerate</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="k">case</span> <span class="m">3</span><span class="p">:</span>
-        <span class="k">case</span> <span class="m">2</span><span class="p">:</span>
-          <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-        <span class="k">case</span> <span class="m">1</span><span class="p">:</span>
-          <span class="c1">// rectangle
-</span>          <span class="c1">// box with 8 corners flattened to rectangle with 4 corners
-</span>          <span class="kt">var</span> <span class="n">rectangle_corners</span> <span class="p">=</span> <span class="n">bbox</span><span class="p">.</span><span class="nf">GetCorners</span><span class="p">().</span><span class="nf">Distinct</span><span class="p">().</span><span class="nf">ToList</span><span class="p">();</span>
-          <span class="c1">// add 1st point as last to close the loop
-</span>          <span class="n">rectangle_corners</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">rectangle_corners</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPolyline</span><span class="p">(</span><span class="n">rectangle_corners</span><span class="p">);</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="m">0</span><span class="p">:</span>
-          <span class="c1">// box
-</span>          <span class="kt">var</span> <span class="n">brep_box</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Box</span><span class="p">(</span><span class="n">bbox</span><span class="p">).</span><span class="nf">ToBrep</span><span class="p">();</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">brep_box</span><span class="p">);</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-          <span class="k">break</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    foreach (var mesh in meshes)
+    {
+      var bbox = mesh.GetBoundingBox(true);
+      switch (bbox.IsDegenerate(doc.ModelAbsoluteTolerance))
+      {
+        case 3:
+        case 2:
+          return Result.Failure;
+        case 1:
+          // rectangle
+          // box with 8 corners flattened to rectangle with 4 corners
+          var rectangle_corners = bbox.GetCorners().Distinct().ToList();
+          // add 1st point as last to close the loop
+          rectangle_corners.Add(rectangle_corners[0]);
+          doc.Objects.AddPolyline(rectangle_corners);
+          doc.Views.Redraw();
+          break;
+        case 0:
+          // box
+          var brep_box = new Box(bbox).ToBrep();
+          doc.Objects.AddBrep(brep_box);
+          doc.Views.Redraw();
+          break;
+      }
+    }
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function TightBoundingBox(ByVal doc As RhinoDoc) As Result
@@ -376,68 +375,67 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">System.Collections.Generic</span> <span class="kn">import</span> <span class="o">*</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from scriptcontext import doc
+import rhinoscriptsyntax as rs
+from Rhino.Geometry import *
+from Rhino.Input import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from System.Collections.Generic import *
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span>
-    <span class="s">"Select surface to split"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">brep_face</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">brep_face</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject(
+    "Select surface to split", True, ObjectType.Surface)
+  if rc != Result.Success:
+    return rc
+  brep_face = obj_ref.Surface()
+  if brep_face == None:
+    return Result.Failure
 
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span>
-    <span class="s">"Select cutting curve"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">curve</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">curve</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  rc, obj_ref = RhinoGet.GetOneObject(
+    "Select cutting curve", True, ObjectType.Curve)
+  if rc != Result.Success:
+    return rc
+  curve = obj_ref.Curve()
+  if curve == None:
+    return Result.Failure
 
-  <span class="n">curves</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Curve</span><span class="p">]([</span><span class="n">curve</span><span class="p">])</span>
-  <span class="n">split_brep</span> <span class="o">=</span> <span class="n">brep_face</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span>
-    <span class="n">curves</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">)</span>
+  curves = List[Curve]([curve])
+  split_brep = brep_face.Split(
+    curves, doc.ModelAbsoluteTolerance)
 
-  <span class="k">if</span> <span class="n">split_brep</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">RhinoApp</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Unable to split surface."</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if split_brep == None:
+    RhinoApp.WriteLine("Unable to split surface.")
+    return Result.Nothing
 
-  <span class="n">meshes</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">CreateFromBrep</span><span class="p">(</span><span class="n">split_brep</span><span class="p">)</span>
-  <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">meshes</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">meshes</span><span class="p">:</span>
-    <span class="n">bbox</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">GetBoundingBox</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">bbox_type</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">IsDegenerate</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">bbox_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c"># rectangle</span>
-        <span class="c"># box with 8 corners flattened to rectangle with 4 corners</span>
-        <span class="n">box_corners</span> <span class="o">=</span> <span class="n">bbox</span><span class="o">.</span><span class="n">GetCorners</span><span class="p">()</span>
-        <span class="n">rectangle_corners</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">corner_point</span> <span class="ow">in</span> <span class="n">box_corners</span><span class="p">:</span>
-          <span class="k">if</span> <span class="n">corner_point</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rectangle_corners</span><span class="p">:</span>
-              <span class="n">rectangle_corners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corner_point</span><span class="p">)</span>
-        <span class="c"># add 1st point as last to close the loop</span>
-        <span class="n">rectangle_corners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rectangle_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPolyline</span><span class="p">(</span><span class="n">rectangle_corners</span><span class="p">)</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">bbox_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c"># box</span>
-        <span class="n">brep_box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">bbox</span><span class="p">)</span><span class="o">.</span><span class="n">ToBrep</span><span class="p">()</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">brep_box</span><span class="p">)</span>
-        <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span> <span class="c"># bbox invalid, point, or line</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  meshes = Mesh.CreateFromBrep(split_brep)
+  print type(meshes)
+  for mesh in meshes:
+    bbox = mesh.GetBoundingBox(True)
+    bbox_type = bbox.IsDegenerate(doc.ModelAbsoluteTolerance)
+    if bbox_type == 1: # rectangle
+        # box with 8 corners flattened to rectangle with 4 corners
+        box_corners = bbox.GetCorners()
+        rectangle_corners = []
+        for corner_point in box_corners:
+          if corner_point not in rectangle_corners:
+              rectangle_corners.append(corner_point)
+        # add 1st point as last to close the loop
+        rectangle_corners.append(rectangle_corners[0])
+        doc.Objects.AddPolyline(rectangle_corners)
+        doc.Views.Redraw()
+    elif bbox_type == 0: # box
+        brep_box = Box(bbox).ToBrep()
+        doc.Objects.AddBrep(brep_box)
+        doc.Views.Redraw()
+    else: # bbox invalid, point, or line
+      return Result.Failure
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

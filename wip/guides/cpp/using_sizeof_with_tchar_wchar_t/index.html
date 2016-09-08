@@ -306,44 +306,40 @@ $(document).ready(function()
 
 <h2 id="discussion">Discussion</h2>
 
-<p>The <code class="highlighter-rouge">sizeof</code> keyword gives the amount of storage, in bytes, associated with a variable or a type.  It does not return number of elements in an array, such as an array of characters.</p>
+<p>The <code>sizeof</code> keyword gives the amount of storage, in bytes, associated with a variable or a type.  It does not return number of elements in an array, such as an array of characters.</p>
 
-<p>Mistakes using the <code class="highlighter-rouge">sizeof</code> operator when dealing with UNICODE strings is very common.  For example:</p>
+<p>Mistakes using the <code>sizeof</code> operator when dealing with UNICODE strings is very common.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">char</span> <span class="n">szBuffer</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
-<span class="n">GetWindowText</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">szBuffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">szBuffer</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// OK
-</span>
-<span class="kt">wchar_t</span> <span class="n">wszBuffer</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
-<span class="n">GetWindowText</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">wszBuffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">wszBuffer</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// WRONG
-</span></code></pre>
-</div>
+<pre><code class="language-cpp">char szBuffer[24];
+GetWindowText( hWnd, szBuffer, sizeof(szBuffer) ); // OK
 
-<p>In the above examples, the first block of code works because the char data type just happens to take up only one byte of storage.  Thus, the <code class="highlighter-rouge">sizeof</code> operator, when used on an array of chars just happens to work.  The other example is incorrect for a <code class="highlighter-rouge">wchar_t</code> requires two bytes of storage.  Thus, you have just told the <code class="highlighter-rouge">GetWindowText</code> that the buffer you have passed in is bigger than it really is.  This can crash your plugin.</p>
+wchar_t wszBuffer[24];
+GetWindowText( hWnd, wszBuffer, sizeof(wszBuffer) ); // WRONG
+</code></pre>
+
+<p>In the above examples, the first block of code works because the char data type just happens to take up only one byte of storage.  Thus, the <code>sizeof</code> operator, when used on an array of chars just happens to work.  The other example is incorrect for a <code>wchar_t</code> requires two bytes of storage.  Thus, you have just told the <code>GetWindowText</code> that the buffer you have passed in is bigger than it really is.  This can crash your plugin.</p>
 
 <p>The following is the proper method for using the sizeof operator when using UNICODE text strings…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">wchar_t</span> <span class="n">wszBuffer</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
-<span class="n">GetWindowText</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">wszBuffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">wszBuffer</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">wchar_t</span><span class="p">)</span> <span class="p">);</span>
+<pre><code class="language-cpp">wchar_t wszBuffer[24];
+GetWindowText( hWnd, wszBuffer, sizeof(wszBuffer)/sizeof(wchar_t) );
 </code></pre>
-</div>
 
 <p>If you find yourself writing the above statement frequently, you might consider adding the following macro to your project:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cp">#define _countof(array) (sizeof(array)/sizeof(array[0]))
-</span>
-<span class="kt">wchar_t</span> <span class="n">wszBuffer</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
-<span class="n">GetWindowText</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">wszBuffer</span><span class="p">,</span> <span class="n">_countof</span><span class="p">(</span><span class="n">wszBuffer</span><span class="p">)</span> <span class="p">);</span>
-</code></pre>
-</div>
+<pre><code class="language-cpp">#define _countof(array) (sizeof(array)/sizeof(array[0]))
 
-<p>The <code class="highlighter-rouge">TCHAR</code> data type definition is based on whether or not your plugins compile as MBCS or as UNICODE.  Rhino 5  plugins are compiled as UNICODE.  Thus, a TCHAR in Rhino 5 will be a <code class="highlighter-rouge">wchar_t</code>.</p>
+wchar_t wszBuffer[24];
+GetWindowText( hWnd, wszBuffer, _countof(wszBuffer) );
+</code></pre>
+
+<p>The <code>TCHAR</code> data type definition is based on whether or not your plugins compile as MBCS or as UNICODE.  Rhino 5  plugins are compiled as UNICODE.  Thus, a TCHAR in Rhino 5 will be a <code>wchar_t</code>.</p>
 
 <p>To be safe in all cases, you should use the following convention when dealing with TCHARs:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">TCHAR</span> <span class="n">tchBuffer</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
-<span class="n">GetWindowText</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">tchBuffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tchBuffer</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">TCHAR</span><span class="p">)</span> <span class="p">);</span>
+<pre><code class="language-cpp">TCHAR tchBuffer[24];
+GetWindowText( hWnd, tchBuffer, sizeof(tchBuffer)/sizeof(TCHAR) );
 </code></pre>
-</div>
 
 <p>In doing this, your code will be safe when compiled as either MBCS or UNICODE.</p>
 

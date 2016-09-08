@@ -247,28 +247,27 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">PlanarSurface</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Point3d</span><span class="p">[]</span> <span class="n">corners</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetRectangle</span><span class="p">(</span><span class="k">out</span> <span class="n">corners</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result PlanarSurface(RhinoDoc doc)
+  {
+    Point3d[] corners;
+    var rc = Rhino.Input.RhinoGet.GetRectangle(out corners);
+    if (rc != Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">plane</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Plane</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="m">0</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="m">1</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="m">2</span><span class="p">]);</span>
+    var plane = new Plane(corners[0], corners[1], corners[2]);
 
-    <span class="kt">var</span> <span class="n">plane_surface</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PlaneSurface</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span>
-      <span class="k">new</span> <span class="nf">Interval</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">corners</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="m">1</span><span class="p">])),</span>
-      <span class="k">new</span> <span class="nf">Interval</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">corners</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="m">2</span><span class="p">])));</span>
+    var plane_surface = new PlaneSurface(plane,
+      new Interval(0, corners[0].DistanceTo(corners[1])),
+      new Interval(0, corners[1].DistanceTo(corners[2])));
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">plane_surface</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Objects.Add(plane_surface);
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function PlanarSurface(ByVal doc As RhinoDoc) As Result
@@ -289,23 +288,22 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino;
+import rhinoscriptsyntax as rs
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">corners</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetRectangle</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">rc</span>
+def RunCommand():
+  rc, corners = Rhino.Input.RhinoGet.GetRectangle()
+  if rc &lt;&gt; Rhino.Commands.Result.Success:
+      return rc
 
-  <span class="n">plane</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-  <span class="n">u_dir</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">Distance</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-  <span class="n">v_dir</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">Distance</span><span class="p">(</span><span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-  <span class="n">rs</span><span class="o">.</span><span class="n">AddPlaneSurface</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">u_dir</span><span class="p">,</span> <span class="n">v_dir</span><span class="p">)</span>
+  plane = Rhino.Geometry.Plane(corners[0], corners[1], corners[2])
+  u_dir = rs.Distance(corners[0], corners[1])
+  v_dir = rs.Distance(corners[1], corners[2])
+  rs.AddPlaneSurface(plane, u_dir, v_dir)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+    RunCommand()
 </code></pre>
-</div>
 
 </div>
 

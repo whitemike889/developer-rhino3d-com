@@ -247,47 +247,46 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ExtrudeBrepFace</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go0</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go0</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select surface to extrude"</span><span class="p">);</span>
-    <span class="n">go0</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">go0</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">go0</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go0</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go0</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ExtrudeBrepFace(Rhino.RhinoDoc doc)
+  {
+    Rhino.Input.Custom.GetObject go0 = new Rhino.Input.Custom.GetObject();
+    go0.SetCommandPrompt("Select surface to extrude");
+    go0.GeometryFilter = Rhino.DocObjects.ObjectType.Surface;
+    go0.SubObjectSelect = true;
+    go0.Get();
+    if (go0.CommandResult() != Rhino.Commands.Result.Success)
+      return go0.CommandResult();
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">BrepFace</span> <span class="n">face</span> <span class="p">=</span> <span class="n">go0</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Face</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">face</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.Geometry.BrepFace face = go0.Object(0).Face();
+    if (null == face)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go1</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select path curve"</span><span class="p">);</span>
-    <span class="n">go1</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go1</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">go1</span><span class="p">.</span><span class="n">DeselectAllBeforePostSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go1</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go1</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go1</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    Rhino.Input.Custom.GetObject go1 = new Rhino.Input.Custom.GetObject();
+    go1.SetCommandPrompt("Select path curve");
+    go1.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    go1.SubObjectSelect = true;
+    go1.DeselectAllBeforePostSelect = false;
+    go1.Get();
+    if (go1.CommandResult() != Rhino.Commands.Result.Success)
+      return go1.CommandResult();
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">go1</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">curve</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.Geometry.Curve curve = go1.Object(0).Curve();
+    if (null == curve)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">face</span><span class="p">.</span><span class="nf">CreateExtrusion</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">brep</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
+    Rhino.Geometry.Brep brep = face.CreateExtrusion(curve, true);
+    if (null != brep)
+    {
+      doc.Objects.Add(brep);
+      doc.Views.Redraw();
+    }
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ExtrudeBrepFace(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -331,9 +330,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

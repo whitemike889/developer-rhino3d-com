@@ -242,60 +242,59 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoLayerTable</span><span class="o">&amp;</span> <span class="n">layer_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">;</span>
-  <span class="n">CRhinoMaterialTable</span><span class="o">&amp;</span> <span class="n">material_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_material_table</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">num_modified</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoLayerTable&amp; layer_table = context.m_doc.m_layer_table;
+  CRhinoMaterialTable&amp; material_table = context.m_doc.m_material_table;
+  int num_modified = 0;
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_count</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">LayerCount</span><span class="p">();</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">layer_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">layer</span><span class="p">.</span><span class="n">IsDeleted</span><span class="p">()</span> <span class="o">|</span> <span class="n">layer</span><span class="p">.</span><span class="n">IsReference</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+  int i, layer_count = layer_table.LayerCount();
+  for( i = 0; i &lt; layer_count; i++ )
+  {
+    const CRhinoLayer&amp; layer = layer_table[i];
+    if( layer.IsDeleted() | layer.IsReference() )
+      continue;
 
-    <span class="kt">int</span> <span class="n">material_index</span> <span class="o">=</span> <span class="n">layer</span><span class="p">.</span><span class="n">RenderMaterialIndex</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">material_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// If material_index &lt; 0, then the layer does not have a
-</span>      <span class="c1">// material assigned to it. So, we will create a new material
-</span>      <span class="c1">// that is based on Rhino's default material, and add it
-</span>      <span class="c1">// to the material table.
-</span>
-      <span class="n">ON_Material</span> <span class="n">material</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">DefaultMaterial</span><span class="p">()</span> <span class="p">);</span>
-      <span class="n">material_index</span> <span class="o">=</span> <span class="n">material_table</span><span class="p">.</span><span class="n">AddMaterial</span><span class="p">(</span> <span class="n">material</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">material_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="c1">// Now that we have added the new material,
-</span>        <span class="c1">// assign it to the layer.
-</span>        <span class="n">ON_Layer</span> <span class="n">new_layer</span><span class="p">(</span> <span class="n">layer</span> <span class="p">);</span>
-        <span class="n">new_layer</span><span class="p">.</span><span class="n">SetRenderMaterialIndex</span><span class="p">(</span> <span class="n">material_index</span> <span class="p">);</span>
-        <span class="n">layer_table</span><span class="p">.</span><span class="n">ModifyLayer</span><span class="p">(</span> <span class="n">new_layer</span><span class="p">,</span> <span class="n">layer</span><span class="p">.</span><span class="n">LayerIndex</span><span class="p">()</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    int material_index = layer.RenderMaterialIndex();
+    if( material_index &lt; 0 )
+    {
+      // If material_index &lt; 0, then the layer does not have a
+      // material assigned to it. So, we will create a new material
+      // that is based on Rhino's default material, and add it
+      // to the material table.
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">material_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+      ON_Material material( RhinoApp().AppSettings().DefaultMaterial() );
+      material_index = material_table.AddMaterial( material );
+      if( material_index &gt;= 0 )
+      {
+        // Now that we have added the new material,
+        // assign it to the layer.
+        ON_Layer new_layer( layer );
+        new_layer.SetRenderMaterialIndex( material_index );
+        layer_table.ModifyLayer( new_layer, layer.LayerIndex() );
+      }
+    }
 
-    <span class="k">const</span> <span class="n">CRhinoMaterial</span><span class="o">&amp;</span> <span class="n">material</span> <span class="o">=</span> <span class="n">material_table</span><span class="p">[</span><span class="n">material_index</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">layer</span><span class="p">.</span><span class="n">Color</span><span class="p">()</span> <span class="o">==</span> <span class="n">material</span><span class="p">.</span><span class="n">Diffuse</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+    if( material_index &lt; 0 )
+      continue;
 
-    <span class="c1">// Modify the material's basic, or diffuse, color
-</span>    <span class="n">ON_Material</span> <span class="n">new_material</span><span class="p">(</span> <span class="n">material</span> <span class="p">);</span>
-    <span class="n">new_material</span><span class="p">.</span><span class="n">SetDiffuse</span><span class="p">(</span> <span class="n">layer</span><span class="p">.</span><span class="n">Color</span><span class="p">()</span> <span class="p">);</span>
-    <span class="n">material_table</span><span class="p">.</span><span class="n">ModifyMaterial</span><span class="p">(</span> <span class="n">new_material</span><span class="p">,</span> <span class="n">material</span><span class="p">.</span><span class="n">MaterialIndex</span><span class="p">(),</span> <span class="n">FALSE</span> <span class="p">);</span>
+    const CRhinoMaterial&amp; material = material_table[material_index];
+    if( layer.Color() == material.Diffuse() )
+      continue;
 
-    <span class="n">num_modified</span><span class="o">++</span><span class="p">;</span>
-  <span class="p">}</span>
+    // Modify the material's basic, or diffuse, color
+    ON_Material new_material( material );
+    new_material.SetDiffuse( layer.Color() );
+    material_table.ModifyMaterial( new_material, material.MaterialIndex(), FALSE );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">num_modified</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Regen</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+    num_modified++;
+  }
+
+  if( num_modified &gt; 0 )
+    context.m_doc.Regen();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

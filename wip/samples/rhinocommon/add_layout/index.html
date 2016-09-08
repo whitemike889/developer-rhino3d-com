@@ -247,44 +247,43 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="c1">/// &lt;summary&gt;
-</span>  <span class="c1">/// Generate a layout with a single detail view that zooms to a list of objects
-</span>  <span class="c1">/// &lt;/summary&gt;
-</span>  <span class="c1">/// &lt;param name="doc"&gt;&lt;/param&gt;
-</span>  <span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
-</span>  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddLayout</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">PageUnitSystem</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">UnitSystem</span><span class="p">.</span><span class="n">Millimeters</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">page_views</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">GetPageViews</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">page_number</span> <span class="p">=</span> <span class="p">(</span><span class="n">page_views</span><span class="p">==</span><span class="k">null</span><span class="p">)</span> <span class="p">?</span> <span class="m">1</span> <span class="p">:</span> <span class="n">page_views</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="m">1</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">pageview</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">AddPageView</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"A0_{0}"</span><span class="p">,</span><span class="n">page_number</span><span class="p">),</span> <span class="m">1189</span><span class="p">,</span> <span class="m">841</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">pageview</span><span class="p">!=</span><span class="k">null</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point2d</span> <span class="n">top_left</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point2d</span><span class="p">(</span><span class="m">20</span><span class="p">,</span><span class="m">821</span><span class="p">);</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point2d</span> <span class="n">bottom_right</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point2d</span><span class="p">(</span><span class="m">1169</span><span class="p">,</span> <span class="m">20</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">detail</span> <span class="p">=</span> <span class="n">pageview</span><span class="p">.</span><span class="nf">AddDetailView</span><span class="p">(</span><span class="s">"ModelView"</span><span class="p">,</span> <span class="n">top_left</span><span class="p">,</span> <span class="n">bottom_right</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DefinedViewportProjection</span><span class="p">.</span><span class="n">Top</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">detail</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">pageview</span><span class="p">.</span><span class="nf">SetActiveDetail</span><span class="p">(</span><span class="n">detail</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
-        <span class="n">detail</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">ZoomExtents</span><span class="p">();</span>
-        <span class="n">detail</span><span class="p">.</span><span class="n">DetailGeometry</span><span class="p">.</span><span class="n">IsProjectionLocked</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-        <span class="n">detail</span><span class="p">.</span><span class="n">DetailGeometry</span><span class="p">.</span><span class="nf">SetScale</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelUnitSystem</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="n">doc</span><span class="p">.</span><span class="n">PageUnitSystem</span><span class="p">);</span>
-        <span class="c1">// Commit changes tells the document to replace the document's detail object
-</span>        <span class="c1">// with the modified one that we just adjusted
-</span>        <span class="n">detail</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="n">pageview</span><span class="p">.</span><span class="nf">SetPageAsActive</span><span class="p">();</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span> <span class="p">=</span> <span class="n">pageview</span><span class="p">;</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  /// &lt;summary&gt;
+  /// Generate a layout with a single detail view that zooms to a list of objects
+  /// &lt;/summary&gt;
+  /// &lt;param name="doc"&gt;&lt;/param&gt;
+  /// &lt;returns&gt;&lt;/returns&gt;
+  public static Rhino.Commands.Result AddLayout(Rhino.RhinoDoc doc)
+  {
+    doc.PageUnitSystem = Rhino.UnitSystem.Millimeters;
+    var page_views = doc.Views.GetPageViews();
+    int page_number = (page_views==null) ? 1 : page_views.Length + 1;
+    var pageview = doc.Views.AddPageView(string.Format("A0_{0}",page_number), 1189, 841);
+    if( pageview!=null )
+    {
+      Rhino.Geometry.Point2d top_left = new Rhino.Geometry.Point2d(20,821);
+      Rhino.Geometry.Point2d bottom_right = new Rhino.Geometry.Point2d(1169, 20);
+      var detail = pageview.AddDetailView("ModelView", top_left, bottom_right, Rhino.Display.DefinedViewportProjection.Top);
+      if (detail != null)
+      {
+        pageview.SetActiveDetail(detail.Id);
+        detail.Viewport.ZoomExtents();
+        detail.DetailGeometry.IsProjectionLocked = true;
+        detail.DetailGeometry.SetScale(1, doc.ModelUnitSystem, 10, doc.PageUnitSystem);
+        // Commit changes tells the document to replace the document's detail object
+        // with the modified one that we just adjusted
+        detail.CommitChanges();
+      }
+      pageview.SetPageAsActive();
+      doc.Views.ActiveView = pageview;
+      doc.Views.Redraw();
+      return Rhino.Commands.Result.Success;
+    }
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   ''' &lt;summary&gt;
@@ -320,9 +319,8 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

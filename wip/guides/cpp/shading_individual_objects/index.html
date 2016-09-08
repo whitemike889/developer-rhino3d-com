@@ -325,95 +325,94 @@ $(document).ready(function()
 
 <p>The drawing display pipeline technology provides both users and developers great flexibility and control over how objects are drawn on the screen.  One of the features available is the ability to have objects draw using different display modes in the same viewport.  For example, it is possible for a viewport to display both wireframe and shaded objects at the same time.</p>
 
-<p>To allow an object to draw in a display mode other than what the viewport is currently set to, all you need to do is to add an <code class="highlighter-rouge">ON_DisplayMaterialRef</code> object to an object’s attributes.  A <code class="highlighter-rouge">ON_DisplayMaterialRef</code> defines what viewport an object will draw using a different display attributes and what display attributes it will use.</p>
+<p>To allow an object to draw in a display mode other than what the viewport is currently set to, all you need to do is to add an <code>ON_DisplayMaterialRef</code> object to an object’s attributes.  A <code>ON_DisplayMaterialRef</code> defines what viewport an object will draw using a different display attributes and what display attributes it will use.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample code demonstrates how to shade individual objects using the Rhino C/C++ SDK.  This shading is independent of the viewport’s current display mode, or display attribute.  Is is accomplished by adding a <code class="highlighter-rouge">ON_DisplayMaterialRef</code> object to an object’s attributes.</p>
+<p>The following sample code demonstrates how to shade individual objects using the Rhino C/C++ SDK.  This shading is independent of the viewport’s current display mode, or display attribute.  Is is accomplished by adding a <code>ON_DisplayMaterialRef</code> object to an object’s attributes.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get a list of available display attributes
-</span>  <span class="n">DisplayAttrsMgrList</span> <span class="n">attrs_list</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">attrs_count</span> <span class="o">=</span> <span class="n">CRhinoDisplayAttrsMgr</span><span class="o">::</span><span class="n">GetDisplayAttrsList</span><span class="p">(</span> <span class="n">attrs_list</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">attrs_count</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Get a list of available display attributes
+  DisplayAttrsMgrList attrs_list;
+  const int attrs_count = CRhinoDisplayAttrsMgr::GetDisplayAttrsList( attrs_list );
+  if( attrs_count &lt;= 0 )
+    return CRhinoCommand::nothing;
 
-  <span class="n">ON_wString</span> <span class="n">display_name</span><span class="p">(</span> <span class="s">L"Shaded"</span> <span class="p">);</span>
-  <span class="n">ON_UUID</span> <span class="n">display_material_id</span> <span class="o">=</span> <span class="n">ON_nil_uuid</span><span class="p">;</span>
+  ON_wString display_name( L"Shaded" );
+  ON_UUID display_material_id = ON_nil_uuid;
 
-  <span class="c1">// Find the "Shaded" display attribute
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">attrs_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CDisplayPipelineAttributes</span><span class="o">*</span> <span class="n">pAttrs</span> <span class="o">=</span> <span class="n">attrs_list</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_pAttrs</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pAttrs</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+  // Find the "Shaded" display attribute
+  int i;
+  for( i = 0; i &lt; attrs_count; i++ )
+  {
+    CDisplayPipelineAttributes* pAttrs = attrs_list[i].m_pAttrs;
+    if( !pAttrs )
+      continue;
 
-    <span class="n">ON_wString</span> <span class="n">english_name</span> <span class="o">=</span> <span class="n">pAttrs</span><span class="o">-&gt;</span><span class="n">EnglishName</span><span class="p">();</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">'_'</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">' '</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">'-'</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">','</span> <span class="p">);</span>
-    <span class="n">english_name</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span> <span class="sc">'.'</span> <span class="p">);</span>
+    ON_wString english_name = pAttrs-&gt;EnglishName();
+    english_name.Remove( '_' );
+    english_name.Remove( ' ' );
+    english_name.Remove( '-' );
+    english_name.Remove( ',' );
+    english_name.Remove( '.' );
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">english_name</span><span class="p">.</span><span class="n">CompareNoCase</span><span class="p">(</span><span class="n">display_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">display_material_id</span> <span class="o">=</span> <span class="n">pAttrs</span><span class="o">-&gt;</span><span class="n">Id</span><span class="p">();</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    if( english_name.CompareNoCase(display_name) == 0 )
+    {
+      display_material_id = pAttrs-&gt;Id();
+      break;
+    }
+  }
 
-  <span class="c1">// Bail if not found
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">display_material_id</span> <span class="o">==</span> <span class="n">ON_nil_uuid</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L" </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> display mode not found.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">display_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Bail if not found
+  if( display_material_id == ON_nil_uuid )
+  {
+    RhinoApp().Print( L" \"%s\" display mode not found.\n", display_name );
+    return CRhinoCommand::nothing;
+  }
 
-  <span class="c1">// Select the objects to shade
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surfaces, polysurfaces, and meshes to shade"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span> <span class="n">ON</span><span class="o">::</span><span class="n">brep_object</span> <span class="o">|</span> <span class="n">ON</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Select the objects to shade
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surfaces, polysurfaces, and meshes to shade" );
+  go.SetGeometryFilter( ON::surface_object | ON::brep_object | ON::mesh_object );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Get the viewport to shade the objects in
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the viewport to shade the objects in
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( !view )
+    return failure;
 
-  <span class="c1">// Create a display material reference and assign
-</span>  <span class="c1">// the display attributes id and the viewport id
-</span>  <span class="c1">// to it.
-</span>  <span class="n">ON_DisplayMaterialRef</span> <span class="n">dmr</span><span class="p">;</span>
-  <span class="n">dmr</span><span class="p">.</span><span class="n">m_display_material_id</span> <span class="o">=</span> <span class="n">display_material_id</span><span class="p">;</span>
-  <span class="n">dmr</span><span class="p">.</span><span class="n">m_viewport_id</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">VP</span><span class="p">().</span><span class="n">ViewportId</span><span class="p">();</span>
+  // Create a display material reference and assign
+  // the display attributes id and the viewport id
+  // to it.
+  ON_DisplayMaterialRef dmr;
+  dmr.m_display_material_id = display_material_id;
+  dmr.m_viewport_id = view-&gt;Viewport().VP().ViewportId();
 
-  <span class="c1">// Process each selected object
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">object_count</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">object_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+  // Process each selected object
+  const int object_count = go.ObjectCount();
+  for( i = 0; i &lt; object_count; i++ )
+  {
+    const CRhinoObjRef&amp; ref = go.Object(i);
+    const CRhinoObject* obj = ref.Object();
+    if( !obj )
+      continue;
 
-    <span class="c1">// Make a copy of the object's attributes
-</span>    <span class="n">ON_3dmObjectAttributes</span> <span class="n">attributes</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-    <span class="c1">// Add a display material reference
-</span>    <span class="n">attributes</span><span class="p">.</span><span class="n">AddDisplayMaterialRef</span><span class="p">(</span> <span class="n">dmr</span> <span class="p">);</span>
-    <span class="c1">// Modify the object's attributes
-</span>    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">ref</span><span class="p">,</span> <span class="n">attributes</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Make a copy of the object's attributes
+    ON_3dmObjectAttributes attributes = obj-&gt;Attributes();
+    // Add a display material reference
+    attributes.AddDisplayMaterialRef( dmr );
+    // Modify the object's attributes
+    context.m_doc.ModifyObjectAttributes( ref, attributes );
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

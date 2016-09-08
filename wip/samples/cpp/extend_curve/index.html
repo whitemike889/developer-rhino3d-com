@@ -242,76 +242,75 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">gc</span><span class="p">;</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select line to extend"</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+        const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject gc;
+  gc.SetCommandPrompt( L"Select line to extend" );
+  gc.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gc.GetObjects( 1, 1 );
+  if( gc.CommandResult() != CRhinoCommand::success )
+    return gc.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">gc</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC</span> <span class="o">=</span> <span class="n">ON_Curve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">objref</span><span class="p">.</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; objref = gc.Object(0);
+  const ON_Curve* pC = ON_Curve::Cast( objref.Geometry() );
+  if( !pC )
+    return CRhinoCommand::failure;
 
-  <span class="kt">int</span> <span class="n">side</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// start of curve
-</span>  <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">objref</span><span class="p">.</span><span class="n">SelectionPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dPoint</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">pC</span><span class="o">-&gt;</span><span class="n">PointAtStart</span><span class="p">();</span>
-    <span class="n">ON_3dPoint</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">pC</span><span class="o">-&gt;</span><span class="n">PointAtEnd</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">p0</span><span class="o">-</span><span class="n">pt</span><span class="p">).</span><span class="n">Length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">pt</span><span class="p">).</span><span class="n">Length</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">side</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// end of curve
-</span>  <span class="p">}</span>
+  int side = 0; // start of curve
+  ON_3dPoint pt;
+  if( objref.SelectionPoint(pt) )
+  {
+    ON_3dPoint p0 = pC-&gt;PointAtStart();
+    ON_3dPoint p1 = pC-&gt;PointAtEnd();
+    if( (p0-pt).Length() &gt; (p1-pt).Length() )
+      side = 1; // end of curve
+  }
 
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select boundary surfaces"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-                        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select boundary surfaces" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object |
+                        CRhinoGetObject::polysrf_object );
+  go.EnablePreSelect( false );
+  go.EnableDeselectAllBeforePostSelect( false );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="kt">int</span> <span class="n">object_count</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*&gt;</span> <span class="n">geom</span><span class="p">(</span> <span class="n">object_count</span> <span class="p">);</span>
+  int object_count = go.ObjectCount();
+  ON_SimpleArray&lt;const ON_Geometry*&gt; geom( object_count );
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">object_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-      <span class="n">geom</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-  <span class="p">}</span>
+  for( int i = 0; i &lt; object_count; i++ )
+  {
+    const CRhinoObject* obj = go.Object(i).Object();
+    if( obj )
+      geom.Append( obj-&gt;Geometry() );
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">geom</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  if( geom.Count() &lt;= 0 )
+    return CRhinoCommand::cancel;
 
-  <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">pC</span><span class="o">-&gt;</span><span class="n">DuplicateCurve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  ON_Curve* crv = pC-&gt;DuplicateCurve();
+  if( !crv )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Do the curve extension
-</span>  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoExtendCurve</span><span class="p">(</span><span class="n">crv</span><span class="p">,</span> <span class="n">CRhinoExtend</span><span class="o">::</span><span class="n">Line</span><span class="p">,</span> <span class="n">side</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
+  // Do the curve extension
+  bool rc = RhinoExtendCurve(crv, CRhinoExtend::Line, side, geom);
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// CRhinoDoc::ReplaceObject() will copy our curve
-</span>    <span class="c1">// so, we will need to clean up when finshed.
-</span>    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">objref</span><span class="p">,</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( rc )
+  {
+    // CRhinoDoc::ReplaceObject() will copy our curve
+    // so, we will need to clean up when finshed.
+    context.m_doc.ReplaceObject( objref, *crv );
+    context.m_doc.Redraw();
+  }
 
-  <span class="c1">// Clean up or leak...
-</span>  <span class="k">delete</span> <span class="n">crv</span><span class="p">;</span>
-  <span class="n">crv</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Clean up or leak...
+  delete crv;
+  crv = 0;
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

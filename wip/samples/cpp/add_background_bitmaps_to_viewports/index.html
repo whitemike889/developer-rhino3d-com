@@ -242,108 +242,107 @@ $(document).ready(function()
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Allow the user to select a bitmap file
-</span>  <span class="n">ON_wString</span> <span class="n">bitmap_filename</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Allow the user to select a bitmap file
+  ON_wString bitmap_filename;
 
-  <span class="n">CRhinoGetFileDialog</span> <span class="n">gf</span><span class="p">;</span>
-  <span class="n">gf</span><span class="p">.</span><span class="n">SetScriptMode</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="n">FALSE</span> <span class="o">:</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">DisplayFileDialog</span><span class="p">(</span>
-        <span class="n">CRhinoGetFileDialog</span><span class="o">::</span><span class="n">open_bitmap_dialog</span><span class="p">,</span>
-        <span class="n">bitmap_filename</span><span class="p">,</span>
-        <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">)</span>
-        <span class="p">);</span>
+  CRhinoGetFileDialog gf;
+  gf.SetScriptMode( context.IsInteractive() ? FALSE : TRUE );
+  BOOL rc = gf.DisplayFileDialog(
+        CRhinoGetFileDialog::open_bitmap_dialog,
+        bitmap_filename,
+        CWnd::FromHandle( RhinoApp().MainWnd() )
+        );
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  if( !rc )
+    return nothing;
 
-  <span class="c1">// Verify the file that was selected
-</span>  <span class="n">bitmap_filename</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">FileName</span><span class="p">();</span>
-  <span class="n">bitmap_filename</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">bitmap_filename</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Verify the file that was selected
+  bitmap_filename = gf.FileName();
+  bitmap_filename.TrimLeftAndRight();
+  if( bitmap_filename.IsEmpty() )
+    return nothing;
 
-  <span class="c1">// Verify that the bitmap file is valid
-</span>  <span class="n">CRhinoDib</span> <span class="n">dib</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dib</span><span class="p">.</span><span class="n">ReadFromFile</span><span class="p">(</span><span class="n">bitmap_filename</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"The specified file cannot be identifed as a supported type.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Verify that the bitmap file is valid
+  CRhinoDib dib;
+  if( !dib.ReadFromFile(bitmap_filename) )
+  {
+    RhinoApp().Print( L"The specified file cannot be identifed as a supported type.\n" );
+    return nothing;
+  }
 
-  <span class="c1">// Allow the user to pick the bitmap origin
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Bitmap origin"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">();</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Allow the user to pick the bitmap origin
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Bitmap origin" );
+  gp.ConstrainToConstructionPlane();
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// Get the view that the point was picked in.
-</span>  <span class="c1">// This will be the view that the bitmap appears in.
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Get the view that the point was picked in.
+  // This will be the view that the bitmap appears in.
+  CRhinoView* view = gp.View();
+  if( !view )
+  {
+    view = RhinoApp().ActiveView();
+    if( !view )
+      return failure;
+  }
 
-  <span class="c1">// Allow the user to specify the bitmap with in model units
-</span>  <span class="n">CRhinoGetNumber</span> <span class="n">gn</span><span class="p">;</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Bitmap width"</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mf">1.0</span> <span class="p">);</span>
-  <span class="n">gn</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Allow the user to specify the bitmap with in model units
+  CRhinoGetNumber gn;
+  gn.SetCommandPrompt( L"Bitmap width" );
+  gn.SetLowerLimit( 1.0 );
+  gn.GetNumber();
+  if( gn.CommandResult() != success )
+    return gn.CommandResult();
 
-  <span class="c1">// Cook up some scale factors
-</span>  <span class="kt">double</span> <span class="n">w</span> <span class="o">=</span> <span class="n">gn</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">dib_width</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">dib</span><span class="p">.</span><span class="n">Width</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">dib_height</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">dib</span><span class="p">.</span><span class="n">Height</span><span class="p">();</span>
-  <span class="kt">double</span> <span class="n">h</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span> <span class="n">dib_height</span> <span class="o">/</span> <span class="n">dib_width</span> <span class="p">);</span>
+  // Cook up some scale factors
+  double w = gn.Number();
+  double dib_width = (double)dib.Width();
+  double dib_height = (double)dib.Height();
+  double h = w * ( dib_height / dib_width );
 
-  <span class="c1">// Calculate the 3-D points that bound the bitmap
-</span>  <span class="n">ON_3dPoint</span> <span class="n">rect</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
-  <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="n">rect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">z</span><span class="p">);</span>
-  <span class="n">rect</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">z</span><span class="p">);</span>
-  <span class="n">rect</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">,</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">z</span><span class="p">);</span>
+  // Calculate the 3-D points that bound the bitmap
+  ON_3dPoint rect[4];
+  rect[0] = gp.Point();
+  rect[1] = ON_3dPoint(rect[0].x+w, rect[0].y, rect[0].z);
+  rect[2] = ON_3dPoint(rect[0].x+w, rect[0].y+h, rect[0].z);
+  rect[3] = ON_3dPoint(rect[0].x, rect[0].y+h, rect[0].z);
 
-  <span class="c1">// Get Rhino's bitmap table
-</span>  <span class="n">CRhinoBitmapTable</span><span class="o">&amp;</span> <span class="n">bitmap_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_bitmap_table</span><span class="p">;</span>
+  // Get Rhino's bitmap table
+  CRhinoBitmapTable&amp; bitmap_table = context.m_doc.m_bitmap_table;
 
-  <span class="c1">// Search the bitmap table to see if the bitmap has already
-</span>  <span class="c1">// been used. If so, delete the bitmap so Rhino will not just
-</span>  <span class="c1">// reuse the one it already has (if we want to re-read the bitmap
-</span>  <span class="c1">// file
-</span>  <span class="k">const</span> <span class="n">CRhinoBitmap</span><span class="o">*</span> <span class="n">rhino_bitmap</span> <span class="o">=</span> <span class="n">bitmap_table</span><span class="p">.</span><span class="n">Bitmap</span><span class="p">(</span> <span class="n">bitmap_filename</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rhino_bitmap</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">SetTraceImage</span><span class="p">(</span> <span class="n">ON_3dmViewTraceImage</span><span class="p">()</span> <span class="p">);</span>
-    <span class="n">bitmap_table</span><span class="p">.</span><span class="n">DeleteBitmap</span><span class="p">(</span> <span class="n">bitmap_filename</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="n">rhino_bitmap</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  // Search the bitmap table to see if the bitmap has already
+  // been used. If so, delete the bitmap so Rhino will not just
+  // reuse the one it already has (if we want to re-read the bitmap
+  // file
+  const CRhinoBitmap* rhino_bitmap = bitmap_table.Bitmap( bitmap_filename );
+  if( rhino_bitmap )
+  {
+    view-&gt;ActiveViewport().SetTraceImage( ON_3dmViewTraceImage() );
+    bitmap_table.DeleteBitmap( bitmap_filename );
+  }
+  rhino_bitmap = 0;
 
-  <span class="c1">// Create the trace image (background bitmap) object
-</span>  <span class="n">ON_3dmViewTraceImage</span> <span class="n">trace_image</span><span class="p">;</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_bitmap_filename</span> <span class="o">=</span> <span class="n">bitmap_filename</span><span class="p">;</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_bGrayScale</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">().</span><span class="n">m_plane</span><span class="p">;</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">SetOrigin</span><span class="p">(</span> <span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_width</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span> <span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">rect</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="n">Length</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_height</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span> <span class="p">(</span><span class="n">rect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">rect</span><span class="p">[</span><span class="mi">3</span><span class="p">]).</span><span class="n">Length</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">trace_image</span><span class="p">.</span><span class="n">m_bHidden</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  // Create the trace image (background bitmap) object
+  ON_3dmViewTraceImage trace_image;
+  trace_image.m_bitmap_filename = bitmap_filename;
+  trace_image.m_bGrayScale = false;
+  trace_image.m_plane = view-&gt;ActiveViewport().ConstructionPlane().m_plane;
+  trace_image.m_plane.SetOrigin( rect[0] );
+  trace_image.m_width = fabs( (rect[0] - rect[1]).Length() );
+  trace_image.m_height = fabs( (rect[0] - rect[3]).Length() );
+  trace_image.m_bHidden = false;
 
-  <span class="c1">// Add the trace image to the viewport
-</span>  <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">SetTraceImage</span><span class="p">(</span> <span class="n">trace_image</span> <span class="p">);</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
+  // Add the trace image to the viewport
+  view-&gt;ActiveViewport().SetTraceImage( trace_image );
+  view-&gt;Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -247,79 +247,78 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">CopyGroups</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to copy in place"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result CopyGroups(RhinoDoc doc)
+  {
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select objects to copy in place");
+    go.GroupSelect = true;
+    go.SubObjectSelect = false;
+    go.GetMultiple(1, 0);
+    if (go.CommandResult() != Result.Success)
+      return go.CommandResult();
 
-    <span class="kt">var</span> <span class="n">xform</span> <span class="p">=</span> <span class="n">Transform</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">group_map</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;();</span>
+    var xform = Transform.Identity;
+    var group_map = new Dictionary&lt;int, int&gt;();
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref</span> <span class="k">in</span> <span class="n">go</span><span class="p">.</span><span class="nf">Objects</span><span class="p">())</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">obj_ref</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
-        <span class="kt">var</span> <span class="n">duplicate</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">obj_ref</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-        <span class="nf">RhinoUpdateObjectGroups</span><span class="p">(</span><span class="k">ref</span> <span class="n">obj</span><span class="p">,</span> <span class="k">ref</span> <span class="n">group_map</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    foreach (var obj_ref in go.Objects())
+    {
+      if (obj_ref != null)
+      {
+        var obj = obj_ref.Object();
+        var duplicate = doc.Objects.Transform(obj_ref.ObjectId, xform, false);
+        RhinoUpdateObjectGroups(ref obj, ref group_map);
+      }
+    }
+    doc.Views.Redraw();
+    return Result.Success;
+  }
 
-  <span class="k">static</span> <span class="k">void</span> <span class="nf">RhinoUpdateObjectGroups</span><span class="p">(</span><span class="k">ref</span> <span class="n">RhinoObject</span> <span class="n">obj</span><span class="p">,</span> <span class="k">ref</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">group_map</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+  static void RhinoUpdateObjectGroups(ref RhinoObject obj, ref Dictionary&lt;int, int&gt; group_map)
+  {
+    if (obj == null) return;
 
-    <span class="kt">int</span> <span class="n">attrib_group_count</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">GroupCount</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">attrib_group_count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    int attrib_group_count = obj.Attributes.GroupCount;
+    if (attrib_group_count == 0) return;
 
-    <span class="kt">var</span> <span class="n">doc</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Document</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    var doc = obj.Document;
+    if (doc == null) return;
 
-    <span class="kt">var</span> <span class="n">groups</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Groups</span><span class="p">;</span>
+    var groups = doc.Groups;
 
-    <span class="kt">int</span> <span class="n">group_count</span> <span class="p">=</span> <span class="n">groups</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">group_count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    int group_count = groups.Count;
+    if (group_count == 0) return;
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">group_map</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">group_count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-        <span class="n">group_map</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">);</span>
+    if (group_map.Count == 0)
+      for (int i = 0; i &lt; group_count; i++)
+        group_map.Add(i, -1);
 
-    <span class="kt">var</span> <span class="n">attributes</span> <span class="p">=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">group_list</span> <span class="p">=</span> <span class="n">attributes</span><span class="p">.</span><span class="nf">GetGroupList</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">group_list</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="n">attrib_group_count</span> <span class="p">=</span> <span class="n">group_list</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    var attributes = obj.Attributes;
+    var group_list = attributes.GetGroupList();
+    if (group_list == null) return;
+    attrib_group_count = group_list.Length;
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">attrib_group_count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">old_group_index</span> <span class="p">=</span> <span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="kt">int</span> <span class="n">new_group_index</span> <span class="p">=</span> <span class="n">group_map</span><span class="p">[</span><span class="n">old_group_index</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">new_group_index</span> <span class="p">==</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">new_group_index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Groups</span><span class="p">.</span><span class="nf">Add</span><span class="p">();</span>
-        <span class="n">group_map</span><span class="p">[</span><span class="n">old_group_index</span><span class="p">]</span> <span class="p">=</span> <span class="n">new_group_index</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">new_group_index</span><span class="p">;</span>
-    <span class="p">}</span>
+    for (int i = 0; i &lt; attrib_group_count; i++)
+    {
+      int old_group_index = group_list[i];
+      int new_group_index = group_map[old_group_index];
+      if (new_group_index == -1)
+      {
+        new_group_index = doc.Groups.Add();
+        group_map[old_group_index] = new_group_index;
+      }
+      group_list[i] = new_group_index;
+    }
 
-    <span class="n">attributes</span><span class="p">.</span><span class="nf">RemoveFromAllGroups</span><span class="p">();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">attrib_group_count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="n">attributes</span><span class="p">.</span><span class="nf">AddToGroup</span><span class="p">(</span><span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    attributes.RemoveFromAllGroups();
+    for (int i = 0; i &lt; attrib_group_count; i++)
+      attributes.AddToGroup(group_list[i]);
 
-    <span class="n">obj</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    obj.CommitChanges();
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CopyGroups(ByVal doc As RhinoDoc) As Result
@@ -401,71 +400,70 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+from Rhino.Commands import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RhinoUpdateObjectGroups</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">group_map</span><span class="p">):</span>
-  <span class="k">if</span> <span class="n">obj</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span>
+def RhinoUpdateObjectGroups(obj, group_map):
+  if obj == None: return
 
-  <span class="n">attrib_group_count</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">GroupCount</span>
-  <span class="k">if</span> <span class="n">attrib_group_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span>
+  attrib_group_count = obj.Attributes.GroupCount
+  if attrib_group_count == 0: return
 
-  <span class="n">doc</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">Document</span>
-  <span class="k">if</span> <span class="n">doc</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span>
+  doc = obj.Document
+  if doc == None: return
 
-  <span class="n">groups</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Groups</span>
+  groups = doc.Groups
 
-  <span class="n">group_count</span> <span class="o">=</span> <span class="n">groups</span><span class="o">.</span><span class="n">Count</span>
-  <span class="k">if</span> <span class="n">group_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span>
+  group_count = groups.Count
+  if group_count == 0: return
 
-  <span class="k">if</span> <span class="n">group_map</span><span class="o">.</span><span class="n">Count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">group_count</span><span class="p">):</span>
-      <span class="n">group_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  if group_map.Count == 0:
+    for i in range(0, group_count):
+      group_map.append(-1)
 
-  <span class="n">attributes</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">Attributes</span>
-  <span class="n">group_list</span> <span class="o">=</span> <span class="n">attributes</span><span class="o">.</span><span class="n">GetGroupList</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">group_list</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span>
-  <span class="n">attrib_group_count</span> <span class="o">=</span> <span class="n">group_list</span><span class="o">.</span><span class="n">Length</span>
+  attributes = obj.Attributes
+  group_list = attributes.GetGroupList()
+  if group_list == None: return
+  attrib_group_count = group_list.Length
 
-  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">attrib_group_count</span><span class="p">):</span>
-    <span class="n">old_group_index</span> <span class="o">=</span> <span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">new_group_index</span> <span class="o">=</span> <span class="n">group_map</span><span class="p">[</span><span class="n">old_group_index</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">new_group_index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-      <span class="n">new_group_index</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Groups</span><span class="o">.</span><span class="n">Add</span><span class="p">()</span>
-      <span class="n">group_map</span><span class="p">[</span><span class="n">old_group_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_group_index</span>
-    <span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_group_index</span>
+  for i in range(0, attrib_group_count):
+    old_group_index = group_list[i]
+    new_group_index = group_map[old_group_index]
+    if new_group_index == -1:
+      new_group_index = doc.Groups.Add()
+      group_map[old_group_index] = new_group_index
+    group_list[i] = new_group_index
 
-  <span class="n">attributes</span><span class="o">.</span><span class="n">RemoveFromAllGroups</span><span class="p">()</span>
-  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">attrib_group_count</span><span class="p">):</span>
-    <span class="n">attributes</span><span class="o">.</span><span class="n">AddToGroup</span><span class="p">(</span><span class="n">group_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+  attributes.RemoveFromAllGroups()
+  for i in range(0, attrib_group_count):
+    attributes.AddToGroup(group_list[i])
 
-  <span class="n">obj</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+  obj.CommitChanges()
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to copy in place"</span><span class="p">)</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GroupSelect</span> <span class="o">=</span> <span class="bp">True</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def RunCommand():
+  go = Rhino.Input.Custom.GetObject()
+  go.SetCommandPrompt("Select objects to copy in place")
+  go.GroupSelect = True
+  go.SubObjectSelect = False
+  go.GetMultiple(1, 0)
+  if go.CommandResult() != Result.Success:
+    return go.CommandResult()
 
-  <span class="n">xform</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">Identity</span>
-  <span class="n">group_map</span> <span class="o">=</span> <span class="p">[]</span>
+  xform = Rhino.Geometry.Transform.Identity
+  group_map = []
 
-  <span class="k">for</span> <span class="n">obj_ref</span> <span class="ow">in</span> <span class="n">go</span><span class="o">.</span><span class="n">Objects</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">obj_ref</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-      <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-      <span class="n">duplicate</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">obj_ref</span><span class="o">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-      <span class="n">RhinoUpdateObjectGroups</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">group_map</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  for obj_ref in go.Objects():
+    if obj_ref != None:
+      obj = obj_ref.Object()
+      duplicate = doc.Objects.Transform(obj_ref.ObjectId, xform, False)
+      RhinoUpdateObjectGroups(obj, group_map)
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+    RunCommand()
 </code></pre>
-</div>
 
 </div>
 

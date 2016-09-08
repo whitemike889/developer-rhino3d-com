@@ -340,13 +340,13 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>You would like to modify a particular point, or vertex, of <code class="highlighter-rouge">CRhinoMeshObject</code> object.</p>
+<p>You would like to modify a particular point, or vertex, of <code>CRhinoMeshObject</code> object.</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>A <code class="highlighter-rouge">CRhinoMeshObject</code>’s geometric data member is an <code class="highlighter-rouge">ON_Mesh</code> object.  For information on the <code class="highlighter-rouge">ON_Mesh</code> class, the <em>opennurbs_mesh.h</em> header file.</p>
+<p>A <code>CRhinoMeshObject</code>’s geometric data member is an <code>ON_Mesh</code> object.  For information on the <code>ON_Mesh</code> class, the <em>opennurbs_mesh.h</em> header file.</p>
 
-<p>Mesh vertices are stored on an <code class="highlighter-rouge">ON_Mesh</code> in an <code class="highlighter-rouge">m_V</code> data member, which is simply an array of points.  So, if you want to modify the vertices of a mesh, you need to modify the data in this array.</p>
+<p>Mesh vertices are stored on an <code>ON_Mesh</code> in an <code>m_V</code> data member, which is simply an array of points.  So, if you want to modify the vertices of a mesh, you need to modify the data in this array.</p>
 
 <p>In order to modify anything in Rhino, you might:</p>
 
@@ -354,66 +354,65 @@ $(document).ready(function()
   <li>Get the object.</li>
   <li>Make a copy of the object.</li>
   <li>Modify this copied object.</li>
-  <li>Call one of the <code class="highlighter-rouge">CRhinoDoc::ReplaceObject</code> overrides to update the object.</li>
+  <li>Call one of the <code>CRhinoDoc::ReplaceObject</code> overrides to update the object.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample demonstrates how you might do this from a command…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">gv</span><span class="p">;</span>
-  <span class="n">gv</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select mesh vertex to move"</span> <span class="p">);</span>
-  <span class="n">gv</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">meshvertex_object</span> <span class="p">);</span>
-  <span class="n">gv</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gv</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gv</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject gv;
+  gv.SetCommandPrompt( L"Select mesh vertex to move" );
+  gv.SetGeometryFilter( CRhinoGetObject::meshvertex_object );
+  gv.GetObjects( 1, 1 );
+  if( gv.CommandResult() != success )
+    return gv.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">gv</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_MeshVertexRef</span><span class="o">*</span> <span class="n">vertex</span> <span class="o">=</span> <span class="n">gv</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">MeshVertex</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">obj</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">vertex</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObject* obj = gv.Object(0).Object();
+  const ON_MeshVertexRef* vertex = gv.Object(0).MeshVertex();
+  if( 0 == obj | 0 == vertex )
+    return failure;
 
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">vertex</span><span class="o">-&gt;</span><span class="n">m_mesh</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh</span> <span class="p">)</span>
-   <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Mesh* mesh = vertex-&gt;m_mesh;
+  if( 0 == mesh )
+   return failure;
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">-&gt;</span><span class="n">m_V</span><span class="p">[</span><span class="n">vertex</span><span class="o">-&gt;</span><span class="n">m_mesh_vi</span><span class="p">];</span>
+  ON_3dPoint pt = mesh-&gt;m_V[vertex-&gt;m_mesh_vi];
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New location"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"New location" );
+  gp.SetBasePoint( pt );
+  gp.DrawLineFromPoint( pt, TRUE );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_Mesh</span> <span class="n">dupe_mesh</span><span class="p">(</span> <span class="o">*</span><span class="n">mesh</span> <span class="p">);</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="n">vertex</span><span class="o">-&gt;</span><span class="n">m_mesh_vi</span><span class="p">,</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
+  ON_Mesh dupe_mesh( *mesh );
+  dupe_mesh.SetVertex( vertex-&gt;m_mesh_vi, gp.Point() );
 
-  <span class="c1">// Since we've modified ON_Mesh.m_V array,
-</span>  <span class="c1">// we need to invalidate a few things so they
-</span>  <span class="c1">// can be recalculated based on the new data.
-</span>  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">InvalidateVertexBoundingBox</span><span class="p">();</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">InvalidateVertexNormalBoundingBox</span><span class="p">();</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">InvalidateCurvatureStats</span><span class="p">();</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">m_FN</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">m_N</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">ComputeFaceNormals</span><span class="p">();</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">ComputeVertexNormals</span><span class="p">();</span>
-  <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">SetClosed</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+  // Since we've modified ON_Mesh.m_V array,
+  // we need to invalidate a few things so they
+  // can be recalculated based on the new data.
+  dupe_mesh.InvalidateVertexBoundingBox();
+  dupe_mesh.InvalidateVertexNormalBoundingBox();
+  dupe_mesh.InvalidateCurvatureStats();
+  dupe_mesh.m_FN.SetCount(0);
+  dupe_mesh.m_N.SetCount(0);
+  dupe_mesh.ComputeFaceNormals();
+  dupe_mesh.ComputeVertexNormals();
+  dupe_mesh.SetClosed(-1);
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">dupe_mesh</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">dupe_mesh</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( dupe_mesh.IsValid() )
+  {
+    context.m_doc.ReplaceObject( CRhinoObjRef(obj), dupe_mesh );
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

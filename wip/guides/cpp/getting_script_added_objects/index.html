@@ -323,82 +323,81 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>You have a command, derived from <code class="highlighter-rouge">CRhinoScriptCommand</code>, that scripts several Rhino command that add objects.  After running the scripts, with <code class="highlighter-rouge">CRhinoApp::RunScript</code>, you would like to get the addresses, or pointers, of the added objects.  But the commands that create the new objects do not select then.  Is there a way to get the added objects’ addresses in this case?</p>
+<p>You have a command, derived from <code>CRhinoScriptCommand</code>, that scripts several Rhino command that add objects.  After running the scripts, with <code>CRhinoApp::RunScript</code>, you would like to get the addresses, or pointers, of the added objects.  But the commands that create the new objects do not select then.  Is there a way to get the added objects’ addresses in this case?</p>
 
 <h2 id="solution">Solution</h2>
 
 <p>See of the following sample gives you any ideas…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">int</span> <span class="nf">CompareObjectPtr</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="k">const</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="k">const</span> <span class="o">*</span> <span class="n">b</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">INT_PTR</span> <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">);</span>
-  <span class="k">return</span> <span class="p">(</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="p">(</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">static int CompareObjectPtr( const CRhinoObject* const * a, const CRhinoObject* const * b )
+{
+  INT_PTR d = (*a) - (*b);
+  return ( (d &lt; 0) ? -1 : ( (d &gt; 0) ? 1 : 0 ) );
+}
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Disable redrawing
-</span>  <span class="n">CRhinoView</span><span class="o">::</span><span class="n">EnableDrawing</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Disable redrawing
+  CRhinoView::EnableDrawing( FALSE );
 
-  <span class="c1">// Get the next runtime object serial number before scripting
-</span>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">first_sn</span> <span class="o">=</span> <span class="n">CRhinoObject</span><span class="o">::</span><span class="n">NextRuntimeObjectSerialNumber</span><span class="p">();</span>
+  // Get the next runtime object serial number before scripting
+  unsigned int first_sn = CRhinoObject::NextRuntimeObjectSerialNumber();
 
-  <span class="c1">// Do some scripting...
-</span>  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_-Line 0,0,0 10,10,0"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_SelLast"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_-Properties _Object _Color _Object 255,0,0 _Enter _Enter"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_-Circle 0,0,0 10"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_SelLast"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RunScript</span><span class="p">(</span> <span class="s">L"_-Properties _Object _Color _Object 0,0,255 _Enter _Enter"</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // Do some scripting...
+  RhinoApp().RunScript( L"_-Line 0,0,0 10,10,0", 0 );
+  RhinoApp().RunScript( L"_SelLast", 0 );
+  RhinoApp().RunScript( L"_-Properties _Object _Color _Object 255,0,0 _Enter _Enter", 0 );
+  RhinoApp().RunScript( L"_-Circle 0,0,0 10", 0 );
+  RhinoApp().RunScript( L"_SelLast", 0 );
+  RhinoApp().RunScript( L"_-Properties _Object _Color _Object 0,0,255 _Enter _Enter", 0 );
 
-  <span class="c1">// Get the next runtime object serial number after scripting
-</span>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">next_sn</span> <span class="o">=</span> <span class="n">CRhinoObject</span><span class="o">::</span><span class="n">NextRuntimeObjectSerialNumber</span><span class="p">();</span>
+  // Get the next runtime object serial number after scripting
+  unsigned int next_sn = CRhinoObject::NextRuntimeObjectSerialNumber();
 
-  <span class="c1">// Enable redrawing
-</span>  <span class="n">CRhinoView</span><span class="o">::</span><span class="n">EnableDrawing</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
+  // Enable redrawing
+  CRhinoView::EnableDrawing( TRUE );
 
-  <span class="c1">// if the two are the same, then nothing happened
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">first_sn</span> <span class="o">==</span> <span class="n">next_sn</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // if the two are the same, then nothing happened
+  if( first_sn == next_sn )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// The the pointers of all of the objects that were added during scripting
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">objects</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sn</span> <span class="o">=</span> <span class="n">first_sn</span><span class="p">;</span> <span class="n">sn</span> <span class="o">&lt;</span> <span class="n">next_sn</span><span class="p">;</span> <span class="n">sn</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">LookupObjectByRuntimeSerialNumber</span><span class="p">(</span> <span class="n">sn</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">IsDeleted</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">objects</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-  <span class="p">}</span>
+  // The the pointers of all of the objects that were added during scripting
+  ON_SimpleArray&lt;const CRhinoObject*&gt; objects;
+  for( unsigned int sn = first_sn; sn &lt; next_sn; sn++ )
+  {
+    const CRhinoObject* obj = context.m_doc.LookupObjectByRuntimeSerialNumber( sn );
+    if( obj &amp;&amp; !obj-&gt;IsDeleted() )
+      objects.Append( obj );
+  }
 
-  <span class="c1">// Sort and cull the list, as there may be duplicates
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">objects</span><span class="p">.</span><span class="n">HeapSort</span><span class="p">(</span> <span class="n">CompareObjectPtr</span> <span class="p">);</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">last_obj</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">prev_obj</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">last_obj</span> <span class="o">==</span> <span class="n">prev_obj</span> <span class="p">)</span>
-        <span class="n">objects</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-      <span class="k">else</span>
-        <span class="n">last_obj</span> <span class="o">=</span> <span class="n">prev_obj</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Sort and cull the list, as there may be duplicates
+  if( objects.Count() &gt; 1 )
+  {
+    objects.HeapSort( CompareObjectPtr );
+    const CRhinoObject* last_obj = objects[objects.Count()-1];
+    for( int i = objects.Count()-2; i &gt;= 0; i-- )
+    {
+      const CRhinoObject* prev_obj = objects[i];
+      if( last_obj == prev_obj )
+        objects.Remove(i);
+      else
+        last_obj = prev_obj;
+    }
+  }
 
-  <span class="c1">// Do something with the list...
-</span>  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">IsSelectable</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="p">}</span>
+  // Do something with the list...
+  for( int i = 0; i &lt; objects.Count(); i++ )
+  {
+    const CRhinoObject* obj = objects[i];
+    if( obj-&gt;IsSelectable(true) )
+      obj-&gt;Select( true );
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

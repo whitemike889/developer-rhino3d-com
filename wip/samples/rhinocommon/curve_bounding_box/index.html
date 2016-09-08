@@ -247,48 +247,47 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CurveBoundingBox</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Select a curve object
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">rhObject</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">rhObject</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result CurveBoundingBox(Rhino.RhinoDoc doc)
+  {
+    // Select a curve object
+    Rhino.DocObjects.ObjRef rhObject;
+    var rc = Rhino.Input.RhinoGet.GetOneObject("Select curve", false, Rhino.DocObjects.ObjectType.Curve, out rhObject);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="c1">// Validate selection
-</span>    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">rhObject</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    // Validate selection
+    var curve = rhObject.Curve();
+    if (curve == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="c1">// Get the active view's construction plane
-</span>    <span class="kt">var</span> <span class="n">view</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
+    // Get the active view's construction plane
+    var view = doc.Views.ActiveView;
+    if (view == null)
+      return Rhino.Commands.Result.Failure;
+    var plane = view.ActiveViewport.ConstructionPlane();
 
-    <span class="c1">// Compute the tight bounding box of the curve in world coordinates
-</span>    <span class="kt">var</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">bbox</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    // Compute the tight bounding box of the curve in world coordinates
+    var bbox = curve.GetBoundingBox(true);
+    if (!bbox.IsValid)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="c1">// Print the min and max box coordinates in world coordinates
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"World min: {0}"</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"World max: {0}"</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Max</span><span class="p">);</span>
+    // Print the min and max box coordinates in world coordinates
+    Rhino.RhinoApp.WriteLine("World min: {0}", bbox.Min);
+    Rhino.RhinoApp.WriteLine("World max: {0}", bbox.Max);
 
-    <span class="c1">// Compute the tight bounding box of the curve based on the
-</span>    <span class="c1">// active view's construction plane
-</span>    <span class="n">bbox</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">GetBoundingBox</span><span class="p">(</span><span class="n">plane</span><span class="p">);</span>
+    // Compute the tight bounding box of the curve based on the
+    // active view's construction plane
+    bbox = curve.GetBoundingBox(plane);
 
-    <span class="c1">// Print the min and max box coordinates in cplane coordinates
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"CPlane min: {0}"</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"CPlane max: {0}"</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Max</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Print the min and max box coordinates in cplane coordinates
+    Rhino.RhinoApp.WriteLine("CPlane min: {0}", bbox.Min);
+    Rhino.RhinoApp.WriteLine("CPlane max: {0}", bbox.Max);
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CurveBoundingBox(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -334,43 +333,42 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">CurveBoundingBox</span><span class="p">():</span>
-    <span class="c"># Select a curve object</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">rhobject</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def CurveBoundingBox():
+    # Select a curve object
+    rc, rhobject = Rhino.Input.RhinoGet.GetOneObject("Select curve", False, Rhino.DocObjects.ObjectType.Curve)
+    if rc!=Rhino.Commands.Result.Success: return
 
-    <span class="c"># Validate selection</span>
-    <span class="n">curve</span> <span class="o">=</span> <span class="n">rhobject</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">curve</span><span class="p">:</span> <span class="k">return</span>
+    # Validate selection
+    curve = rhobject.Curve()
+    if not curve: return
 
-    <span class="c">## Get the active view's construction plane</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">view</span><span class="p">:</span> <span class="k">return</span>
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
+    ## Get the active view's construction plane
+    view = scriptcontext.doc.Views.ActiveView
+    if not view: return
+    plane = view.ActiveViewport.ConstructionPlane()
 
-    <span class="c"># Compute the tight bounding box of the curve in world coordinates</span>
-    <span class="n">bbox</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">GetBoundingBox</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">bbox</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span> <span class="k">return</span>
+    # Compute the tight bounding box of the curve in world coordinates
+    bbox = curve.GetBoundingBox(True)
+    if not bbox.IsValid: return
 
-    <span class="c"># Print the min and max box coordinates in world coordinates</span>
-    <span class="k">print</span> <span class="s">"World min:"</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">Min</span>
-    <span class="k">print</span> <span class="s">"World max:"</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">Max</span>
+    # Print the min and max box coordinates in world coordinates
+    print "World min:", bbox.Min
+    print "World max:", bbox.Max
 
-    <span class="c"># Compute the tight bounding box of the curve based on the</span>
-    <span class="c"># active view's construction plane</span>
-    <span class="n">bbox</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">GetBoundingBox</span><span class="p">(</span><span class="n">plane</span><span class="p">)</span>
+    # Compute the tight bounding box of the curve based on the
+    # active view's construction plane
+    bbox = curve.GetBoundingBox(plane)
 
-    <span class="c"># Print the min and max box coordinates in cplane coordinates</span>
-    <span class="k">print</span> <span class="s">"CPlane min:"</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">Min</span>
-    <span class="k">print</span> <span class="s">"CPlane max:"</span><span class="p">,</span> <span class="n">bbox</span><span class="o">.</span><span class="n">Max</span>
+    # Print the min and max box coordinates in cplane coordinates
+    print "CPlane min:", bbox.Min
+    print "CPlane max:", bbox.Max
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">CurveBoundingBox</span><span class="p">()</span>
+if __name__=="__main__":
+    CurveBoundingBox()
 </code></pre>
-</div>
 
 </div>
 

@@ -247,31 +247,30 @@ $(document).ready(function()
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddObjectsToGroup</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to group"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddObjectsToGroup(Rhino.RhinoDoc doc)
+  {
+    Rhino.Input.Custom.GetObject go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select objects to group");
+    go.GroupSelect = true;
+    go.GetMultiple(1, 0);
+    if (go.CommandResult() != Rhino.Commands.Result.Success)
+      return go.CommandResult();
 
-    <span class="n">List</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;</span> <span class="n">ids</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">ids</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">ObjectId</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Groups</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">ids</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="p">&gt;=</span> <span class="m">0</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    List&lt;Guid&gt; ids = new List&lt;Guid&gt;();
+    for (int i = 0; i &lt; go.ObjectCount; i++)
+    {
+      ids.Add(go.Object(i).ObjectId);
+    }
+    int index = doc.Groups.Add(ids);
+    doc.Views.Redraw();
+    if (index &gt;= 0)
+      return Rhino.Commands.Result.Success;
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddObjectsToGroup(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -297,28 +296,27 @@ $(document).ready(function()
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">AddObjectsToGroup</span><span class="p">():</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select objects to group"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GroupSelect</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+def AddObjectsToGroup():
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select objects to group")
+    go.GroupSelect = True
+    go.GetMultiple(1, 0)
+    if go.CommandResult()!=Rhino.Commands.Result.Success:
+        return go.CommandResult()
 
-    <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">ObjectId</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">ObjectCount</span><span class="p">)]</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Groups</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">index</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    ids = [go.Object(i).ObjectId for i in range(go.ObjectCount)]
+    index = scriptcontext.doc.Groups.Add(ids)
+    scriptcontext.doc.Views.Redraw()
+    if index&gt;=0: return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddObjectsToGroup</span><span class="p">()</span>
+if __name__ == "__main__":
+    AddObjectsToGroup()
 </code></pre>
-</div>
 
 </div>
 

@@ -340,134 +340,133 @@ $(document).ready(function()
 
 <h2 id="problem">Problem</h2>
 
-<p>You are using the <code class="highlighter-rouge">RhinoOffsetCurveOnSrf</code> function to offset a curve which was interpolated on a cylindrical surface.  The problem is that the results do not seem to match those of Rhino’s <code class="highlighter-rouge">OffsetCrvOnSrf</code> command.  That is, the offset curve does not extend to the edges of the surfaces.  Why is this?</p>
+<p>You are using the <code>RhinoOffsetCurveOnSrf</code> function to offset a curve which was interpolated on a cylindrical surface.  The problem is that the results do not seem to match those of Rhino’s <code>OffsetCrvOnSrf</code> command.  That is, the offset curve does not extend to the edges of the surfaces.  Why is this?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>After calculating the offset curve, the <code class="highlighter-rouge">OffsetCrvOnSrf</code> command extends both ends of that curve to the surface edge using <code class="highlighter-rouge">RhinoExtendCrvOnSrf</code>.  Below is an sample of how you can do this using the SDK…</p>
+<p>After calculating the offset curve, the <code>OffsetCrvOnSrf</code> command extends both ends of that curve to the surface edge using <code>RhinoExtendCrvOnSrf</code>.  Below is an sample of how you can do this using the SDK…</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select curve on surface
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">gc</span><span class="p">;</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve on surface"</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select curve on surface
+  CRhinoGetObject gc;
+  gc.SetCommandPrompt( L"Select curve on surface" );
+  gc.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gc.GetObjects( 1, 1 );
+  if( gc.CommandResult() != CRhinoCommand::success )
+    return gc.CommandResult();
 
-  <span class="c1">// Validate curve
-</span>  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">gc</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Validate curve
+  const ON_Curve* crv = gc.Object(0).Curve();
+  if( 0 == crv )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Select base surface
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select base surface"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Select base surface
+  CRhinoGetObject gs;
+  gs.SetCommandPrompt( L"Select base surface" );
+  gs.SetGeometryFilter( CRhinoGetObject::surface_object );
+  gs.EnablePreSelect( false );
+  gs.EnableDeselectAllBeforePostSelect( false );
+  gs.GetObjects( 1, 1 );
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Validate face
-</span>  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Validate face
+  const ON_BrepFace* face = gs.Object(0).Face();
+  if( 0 == face )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Validate brep
-</span>  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Validate brep
+  const ON_Brep* brep = face-&gt;Brep();
+  if( 0 == brep )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Specify offset distance
-</span>  <span class="n">CRhinoGetNumber</span> <span class="n">gd</span><span class="p">;</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Offset distance"</span> <span class="p">);</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">SetDefaultNumber</span><span class="p">(</span> <span class="mf">1.0</span> <span class="p">);</span>
-  <span class="n">gd</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gd</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gd</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Specify offset distance
+  CRhinoGetNumber gd;
+  gd.SetCommandPrompt( L"Offset distance" );
+  gd.SetDefaultNumber( 1.0 );
+  gd.GetNumber();
+  if( gd.CommandResult() != CRhinoCommand::success )
+    return gd.CommandResult();
 
-  <span class="kt">double</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">gd</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
+  double dist = gd.Number();
 
-  <span class="c1">// Do offset curve on surface
-</span>  <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">offset_curves</span><span class="p">;</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">cmdrc</span> <span class="o">=</span> <span class="n">RhinoOffsetCurveOnSrf</span><span class="p">(</span> <span class="n">crv</span><span class="p">,</span> <span class="n">brep</span><span class="p">,</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">m_face_index</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">offset_curves</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">cmdrc</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">curves_to_join</span><span class="p">;</span>
-    <span class="n">curves_to_join</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">offset_curves</span><span class="p">.</span><span class="n">Count</span><span class="p">(),</span> <span class="n">offset_curves</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
+  // Do offset curve on surface
+  double tol = context.m_doc.AbsoluteTolerance();
+  ON_SimpleArray&lt;ON_Curve*&gt; offset_curves;
+  CRhinoCommand::result cmdrc = RhinoOffsetCurveOnSrf( crv, brep, face-&gt;m_face_index, dist, tol, offset_curves );
+  if( cmdrc == CRhinoCommand::success )
+  {
+    int i = 0;
+    ON_SimpleArray&lt;const ON_Curve*&gt; curves_to_join;
+    curves_to_join.Append( offset_curves.Count(), offset_curves.Array() );
 
-    <span class="c1">// Try joining the offset curves
-</span>    <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;</span> <span class="n">joined_curves</span><span class="p">;</span>
-    <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoMergeCurves</span><span class="p">(</span> <span class="n">curves_to_join</span><span class="p">,</span> <span class="n">joined_curves</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">tol</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
+    // Try joining the offset curves
+    ON_SimpleArray&lt;ON_Curve*&gt; joined_curves;
+    BOOL rc = RhinoMergeCurves( curves_to_join, joined_curves, 2.0 * tol, TRUE );
 
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">curves_to_join</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="n">curves_to_join</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    for( i = 0; i &lt; curves_to_join.Count(); i++ )
+      curves_to_join[i] = 0;
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">joined_curves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC</span> <span class="o">=</span> <span class="n">joined_curves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">pC</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="c1">// Extend both ends to edge of the surface
-</span>          <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-            <span class="n">RhinoExtendCrvOnSrf</span><span class="p">(</span> <span class="o">*</span><span class="n">face</span><span class="p">,</span> <span class="n">pC</span> <span class="p">);</span>
+    if( rc )
+    {
+      for( i = 0; i &lt; joined_curves.Count(); i++ )
+      {
+        ON_Curve* pC = joined_curves[i];
+        if( pC )
+        {
+          // Extend both ends to edge of the surface
+          if( !pC-&gt;IsClosed() )
+            RhinoExtendCrvOnSrf( *face, pC );
 
-          <span class="c1">// Add to document
-</span>          <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crv_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-          <span class="n">crv_obj</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">pC</span> <span class="p">);</span>
-          <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">crv_obj</span> <span class="p">);</span>
+          // Add to document
+          CRhinoCurveObject* crv_obj = new CRhinoCurveObject();
+          crv_obj-&gt;SetCurve( pC );
+          context.m_doc.AddObject( crv_obj );
 
-          <span class="n">joined_curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
+          joined_curves[i] = 0;
+        }
+      }
 
-      <span class="c1">// Do not leak memory
-</span>      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">offset_curves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">offset_curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">delete</span> <span class="n">offset_curves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-          <span class="n">offset_curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">offset_curves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC</span> <span class="o">=</span> <span class="n">offset_curves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">pC</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="c1">// Extend both ends to edge of the surface
-</span>          <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-            <span class="n">RhinoExtendCrvOnSrf</span><span class="p">(</span> <span class="o">*</span><span class="n">face</span><span class="p">,</span> <span class="n">pC</span> <span class="p">);</span>
+      // Do not leak memory
+      for( i = 0; i &lt; offset_curves.Count(); i++ )
+      {
+        if( offset_curves[i] )
+        {
+          delete offset_curves[i];
+          offset_curves[i] = 0;
+        }
+      }
+    }
+    else
+    {
+      for( i = 0; i &lt; offset_curves.Count(); i++)
+      {
+        ON_Curve* pC = offset_curves[i];
+        if( pC )
+        {
+          // Extend both ends to edge of the surface
+          if( !pC-&gt;IsClosed() )
+            RhinoExtendCrvOnSrf( *face, pC );
 
-          <span class="c1">// Add to document
-</span>          <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crv_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-          <span class="n">crv_obj</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">pC</span> <span class="p">);</span>
-          <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">crv_obj</span> <span class="p">);</span>
+          // Add to document
+          CRhinoCurveObject* crv_obj = new CRhinoCurveObject();
+          crv_obj-&gt;SetCurve( pC );
+          context.m_doc.AddObject( crv_obj );
 
-          <span class="n">offset_curves</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+          offset_curves[i] = 0;
+        }
+      }
+    }
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

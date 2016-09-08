@@ -374,7 +374,7 @@ $(document).ready(function()
 
 <h2 id="overview">Overview</h2>
 
-<p>In VBScript, there are two ways values can be passed: <code class="highlighter-rouge">ByVal</code> and <code class="highlighter-rouge">ByRef</code>.  Using <code class="highlighter-rouge">ByVal</code>, we can pass arguments as values whereas with the use of <code class="highlighter-rouge">ByRef</code>, we can pass arguments are references.  This is the obvious bit, but, how do these two differ in practice?</p>
+<p>In VBScript, there are two ways values can be passed: <code>ByVal</code> and <code>ByRef</code>.  Using <code>ByVal</code>, we can pass arguments as values whereas with the use of <code>ByRef</code>, we can pass arguments are references.  This is the obvious bit, but, how do these two differ in practice?</p>
 
 <h2 id="passing-by-value">Passing By Value</h2>
 
@@ -397,7 +397,7 @@ Call Rhino.Print("x = " &amp; CStr(x))
 <pre><code class="language-vbnet">x = 5
 </code></pre>
 
-<p>In other words, when we passed the variable <code class="highlighter-rouge">x</code> (<code class="highlighter-rouge">ByVal</code>) to the function <code class="highlighter-rouge">GetValue</code>, we were simply passing a copy of the variable <code class="highlighter-rouge">x</code>. When <code class="highlighter-rouge">GetValue</code> executes, var stores a copy of the variable <code class="highlighter-rouge">x</code> and increments itself by 1. Therefore, because what we are passing to <code class="highlighter-rouge">GetValue</code> is a copy of <code class="highlighter-rouge">x</code>, it cannot be modified.</p>
+<p>In other words, when we passed the variable <code>x</code> (<code>ByVal</code>) to the function <code>GetValue</code>, we were simply passing a copy of the variable <code>x</code>. When <code>GetValue</code> executes, var stores a copy of the variable <code>x</code> and increments itself by 1. Therefore, because what we are passing to <code>GetValue</code> is a copy of <code>x</code>, it cannot be modified.</p>
 
 <h2 id="passing-by-reference">Passing By Reference</h2>
 
@@ -422,9 +422,9 @@ Call Rhino.Print("x = " &amp; CStr(x))
 <pre><code class="language-vbnet">x = 6
 </code></pre>
 
-<p>Variable <code class="highlighter-rouge">x</code> was increment by 1.  But why was <code class="highlighter-rouge">x</code> incremented?  Only var must have incremented by 1, and not <code class="highlighter-rouge">x</code>?  Well, that is the core concept behind passing variables by reference.</p>
+<p>Variable <code>x</code> was increment by 1.  But why was <code>x</code> incremented?  Only var must have incremented by 1, and not <code>x</code>?  Well, that is the core concept behind passing variables by reference.</p>
 
-<p>When the function <code class="highlighter-rouge">GetReference</code> executes, var becomes a reference of <code class="highlighter-rouge">x</code>, and therefore, any changes made to var would impact <code class="highlighter-rouge">x</code>.  So if <code class="highlighter-rouge">var</code> increments itself by 1, so would <code class="highlighter-rouge">x</code>.  If <code class="highlighter-rouge">var</code> becomes 0 (zero), so would <code class="highlighter-rouge">x</code>.</p>
+<p>When the function <code>GetReference</code> executes, var becomes a reference of <code>x</code>, and therefore, any changes made to var would impact <code>x</code>.  So if <code>var</code> increments itself by 1, so would <code>x</code>.  If <code>var</code> becomes 0 (zero), so would <code>x</code>.</p>
 
 <p>Let’s look at another example:</p>
 
@@ -437,7 +437,7 @@ Dim newArray: newArray = Array(0, 1)
 Call GetReference(newArray)
 </code></pre>
 
-<p>Will the size of <code class="highlighter-rouge">newArray</code> increase?  Look at:</p>
+<p>Will the size of <code>newArray</code> increase?  Look at:</p>
 
 <pre><code class="language-vbnet">' new size: 2
 Call Rhino.Print(UBound(newArray))
@@ -448,9 +448,9 @@ For x = LBound(newArray) To UBound(newArray)
 Next
 </code></pre>
 
-<p>Since <code class="highlighter-rouge">newArray</code> was passed as a reference to the <code class="highlighter-rouge">GetReference</code> function, the change made to <code class="highlighter-rouge">arrArray</code> was reflected upon <code class="highlighter-rouge">newArray</code> as well.  Thus, sizes of both arrays incremented by 1.</p>
+<p>Since <code>newArray</code> was passed as a reference to the <code>GetReference</code> function, the change made to <code>arrArray</code> was reflected upon <code>newArray</code> as well.  Thus, sizes of both arrays incremented by 1.</p>
 
-<p>Is there a way to pass variables <code class="highlighter-rouge">ByRef</code> and still avoid this?  Yes, there is.  The answer lies in passing temporary variables…</p>
+<p>Is there a way to pass variables <code>ByRef</code> and still avoid this?  Yes, there is.  The answer lies in passing temporary variables…</p>
 
 <h2 id="byref--temporary-variables">ByRef &amp; Temporary Variables</h2>
 
@@ -471,7 +471,7 @@ Call Rhino.Print(x)
 Call Rhino.Print(y)
 </code></pre>
 
-<p>Above, you will notice that as <code class="highlighter-rouge">y</code> became a temporary variable and was passed to <code class="highlighter-rouge">GetReference</code>, only it was modified.  The variable <code class="highlighter-rouge">x</code> was unchanged.  Thus, it’s recommended to use temporary variables when passing variables as reference.</p>
+<p>Above, you will notice that as <code>y</code> became a temporary variable and was passed to <code>GetReference</code>, only it was modified.  The variable <code>x</code> was unchanged.  Thus, it’s recommended to use temporary variables when passing variables as reference.</p>
 
 <h2 id="summary">Summary</h2>
 

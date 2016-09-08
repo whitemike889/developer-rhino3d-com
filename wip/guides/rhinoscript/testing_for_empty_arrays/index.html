@@ -343,7 +343,7 @@ End Sub
 <pre><code class="language-vbnet">arr = Array()
 </code></pre>
 
-<p>you are declaring an array that has an upper bounds of -1.  Because this variable is an array, it will pass the <code class="highlighter-rouge">IsArray()</code> test.  What the above code needs is an additional test condition to see if the upper bounds of the array is greater than -1:</p>
+<p>you are declaring an array that has an upper bounds of -1.  Because this variable is an array, it will pass the <code>IsArray()</code> test.  What the above code needs is an additional test condition to see if the upper bounds of the array is greater than -1:</p>
 
 <pre><code class="language-vbnet">Sub Main()
   Dim arr
@@ -364,7 +364,7 @@ End Sub
 End Sub
 </code></pre>
 
-<p>Notice that the above code gives you an “Script out of range: UBound” error.  This is because, although the variable is an array, it has not been dimensioned.  Thus the call to <code class="highlighter-rouge">UBound()</code> fails.  So, we need a better test - one that will test for both types of array declarations.  Consider the following function:</p>
+<p>Notice that the above code gives you an “Script out of range: UBound” error.  This is because, although the variable is an array, it has not been dimensioned.  Thus the call to <code>UBound()</code> fails.  So, we need a better test - one that will test for both types of array declarations.  Consider the following function:</p>
 
 <pre><code class="language-vbnet">Function IsArrayDimmed(arr)
   IsArrayDimmed = False
@@ -376,7 +376,7 @@ End Sub
 End Function
 </code></pre>
 
-<p>Notice how the function above provides error checking.  If an error occurs when calling <code class="highlighter-rouge">UBound()</code>, it is caught. Thus, the function knows when an array has not been dimensioned.  Also, if <code class="highlighter-rouge">UBound()</code> returns a value of -1, we know that the array has no space to store elements.  We can test this with the following function:</p>
+<p>Notice how the function above provides error checking.  If an error occurs when calling <code>UBound()</code>, it is caught. Thus, the function knows when an array has not been dimensioned.  Also, if <code>UBound()</code> returns a value of -1, we know that the array has no space to store elements.  We can test this with the following function:</p>
 
 <pre><code class="language-vbnet">Sub Main()
   Dim arr0
