@@ -217,18 +217,17 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_3dPoint</span> <span class="nf">BlockInstanceInsertionPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoInstanceObject</span><span class="o">*</span> <span class="n">instance_obj</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">ON_UNSET_POINT</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">instance_obj</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">pt</span> <span class="o">=</span> <span class="n">ON_origin</span><span class="p">;</span>
-    <span class="n">pt</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">instance_obj</span><span class="o">-&gt;</span><span class="n">InstanceXform</span><span class="p">());</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">pt</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">ON_3dPoint BlockInstanceInsertionPoint(const CRhinoInstanceObject* instance_obj)
+{
+  ON_3dPoint pt = ON_UNSET_POINT;
+  if (instance_obj != 0)
+  {
+    pt = ON_origin;
+    pt.Transform(instance_obj-&gt;InstanceXform());
+  }
+  return pt;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -313,17 +313,17 @@
 
 <p>This guide demonstrates how to operate on more than one item at a time.</p>
 
-<p>So far the example components have all operated on individual data items.  This is known as One-In-One-Out.  But what if you want to operate on more than one item at a time; One-In-Many-Out, Many-In-One-Out or Many-In-Many-Out?  This requires that input or output parameters have a non-standard <code class="highlighter-rouge">Grasshopper.Kernel.GH_ParamAccess</code> flag.</p>
+<p>So far the example components have all operated on individual data items.  This is known as One-In-One-Out.  But what if you want to operate on more than one item at a time; One-In-Many-Out, Many-In-One-Out or Many-In-Many-Out?  This requires that input or output parameters have a non-standard <code>Grasshopper.Kernel.GH_ParamAccess</code> flag.</p>
 
 <h2 id="list-parameters">List Parameters</h2>
 
 <p>Input and Output parameters that are part of Grasshopper components have an access flag that affects how the component treats data stored in these parameters.  Take for example the Polyline component.  It creates a single polyline object from a <em>collection</em> of corner-points.  This is a Many-In-One-Out kind of logic.  The Divide component creates a whole bunch of division points from a single curve. This is an example of One-In-Many-Out.  The Cull components remove certain items from lists, this is an example of Many-In-Many-Out.</p>
 
-<p>Most components treat their inputs and outputs as parameters that provide individual instances of data, rather than related collections of data.  This is indicated by all parameters having an <code class="highlighter-rouge">GH_ParamAccess.item</code> access flag.  You can however assign different access flags to parameters.  Preferably this flag should be assigned only once, namely in the <code class="highlighter-rouge">RegisterInputParams</code> or <code class="highlighter-rouge">RegisterOutputParams</code> method overrides.  It is legal to modify an access flag as long as a solution is not currently in progress, but it is not recommended.</p>
+<p>Most components treat their inputs and outputs as parameters that provide individual instances of data, rather than related collections of data.  This is indicated by all parameters having an <code>GH_ParamAccess.item</code> access flag.  You can however assign different access flags to parameters.  Preferably this flag should be assigned only once, namely in the <code>RegisterInputParams</code> or <code>RegisterOutputParams</code> method overrides.  It is legal to modify an access flag as long as a solution is not currently in progress, but it is not recommended.</p>
 
 <p>In this guide, we’ll be writing a component that removes (culls) the bottom-most N objects in a collection of geometric shapes.  As inputs we’ll need a collection of geometry and an integer indicating how many objects the user wants to remove, and as output we’ll provide the same collection of geometry, but with the bottom-most objects missing.  This is therefore a Many-In-Many-Out case.</p>
 
-<p>The Component code (without the <code class="highlighter-rouge">RegisterInputParams</code>, <code class="highlighter-rouge">RegisterOutputParams</code> and <code class="highlighter-rouge">SolveInstance</code> methods) may look like this:</p>
+<p>The Component code (without the <code>RegisterInputParams</code>, <code>RegisterOutputParams</code> and <code>SolveInstance</code> methods) may look like this:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
@@ -332,25 +332,24 @@
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Component_CullByElevation</span> <span class="p">:</span> <span class="n">GH_Component</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="nf">Component_CullByElevation</span><span class="p">()</span>
-    <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="s">"Cull Elevation"</span><span class="p">,</span> <span class="s">"CullZ"</span><span class="p">,</span> <span class="s">"Cull objects by relative elevation"</span><span class="p">,</span> <span class="s">"Sets"</span><span class="p">,</span> <span class="s">"Sequence"</span><span class="p">)</span>
-  <span class="p">{</span> <span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">public class Component_CullByElevation : GH_Component
+{
+  public Component_CullByElevation()
+    : base("Cull Elevation", "CullZ", "Cull objects by relative elevation", "Sets", "Sequence")
+  { }
 
-  <span class="k">public</span> <span class="k">override</span> <span class="n">Kernel</span><span class="p">.</span><span class="n">GH_Exposure</span> <span class="n">Exposure</span>
-  <span class="p">{</span>
-    <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">GH_Exposure</span><span class="p">.</span><span class="n">primary</span> <span class="p">|</span> <span class="n">GH_Exposure</span><span class="p">.</span><span class="n">obscure</span><span class="p">;</span> <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">public</span> <span class="k">override</span> <span class="n">System</span><span class="p">.</span><span class="n">Guid</span> <span class="n">ComponentGuid</span>
-  <span class="p">{</span>
-    <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">Guid</span><span class="p">(</span><span class="s">"{A8FF9CBA-0837-4cd6-9198-0D17325D3F8F}"</span><span class="p">);</span> <span class="p">}</span>
-  <span class="p">}</span>
+  public override Kernel.GH_Exposure Exposure
+  {
+    get { return GH_Exposure.primary | GH_Exposure.obscure; }
+  }
+  public override System.Guid ComponentGuid
+  {
+    get { return new Guid("{A8FF9CBA-0837-4cd6-9198-0D17325D3F8F}"); }
+  }
 
-  <span class="c1">//...additional component code will go here..
-</span><span class="p">}</span>
+  //...additional component code will go here..
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Public Class Component_CullByElevation
   Inherits GH_Component
@@ -391,17 +390,16 @@ End Class
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs1"><pre class="highlight"><code><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterInputParams</span><span class="p">(</span><span class="n">Kernel</span><span class="p">.</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_InputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddGeometryParameter</span><span class="p">(</span><span class="s">"Geometry"</span><span class="p">,</span> <span class="s">"G"</span><span class="p">,</span> <span class="s">"Geometry to cull"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">list</span><span class="p">);</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddIntegerParameter</span><span class="p">(</span><span class="s">"Count"</span><span class="p">,</span> <span class="s">"C"</span><span class="p">,</span> <span class="s">"Number of objects to cull"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">item</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">RegisterOutputParams</span><span class="p">(</span><span class="n">Kernel</span><span class="p">.</span><span class="n">GH_Component</span><span class="p">.</span><span class="n">GH_OutputParamManager</span> <span class="n">pManager</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pManager</span><span class="p">.</span><span class="nf">AddGeometryParameter</span><span class="p">(</span><span class="s">"Geometry"</span><span class="p">,</span> <span class="s">"G"</span><span class="p">,</span> <span class="s">"Culled geometry"</span><span class="p">,</span> <span class="n">GH_ParamAccess</span><span class="p">.</span><span class="n">list</span><span class="p">);</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">protected override void RegisterInputParams(Kernel.GH_Component.GH_InputParamManager pManager)
+{
+  pManager.AddGeometryParameter("Geometry", "G", "Geometry to cull", GH_ParamAccess.list);
+  pManager.AddIntegerParameter("Count", "C", "Number of objects to cull", GH_ParamAccess.item, 1);
+}
+protected override void RegisterOutputParams(Kernel.GH_Component.GH_OutputParamManager pManager)
+{
+  pManager.AddGeometryParameter("Geometry", "G", "Culled geometry", GH_ParamAccess.list);
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">Protected Overrides Sub RegisterInputParams(ByVal pManager As Kernel.GH_Component.GH_InputParamManager)
   'list access is non-standard, so we need to specifically assign it.
@@ -416,11 +414,11 @@ End Sub
 
 </div>
 
-<p>Input parameters rigorously enforce their access.  You are only allowed to retrieve individual items from inputs that have the <code class="highlighter-rouge">GH_ParamAccess.item</code> flag set.  Lists can only be retrieved when the access is set to <code class="highlighter-rouge">GH_ParamAccess.list</code> and data trees can only be gotten from a <code class="highlighter-rouge">GH_ParamAccess.tree</code> parameter.  Failure to do so will result in an error message at runtime.  Output parameter are more flexible, but this is only because output access was added only in Grasshopper 0.9.0001 and strict enforcement would result in SDK breakage with previous versions.</p>
+<p>Input parameters rigorously enforce their access.  You are only allowed to retrieve individual items from inputs that have the <code>GH_ParamAccess.item</code> flag set.  Lists can only be retrieved when the access is set to <code>GH_ParamAccess.list</code> and data trees can only be gotten from a <code>GH_ParamAccess.tree</code> parameter.  Failure to do so will result in an error message at runtime.  Output parameter are more flexible, but this is only because output access was added only in Grasshopper 0.9.0001 and strict enforcement would result in SDK breakage with previous versions.</p>
 
 <h2 id="solving-routine">Solving Routine</h2>
 
-<p>The <code class="highlighter-rouge">SolveInstance</code> implementation is basically identical to previous examples, the only difference is the way the component interacts with the parameters…</p>
+<p>The <code>SolveInstance</code> implementation is basically identical to previous examples, the only difference is the way the component interacts with the parameters…</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
@@ -429,65 +427,64 @@ End Sub
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs2"><pre class="highlight"><code><span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">SolveInstance</span><span class="p">(</span><span class="n">Kernel</span><span class="p">.</span><span class="n">IGH_DataAccess</span> <span class="n">DA</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">//Declare a new List(Of T) to hold your data.
-</span>  <span class="c1">//This list must exist and should probably be empty.
-</span>  <span class="n">List</span><span class="p">&lt;</span><span class="n">IGH_GeometricGoo</span><span class="p">&gt;</span> <span class="n">geometry</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">IGH_GeometricGoo</span><span class="p">&gt;();</span>
-  <span class="n">Int32</span> <span class="n">count</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">protected override void SolveInstance(Kernel.IGH_DataAccess DA)
+{
+  //Declare a new List(Of T) to hold your data.
+  //This list must exist and should probably be empty.
+  List&lt;IGH_GeometricGoo&gt; geometry = new List&lt;IGH_GeometricGoo&gt;();
+  Int32 count = 0;
 
-  <span class="c1">//Retrieve the whole list using Da.GetDataList().
-</span>  <span class="k">if</span> <span class="p">((!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetDataList</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">geometry</span><span class="p">)))</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">((!</span><span class="n">DA</span><span class="p">.</span><span class="nf">GetData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">count</span><span class="p">)))</span>
-    <span class="k">return</span><span class="p">;</span>
+  //Retrieve the whole list using Da.GetDataList().
+  if ((!DA.GetDataList(0, geometry)))
+    return;
+  if ((!DA.GetData(1, count)))
+    return;
 
-  <span class="c1">//Validate inputs.
-</span>  <span class="k">if</span> <span class="p">((</span><span class="n">count</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">))</span>
-  <span class="p">{</span>
-    <span class="nf">AddRuntimeMessage</span><span class="p">(</span><span class="n">GH_RuntimeMessageLevel</span><span class="p">.</span><span class="n">Error</span><span class="p">,</span> <span class="s">"Count must be a positive integer"</span><span class="p">);</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
+  //Validate inputs.
+  if ((count &lt; 0))
+  {
+    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Count must be a positive integer");
+    return;
+  }
 
-  <span class="c1">//The number of objects to cull is larger than or
-</span>  <span class="c1">//equal to the total number of objects. I.e. cull them all.
-</span>  <span class="k">if</span> <span class="p">((</span><span class="n">geometry</span><span class="p">.</span><span class="n">Count</span> <span class="p">&lt;=</span> <span class="n">count</span><span class="p">))</span>
-    <span class="k">return</span><span class="p">;</span>
+  //The number of objects to cull is larger than or
+  //equal to the total number of objects. I.e. cull them all.
+  if ((geometry.Count &lt;= count))
+    return;
 
-  <span class="c1">//Iteratively remove the lowest object from the list.
-</span>  <span class="k">for</span> <span class="p">(</span><span class="n">Int32</span> <span class="n">N</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="n">N</span> <span class="p">&lt;=</span> <span class="n">count</span><span class="p">;</span> <span class="n">N</span><span class="p">++)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">lowestElevation</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">;</span>
-    <span class="n">Int32</span> <span class="n">lowestIndex</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+  //Iteratively remove the lowest object from the list.
+  for (Int32 N = 1; N &lt;= count; N++)
+  {
+    double lowestElevation = double.MaxValue;
+    Int32 lowestIndex = -1;
 
-    <span class="c1">//Iterate over all remaining geometry and find the lowest one.
-</span>    <span class="k">for</span> <span class="p">(</span><span class="n">Int32</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;=</span> <span class="n">geometry</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">((</span><span class="n">geometry</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">==</span> <span class="k">null</span><span class="p">))</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="n">BoundingBox</span> <span class="n">bbox</span> <span class="p">=</span> <span class="n">geometry</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Boundingbox</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">((!</span><span class="n">bbox</span><span class="p">.</span><span class="n">IsValid</span><span class="p">))</span>
-        <span class="k">continue</span><span class="p">;</span>
+    //Iterate over all remaining geometry and find the lowest one.
+    for (Int32 i = 0; i &lt;= geometry.Count - 1; i++)
+    {
+      if ((geometry[i] == null))
+        continue;
+      BoundingBox bbox = geometry[i].Boundingbox;
+      if ((!bbox.IsValid))
+        continue;
 
-      <span class="kt">double</span> <span class="n">localElevation</span> <span class="p">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Min</span><span class="p">.</span><span class="n">Z</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">((</span><span class="n">localElevation</span> <span class="p">&lt;</span> <span class="n">lowestElevation</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="n">lowestElevation</span> <span class="p">=</span> <span class="n">localElevation</span><span class="p">;</span>
-        <span class="n">lowestIndex</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+      double localElevation = bbox.Min.Z;
+      if ((localElevation &lt; lowestElevation))
+      {
+        lowestElevation = localElevation;
+        lowestIndex = i;
+      }
+    }
 
-    <span class="c1">//Delete the lowest object.
-</span>    <span class="n">geometry</span><span class="p">.</span><span class="nf">RemoveAt</span><span class="p">(</span><span class="n">lowestIndex</span><span class="p">);</span>
-  <span class="p">}</span>
+    //Delete the lowest object.
+    geometry.RemoveAt(lowestIndex);
+  }
 
-  <span class="c1">//Assign the remaining geometry
-</span>  <span class="c1">//(even if it is only a single item!)
-</span>  <span class="c1">//using the DA.SetDataList() method.
-</span>  <span class="n">DA</span><span class="p">.</span><span class="nf">SetDataList</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">geometry</span><span class="p">);</span>
-<span class="p">}</span>
+  //Assign the remaining geometry
+  //(even if it is only a single item!)
+  //using the DA.SetDataList() method.
+  DA.SetDataList(0, geometry);
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">Protected Overrides Sub SolveInstance(ByVal DA As Kernel.IGH_DataAccess)
   'Declare a new List(Of T) to hold your data.

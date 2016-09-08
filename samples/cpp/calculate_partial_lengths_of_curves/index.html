@@ -217,42 +217,41 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv = go.Object(0).Curve();
+  if( 0 == crv )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point on surface"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Point on surface" );
+  gp.Constrain( *crv );
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint pt = gp.Point();
 
-  <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Interval</span> <span class="n">domain</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">Domain</span><span class="p">();</span>
-    <span class="n">ON_Interval</span> <span class="n">sub_domain</span><span class="p">(</span> <span class="n">domain</span><span class="p">.</span><span class="n">Min</span><span class="p">(),</span> <span class="n">t</span> <span class="p">);</span>
-    <span class="kt">double</span> <span class="n">length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetLength</span><span class="p">(</span><span class="o">&amp;</span><span class="n">length</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sub_domain</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Distance from start of curve = %f.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">length</span> <span class="p">);</span>
-  <span class="p">}</span>
+  double t = 0.0;
+  if( crv-&gt;GetClosestPoint(pt, &amp;t) )
+  {
+    ON_Interval domain = crv-&gt;Domain();
+    ON_Interval sub_domain( domain.Min(), t );
+    double length = 0.0;
+    if( crv-&gt;GetLength(&amp;length, 0.0, &amp;sub_domain) )
+      RhinoApp().Print( L"Distance from start of curve = %f.\n", length );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

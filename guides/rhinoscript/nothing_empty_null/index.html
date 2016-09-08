@@ -347,32 +347,32 @@
 <pre><code class="language-vbnet">If varValue = Null Then
 </code></pre>
 
-<p>Why does VBScript have <code class="highlighter-rouge">Null</code>, <code class="highlighter-rouge">Nothing</code> and <code class="highlighter-rouge">Empty</code>, and what are the differences between them?</p>
+<p>Why does VBScript have <code>Null</code>, <code>Nothing</code> and <code>Empty</code>, and what are the differences between them?</p>
 
 <h2 id="empty">Empty</h2>
 
-<p>When you declare a variable in VBScript, the variable’s value before the first assignment is undefined, or <code class="highlighter-rouge">Empty</code>.</p>
+<p>When you declare a variable in VBScript, the variable’s value before the first assignment is undefined, or <code>Empty</code>.</p>
 
 <pre><code class="language-vbnet">Dim varValue ' Empty value
 </code></pre>
 
-<p>So basically, <code class="highlighter-rouge">Empty</code> says “I am an uninitialized variant.”  If you need to detect whether a variable actually is an empty variant and not a string or a number, you can use <code class="highlighter-rouge">IsEmpty</code>.  Alternatively, you could use <code class="highlighter-rouge">TypeName</code> or <code class="highlighter-rouge">VarType</code>, but <code class="highlighter-rouge">IsEmpty</code> is best.</p>
+<p>So basically, <code>Empty</code> says “I am an uninitialized variant.”  If you need to detect whether a variable actually is an empty variant and not a string or a number, you can use <code>IsEmpty</code>.  Alternatively, you could use <code>TypeName</code> or <code>VarType</code>, but <code>IsEmpty</code> is best.</p>
 
 <h2 id="nothing">Nothing</h2>
 
-<p><code class="highlighter-rouge">Nothing</code> is similar to <code class="highlighter-rouge">Empty</code> but subtly different.  If <code class="highlighter-rouge">Empty</code> says “I am an uninitialized variant,” <code class="highlighter-rouge">Nothing</code> says “I am an object reference that refers to no object.”  Objects are assigned to variables using the <code class="highlighter-rouge">Set</code> statement.  Since the equality operator on objects checks for equality on the default property of an object, any attempt to say:</p>
+<p><code>Nothing</code> is similar to <code>Empty</code> but subtly different.  If <code>Empty</code> says “I am an uninitialized variant,” <code>Nothing</code> says “I am an object reference that refers to no object.”  Objects are assigned to variables using the <code>Set</code> statement.  Since the equality operator on objects checks for equality on the default property of an object, any attempt to say:</p>
 
 <pre><code class="language-vbnet">If varValue = Nothing Then
 </code></pre>
 
-<p>is doomed to failure; <code class="highlighter-rouge">Nothing</code> does not have a default property, so this will produce a run-time error.  To check to see if an object reference is invalid, use:</p>
+<p>is doomed to failure; <code>Nothing</code> does not have a default property, so this will produce a run-time error.  To check to see if an object reference is invalid, use:</p>
 
 <pre><code class="language-vbnet">If varValue Is Nothing Then
 </code></pre>
 
 <h2 id="null">Null</h2>
 
-<p><code class="highlighter-rouge">Null</code> is more obscure.  The semantics of <code class="highlighter-rouge">Null</code> are very poorly understood, particularly amongst people who have little experience with programming.  Empty says “I’m an uninitialized variant,” <code class="highlighter-rouge">Nothing</code> says “I’m an invalid object” and <code class="highlighter-rouge">Null</code> says “I represent a value which is not known.”  Null is not <em>True</em>, not <em>False</em>, but <code class="highlighter-rouge">Null</code>! The correct way to check for <code class="highlighter-rouge">Null</code> is much as you’d do for <code class="highlighter-rouge">Empty</code>: use <code class="highlighter-rouge">IsNull</code> (or <code class="highlighter-rouge">TypeName</code> or <code class="highlighter-rouge">VarType</code>.)</p>
+<p><code>Null</code> is more obscure.  The semantics of <code>Null</code> are very poorly understood, particularly amongst people who have little experience with programming.  Empty says “I’m an uninitialized variant,” <code>Nothing</code> says “I’m an invalid object” and <code>Null</code> says “I represent a value which is not known.”  Null is not <em>True</em>, not <em>False</em>, but <code>Null</code>! The correct way to check for <code>Null</code> is much as you’d do for <code>Empty</code>: use <code>IsNull</code> (or <code>TypeName</code> or <code>VarType</code>.)</p>
 
         </article>
 

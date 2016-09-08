@@ -325,7 +325,7 @@
 
 <p>The following example code demonstrates how to calculate the angle between two 3D points, given a common base point.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<pre><code class="language-cpp">/*
 Description:
   Calculates the angle between two points that lie on a
   given plane.
@@ -337,115 +337,113 @@ Parameters:
   radians - [out] The angle in radians
 Returns:
   TRUE if successful, FALSE otherwise.
-*/</span>
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">CalculatePlaneAngle</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">ON_Plane</span><span class="o">&amp;</span> <span class="n">plane</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">basept</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">refpt1</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">refpt2</span><span class="p">,</span>
-        <span class="kt">double</span><span class="o">&amp;</span> <span class="n">radians</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Make sure the points are on the plane
-</span>  <span class="kt">double</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.000001</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">dist</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+*/
+static bool CalculatePlaneAngle(
+        const ON_Plane&amp; plane,
+        const ON_3dPoint&amp; basept,
+        const ON_3dPoint&amp; refpt1,
+        const ON_3dPoint&amp; refpt2,
+        double&amp; radians
+        )
+{
+  // Make sure the points are on the plane
+  double tolerance = 0.000001;
+  double dist = 0.0;
 
-  <span class="n">dist</span> <span class="o">=</span> <span class="n">plane</span><span class="p">.</span><span class="n">plane_equation</span><span class="p">.</span><span class="n">ValueAt</span><span class="p">(</span> <span class="n">basept</span> <span class="p">);</span>  
-  <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  dist = plane.plane_equation.ValueAt( basept );  
+  if( fabs(dist) &gt; tolerance )
+    return false;
 
-  <span class="n">dist</span> <span class="o">=</span> <span class="n">plane</span><span class="p">.</span><span class="n">plane_equation</span><span class="p">.</span><span class="n">ValueAt</span><span class="p">(</span> <span class="n">refpt1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  dist = plane.plane_equation.ValueAt( refpt1 );
+  if( fabs(dist) &gt; tolerance )
+    return false;
 
-  <span class="n">dist</span> <span class="o">=</span> <span class="n">plane</span><span class="p">.</span><span class="n">plane_equation</span><span class="p">.</span><span class="n">ValueAt</span><span class="p">(</span> <span class="n">refpt2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">fabs</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  dist = plane.plane_equation.ValueAt( refpt2 );
+  if( fabs(dist) &gt; tolerance )
+    return false;
 
-  <span class="c1">// Make sure base and reference points are not equal
-</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">basept</span> <span class="o">==</span> <span class="n">refpt1</span> <span class="o">|</span> <span class="n">basept</span> <span class="o">==</span> <span class="n">refpt2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  // Make sure base and reference points are not equal
 
-  <span class="c1">// Calculate angle between vectors
-</span>
-  <span class="n">ON_3dVector</span> <span class="n">v</span> <span class="o">=</span> <span class="n">refpt2</span> <span class="o">-</span> <span class="n">basept</span><span class="p">;</span>
-  <span class="n">v</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+  if( basept == refpt1 | basept == refpt2 )
+    return false;
 
-  <span class="n">ON_3dVector</span> <span class="n">zerov</span> <span class="o">=</span> <span class="n">refpt1</span> <span class="o">-</span> <span class="n">basept</span><span class="p">;</span>
-  <span class="n">zerov</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>  
+  // Calculate angle between vectors
 
-  <span class="kt">double</span> <span class="n">dot</span> <span class="o">=</span> <span class="n">ON_DotProduct</span><span class="p">(</span> <span class="n">zerov</span><span class="p">,</span> <span class="n">v</span> <span class="p">);</span>
-  <span class="n">dot</span> <span class="o">=</span> <span class="n">RHINO_CLAMP</span><span class="p">(</span> <span class="n">dot</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span> <span class="n">dot</span> <span class="p">);</span>
+  ON_3dVector v = refpt2 - basept;
+  v.Unitize();
 
-  <span class="c1">// Calculate a new y-axis based on the plane's
-</span>  <span class="c1">// zaxis and our zero vector
-</span>  <span class="n">v</span> <span class="o">=</span> <span class="n">ON_CrossProduct</span><span class="p">(</span> <span class="n">plane</span><span class="p">.</span><span class="n">zaxis</span><span class="p">,</span> <span class="n">zerov</span> <span class="p">);</span>
-  <span class="n">v</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+  ON_3dVector zerov = refpt1 - basept;
+  zerov.Unitize();  
 
-  <span class="c1">// Create a plane using our y-axis a the normal
-</span>  <span class="n">ON_Plane</span> <span class="n">yplane</span><span class="p">;</span>
-  <span class="n">yplane</span><span class="p">.</span><span class="n">CreateFromNormal</span><span class="p">(</span> <span class="n">basept</span><span class="p">,</span> <span class="n">v</span> <span class="p">);</span>
+  double dot = ON_DotProduct( zerov, v );
+  dot = RHINO_CLAMP( dot, -1.0, 1.0 );
+  double angle = acos( dot );
 
-  <span class="c1">// Figure out which side of this plane that refpt2 is on
-</span>  <span class="n">dist</span> <span class="o">=</span> <span class="n">yplane</span><span class="p">.</span><span class="n">plane_equation</span><span class="p">.</span><span class="n">ValueAt</span><span class="p">(</span> <span class="n">refpt2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="p">)</span>
-    <span class="n">angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">ON_PI</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">-</span> <span class="n">angle</span><span class="p">;</span>
+  // Calculate a new y-axis based on the plane's
+  // zaxis and our zero vector
+  v = ON_CrossProduct( plane.zaxis, zerov );
+  v.Unitize();
 
-  <span class="n">radians</span> <span class="o">=</span> <span class="n">angle</span><span class="p">;</span>
+  // Create a plane using our y-axis a the normal
+  ON_Plane yplane;
+  yplane.CreateFromNormal( basept, v );
 
-  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
+  // Figure out which side of this plane that refpt2 is on
+  dist = yplane.plane_equation.ValueAt( refpt2 );
+  if( dist &lt; 0.0 )
+    angle = (ON_PI * 2.0) - angle;
+
+  radians = angle;
+
+  return true;
+}
 </code></pre>
-</div>
 
 <p>You can use the above function as follows…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( 0 == view )
+    return failure;
 
-  <span class="n">ON_Plane</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">().</span><span class="n">m_plane</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">basept</span><span class="p">,</span> <span class="n">refpt1</span><span class="p">,</span> <span class="n">refpt2</span><span class="p">;</span>
+  ON_Plane plane = view-&gt;ActiveViewport().ConstructionPlane().m_plane;
+  ON_3dPoint basept, refpt1, refpt2;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Base point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Base point" );
+  gp.Constrain( plane );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">basept</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  basept = gp.Point();
 
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"First angle point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">basept</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">basept</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  gp.SetCommandPrompt( L"First angle point" );
+  gp.SetBasePoint( basept );
+  gp.DrawLineFromPoint( basept, TRUE );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">refpt1</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  refpt1 = gp.Point();
 
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Second angle point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">basept</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">basept</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  gp.SetCommandPrompt( L"Second angle point" );
+  gp.SetBasePoint( basept );
+  gp.DrawLineFromPoint( basept, TRUE );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">refpt2</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  refpt2 = gp.Point();
 
-  <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">CalculatePlaneAngle</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">basept</span><span class="p">,</span> <span class="n">refpt1</span><span class="p">,</span> <span class="n">refpt2</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Angle = %.3f degrees.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">angle</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.0</span> <span class="o">/</span> <span class="n">ON_PI</span><span class="p">)</span> <span class="p">);</span>
+  double angle = 0.0;
+  if( CalculatePlaneAngle(plane, basept, refpt1, refpt2, angle) )
+    RhinoApp().Print( L"Angle = %.3f degrees.\n", angle * (180.0 / ON_PI) );
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 <h2 id="related-topics">Related Topics</h2>
 

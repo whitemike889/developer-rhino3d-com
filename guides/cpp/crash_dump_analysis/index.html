@@ -358,13 +358,12 @@
 
 <p>If you read a RhinoCrashDump.dmp file in Notepad.exe and search for “RHINOCRASHINFO” you will find a block of text like the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;RHINOCRASHINFO&gt;
+<pre><code>&lt;RHINOCRASHINFO&gt;
   &lt;BUILD VERSION="YYYY-MM-DD" DATE="mmm dd yyyy" TIME="hh:mm"ss" /&gt;
   &lt;COMMAND NAME="..." UUID="..." /&gt;
   &lt;EXECUTABLE FILENAME="..." UUID="..." /&gt;
 &lt;/RHINOCRASHINFO&gt;
 </code></pre>
-</div>
 
 <p>If the crash happens in a command that is in a plugin, the name of the plugin’s <em>.RHP</em> file is in *<EXECUTABLE FILENAME="">* and the id is in *<EXECUTABLE UUID="">*.</EXECUTABLE></EXECUTABLE></p>
 
@@ -373,7 +372,7 @@
 <h3 id="step-by-step">Step-by-Step</h3>
 
 <ol>
-  <li><strong>Determine which build of Rhino crashed</strong>: Open the <em>RhinoCrashDump.dmp</em> file in Notepad.exe (or your favorite text editor) and search for <code class="highlighter-rouge">RHINOCRASHINFO</code>.  Then look for <code class="highlighter-rouge">B u i l d V e r s i o n = " YYYY - MM - DD "</code>… <code class="highlighter-rouge">YYYYMMDD</code> is the build that crashed.  If you are lucky, the other <code class="highlighter-rouge">RHINOCRASHINFO</code> values will give you a hint about what crashed.</li>
+  <li><strong>Determine which build of Rhino crashed</strong>: Open the <em>RhinoCrashDump.dmp</em> file in Notepad.exe (or your favorite text editor) and search for <code>RHINOCRASHINFO</code>.  Then look for <code>B u i l d V e r s i o n = " YYYY - MM - DD "</code>… <code>YYYYMMDD</code> is the build that crashed.  If you are lucky, the other <code>RHINOCRASHINFO</code> values will give you a hint about what crashed.</li>
   <li><strong>Get the build of Rhino that crashed</strong>: To analyze the crash dump file, you need the same build of Rhino on your system that produced the crash dump.  If you do not have the same build, download it from the <a href="http://www.rhino3d.com/download">Rhino download page</a>.</li>
   <li><strong>Copy files</strong>: After you have determined the version of the crashed Rhino, copy the <em>RhinoCrashDump.dmp</em> into the same directory as the <em>Rhino.exe</em> file.  In most cases, this will be the following folder: <em>C:\Program Files\Rhinoceros\System</em>.  Over your plugin’s life you are likely to see many crashes.  So do yourself a big favor and rename the <em>RhinoCrashDump.dmp</em> file something descriptive. Also, copy your plugin’s release <em>.RHP</em> and <em>.PDB</em> files into the same folder.
     <div class="bs-callout bs-callout-danger">
@@ -401,7 +400,7 @@
 
 <h2 id="try-this-yourself">Try this yourself</h2>
 
-<p>Below is a sample C++ plugin that will crash Rhino.  To test out crash dump analysis, download and build the plugin.  Then, launch Rhino and load the plugin using the <code class="highlighter-rouge">PlugInManager</code> command.  Then run the <code class="highlighter-rouge">TestSdkCrash</code> command.  While the <em>McNeel Error Reporting</em> dialog is displayed, copy the <em>RhinoCrashDump.dmp</em> from the desktop to some other location, and then click <em>Don’t Send</em>.  Then follow the steps above to analyze the crash dump.</p>
+<p>Below is a sample C++ plugin that will crash Rhino.  To test out crash dump analysis, download and build the plugin.  Then, launch Rhino and load the plugin using the <code>PlugInManager</code> command.  Then run the <code>TestSdkCrash</code> command.  While the <em>McNeel Error Reporting</em> dialog is displayed, copy the <em>RhinoCrashDump.dmp</em> from the desktop to some other location, and then click <em>Don’t Send</em>.  Then follow the steps above to analyze the crash dump.</p>
 
 <p><a href="/files/testsdkcrash.zip"><span class="glyphicon glyphicon-download"> testsdkcrash.zip</span></a></p>
 

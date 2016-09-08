@@ -222,42 +222,41 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DeleteBlock</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the name of the instance definition to rename
-</span>    <span class="kt">string</span> <span class="n">instance_definition_name</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Name of block to delete"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">instance_definition_name</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DeleteBlock(RhinoDoc doc)
+  {
+    // Get the name of the instance definition to rename
+    string instance_definition_name = "";
+    var rc = RhinoGet.GetString("Name of block to delete", true, ref instance_definition_name);
+    if (rc != Result.Success)
+      return rc;
+    if (string.IsNullOrWhiteSpace(instance_definition_name))
+      return Result.Nothing;
 
-    <span class="c1">// Verify instance definition exists
-</span>    <span class="kt">var</span> <span class="n">instance_definition</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">instance_definition_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">instance_definition</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Block \"{0}\" not found."</span><span class="p">,</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify instance definition exists
+    var instance_definition = doc.InstanceDefinitions.Find(instance_definition_name, true);
+    if (instance_definition == null) {
+      RhinoApp.WriteLine("Block \"{0}\" not found.", instance_definition_name);
+      return Result.Nothing;
+    }
 
-    <span class="c1">// Verify instance definition can be deleted
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">instance_definition</span><span class="p">.</span><span class="n">IsReference</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to delete block \"{0}\"."</span><span class="p">,</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify instance definition can be deleted
+    if (instance_definition.IsReference) {
+      RhinoApp.WriteLine("Unable to delete block \"{0}\".", instance_definition_name);
+      return Result.Nothing;
+    }
 
-    <span class="c1">// delete block and all references
-</span>    <span class="k">if</span> <span class="p">(!</span><span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="n">instance_definition</span><span class="p">.</span><span class="n">Index</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">true</span><span class="p">))</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Could not delete {0} block"</span><span class="p">,</span> <span class="n">instance_definition</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    // delete block and all references
+    if (!doc.InstanceDefinitions.Delete(instance_definition.Index, true, true)) {
+      RhinoApp.WriteLine("Could not delete {0} block", instance_definition.Name);
+      return Result.Failure;
+    }
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DeleteBlock(ByVal doc As RhinoDoc) As Result
@@ -295,22 +294,21 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">Delete</span><span class="p">():</span>
-    <span class="n">blockName</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"block to delete"</span><span class="p">)</span>
-    <span class="n">instanceDefinition</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">blockName</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">instanceDefinition</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"{0} block does not exist"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">blockName</span><span class="p">)</span>
-        <span class="k">return</span>
+def Delete():
+    blockName = rs.GetString("block to delete")
+    instanceDefinition = doc.InstanceDefinitions.Find(blockName, True)
+    if not instanceDefinition:
+        print "{0} block does not exist".format(blockName)
+        return
 
-    <span class="n">rs</span><span class="o">.</span><span class="n">DeleteBlock</span><span class="p">(</span><span class="n">blockName</span><span class="p">)</span>
+    rs.DeleteBlock(blockName)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">Delete</span><span class="p">()</span>
+if __name__ == "__main__":
+    Delete()
 </code></pre>
-</div>
 
 </div>
 

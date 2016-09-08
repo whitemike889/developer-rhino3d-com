@@ -369,17 +369,17 @@
 <p>You can control the flow of your script with conditional statements and looping statements.  Using conditional statements, you can write VBScript code that makes decisions and repeats actions.  The following conditional statements are available in VBScript:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement</li>
-  <li><code class="highlighter-rouge">Select Case</code> statement</li>
+  <li><code>If</code>…<code>Then</code>…<code>Else</code> statement</li>
+  <li><code>Select Case</code> statement</li>
 </ul>
 
 <h2 id="if-then-else">If Then Else</h2>
 
-<p>The <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement is used to evaluate whether a condition is True or False and, depending on the result, to specify one or more statements to run.  Usually the condition is an expression that uses a comparison operator to compare one value or variable with another.  For information about comparison operators, see the <a href="/guides/rhinoscript/vbscript_operators">VBScript Operators</a> guide.  <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statements can be nested to as many levels as you need.</p>
+<p>The <code>If</code>…<code>Then</code>…<code>Else</code> statement is used to evaluate whether a condition is True or False and, depending on the result, to specify one or more statements to run.  Usually the condition is an expression that uses a comparison operator to compare one value or variable with another.  For information about comparison operators, see the <a href="/guides/rhinoscript/vbscript_operators">VBScript Operators</a> guide.  <code>If</code>…<code>Then</code>…<code>Else</code> statements can be nested to as many levels as you need.</p>
 
 <h3 id="if-true">If True</h3>
 
-<p>To run only one statement when a condition is True, use the single-line syntax for the <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement.  The following example shows the single-line syntax.  Notice that this example omits the <code class="highlighter-rouge">Else</code> keyword…</p>
+<p>To run only one statement when a condition is True, use the single-line syntax for the <code>If</code>…<code>Then</code>…<code>Else</code> statement.  The following example shows the single-line syntax.  Notice that this example omits the <code>Else</code> keyword…</p>
 
 <pre><code class="language-vbnet">Sub FixDate()
   Dim myDate
@@ -388,7 +388,7 @@
 End Sub
 </code></pre>
 
-<p>To run more than one line of code, you must use the multiple-line (or block) syntax.  This syntax includes the <code class="highlighter-rouge">End If</code> statement, as shown in the following example:</p>
+<p>To run more than one line of code, you must use the multiple-line (or block) syntax.  This syntax includes the <code>End If</code> statement, as shown in the following example:</p>
 
 <pre><code class="language-vbnet">Sub AlertUser(value)
   If value = 0 Then
@@ -400,7 +400,7 @@ End Sub
 
 <h3 id="some-true-some-false">Some True Some False</h3>
 
-<p>You can use an <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement to define two blocks of executable statements: one block to run if the condition is True, the other block to run if the condition is False…</p>
+<p>You can use an <code>If</code>…<code>Then</code>…<code>Else</code> statement to define two blocks of executable statements: one block to run if the condition is True, the other block to run if the condition is False…</p>
 
 <pre><code class="language-vbnet">Sub AlertUser(value)
   If value = 0 Then
@@ -415,7 +415,7 @@ End Sub
 
 <h3 id="several-alternatives">Several Alternatives</h3>
 
-<p>A variation on the <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement allows you to choose from several alternatives.  Adding <code class="highlighter-rouge">ElseIf</code> clauses expands the functionality of the <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement so you can control program flow based on different possibilities.  For example:</p>
+<p>A variation on the <code>If</code>…<code>Then</code>…<code>Else</code> statement allows you to choose from several alternatives.  Adding <code>ElseIf</code> clauses expands the functionality of the <code>If</code>…<code>Then</code>…<code>Else</code> statement so you can control program flow based on different possibilities.  For example:</p>
 
 <pre><code class="language-vbnet">Sub ReportValue(value)
   If value = 0 Then
@@ -430,13 +430,13 @@ End Sub
 End Sub
 </code></pre>
 
-<p>You can add as many <code class="highlighter-rouge">ElseIf</code> clauses as you need to provide alternative choices.  Extensive use of the <code class="highlighter-rouge">ElseIf</code> clauses often becomes cumbersome.  A better way to choose between several alternatives is the <code class="highlighter-rouge">Select Case</code> statement.</p>
+<p>You can add as many <code>ElseIf</code> clauses as you need to provide alternative choices.  Extensive use of the <code>ElseIf</code> clauses often becomes cumbersome.  A better way to choose between several alternatives is the <code>Select Case</code> statement.</p>
 
 <h2 id="select-case">Select Case</h2>
 
-<p>The <code class="highlighter-rouge">Select Case</code> structure provides an alternative to <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> for selectively executing one block of statements from among multiple blocks of statements.  A <code class="highlighter-rouge">Select Case</code> statement provides capability similar to the <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> statement, but it makes code more efficient and readable.</p>
+<p>The <code>Select Case</code> structure provides an alternative to <code>If</code>…<code>Then</code>…<code>Else</code> for selectively executing one block of statements from among multiple blocks of statements.  A <code>Select Case</code> statement provides capability similar to the <code>If</code>…<code>Then</code>…<code>Else</code> statement, but it makes code more efficient and readable.</p>
 
-<p>A <code class="highlighter-rouge">Select Case</code> structure works with a single test expression that is evaluated once, at the top of the structure. The result of the expression is then compared with the values for each <code class="highlighter-rouge">Case</code> in the structure.  If there is a match, the block of statements associated with that <code class="highlighter-rouge">Case</code> is executed, as in the following example…</p>
+<p>A <code>Select Case</code> structure works with a single test expression that is evaluated once, at the top of the structure. The result of the expression is then compared with the values for each <code>Case</code> in the structure.  If there is a match, the block of statements associated with that <code>Case</code> is executed, as in the following example…</p>
 
 <pre><code class="language-vbnet">Select Case MyVar
   Case "red"     MyColor = vbRed
@@ -446,7 +446,7 @@ End Sub
 End Select
 </code></pre>
 
-<p>Notice that the <code class="highlighter-rouge">Select Case</code> structure evaluates an expression once at the top of the structure.  In contrast, the <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> structure can evaluate a different expression for each <code class="highlighter-rouge">ElseIf</code> statement.  You can replace an <code class="highlighter-rouge">If</code>…<code class="highlighter-rouge">Then</code>…<code class="highlighter-rouge">Else</code> structure with a <code class="highlighter-rouge">Select Case</code> structure only if each <code class="highlighter-rouge">ElseIf</code> statement evaluates the same expression.</p>
+<p>Notice that the <code>Select Case</code> structure evaluates an expression once at the top of the structure.  In contrast, the <code>If</code>…<code>Then</code>…<code>Else</code> structure can evaluate a different expression for each <code>ElseIf</code> statement.  You can replace an <code>If</code>…<code>Then</code>…<code>Else</code> structure with a <code>Select Case</code> structure only if each <code>ElseIf</code> statement evaluates the same expression.</p>
 
 <hr />
 

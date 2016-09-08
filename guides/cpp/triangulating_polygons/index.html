@@ -298,75 +298,74 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Rhino’s mesh representation, <code class="highlighter-rouge">ON_Mesh</code>, only support three and four sided faces.  This can pose a problem when trying to write an import plugin for a mesh file format that supports n-sided polygons.  If you search the Internet, you can probably find a number of algorithms that will triangulate n-sided polygons so they can be used with <code class="highlighter-rouge">ON_Mesh</code>.  The Rhino C/C++ SDK also includes a tool for doing this.</p>
+<p>Rhino’s mesh representation, <code>ON_Mesh</code>, only support three and four sided faces.  This can pose a problem when trying to write an import plugin for a mesh file format that supports n-sided polygons.  If you search the Internet, you can probably find a number of algorithms that will triangulate n-sided polygons so they can be used with <code>ON_Mesh</code>.  The Rhino C/C++ SDK also includes a tool for doing this.</p>
 
-<p>The <code class="highlighter-rouge">RhinoTriangulate3dPolygon</code> SDK function will triangulate an n-sided polygon.  The polygon must project onto a plane and the projected polygon must be a simple closed curve.  For more information on the <code class="highlighter-rouge">RhinoTriangulate3dPolygon</code>, see the comments in <em>rhinoSdkMeshUtilities.h</em>.</p>
+<p>The <code>RhinoTriangulate3dPolygon</code> SDK function will triangulate an n-sided polygon.  The polygon must project onto a plane and the projected polygon must be a simple closed curve.  For more information on the <code>RhinoTriangulate3dPolygon</code>, see the comments in <em>rhinoSdkMeshUtilities.h</em>.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample code demonstrates how to triangulate a closed planar polygon that has more than three sides using the <code class="highlighter-rouge">RhinoTriangulate3dPolygon</code> function.  Although this sample demonstrates the function on polyline curves, the code could be easily converted to work on mesh vertices.</p>
+<p>The following sample code demonstrates how to triangulate a closed planar polygon that has more than three sides using the <code>RhinoTriangulate3dPolygon</code> function.  Although this sample demonstrates the function on polyline curves, the code could be easily converted to work on mesh vertices.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select closed planar polygon to triangulate"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">closed_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select closed planar polygon to triangulate" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.SetGeometryFilter( CRhinoGetObject::closed_curve );
+  go.EnableSubObjectSelect( FALSE );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  const CRhinoObjRef&amp; ref = go.Object(0);
 
-  <span class="n">ON_3dPointArray</span> <span class="n">vertices</span><span class="p">;</span>
+  ON_3dPointArray vertices;
 
-  <span class="k">const</span> <span class="n">ON_PolylineCurve</span><span class="o">*</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">ON_PolylineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">vertices</span> <span class="o">=</span> <span class="n">pc</span><span class="o">-&gt;</span><span class="n">m_pline</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">nc</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">()</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">nc</span> <span class="p">)</span>
-      <span class="n">nc</span><span class="o">-&gt;</span><span class="n">IsPolyline</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">vertices</span> <span class="p">);</span>
-  <span class="p">}</span>
+  const ON_PolylineCurve* pc = ON_PolylineCurve::Cast( ref.Curve() );
+  if( pc )
+  {
+    vertices = pc-&gt;m_pline;
+  }
+  else
+  {
+    const ON_NurbsCurve* nc = ON_NurbsCurve::Cast( ref.Curve() );
+    if( nc )
+      nc-&gt;IsPolyline( &amp;vertices );
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">5</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Curve not polygon with at least four sides.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( vertices.Count() &lt; 5 )
+  {
+    RhinoApp().Print( L"Curve not polygon with at least four sides.\n" );
+    return nothing;
+  }
 
-  <span class="kt">int</span><span class="o">*</span> <span class="n">triangles</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">onmalloc</span><span class="p">(</span> <span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">triangles</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span> <span class="c1">// out of memory
-</span>
-  <span class="n">memset</span><span class="p">(</span> <span class="n">triangles</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span> <span class="p">);</span>
+  int* triangles = (int*)onmalloc( (vertices.Count()-3) * sizeof(int) * 3 );
+  if( 0 == triangles )
+    return failure; // out of memory
 
-  <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoTriangulate3dPolygon</span><span class="p">(</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span><span class="p">)</span><span class="n">vertices</span><span class="p">.</span><span class="n">Array</span><span class="p">(),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">triangles</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span><span class="o">-</span><span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Polyline</span> <span class="n">pline</span><span class="p">;</span>
-      <span class="n">pline</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]]</span> <span class="p">);</span>
-      <span class="n">pline</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="p">);</span>
-      <span class="n">pline</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">vertices</span><span class="p">[</span><span class="n">triangles</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]]</span> <span class="p">);</span>
-      <span class="n">pline</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">pline</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">pline</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  memset( triangles, 0, (vertices.Count()-3) * sizeof(int) * 3 );
 
-  <span class="n">onfree</span><span class="p">(</span> <span class="n">triangles</span> <span class="p">);</span>
+  int rc = RhinoTriangulate3dPolygon( vertices.Count()-1, 3, (const double*)vertices.Array(), 3, triangles);
+  if( 0 == rc )
+  {
+    int i;
+    for( i = 0; i &lt; vertices.Count()-3; i++ )
+    {
+      ON_Polyline pline;
+      pline.Append( vertices[triangles[i * 3]] );
+      pline.Append( vertices[triangles[i * 3 + 1]] );
+      pline.Append( vertices[triangles[i * 3 + 2]] );
+      pline.Append( pline[0] );
+      context.m_doc.AddCurveObject( pline );
+    }
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  onfree( triangles );
+
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

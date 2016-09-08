@@ -283,11 +283,11 @@
 
 <p>Imagine you are trying to apply a non-uniform scale to a cylinder.  If the same scale operation is applied to another object type, it works as expected; but not a cylinder.  Why?</p>
 
-<p>Not all <code class="highlighter-rouge">ON_Geometry</code> derived classes can be can be accurately modified with “squishy” transformations like projections, shears, an non-uniform scaling.  For example, if you were to apply a non-uniform scale to a circle, which is represented by an <code class="highlighter-rouge">ON_ArcCurve</code> curve, the resulting geometry is no longer a circle.</p>
+<p>Not all <code>ON_Geometry</code> derived classes can be can be accurately modified with “squishy” transformations like projections, shears, an non-uniform scaling.  For example, if you were to apply a non-uniform scale to a circle, which is represented by an <code>ON_ArcCurve</code> curve, the resulting geometry is no longer a circle.</p>
 
-<p>Before transforming your object, you will want to first test to see if the the transformation is a similarity transformation.  This can be done by using <code class="highlighter-rouge">ON_XForm::IsSimilarity()</code>.  See <em>opennurbs_xform.h</em> for more information.</p>
+<p>Before transforming your object, you will want to first test to see if the the transformation is a similarity transformation.  This can be done by using <code>ON_XForm::IsSimilarity()</code>.  See <em>opennurbs_xform.h</em> for more information.</p>
 
-<p>If the transformation is not a similarity, then you should convert the geometry into a form that can be accurately modified.  This can be done by using the <code class="highlighter-rouge">ON_Geometry::MakeDeformable()</code> override on the geometric object.</p>
+<p>If the transformation is not a similarity, then you should convert the geometry into a form that can be accurately modified.  This can be done by using the <code>ON_Geometry::MakeDeformable()</code> override on the geometric object.</p>
 
         </article>
 

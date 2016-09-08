@@ -338,28 +338,27 @@
 
 <p>The following example demonstrates how to periodically test to see if the user pressed the <kbd>ESC</kbd> key by “peeking” in Rhino’s message queue…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//  -1 = Quit Rhino
+<pre><code class="language-cpp">//  -1 = Quit Rhino
 //   1 = Escape key pressed
 //   0 = Okay to proceed
-</span><span class="kt">int</span> <span class="nf">EscapeKeyPressed</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">AFX_MANAGE_STATE</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoModuleState</span><span class="p">()</span> <span class="p">);</span>
+int EscapeKeyPressed()
+{
+  AFX_MANAGE_STATE( RhinoApp().RhinoModuleState() );
 
-  <span class="n">MSG</span> <span class="n">msg</span><span class="p">;</span>
-  <span class="n">memset</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">MSG</span><span class="p">)</span> <span class="p">);</span>
-  <span class="k">while</span><span class="p">(</span> <span class="o">::</span><span class="n">PeekMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PM_NOREMOVE</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">msg</span><span class="p">.</span><span class="n">message</span> <span class="o">==</span> <span class="n">WM_KEYDOWN</span> <span class="o">&amp;&amp;</span> <span class="n">msg</span><span class="p">.</span><span class="n">wParam</span> <span class="o">==</span> <span class="n">VK_ESCAPE</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  MSG msg;
+  memset( &amp;msg, 0, sizeof(MSG) );
+  while( ::PeekMessage(&amp;msg, 0, 0, 0, PM_NOREMOVE) )
+  {
+    if( msg.message == WM_KEYDOWN &amp;&amp; msg.wParam == VK_ESCAPE )
+      return 1;
 
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">PumpMessage</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-  <span class="p">}</span>
+    if( !RhinoApp().PumpMessage() )
+      return -1;
+  }
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  return 0;
+}
 </code></pre>
-</div>
 
 <p>Using this function is quite simple: in the middle of your loop, call the above function.  If the function returns something other than 0, break out of your loop.</p>
 
@@ -367,115 +366,113 @@
 
 <p>The following sample class demonstrates how to hook the Windows keyboard from a Rhino plugin and check for the <kbd>ESC</kbd> key.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//
+<pre><code class="language-cpp">//
 // rhinoEscapeKey.h
 //
-</span>
-<span class="k">class</span> <span class="nc">CRhinoEscapeKey</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CRhinoEscapeKey</span><span class="p">(</span> <span class="kt">bool</span> <span class="n">bHookNow</span> <span class="o">=</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="o">~</span><span class="n">CRhinoEscapeKey</span><span class="p">();</span>
-  <span class="kt">bool</span> <span class="n">Start</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">Stop</span><span class="p">();</span>
-  <span class="kt">bool</span> <span class="n">EscapeKeyPressed</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="kt">void</span> <span class="n">ClearEscapeKeyPressedFlag</span><span class="p">();</span>
-<span class="k">protected</span><span class="o">:</span>
-  <span class="k">static</span> <span class="n">LRESULT</span> <span class="n">CALLBACK</span> <span class="n">HookProc</span><span class="p">(</span> <span class="kt">int</span> <span class="n">code</span><span class="p">,</span> <span class="n">WPARAM</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">LPARAM</span> <span class="n">lParam</span> <span class="p">);</span>
-  <span class="k">static</span> <span class="n">HHOOK</span> <span class="n">m_KeyboardHookProc</span><span class="p">;</span>
-  <span class="k">static</span> <span class="kt">bool</span> <span class="n">m_escape_pressed</span><span class="p">;</span>
-<span class="p">};</span>
 
-<span class="c1">//
+class CRhinoEscapeKey
+{
+public:
+  CRhinoEscapeKey( bool bHookNow = false );
+  ~CRhinoEscapeKey();
+  bool Start();
+  void Stop();
+  bool EscapeKeyPressed() const;
+  void ClearEscapeKeyPressedFlag();
+protected:
+  static LRESULT CALLBACK HookProc( int code, WPARAM wParam, LPARAM lParam );
+  static HHOOK m_KeyboardHookProc;
+  static bool m_escape_pressed;
+};
+
+//
 // rhinoEscapeKey.cpp
 //
-</span>
-<span class="kt">bool</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">m_escape_pressed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-<span class="n">HHOOK</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">m_KeyboardHookProc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 
-<span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">CRhinoEscapeKey</span><span class="p">(</span> <span class="kt">bool</span> <span class="n">bStartNow</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">bStartNow</span> <span class="p">)</span>
-    <span class="n">Start</span><span class="p">();</span>
-<span class="p">}</span>
+bool CRhinoEscapeKey::m_escape_pressed = false;
+HHOOK CRhinoEscapeKey::m_KeyboardHookProc = NULL;
 
-<span class="n">CRhinoEscapeKey</span><span class="o">::~</span><span class="n">CRhinoEscapeKey</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">Stop</span><span class="p">();</span>
-<span class="p">}</span>
+CRhinoEscapeKey::CRhinoEscapeKey( bool bStartNow )
+{
+  if( bStartNow )
+    Start();
+}
 
-<span class="kt">bool</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">Start</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="nb">NULL</span> <span class="o">==</span> <span class="n">m_KeyboardHookProc</span> <span class="p">)</span>
-    <span class="n">m_KeyboardHookProc</span> <span class="o">=</span> <span class="o">::</span><span class="n">SetWindowsHookEx</span><span class="p">(</span>
-                              <span class="n">WH_KEYBOARD</span><span class="p">,</span>
-                              <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">HookProc</span><span class="p">,</span>
-                              <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoInstanceHandle</span><span class="p">(),</span>
-                              <span class="o">::</span><span class="n">AfxGetThread</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">m_nThreadID</span>
-                              <span class="p">);</span>
-  <span class="n">ClearEscapeKeyPressedFlag</span><span class="p">();</span>
-  <span class="k">return</span><span class="p">(</span> <span class="nb">NULL</span> <span class="o">!=</span> <span class="n">m_KeyboardHookProc</span> <span class="p">);</span>
-<span class="p">}</span>
+CRhinoEscapeKey::~CRhinoEscapeKey()
+{
+  Stop();
+}
 
-<span class="kt">void</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">Stop</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">m_KeyboardHookProc</span> <span class="p">)</span>
-    <span class="n">UnhookWindowsHookEx</span><span class="p">(</span> <span class="n">m_KeyboardHookProc</span> <span class="p">);</span>
-  <span class="n">m_KeyboardHookProc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="p">}</span>
+bool CRhinoEscapeKey::Start()
+{
+  if( NULL == m_KeyboardHookProc )
+    m_KeyboardHookProc = ::SetWindowsHookEx(
+                              WH_KEYBOARD,
+                              CRhinoEscapeKey::HookProc,
+                              RhinoApp().RhinoInstanceHandle(),
+                              ::AfxGetThread()-&gt;m_nThreadID
+                              );
+  ClearEscapeKeyPressedFlag();
+  return( NULL != m_KeyboardHookProc );
+}
 
-<span class="kt">bool</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">EscapeKeyPressed</span><span class="p">()</span> <span class="k">const</span>
-<span class="p">{</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Wait</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">m_escape_pressed</span><span class="p">;</span>
-<span class="p">}</span>
+void CRhinoEscapeKey::Stop()
+{
+  if( m_KeyboardHookProc )
+    UnhookWindowsHookEx( m_KeyboardHookProc );
+  m_KeyboardHookProc = NULL;
+}
 
-<span class="kt">void</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">ClearEscapeKeyPressedFlag</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">m_escape_pressed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+bool CRhinoEscapeKey::EscapeKeyPressed() const
+{
+  RhinoApp().Wait(0);
+  return m_escape_pressed;
+}
 
-<span class="n">LRESULT</span> <span class="n">CALLBACK</span> <span class="n">CRhinoEscapeKey</span><span class="o">::</span><span class="n">HookProc</span><span class="p">(</span> <span class="kt">int</span> <span class="n">code</span><span class="p">,</span> <span class="n">WPARAM</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">LPARAM</span> <span class="n">lParam</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// On escape key down....
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">code</span> <span class="o">==</span> <span class="n">HC_ACTION</span> <span class="o">&amp;&amp;</span> <span class="n">wParam</span> <span class="o">==</span> <span class="n">VK_ESCAPE</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">lParam</span> <span class="o">&amp;</span> <span class="mh">0x80000000</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_escape_pressed</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="n">UnhookWindowsHookEx</span><span class="p">(</span> <span class="n">m_KeyboardHookProc</span> <span class="p">);</span>
-    <span class="n">m_KeyboardHookProc</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Eat the escape key
-</span>  <span class="p">}</span>
-  <span class="c1">// call next hook proc including standard windows proc.
-</span>  <span class="k">return</span> <span class="n">CallNextHookEx</span><span class="p">(</span> <span class="n">m_KeyboardHookProc</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">wParam</span><span class="p">,</span> <span class="n">lParam</span> <span class="p">);</span>
-<span class="p">}</span>
+void CRhinoEscapeKey::ClearEscapeKeyPressedFlag()
+{
+  m_escape_pressed = false;
+}
+
+LRESULT CALLBACK CRhinoEscapeKey::HookProc( int code, WPARAM wParam, LPARAM lParam )
+{
+  // On escape key down....
+  if( code == HC_ACTION &amp;&amp; wParam == VK_ESCAPE &amp;&amp; !(lParam &amp; 0x80000000) )
+  {
+    m_escape_pressed = true;
+    UnhookWindowsHookEx( m_KeyboardHookProc );
+    m_KeyboardHookProc = NULL;
+    return 0; // Eat the escape key
+  }
+  // call next hook proc including standard windows proc.
+  return CallNextHookEx( m_KeyboardHookProc, code, wParam, lParam );
+}
 </code></pre>
-</div>
 
 <h2 id="usage">Usage</h2>
 
-<p>The following sample code demonstrates using the <code class="highlighter-rouge">CRhinoEscapeKey</code> class within a Rhino command…</p>
+<p>The following sample code demonstrates using the <code>CRhinoEscapeKey</code> class within a Rhino command…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoEscapeKey</span> <span class="n">escape</span><span class="p">;</span>
-  <span class="n">escape</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoEscapeKey escape;
+  escape.Start();
 
-  <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">escape</span><span class="p">.</span><span class="n">EscapeKeyPressed</span><span class="p">()</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">escape</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Command canceled.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Count = %d.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">++</span><span class="n">i</span> <span class="p">);</span>
-  <span class="p">}</span>
+  int i = 0;
+  while( true )
+  {
+    if( escape.EscapeKeyPressed() )
+    {
+      escape.Stop();
+      RhinoApp().Print( L"Command canceled.\n" );
+      break;
+    }
+    RhinoApp().Print( L"Count = %d.\n", ++i );
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

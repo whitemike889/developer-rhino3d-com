@@ -217,80 +217,79 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandBrenton</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select closed planar curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">closed_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandBrenton::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select closed planar curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::closed_curve );
+  go.EnableSubObjectSelect( false );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="o">|</span> <span class="o">!</span><span class="n">crv</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="o">|</span> <span class="o">!</span><span class="n">crv</span><span class="o">-&gt;</span><span class="n">IsPlanar</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv = go.Object(0).Curve();
+  if( 0 == crv | !crv-&gt;IsClosed() | !crv-&gt;IsPlanar() )
+    return failure;
 
-  <span class="n">CRhinoHatchPatternTable</span><span class="o">&amp;</span> <span class="n">table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_hatchpattern_table</span><span class="p">;</span>
+  CRhinoHatchPatternTable&amp; table = context.m_doc.m_hatchpattern_table;
 
-  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Hatch pattern"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetDefaultString</span><span class="p">(</span> <span class="n">table</span><span class="p">.</span><span class="n">CurrentHatchPattern</span><span class="p">().</span><span class="n">Name</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Hatch pattern" );
+  gs.SetDefaultString( table.CurrentHatchPattern().Name() );
+  gs.GetString();
+  if( gs.CommandResult() != success )
+    return gs.CommandResult();
 
-  <span class="n">ON_wString</span> <span class="n">name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  ON_wString name = gs.String();
+  name.TrimLeftAndRight();
+  if( name.IsEmpty() )
+    return nothing;
 
-  <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">table</span><span class="p">.</span><span class="n">FindHatchPattern</span><span class="p">(</span> <span class="n">name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Hatch pattern does not exist.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  int index = table.FindHatchPattern( name );
+  if( index &lt; 0 )
+  {
+    RhinoApp().Print( L"Hatch pattern does not exist.\n" );
+    return nothing;
+  }
 
-  <span class="n">CArgsRhinoHatch</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loops</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetPatternIndex</span><span class="p">(</span> <span class="n">index</span> <span class="p">);</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">SetPatternScale</span><span class="p">(</span> <span class="mf">1.0</span> <span class="p">);</span> <span class="c1">// default
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">SetPatternRotation</span><span class="p">(</span> <span class="mf">0.0</span> <span class="p">);</span> <span class="c1">// default
-</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Hatch</span><span class="o">*&gt;</span> <span class="n">hatches</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoCreateHatches</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">hatches</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">hatches</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">num_added</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">hatches</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Hatch</span><span class="o">*</span> <span class="n">hatch</span> <span class="o">=</span> <span class="n">hatches</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">hatch</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">CRhinoHatch</span><span class="o">*</span> <span class="n">hatch_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoHatch</span><span class="p">();</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">hatch_obj</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">hatch_obj</span><span class="o">-&gt;</span><span class="n">SetHatch</span><span class="p">(</span> <span class="n">hatch</span> <span class="p">);</span>
-          <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">hatch_obj</span><span class="p">)</span> <span class="p">)</span>
-            <span class="n">num_added</span><span class="o">++</span><span class="p">;</span>
-          <span class="k">else</span>
-            <span class="k">delete</span> <span class="n">hatch_obj</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-          <span class="k">delete</span> <span class="n">hatch</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+  CArgsRhinoHatch args;
+  args.m_loops.Append( crv );
+  args.SetPatternIndex( index );
+  args.SetPatternScale( 1.0 ); // default
+  args.SetPatternRotation( 0.0 ); // default
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">num_added</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  ON_SimpleArray&lt;ON_Hatch*&gt; hatches;
+  bool rc = RhinoCreateHatches( args, hatches );
+  if( rc &amp;&amp; hatches.Count() )
+  {
+    int i, num_added = 0;
+    for( i = 0; i &lt; hatches.Count(); i++ )
+    {
+      ON_Hatch* hatch = hatches[0];
+      if( hatch )
+      {
+        CRhinoHatch* hatch_obj = new CRhinoHatch();
+        if( hatch_obj )
+        {
+          hatch_obj-&gt;SetHatch( hatch );
+          if( context.m_doc.AddObject(hatch_obj) )
+            num_added++;
+          else
+            delete hatch_obj;
+        }
+        else
+          delete hatch;
+      }
+    }
 
-  <span class="k">return</span> <span class="n">rc</span> <span class="o">?</span> <span class="n">success</span> <span class="o">:</span> <span class="n">failure</span><span class="p">;</span>
-<span class="p">}</span>
+    if( num_added )
+      context.m_doc.Redraw();
+  }
+
+  return rc ? success : failure;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

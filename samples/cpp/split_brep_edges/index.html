@@ -217,7 +217,7 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<pre><code class="language-cpp">/*
 Description:
   Splits a brep edge into two edges.
 Parameters:
@@ -226,92 +226,91 @@ Parameters:
   edge_t     - [in] The parameter on the edge to split at.
 Returns:
   True if successful, false otherwise.
-*/</span>
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">SplitBrepEdge</span><span class="p">(</span> <span class="n">ON_Brep</span><span class="o">&amp;</span> <span class="n">brep</span><span class="p">,</span> <span class="kt">int</span> <span class="n">edge_index</span><span class="p">,</span> <span class="kt">double</span> <span class="n">edge_t</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="k">const</span> <span class="n">ON_BrepEdge</span><span class="o">&amp;</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">m_E</span><span class="p">[</span><span class="n">edge_index</span><span class="p">];</span>
+*/
+static bool SplitBrepEdge( ON_Brep&amp; brep, int edge_index, double edge_t )
+{
+  bool rc = true;
+  const ON_BrepEdge&amp; edge = brep.m_E[edge_index];
 
-  <span class="kt">int</span> <span class="n">trim_count</span> <span class="o">=</span> <span class="n">edge</span><span class="p">.</span><span class="n">TrimCount</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">trim_t</span><span class="p">(</span> <span class="n">trim_count</span> <span class="p">);</span>
-  <span class="n">trim_t</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">trim_count</span> <span class="p">);</span>
+  int trim_count = edge.TrimCount();
+  ON_SimpleArray&lt;double&gt; trim_t( trim_count );
+  trim_t.SetCount( trim_count );
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">trim_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Given a trim and parameter on the corresponding 3d edge,
-</span>    <span class="c1">// get the corresponding parameter on the 2d trim curve.
-</span>    <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">GetTrimParameter</span><span class="p">(</span> <span class="n">edge</span><span class="p">.</span><span class="n">m_ti</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">edge_t</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-      <span class="n">trim_t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
-    <span class="k">else</span>
-      <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+  int i;
+  for( i = 0; i &lt; trim_count; i++ )
+  {
+    // Given a trim and parameter on the corresponding 3d edge,
+    // get the corresponding parameter on the 2d trim curve.
+    double t = 0.0;
+    rc = brep.GetTrimParameter( edge.m_ti[i], edge_t, &amp;t );
+    if( rc )
+      trim_t[i] = t;
+    else
+      break;
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Splits an edge into two edges.  The input edge
-</span>    <span class="c1">// becomes the left portion and a new edge is created
-</span>    <span class="c1">// for the right portion.
-</span>    <span class="n">rc</span> <span class="o">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">SplitEdge</span><span class="p">(</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_t</span><span class="p">,</span> <span class="n">trim_t</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="p">);</span>
+  if( rc )
+  {
+    // Splits an edge into two edges.  The input edge
+    // becomes the left portion and a new edge is created
+    // for the right portion.
+    rc = brep.SplitEdge( edge_index, edge_t, trim_t, -1 );
 
-    <span class="c1">// Delete any unreferenced objects from the brep arrays,
-</span>    <span class="c1">// reindexes as needed, and shrinks arrays to minimum required size.
-</span>    <span class="n">brep</span><span class="p">.</span><span class="n">Compact</span><span class="p">();</span>
+    // Delete any unreferenced objects from the brep arrays,
+    // reindexes as needed, and shrinks arrays to minimum required size.
+    brep.Compact();
 
-    <span class="c1">// Set the brep's vertex tolerances.
-</span>    <span class="n">brep</span><span class="p">.</span><span class="n">SetVertexTolerances</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Set the brep's vertex tolerances.
+    brep.SetVertexTolerances( true );
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Don't split kinky surfaces...
-</span>  <span class="n">CRhinoKeepKinkySurfaces</span> <span class="n">keep_kinky_srfs</span><span class="p">;</span>
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Don't split kinky surfaces...
+  CRhinoKeepKinkySurfaces keep_kinky_srfs;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select edge to split"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">edge_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableReferenceObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select edge to split" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::edge_curve );
+  go.EnableReferenceObjectSelect( false );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_BrepEdge</span><span class="o">*</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Edge</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">obj</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">edge</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef objref = go.Object(0);
+  const CRhinoObject* obj = objref.Object();
+  const ON_BrepEdge* edge = objref.Edge();
+  const ON_Brep* brep = objref.Brep();
+  if( 0 == obj | 0 == edge | 0 == brep )
+    return failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point to split edge"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">edge</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Point to split edge" );
+  gp.Constrain( *edge );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_BrepTrim</span><span class="o">*</span> <span class="n">trim</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">edge_t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">edge</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">PointOnEdge</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">edge_t</span><span class="p">,</span> <span class="n">trim</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">edge</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Brep</span> <span class="n">newbrep</span><span class="p">(</span> <span class="o">*</span><span class="n">brep</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">SplitBrepEdge</span><span class="p">(</span><span class="n">newbrep</span><span class="p">,</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">m_edge_index</span><span class="p">,</span> <span class="n">edge_t</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">newbrep</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  const ON_BrepTrim* trim = 0;
+  double edge_t = 0;
+  edge = gp.PointOnEdge( &amp;edge_t, trim );
+  if( edge )
+  {
+    ON_Brep newbrep( *brep );
+    if( SplitBrepEdge(newbrep, edge-&gt;m_edge_index, edge_t) )
+    {
+      context.m_doc.ReplaceObject( CRhinoObjRef(obj), newbrep );
+      context.m_doc.Redraw();
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

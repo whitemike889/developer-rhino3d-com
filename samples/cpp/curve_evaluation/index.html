@@ -217,67 +217,66 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve for evaluation"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve for evaluation" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv = go.Object(0).Curve();
+  if( 0 == crv )
+    return failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Pick point on curve for evaluation"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Pick point on curve for evaluation" );
+  gp.Constrain( *crv );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">gp</span><span class="p">.</span><span class="n">PointOnCurve</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  double t = 0.0;
+  if( 0 == gp.PointOnCurve(&amp;t) )
+    return nothing;
 
-  <span class="n">CRhinoGetInteger</span> <span class="n">gi</span><span class="p">;</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Number of derivatives to calculate"</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetDefaultInteger</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetUpperLimit</span><span class="p">(</span> <span class="mi">4</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">GetNumber</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gi</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gi</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetInteger gi;
+  gi.SetCommandPrompt( L"Number of derivatives to calculate" );
+  gi.SetDefaultInteger( 1 );
+  gi.SetLowerLimit( 0 );
+  gi.SetUpperLimit( 4 );
+  gi.GetNumber();
+  if( gi.CommandResult() != success )
+    return gi.CommandResult();
 
-  <span class="kt">int</span> <span class="n">der_count</span> <span class="o">=</span> <span class="n">gi</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
+  int der_count = gi.Number();
 
-  <span class="c1">// Allocate memory for results
-</span>  <span class="kt">int</span> <span class="n">v_stride</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">v_count</span> <span class="o">=</span> <span class="n">v_stride</span> <span class="o">*</span> <span class="p">(</span> <span class="n">der_count</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">v_array</span><span class="p">(</span> <span class="n">v_count</span> <span class="p">);</span>
-  <span class="n">v_array</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span> <span class="n">v_count</span> <span class="p">);</span>
+  // Allocate memory for results
+  int v_stride = 3;
+  int v_count = v_stride * ( der_count + 1 );
+  ON_SimpleArray&lt;double&gt; v_array( v_count );
+  v_array.SetCount( v_count );
 
-  <span class="c1">// Do the curve evaluation
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">der_count</span><span class="p">,</span> <span class="n">v_stride</span><span class="p">,</span> <span class="n">v_array</span><span class="p">.</span><span class="n">Array</span><span class="p">())</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">v</span> <span class="o">=</span> <span class="n">v_array</span><span class="p">.</span><span class="n">Array</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">der_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Derivative %d = (%.3f,%.3f,%.3f)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">);</span>
-      <span class="n">v</span> <span class="o">+=</span> <span class="n">v_stride</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Failed to evaluate curve.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-  <span class="p">}</span>
+  // Do the curve evaluation
+  if( crv-&gt;Evaluate(t, der_count, v_stride, v_array.Array()) )
+  {
+    const double* v = v_array.Array();
+    int i;
+    for( i = 0; i &lt; der_count + 1; i++ )
+    {
+      RhinoApp().Print( L"Derivative %d = (%.3f,%.3f,%.3f)\n", i, v[0], v[1], v[2] );
+      v += v_stride;
+    }
+  }
+  else
+  {
+    RhinoApp().Print( L"Failed to evaluate curve.\n" );
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

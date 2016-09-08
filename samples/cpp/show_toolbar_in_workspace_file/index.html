@@ -217,105 +217,103 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">BOOL</span> <span class="nf">LoadAndShowPlugInToolbar</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="c1">// Get reference to our plugin object
-</span>  <span class="n">CTestPlugIn</span><span class="o">&amp;</span> <span class="n">plugin</span> <span class="o">=</span> <span class="n">GetTestPlugIn</span><span class="p">();</span>
+<pre><code class="language-cpp">BOOL LoadAndShowPlugInToolbar()
+{
+  // Get reference to our plugin object
+  CTestPlugIn&amp; plugin = GetTestPlugIn();
 
-  <span class="c1">// Get the full path to plugin file
-</span>  <span class="n">ON_wString</span> <span class="n">file_name</span><span class="p">;</span>
-  <span class="n">plugin</span><span class="p">.</span><span class="n">GetPlugInFileName</span><span class="p">(</span> <span class="n">file_name</span> <span class="p">);</span>
+  // Get the full path to plugin file
+  ON_wString file_name;
+  plugin.GetPlugInFileName( file_name );
 
-  <span class="c1">// Build the toolbar collection file name
-</span>  <span class="kt">wchar_t</span> <span class="n">drive</span><span class="p">[</span><span class="n">_MAX_DRIVE</span><span class="p">];</span>
-  <span class="kt">wchar_t</span> <span class="n">dir</span><span class="p">[</span><span class="n">_MAX_DIR</span><span class="p">];</span>
-  <span class="kt">wchar_t</span> <span class="n">fname</span><span class="p">[</span><span class="n">_MAX_FNAME</span><span class="p">];</span>
-  <span class="n">_wsplitpath</span><span class="p">(</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // Build the toolbar collection file name
+  wchar_t drive[_MAX_DRIVE];
+  wchar_t dir[_MAX_DIR];
+  wchar_t fname[_MAX_FNAME];
+  _wsplitpath( file_name, drive, dir, fname, 0 );
 
-  <span class="n">ON_wString</span> <span class="n">collection_name</span><span class="p">;</span>
-  <span class="n">collection_name</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"%s%s%s.tb"</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">fname</span> <span class="p">);</span>
+  ON_wString collection_name;
+  collection_name.Format( L"%s%s%s.tb", drive, dir, fname );
 
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+  BOOL rc = FALSE;
 
-  <span class="c1">// Get reference to Rhino's toolbar manager
-</span>  <span class="n">CRhinoAppUiToolBarManager</span><span class="o">&amp;</span> <span class="n">tm</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoUiToolBarManager</span><span class="p">();</span>
+  // Get reference to Rhino's toolbar manager
+  CRhinoAppUiToolBarManager&amp; tm = RhinoApp().RhinoUiToolBarManager();
 
-  <span class="c1">// Load the toolbar collection, if necessary.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">tm</span><span class="p">.</span><span class="n">ReadFile</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the toolbar collection
-</span>    <span class="k">const</span> <span class="n">CRhinoUiToolBarCollection</span><span class="o">*</span> <span class="n">col</span> <span class="o">=</span> <span class="n">tm</span><span class="p">.</span><span class="n">Collection</span><span class="p">(</span> <span class="n">tm</span><span class="p">.</span><span class="n">CollectionIndex</span><span class="p">(</span><span class="n">collection_name</span><span class="p">,</span> <span class="nb">false</span><span class="p">)</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">col</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Find the "Default" toolbar
-</span>      <span class="k">const</span> <span class="n">CRhinoUiToolBar</span><span class="o">*</span> <span class="n">tb</span> <span class="o">=</span> <span class="n">col</span><span class="o">-&gt;</span><span class="n">ToolBar</span><span class="p">(</span> <span class="n">col</span><span class="o">-&gt;</span><span class="n">FindToolBar</span><span class="p">(</span><span class="s">L"Default"</span><span class="p">)</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">tb</span> <span class="o">&amp;&amp;</span> <span class="n">tm</span><span class="p">.</span><span class="n">ShowToolBar</span><span class="p">(</span><span class="n">tb</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">)</span> <span class="p">)</span> <span class="c1">// Load it
-</span>        <span class="n">rc</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Load the toolbar collection, if necessary.
+  if( tm.ReadFile(collection_name, true, true, true) )
+  {
+    // Get the toolbar collection
+    const CRhinoUiToolBarCollection* col = tm.Collection( tm.CollectionIndex(collection_name, false) );
+    if( col )
+    {
+      // Find the "Default" toolbar
+      const CRhinoUiToolBar* tb = col-&gt;ToolBar( col-&gt;FindToolBar(L"Default") );
+      if( tb &amp;&amp; tm.ShowToolBar(tb, true, false) ) // Load it
+        rc = TRUE;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 <p>Alternatively:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">BOOL</span> <span class="nf">ShowPlugInToolbar</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="c1">// Get reference to our plugin object
-</span>  <span class="n">CTestPlugIn</span><span class="o">&amp;</span> <span class="n">plugin</span> <span class="o">=</span> <span class="n">GetTestPlugIn</span><span class="p">();</span>
+<pre><code class="language-cpp">BOOL ShowPlugInToolbar()
+{
+  // Get reference to our plugin object
+  CTestPlugIn&amp; plugin = GetTestPlugIn();
 
-  <span class="c1">// Get the full path to plugin file
-</span>  <span class="n">ON_wString</span> <span class="n">file_name</span><span class="p">;</span>
-  <span class="n">plugin</span><span class="p">.</span><span class="n">GetPlugInFileName</span><span class="p">(</span> <span class="n">file_name</span> <span class="p">);</span>
+  // Get the full path to plugin file
+  ON_wString file_name;
+  plugin.GetPlugInFileName( file_name );
 
-  <span class="c1">// Build the toolbar collection file name
-</span>  <span class="kt">wchar_t</span> <span class="n">drive</span><span class="p">[</span><span class="n">_MAX_DRIVE</span><span class="p">];</span>
-  <span class="kt">wchar_t</span> <span class="n">dir</span><span class="p">[</span><span class="n">_MAX_DIR</span><span class="p">];</span>
-  <span class="kt">wchar_t</span> <span class="n">fname</span><span class="p">[</span><span class="n">_MAX_FNAME</span><span class="p">];</span>
-  <span class="n">_wsplitpath</span><span class="p">(</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // Build the toolbar collection file name
+  wchar_t drive[_MAX_DRIVE];
+  wchar_t dir[_MAX_DIR];
+  wchar_t fname[_MAX_FNAME];
+  _wsplitpath( file_name, drive, dir, fname, 0 );
 
-  <span class="n">ON_wString</span> <span class="n">collection_name</span><span class="p">;</span>
-  <span class="n">collection_name</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"%s%s%s.tb"</span><span class="p">,</span> <span class="n">drive</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">fname</span> <span class="p">);</span>
+  ON_wString collection_name;
+  collection_name.Format( L"%s%s%s.tb", drive, dir, fname );
 
-  <span class="c1">// Get reference to Rhino's toolbar manager
-</span>  <span class="n">CRhinoToolBarManager</span><span class="o">&amp;</span> <span class="n">tm</span> <span class="o">=</span> <span class="n">ToolBarManager</span><span class="p">();</span>
+  // Get reference to Rhino's toolbar manager
+  CRhinoToolBarManager&amp; tm = ToolBarManager();
 
-  <span class="c1">// See if the toolbar collection is already open
-</span>  <span class="kt">int</span> <span class="n">collection_index</span> <span class="o">=</span> <span class="n">tm</span><span class="p">.</span><span class="n">CollectionIndex</span><span class="p">(</span> <span class="n">collection_name</span><span class="p">,</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">collection_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Open the toolbar collection
-</span>    <span class="n">collection_index</span> <span class="o">=</span> <span class="n">tm</span><span class="p">.</span><span class="n">OpenCollection</span><span class="p">(</span> <span class="n">collection_name</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">collection_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Help Rhino figure out where all toolbars are supposed
-</span>      <span class="c1">// to be positioned
-</span>      <span class="n">AFX_MANAGE_STATE</span><span class="p">(</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoModuleState</span><span class="p">()</span> <span class="p">);</span>
-      <span class="p">((</span><span class="n">CFrameWnd</span><span class="o">*</span><span class="p">)</span><span class="n">AfxGetMainWnd</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">RecalcLayout</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // See if the toolbar collection is already open
+  int collection_index = tm.CollectionIndex( collection_name, FALSE );
+  if( collection_index &lt; 0 )
+  {
+    // Open the toolbar collection
+    collection_index = tm.OpenCollection( collection_name );
+    if( collection_index &gt;= 0 )
+    {
+      // Help Rhino figure out where all toolbars are supposed
+      // to be positioned
+      AFX_MANAGE_STATE( ::RhinoApp().RhinoModuleState() );
+      ((CFrameWnd*)AfxGetMainWnd())-&gt;RecalcLayout();
+    }
+  }
 
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+  BOOL rc = FALSE;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">collection_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  if( collection_index &lt; 0 )
+    return rc;
 
-  <span class="c1">// See if our toolbar is available
-</span>  <span class="kt">int</span> <span class="n">toolbar_index</span> <span class="o">=</span> <span class="n">tm</span><span class="p">.</span><span class="n">ToolBarIndex</span><span class="p">(</span> <span class="n">collection_index</span><span class="p">,</span> <span class="s">L"Default"</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">toolbar_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// If the toolbar is not visible, display it
-</span>    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">tm</span><span class="p">.</span><span class="n">IsToolBarVisisble</span><span class="p">(</span><span class="n">collection_index</span><span class="p">,</span> <span class="n">toolbar_index</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">tm</span><span class="p">.</span><span class="n">ShowToolBar</span><span class="p">(</span> <span class="n">collection_index</span><span class="p">,</span> <span class="n">toolbar_index</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // See if our toolbar is available
+  int toolbar_index = tm.ToolBarIndex( collection_index, L"Default" );
+  if( toolbar_index &gt;= 0 )
+  {
+    // If the toolbar is not visible, display it
+    if( !tm.IsToolBarVisisble(collection_index, toolbar_index) )
+      rc = tm.ShowToolBar( collection_index, toolbar_index, TRUE );
+    else
+      rc = TRUE;
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

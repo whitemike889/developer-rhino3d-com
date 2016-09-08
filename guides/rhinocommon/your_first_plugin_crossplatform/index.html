@@ -407,21 +407,20 @@
   <li>In the Solution panel, <strong>right-click</strong> the <strong>HelloRhino.Common</strong> project and select <strong>Rename</strong>.  Rename the project <strong>HelloRhino.Common.Mac</strong>.</li>
   <li>Rename <strong>HelloRhino.CommonCommand.cs</strong> to <strong>HelloRhinoCommonCommand.cs</strong>.</li>
   <li>Rename <strong>HelloRhino.CommonPlugin.cs</strong> to <strong>HelloRhinoCommonPlugin.cs</strong>.</li>
-  <li>Open <strong>HelloRhinoCommonPlugin.cs</strong> and remove the period (<code class="highlighter-rouge">.</code>) between the <code class="highlighter-rouge">HelloRhino</code> and the <code class="highlighter-rouge">Common</code>:</li>
+  <li>Open <strong>HelloRhinoCommonPlugin.cs</strong> and remove the period (<code>.</code>) between the <code>HelloRhino</code> and the <code>Common</code>:</li>
 </ol>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">HelloRhinoCommonPlugin</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">PlugIns</span><span class="p">.</span><span class="n">PlugIn</span>
-  <span class="p">{</span>  
-    <span class="c1">///&lt;summary&gt;Gets the only instance of the HelloRhinoCommonPlugin plugin.&lt;/summary&gt;
-</span>    <span class="k">public</span> <span class="k">static</span> <span class="n">HelloRhinoCommonPlugin</span> <span class="n">Instance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<pre><code class="language-cs">public class HelloRhinoCommonPlugin : Rhino.PlugIns.PlugIn
+  {  
+    ///&lt;summary&gt;Gets the only instance of the HelloRhinoCommonPlugin plugin.&lt;/summary&gt;
+    public static HelloRhinoCommonPlugin Instance { get; private set; }
 
-    <span class="k">public</span> <span class="nf">HelloRhinoCommonPlugin</span><span class="p">()</span>
-    <span class="p">{</span>
-      <span class="n">Instance</span> <span class="p">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    public HelloRhinoCommonPlugin()
+    {
+      Instance = this;
+    }
+  }
 </code></pre>
-</div>
 
 <h3 id="clone-project">Clone Project</h3>
 
@@ -448,9 +447,9 @@
   <li>In the <strong>Solution Explorer</strong>, select the <strong>RhinoCommon</strong> reference you just added to <strong>HelloRhino.Common.Windows</strong>.  Open the <strong>Properties</strong> panel if it is not already visible (<strong>View</strong> &gt; <strong>Properties Window</strong>).  Make sure <strong>Copy Local</strong> is <strong>False</strong>:
 <img src="/images/your_first_plugin_crossplatform_10.png" alt="Copy Local False" /></li>
   <li>In the <strong>Solution Explorer</strong>, <strong>right-click</strong> the <strong>HelloRhino.Common.Windows</strong> project and select <strong>Properties</strong> from the menu.</li>
-  <li>In the <strong>Build Events</strong> section, in the <strong>Post-build event command line:</strong> enter <code class="highlighter-rouge">Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).rhp" Erase "$(TargetPath)"</code>…
+  <li>In the <strong>Build Events</strong> section, in the <strong>Post-build event command line:</strong> enter <code>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).rhp" Erase "$(TargetPath)"</code>…
 <img src="/images/your_first_plugin_crossplatform_11.png" alt="Build Events" /></li>
-  <li>In the <strong>Debug</strong> section, in the <strong>Start external program</strong>, browse to: <code class="highlighter-rouge">C:\Program Files\Rhinoceros 5 (64-bit)\System\Rhino.exe</code>…
+  <li>In the <strong>Debug</strong> section, in the <strong>Start external program</strong>, browse to: <code>C:\Program Files\Rhinoceros 5 (64-bit)\System\Rhino.exe</code>…
 <img src="/images/your_first_plugin_crossplatform_12.png" alt="Debug Properties" /></li>
   <li><strong>Build</strong> and <strong>Start Debugging</strong>.  You should get two build errors concerning Eto.  Let’s take this opportunity to do create some…</li>
 </ol>
@@ -463,18 +462,17 @@
 
 <ol>
   <li>In the <strong>Solution Explorer</strong>, <strong>right-click</strong> the <strong>HelloRhino.Common.Windows</strong> project and select <strong>Properties</strong> from the menu.</li>
-  <li>In the <strong>Build</strong> section, switch the <strong>Configuration:</strong> to <strong>All Configurations</strong> and, in <strong>Conditional compilation symbols</strong>, create a define called <code class="highlighter-rouge">ON_RUNTIME_WIN</code>…
+  <li>In the <strong>Build</strong> section, switch the <strong>Configuration:</strong> to <strong>All Configurations</strong> and, in <strong>Conditional compilation symbols</strong>, create a define called <code>ON_RUNTIME_WIN</code>…
 <img src="/images/your_first_plugin_crossplatform_13.png" alt="Windows Define" /></li>
   <li>Open <strong>HelloRhinoCommonCommand.cs</strong>.</li>
   <li>
-    <p>In the <code class="highlighter-rouge">using</code> section at the top, create a conditional define around the Eto references like this:</p>
+    <p>In the <code>using</code> section at the top, create a conditional define around the Eto references like this:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> #if ON_RUNTIME_APPLE
+    <pre><code> #if ON_RUNTIME_APPLE
  using Eto.Drawing;
  using Eto.Forms;
  #endif
 </code></pre>
-    </div>
   </li>
   <li><strong>Build</strong> and <strong>Start Debugging</strong>.  Your build errors should disappear and debugging should begin.  You can use the PluginManager to install your plugin and the HelloRhino command should work.  When you are done testing out the command, stop the debugging session, close Visual Studio and switch back to…</li>
 </ol>
@@ -486,7 +484,7 @@
   <li>Notice that <strong>HelloRhino.Common.Windows</strong> is now present in your solution (as expected).  In the <strong>Solution</strong> panel, <strong>right-click</strong> the <strong>HelloRhino.Common.Windows</strong> project and select <strong>Unload</strong>…
 <img src="/images/your_first_plugin_crossplatform_14.png" alt="Unload Windows Project" /></li>
   <li>In the <strong>Solution</strong> panel, <strong>double-click</strong> the <strong>HelloRhino.Common.Mac</strong> project to bring up its <strong>Project Options</strong> (Properties).</li>
-  <li>Navigate to the <strong>Build</strong> &gt; <strong>Compiler</strong> section in the <strong>Project Options</strong>.  Notice that the configuration is set to <strong>Debug</strong>.  In the <strong>Define Symbols</strong>: add a <code class="highlighter-rouge">ON_RUNTIME_APPLE</code> after <code class="highlighter-rouge">DEBUG</code>.  You must separate these with a semi-colon.  It should read: <code class="highlighter-rouge">DEBUG;ON_RUNTIME_APPLE</code>.  Switch the <strong>Configuration</strong> to <strong>Release</strong>.  Add the <code class="highlighter-rouge">ON_RUNTIME_APPLE</code> again (Xamarin Studio lacks an “All Configurations” like Visual Studio)…
+  <li>Navigate to the <strong>Build</strong> &gt; <strong>Compiler</strong> section in the <strong>Project Options</strong>.  Notice that the configuration is set to <strong>Debug</strong>.  In the <strong>Define Symbols</strong>: add a <code>ON_RUNTIME_APPLE</code> after <code>DEBUG</code>.  You must separate these with a semi-colon.  It should read: <code>DEBUG;ON_RUNTIME_APPLE</code>.  Switch the <strong>Configuration</strong> to <strong>Release</strong>.  Add the <code>ON_RUNTIME_APPLE</code> again (Xamarin Studio lacks an “All Configurations” like Visual Studio)…
 <img src="/images/your_first_plugin_crossplatform_15.png" alt="Add Mac Defines" /></li>
   <li>Click <strong>OK</strong> to close the <strong>Project Options</strong> dialog.</li>
   <li><strong>Build</strong> and <strong>Run</strong>.  The <em>HelloRhino</em> command from the plugin should autocomplete and run.</li>
@@ -515,9 +513,8 @@
 
 <p>The cloned projects have platform-specific defines and platform-specific references, but otherwise reference the same shared (common) code.  Notice that the namespace of your common code is:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">HelloRhino.Common</span>
+<pre><code class="language-cs">namespace HelloRhino.Common
 </code></pre>
-</div>
 
 <p>This common (sometimes called “core”) namespace can be thought of as a shared library.  This is where the “business logic” of your plugin should be stored.</p>
 

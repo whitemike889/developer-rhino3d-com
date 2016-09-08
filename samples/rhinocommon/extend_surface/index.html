@@ -222,63 +222,62 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ExtendSurface</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select edge of surface to extend"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">EdgeFilter</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">EdgeCurve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">obj_ref</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ExtendSurface(RhinoDoc doc)
+  {
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select edge of surface to extend");
+    go.GeometryFilter = ObjectType.EdgeFilter;
+    go.GeometryAttributeFilter = GeometryAttributeFilter.EdgeCurve;
+    go.Get();
+    if (go.CommandResult() != Result.Success)
+      return go.CommandResult();
+    var obj_ref = go.Object(0);
 
-    <span class="kt">var</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">surface</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to extend polysurfaces."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    var surface = obj_ref.Surface();
+    if (surface == null)
+    {
+      RhinoApp.WriteLine("Unable to extend polysurfaces.");
+      return Result.Failure;
+    }
 
-    <span class="kt">var</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">face</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Face</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">face</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">face</span><span class="p">.</span><span class="n">FaceIndex</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var brep = obj_ref.Brep();
+    var face = obj_ref.Face();
+    if (brep == null || face == null)
+      return Result.Failure;
+    if (face.FaceIndex &lt; 0)
+      return Result.Failure;
 
-    <span class="k">if</span><span class="p">(</span> <span class="p">!</span><span class="n">brep</span><span class="p">.</span><span class="n">IsSurface</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to extend trimmed surfaces."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    if( !brep.IsSurface)
+    {
+      RhinoApp.WriteLine("Unable to extend trimmed surfaces.");
+      return Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
+    var curve = obj_ref.Curve();
 
-    <span class="kt">var</span> <span class="n">trim</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Trim</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">trim</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var trim = obj_ref.Trim();
+    if (trim == null)
+      return Result.Failure;
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">trim</span><span class="p">.</span><span class="n">TrimType</span> <span class="p">==</span> <span class="n">BrepTrimType</span><span class="p">.</span><span class="n">Seam</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to extend surface at seam."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (trim.TrimType == BrepTrimType.Seam)
+    {
+      RhinoApp.WriteLine("Unable to extend surface at seam.");
+      return Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">extended_surface</span> <span class="p">=</span> <span class="n">surface</span><span class="p">.</span><span class="nf">Extend</span><span class="p">(</span><span class="n">trim</span><span class="p">.</span><span class="n">IsoStatus</span><span class="p">,</span> <span class="m">5.0</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">extended_surface</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">mybrep</span> <span class="p">=</span> <span class="n">Brep</span><span class="p">.</span><span class="nf">CreateFromSurface</span><span class="p">(</span><span class="n">extended_surface</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="n">obj_ref</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">mybrep</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var extended_surface = surface.Extend(trim.IsoStatus, 5.0, true);
+    if (extended_surface != null)
+    {
+      var mybrep = Brep.CreateFromSurface(extended_surface);
+      doc.Objects.Replace(obj_ref.ObjectId, mybrep);
+      doc.Views.Redraw();
+    }
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ExtendSurface(ByVal doc As RhinoDoc) As Result
@@ -335,60 +334,59 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+from Rhino.Input.Custom import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Geometry import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select edge of surface to extend"</span><span class="p">)</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">EdgeFilter</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">EdgeCurve</span>
-  <span class="n">go</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+def RunCommand():
+  go = Rhino.Input.Custom.GetObject()
+  go.SetCommandPrompt("Select edge of surface to extend")
+  go.GeometryFilter = ObjectType.EdgeFilter
+  go.GeometryAttributeFilter = GeometryAttributeFilter.EdgeCurve
+  go.Get()
+  if go.CommandResult() != Result.Success:
+    return go.CommandResult()
+  obj_ref = go.Object(0)
 
-  <span class="n">surface</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">surface</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"Unable to extend polysurfaces."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  surface = obj_ref.Surface()
+  if surface == None:
+    print "Unable to extend polysurfaces."
+    return Result.Failure
 
-  <span class="n">brep</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Brep</span><span class="p">()</span>
-  <span class="n">face</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Face</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">brep</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">face</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-  <span class="k">if</span> <span class="n">face</span><span class="o">.</span><span class="n">FaceIndex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  brep = obj_ref.Brep()
+  face = obj_ref.Face()
+  if brep == None or face == None:
+    return Result.Failure
+  if face.FaceIndex &lt; 0:
+    return Result.Failure
 
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">brep</span><span class="o">.</span><span class="n">IsSurface</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"Unable to extend trimmed surfaces."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if not brep.IsSurface:
+    print "Unable to extend trimmed surfaces."
+    return Result.Nothing
 
-  <span class="n">curve</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
+  curve = obj_ref.Curve()
 
-  <span class="n">trim</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Trim</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">trim</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  trim = obj_ref.Trim()
+  if trim == None:
+    return Result.Failure
 
-  <span class="k">if</span> <span class="n">trim</span><span class="o">.</span><span class="n">TrimType</span> <span class="o">==</span> <span class="n">BrepTrimType</span><span class="o">.</span><span class="n">Seam</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"Unable to extend surface at seam."</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if trim.TrimType == BrepTrimType.Seam:
+    print "Unable to extend surface at seam."
+    return Result.Nothing
 
-  <span class="n">extended_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">Extend</span><span class="p">(</span><span class="n">trim</span><span class="o">.</span><span class="n">IsoStatus</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">extended_surface</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="n">mybrep</span> <span class="o">=</span> <span class="n">Brep</span><span class="o">.</span><span class="n">CreateFromSurface</span><span class="p">(</span><span class="n">extended_surface</span><span class="p">)</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">obj_ref</span><span class="o">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">mybrep</span><span class="p">)</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  extended_surface = surface.Extend(trim.IsoStatus, 5.0, True)
+  if extended_surface != None:
+    mybrep = Brep.CreateFromSurface(extended_surface)
+    doc.Objects.Replace(obj_ref.ObjectId, mybrep)
+    doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

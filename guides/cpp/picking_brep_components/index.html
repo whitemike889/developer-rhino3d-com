@@ -300,14 +300,13 @@
 
 <p>You would like to pick a brep component (e.g. face or edge) and then take action depending on what was picked.  If you write an object picker as such:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select face or edge"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-<span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">edge_object</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select face or edge" );
+go.SetGeometryFilter( CRhinoGetObject::surface_object |
+CRhinoGetObject::edge_object );
+go.EnableSubObjectSelect( true );
+go.GetObjects( 1, 1 );
 </code></pre>
-</div>
 
 <p>and then use it to try to pick the edge of a box, for example, only the faces show up on the “choose one object” menu.</p>
 
@@ -315,15 +314,14 @@
 
 <p>You need to enable “choose one question” to get multiple subobject types on one brep to work.  So, this should work:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select face or edge"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-<span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">edge_object</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">EnableChooseOneQuestion</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span> <span class="c1">// ADD THIS...
-</span><span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select face or edge" );
+go.SetGeometryFilter( CRhinoGetObject::surface_object |
+CRhinoGetObject::edge_object );
+go.EnableSubObjectSelect( true );
+go.EnableChooseOneQuestion( true ); // ADD THIS...
+go.GetObjects( 1, 1 );
 </code></pre>
-</div>
 
         </article>
 

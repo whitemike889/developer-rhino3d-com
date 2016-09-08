@@ -315,55 +315,54 @@
 
 <h2 id="problem">Problem</h2>
 
-<p>Given an <code class="highlighter-rouge">ON_Curve</code>, how can one determine which kind of <code class="highlighter-rouge">ON_Curve</code>-derived object it really is?  (e.g. <code class="highlighter-rouge">ON_LineCurve</code>, <code class="highlighter-rouge">ON_ArcCurve</code>, <code class="highlighter-rouge">ON_PolylineCurve</code>, <code class="highlighter-rouge">ON_PolyCurve</code>, <code class="highlighter-rouge">ON_NurbsCurve</code>, etc.)?</p>
+<p>Given an <code>ON_Curve</code>, how can one determine which kind of <code>ON_Curve</code>-derived object it really is?  (e.g. <code>ON_LineCurve</code>, <code>ON_ArcCurve</code>, <code>ON_PolylineCurve</code>, <code>ON_PolyCurve</code>, <code>ON_NurbsCurve</code>, etc.)?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>Basically, you try to cast the <code class="highlighter-rouge">ON_Curve</code> object to one of the <code class="highlighter-rouge">ON_Curve</code>-derived classes using its <code class="highlighter-rouge">Cast</code> operator.  If the cast operation is success, you are good to go.  If it fails, then you know the test object is some other <code class="highlighter-rouge">ON_Curve</code>-derived object.</p>
+<p>Basically, you try to cast the <code>ON_Curve</code> object to one of the <code>ON_Curve</code>-derived classes using its <code>Cast</code> operator.  If the cast operation is success, you are good to go.  If it fails, then you know the test object is some other <code>ON_Curve</code>-derived object.</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">const</span> <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="nf">GetLineCurve</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">ON_LineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">const ON_LineCurve* GetLineCurve( const ON_Curve* crv )
+{
+  const ON_LineCurve* p = 0;
+  if( crv != 0 )
+    p = ON_LineCurve::Cast( crv );
+  return p;
+}
 
-<span class="k">const</span> <span class="n">ON_ArcCurve</span><span class="o">*</span> <span class="nf">GetArcCurve</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_ArcCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">ON_ArcCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+const ON_ArcCurve* GetArcCurve( const ON_Curve* crv )
+{
+  const ON_ArcCurve* p = 0;
+  if( crv != 0 )
+    p = ON_ArcCurve::Cast( crv );
+  return p;
+}
 
-<span class="k">const</span> <span class="n">ON_PolylineCurve</span><span class="o">*</span> <span class="nf">GetPolylineCurve</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_PolylineCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">ON_PolylineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+const ON_PolylineCurve* GetPolylineCurve( const ON_Curve* crv )
+{
+  const ON_PolylineCurve* p = 0;
+  if( crv != 0 )
+    p = ON_PolylineCurve::Cast( crv );
+  return p;
+}
 
-<span class="k">const</span> <span class="n">ON_PolyCurve</span><span class="o">*</span> <span class="nf">GetPolyCurve</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_PolyCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">ON_PolyCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+const ON_PolyCurve* GetPolyCurve( const ON_Curve* crv )
+{
+  const ON_PolyCurve* p = 0;
+  if( crv != 0 )
+    p = ON_PolyCurve::Cast( crv );
+  return p;
+}
 
-<span class="k">const</span> <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="nf">GetNurbsCurve</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">crv</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+const ON_NurbsCurve* GetNurbsCurve( const ON_Curve* crv )
+{
+  const ON_NurbsCurve* p = 0;
+  if( crv != 0 )
+    p = ON_NurbsCurve::Cast( crv );
+  return p;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -304,82 +304,81 @@
 
 <p>The following code sample demonstrates this capability…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">bObjectsWerePreSelected</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">bObjectsWerePostSelected</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">obj_list</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  bool bObjectsWerePreSelected = false;
+  bool bObjectsWerePostSelected = false;
+  ON_SimpleArray&lt;const CRhinoObject*&gt; obj_list;
 
-  <span class="c1">// Select some objects. Allow for pre-selected objects
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Select some objects. Allow for pre-selected objects
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects" );
+  go.EnablePreSelect( TRUE );
+  go.GetObjects( 0, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Add the selected objects to our list
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-      <span class="n">obj_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-  <span class="p">}</span>
+  // Add the selected objects to our list
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const CRhinoObjRef&amp; objref = go.Object(i);
+    const CRhinoObject* obj = objref.Object();
+    if( obj )
+      obj_list.Append( obj );
+  }
 
-  <span class="c1">// Determine of the bjects were pre-selected
-</span>  <span class="c1">// or post-selected.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectsWerePreSelected</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">bObjectsWerePreSelected</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="n">bObjectsWerePostSelected</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+  // Determine of the bjects were pre-selected
+  // or post-selected.
+  if( go.ObjectsWerePreSelected() )
+    bObjectsWerePreSelected = true;
+  else
+    bObjectsWerePostSelected = true;
 
-  <span class="c1">// If objects were pre-selected, then select
-</span>  <span class="c1">// more objects. But, ignore pre-selected ones.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">bObjectsWerePreSelected</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // If objects were pre-selected, then select
+  // more objects. But, ignore pre-selected ones.
+  if( bObjectsWerePreSelected )
+  {
+    go.EnablePreSelect( FALSE );
+    go.EnableDeselectAllBeforePostSelect( FALSE );
+    go.GetObjects( 0, 0 );
+    if( go.CommandResult() != CRhinoCommand::success )
+      return go.CommandResult();
 
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-      <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-        <span class="n">obj_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-    <span class="p">}</span>
+    for( i = 0; i &lt; go.ObjectCount(); i++ )
+    {
+      const CRhinoObjRef&amp; objref = go.Object(i);
+      const CRhinoObject* obj = objref.Object();
+      if( obj )
+        obj_list.Append( obj );
+    }
 
-    <span class="n">bObjectsWerePostSelected</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-  <span class="p">}</span>
+    bObjectsWerePostSelected = true;
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">obj_list</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="c1">//
-</span>  <span class="c1">// TODO: do something with the object list here
-</span>  <span class="c1">//
-</span>  <span class="c1">// The normal behavior of commands is that when they finish,
-</span>  <span class="c1">// objects that were pre-selected remain selected and objects
-</span>  <span class="c1">// that were post-selected will not be selected. Because we
-</span>  <span class="c1">// potentially could have both, we'll try to do something
-</span>  <span class="c1">// consistent.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">bObjectsWerePreSelected</span> <span class="o">&amp;&amp;</span> <span class="n">bObjectsWerePreSelected</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="o">&amp;&amp;</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">IsSelected</span><span class="p">()</span> <span class="p">)</span>
-        <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  if( obj_list.Count() == 0 )
+    return CRhinoCommand::nothing;
+  //
+  // TODO: do something with the object list here
+  //
+  // The normal behavior of commands is that when they finish,
+  // objects that were pre-selected remain selected and objects
+  // that were post-selected will not be selected. Because we
+  // potentially could have both, we'll try to do something
+  // consistent.
+  if( bObjectsWerePreSelected &amp;&amp; bObjectsWerePreSelected )
+  {
+    for( i = 0; i &lt; obj_list.Count(); i++ )
+    {
+      const CRhinoObject* obj = obj_list[i];
+      if( obj &amp;&amp; obj-&gt;IsSelected() )
+        obj-&gt;Select( false );
+    }
+    context.m_doc.Redraw();
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

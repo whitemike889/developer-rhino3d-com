@@ -222,28 +222,27 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ObjectDecoration</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Define a line
-</span>    <span class="kt">var</span> <span class="n">line</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Line</span><span class="p">(</span><span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">));</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ObjectDecoration(Rhino.RhinoDoc doc)
+  {
+    // Define a line
+    var line = new Rhino.Geometry.Line(new Rhino.Geometry.Point3d(0, 0, 0), new Rhino.Geometry.Point3d(10, 0, 0));
 
-    <span class="c1">// Make a copy of Rhino's default object attributes
-</span>    <span class="kt">var</span> <span class="n">attribs</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="nf">CreateDefaultAttributes</span><span class="p">();</span>
+    // Make a copy of Rhino's default object attributes
+    var attribs = doc.CreateDefaultAttributes();
 
-    <span class="c1">// Modify the object decoration style
-</span>    <span class="n">attribs</span><span class="p">.</span><span class="n">ObjectDecoration</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectDecoration</span><span class="p">.</span><span class="n">BothArrowhead</span><span class="p">;</span>
+    // Modify the object decoration style
+    attribs.ObjectDecoration = Rhino.DocObjects.ObjectDecoration.BothArrowhead;
 
-    <span class="c1">// Create a new curve object with our attributes
-</span>    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLine</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">attribs</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    // Create a new curve object with our attributes
+    doc.Objects.AddLine(line, attribs);
+    doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ObjectDecoration(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -265,27 +264,26 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">ObjectDecoration</span><span class="p">():</span>
-    <span class="c"># Define a line</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+def ObjectDecoration():
+    # Define a line
+    line = Rhino.Geometry.Line(Rhino.Geometry.Point3d(0, 0, 0), Rhino.Geometry.Point3d(10, 0, 0))
 
-    <span class="c"># Make a copy of Rhino's default object attributes</span>
-    <span class="n">attribs</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">CreateDefaultAttributes</span><span class="p">()</span>
+    # Make a copy of Rhino's default object attributes
+    attribs = scriptcontext.doc.CreateDefaultAttributes()
 
-    <span class="c"># Modify the object decoration style</span>
-    <span class="n">attribs</span><span class="o">.</span><span class="n">ObjectDecoration</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectDecoration</span><span class="o">.</span><span class="n">BothArrowhead</span>
+    # Modify the object decoration style
+    attribs.ObjectDecoration = Rhino.DocObjects.ObjectDecoration.BothArrowhead
 
-    <span class="c"># Create a new curve object with our attributes</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddLine</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">attribs</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    # Create a new curve object with our attributes
+    scriptcontext.doc.Objects.AddLine(line, attribs)
+    scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">ObjectDecoration</span><span class="p">()</span>
+if __name__ == "__main__":
+    ObjectDecoration()
 </code></pre>
-</div>
 
 </div>
 

@@ -300,12 +300,11 @@
 
 <p>To determine the normal direction of a surface, you can use one of the following functions:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_Surface</span><span class="o">::</span><span class="n">NormalAt</span><span class="p">()</span>
-<span class="n">ON_Surface</span><span class="o">::</span><span class="n">EvNormal</span><span class="p">()</span>
+<pre><code class="language-cpp">ON_Surface::NormalAt()
+ON_Surface::EvNormal()
 </code></pre>
-</div>
 
-<p>To determine the normal direction of a face which is part of a Brep, you can also use the above functions, as an <code class="highlighter-rouge">ON_BrepFace</code> object is derived from <code class="highlighter-rouge">ON_Surface</code>. But, you will also need to take into account the orientation of the Brep face.  If the orientation of the Brep face is opposite of the underlying, natural surface orientation, then you will need to reverse the direction of the calculated normal vector.</p>
+<p>To determine the normal direction of a face which is part of a Brep, you can also use the above functions, as an <code>ON_BrepFace</code> object is derived from <code>ON_Surface</code>. But, you will also need to take into account the orientation of the Brep face.  If the orientation of the Brep face is opposite of the underlying, natural surface orientation, then you will need to reverse the direction of the calculated normal vector.</p>
 
 <p>It should also be noted that most surfaces in Rhino are really Breps with a single face.</p>
 
@@ -313,63 +312,62 @@
 
 <p>The following sample code demonstrates how to interactively determine the normal direction of a selected surface or Brep face.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandNormal</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select a surface
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandNormal::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select a surface
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Get the selected face
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the selected face
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const ON_BrepFace* face = ref.Face();
+  if( 0 == face )
+    return failure;
 
-  <span class="c1">// Pick a point on the surface. Constrain
-</span>  <span class="c1">// picking to the face.
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select point on surface"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">face</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Pick a point on the surface. Constrain
+  // picking to the face.
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Select point on surface" );
+  gp.Constrain( *face );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint pt = gp.Point();
 
-  <span class="c1">// Get the parameters of the point on the
-</span>  <span class="c1">// surface that is closest to pt
-</span>  <span class="kt">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">;</span>
-    <span class="n">ON_3dVector</span> <span class="n">du</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dir</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">EvNormal</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// if the face orientation is opposite of
-</span>      <span class="c1">// the natural surface orientation, then
-</span>      <span class="c1">// reverse the direction of the vector.
-</span>      <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">m_bRev</span> <span class="p">)</span>
-        <span class="n">dir</span><span class="p">.</span><span class="n">Reverse</span><span class="p">();</span>
+  // Get the parameters of the point on the
+  // surface that is closest to pt
+  double u, v;
+  if( face-&gt;GetClosestPoint(pt, &amp;u, &amp;v) )
+  {
+    ON_3dPoint pt;
+    ON_3dVector du, dv, dir;
+    if( face-&gt;EvNormal(u, v, pt, du, dv, dir) )
+    {
+      // if the face orientation is opposite of
+      // the natural surface orientation, then
+      // reverse the direction of the vector.
+      if( face-&gt;m_bRev )
+        dir.Reverse();
 
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span>
-        <span class="s">L"Surface normal at uv(%.2f,%.2f) = (%.2f,%.2f,%.2f)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-        <span class="n">u</span><span class="p">,</span>
-        <span class="n">v</span><span class="p">,</span>
-        <span class="n">dir</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
-        <span class="n">dir</span><span class="p">.</span><span class="n">y</span><span class="p">,</span>
-        <span class="n">dir</span><span class="p">.</span><span class="n">z</span>
-        <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      RhinoApp().Print(
+        L"Surface normal at uv(%.2f,%.2f) = (%.2f,%.2f,%.2f)\n",
+        u,
+        v,
+        dir.x,
+        dir.y,
+        dir.z
+        );
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

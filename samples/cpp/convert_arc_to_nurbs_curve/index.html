@@ -217,42 +217,41 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select arc to convert"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">open_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select arc to convert" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.SetGeometryAttributeFilter( CRhinoGetObject::open_curve );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; obj_ref = go.Object(0);
+  const CRhinoObject* obj = obj_ref.Object();
+  if( !obj )
+    return failure;
 
-  <span class="k">const</span> <span class="n">ON_ArcCurve</span><span class="o">*</span> <span class="n">arc_crv</span> <span class="o">=</span> <span class="n">ON_ArcCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">arc_crv</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Curve is not an arc.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  const ON_ArcCurve* arc_crv = ON_ArcCurve::Cast( obj_ref.Geometry() );
+  if( !arc_crv )
+  {
+    RhinoApp().Print( L"Curve is not an arc.\n" );
+    return nothing;
+  }
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nurbs_crv</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">arc_crv</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nurbs_crv</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">nurbs_crv</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_3dmObjectAttributes</span> <span class="n">attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">nurbs_crv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attribs</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">DeleteObject</span><span class="p">(</span> <span class="n">obj_ref</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_NurbsCurve nurbs_crv;
+  if( arc_crv-&gt;GetNurbForm(nurbs_crv) &amp;&amp; nurbs_crv.IsValid() )
+  {
+    ON_3dmObjectAttributes attribs = obj-&gt;Attributes();
+    context.m_doc.AddCurveObject( nurbs_crv, &amp;attribs );
+    context.m_doc.DeleteObject( obj_ref );
+    context.m_doc.Redraw();
+    return success;
+  }
 
-  <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-<span class="p">}</span>
+  return failure;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

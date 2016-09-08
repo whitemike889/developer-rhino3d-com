@@ -222,32 +222,31 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">FindObjectsByName</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">string</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"abc"</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectEnumeratorSettings</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="nf">ObjectEnumeratorSettings</span><span class="p">();</span>
-    <span class="n">settings</span><span class="p">.</span><span class="n">NameFilter</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
-    <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;</span> <span class="n">ids</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">rhObj</span> <span class="k">in</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">GetObjectList</span><span class="p">(</span><span class="n">settings</span><span class="p">))</span>
-      <span class="n">ids</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">rhObj</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result FindObjectsByName(Rhino.RhinoDoc doc)
+  {
+    const string name = "abc";
+    Rhino.DocObjects.ObjectEnumeratorSettings settings = new Rhino.DocObjects.ObjectEnumeratorSettings();
+    settings.NameFilter = name;
+    System.Collections.Generic.List&lt;Guid&gt; ids = new System.Collections.Generic.List&lt;Guid&gt;();
+    foreach (Rhino.DocObjects.RhinoObject rhObj in doc.Objects.GetObjectList(settings))
+      ids.Add(rhObj.Id);
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">ids</span><span class="p">.</span><span class="n">Count</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"No objects with the name "</span> <span class="p">+</span> <span class="n">name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (ids.Count == 0)
+    {
+      Rhino.RhinoApp.WriteLine("No objects with the name " + name);
+      return Rhino.Commands.Result.Failure;
+    }
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Found {0} objects"</span><span class="p">,</span> <span class="n">ids</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="n">Guid</span> <span class="n">id</span> <span class="k">in</span> <span class="n">ids</span><span class="p">)</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"  {0}"</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+    Rhino.RhinoApp.WriteLine("Found {0} objects", ids.Count);
+    foreach (Guid id in ids)
+      Rhino.RhinoApp.WriteLine("  {0}", id);
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function FindObjectsByName(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -274,27 +273,26 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">FindObjectsByName</span><span class="p">():</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">"abc"</span>
-    <span class="n">settings</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectEnumeratorSettings</span><span class="p">()</span>
-    <span class="n">settings</span><span class="o">.</span><span class="n">NameFilter</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="n">ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">rhobj</span><span class="o">.</span><span class="n">Id</span> <span class="k">for</span> <span class="n">rhobj</span> <span class="ow">in</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">GetObjectList</span><span class="p">(</span><span class="n">settings</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ids</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"No objects with the name"</span><span class="p">,</span> <span class="n">name</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Found"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">),</span> <span class="s">"objects"</span>
-        <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span> <span class="k">print</span> <span class="s">"  "</span><span class="p">,</span> <span class="nb">id</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+def FindObjectsByName():
+    name = "abc"
+    settings = Rhino.DocObjects.ObjectEnumeratorSettings()
+    settings.NameFilter = name
+    ids = [rhobj.Id for rhobj in scriptcontext.doc.Objects.GetObjectList(settings)]
+    if not ids:
+        print "No objects with the name", name
+        return Rhino.Commands.Result.Failure
+    else:
+        print "Found", len(ids), "objects"
+        for id in ids: print "  ", id
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">FindObjectsByName</span><span class="p">()</span>
+if __name__ == "__main__":
+    FindObjectsByName()
 </code></pre>
-</div>
 
 </div>
 

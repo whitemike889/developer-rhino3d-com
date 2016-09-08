@@ -298,40 +298,39 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>The openNURBS C/C++ SDK, which is also included with the Rhino C/C++ SDK, contains a <code class="highlighter-rouge">ON_TextLog</code> class that makes it very simple to write, or dump, information to a text file.  The class can be very handy when trying to debug geometric objects, for most objects have the ability to dump their contents to a log file.</p>
+<p>The openNURBS C/C++ SDK, which is also included with the Rhino C/C++ SDK, contains a <code>ON_TextLog</code> class that makes it very simple to write, or dump, information to a text file.  The class can be very handy when trying to debug geometric objects, for most objects have the ability to dump their contents to a log file.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following is an example of using the <code class="highlighter-rouge">ON_TextLog</code> class to dump the contents of a brep object to a text file.  For more information on <code class="highlighter-rouge">ON_TextLog</code>, see <em>opennurbs_textlog.h</em></p>
+<p>The following is an example of using the <code>ON_TextLog</code> class to dump the contents of a brep object to a text file.  For more information on <code>ON_TextLog</code>, see <em>opennurbs_textlog.h</em></p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-    <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select brep"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span>
-       <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-       <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Brep</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="s">L"c:</span><span class="se">\\</span><span class="s">bug_report.txt"</span><span class="p">,</span> <span class="s">L"w"</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">fp</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_TextLog</span> <span class="n">text_log</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-        <span class="n">text_log</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Dumping Brep...</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-        <span class="n">brep</span><span class="o">-&gt;</span><span class="n">Dump</span><span class="p">(</span> <span class="n">text_log</span> <span class="p">);</span>
-        <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+    const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select brep" );
+  go.SetGeometryFilter(
+       CRhinoGetObject::surface_object |
+       CRhinoGetObject::polysrf_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() == CRhinoCommand::success )
+  {
+    const ON_Brep* brep = go.Object(0).Brep();
+    if( brep )
+    {
+      FILE* fp = ON::OpenFile( L"c:\\bug_report.txt", L"w" );
+      if( fp )
+      {
+        ON_TextLog text_log( fp );
+        text_log.Print( L"Dumping Brep...\n" );
+        brep-&gt;Dump( text_log );
+        ON::CloseFile( fp );
+      }
+    }
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

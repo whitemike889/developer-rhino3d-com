@@ -347,7 +347,7 @@
 <p>Creating instance definitions using C/C++ requires two steps:</p>
 
 <ol>
-  <li>Define the instance definition objects.  Instance definition objects are similar to regular Rhino objects - the ones that you see on the screen.  The difference is that instance definition objects reside in a different location in the document.  To add instance definition objects to the document, use <code class="highlighter-rouge">CRhinoDoc::AddObject</code> and make sure you set the bInstanceDefinition parameter to true.</li>
+  <li>Define the instance definition objects.  Instance definition objects are similar to regular Rhino objects - the ones that you see on the screen.  The difference is that instance definition objects reside in a different location in the document.  To add instance definition objects to the document, use <code>CRhinoDoc::AddObject</code> and make sure you set the bInstanceDefinition parameter to true.</li>
   <li>Add a new instance definition object to Rhino’s instance definition table, which is located on the Rhino document.  An instance definition defines the name of the instance and the instance definition objects used by it.</li>
 </ol>
 
@@ -359,109 +359,108 @@
 
 <p><strong>NOTE</strong>:  Unlike Rhino’s <em>Block</em> command, this example code does not delete the selected objects, nor does it automatically insert a block instance at the location defined by the user.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select objects to define block
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects to define block"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableReferenceObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableGroupSelect</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select objects to define block
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects to define block" );
+  go.EnableReferenceObjectSelect( false );
+  go.EnableSubObjectSelect( false );
+  go.EnableGroupSelect( true );
 
-  <span class="c1">// Phantoms, grips, lights, etc., cannot be in blocks.
-</span>  <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">forbidden_geometry_filter</span>
-                <span class="o">=</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">light_object</span>
-                <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">grip_object</span>
-                <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">phantom_object</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">geometry_filter</span> <span class="o">=</span> <span class="n">forbidden_geometry_filter</span>
-                               <span class="o">^</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">any_object</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">geometry_filter</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Phantoms, grips, lights, etc., cannot be in blocks.
+  const unsigned int forbidden_geometry_filter
+                = CRhinoGetObject::light_object
+                | CRhinoGetObject::grip_object
+                | CRhinoGetObject::phantom_object;
+  const unsigned int geometry_filter = forbidden_geometry_filter
+                               ^ CRhinoGetObject::any_object;
+  go.SetGeometryFilter( geometry_filter );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Block base point
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Block base point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Block base point
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Block base point" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">base_point</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint base_point = gp.Point();
 
-  <span class="c1">// Block definition name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Block definition name"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Block definition name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Block definition name" );
+  gs.GetString();
+  if( gs.CommandResult() != success )
+    return gs.CommandResult();
 
-  <span class="c1">// Validate block name
-</span>  <span class="n">ON_wString</span> <span class="n">idef_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">idef_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Validate block name
+  ON_wString idef_name = gs.String();
+  idef_name.TrimLeftAndRight();
+  if( idef_name.IsEmpty() )
+    return nothing;
 
-  <span class="c1">// See if block name already exists
-</span>  <span class="n">CRhinoInstanceDefinitionTable</span><span class="o">&amp;</span> <span class="n">idef_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_instance_definition_table</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">idef_index</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">.</span><span class="n">FindInstanceDefinition</span><span class="p">(</span> <span class="n">idef_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Block definition </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> already exists.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">idef_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // See if block name already exists
+  CRhinoInstanceDefinitionTable&amp; idef_table = context.m_doc.m_instance_definition_table;
+  int idef_index = idef_table.FindInstanceDefinition( idef_name );
+  if( idef_index &gt;= 0 )
+  {
+    RhinoApp().Print( L"Block definition \"%s\" already exists.\n", idef_name );
+    return nothing;
+  }
 
-  <span class="c1">// Create new block definition
-</span>  <span class="n">ON_InstanceDefinition</span> <span class="n">idef</span><span class="p">;</span>
-  <span class="n">idef</span><span class="p">.</span><span class="n">SetName</span><span class="p">(</span> <span class="n">idef_name</span> <span class="p">);</span>
+  // Create new block definition
+  ON_InstanceDefinition idef;
+  idef.SetName( idef_name );
 
-  <span class="c1">// Gather all of the selected objects
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">objects</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-      <span class="n">objects</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj</span><span class="p">);</span>
-  <span class="p">}</span>
+  // Gather all of the selected objects
+  ON_SimpleArray&lt;const CRhinoObject*&gt; objects( go.ObjectCount() );
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const CRhinoObject* obj = go.Object(i).Object();
+    if( obj )
+      objects.Append( obj);
+  }
 
-  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">ON_origin</span> <span class="o">-</span> <span class="n">base_point</span> <span class="p">);</span>
+  ON_Xform xform;
+  xform.Translation( ON_origin - base_point );
 
-  <span class="c1">// Duplicate all of the selected objects and add them
-</span>  <span class="c1">// to the document as instance definition objects
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">idef_objects</span><span class="p">(</span> <span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">objects</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">dupe</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">TransformObject</span><span class="p">(</span> <span class="n">obj</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">false</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">dupe</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">dupe</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-        <span class="n">idef_objects</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">dupe</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Duplicate all of the selected objects and add them
+  // to the document as instance definition objects
+  ON_SimpleArray&lt;const CRhinoObject*&gt; idef_objects( objects.Count() );
+  for( i = 0; i &lt; objects.Count(); i++ )
+  {
+    const CRhinoObject* obj = objects[i];
+    if( obj )
+    {
+      CRhinoObject* dupe = context.m_doc.TransformObject( obj, xform, false, false, false );
+      if( dupe)
+      {
+        context.m_doc.AddObject( dupe, false, true );
+        idef_objects.Append( dupe );
+      }
+    }
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_objects</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to duplicate block definition geometry.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( idef_objects.Count() &lt; 1 )
+  {
+    RhinoApp().Print( L"Unable to duplicate block definition geometry.\n" );
+    return failure;
+  }
 
-  <span class="n">idef_index</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">.</span><span class="n">AddInstanceDefinition</span><span class="p">(</span> <span class="n">idef</span><span class="p">,</span> <span class="n">idef_objects</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to create block definition </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">idef_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  idef_index = idef_table.AddInstanceDefinition( idef, idef_objects );
+  if( idef_index &lt; 0 )
+  {
+    RhinoApp().Print( L"Unable to create block definition \"%s\".\n", idef_name );
+    return failure;
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 <h2 id="related-topics">Related Topics</h2>
 

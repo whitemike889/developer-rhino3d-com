@@ -222,76 +222,75 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CreateBlock</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Select objects to define block
-</span>    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span> <span class="s">"Select objects to define block"</span> <span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">ReferenceObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result CreateBlock(Rhino.RhinoDoc doc)
+  {
+    // Select objects to define block
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt( "Select objects to define block" );
+    go.ReferenceObjectSelect = false;
+    go.SubObjectSelect = false;
+    go.GroupSelect = true;
 
-    <span class="c1">// Phantoms, grips, lights, etc., cannot be in blocks.
-</span>    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">forbidden_geometry_filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Light</span> <span class="p">|</span>
-                                                 <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Grip</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Phantom</span><span class="p">;</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">geometry_filter</span> <span class="p">=</span> <span class="n">forbidden_geometry_filter</span> <span class="p">^</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">geometry_filter</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Phantoms, grips, lights, etc., cannot be in blocks.
+    const ObjectType forbidden_geometry_filter = Rhino.DocObjects.ObjectType.Light |
+                                                 Rhino.DocObjects.ObjectType.Grip | Rhino.DocObjects.ObjectType.Phantom;
+    const ObjectType geometry_filter = forbidden_geometry_filter ^ Rhino.DocObjects.ObjectType.AnyObject;
+    go.GeometryFilter = geometry_filter;
+    go.GetMultiple(1, 0);
+    if (go.CommandResult() != Rhino.Commands.Result.Success)
+      return go.CommandResult();
 
-    <span class="c1">// Block base point
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">base_point</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">(</span><span class="s">"Block base point"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">out</span> <span class="n">base_point</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    // Block base point
+    Rhino.Geometry.Point3d base_point;
+    var rc = Rhino.Input.RhinoGet.GetPoint("Block base point", false, out base_point);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="c1">// Block definition name
-</span>    <span class="kt">string</span> <span class="n">idef_name</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Block definition name"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">idef_name</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="c1">// Validate block name
-</span>    <span class="n">idef_name</span> <span class="p">=</span> <span class="n">idef_name</span><span class="p">.</span><span class="nf">Trim</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">idef_name</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+    // Block definition name
+    string idef_name = "";
+    rc = Rhino.Input.RhinoGet.GetString("Block definition name", false, ref idef_name);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
+    // Validate block name
+    idef_name = idef_name.Trim();
+    if (string.IsNullOrEmpty(idef_name))
+      return Rhino.Commands.Result.Nothing;
 
-    <span class="c1">// See if block name already exists
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceDefinition</span> <span class="n">existing_idef</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">idef_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">existing_idef</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Block definition {0} already exists"</span><span class="p">,</span> <span class="n">idef_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // See if block name already exists
+    Rhino.DocObjects.InstanceDefinition existing_idef = doc.InstanceDefinitions.Find(idef_name, true);
+    if (existing_idef != null)
+    {
+      Rhino.RhinoApp.WriteLine("Block definition {0} already exists", idef_name);
+      return Rhino.Commands.Result.Nothing;
+    }
 
-    <span class="c1">// Gather all of the selected objects
-</span>    <span class="kt">var</span> <span class="n">geometry</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">GeometryBase</span><span class="p">&gt;();</span>
-    <span class="kt">var</span> <span class="n">attributes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectAttributes</span><span class="p">&gt;();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">rhinoObject</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">Object</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">rhinoObject</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">geometry</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">rhinoObject</span><span class="p">.</span><span class="n">Geometry</span><span class="p">);</span>
-        <span class="n">attributes</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">rhinoObject</span><span class="p">.</span><span class="n">Attributes</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    // Gather all of the selected objects
+    var geometry = new System.Collections.Generic.List&lt;Rhino.Geometry.GeometryBase&gt;();
+    var attributes = new System.Collections.Generic.List&lt;Rhino.DocObjects.ObjectAttributes&gt;();
+    for (int i = 0; i &lt; go.ObjectCount; i++)
+    {
+      var rhinoObject = go.Object(i).Object();
+      if (rhinoObject != null)
+      {
+        geometry.Add(rhinoObject.Geometry);
+        attributes.Add(rhinoObject.Attributes);
+      }
+    }
 
-    <span class="c1">// Gather all of the selected objects
-</span>    <span class="kt">int</span> <span class="n">idef_index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">idef_name</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">attributes</span><span class="p">);</span>
+    // Gather all of the selected objects
+    int idef_index = doc.InstanceDefinitions.Add(idef_name, string.Empty, base_point, geometry, attributes);
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">idef_index</span> <span class="p">&lt;</span> <span class="m">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to create block definition"</span><span class="p">,</span> <span class="n">idef_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    if( idef_index &lt; 0 )
+    {
+      Rhino.RhinoApp.WriteLine("Unable to create block definition", idef_name);
+      return Rhino.Commands.Result.Failure;
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CreateBlock(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -360,60 +359,59 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">CreateBlock</span><span class="p">():</span>
-    <span class="c"># Select objects to define block</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">"Select objects to define block"</span> <span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">ReferenceObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GroupSelect</span> <span class="o">=</span> <span class="bp">True</span>
+def CreateBlock():
+    # Select objects to define block
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt( "Select objects to define block" )
+    go.ReferenceObjectSelect = False
+    go.SubObjectSelect = False
+    go.GroupSelect = True
 
-    <span class="c"># Phantoms, grips, lights, etc., cannot be in blocks.</span>
-    <span class="n">forbidden_geometry_filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Light</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Grip</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Phantom</span>
-    <span class="n">geometry_filter</span> <span class="o">=</span> <span class="n">forbidden_geometry_filter</span> <span class="o">^</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">geometry_filter</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Phantoms, grips, lights, etc., cannot be in blocks.
+    forbidden_geometry_filter = Rhino.DocObjects.ObjectType.Light | Rhino.DocObjects.ObjectType.Grip | Rhino.DocObjects.ObjectType.Phantom
+    geometry_filter = forbidden_geometry_filter ^ Rhino.DocObjects.ObjectType.AnyObject
+    go.GeometryFilter = geometry_filter
+    go.GetMultiple(1, 0)
+    if go.CommandResult() != Rhino.Commands.Result.Success:
+        return go.CommandResult()
 
-    <span class="c"># Block base point</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">base_point</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"Block base point"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+    # Block base point
+    rc, base_point = Rhino.Input.RhinoGet.GetPoint("Block base point", False)
+    if rc != Rhino.Commands.Result.Success: return rc
 
-    <span class="c"># Block definition name</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">idef_name</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"Block definition name"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
-    <span class="c"># Validate block name</span>
-    <span class="n">idef_name</span> <span class="o">=</span> <span class="n">idef_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">idef_name</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+    # Block definition name
+    rc, idef_name = Rhino.Input.RhinoGet.GetString("Block definition name", False, "")
+    if rc != Rhino.Commands.Result.Success: return rc
+    # Validate block name
+    idef_name = idef_name.strip()
+    if not idef_name: return Rhino.Commands.Result.Nothing
 
-    <span class="c"># See if block name already exists</span>
-    <span class="n">existing_idef</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">idef_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">existing_idef</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Block definition"</span><span class="p">,</span> <span class="n">idef_name</span><span class="p">,</span> <span class="s">"already exists"</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+    # See if block name already exists
+    existing_idef = scriptcontext.doc.InstanceDefinitions.Find(idef_name, True)
+    if existing_idef:
+        print "Block definition", idef_name, "already exists"
+        return Rhino.Commands.Result.Nothing
 
-    <span class="c"># Gather all of the selected objects</span>
-    <span class="n">objrefs</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Objects</span><span class="p">()</span>
-    <span class="n">geometry</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span><span class="o">.</span><span class="n">Geometry</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">objrefs</span><span class="p">]</span>
-    <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span><span class="o">.</span><span class="n">Attributes</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">objrefs</span><span class="p">]</span>
+    # Gather all of the selected objects
+    objrefs = go.Objects()
+    geometry = [item.Object().Geometry for item in objrefs]
+    attributes = [item.Object().Attributes for item in objrefs]
 
-    <span class="c"># Add the instance definition</span>
-    <span class="n">idef_index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">idef_name</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">attributes</span><span class="p">)</span>
+    # Add the instance definition
+    idef_index = scriptcontext.doc.InstanceDefinitions.Add(idef_name, "", base_point, geometry, attributes)
 
-    <span class="k">if</span> <span class="n">idef_index</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Unable to create block definition"</span><span class="p">,</span> <span class="n">idef_name</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    if idef_index&lt;0:
+        print "Unable to create block definition", idef_name
+        return Rhino.Commands.Result.Failure
+    return Rhino.Commands.Result.Failure
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">CreateBlock</span><span class="p">()</span>
+if __name__=="__main__":
+    CreateBlock()
 </code></pre>
-</div>
 
 </div>
 

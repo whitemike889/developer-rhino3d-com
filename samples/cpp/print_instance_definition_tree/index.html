@@ -217,61 +217,60 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoInstanceDefinitionTable</span><span class="o">&amp;</span> <span class="n">idef_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_instance_definition_table</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">idef_count</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">.</span><span class="n">InstanceDefinitionCount</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">idef_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">"No instance definitions found.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  const CRhinoInstanceDefinitionTable&amp; idef_table = context.m_doc.m_instance_definition_table;
+  int idef_count = idef_table.InstanceDefinitionCount();
+  if (idef_count == 0)
+  {
+    RhinoApp().Print("No instance definitions found.\n");
+    return CRhinoCommand::nothing;
+  }
 
-  <span class="n">ON_wString</span> <span class="n">writer</span><span class="p">;</span>
-  <span class="n">ON_TextLog</span> <span class="n">dump</span><span class="p">(</span> <span class="n">writer</span> <span class="p">);</span>
-  <span class="n">dump</span><span class="p">.</span><span class="n">SetIndentSize</span><span class="p">(</span> <span class="mi">4</span> <span class="p">);</span>
+  ON_wString writer;
+  ON_TextLog dump( writer );
+  dump.SetIndentSize( 4 );
 
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">idef_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">DumpInstanceDefinition</span><span class="p">(</span> <span class="n">idef_table</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dump</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
+  for (int i = 0; i &lt; idef_count; i++)
+    DumpInstanceDefinition( idef_table[i], dump, true );
 
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">writer</span> <span class="p">);</span>
+  RhinoApp().Print( L"%s\n", writer );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 
-<span class="kt">void</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">DumpInstanceDefinition</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span><span class="p">,</span> <span class="n">ON_TextLog</span><span class="o">&amp;</span> <span class="n">dump</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bRoot</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">IsDeleted</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_wString</span> <span class="n">node</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">bRoot</span> <span class="p">)</span>
-      <span class="n">node</span> <span class="o">=</span> <span class="s">L"\u2500"</span><span class="p">;</span>
-    <span class="k">else</span>
-      <span class="n">node</span> <span class="o">=</span> <span class="s">L"\u2514"</span><span class="p">;</span>
-    <span class="n">dump</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"%s Instance definition %d = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">Index</span><span class="p">(),</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">Name</span><span class="p">()</span> <span class="p">);</span>
+void CCommandTest::DumpInstanceDefinition( const CRhinoInstanceDefinition* idef, ON_TextLog&amp; dump, bool bRoot )
+{
+  if( idef &amp;&amp; ! idef-&gt;IsDeleted() )
+  {
+    ON_wString node;
+    if( bRoot )
+      node = L"\u2500";
+    else
+      node = L"\u2514";
+    dump.Print(L"%s Instance definition %d = %s\n", node, idef-&gt;Index(), idef-&gt;Name() );
 
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">idef_object_count</span> <span class="o">=</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">ObjectCount</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">idef_object_count</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">dump</span><span class="p">.</span><span class="n">PushIndent</span><span class="p">();</span>
-      <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">Object</span><span class="p">(</span> <span class="n">i</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">const</span> <span class="n">CRhinoInstanceObject</span><span class="o">*</span> <span class="n">iref</span> <span class="o">=</span> <span class="n">CRhinoInstanceObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-          <span class="k">if</span><span class="p">(</span> <span class="n">iref</span> <span class="p">)</span>
-            <span class="n">DumpInstanceDefinition</span><span class="p">(</span> <span class="n">iref</span><span class="o">-&gt;</span><span class="n">InstanceDefinition</span><span class="p">(),</span> <span class="n">dump</span><span class="p">,</span> <span class="nb">false</span> <span class="p">);</span> <span class="c1">// Recursive...
-</span>          <span class="k">else</span>
-            <span class="n">dump</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"\u2514 Object %d = %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">ShortDescription</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="n">dump</span><span class="p">.</span><span class="n">PopIndent</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    const int idef_object_count = idef-&gt;ObjectCount();
+    if( idef_object_count )
+    {
+      dump.PushIndent();
+      for( int i = 0; i &lt; idef-&gt;ObjectCount(); i++ )
+      {
+        const CRhinoObject* obj = idef-&gt;Object( i );
+        if( obj )
+        {
+          const CRhinoInstanceObject* iref = CRhinoInstanceObject::Cast( obj );
+          if( iref )
+            DumpInstanceDefinition( iref-&gt;InstanceDefinition(), dump, false ); // Recursive...
+          else
+            dump.Print(L"\u2514 Object %d = %s\n", i, obj-&gt;ShortDescription(false) );
+        }
+      }
+      dump.PopIndent();
+    }
+  }
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -222,38 +222,37 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">FindCurveParameterAtPoint</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span><span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="p">==</span><span class="k">null</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result FindCurveParameterAtPoint(RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef objref;
+    var rc = RhinoGet.GetOneObject("Select curve", true, ObjectType.Curve,out objref);
+    if(rc!= Result.Success)
+      return rc;
+    var curve = objref.Curve();
+    if( curve==null )
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Pick a location on the curve"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("Pick a location on the curve");
+    gp.Constrain(curve, false);
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
 
-    <span class="kt">var</span> <span class="n">point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-    <span class="kt">double</span> <span class="n">closest_point_param</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="k">out</span> <span class="n">closest_point_param</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"point: ({0}), parameter: {1}"</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">closest_point_param</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var point = gp.Point();
+    double closest_point_param;
+    if (curve.ClosestPoint(point, out closest_point_param))
+    {
+      RhinoApp.WriteLine("point: ({0}), parameter: {1}", point, closest_point_param);
+      doc.Objects.AddPoint(point);
+      doc.Views.Redraw();
+    }
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function FindCurveParameterAtPoint(ByVal doc As RhinoDoc) As Result
@@ -287,38 +286,37 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import rhinoscriptsyntax as rs
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">rc</span><span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">crv</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="o">==</span> <span class="bp">None</span> <span class="p">):</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select curve", True, Rhino.DocObjects.ObjectType.Curve)
+  if(rc!= Rhino.Commands.Result.Success):
+    return rc
+  crv = objref.Curve()
+  if( crv == None ):
+    return Rhino.Commands.Result.Failure
 
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Pick a location on the curve"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">crv</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  gp = Rhino.Input.Custom.GetPoint()
+  gp.SetCommandPrompt("Pick a location on the curve")
+  gp.Constrain(crv, False)
+  gp.Get()
+  if (gp.CommandResult() != Rhino.Commands.Result.Success):
+    return gp.CommandResult();
 
-  <span class="n">p</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-  <span class="n">b</span><span class="p">,</span> <span class="n">cp</span> <span class="o">=</span> <span class="n">crv</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">):</span>
-    <span class="k">print</span> <span class="s">"point: ({0},{1},{2}), parameter: {3}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="n">cp</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+  p = gp.Point()
+  b, cp = crv.ClosestPoint(p)
+  if (b):
+    print "point: ({0},{1},{2}), parameter: {3}".format(p.X, p.Y, p.Z, cp)
+    scriptcontext.doc.Objects.AddPoint(p)
+    scriptcontext.doc.Views.Redraw()
 
-  <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__=="__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

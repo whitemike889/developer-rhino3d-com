@@ -302,15 +302,14 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>To change the title of a viewport, use <code class="highlighter-rouge">CRhinoViewport::SetName</code>.  A Rhino view contains a “main viewport” that fills the entire view client window.  To get a view’s main viewport, you can call <code class="highlighter-rouge">CRhinoView::MainViewport</code>.</p>
+<p>To change the title of a viewport, use <code>CRhinoViewport::SetName</code>.  A Rhino view contains a “main viewport” that fills the entire view client window.  To get a view’s main viewport, you can call <code>CRhinoView::MainViewport</code>.</p>
 
 <p>For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">view</span><span class="p">)</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">MainViewport</span><span class="p">().</span><span class="n">SetName</span><span class="p">(</span><span class="s">"Facade"</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoView* view = RhinoApp().ActiveView();
+if (view)
+  view-&gt;MainViewport().SetName("Facade");
 </code></pre>
-</div>
 
         </article>
 

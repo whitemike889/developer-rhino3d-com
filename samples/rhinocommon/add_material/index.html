@@ -222,34 +222,33 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddMaterial</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// materials are stored in the document's material table
-</span>    <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Materials</span><span class="p">.</span><span class="nf">Add</span><span class="p">();</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Material</span> <span class="n">mat</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Materials</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
-    <span class="n">mat</span><span class="p">.</span><span class="n">DiffuseColor</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Chocolate</span><span class="p">;</span>
-    <span class="n">mat</span><span class="p">.</span><span class="n">SpecularColor</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">CadetBlue</span><span class="p">;</span>
-    <span class="n">mat</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddMaterial(Rhino.RhinoDoc doc)
+  {
+    // materials are stored in the document's material table
+    int index = doc.Materials.Add();
+    Rhino.DocObjects.Material mat = doc.Materials[index];
+    mat.DiffuseColor = System.Drawing.Color.Chocolate;
+    mat.SpecularColor = System.Drawing.Color.CadetBlue;
+    mat.CommitChanges();
 
-    <span class="c1">// set up object attributes to say they use a specific material
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Sphere</span> <span class="n">sp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Sphere</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span><span class="p">.</span><span class="n">WorldXY</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectAttributes</span> <span class="n">attr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="nf">ObjectAttributes</span><span class="p">();</span>
-    <span class="n">attr</span><span class="p">.</span><span class="n">MaterialIndex</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
-    <span class="n">attr</span><span class="p">.</span><span class="n">MaterialSource</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectMaterialSource</span><span class="p">.</span><span class="n">MaterialFromObject</span><span class="p">;</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddSphere</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">attr</span><span class="p">);</span>
+    // set up object attributes to say they use a specific material
+    Rhino.Geometry.Sphere sp = new Rhino.Geometry.Sphere(Rhino.Geometry.Plane.WorldXY, 5);
+    Rhino.DocObjects.ObjectAttributes attr = new Rhino.DocObjects.ObjectAttributes();
+    attr.MaterialIndex = index;
+    attr.MaterialSource = Rhino.DocObjects.ObjectMaterialSource.MaterialFromObject;
+    doc.Objects.AddSphere(sp, attr);
 
-    <span class="c1">// add a sphere without the material attributes set
-</span>    <span class="n">sp</span><span class="p">.</span><span class="n">Center</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddSphere</span><span class="p">(</span><span class="n">sp</span><span class="p">);</span>
+    // add a sphere without the material attributes set
+    sp.Center = new Rhino.Geometry.Point3d(10, 10, 0);
+    doc.Objects.AddSphere(sp);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddMaterial(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -277,35 +276,34 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Drawing</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Drawing
 
-<span class="k">def</span> <span class="nf">AddMaterial</span><span class="p">():</span>
-    <span class="c"># materials are stored in the document's material table</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Materials</span><span class="o">.</span><span class="n">Add</span><span class="p">()</span>
-    <span class="n">mat</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Materials</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-    <span class="n">mat</span><span class="o">.</span><span class="n">DiffuseColor</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Chocolate</span>
-    <span class="n">mat</span><span class="o">.</span><span class="n">SpecularColor</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">CadetBlue</span>
-    <span class="n">mat</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+def AddMaterial():
+    # materials are stored in the document's material table
+    index = scriptcontext.doc.Materials.Add()
+    mat = scriptcontext.doc.Materials[index]
+    mat.DiffuseColor = System.Drawing.Color.Chocolate
+    mat.SpecularColor = System.Drawing.Color.CadetBlue
+    mat.CommitChanges()
 
-    <span class="c"># set up object attributes to say they use a specific material</span>
-    <span class="n">sp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Sphere</span><span class="p">(</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="o">.</span><span class="n">WorldXY</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">attr</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectAttributes</span><span class="p">()</span>
-    <span class="n">attr</span><span class="o">.</span><span class="n">MaterialIndex</span> <span class="o">=</span> <span class="n">index</span>
-    <span class="n">attr</span><span class="o">.</span><span class="n">MaterialSource</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectMaterialSource</span><span class="o">.</span><span class="n">MaterialFromObject</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddSphere</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+    # set up object attributes to say they use a specific material
+    sp = Rhino.Geometry.Sphere(Rhino.Geometry.Plane.WorldXY, 5)
+    attr = Rhino.DocObjects.ObjectAttributes()
+    attr.MaterialIndex = index
+    attr.MaterialSource = Rhino.DocObjects.ObjectMaterialSource.MaterialFromObject
+    scriptcontext.doc.Objects.AddSphere(sp, attr)
 
-    <span class="c"># add a sphere without the material attributes set</span>
-    <span class="n">sp</span><span class="o">.</span><span class="n">Center</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddSphere</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+    # add a sphere without the material attributes set
+    sp.Center = Rhino.Geometry.Point3d(10, 10, 0)
+    scriptcontext.doc.Objects.AddSphere(sp)
 
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">();</span>
+    scriptcontext.doc.Views.Redraw();
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddMaterial</span><span class="p">()</span>
+if __name__=="__main__":
+    AddMaterial()
 </code></pre>
-</div>
 
 </div>
 

@@ -222,28 +222,27 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DisplayPrecision</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gi</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetInteger</span><span class="p">();</span>
-    <span class="n">gi</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"New display precision"</span><span class="p">);</span>
-    <span class="n">gi</span><span class="p">.</span><span class="nf">SetDefaultInteger</span><span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">ModelDistanceDisplayPrecision</span><span class="p">);</span>
-    <span class="n">gi</span><span class="p">.</span><span class="nf">SetLowerLimit</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gi</span><span class="p">.</span><span class="nf">SetUpperLimit</span><span class="p">(</span><span class="m">7</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gi</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gi</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gi</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">distance_display_precision</span> <span class="p">=</span> <span class="n">gi</span><span class="p">.</span><span class="nf">Number</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DisplayPrecision(RhinoDoc doc)
+  {
+    var gi = new GetInteger();
+    gi.SetCommandPrompt("New display precision");
+    gi.SetDefaultInteger(doc.ModelDistanceDisplayPrecision);
+    gi.SetLowerLimit(0, false);
+    gi.SetUpperLimit(7, false);
+    gi.Get();
+    if (gi.CommandResult() != Result.Success)
+      return gi.CommandResult();
+    var distance_display_precision = gi.Number();
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">distance_display_precision</span> <span class="p">!=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelDistanceDisplayPrecision</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">ModelDistanceDisplayPrecision</span> <span class="p">=</span> <span class="n">distance_display_precision</span><span class="p">;</span>
+    if (distance_display_precision != doc.ModelDistanceDisplayPrecision)
+      doc.ModelDistanceDisplayPrecision = distance_display_precision;
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DisplayPrecision(ByVal doc As RhinoDoc) As Result
@@ -267,26 +266,25 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Input.Custom import *
+from Rhino.Commands import *
+from scriptcontext import doc
+import rhinoscriptsyntax as rs
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">distance_display_precision</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetInteger</span><span class="p">(</span><span class="s">"Display precision"</span><span class="p">,</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">ModelDistanceDisplayPrecision</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">distance_display_precision</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+def RunCommand():
+  distance_display_precision = rs.GetInteger("Display precision",
+    doc.ModelDistanceDisplayPrecision, 0, 7)
+  if distance_display_precision == None: return Result.Nothing
 
-  <span class="k">if</span> <span class="n">distance_display_precision</span> <span class="o">&lt;&gt;</span> <span class="n">doc</span><span class="o">.</span><span class="n">ModelDistanceDisplayPrecision</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">ModelDistanceDisplayPrecision</span> <span class="o">=</span> <span class="n">distance_display_precision</span>
+  if distance_display_precision &lt;&gt; doc.ModelDistanceDisplayPrecision:
+    doc.ModelDistanceDisplayPrecision = distance_display_precision
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span>  <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ ==  "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

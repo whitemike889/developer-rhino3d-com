@@ -222,52 +222,51 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ExtractIsoCurve</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">obj_ref</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">surface</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ExtractIsoCurve(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select surface", false, ObjectType.Surface, out obj_ref);
+    if (rc != Result.Success || obj_ref == null)
+      return rc;
+    var surface = obj_ref.Surface();
 
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point on surface"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">option_toggle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptionToggle</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="s">"U"</span><span class="p">,</span> <span class="s">"V"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionToggle</span><span class="p">(</span><span class="s">"Direction"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">option_toggle</span><span class="p">);</span>
-    <span class="n">Point3d</span> <span class="n">point</span> <span class="p">=</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Unset</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">grc</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">grc</span> <span class="p">==</span> <span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">grc</span> <span class="p">==</span> <span class="n">GetResult</span><span class="p">.</span><span class="n">Point</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-        <span class="k">break</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-        <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">point</span> <span class="p">==</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Unset</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("Point on surface");
+    gp.Constrain(surface, false);
+    var option_toggle = new OptionToggle(false, "U", "V");
+    gp.AddOptionToggle("Direction", ref option_toggle);
+    Point3d point = Point3d.Unset;
+    while (true)
+    {
+      var grc = gp.Get();
+      if (grc == GetResult.Option)
+        continue;
+      else if (grc == GetResult.Point)
+      {
+        point = gp.Point();
+        break;
+      }
+      else
+        return Result.Nothing;
+    }
+    if (point == Point3d.Unset)
+      return Result.Nothing;
 
-    <span class="kt">int</span> <span class="n">direction</span> <span class="p">=</span> <span class="n">option_toggle</span><span class="p">.</span><span class="n">CurrentValue</span> <span class="p">?</span> <span class="m">1</span> <span class="p">:</span> <span class="m">0</span><span class="p">;</span> <span class="c1">// V : U
-</span>    <span class="kt">double</span> <span class="n">u_parameter</span><span class="p">,</span> <span class="n">v_parameter</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">surface</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="k">out</span> <span class="n">u_parameter</span><span class="p">,</span> <span class="k">out</span> <span class="n">v_parameter</span><span class="p">))</span> <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    int direction = option_toggle.CurrentValue ? 1 : 0; // V : U
+    double u_parameter, v_parameter;
+    if (!surface.ClosestPoint(point, out u_parameter, out v_parameter)) return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">iso_curve</span> <span class="p">=</span> <span class="n">surface</span><span class="p">.</span><span class="nf">IsoCurve</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">direction</span> <span class="p">==</span> <span class="m">1</span> <span class="p">?</span> <span class="n">u_parameter</span> <span class="p">:</span> <span class="n">v_parameter</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">iso_curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var iso_curve = surface.IsoCurve(direction, direction == 1 ? u_parameter : v_parameter);
+    if (iso_curve == null) return Result.Failure;
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">iso_curve</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Objects.AddCurve(iso_curve);
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ExtractIsoCurve(ByVal doc As RhinoDoc) As Result
@@ -317,56 +316,55 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
+from Rhino.Geometry import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select surface"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span> <span class="ow">or</span> <span class="n">obj_ref</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">surface</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Surface</span><span class="p">()</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject("Select surface", False, ObjectType.Surface)
+  if rc &lt;&gt; Result.Success or obj_ref == None:
+    return rc
+  surface = obj_ref.Surface()
 
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Point on surface"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-  <span class="n">option_toggle</span> <span class="o">=</span> <span class="n">OptionToggle</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="s">"U"</span><span class="p">,</span> <span class="s">"V"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionToggle</span><span class="p">(</span><span class="s">"Direction"</span><span class="p">,</span> <span class="n">option_toggle</span><span class="p">)</span>
-  <span class="n">point</span> <span class="o">=</span> <span class="n">Point3d</span><span class="o">.</span><span class="n">Unset</span>
+  gp = GetPoint()
+  gp.SetCommandPrompt("Point on surface")
+  gp.Constrain(surface, False)
+  option_toggle = OptionToggle(False, "U", "V")
+  gp.AddOptionToggle("Direction", option_toggle)
+  point = Point3d.Unset
 
-  <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">grc</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">grc</span> <span class="o">==</span> <span class="n">GetResult</span><span class="o">.</span><span class="n">Option</span><span class="p">:</span>
-      <span class="k">continue</span>
-    <span class="k">elif</span> <span class="n">grc</span> <span class="o">==</span> <span class="n">GetResult</span><span class="o">.</span><span class="n">Point</span><span class="p">:</span>
-      <span class="n">point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-      <span class="k">break</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  while True:
+    grc = gp.Get()
+    if grc == GetResult.Option:
+      continue
+    elif grc == GetResult.Point:
+      point = gp.Point()
+      break
+    else:
+      return Result.Nothing
 
-  <span class="k">if</span> <span class="n">point</span> <span class="o">==</span> <span class="n">Point3d</span><span class="o">.</span><span class="n">Unset</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  if point == Point3d.Unset:
+    return Result.Nothing
 
-  <span class="n">direction</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">option_toggle</span><span class="o">.</span><span class="n">CurrentValue</span> <span class="k">else</span> <span class="mi">0</span>
-  <span class="n">b</span><span class="p">,</span> <span class="n">u_parameter</span><span class="p">,</span> <span class="n">v_parameter</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span> <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  direction = 1 if option_toggle.CurrentValue else 0
+  b, u_parameter, v_parameter = surface.ClosestPoint(point)
+  if not b: return Result.Failure
 
-  <span class="n">iso_curve</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">IsoCurve</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">u_parameter</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">v_parameter</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">iso_curve</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+  iso_curve = surface.IsoCurve(direction, u_parameter if direction == 1 else v_parameter)
+  if iso_curve == None:
+    return Result.Failure
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">iso_curve</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Objects.AddCurve(iso_curve)
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

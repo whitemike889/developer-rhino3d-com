@@ -285,16 +285,15 @@
 
 <p>The following sample code demonstrates how to clear Rhino’s undo and redo lists…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Clearing undo and redo lists.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ClearUndoRecords</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+        const CRhinoCommandContext&amp; context
+        )
+{
+  RhinoApp().Print( L"Clearing undo and redo lists.\n" );
+  context.m_doc.ClearUndoRecords( true );
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

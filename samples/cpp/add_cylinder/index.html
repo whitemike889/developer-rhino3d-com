@@ -217,30 +217,29 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span> <span class="n">center_point</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">height_point</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span> <span class="p">);</span>
-  <span class="n">ON_3dVector</span> <span class="n">zaxis</span> <span class="o">=</span> <span class="n">height_point</span> <span class="o">-</span> <span class="n">center_point</span><span class="p">;</span>
-  <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">(</span> <span class="n">center_point</span><span class="p">,</span> <span class="n">zaxis</span> <span class="p">);</span>
-  <span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">(</span> <span class="n">plane</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
-  <span class="n">ON_Cylinder</span> <span class="n">cylinder</span><span class="p">(</span> <span class="n">circle</span><span class="p">,</span> <span class="n">zaxis</span><span class="p">.</span><span class="n">Length</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_BrepCylinder</span><span class="p">(</span> <span class="n">cylinder</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">cylinder_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoBrepObject</span><span class="p">();</span>
-    <span class="n">cylinder_object</span><span class="o">-&gt;</span><span class="n">SetBrep</span><span class="p">(</span> <span class="n">brep</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">cylinder_object</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="k">else</span>
-      <span class="k">delete</span> <span class="n">cylinder_object</span><span class="p">;</span>
-  <span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_3dPoint center_point( 0.0, 0.0, 0.0 );
+  double radius = 5.0;
+  ON_3dPoint height_point( 0.0, 0.0, 10.0 );
+  ON_3dVector zaxis = height_point - center_point;
+  ON_Plane plane( center_point, zaxis );
+  ON_Circle circle( plane, radius );
+  ON_Cylinder cylinder( circle, zaxis.Length() );
+  ON_Brep* brep = ON_BrepCylinder( cylinder, TRUE, TRUE );
+  if( brep )
+  {
+    CRhinoBrepObject* cylinder_object = new CRhinoBrepObject();
+    cylinder_object-&gt;SetBrep( brep );
+    if( context.m_doc.AddObject(cylinder_object) )
+      context.m_doc.Redraw();
+    else
+      delete cylinder_object;
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

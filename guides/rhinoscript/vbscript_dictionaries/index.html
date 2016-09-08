@@ -397,11 +397,11 @@
 Set objDictionary = CreateObject("Scripting.Dictionary")
 </code></pre>
 
-<p>Dictionary objects have one property that should be set before any data values are stored in the dictionary.  There are two modes for the .CompareMode property which control how individual keys are compared.  If the mode is <code class="highlighter-rouge">vbBinaryCompare</code> (the default), upper and lower case letters in keys are considered distinct.  If the mode is <code class="highlighter-rouge">vbTextCompare</code>, upper and lower case letters in keys are considered identical.  This means that a Dictionary object in binary mode can contain two keys “Key” and “key”, whereas these would be considered the same key in text mode.</p>
+<p>Dictionary objects have one property that should be set before any data values are stored in the dictionary.  There are two modes for the .CompareMode property which control how individual keys are compared.  If the mode is <code>vbBinaryCompare</code> (the default), upper and lower case letters in keys are considered distinct.  If the mode is <code>vbTextCompare</code>, upper and lower case letters in keys are considered identical.  This means that a Dictionary object in binary mode can contain two keys “Key” and “key”, whereas these would be considered the same key in text mode.</p>
 
 <h2 id="adding-values">Adding Values</h2>
 
-<p>To add a value to a Dictionary, use the <code class="highlighter-rouge">.Add</code> method.  For example:</p>
+<p>To add a value to a Dictionary, use the <code>.Add</code> method.  For example:</p>
 
 <pre><code class="language-vbnet">Dim objDictionary
 Set objDictionary = CreateObject("Scripting.Dictionary")
@@ -411,39 +411,39 @@ objDictionary.Add "Roast Beef", "OK on Sunday"
 objDictionary.Add "Salami", "Not so good"
 </code></pre>
 
-<p>The first argument to the <code class="highlighter-rouge">.Add</code> method is the key value and the second argument is the item value.  The key is similar to the index in a numerically-based, indexed array, and the item is the value at that index.  There is no limit to the number of values that can be added to a dictionary (within the bounds of physical memory).</p>
+<p>The first argument to the <code>.Add</code> method is the key value and the second argument is the item value.  The key is similar to the index in a numerically-based, indexed array, and the item is the value at that index.  There is no limit to the number of values that can be added to a dictionary (within the bounds of physical memory).</p>
 
 <h2 id="removing-values">Removing Values</h2>
 
-<p>To remove a value from a dictionary, use the <code class="highlighter-rouge">.Remove</code> method and specify the key to remove.  For example:</p>
+<p>To remove a value from a dictionary, use the <code>.Remove</code> method and specify the key to remove.  For example:</p>
 
 <pre><code class="language-vbnet">objDictionary.Remove "Salami"
 </code></pre>
 
-<p>To remove all values and clear the dictionary, use the <code class="highlighter-rouge">.RemoveAll</code> method.</p>
+<p>To remove all values and clear the dictionary, use the <code>.RemoveAll</code> method.</p>
 
 <h2 id="counting-values">Counting Values</h2>
 
-<p>Use the <code class="highlighter-rouge">.Count</code> property to obtain a count of values in the dictionary.</p>
+<p>Use the <code>.Count</code> property to obtain a count of values in the dictionary.</p>
 
 <h2 id="get-values-for-key">Get Values for Key</h2>
 
-<p>The <code class="highlighter-rouge">.Exists</code> method returns True if the specified key exists within the dictionary.  For example:</p>
+<p>The <code>.Exists</code> method returns True if the specified key exists within the dictionary.  For example:</p>
 
 <pre><code class="language-vbnet">If objDictionary.Exists("Pastrami") Then Rhino.Print "Pastrami is available today."
 </code></pre>
 
-<p>To retrieve the item value for a given key, use the <code class="highlighter-rouge">.Item</code> property.  This is the default property for a Dictionary object.  For example:</p>
+<p>To retrieve the item value for a given key, use the <code>.Item</code> property.  This is the default property for a Dictionary object.  For example:</p>
 
 <pre><code class="language-vbnet">If objDictionary.Exists("Salami") Then Rhino.Print objDictionary("Salami")
 </code></pre>
 
-<p>The <code class="highlighter-rouge">Rhino.Print</code> statement displays the item value stored in the dictionary for the <code class="highlighter-rouge">"Salami"</code> key.  Use the <code class="highlighter-rouge">.Key</code> property to change the key value for a given key.  For example:</p>
+<p>The <code>Rhino.Print</code> statement displays the item value stored in the dictionary for the <code>"Salami"</code> key.  Use the <code>.Key</code> property to change the key value for a given key.  For example:</p>
 
 <pre><code class="language-vbnet">objDictionary.Key("Salami") = "Italian Salami"
 </code></pre>
 
-<p>The <code class="highlighter-rouge">.Keys</code> and <code class="highlighter-rouge">.Items</code> methods return an array containing all the keys or items from the dictionary.  For example:</p>
+<p>The <code>.Keys</code> and <code>.Items</code> methods return an array containing all the keys or items from the dictionary.  For example:</p>
 
 <pre><code class="language-vbnet">aMeats = oDict.Keys
 aComments = oDict.Items

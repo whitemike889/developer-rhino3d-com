@@ -222,57 +222,56 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">RenameBlock</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the name of the insance definition to rename
-</span>    <span class="kt">var</span> <span class="n">instance_definition_name</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Name of block to rename"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">instance_definition_name</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result RenameBlock(RhinoDoc doc)
+  {
+    // Get the name of the insance definition to rename
+    var instance_definition_name = "";
+    var rc = RhinoGet.GetString("Name of block to rename", true, ref instance_definition_name);
+    if (rc != Result.Success)
+      return rc;
+    if (string.IsNullOrWhiteSpace(instance_definition_name))
+      return Result.Nothing;
 
-    <span class="c1">// Verify instance definition exists
-</span>    <span class="kt">var</span> <span class="n">instance_definition</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">instance_definition_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">instance_definition</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Block \"{0}\" not found."</span><span class="p">,</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify instance definition exists
+    var instance_definition = doc.InstanceDefinitions.Find(instance_definition_name, true);
+    if (instance_definition == null) {
+      RhinoApp.WriteLine("Block \"{0}\" not found.", instance_definition_name);
+      return Result.Nothing;
+    }
 
-    <span class="c1">// Verify instance definition is rename-able
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">instance_definition</span><span class="p">.</span><span class="n">IsDeleted</span> <span class="p">||</span> <span class="n">instance_definition</span><span class="p">.</span><span class="n">IsReference</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unable to rename block \"{0}\"."</span><span class="p">,</span> <span class="n">instance_definition_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify instance definition is rename-able
+    if (instance_definition.IsDeleted || instance_definition.IsReference) {
+      RhinoApp.WriteLine("Unable to rename block \"{0}\".", instance_definition_name);
+      return Result.Nothing;
+    }
 
-    <span class="c1">// Get the new instance definition name
-</span>    <span class="kt">string</span> <span class="n">instance_definition_new_name</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Name of block to rename"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">instance_definition_new_name</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">instance_definition_new_name</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+    // Get the new instance definition name
+    string instance_definition_new_name = "";
+    rc = RhinoGet.GetString("Name of block to rename", true, ref instance_definition_new_name);
+    if (rc != Result.Success)
+      return rc;
+    if (string.IsNullOrWhiteSpace(instance_definition_new_name))
+      return Result.Nothing;
 
-    <span class="c1">// Verify the new instance definition name is not already in use
-</span>    <span class="kt">var</span> <span class="n">existing_instance_definition</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">instance_definition_new_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">existing_instance_definition</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">existing_instance_definition</span><span class="p">.</span><span class="n">IsDeleted</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Block \"{0}\" already exists."</span><span class="p">,</span> <span class="n">existing_instance_definition</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify the new instance definition name is not already in use
+    var existing_instance_definition = doc.InstanceDefinitions.Find(instance_definition_new_name, true);
+    if (existing_instance_definition != null &amp;&amp; !existing_instance_definition.IsDeleted) {
+      RhinoApp.WriteLine("Block \"{0}\" already exists.", existing_instance_definition);
+      return Result.Nothing;
+    }
 
-    <span class="c1">// change the block name
-</span>    <span class="k">if</span> <span class="p">(!</span><span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Modify</span><span class="p">(</span><span class="n">instance_definition</span><span class="p">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">instance_definition_new_name</span><span class="p">,</span> <span class="n">instance_definition</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span> <span class="k">true</span><span class="p">))</span> <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Could not rename {0} to {1}"</span><span class="p">,</span> <span class="n">instance_definition</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">instance_definition_new_name</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    // change the block name
+    if (!doc.InstanceDefinitions.Modify(instance_definition.Index, instance_definition_new_name, instance_definition.Description, true)) {
+      RhinoApp.WriteLine("Could not rename {0} to {1}", instance_definition.Name, instance_definition_new_name);
+      return Result.Failure;
+    }
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function RenameBlock(ByVal doc As RhinoDoc) As Result
@@ -327,28 +326,27 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">Rename</span><span class="p">():</span>
-    <span class="n">blockName</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"block to rename"</span><span class="p">)</span>
-    <span class="n">instanceDefinition</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">blockName</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">instanceDefinition</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"{0} block does not exist"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">blockName</span><span class="p">)</span>
-        <span class="k">return</span>
+def Rename():
+    blockName = rs.GetString("block to rename")
+    instanceDefinition = doc.InstanceDefinitions.Find(blockName, True)
+    if not instanceDefinition:
+        print "{0} block does not exist".format(blockName)
+        return
 
-    <span class="n">newName</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"new name"</span><span class="p">)</span>
-    <span class="n">instanceDefinition</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">newName</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">instanceDefinition</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"the name '{0}' is already taken by another block"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">newName</span><span class="p">)</span>
-        <span class="k">return</span>
+    newName = rs.GetString("new name")
+    instanceDefinition = doc.InstanceDefinitions.Find(newName, True)
+    if instanceDefinition:
+        print "the name '{0}' is already taken by another block".format(newName)
+        return
 
-    <span class="n">rs</span><span class="o">.</span><span class="n">RenameBlock</span><span class="p">(</span><span class="n">blockName</span><span class="p">,</span> <span class="n">newName</span><span class="p">)</span>
+    rs.RenameBlock(blockName, newName)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">Rename</span><span class="p">()</span>
+if __name__ == "__main__":
+    Rename()
 </code></pre>
-</div>
 
 </div>
 

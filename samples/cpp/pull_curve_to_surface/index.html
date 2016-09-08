@@ -217,60 +217,59 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestSdk</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">gc</span><span class="p">;</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select a curve on a surface"</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gc</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestSdk::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject gc;
+  gc.SetCommandPrompt( L"Select a curve on a surface" );
+  gc.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gc.GetObjects( 1, 1 );
+  if( gc.CommandResult() != CRhinoCommand::success )
+    return gc.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC3d</span> <span class="o">=</span> <span class="n">gc</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC3d</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* pC3d = gc.Object(0).Curve();
+  if( !pC3d )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">L"Select the surface"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableHighlight</span><span class="p">();</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject gs;
+  gs.SetCommandPrompt(L"Select the surface" );
+  gs.EnableHighlight();
+  gs.SetGeometryFilter( CRhinoGetObject::surface_object );
+  gs.EnableDeselectAllBeforePostSelect( false );
+  gs.EnablePreSelect( FALSE );
+  gs.GetObjects( 1, 1 );
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">pS</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Surface</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pS</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Surface* pS = gs.Object(0).Surface();
+  if( !pS )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">pC2d</span> <span class="o">=</span> <span class="n">pS</span><span class="o">-&gt;</span><span class="n">Pullback</span><span class="p">(</span> <span class="o">*</span><span class="n">pC3d</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">pC2d</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to pull curve to surface.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_Curve* pC2d = pS-&gt;Pullback( *pC3d, context.m_doc.AbsoluteTolerance() );
+  if( !pC2d )
+  {
+    RhinoApp().Print( L"Unable to pull curve to surface.\n" );
+    return CRhinoCommand::failure;
+  }
 
-  <span class="c1">// At this point we now have a 2D curve to do with what we want.
-</span>  <span class="c1">// In this case, we will just add it to the document.
-</span>  <span class="n">pC2d</span><span class="o">-&gt;</span><span class="n">ChangeDimension</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pC2d</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">crv_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-    <span class="n">crv_obj</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">pC2d</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">crv_obj</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">delete</span> <span class="n">crv_obj</span><span class="p">;</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // At this point we now have a 2D curve to do with what we want.
+  // In this case, we will just add it to the document.
+  pC2d-&gt;ChangeDimension(3);
+  if( pC2d-&gt;IsValid() )
+  {
+    CRhinoCurveObject* crv_obj = new CRhinoCurveObject();
+    crv_obj-&gt;SetCurve( pC2d );
+    if( !context.m_doc.AddObject(crv_obj) )
+    {
+      delete crv_obj;
+      return CRhinoCommand::failure;
+    }
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

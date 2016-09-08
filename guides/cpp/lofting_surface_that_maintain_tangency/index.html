@@ -298,161 +298,160 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>When trying to loft a surface with starting or ending tangency, it is not enough just to set <code class="highlighter-rouge">CArgsRhinoLoft</code> object’s <code class="highlighter-rouge">m_start_condition</code> and <code class="highlighter-rouge">m_end_condition</code> members to <code class="highlighter-rouge">CArgsRhinoLoft::leTangent</code>.  You also need to tell Rhino’s lofter what it is that this lofted surface need to be tangent to.  You do this by setting the <code class="highlighter-rouge">m_trim</code> parameter of the starting and ending <code class="highlighter-rouge">CRhinoLoftCurve</code> objects.  This is a constant <code class="highlighter-rouge">ON_BrepTrim</code> pointer.  If you are lofting curves that you have picked using a <code class="highlighter-rouge">CRhinoGetObject</code> object, you can retrieve this pointer by simply calling <code class="highlighter-rouge">CRhinoObjRef::Trim()</code>.</p>
+<p>When trying to loft a surface with starting or ending tangency, it is not enough just to set <code>CArgsRhinoLoft</code> object’s <code>m_start_condition</code> and <code>m_end_condition</code> members to <code>CArgsRhinoLoft::leTangent</code>.  You also need to tell Rhino’s lofter what it is that this lofted surface need to be tangent to.  You do this by setting the <code>m_trim</code> parameter of the starting and ending <code>CRhinoLoftCurve</code> objects.  This is a constant <code>ON_BrepTrim</code> pointer.  If you are lofting curves that you have picked using a <code>CRhinoGetObject</code> object, you can retrieve this pointer by simply calling <code>CRhinoObjRef::Trim()</code>.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample code demonstrates how to loft surfaces that maintain tangency with adjacent surfaces using the <code class="highlighter-rouge">CArgsRhinoLoft</code> class and the <code class="highlighter-rouge">RhinoSdkLoftSurface</code> function.  The definitions of these are in <em>rhinoSdkLoft.h</em>.</p>
+<p>The following sample code demonstrates how to loft surfaces that maintain tangency with adjacent surfaces using the <code>CArgsRhinoLoft</code> class and the <code>RhinoSdkLoftSurface</code> function.  The definitions of these are in <em>rhinoSdkLoft.h</em>.</p>
 
 <p><strong>NOTE</strong>: This sample does not perform any curve sorting or direction matching.  This is the responsibility of the plugin developer.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select curves to loft
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curves to loft"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="o">|</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">edge_object</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">open_curve</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select curves to loft
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curves to loft" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object | CRhinoGetObject::edge_object);
+  go.SetGeometryAttributeFilter( CRhinoGetObject::open_curve );
+  go.EnablePreSelect( false );
+  go.GetObjects( 2, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Create loft arguments object
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">obj_count</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span>
-  <span class="n">CArgsRhinoLoft</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">SetCapacity</span><span class="p">(</span> <span class="n">obj_count</span> <span class="p">);</span>
+  // Create loft arguments object
+  const int obj_count = go.ObjectCount();
+  CArgsRhinoLoft args;
+  args.m_loftcurves.SetCapacity( obj_count );
 
-  <span class="c1">// Add curves to loft arguments object
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// New loft curve
-</span>      <span class="n">CRhinoLoftCurve</span><span class="o">*</span> <span class="n">lc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoLoftCurve</span><span class="p">;</span>
+  // Add curves to loft arguments object
+  int i;
+  for( i = 0; i &lt; obj_count; i++ )
+  {
+    const CRhinoObjRef&amp; ref = go.Object(i);
+    const ON_Curve* crv = ref.Curve();
+    if( crv )
+    {
+      // New loft curve
+      CRhinoLoftCurve* lc = new CRhinoLoftCurve;
 
-      <span class="c1">// Duplicate the selected curve. Note,
-</span>      <span class="c1">// the loft curve will delete this curve.
-</span>      <span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_curve</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">DuplicateCurve</span><span class="p">();</span>
-      <span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_curve</span><span class="o">-&gt;</span><span class="n">RemoveShortSegments</span><span class="p">(</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">);</span>
+      // Duplicate the selected curve. Note,
+      // the loft curve will delete this curve.
+      lc-&gt;m_curve = crv-&gt;DuplicateCurve();
+      lc-&gt;m_curve-&gt;RemoveShortSegments( ON_ZERO_TOLERANCE );
 
-      <span class="c1">// Set other loft curve parameters
-</span>      <span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_bPlanar</span> <span class="o">=</span> <span class="p">(</span> <span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_curve</span><span class="o">-&gt;</span><span class="n">IsPlanar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_plane</span><span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span> <span class="p">);</span>
+      // Set other loft curve parameters
+      lc-&gt;m_bPlanar = ( lc-&gt;m_curve-&gt;IsPlanar(&amp;lc-&gt;m_plane) ? true : false );
 
-      <span class="c1">// If referenced geometry is a surface edge,
-</span>      <span class="c1">// assign associated brep trim.
-</span>      <span class="n">lc</span><span class="o">-&gt;</span><span class="n">m_trim</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Trim</span><span class="p">();</span>
+      // If referenced geometry is a surface edge,
+      // assign associated brep trim.
+      lc-&gt;m_trim = ref.Trim();
 
-      <span class="c1">// Append loft curve to loft argument
-</span>      <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">lc</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      // Append loft curve to loft argument
+      args.m_loftcurves.Append( lc );
+    }
+  }
 
-  <span class="c1">// If we do not have enough loft curves,
-</span>  <span class="c1">// clean up and bail.
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">lc_count</span> <span class="o">=</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">lc_count</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lc_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="k">delete</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // If we do not have enough loft curves,
+  // clean up and bail.
+  const int lc_count = args.m_loftcurves.Count();
+  if( lc_count &lt; 2 )
+  {
+    for( i = 0; i &lt; lc_count; i++ )
+      delete args.m_loftcurves[i];
+    return failure;
+  }
 
-  <span class="c1">// If the starting loft curve has a trim,
-</span>  <span class="c1">// set the start condition to tangent.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">m_trim</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_start_condition</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">leTangent</span><span class="p">;</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_bAllowStartTangent</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-  <span class="p">}</span>
+  // If the starting loft curve has a trim,
+  // set the start condition to tangent.
+  if( args.m_loftcurves[0] &amp;&amp; args.m_loftcurves[0]-&gt;m_trim )
+  {
+    args.m_start_condition = CArgsRhinoLoft::leTangent;
+    args.m_bAllowStartTangent = TRUE;
+  }
 
-  <span class="c1">// If the ending loft curve has a trim,
-</span>  <span class="c1">// set the end condition to tangent.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="n">lc_count</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="n">lc_count</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">m_trim</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_end_condition</span> <span class="o">=</span> <span class="n">CArgsRhinoLoft</span><span class="o">::</span><span class="n">leTangent</span><span class="p">;</span>
-    <span class="n">args</span><span class="p">.</span><span class="n">m_bAllowEndTangent</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-  <span class="p">}</span>
+  // If the ending loft curve has a trim,
+  // set the end condition to tangent.
+  if( args.m_loftcurves[lc_count-1] &amp;&amp; args.m_loftcurves[lc_count-1]-&gt;m_trim )
+  {
+    args.m_end_condition = CArgsRhinoLoft::leTangent;
+    args.m_bAllowEndTangent = TRUE;
+  }
 
-  <span class="c1">// Do the loft calculation
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_NurbsSurface</span><span class="o">*&gt;</span> <span class="n">srf_list</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoSdkLoftSurface</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">srf_list</span> <span class="p">);</span>
+  // Do the loft calculation
+  ON_SimpleArray&lt;ON_NurbsSurface*&gt; srf_list;
+  bool rc = RhinoSdkLoftSurface( args, srf_list );
 
-  <span class="c1">// Delete the loft curves so we do not leak memory.
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="k">delete</span> <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_loftcurves</span><span class="p">.</span><span class="n">Empty</span><span class="p">();</span>
+  // Delete the loft curves so we do not leak memory.
+  for( i = 0; i &lt; args.m_loftcurves.Count(); i++ )
+    delete args.m_loftcurves[i];
+  args.m_loftcurves.Empty();
 
-  <span class="c1">// If the loft operation failed, bail.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // If the loft operation failed, bail.
+  if( !rc )
+    return failure;
 
-  <span class="c1">// If only one surface was calculated, add it to Rhino
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">srf_list</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddSurfaceObject</span><span class="p">(</span> <span class="o">*</span><span class="n">srf_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
+  // If only one surface was calculated, add it to Rhino
+  if( srf_list.Count() == 1 )
+  {
+    context.m_doc.AddSurfaceObject( *srf_list[0] );
 
-    <span class="c1">// CRhinoDoc::AddSurfaceObject() make a copy.
-</span>    <span class="c1">// So, delete original so memory is not leaked.
-</span>    <span class="k">delete</span> <span class="n">srf_list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="c1">// If more than one surface was calculated,
-</span>    <span class="c1">// create a list of breps.
-</span>    <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Brep</span><span class="o">*&gt;</span> <span class="n">brep_list</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">srf_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">srf_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-        <span class="n">brep</span><span class="o">-&gt;</span><span class="n">NewFace</span><span class="p">(</span> <span class="o">*</span><span class="n">srf_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
+    // CRhinoDoc::AddSurfaceObject() make a copy.
+    // So, delete original so memory is not leaked.
+    delete srf_list[0];
+  }
+  else
+  {
+    // If more than one surface was calculated,
+    // create a list of breps.
+    ON_SimpleArray&lt;ON_Brep*&gt; brep_list;
+    for( i = 0; i &lt; srf_list.Count(); i++)
+    {
+      if( srf_list[i]-&gt;IsValid() )
+      {
+        ON_Brep* brep = ON_Brep::New();
+        brep-&gt;NewFace( *srf_list[i] );
 
-        <span class="c1">// ON_Brep::NewFace() make a copy.
-</span>        <span class="c1">// So, delete original so memory is not leaked.
-</span>        <span class="k">delete</span> <span class="n">srf_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        // ON_Brep::NewFace() make a copy.
+        // So, delete original so memory is not leaked.
+        delete srf_list[i];
 
-        <span class="n">brep_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">brep</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+        brep_list.Append( brep );
+      }
+    }
 
-    <span class="c1">// Try joining all breps
-</span>    <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-    <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">RhinoJoinBreps</span><span class="p">(</span> <span class="n">brep_list</span><span class="p">,</span> <span class="n">tol</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">brep</span> <span class="p">);</span>
+    // Try joining all breps
+    double tol = context.m_doc.AbsoluteTolerance();
+    ON_Brep* brep = RhinoJoinBreps( brep_list, tol );
+    if( brep )
+    {
+      context.m_doc.AddBrepObject( *brep );
 
-      <span class="c1">// CRhinoDoc::AddBrepObject() make a copy.
-</span>      <span class="c1">// So, delete original so memory is not leaked.
-</span>      <span class="k">delete</span> <span class="n">brep</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="c1">// Othewise just add the individual breps to Rhino.
-</span>      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">brep_list</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
+      // CRhinoDoc::AddBrepObject() make a copy.
+      // So, delete original so memory is not leaked.
+      delete brep;
+    }
+    else
+    {
+      // Othewise just add the individual breps to Rhino.
+      for( i = 0; i &lt; brep_list.Count(); i++ )
+      {
+        if( brep_list[i] )
+        {
+          context.m_doc.AddBrepObject( *brep_list[i] );
 
-          <span class="c1">// CRhinoDoc::AddBrepObject() make a copy.
-</span>          <span class="c1">// So, delete original so memory is not leaked.
-</span>          <span class="k">delete</span> <span class="n">brep_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+          // CRhinoDoc::AddBrepObject() make a copy.
+          // So, delete original so memory is not leaked.
+          delete brep_list[i];
+        }
+      }
+    }
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,43 +217,42 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestSdk</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestSdk::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoCommand::result rc = CRhinoCommand::nothing;
 
-  <span class="c1">// define the corners of the box
-</span>  <span class="n">ON_3dPointArray</span> <span class="n">corners</span><span class="p">;</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">corners</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span> <span class="p">);</span>
+  // define the corners of the box
+  ON_3dPointArray corners;
+  corners.Append( ON_3dPoint( 0.0,  0.0,  0.0) );
+  corners.Append( ON_3dPoint(10.0,  0.0,  0.0) );
+  corners.Append( ON_3dPoint(10.0, 10.0,  0.0) );
+  corners.Append( ON_3dPoint( 0.0, 10.0,  0.0) );
+  corners.Append( ON_3dPoint( 0.0,  0.0, 10.0) );
+  corners.Append( ON_3dPoint(10.0,  0.0, 10.0) );
+  corners.Append( ON_3dPoint(10.0, 10.0, 10.0) );
+  corners.Append( ON_3dPoint( 0.0, 10.0, 10.0) );
 
-  <span class="c1">// Build the brep  
-</span>  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">pBrep</span> <span class="o">=</span> <span class="n">ON_BrepBox</span><span class="p">(</span> <span class="n">corners</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pBrep</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">pObject</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoBrepObject</span><span class="p">();</span>
-    <span class="n">pObject</span><span class="o">-&gt;</span><span class="n">SetBrep</span><span class="p">(</span> <span class="n">pBrep</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">pObject</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">delete</span> <span class="n">pObject</span><span class="p">;</span>
-      <span class="n">pObject</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  // Build the brep  
+  ON_Brep* pBrep = ON_BrepBox( corners );
+  if( pBrep )
+  {
+    CRhinoBrepObject* pObject = new CRhinoBrepObject();
+    pObject-&gt;SetBrep( pBrep );
+    if( context.m_doc.AddObject(pObject) )
+    {
+      context.m_doc.Redraw();
+      rc = CRhinoCommand::success;
+    }
+    else
+    {
+      delete pObject;
+      pObject = 0;
+      rc = CRhinoCommand::failure;
+    }
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

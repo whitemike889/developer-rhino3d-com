@@ -217,71 +217,70 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">();</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.EnableSubObjectSelect();
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_BrepFace* face = go.Object(0).Face();
+  if( 0 == face )
+    return CRhinoCommand::failure;
 
-  <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const ON_Brep* brep = face-&gt;Brep();
+  if( 0 == brep )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vertices</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  ON_SimpleArray&lt;int&gt; vertices;
+  int i = 0;
 
-  <span class="k">const</span> <span class="n">ON_BrepLoop</span><span class="o">*</span> <span class="n">loop</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">OuterLoop</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">loop</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">loop</span><span class="o">-&gt;</span><span class="n">TrimCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">ON_BrepTrim</span><span class="o">*</span> <span class="n">trim</span> <span class="o">=</span> <span class="n">loop</span><span class="o">-&gt;</span><span class="n">Trim</span><span class="p">(</span> <span class="n">i</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">trim</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">const</span> <span class="n">ON_BrepVertex</span><span class="o">*</span> <span class="n">vertex</span> <span class="o">=</span> <span class="n">trim</span><span class="o">-&gt;</span><span class="n">Vertex</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">vertex</span> <span class="p">)</span>
-          <span class="n">vertices</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">vertex</span><span class="o">-&gt;</span><span class="n">m_vertex_index</span> <span class="p">);</span>
-        <span class="n">vertex</span> <span class="o">=</span> <span class="n">trim</span><span class="o">-&gt;</span><span class="n">Vertex</span><span class="p">(</span> <span class="mi">1</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">vertex</span> <span class="p">)</span>
-          <span class="n">vertices</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">vertex</span><span class="o">-&gt;</span><span class="n">m_vertex_index</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  const ON_BrepLoop* loop = face-&gt;OuterLoop();
+  if( loop )
+  {
+    for( i = 0; i &lt; loop-&gt;TrimCount(); i++ )
+    {
+      const ON_BrepTrim* trim = loop-&gt;Trim( i );
+      if( trim )
+      {
+        const ON_BrepVertex* vertex = trim-&gt;Vertex( 0 );
+        if( vertex )
+          vertices.Append( vertex-&gt;m_vertex_index );
+        vertex = trim-&gt;Vertex( 1 );
+        if( vertex )
+          vertices.Append( vertex-&gt;m_vertex_index );
+      }
+    }
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  if( 0 == vertices.Count() )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// sort
-</span>  <span class="n">vertices</span><span class="p">.</span><span class="n">QuickSort</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">ON_CompareIncreasing</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="p">);</span>
+  // sort
+  vertices.QuickSort( &amp;ON_CompareIncreasing&lt;int&gt; );
 
-  <span class="c1">// cull
-</span>  <span class="kt">int</span> <span class="n">vi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">vi</span> <span class="p">)</span>
-      <span class="n">vertices</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">vi</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="p">}</span>
+  // cull
+  int vi = -1;
+  for( i = vertices.Count() - 1; i &gt;= 0; i-- )
+  {
+    if( vertices[i] == vi )
+      vertices.Remove(i);
+    else
+      vi = vertices[i];
+  }
 
-  <span class="c1">// Add
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">m_V</span><span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
+  // Add
+  for( i = 0; i &lt; vertices.Count(); i++ )
+    context.m_doc.AddPointObject( brep-&gt;m_V[vertices[i]].Point() );
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

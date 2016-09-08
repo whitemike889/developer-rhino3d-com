@@ -222,52 +222,51 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CreateSpiral</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">axisStart</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">axisDir</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Vector3d</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">radiusPoint</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result CreateSpiral(Rhino.RhinoDoc doc)
+  {
+    var axisStart = new Rhino.Geometry.Point3d(0, 0, 0);
+    var axisDir = new Rhino.Geometry.Vector3d(1, 0, 0);
+    var radiusPoint = new Rhino.Geometry.Point3d(0, 1, 0);
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span> <span class="n">curve0</span> <span class="p">=</span> <span class="nf">GetSpirial0</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">curve0</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curve0</span><span class="p">);</span>
+    Rhino.Geometry.NurbsCurve curve0 = GetSpirial0();
+    if (null != curve0)
+      doc.Objects.AddCurve(curve0);
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span> <span class="n">curve1</span> <span class="p">=</span> <span class="nf">GetSpirial1</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">curve1</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curve1</span><span class="p">);</span>
+    Rhino.Geometry.NurbsCurve curve1 = GetSpirial1();
+    if (null != curve1)
+      doc.Objects.AddCurve(curve1);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span> <span class="nf">GetSpirial0</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">axisStart</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">axisDir</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Vector3d</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">radiusPoint</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+  private static Rhino.Geometry.NurbsCurve GetSpirial0()
+  {
+    var axisStart = new Rhino.Geometry.Point3d(0, 0, 0);
+    var axisDir = new Rhino.Geometry.Vector3d(1, 0, 0);
+    var radiusPoint = new Rhino.Geometry.Point3d(0, 1, 0);
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span><span class="p">.</span><span class="nf">CreateSpiral</span><span class="p">(</span><span class="n">axisStart</span><span class="p">,</span> <span class="n">axisDir</span><span class="p">,</span> <span class="n">radiusPoint</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span>
-  <span class="p">}</span>
+    return Rhino.Geometry.NurbsCurve.CreateSpiral(axisStart, axisDir, radiusPoint, 1, 10, 1.0, 1.0);
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span> <span class="nf">GetSpirial1</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">railStart</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">railEnd</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">railCurve</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">LineCurve</span><span class="p">(</span><span class="n">railStart</span><span class="p">,</span> <span class="n">railEnd</span><span class="p">);</span>
+  private static Rhino.Geometry.NurbsCurve GetSpirial1()
+  {
+    var railStart = new Rhino.Geometry.Point3d(0, 0, 0);
+    var railEnd = new Rhino.Geometry.Point3d(0, 0, 10);
+    var railCurve = new Rhino.Geometry.LineCurve(railStart, railEnd);
 
-    <span class="kt">double</span> <span class="n">t0</span> <span class="p">=</span> <span class="n">railCurve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Min</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">t1</span> <span class="p">=</span> <span class="n">railCurve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Max</span><span class="p">;</span>
+    double t0 = railCurve.Domain.Min;
+    double t1 = railCurve.Domain.Max;
 
-    <span class="kt">var</span> <span class="n">radiusPoint</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+    var radiusPoint = new Rhino.Geometry.Point3d(1, 0, 0);
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">NurbsCurve</span><span class="p">.</span><span class="nf">CreateSpiral</span><span class="p">(</span><span class="n">railCurve</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">radiusPoint</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">12</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Geometry.NurbsCurve.CreateSpiral(railCurve, t0, t1, radiusPoint, 1, 10, 1.0, 1.0, 12);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CreateSpiral(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -313,9 +312,8 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

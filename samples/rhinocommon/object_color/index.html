@@ -222,41 +222,40 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ObjectColor</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span><span class="p">[]</span> <span class="n">objRefs</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">cmdResult</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select objects to change color"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">objRefs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">cmdResult</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">cmdResult</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ObjectColor(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef[] objRefs;
+    Rhino.Commands.Result cmdResult = Rhino.Input.RhinoGet.GetMultipleObjects("Select objects to change color", false, Rhino.DocObjects.ObjectType.AnyObject, out objRefs);
+    if (cmdResult != Rhino.Commands.Result.Success)
+      return cmdResult;
 
-    <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span> <span class="n">color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Black</span><span class="p">;</span>
-    <span class="kt">bool</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">UI</span><span class="p">.</span><span class="n">Dialogs</span><span class="p">.</span><span class="nf">ShowColorDialog</span><span class="p">(</span><span class="k">ref</span> <span class="n">color</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">rc</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+    System.Drawing.Color color = System.Drawing.Color.Black;
+    bool rc = Rhino.UI.Dialogs.ShowColorDialog(ref color);
+    if (!rc)
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">objRefs</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">objRefs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">Object</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">obj</span> <span class="p">||</span> <span class="n">obj</span><span class="p">.</span><span class="n">IsReference</span><span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
+    for (int i = 0; i &lt; objRefs.Length; i++)
+    {
+      Rhino.DocObjects.RhinoObject obj = objRefs[i].Object();
+      if (null == obj || obj.IsReference)
+        continue;
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">color</span> <span class="p">!=</span> <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ObjectColor</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ObjectColor</span> <span class="p">=</span> <span class="n">color</span><span class="p">;</span>
-        <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ColorSource</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectColorSource</span><span class="p">.</span><span class="n">ColorFromObject</span><span class="p">;</span>
-        <span class="n">obj</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+      if (color != obj.Attributes.ObjectColor)
+      {
+        obj.Attributes.ObjectColor = color;
+        obj.Attributes.ColorSource = Rhino.DocObjects.ObjectColorSource.ColorFromObject;
+        obj.CommitChanges();
+      }
+    }
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ObjectColor(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -292,9 +291,8 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

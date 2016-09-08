@@ -324,8 +324,8 @@
 <p>To project a curve onto a brep, you need to do the following:</p>
 
 <ol>
-  <li>Extrude the curve through the brep using the <code class="highlighter-rouge">RhinoExtrudeCurveStraight()</code> function.</li>
-  <li>Intersect the two breps using <code class="highlighter-rouge">RhinoIntersectBreps()</code> function.</li>
+  <li>Extrude the curve through the brep using the <code>RhinoExtrudeCurveStraight()</code> function.</li>
+  <li>Intersect the two breps using <code>RhinoIntersectBreps()</code> function.</li>
   <li>The results of the brep intersection will be the projected curves.</li>
 </ol>
 
@@ -333,7 +333,7 @@
 
 <p>The following sample code demonstrates how one might write such a function…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cm">/*
+<pre><code class="language-cpp">/*
 Description:
   Projects a curve onto a surface or polysurface
 Parameters:
@@ -347,36 +347,35 @@ Parameters:
 Returns:
   true if successful.
   false if unsuccessful.
-*/</span>
-<span class="kt">bool</span> <span class="nf">ProjectCurveToBrep</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">&amp;</span> <span class="n">brep</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">&amp;</span> <span class="n">curve</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_3dVector</span><span class="o">&amp;</span> <span class="n">dir</span><span class="p">,</span>
-        <span class="kt">double</span> <span class="n">tolerance</span><span class="p">,</span>
-        <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Curve</span><span class="o">*&gt;&amp;</span> <span class="n">output_curves</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dVector</span> <span class="n">n</span> <span class="o">=</span> <span class="n">dir</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">n</span><span class="p">.</span><span class="n">Unitize</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+*/
+bool ProjectCurveToBrep(
+        const ON_Brep&amp; brep,
+        const ON_Curve&amp; curve,
+        const ON_3dVector&amp; dir,
+        double tolerance,
+        ON_SimpleArray&lt;ON_Curve*&gt;&amp; output_curves
+        )
+{
+  ON_3dVector n = dir;
+  if( !n.Unitize() )
+    return false;
 
-  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span> <span class="o">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">();</span>
-  <span class="n">bbox</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span> <span class="n">curve</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">()</span> <span class="p">);</span>
+  ON_BoundingBox bbox = brep.BoundingBox();
+  bbox.Union( curve.BoundingBox() );
 
-  <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">pExtrusion</span> <span class="o">=</span> <span class="n">RhinoExtrudeCurveStraight</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">curve</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Diagonal</span><span class="p">().</span><span class="n">Length</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">pExtrusion</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  ON_Surface* pExtrusion = RhinoExtrudeCurveStraight( &amp;curve, dir, bbox.Diagonal().Length() );
+  if( 0 == pExtrusion )
+    return false;
 
-  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">pBrep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-  <span class="n">pBrep</span><span class="o">-&gt;</span><span class="n">Create</span><span class="p">(</span> <span class="n">pExtrusion</span> <span class="p">);</span>
+  ON_Brep* pBrep = ON_Brep::New();
+  pBrep-&gt;Create( pExtrusion );
 
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoIntersectBreps</span><span class="p">(</span> <span class="o">*</span><span class="n">pBrep</span><span class="p">,</span> <span class="n">brep</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">output_curves</span> <span class="p">);</span>
-  <span class="k">delete</span> <span class="n">pBrep</span><span class="p">;</span> <span class="c1">// Don't leak...
-</span>
-  <span class="k">return</span> <span class="p">(</span> <span class="n">rc</span> <span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  BOOL rc = RhinoIntersectBreps( *pBrep, brep, tolerance, output_curves );
+  delete pBrep; // Don't leak...
+
+  return ( rc ) ? true : false;
+}
 </code></pre>
-</div>
 
         </article>
 

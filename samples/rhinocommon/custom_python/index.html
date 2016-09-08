@@ -222,75 +222,74 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CustomPython</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">m_python</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_python</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">PythonScript</span><span class="p">.</span><span class="nf">Create</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">==</span> <span class="n">m_python</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Error: Unable to create an instance of the python engine"</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">m_python</span><span class="p">.</span><span class="n">ScriptContextDoc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CustomPythonDoc</span><span class="p">(</span><span class="n">doc</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result CustomPython(RhinoDoc doc)
+  {
+    if (null == m_python)
+    {
+      m_python = Rhino.Runtime.PythonScript.Create();
+      if (null == m_python)
+      {
+        RhinoApp.WriteLine("Error: Unable to create an instance of the python engine");
+        return Rhino.Commands.Result.Failure;
+      }
+    }
+    m_python.ScriptContextDoc = new CustomPythonDoc(doc);
 
-    <span class="k">const</span> <span class="kt">string</span> <span class="n">script</span> <span class="p">=</span> <span class="err">@</span><span class="s">"
-</span><span class="n">import</span> <span class="n">rhinoscriptsyntax</span> <span class="k">as</span> <span class="n">rs</span>
-<span class="n">rs</span><span class="p">.</span><span class="nf">AddLine</span><span class="p">((</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">))</span>
-<span class="s">";
-</span>    <span class="n">m_python</span><span class="p">.</span><span class="nf">ExecuteScript</span><span class="p">(</span><span class="n">script</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    const string script = @"
+import rhinoscriptsyntax as rs
+rs.AddLine((0,0,0), (10,10,10))
+";
+    m_python.ExecuteScript(script);
+    return Rhino.Commands.Result.Success;
+  }
 
-  <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">PythonScript</span> <span class="n">m_python</span><span class="p">;</span>
-<span class="p">}</span>
+  static Rhino.Runtime.PythonScript m_python;
+}
 
-<span class="c1">// our fake RhinoDoc
-</span><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomPythonDoc</span>
-<span class="p">{</span>
-  <span class="k">readonly</span> <span class="n">RhinoDoc</span> <span class="n">m_doc</span><span class="p">;</span>
-  <span class="k">public</span> <span class="nf">CustomPythonDoc</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_doc</span> <span class="p">=</span> <span class="n">doc</span><span class="p">;</span>
-  <span class="p">}</span>
+// our fake RhinoDoc
+public class CustomPythonDoc
+{
+  readonly RhinoDoc m_doc;
+  public CustomPythonDoc(RhinoDoc doc)
+  {
+    m_doc = doc;
+  }
 
-  <span class="k">readonly</span> <span class="n">CustomObjectTable</span> <span class="n">m_table</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CustomObjectTable</span><span class="p">();</span>
-  <span class="k">public</span> <span class="n">CustomObjectTable</span> <span class="n">Objects</span>
-  <span class="p">{</span>
-    <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_table</span><span class="p">;</span> <span class="p">}</span>
-  <span class="p">}</span>
+  readonly CustomObjectTable m_table = new CustomObjectTable();
+  public CustomObjectTable Objects
+  {
+    get { return m_table; }
+  }
 
-  <span class="k">public</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">Tables</span><span class="p">.</span><span class="n">ViewTable</span> <span class="n">Views</span>
-  <span class="p">{</span>
-    <span class="k">get</span>
-    <span class="p">{</span>
-      <span class="k">return</span> <span class="n">m_doc</span><span class="p">.</span><span class="n">Views</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  public Rhino.DocObjects.Tables.ViewTable Views
+  {
+    get
+    {
+      return m_doc.Views;
+    }
+  }
 
-<span class="p">}</span>
+}
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">CustomObjectTable</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="n">Guid</span> <span class="nf">AddLine</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">p2</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Line</span> <span class="n">l</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Line</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">l</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Guid</span> <span class="n">id</span> <span class="p">=</span> <span class="n">Guid</span><span class="p">.</span><span class="nf">NewGuid</span><span class="p">();</span>
-      <span class="n">m_lines_dict</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">l</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-  <span class="p">}</span>
+public class CustomObjectTable
+{
+  public Guid AddLine(Rhino.Geometry.Point3d p1, Rhino.Geometry.Point3d p2)
+  {
+    Rhino.Geometry.Line l = new Rhino.Geometry.Line(p1, p2);
+    if (l.IsValid)
+    {
+      Guid id = Guid.NewGuid();
+      m_lines_dict.Add(id, l);
+      return id;
+    }
+    return Guid.Empty;
+  }
 
-  <span class="k">readonly</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Line</span><span class="p">&gt;</span> <span class="n">m_lines_dict</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">.</span><span class="n">Generic</span><span class="p">.</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Line</span><span class="p">&gt;();</span>
-<span class="p">}</span>
+  readonly System.Collections.Generic.Dictionary&lt;Guid, Rhino.Geometry.Line&gt; m_lines_dict = new System.Collections.Generic.Dictionary&lt;Guid, Rhino.Geometry.Line&gt;();
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CustomPython(ByVal doc As RhinoDoc) As Rhino.Commands.Result
@@ -351,9 +350,8 @@ Public Class CustomObjectTable
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

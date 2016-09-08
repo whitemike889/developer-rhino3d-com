@@ -222,31 +222,30 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CustomConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">DrawForeground</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">bounds</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">Bounds</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">pt</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point2d</span><span class="p">(</span><span class="n">bounds</span><span class="p">.</span><span class="n">Right</span> <span class="p">-</span> <span class="m">100</span><span class="p">,</span> <span class="n">bounds</span><span class="p">.</span><span class="n">Bottom</span> <span class="p">-</span> <span class="m">30</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">Draw2dText</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">class CustomConduit : Rhino.Display.DisplayConduit
+{
+  protected override void DrawForeground(Rhino.Display.DrawEventArgs e)
+  {
+    var bounds = e.Viewport.Bounds;
+    var pt = new Rhino.Geometry.Point2d(bounds.Right - 100, bounds.Bottom - 30);
+    e.Display.Draw2dText("Hello", System.Drawing.Color.Red, pt, false);
+  }
+}
 
-<span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">readonly</span> <span class="k">static</span> <span class="n">CustomConduit</span> <span class="n">m_customconduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CustomConduit</span><span class="p">();</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">DrawOverlay</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// toggle conduit on/off
-</span>    <span class="n">m_customconduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="p">!</span><span class="n">m_conduit</span><span class="p">.</span><span class="n">Enabled</span><span class="p">;</span>
+partial class Examples
+{
+  readonly static CustomConduit m_customconduit = new CustomConduit();
+  public static Rhino.Commands.Result DrawOverlay(RhinoDoc doc)
+  {
+    // toggle conduit on/off
+    m_customconduit.Enabled = !m_conduit.Enabled;
 
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Custom conduit enabled = {0}"</span><span class="p">,</span> <span class="n">m_customconduit</span><span class="p">.</span><span class="n">Enabled</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    RhinoApp.WriteLine("Custom conduit enabled = {0}", m_customconduit.Enabled);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private ReadOnly Shared m_customconduit As New CustomConduit()
@@ -261,59 +260,58 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">System.Drawing</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import System.Drawing
+import scriptcontext
+import rhinoscriptsyntax as rs
 
-<span class="c"># DisplayConduit subclass that overrides the DrawForeground function</span>
-<span class="c"># e is an instance of Rhino.Display.DrawEventArgs</span>
-<span class="k">class</span> <span class="nc">CustomConduit</span><span class="p">(</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">DisplayConduit</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">DrawForeground</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
-        <span class="n">color</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Red</span>
-        <span class="n">bounds</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">Viewport</span><span class="o">.</span><span class="n">Bounds</span>
-        <span class="n">pt</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point2d</span><span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">Right</span> <span class="o">-</span> <span class="mi">100</span><span class="p">,</span> <span class="n">bounds</span><span class="o">.</span><span class="n">Bottom</span> <span class="o">-</span> <span class="mi">30</span><span class="p">)</span>
-        <span class="n">e</span><span class="o">.</span><span class="n">Display</span><span class="o">.</span><span class="n">Draw2dText</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">showafterscript</span><span class="p">():</span>
-    <span class="c"># Create a custom conduit that can continue to draw after the</span>
-    <span class="c"># script has completed. The conduit is kept in the sticky</span>
-    <span class="c"># dictionary so we can get at it and turn it off in the future</span>
-    <span class="c">#</span>
-    <span class="c"># check to see if the conduit has been created and is in sticky</span>
-    <span class="n">conduit</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">"myconduit"</span><span class="p">):</span>
-        <span class="n">conduit</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"myconduit"</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c"># create a conduit and place it in sticky</span>
-        <span class="n">conduit</span> <span class="o">=</span> <span class="n">CustomConduit</span><span class="p">()</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"myconduit"</span><span class="p">]</span> <span class="o">=</span> <span class="n">conduit</span>
-
-    <span class="c"># Toggle enabled state for conduit. Every time this script is</span>
-    <span class="c"># run, it will turn the conduit on and off</span>
-    <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span>
-    <span class="k">if</span> <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span><span class="p">:</span> <span class="k">print</span> <span class="s">"conduit enabled"</span>
-    <span class="k">else</span><span class="p">:</span> <span class="k">print</span> <span class="s">"conduit disabled"</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+# DisplayConduit subclass that overrides the DrawForeground function
+# e is an instance of Rhino.Display.DrawEventArgs
+class CustomConduit(Rhino.Display.DisplayConduit):
+    def DrawForeground(self, e):
+        color = System.Drawing.Color.Red
+        bounds = e.Viewport.Bounds
+        pt = Rhino.Geometry.Point2d(bounds.Right - 100, bounds.Bottom - 30)
+        e.Display.Draw2dText("Hello", color, pt, False)
 
 
-<span class="k">def</span> <span class="nf">showinscript</span><span class="p">():</span>
-    <span class="c"># create a custom conduit that only displays during the execution</span>
-    <span class="c"># of this script. Once the script has completed, the conduit is turned</span>
-    <span class="c"># off and display goes back to normal</span>
-    <span class="n">conduit</span> <span class="o">=</span> <span class="n">CustomConduit</span><span class="p">()</span>
-    <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="n">rs</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"Pausing for user input"</span><span class="p">)</span>
-    <span class="n">conduit</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+def showafterscript():
+    # Create a custom conduit that can continue to draw after the
+    # script has completed. The conduit is kept in the sticky
+    # dictionary so we can get at it and turn it off in the future
+    #
+    # check to see if the conduit has been created and is in sticky
+    conduit = None
+    if scriptcontext.sticky.has_key("myconduit"):
+        conduit = scriptcontext.sticky["myconduit"]
+    else:
+        # create a conduit and place it in sticky
+        conduit = CustomConduit()
+        scriptcontext.sticky["myconduit"] = conduit
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">showinscript</span><span class="p">()</span>
-    <span class="c">#showafterscript()</span>
+    # Toggle enabled state for conduit. Every time this script is
+    # run, it will turn the conduit on and off
+    conduit.Enabled = not conduit.Enabled
+    if conduit.Enabled: print "conduit enabled"
+    else: print "conduit disabled"
+    scriptcontext.doc.Views.Redraw()
+
+
+def showinscript():
+    # create a custom conduit that only displays during the execution
+    # of this script. Once the script has completed, the conduit is turned
+    # off and display goes back to normal
+    conduit = CustomConduit()
+    conduit.Enabled = True
+    scriptcontext.doc.Views.Redraw()
+    rs.GetString("Pausing for user input")
+    conduit.Enabled = False
+    scriptcontext.doc.Views.Redraw()
+
+if __name__=="__main__":
+    showinscript()
+    #showafterscript()
 </code></pre>
-</div>
 
 </div>
 

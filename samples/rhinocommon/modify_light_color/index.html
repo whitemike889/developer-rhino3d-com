@@ -222,31 +222,30 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ModifyLightColor</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select light to change color"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span>
-      <span class="n">ObjectType</span><span class="p">.</span><span class="n">Light</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">light</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Light</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">light</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ModifyLightColor(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select light to change color", true,
+      ObjectType.Light, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var light = obj_ref.Light();
+    if (light == null)
+      return Result.Failure;
 
-    <span class="kt">var</span> <span class="n">diffuse_color</span> <span class="p">=</span> <span class="n">light</span><span class="p">.</span><span class="n">Diffuse</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Dialogs</span><span class="p">.</span><span class="nf">ShowColorDialog</span><span class="p">(</span><span class="k">ref</span> <span class="n">diffuse_color</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">light</span><span class="p">.</span><span class="n">Diffuse</span> <span class="p">=</span> <span class="n">diffuse_color</span><span class="p">;</span>
-    <span class="p">}</span>
+    var diffuse_color = light.Diffuse;
+    if (Dialogs.ShowColorDialog(ref diffuse_color))
+    {
+      light.Diffuse = diffuse_color;
+    }
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Lights</span><span class="p">.</span><span class="nf">Modify</span><span class="p">(</span><span class="n">obj_ref</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">light</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Lights.Modify(obj_ref.ObjectId, light);
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ModifyLightColor(ByVal doc As RhinoDoc) As Result
@@ -271,35 +270,34 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.UI</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="n">Result</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Input import *
+from Rhino.UI import *
+from Rhino.Commands import Result
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span>
-    <span class="s">"Select light to change color"</span><span class="p">,</span>
-    <span class="bp">True</span><span class="p">,</span>
-    <span class="n">ObjectType</span><span class="o">.</span><span class="n">Light</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">light</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Light</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">light</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def RunCommand():
+  rc, obj_ref = RhinoGet.GetOneObject(
+    "Select light to change color",
+    True,
+    ObjectType.Light)
+  if rc != Result.Success:
+    return rc
+  light = obj_ref.Light()
+  if light == None:
+    return Result.Failure
 
-  <span class="n">b</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Dialogs</span><span class="o">.</span><span class="n">ShowColorDialog</span><span class="p">(</span><span class="n">light</span><span class="o">.</span><span class="n">Diffuse</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
-    <span class="n">light</span><span class="o">.</span><span class="n">Diffuse</span> <span class="o">=</span> <span class="n">color</span>
+  b, color = Dialogs.ShowColorDialog(light.Diffuse)
+  if b:
+    light.Diffuse = color
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Lights</span><span class="o">.</span><span class="n">Modify</span><span class="p">(</span><span class="n">obj_ref</span><span class="o">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">light</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Lights.Modify(obj_ref.ObjectId, light)
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

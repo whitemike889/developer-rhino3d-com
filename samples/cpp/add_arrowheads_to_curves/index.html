@@ -217,31 +217,30 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Define a line
-</span>  <span class="n">ON_Line</span> <span class="n">line</span><span class="p">;</span>
-  <span class="n">line</span><span class="p">.</span><span class="n">from</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-  <span class="n">line</span><span class="p">.</span><span class="n">to</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Define a line
+  ON_Line line;
+  line.from = ON_3dPoint(0, 0, 0);
+  line.to = ON_3dPoint(10, 0, 0);
 
-  <span class="c1">// Make a copy of Rhino's default object attributes
-</span>  <span class="n">ON_3dmObjectAttributes</span> <span class="n">attribs</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">GetDefaultObjectAttributes</span><span class="p">(</span> <span class="n">attribs</span> <span class="p">);</span>
+  // Make a copy of Rhino's default object attributes
+  ON_3dmObjectAttributes attribs;
+  context.m_doc.GetDefaultObjectAttributes( attribs );
 
-  <span class="c1">// Modify the object decoration style
-</span>  <span class="c1">//attribs.m_object_decoration = ON::no_object_decoration;
-</span>  <span class="c1">//attribs.m_object_decoration = ON::start_arrowhead;
-</span>  <span class="c1">//attribs.m_object_decoration = ON::end_arrowhead;
-</span>  <span class="n">attribs</span><span class="p">.</span><span class="n">m_object_decoration</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">both_arrowhead</span><span class="p">;</span>
+  // Modify the object decoration style
+  //attribs.m_object_decoration = ON::no_object_decoration;
+  //attribs.m_object_decoration = ON::start_arrowhead;
+  //attribs.m_object_decoration = ON::end_arrowhead;
+  attribs.m_object_decoration = ON::both_arrowhead;
 
-  <span class="c1">// Create a new curve object with our attributes
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">line</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attribs</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  // Create a new curve object with our attributes
+  context.m_doc.AddCurveObject( line, &amp;attribs );
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

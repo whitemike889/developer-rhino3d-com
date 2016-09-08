@@ -222,22 +222,21 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">InstanceDefinitionNames</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">instance_definition_names</span> <span class="p">=</span> <span class="p">(</span><span class="k">from</span> <span class="n">instance_definition</span> <span class="k">in</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span>
-                                     <span class="k">where</span> <span class="n">instance_definition</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">instance_definition</span><span class="p">.</span><span class="n">IsDeleted</span>
-                                     <span class="k">select</span> <span class="n">instance_definition</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result InstanceDefinitionNames(RhinoDoc doc)
+  {
+    var instance_definition_names = (from instance_definition in doc.InstanceDefinitions
+                                     where instance_definition != null &amp;&amp; !instance_definition.IsDeleted
+                                     select instance_definition.Name);
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">n</span> <span class="k">in</span> <span class="n">instance_definition_names</span><span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Instance definition = {0}"</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    foreach (var n in instance_definition_names)
+      RhinoApp.WriteLine("Instance definition = {0}", n);
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function InstanceDefinitionNames(ByVal doc As RhinoDoc) As Result
@@ -255,19 +254,18 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">instanceDefinitionNames</span> <span class="o">=</span> <span class="p">[</span><span class="n">instanceDefinition</span><span class="o">.</span><span class="n">Name</span> <span class="k">for</span> <span class="n">instanceDefinition</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">InstanceDefinitions</span>
-                             <span class="k">if</span> <span class="n">instanceDefinition</span> <span class="o">!=</span> <span class="bp">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">instanceDefinition</span><span class="o">.</span><span class="n">IsDeleted</span><span class="p">]</span>
+def RunCommand():
+  instanceDefinitionNames = [instanceDefinition.Name for instanceDefinition in doc.InstanceDefinitions
+                             if instanceDefinition != None and not instanceDefinition.IsDeleted]
 
-  <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">instanceDefinitionNames</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"instance definition = {0}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  for n in instanceDefinitionNames:
+    print "instance definition = {0}".format(n)
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

@@ -217,17 +217,16 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="p">.....</span> <span class="c1">// some object
-</span><span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">duplicate</span> <span class="o">=</span> <span class="n">object</span><span class="o">-&gt;</span><span class="n">Duplicate</span><span class="p">();</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">duplicate</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">duplicate</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">;</span>
-  <span class="k">else</span>
-    <span class="k">delete</span> <span class="n">duplicate</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">const CRhinoObject* object = ..... // some object
+CRhinoObject* duplicate = object-&gt;Duplicate();
+if( duplicate )
+{
+  if( context.m_doc.AddObject(duplicate) )
+    context.m_doc.Redraw;
+  else
+    delete duplicate;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

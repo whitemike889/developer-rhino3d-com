@@ -222,58 +222,57 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CommandLineOptions</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// For this example we will use a GetPoint class, but all of the custom
-</span>    <span class="c1">// "Get" classes support command line options.
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetPoint</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"GetPoint with options"</span><span class="p">);</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result CommandLineOptions(Rhino.RhinoDoc doc)
+  {
+    // For this example we will use a GetPoint class, but all of the custom
+    // "Get" classes support command line options.
+    Rhino.Input.Custom.GetPoint gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("GetPoint with options");
 
-    <span class="c1">// set up the options
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">OptionInteger</span> <span class="n">intOption</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">OptionInteger</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">99</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">OptionDouble</span> <span class="n">dblOption</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">OptionDouble</span><span class="p">(</span><span class="m">2.2</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">99.9</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">OptionToggle</span> <span class="n">boolOption</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">OptionToggle</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="s">"Off"</span><span class="p">,</span> <span class="s">"On"</span><span class="p">);</span>
-    <span class="kt">string</span><span class="p">[]</span> <span class="n">listValues</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"Item0"</span><span class="p">,</span> <span class="s">"Item1"</span><span class="p">,</span> <span class="s">"Item2"</span><span class="p">,</span> <span class="s">"Item3"</span><span class="p">,</span> <span class="s">"Item4"</span> <span class="p">};</span>
+    // set up the options
+    Rhino.Input.Custom.OptionInteger intOption = new Rhino.Input.Custom.OptionInteger(1, 1, 99);
+    Rhino.Input.Custom.OptionDouble dblOption = new Rhino.Input.Custom.OptionDouble(2.2, 0, 99.9);
+    Rhino.Input.Custom.OptionToggle boolOption = new Rhino.Input.Custom.OptionToggle(true, "Off", "On");
+    string[] listValues = new string[] { "Item0", "Item1", "Item2", "Item3", "Item4" };
 
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionInteger</span><span class="p">(</span><span class="s">"Integer"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">intOption</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionDouble</span><span class="p">(</span><span class="s">"Double"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">dblOption</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionToggle</span><span class="p">(</span><span class="s">"Boolean"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">boolOption</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">listIndex</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">opList</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">AddOptionList</span><span class="p">(</span><span class="s">"List"</span><span class="p">,</span> <span class="n">listValues</span><span class="p">,</span> <span class="n">listIndex</span><span class="p">);</span>
+    gp.AddOptionInteger("Integer", ref intOption);
+    gp.AddOptionDouble("Double", ref dblOption);
+    gp.AddOptionToggle("Boolean", ref boolOption);
+    int listIndex = 3;
+    int opList = gp.AddOptionList("List", listValues, listIndex);
 
-    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// perform the get operation. This will prompt the user to input a point, but also
-</span>      <span class="c1">// allow for command line options defined above
-</span>      <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span> <span class="n">get_rc</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    while (true)
+    {
+      // perform the get operation. This will prompt the user to input a point, but also
+      // allow for command line options defined above
+      Rhino.Input.GetResult get_rc = gp.Get();
+      if (gp.CommandResult() != Rhino.Commands.Result.Success)
+        return gp.CommandResult();
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">get_rc</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Point</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">());</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Command line option values are"</span><span class="p">);</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">" Integer = {0}"</span><span class="p">,</span> <span class="n">intOption</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">);</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">" Double = {0}"</span><span class="p">,</span> <span class="n">dblOption</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">);</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">" Boolean = {0}"</span><span class="p">,</span> <span class="n">boolOption</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">);</span>
-        <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">" List = {0}"</span><span class="p">,</span> <span class="n">listValues</span><span class="p">[</span><span class="n">listIndex</span><span class="p">]);</span>
-      <span class="p">}</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">get_rc</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">OptionIndex</span><span class="p">()</span> <span class="p">==</span> <span class="n">opList</span><span class="p">)</span>
-          <span class="n">listIndex</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Option</span><span class="p">().</span><span class="n">CurrentListOptionIndex</span><span class="p">;</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+      if (get_rc == Rhino.Input.GetResult.Point)
+      {
+        doc.Objects.AddPoint(gp.Point());
+        doc.Views.Redraw();
+        Rhino.RhinoApp.WriteLine("Command line option values are");
+        Rhino.RhinoApp.WriteLine(" Integer = {0}", intOption.CurrentValue);
+        Rhino.RhinoApp.WriteLine(" Double = {0}", dblOption.CurrentValue);
+        Rhino.RhinoApp.WriteLine(" Boolean = {0}", boolOption.CurrentValue);
+        Rhino.RhinoApp.WriteLine(" List = {0}", listValues[listIndex]);
+      }
+      else if (get_rc == Rhino.Input.GetResult.Option)
+      {
+        if (gp.OptionIndex() == opList)
+          listIndex = gp.Option().CurrentListOptionIndex;
+        continue;
+      }
+      break;
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function CommandLineOptions(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -323,54 +322,53 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">CommandLineOptions</span><span class="p">():</span>
-    <span class="c"># For this example we will use a GetPoint class, but all of the custom</span>
-    <span class="c"># "Get" classes support command line options.</span>
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"GetPoint with options"</span><span class="p">)</span>
+def CommandLineOptions():
+    # For this example we will use a GetPoint class, but all of the custom
+    # "Get" classes support command line options.
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.SetCommandPrompt("GetPoint with options")
 
-    <span class="c"># set up the options</span>
-    <span class="n">intOption</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">OptionInteger</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">99</span><span class="p">)</span>
-    <span class="n">dblOption</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">OptionDouble</span><span class="p">(</span><span class="mf">2.2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">99.9</span><span class="p">)</span>
-    <span class="n">boolOption</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">OptionToggle</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="s">"Off"</span><span class="p">,</span> <span class="s">"On"</span><span class="p">)</span>
-    <span class="n">listValues</span> <span class="o">=</span> <span class="s">"Item0"</span><span class="p">,</span> <span class="s">"Item1"</span><span class="p">,</span> <span class="s">"Item2"</span><span class="p">,</span> <span class="s">"Item3"</span><span class="p">,</span> <span class="s">"Item4"</span>
+    # set up the options
+    intOption = Rhino.Input.Custom.OptionInteger(1, 1, 99)
+    dblOption = Rhino.Input.Custom.OptionDouble(2.2, 0, 99.9)
+    boolOption = Rhino.Input.Custom.OptionToggle(True, "Off", "On")
+    listValues = "Item0", "Item1", "Item2", "Item3", "Item4"
 
-    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionInteger</span><span class="p">(</span><span class="s">"Integer"</span><span class="p">,</span> <span class="n">intOption</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionDouble</span><span class="p">(</span><span class="s">"Double"</span><span class="p">,</span> <span class="n">dblOption</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionToggle</span><span class="p">(</span><span class="s">"Boolean"</span><span class="p">,</span> <span class="n">boolOption</span><span class="p">)</span>
-    <span class="n">listIndex</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">opList</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">AddOptionList</span><span class="p">(</span><span class="s">"List"</span><span class="p">,</span> <span class="n">listValues</span><span class="p">,</span> <span class="n">listIndex</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="c"># perform the get operation. This will prompt the user to</span>
-        <span class="c"># input a point, but also allow for command line options</span>
-        <span class="c"># defined above</span>
-        <span class="n">get_rc</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">get_rc</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">GetResult</span><span class="o">.</span><span class="n">Point</span><span class="p">:</span>
-            <span class="n">point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-            <span class="k">print</span> <span class="s">"Command line option values are"</span>
-            <span class="k">print</span> <span class="s">" Integer ="</span><span class="p">,</span> <span class="n">intOption</span><span class="o">.</span><span class="n">CurrentValue</span>
-            <span class="k">print</span> <span class="s">" Double ="</span><span class="p">,</span> <span class="n">dblOption</span><span class="o">.</span><span class="n">CurrentValue</span>
-            <span class="k">print</span> <span class="s">" Boolean ="</span><span class="p">,</span> <span class="n">boolOption</span><span class="o">.</span><span class="n">CurrentValue</span>
-            <span class="k">print</span> <span class="s">" List ="</span><span class="p">,</span> <span class="n">listValues</span><span class="p">[</span><span class="n">listIndex</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">get_rc</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">GetResult</span><span class="o">.</span><span class="n">Option</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">OptionIndex</span><span class="p">()</span><span class="o">==</span><span class="n">opList</span><span class="p">:</span>
-              <span class="n">listIndex</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Option</span><span class="p">()</span><span class="o">.</span><span class="n">CurrentListOptionIndex</span>
-            <span class="k">continue</span>
-        <span class="k">break</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    gp.AddOptionInteger("Integer", intOption)
+    gp.AddOptionDouble("Double", dblOption)
+    gp.AddOptionToggle("Boolean", boolOption)
+    listIndex = 3
+    opList = gp.AddOptionList("List", listValues, listIndex)
+    while True:
+        # perform the get operation. This will prompt the user to
+        # input a point, but also allow for command line options
+        # defined above
+        get_rc = gp.Get()
+        if gp.CommandResult()!=Rhino.Commands.Result.Success:
+            return gp.CommandResult()
+        if get_rc==Rhino.Input.GetResult.Point:
+            point = gp.Point()
+            scriptcontext.doc.Objects.AddPoint(point)
+            scriptcontext.doc.Views.Redraw()
+            print "Command line option values are"
+            print " Integer =", intOption.CurrentValue
+            print " Double =", dblOption.CurrentValue
+            print " Boolean =", boolOption.CurrentValue
+            print " List =", listValues[listIndex]
+        elif get_rc==Rhino.Input.GetResult.Option:
+            if gp.OptionIndex()==opList:
+              listIndex = gp.Option().CurrentListOptionIndex
+            continue
+        break
+    return Rhino.Commands.Result.Success
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">CommandLineOptions</span><span class="p">()</span>
+if __name__ == "__main__":
+    CommandLineOptions()
 </code></pre>
-</div>
 
 </div>
 

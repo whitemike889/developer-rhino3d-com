@@ -301,88 +301,85 @@
 <p>Imagine you are trying to wrote code to pick grip objects, and you want that only grips at the boundary of a mesh to be selectable.  You might have just spent a considerable amount of time trying to get the following to work:</p>
 
 <ol>
-  <li>Derive a class from <code class="highlighter-rouge">CRhinoGetObject</code>.</li>
-  <li>Override <code class="highlighter-rouge">CRhinoGetObject::CustomGeometryFilter</code>.</li>
+  <li>Derive a class from <code>CRhinoGetObject</code>.</li>
+  <li>Override <code>CRhinoGetObject::CustomGeometryFilter</code>.</li>
 </ol>
 
-<p>What is missing is a pointer to a grip object inside <code class="highlighter-rouge">CRhinoGetObject::CustomGeometryFilter</code>.  One might think this code would work…</p>
+<p>What is missing is a pointer to a grip object inside <code>CRhinoGetObject::CustomGeometryFilter</code>.  One might think this code would work…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CMyGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">grip_object</span> <span class="p">);</span>
+<pre><code class="language-cpp">CMyGetObject go;
+go.SetGeometryFilter( CRhinoGetObject::grip_object );
 </code></pre>
-</div>
 
-<p>but now <code class="highlighter-rouge">CRhinoGetObject::CustomGeometryFilter</code> override is not even called anymore.  On the other hand, if you do not specify a <code class="highlighter-rouge">CRhinoGetObject::SetGeometryFilter</code> up front, the function is called but you don’t get any grip object from the geometry parameter of <code class="highlighter-rouge">CRhinoGetObject::CustomGeometryFilter</code>.</p>
+<p>but now <code>CRhinoGetObject::CustomGeometryFilter</code> override is not even called anymore.  On the other hand, if you do not specify a <code>CRhinoGetObject::SetGeometryFilter</code> up front, the function is called but you don’t get any grip object from the geometry parameter of <code>CRhinoGetObject::CustomGeometryFilter</code>.</p>
 
 <p>Is there a way around this problem?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>Yes.  In order to pick grip objects, using <code class="highlighter-rouge">CRhinoGetObject</code>, you must set the <code class="highlighter-rouge">CRhinoGetObject::grip_object</code> geometry filter.  If not, then Rhino will ignore grips in an effort to improve picking performance.</p>
+<p>Yes.  In order to pick grip objects, using <code>CRhinoGetObject</code>, you must set the <code>CRhinoGetObject::grip_object</code> geometry filter.  If not, then Rhino will ignore grips in an effort to improve picking performance.</p>
 
-<p>Also, if you want your <code class="highlighter-rouge">CRhinoGetObject::CustomGeometryFilter</code> override to be called, make sure to call <code class="highlighter-rouge">CRhinoGetObject::EnableSubObjectSelect</code> to disable subobject picking.  For example:</p>
+<p>Also, if you want your <code>CRhinoGetObject::CustomGeometryFilter</code> override to be called, make sure to call <code>CRhinoGetObject::EnableSubObjectSelect</code> to disable subobject picking.  For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CMyGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoObject</span><span class="o">::</span><span class="n">grip_object</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// TODO...
-</span><span class="p">}</span>
+<pre><code class="language-cpp">CMyGetObject go;
+go.SetGeometryFilter( CRhinoObject::grip_object );
+go.EnableSubObjectSelect( false );
+go.GetObjects( 1, 0 );
+if( go.CommandResult() == CRhinoCommand::success )
+{
+  // TODO...
+}
 </code></pre>
-</div>
 
 <p>Regarding the picking of grips at the boundary of a mesh, here is a sample class that you can use…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CRhGetMeshBoundaryGrip</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetObject</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="kt">bool</span> <span class="n">CustomGeometryFilter</span><span class="p">(</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geo</span><span class="p">,</span>
-    <span class="n">ON_COMPONENT_INDEX</span> <span class="n">ci</span>
-    <span class="p">)</span> <span class="k">const</span><span class="p">;</span>
-<span class="p">};</span>
+<pre><code class="language-cpp">class CRhGetMeshBoundaryGrip : public CRhinoGetObject
+{
+public:
+  bool CustomGeometryFilter(
+    const CRhinoObject* obj,
+    const ON_Geometry* geo,
+    ON_COMPONENT_INDEX ci
+    ) const;
+};
 
-<span class="kt">bool</span> <span class="n">CRhGetMeshBoundaryGrip</span><span class="o">::</span><span class="n">CustomGeometryFilter</span><span class="p">(</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span><span class="p">,</span>
-  <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geo</span><span class="p">,</span>
-  <span class="n">ON_COMPONENT_INDEX</span> <span class="n">ci</span>
-  <span class="p">)</span> <span class="k">const</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+bool CRhGetMeshBoundaryGrip::CustomGeometryFilter(
+  const CRhinoObject* obj,
+  const ON_Geometry* geo,
+  ON_COMPONENT_INDEX ci
+  ) const
+{
+  if( 0 == obj )
+    return false;
 
-  <span class="c1">// Is grip object?
-</span>  <span class="k">const</span> <span class="n">CRhinoGripObject</span><span class="o">*</span> <span class="n">grip_obj</span> <span class="o">=</span> <span class="n">CRhinoGripObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">grip_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  // Is grip object?
+  const CRhinoGripObject* grip_obj = CRhinoGripObject::Cast( obj );
+  if( 0 == grip_obj )
+    return false;
 
-  <span class="c1">// Is mesh grip object?
-</span>  <span class="k">const</span> <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">mesh_obj</span> <span class="o">=</span> <span class="n">CRhinoMeshObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">grip_obj</span><span class="o">-&gt;</span><span class="n">Owner</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  // Is mesh grip object?
+  const CRhinoMeshObject* mesh_obj = CRhinoMeshObject::Cast( grip_obj-&gt;Owner() );
+  if( 0 == mesh_obj )
+    return false;
 
-  <span class="c1">// Is the grip on the border?
-</span>  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh_obj</span><span class="o">-&gt;</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">mesh</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mesh</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_MeshTopology</span><span class="o">&amp;</span> <span class="n">meshtop</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">-&gt;</span><span class="n">Topology</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">topvi</span> <span class="o">=</span> <span class="n">meshtop</span><span class="p">.</span><span class="n">m_topv_map</span><span class="p">[</span><span class="n">grip_obj</span><span class="o">-&gt;</span><span class="n">m_grip_index</span><span class="p">];</span>
-    <span class="k">const</span> <span class="n">ON_MeshTopologyVertex</span><span class="o">&amp;</span> <span class="n">topv</span> <span class="o">=</span> <span class="n">meshtop</span><span class="p">.</span><span class="n">m_topv</span><span class="p">[</span><span class="n">topvi</span><span class="p">];</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">topv</span><span class="p">.</span><span class="n">m_tope_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">ON_MeshTopologyEdge</span><span class="o">&amp;</span> <span class="n">tope</span> <span class="o">=</span> <span class="n">meshtop</span><span class="p">.</span><span class="n">m_tope</span><span class="p">[</span><span class="n">topv</span><span class="p">.</span><span class="n">m_topei</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">tope</span><span class="p">.</span><span class="n">m_topf_count</span> <span class="p">)</span>
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Is the grip on the border?
+  const ON_Mesh* mesh = mesh_obj-&gt;Mesh();
+  if( mesh &amp;&amp; !mesh-&gt;IsClosed() )
+  {
+    const ON_MeshTopology&amp; meshtop = mesh-&gt;Topology();
+    int topvi = meshtop.m_topv_map[grip_obj-&gt;m_grip_index];
+    const ON_MeshTopologyVertex&amp; topv = meshtop.m_topv[topvi];
+    for( int i = 0; i &lt; topv.m_tope_count; i++ )
+    {
+      const ON_MeshTopologyEdge&amp; tope = meshtop.m_tope[topv.m_topei[i]];
+      if( 1 == tope.m_topf_count )
+        return true;
+    }
+  }
 
-  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+  return false;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,149 +217,146 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//This sample code demonstrates how to modify the name of a single object.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select an object to modify
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object to change name"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">//This sample code demonstrates how to modify the name of a single object.
+CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  // Select an object to modify
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select object to change name" );
+  go.EnablePreSelect( TRUE );
+  go.EnableSubObjectSelect( FALSE );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Get the object reference
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  // Get the object reference
+  const CRhinoObjRef&amp; objref = go.Object(0);
 
-  <span class="c1">// Get the object
-</span>  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Get the object
+  const CRhinoObject* obj = objref.Object();
+  if( !obj )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Make copy of object attributes. This objects
-</span>  <span class="c1">// holds an object's user-defined name.
-</span>  <span class="n">ON_3dmObjectAttributes</span> <span class="n">obj_attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
+  // Make copy of object attributes. This objects
+  // holds an object's user-defined name.
+  ON_3dmObjectAttributes obj_attribs = obj-&gt;Attributes();
 
-  <span class="c1">// Prompt for new object name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New object name"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetDefaultString</span><span class="p">(</span> <span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for new object name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"New object name" );
+  gs.SetDefaultString( obj_attribs.m_name );
+  gs.AcceptNothing( TRUE );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Get the string entered by the user
-</span>  <span class="n">ON_wString</span> <span class="n">obj_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">obj_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
+  // Get the string entered by the user
+  ON_wString obj_name = gs.String();
+  obj_name.TrimLeftAndRight();
 
-  <span class="c1">// Is name the same?
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">obj_name</span><span class="p">.</span><span class="n">Compare</span><span class="p">(</span><span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Is name the same?
+  if( obj_name.Compare(obj_attribs.m_name) == 0 )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Modify the attributes of the object
-</span>  <span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span> <span class="o">=</span> <span class="n">obj_name</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">objref</span><span class="p">,</span> <span class="n">obj_attribs</span> <span class="p">);</span>
+  // Modify the attributes of the object
+  obj_attribs.m_name = obj_name;
+  context.m_doc.ModifyObjectAttributes( objref, obj_attribs );
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <p>Alternatively:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//This sample code demonstrates how to modify the name of one or more objects.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select objects to modify
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects to change name"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">//This sample code demonstrates how to modify the name of one or more objects.
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select objects to modify
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects to change name" );
+  go.EnablePreSelect( TRUE );
+  go.EnableSubObjectSelect( FALSE );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Prompt for new object name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New object name"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for new object name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"New object name" );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Get the string entered by the user
-</span>  <span class="n">ON_wString</span> <span class="n">obj_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">obj_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
+  // Get the string entered by the user
+  ON_wString obj_name = gs.String();
+  obj_name.TrimLeftAndRight();
 
-  <span class="c1">// Process each selected object
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the object reference
-</span>    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+  // Process each selected object
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    // Get the object reference
+    const CRhinoObjRef&amp; objref = go.Object(i);
 
-    <span class="c1">// Get the object
-</span>    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+    // Get the object
+    const CRhinoObject* obj = objref.Object();
+    if( !obj )
+      return CRhinoCommand::failure;
 
-    <span class="c1">// Make copy of object attributes. This objects
-</span>    <span class="c1">// holds an object's user-defined name.
-</span>    <span class="n">ON_3dmObjectAttributes</span> <span class="n">obj_attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
+    // Make copy of object attributes. This objects
+    // holds an object's user-defined name.
+    ON_3dmObjectAttributes obj_attribs = obj-&gt;Attributes();
 
-    <span class="c1">// Is name the same?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">obj_name</span><span class="p">.</span><span class="n">Compare</span><span class="p">(</span><span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+    // Is name the same?
+    if( obj_name.Compare(obj_attribs.m_name) == 0 )
+      continue;
 
-    <span class="c1">// Modify the attributes of the object
-</span>    <span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span> <span class="o">=</span> <span class="n">obj_name</span><span class="p">;</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">objref</span><span class="p">,</span> <span class="n">obj_attribs</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Modify the attributes of the object
+    obj_attribs.m_name = obj_name;
+    context.m_doc.ModifyObjectAttributes( objref, obj_attribs );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <p>…or:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//This sample code demonstrates how to modify all normal (not locked and not hidden) objects.
-</span><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Prompt for new object name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New object name"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">//This sample code demonstrates how to modify all normal (not locked and not hidden) objects.
+CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Prompt for new object name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"New object name" );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Get the string entered by the user
-</span>  <span class="n">ON_wString</span> <span class="n">obj_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">obj_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
+  // Get the string entered by the user
+  ON_wString obj_name = gs.String();
+  obj_name.TrimLeftAndRight();
 
-  <span class="c1">// Iterate through all normal (not locked and not hidden) objects
-</span>  <span class="n">CRhinoObjectIterator</span> <span class="n">it</span><span class="p">(</span> <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">normal_objects</span><span class="p">,</span> <span class="n">CRhinoObjectIterator</span><span class="o">::</span><span class="n">active_objects</span> <span class="p">);</span>
-  <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="n">First</span><span class="p">();</span> <span class="n">obj</span><span class="p">;</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">it</span><span class="p">.</span><span class="n">Next</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Make copy of object attributes. This objects
-</span>    <span class="c1">// holds an object's user-defined name.
-</span>    <span class="n">ON_3dmObjectAttributes</span> <span class="n">obj_attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
+  // Iterate through all normal (not locked and not hidden) objects
+  CRhinoObjectIterator it( CRhinoObjectIterator::normal_objects, CRhinoObjectIterator::active_objects );
+  CRhinoObject* obj = 0;
+  for( obj = it.First(); obj; obj = it.Next() )
+  {
+    // Make copy of object attributes. This objects
+    // holds an object's user-defined name.
+    ON_3dmObjectAttributes obj_attribs = obj-&gt;Attributes();
 
-    <span class="c1">// Is name the same?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">obj_name</span><span class="p">.</span><span class="n">Compare</span><span class="p">(</span><span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+    // Is name the same?
+    if( obj_name.Compare(obj_attribs.m_name) == 0 )
+      continue;
 
-    <span class="c1">// Modify the attributes of the object
-</span>    <span class="n">obj_attribs</span><span class="p">.</span><span class="n">m_name</span> <span class="o">=</span> <span class="n">obj_name</span><span class="p">;</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">obj_attribs</span> <span class="p">);</span>
-  <span class="p">}</span>
+    // Modify the attributes of the object
+    obj_attribs.m_name = obj_name;
+    context.m_doc.ModifyObjectAttributes( CRhinoObjRef(obj), obj_attribs );
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

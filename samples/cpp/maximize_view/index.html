@@ -217,52 +217,51 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Name of viewport to maximize"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Name of viewport to maximize" );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="n">ON_wString</span> <span class="n">view_name</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">view_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">view_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  ON_wString view_name( gs.String() );
+  view_name.TrimLeftAndRight();
+  if( view_name.IsEmpty() )
+    return CRhinoCommand::cancel;
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">CRhinoView</span><span class="o">*&gt;</span> <span class="n">view_list</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">view_count</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">GetViewList</span><span class="p">(</span> <span class="n">view_list</span> <span class="p">);</span>
+  ON_SimpleArray&lt;CRhinoView*&gt; view_list;
+  int view_count = context.m_doc.GetViewList( view_list );
 
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">active_view</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+  CRhinoView* active_view = NULL;
+  int i;
 
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">view_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">view_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">view</span> <span class="o">&amp;&amp;</span> <span class="n">view_name</span><span class="p">.</span><span class="n">CompareNoCase</span><span class="p">(</span><span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">Name</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">active_view</span> <span class="o">=</span> <span class="n">view</span><span class="p">;</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  for( i = 0; i &lt; view_count; i++ )
+  {
+    CRhinoView* view = view_list[i];
+    if( view &amp;&amp; view_name.CompareNoCase(view-&gt;Viewport().Name()) == 0 )
+    {
+      active_view = view;
+      break;
+    }
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">active_view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to find viewport named %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">view_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( !active_view )
+  {
+    RhinoApp().Print( L"Unable to find viewport named %s\n", view_name );
+    return CRhinoCommand::nothing;
+  }
 
-  <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">SetActiveView</span><span class="p">(</span> <span class="n">active_view</span> <span class="p">);</span>
-  <span class="n">CWnd</span><span class="o">*</span> <span class="n">frame_wnd</span> <span class="o">=</span> <span class="n">active_view</span><span class="o">-&gt;</span><span class="n">GetParent</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">frame_wnd</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">frame_wnd</span><span class="o">-&gt;</span><span class="n">ShowWindow</span><span class="p">(</span> <span class="n">SW_SHOWMAXIMIZED</span> <span class="p">);</span>
-    <span class="n">frame_wnd</span><span class="o">-&gt;</span><span class="n">BringWindowToTop</span><span class="p">();</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  ::RhinoApp().SetActiveView( active_view );
+  CWnd* frame_wnd = active_view-&gt;GetParent();
+  if( frame_wnd )
+  {
+    frame_wnd-&gt;ShowWindow( SW_SHOWMAXIMIZED );
+    frame_wnd-&gt;BringWindowToTop();
+  }
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

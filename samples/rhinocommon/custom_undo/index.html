@@ -222,54 +222,53 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">static</span> <span class="kt">double</span> <span class="n">MyFavoriteNumber</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  static double MyFavoriteNumber = 0;
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">CustomUndo</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Rhino automatically sets up an undo record when a command is run,
-</span>    <span class="c1">// but... the undo record is not saved if nothing changes in the
-</span>    <span class="c1">// document (objects added/deleted, layers changed,...)
-</span>    <span class="c1">//
-</span>    <span class="c1">// If we have a command that doesn't change things in the document,
-</span>    <span class="c1">// but we want to have our own custom undo called then we need to do
-</span>    <span class="c1">// a little extra work
-</span>
-    <span class="kt">double</span> <span class="n">d</span> <span class="p">=</span> <span class="n">MyFavoriteNumber</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="s">"Favorite number"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">d</span><span class="p">)</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">double</span> <span class="n">current_value</span> <span class="p">=</span> <span class="n">MyFavoriteNumber</span><span class="p">;</span>
-      <span class="n">doc</span><span class="p">.</span><span class="nf">AddCustomUndoEvent</span><span class="p">(</span><span class="s">"Favorite Number"</span><span class="p">,</span> <span class="n">OnUndoFavoriteNumber</span><span class="p">,</span> <span class="n">current_value</span><span class="p">);</span>
-      <span class="n">MyFavoriteNumber</span> <span class="p">=</span> <span class="n">d</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+  public static Rhino.Commands.Result CustomUndo(RhinoDoc doc)
+  {
+    // Rhino automatically sets up an undo record when a command is run,
+    // but... the undo record is not saved if nothing changes in the
+    // document (objects added/deleted, layers changed,...)
+    //
+    // If we have a command that doesn't change things in the document,
+    // but we want to have our own custom undo called then we need to do
+    // a little extra work
 
-  <span class="c1">// event handler for custom undo
-</span>  <span class="k">static</span> <span class="k">void</span> <span class="nf">OnUndoFavoriteNumber</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">CustomUndoEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// !!!!!!!!!!
-</span>    <span class="c1">// NEVER change any setting in the Rhino document or application.  Rhino
-</span>    <span class="c1">// handles ALL changes to the application and document and you will break
-</span>    <span class="c1">// the Undo/Redo commands if you make any changes to the application or
-</span>    <span class="c1">// document. This is meant only for your own private plugin data
-</span>    <span class="c1">// !!!!!!!!!!
-</span>
-    <span class="c1">// This function can be called either by undo or redo
-</span>    <span class="c1">// In order to get redo to work, add another custom undo event with the
-</span>    <span class="c1">// current value.  If you don't want redo to work, just skip adding
-</span>    <span class="c1">// a custom undo event here
-</span>    <span class="kt">double</span> <span class="n">current_value</span> <span class="p">=</span> <span class="n">MyFavoriteNumber</span><span class="p">;</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Document</span><span class="p">.</span><span class="nf">AddCustomUndoEvent</span><span class="p">(</span><span class="s">"Favorite Number"</span><span class="p">,</span> <span class="n">OnUndoFavoriteNumber</span><span class="p">,</span> <span class="n">current_value</span><span class="p">);</span>
+    double d = MyFavoriteNumber;
+    if (Rhino.Input.RhinoGet.GetNumber("Favorite number", true, ref d) == Rhino.Commands.Result.Success)
+    {
+      double current_value = MyFavoriteNumber;
+      doc.AddCustomUndoEvent("Favorite Number", OnUndoFavoriteNumber, current_value);
+      MyFavoriteNumber = d;
+    }
+    return Rhino.Commands.Result.Success;
+  }
 
-    <span class="kt">double</span> <span class="n">old_value</span> <span class="p">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">e</span><span class="p">.</span><span class="n">Tag</span><span class="p">;</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Going back to your favorite = {0}"</span><span class="p">,</span> <span class="n">old_value</span><span class="p">);</span>
-    <span class="n">MyFavoriteNumber</span> <span class="p">=</span> <span class="n">old_value</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  // event handler for custom undo
+  static void OnUndoFavoriteNumber(object sender, Rhino.Commands.CustomUndoEventArgs e)
+  {
+    // !!!!!!!!!!
+    // NEVER change any setting in the Rhino document or application.  Rhino
+    // handles ALL changes to the application and document and you will break
+    // the Undo/Redo commands if you make any changes to the application or
+    // document. This is meant only for your own private plugin data
+    // !!!!!!!!!!
+
+    // This function can be called either by undo or redo
+    // In order to get redo to work, add another custom undo event with the
+    // current value.  If you don't want redo to work, just skip adding
+    // a custom undo event here
+    double current_value = MyFavoriteNumber;
+    e.Document.AddCustomUndoEvent("Favorite Number", OnUndoFavoriteNumber, current_value);
+
+    double old_value = (double)e.Tag;
+    RhinoApp.WriteLine("Going back to your favorite = {0}", old_value);
+    MyFavoriteNumber = old_value;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared MyFavoriteNumber As Double = 0
@@ -315,12 +314,12 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
 
-<span class="k">def</span> <span class="nf">OnUndoFavoriteNumber</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
-    <span class="s">"""!!!!!!!!!!
+def OnUndoFavoriteNumber(sender, e):
+    """!!!!!!!!!!
     NEVER change any setting in the Rhino document or application.  Rhino
     handles ALL changes to the application and document and you will break
     the Undo/Redo commands if you make any changes to the application or
@@ -331,37 +330,36 @@ End Class
     In order to get redo to work, add another custom undo event with the
     current value.  If you don't want redo to work, just skip adding
     a custom undo event here
-    """</span>
-    <span class="n">current_value</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"FavoriteNumber"</span><span class="p">]</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">Document</span><span class="o">.</span><span class="n">AddCustomUndoEvent</span><span class="p">(</span><span class="s">"Favorite Number"</span><span class="p">,</span> <span class="n">OnUndoFavoriteNumber</span><span class="p">,</span> <span class="n">current_value</span><span class="p">)</span>
+    """
+    current_value = scriptcontext.sticky["FavoriteNumber"]
+    e.Document.AddCustomUndoEvent("Favorite Number", OnUndoFavoriteNumber, current_value)
 
-    <span class="n">old_value</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">Tag</span>
-    <span class="k">print</span> <span class="s">"Going back to your favorite ="</span><span class="p">,</span> <span class="n">old_value</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"FavoriteNumber"</span><span class="p">]</span><span class="o">=</span> <span class="n">old_value</span><span class="p">;</span>
+    old_value = e.Tag
+    print "Going back to your favorite =", old_value
+    scriptcontext.sticky["FavoriteNumber"]= old_value;
 
 
-<span class="k">def</span> <span class="nf">TestCustomUndo</span><span class="p">():</span>
-    <span class="s">"""Rhino automatically sets up an undo record when a command is run,
+def TestCustomUndo():
+    """Rhino automatically sets up an undo record when a command is run,
        but... the undo record is not saved if nothing changes in the
        document (objects added/deleted, layers changed,...)
 
        If we have a command that doesn't change things in the document,
        but we want to have our own custom undo called then we need to do
        a little extra work
-    """</span>
-    <span class="n">current_value</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">"FavoriteNumber"</span><span class="p">):</span>
-        <span class="n">current_value</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"FavoriteNumber"</span><span class="p">]</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">new_value</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetNumber</span><span class="p">(</span><span class="s">"Favorite number"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">current_value</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+    """
+    current_value = 0
+    if scriptcontext.sticky.has_key("FavoriteNumber"):
+        current_value = scriptcontext.sticky["FavoriteNumber"]
+    rc, new_value = Rhino.Input.RhinoGet.GetNumber("Favorite number", True, current_value)
+    if rc!=Rhino.Commands.Result.Success: return
 
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">AddCustomUndoEvent</span><span class="p">(</span><span class="s">"Favorite Number"</span><span class="p">,</span> <span class="n">OnUndoFavoriteNumber</span><span class="p">,</span> <span class="n">current_value</span><span class="p">);</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">sticky</span><span class="p">[</span><span class="s">"FavoriteNumber"</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+    scriptcontext.doc.AddCustomUndoEvent("Favorite Number", OnUndoFavoriteNumber, current_value);
+    scriptcontext.sticky["FavoriteNumber"] = new_value
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">TestCustomUndo</span><span class="p">()</span>
+if __name__=="__main__":
+    TestCustomUndo()
 </code></pre>
-</div>
 
 </div>
 

@@ -302,75 +302,74 @@
 
 <ul>
   <li><strong>Texture Bitmap</strong>: A bitmap image, usually saved in a file.</li>
-  <li><strong>Texture Coordinates</strong>: In Rhino these are 2d and 3d points that are saved in an <code class="highlighter-rouge">ON_Mesh</code> in the <code class="highlighter-rouge">m_T[]</code> or <code class="highlighter-rouge">m_TC[]</code> arrays.</li>
-  <li><strong>Texture Mapping</strong>: A function that sets texture coordinates.  Persistent texture mappings are stored in <code class="highlighter-rouge">CRhinoDoc::m_texture_mapping_table[]</code>.</li>
-  <li><strong>Render Material</strong>: A collection of rendering color and shading information, including the names of texture bitmaps.  Rendering materials are stored in <code class="highlighter-rouge">CRhinoDoc::m_material_table[]</code>.</li>
-  <li><strong>Object Attributes</strong>: Attributes of a Rhino object, including the rendering materials and texture mappings the object uses, are stored in the <code class="highlighter-rouge">CRhinoObjectAttributes</code> class returned by <code class="highlighter-rouge">CRhinoObject::Attributes()</code>.</li>
+  <li><strong>Texture Coordinates</strong>: In Rhino these are 2d and 3d points that are saved in an <code>ON_Mesh</code> in the <code>m_T[]</code> or <code>m_TC[]</code> arrays.</li>
+  <li><strong>Texture Mapping</strong>: A function that sets texture coordinates.  Persistent texture mappings are stored in <code>CRhinoDoc::m_texture_mapping_table[]</code>.</li>
+  <li><strong>Render Material</strong>: A collection of rendering color and shading information, including the names of texture bitmaps.  Rendering materials are stored in <code>CRhinoDoc::m_material_table[]</code>.</li>
+  <li><strong>Object Attributes</strong>: Attributes of a Rhino object, including the rendering materials and texture mappings the object uses, are stored in the <code>CRhinoObjectAttributes</code> class returned by <code>CRhinoObject::Attributes()</code>.</li>
 </ul>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample creates a material with a bitmap texture, then modifies a mesh object’s attributes and texture coordinates so the bitmap is projected onto the mesh along the world Z axis…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Create a material with a texture bitmap
-</span><span class="n">ON_Texture</span> <span class="n">tex</span><span class="p">;</span>
-<span class="n">tex</span><span class="p">.</span><span class="n">m_filename</span> <span class="o">=</span> <span class="s">L"full path to your texture.jpg/bmp/..."</span><span class="p">;</span>
-<span class="n">tex</span><span class="p">.</span><span class="n">m_bOn</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-<span class="n">tex</span><span class="p">.</span><span class="n">m_type</span> <span class="o">=</span> <span class="n">ON_Texture</span><span class="o">::</span><span class="n">bitmap_texture</span><span class="p">;</span>
-<span class="n">tex</span><span class="p">.</span><span class="n">m_mode</span> <span class="o">=</span> <span class="n">ON_Texture</span><span class="o">::</span><span class="n">modulate_texture</span><span class="p">;</span>
+<pre><code class="language-cpp">// Create a material with a texture bitmap
+ON_Texture tex;
+tex.m_filename = L"full path to your texture.jpg/bmp/...";
+tex.m_bOn = true;
+tex.m_type = ON_Texture::bitmap_texture;
+tex.m_mode = ON_Texture::modulate_texture;
 
-<span class="n">ON_Material</span> <span class="n">mat</span><span class="p">;</span>
-<span class="n">mat</span><span class="p">.</span><span class="n">m_diffuse</span><span class="p">.</span><span class="n">SetRGB</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
-<span class="n">mat</span><span class="p">.</span><span class="n">m_specular</span><span class="p">.</span><span class="n">SetRGB</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">);</span>
-<span class="n">mat</span><span class="p">.</span><span class="n">m_shine</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">ON_Material</span><span class="o">::</span><span class="n">GetMaxShine</span><span class="p">()</span>
-<span class="n">mat</span><span class="p">.</span><span class="n">AddTexture</span><span class="p">(</span><span class="n">tex</span><span class="p">);</span>
+ON_Material mat;
+mat.m_diffuse.SetRGB(150,0,0);
+mat.m_specular.SetRGB(200,200,200);
+mat.m_shine = 0.5*ON_Material::GetMaxShine()
+mat.AddTexture(tex);
 
-<span class="kt">int</span> <span class="n">mat_index</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_material_table</span><span class="p">.</span><span class="n">AddMaterial</span><span class="p">(</span><span class="n">mat</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span> <span class="n">mat_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>  
+int mat_index = context.m_doc.m_material_table.AddMaterial(mat);
+if ( mat_index &lt; 0 )
+  return CRhinoCommand::failure;  
 
-<span class="c1">// Select a mesh to modify
-</span><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span><span class="n">ON</span><span class="o">::</span><span class="n">mesh_object</span><span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">L"Select a mesh"</span><span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">!=</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-<span class="k">const</span> <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">mesh0_object</span> <span class="o">=</span>
-   <span class="n">CRhinoMeshObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Object</span><span class="p">());</span>
-<span class="k">if</span> <span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh0_object</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-<span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh0</span> <span class="o">=</span> <span class="n">mesh0_object</span><span class="o">-&gt;</span><span class="n">Mesh</span><span class="p">();</span>
-<span class="k">if</span> <span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh0</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+// Select a mesh to modify
+CRhinoGetObject go;
+go.SetGeometryFilter(ON::mesh_object);
+go.SetCommandPrompt(L"Select a mesh");
+go.GetObjects(1,1);
+if ( CRhinoCommand::success != go.CommandResult() )
+  return go.CommandResult();
+const CRhinoMeshObject* mesh0_object =
+   CRhinoMeshObject::Cast(go.Object(0).Object());
+if ( 0 == mesh0_object )
+  return CRhinoCommand::failure;
+const ON_Mesh* mesh0 = mesh0_object-&gt;Mesh();
+if ( 0 == mesh0 )
+  return CRhinoCommand::failure;
 
-<span class="c1">// Copy the mesh and set its texture coordinates
-</span><span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">OnMesh</span><span class="p">(</span><span class="n">mesh0</span><span class="p">);</span>
-<span class="n">ON_BoundingBox</span> <span class="n">bbox</span> <span class="o">=</span> <span class="n">mesh1</span><span class="o">-&gt;</span><span class="n">BoundingBox</span><span class="p">();</span>
-<span class="n">ON_Interval</span> <span class="n">x_extents</span><span class="p">(</span><span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-<span class="n">ON_Interval</span> <span class="n">y_extents</span><span class="p">(</span><span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+// Copy the mesh and set its texture coordinates
+ON_Mesh* mesh1 = new OnMesh(mesh0);
+ON_BoundingBox bbox = mesh1-&gt;BoundingBox();
+ON_Interval x_extents(bbox.m_min.x,bbox.m_max.x);
+ON_Interval y_extents(bbox.m_min.y,bbox.m_max.y);
 
-<span class="k">const</span> <span class="kt">int</span> <span class="n">vertex_count</span> <span class="o">=</span> <span class="n">mesh1</span><span class="o">-&gt;</span><span class="n">m_V</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-<span class="n">mesh1</span><span class="o">-&gt;</span><span class="n">m_T</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span><span class="n">vertex_count</span><span class="p">);</span>
-<span class="n">mesh1</span><span class="o">-&gt;</span><span class="n">m_T</span><span class="p">.</span><span class="n">SetCount</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">vi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">vi</span> <span class="o">&lt;</span> <span class="n">vertex_count</span><span class="p">;</span> <span class="n">vi</span><span class="o">++</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">V</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">-&gt;</span><span class="n">m_V</span><span class="p">[</span><span class="n">vi</span><span class="p">];</span>
-  <span class="n">ON_2fPoint</span><span class="o">&amp;</span> <span class="n">tc</span> <span class="o">=</span> <span class="n">mesh1</span><span class="o">-&gt;</span><span class="n">m_T</span><span class="p">.</span><span class="n">AppendNew</span><span class="p">();</span>
-  <span class="n">tc</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">x_extents</span><span class="p">.</span><span class="n">NormalizedParameterAt</span><span class="p">(</span><span class="n">V</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-  <span class="n">tc</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">y_extents</span><span class="p">.</span><span class="n">NormalizedParameterAt</span><span class="p">(</span><span class="n">V</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
+const int vertex_count = mesh1-&gt;m_V.Count();
+mesh1-&gt;m_T.Reserve(vertex_count);
+mesh1-&gt;m_T.SetCount(0);
+for ( int vi = 0; vi &lt; vertex_count; vi++ )
+{
+  const ON_3dPoint&amp; V = mesh-&gt;m_V[vi];
+  ON_2fPoint&amp; tc = mesh1-&gt;m_T.AppendNew();
+  tc.x = (float)x_extents.NormalizedParameterAt(V.x);
+  tc.y = (float)y_extents.NormalizedParameterAt(V.y);
+}
 
-<span class="c1">// Update the mesh
-</span><span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">mesh1_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMeshObject</span><span class="p">();</span>
-<span class="n">mesh1_object</span><span class="p">.</span><span class="n">SetMesh</span><span class="p">(</span><span class="n">mesh1</span><span class="p">);</span>
-<span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span><span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">mesh0_object</span><span class="p">),</span><span class="n">mesh1_object</span><span class="p">);</span>
-<span class="n">ON_3dmObjectAttributes</span> <span class="n">att</span> <span class="o">=</span> <span class="n">mesh1_object</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-<span class="n">att</span><span class="p">.</span><span class="n">m_material_index</span><span class="p">;</span>
-<span class="n">att</span><span class="p">.</span><span class="n">SetMaterialSource</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">material_from_object</span> <span class="p">);</span>
-<span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+// Update the mesh
+CRhinoMeshObject* mesh1_object = new CRhinoMeshObject();
+mesh1_object.SetMesh(mesh1);
+context.m_doc.ReplaceObject(CRhinoObjRef(mesh0_object),mesh1_object);
+ON_3dmObjectAttributes att = mesh1_object-&gt;Attributes();
+att.m_material_index;
+att.SetMaterialSource( ON::material_from_object );
+context.m_doc.Redraw();
 </code></pre>
-</div>
 
         </article>
 

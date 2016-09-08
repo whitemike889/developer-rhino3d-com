@@ -222,56 +222,55 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">UnrollSurface2</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Brep</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or brep to unroll"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Unroller</span> <span class="n">unroll</span><span class="p">=</span><span class="k">null</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="n">mesh</span><span class="p">=</span><span class="k">null</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">unroll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Unroller</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-      <span class="n">mesh</span> <span class="p">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">Faces</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="nf">GetMesh</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">MeshType</span><span class="p">.</span><span class="n">Render</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Surface</span> <span class="n">srf</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">srf</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">unroll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Unroller</span><span class="p">(</span><span class="n">srf</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">unroll</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">mesh</span><span class="p">==</span><span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result UnrollSurface2(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Brep | Rhino.DocObjects.ObjectType.Surface;
+    Rhino.DocObjects.ObjRef objref;
+    Result rc = Rhino.Input.RhinoGet.GetOneObject("Select surface or brep to unroll", false, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
+    Rhino.Geometry.Unroller unroll=null;
+    Rhino.Geometry.Brep brep = objref.Brep();
+    Rhino.Geometry.Mesh mesh=null;
+    if (brep != null)
+    {
+      unroll = new Rhino.Geometry.Unroller(brep);
+      mesh = brep.Faces[0].GetMesh(Rhino.Geometry.MeshType.Render);
+    }
+    else
+    {
+      Rhino.Geometry.Surface srf = objref.Surface();
+      if (srf != null)
+      {
+        unroll = new Rhino.Geometry.Unroller(srf);
+      }
+    }
+    if (unroll == null || mesh==null)
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="n">unroll</span><span class="p">.</span><span class="nf">AddFollowingGeometry</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">ToPoint3dArray</span><span class="p">());</span>
+    unroll.AddFollowingGeometry(mesh.Vertices.ToPoint3dArray());
 
-    <span class="n">unroll</span><span class="p">.</span><span class="n">ExplodeOutput</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">[]</span> <span class="n">curves</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span><span class="p">[]</span> <span class="n">points</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">TextDot</span><span class="p">[]</span> <span class="n">dots</span><span class="p">;</span>
-    <span class="n">unroll</span><span class="p">.</span><span class="nf">PerformUnroll</span><span class="p">(</span><span class="k">out</span> <span class="n">curves</span><span class="p">,</span> <span class="k">out</span> <span class="n">points</span><span class="p">,</span> <span class="k">out</span> <span class="n">dots</span><span class="p">);</span>
+    unroll.ExplodeOutput = false;
+    Rhino.Geometry.Curve[] curves;
+    Rhino.Geometry.Point3d[] points;
+    Rhino.Geometry.TextDot[] dots;
+    unroll.PerformUnroll(out curves, out points, out dots);
 
-    <span class="c1">// change the mesh vertices to the flattened form and add it to the document
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">points</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="n">Count</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="p">&lt;</span><span class="n">points</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">)</span>
-        <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">SetVertex</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="n">mesh</span><span class="p">.</span><span class="n">Normals</span><span class="p">.</span><span class="nf">ComputeNormals</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">().</span><span class="n">Attributes</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // change the mesh vertices to the flattened form and add it to the document
+    if( points.Length == mesh.Vertices.Count )
+    {
+      for( int i=0; i&lt;points.Length; i++ )
+        mesh.Vertices.SetVertex(i, points[i]);
+      mesh.Normals.ComputeNormals();
+    }
+    doc.Objects.AddMesh(mesh, objref.Object().Attributes);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function UnrollSurface2(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -319,33 +318,32 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">UnrollSurface2</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Brep</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or brep to unroll"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+def UnrollSurface2():
+    filter = Rhino.DocObjects.ObjectType.Brep | Rhino.DocObjects.ObjectType.Surface
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select surface or brep to unroll", False, filter)
+    if rc!=Rhino.Commands.Result.Success: return rc;
 
-    <span class="n">unroll</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Unroller</span><span class="p">(</span><span class="n">objref</span><span class="o">.</span><span class="n">Geometry</span><span class="p">())</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Brep</span><span class="p">()</span><span class="o">.</span><span class="n">Faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetMesh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+    unroll = Rhino.Geometry.Unroller(objref.Geometry())
+    mesh = objref.Brep().Faces[0].GetMesh(0)
+    if not mesh: return Rhino.Commands.Result.Cancel
 
-    <span class="n">unroll</span><span class="o">.</span><span class="n">AddFollowingGeometry</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">ToPoint3dArray</span><span class="p">())</span>
-    <span class="n">unroll</span><span class="o">.</span><span class="n">ExplodeOutput</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">breps</span><span class="p">,</span> <span class="n">curves</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">dots</span> <span class="o">=</span> <span class="n">unroll</span><span class="o">.</span><span class="n">PerformUnroll</span><span class="p">()</span>
-    <span class="c"># change the mesh vertices to the flattened form and add it to the document</span>
-    <span class="k">if</span> <span class="n">points</span><span class="o">.</span><span class="n">Length</span><span class="o">==</span><span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Count</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">):</span> <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">SetVertex</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
-        <span class="n">mesh</span><span class="o">.</span><span class="n">Normals</span><span class="o">.</span><span class="n">ComputeNormals</span><span class="p">()</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span><span class="o">.</span><span class="n">Attributes</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    unroll.AddFollowingGeometry(mesh.Vertices.ToPoint3dArray())
+    unroll.ExplodeOutput = False
+    breps, curves, points, dots = unroll.PerformUnroll()
+    # change the mesh vertices to the flattened form and add it to the document
+    if points.Length==mesh.Vertices.Count:
+        for i, point in enumerate(points): mesh.Vertices.SetVertex(i, point)
+        mesh.Normals.ComputeNormals()
+    scriptcontext.doc.Objects.AddMesh(mesh, objref.Object().Attributes)
+    scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">UnrollSurface2</span><span class="p">()</span>
+if __name__=="__main__":
+    UnrollSurface2()
 </code></pre>
-</div>
 
 </div>
 

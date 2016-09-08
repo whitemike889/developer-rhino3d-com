@@ -217,74 +217,73 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select the surface to extract isocurve
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select the surface to extract isocurve
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Validate selection
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">srf</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Surface</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">srf</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Validate selection
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const ON_Surface* srf = ref.Surface();
+  if( !srf )
+    return failure;
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">(</span> <span class="n">ON_UNSET_POINT</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+  ON_3dPoint pt( ON_UNSET_POINT );
+  BOOL dir = FALSE;
 
-  <span class="c1">// Pick a point on the surface
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point on surface"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">AddCommandOptionToggle</span><span class="p">(</span>
-            <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Direction"</span><span class="p">),</span>
-            <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"U"</span><span class="p">),</span>
-            <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"V"</span><span class="p">),</span>
-            <span class="n">dir</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dir</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">srf</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">point</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">option</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="k">else</span>
-      <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Pick a point on the surface
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Point on surface" );
+  gp.AddCommandOptionToggle(
+            RHCMDOPTNAME(L"Direction"),
+            RHCMDOPTVALUE(L"U"),
+            RHCMDOPTVALUE(L"V"),
+            dir, &amp;dir );
+  gp.Constrain( *srf );
+  for(;;)
+  {
+    CRhinoGet::result res = gp.GetPoint();
+    if( res == CRhinoGet::point )
+    {
+      pt = gp.Point();
+      break;
+    }
+    else if( res == CRhinoGet::option )
+      continue;
+    else
+      return cancel;
+  }
 
-  <span class="c1">// Get the parameters of the point on
-</span>  <span class="c1">// the surface that is closest to pt.
-</span>  <span class="kt">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">srf</span><span class="o">-&gt;</span><span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the isoparametric curve. ON_Surface::IsoCurve
-</span>    <span class="c1">// allocates memory for the resulting curve that we
-</span>    <span class="c1">// will be responsible for.
-</span>    <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">srf</span><span class="o">-&gt;</span><span class="n">IsoCurve</span><span class="p">(</span> <span class="n">dir</span><span class="p">,</span> <span class="n">dir</span> <span class="o">?</span> <span class="n">u</span> <span class="o">:</span> <span class="n">v</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="o">*</span><span class="n">crv</span> <span class="p">);</span>
+  // Get the parameters of the point on
+  // the surface that is closest to pt.
+  double u, v;
+  if( srf-&gt;GetClosestPoint(pt, &amp;u, &amp;v) )
+  {
+    // Get the isoparametric curve. ON_Surface::IsoCurve
+    // allocates memory for the resulting curve that we
+    // will be responsible for.
+    ON_Curve* crv = srf-&gt;IsoCurve( dir, dir ? u : v );
+    if( crv )
+    {
+      context.m_doc.AddCurveObject( *crv );
 
-      <span class="c1">// CRhinoDoc::AddCurveObject make a copy of the input curve.
-</span>      <span class="c1">// So, we need to delete crv otherwise we will leak memory.
-</span>      <span class="k">delete</span> <span class="n">crv</span><span class="p">;</span>
-      <span class="n">crv</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      // CRhinoDoc::AddCurveObject make a copy of the input curve.
+      // So, we need to delete crv otherwise we will leak memory.
+      delete crv;
+      crv = 0;
 
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      context.m_doc.Redraw();
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

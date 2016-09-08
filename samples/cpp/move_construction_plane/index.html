@@ -217,72 +217,71 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CTestMoveCPlanePoint</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CTestMoveCPlanePoint</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_3dmConstructionPlane</span><span class="o">&amp;</span> <span class="n">cplane</span> <span class="p">);</span>
-  <span class="o">~</span><span class="n">CTestMoveCPlanePoint</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="kt">void</span> <span class="n">SetConstructionPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">ON_3dmConstructionPlane</span><span class="o">&amp;</span> <span class="n">cplane</span><span class="p">);</span>
-  <span class="kt">void</span> <span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-                    <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-                    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-                    <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">pt2d</span> <span class="p">);</span>
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span>
-                    <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-                    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">ON_3dmConstructionPlane</span> <span class="n">m_cplane</span><span class="p">;</span>
-<span class="p">};</span>
+<pre><code class="language-cpp">class CTestMoveCPlanePoint : public CRhinoGetPoint
+{
+public:
+  CTestMoveCPlanePoint( const ON_3dmConstructionPlane&amp; cplane );
+  ~CTestMoveCPlanePoint() {}
+  void SetConstructionPlane(const ON_3dmConstructionPlane&amp; cplane);
+  void OnMouseMove( CRhinoViewport&amp; vp,
+                    UINT flags,
+                    const ON_3dPoint&amp; pt,
+                    const CPoint* pt2d );
+  void DynamicDraw( HDC hdc,
+                    CRhinoViewport&amp; vp,
+                    const ON_3dPoint&amp; pt );
+private:
+  ON_3dmConstructionPlane m_cplane;
+};
 
-<span class="n">CTestMoveCPlanePoint</span><span class="o">::</span><span class="n">CTestMoveCPlanePoint</span><span class="p">(</span><span class="k">const</span> <span class="n">ON_3dmConstructionPlane</span><span class="o">&amp;</span> <span class="n">cplane</span><span class="p">)</span>
-<span class="o">:</span> <span class="n">m_cplane</span><span class="p">(</span><span class="n">cplane</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="p">}</span>
+CTestMoveCPlanePoint::CTestMoveCPlanePoint(const ON_3dmConstructionPlane&amp; cplane)
+: m_cplane(cplane)
+{
+}
 
-<span class="kt">void</span> <span class="n">CTestMoveCPlanePoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-                                        <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">pt2d</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromFrame</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="n">m_cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">m_cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">yaxis</span> <span class="p">);</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">pt2d</span> <span class="p">);</span>
-<span class="p">}</span>
+void CTestMoveCPlanePoint::OnMouseMove( CRhinoViewport&amp; vp, UINT flags,
+                                        const ON_3dPoint&amp; pt, const CPoint* pt2d )
+{
+  m_cplane.m_plane.CreateFromFrame( pt, m_cplane.m_plane.xaxis, m_cplane.m_plane.yaxis );
+  CRhinoGetPoint::OnMouseMove( vp, flags, pt, pt2d );
+}
 
-<span class="kt">void</span> <span class="n">CTestMoveCPlanePoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span><span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">vp</span><span class="p">.</span><span class="n">DrawConstructionPlane</span><span class="p">(</span> <span class="n">m_cplane</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">}</span>
+void CTestMoveCPlanePoint::DynamicDraw(HDC hdc, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt)
+{
+  vp.DrawConstructionPlane( m_cplane, FALSE, TRUE );
+  CRhinoGetPoint::DynamicDraw( hdc, vp, pt );
+}
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoView* view = ::RhinoApp().ActiveView();
+  if( !view )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_3dmConstructionPlane</span> <span class="n">cplane</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">();</span>
-  <span class="n">ON_3dPoint</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">origin</span><span class="p">;</span>
+  ON_3dmConstructionPlane cplane = view-&gt;Viewport().ConstructionPlane();
+  ON_3dPoint origin = cplane.m_plane.origin;
 
-  <span class="n">CTestMoveCPlanePoint</span> <span class="n">gp</span><span class="p">(</span> <span class="n">cplane</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"CPlane origin"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">origin</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">origin</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
+  CTestMoveCPlanePoint gp( cplane );
+  gp.SetCommandPrompt( L"CPlane origin" );
+  gp.SetBasePoint( origin );
+  gp.DrawLineFromPoint( origin, TRUE );
+  gp.GetPoint();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="n">ON_3dVector</span> <span class="n">v</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">-</span> <span class="n">pt</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">v</span><span class="p">.</span><span class="n">IsTiny</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  ON_3dPoint pt = gp.Point();
+  ON_3dVector v = origin - pt;
+  if( v.IsTiny() )
+    return CRhinoCommand::nothing;
 
-  <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">CreateFromFrame</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">xaxis</span><span class="p">,</span>
-                                  <span class="n">cplane</span><span class="p">.</span><span class="n">m_plane</span><span class="p">.</span><span class="n">yaxis</span> <span class="p">);</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">SetConstructionPlane</span><span class="p">(</span> <span class="n">cplane</span> <span class="p">);</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  cplane.m_plane.CreateFromFrame( pt, cplane.m_plane.xaxis,
+                                  cplane.m_plane.yaxis );
+  view-&gt;Viewport().SetConstructionPlane( cplane );
+  view-&gt;Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

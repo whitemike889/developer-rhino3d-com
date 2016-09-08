@@ -319,7 +319,7 @@
 
 <h2 id="ubound">UBound</h2>
 
-<p>To determine the upper bounds of an array, use VBScript’s <code class="highlighter-rouge">UBound</code> method. The <code class="highlighter-rouge">UBound</code> method returns the largest available subscript for the indicated dimension of an array.  The syntax for <code class="highlighter-rouge">UBound</code> is:</p>
+<p>To determine the upper bounds of an array, use VBScript’s <code>UBound</code> method. The <code>UBound</code> method returns the largest available subscript for the indicated dimension of an array.  The syntax for <code>UBound</code> is:</p>
 
 <pre><code class="language-vbnet">UBound(arrayname [,dimension])
 </code></pre>
@@ -327,8 +327,8 @@
 <p>where…</p>
 
 <ul>
-  <li><code class="highlighter-rouge">arrayname</code> <em>(required)</em> is the name of the array variable.</li>
-  <li><code class="highlighter-rouge">dimension</code> <em>(optional)</em> is whole number indicating which dimension’s upper bound is returned. Use 1 for the first dimension, 2 for the second, and so on. If dimension is omitted, 1 is assumed.</li>
+  <li><code>arrayname</code> <em>(required)</em> is the name of the array variable.</li>
+  <li><code>dimension</code> <em>(optional)</em> is whole number indicating which dimension’s upper bound is returned. Use 1 for the first dimension, 2 for the second, and so on. If dimension is omitted, 1 is assumed.</li>
 </ul>
 
 <p>For example:</p>
@@ -342,9 +342,9 @@ UBound(A, 3) ' 4
 
 <h2 id="jagged-arrays">Jagged Arrays</h2>
 
-<p>What if you do not know an array’s dimensions, which might be the case with a jagged array? How do you know what dimension values are valid to pass to <code class="highlighter-rouge">UBound</code>?</p>
+<p>What if you do not know an array’s dimensions, which might be the case with a jagged array? How do you know what dimension values are valid to pass to <code>UBound</code>?</p>
 
-<p>VBScript does not have a function that returns the number of dimensions of an array. But, by using the <code class="highlighter-rouge">UBound</code> method and some simple error checking, we can write our own function that determines the number of dimension of an array.</p>
+<p>VBScript does not have a function that returns the number of dimensions of an array. But, by using the <code>UBound</code> method and some simple error checking, we can write our own function that determines the number of dimension of an array.</p>
 
 <p>Consider the following function:</p>
 
@@ -373,7 +373,7 @@ Function GetArrayDim(ByVal arr)
 End Function
 </code></pre>
 
-<p><code class="highlighter-rouge">GetArrayDim</code> simply calls <code class="highlighter-rouge">UBound</code> with a different dimension parameter until an error is thrown. Note, since VBScript allows arrays of up to 60 dimensions, we must check up to this value.</p>
+<p><code>GetArrayDim</code> simply calls <code>UBound</code> with a different dimension parameter until an error is thrown. Note, since VBScript allows arrays of up to 60 dimensions, we must check up to this value.</p>
 
 <p>Now that we have a function that will return the dimensions of an array, we can write a subroutine that dumps out the dimensions and upper bounds of either a rectangular or jagged array.</p>
 
@@ -411,9 +411,9 @@ Sub DumpArrayInfo(arr)
 End Sub
 </code></pre>
 
-<p>For every element in an array, <code class="highlighter-rouge">DumpArrayInfo</code> calls <code class="highlighter-rouge">GetArrayDim</code> to determine the dimension of the array element.  If <code class="highlighter-rouge">GetArrayDim</code> returns a valid result, then the subroutine determines the upper bounds in each dimension of the array element and prints the results to the Rhino command line.</p>
+<p>For every element in an array, <code>DumpArrayInfo</code> calls <code>GetArrayDim</code> to determine the dimension of the array element.  If <code>GetArrayDim</code> returns a valid result, then the subroutine determines the upper bounds in each dimension of the array element and prints the results to the Rhino command line.</p>
 
-<p><strong>NOTE</strong>: <code class="highlighter-rouge">DumpArrayInfo</code> uses a <code class="highlighter-rouge">UBound</code> helper function named <code class="highlighter-rouge">GetArrayUBound</code> that is a little safer than just using <code class="highlighter-rouge">UBound</code>…</p>
+<p><strong>NOTE</strong>: <code>DumpArrayInfo</code> uses a <code>UBound</code> helper function named <code>GetArrayUBound</code> that is a little safer than just using <code>UBound</code>…</p>
 
 <pre><code class="language-vbnet">'Description
 '  Safely returns the largest available subscript for

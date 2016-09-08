@@ -217,56 +217,55 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-      <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span>
-      <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select two curves to intersect
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select two curves"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+      const CRhinoCommandContext&amp; context
+      )
+{
+  // Select two curves to intersect
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select two curves" );
+  go.SetGeometryFilter( ON::curve_object );
+  go.GetObjects( 2, 2 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Validate input
-</span>  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curveA</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curveB</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curveA</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curveB</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Validate input
+  const ON_Curve* curveA = go.Object(0).Curve();
+  const ON_Curve* curveB = go.Object(1).Curve();
+  if( 0 == curveA | 0 == curveB )
+    return CRhinoCommand::failure;
 
-  <span class="c1">// Calculate the intersection
-</span>  <span class="kt">double</span> <span class="n">intersection_tolerance</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">overlap_tolerance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_X_EVENT</span><span class="o">&gt;</span> <span class="n">events</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">curveA</span><span class="o">-&gt;</span><span class="n">IntersectCurve</span><span class="p">(</span>
-        <span class="n">curveB</span><span class="p">,</span>
-        <span class="n">events</span><span class="p">,</span>
-        <span class="n">intersection_tolerance</span><span class="p">,</span>
-        <span class="n">overlap_tolerance</span>
-        <span class="p">);</span>
+  // Calculate the intersection
+  double intersection_tolerance = 0.001;
+  double overlap_tolerance = 0.0;
+  ON_SimpleArray&lt;ON_X_EVENT&gt; events;
+  int count = curveA-&gt;IntersectCurve(
+        curveB,
+        events,
+        intersection_tolerance,
+        overlap_tolerance
+        );
 
-  <span class="c1">// Process the results
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">events</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">ON_X_EVENT</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">e</span><span class="p">.</span><span class="n">m_A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">e</span><span class="p">.</span><span class="n">m_A</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">m_B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">ON_EPSILON</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">e</span><span class="p">.</span><span class="n">m_B</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">ON_Line</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">m_A</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e</span><span class="p">.</span><span class="n">m_B</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  // Process the results
+  if( count &gt; 0 )
+  {
+    int i;
+    for( i = 0; i &lt; events.Count(); i++ )
+    {
+      const ON_X_EVENT&amp; e = events[i];
+      context.m_doc.AddPointObject( e.m_A[0] );
+      if( e.m_A[0].DistanceTo(e.m_B[0]) &gt; ON_EPSILON )
+      {
+        context.m_doc.AddPointObject( e.m_B[0] );
+        context.m_doc.AddCurveObject( ON_Line(e.m_A[0], e.m_B[0]) );
+      }
+    }
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

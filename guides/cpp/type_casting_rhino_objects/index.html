@@ -315,124 +315,121 @@
 
 <h2 id="problem">Problem</h2>
 
-<p>Given a Rhino object, how can one convert it to another Rhino object?  For example, if you have a <code class="highlighter-rouge">CRhinoObject</code> pointer, how can I convert it to a <code class="highlighter-rouge">CRhinoCurveObject</code> pointer?  Or, how can one get the curve geometry?</p>
+<p>Given a Rhino object, how can one convert it to another Rhino object?  For example, if you have a <code>CRhinoObject</code> pointer, how can I convert it to a <code>CRhinoCurveObject</code> pointer?  Or, how can one get the curve geometry?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>All Rhino C/C++ SDK classes derived from <code class="highlighter-rouge">ON_Object</code> provide conversions between pointers to related classes using a static <code class="highlighter-rouge">ON_Object::Cast</code> function.</p>
+<p>All Rhino C/C++ SDK classes derived from <code>ON_Object</code> provide conversions between pointers to related classes using a static <code>ON_Object::Cast</code> function.</p>
 
-<p>If you have a pointer to some base class that inherits from <code class="highlighter-rouge">ON_Object</code>, and you want to convert it to a pointer of a derived class, than simply call the derived class <code class="highlighter-rouge">Cast</code> function.</p>
+<p>If you have a pointer to some base class that inherits from <code>ON_Object</code>, and you want to convert it to a pointer of a derived class, than simply call the derived class <code>Cast</code> function.</p>
 
 <p>For example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">const</span> <span class="n">CBase</span><span class="o">*</span> <span class="n">a</span> <span class="o">=</span> <span class="p">...;</span>
-<span class="k">const</span> <span class="n">CDerived</span><span class="o">*</span> <span class="n">b</span> <span class="o">=</span> <span class="n">CDerived</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">a</span> <span class="p">);</span>
+<pre><code class="language-cpp">const CBase* a = ...;
+const CDerived* b = CDerived::Cast( a );
 </code></pre>
-</div>
 
 <h2 id="samples">Samples</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select something"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">==</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get the one (and only) object reference
-</span>  <span class="n">CRhinoObjRef</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select something" );
+go.GetObjects( 1, 1 );
+if( CRhinoCommand::success == go.CommandResult() )
+{
+  // Get the one (and only) object reference
+  CRhinoObjRef obj_ref = go.Object(0);
 
-  <span class="c1">// Get the Rhino object
-</span>  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Try casting as a Rhino point object
-</span>    <span class="k">const</span> <span class="n">CRhinoPointObject</span><span class="o">*</span> <span class="n">point_obj</span> <span class="o">=</span> <span class="n">CRhinoPointObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">point_obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Get the point object's point geometry
-</span>      <span class="k">const</span> <span class="n">ON_Point</span><span class="o">&amp;</span> <span class="n">point</span> <span class="o">=</span> <span class="n">point_obj</span><span class="o">-&gt;</span><span class="n">Point</span><span class="p">();</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+  // Get the Rhino object
+  const CRhinoObject* obj = obj_ref.Object();
+  if( obj )
+  {
+    // Try casting as a Rhino point object
+    const CRhinoPointObject* point_obj = CRhinoPointObject::Cast( obj );
+    if( point_obj )
+    {
+      // Get the point object's point geometry
+      const ON_Point&amp; point = point_obj-&gt;Point();
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a Rhino curve object
-</span>    <span class="k">const</span> <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_obj</span> <span class="o">=</span> <span class="n">CRhinoCurveObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">curve_obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Get the curve object's curve geometry
-</span>      <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">curve_obj</span><span class="o">-&gt;</span><span class="n">Curve</span><span class="p">();</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a Rhino curve object
+    const CRhinoCurveObject* curve_obj = CRhinoCurveObject::Cast( obj );
+    if( curve_obj )
+    {
+      // Get the curve object's curve geometry
+      const ON_Curve* curve = curve_obj-&gt;Curve();
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a Rhino brep object
-</span>    <span class="k">const</span> <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">brep_obj</span> <span class="o">=</span> <span class="n">CRhinoBrepObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep_obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Get the brep object's brep geometry
-</span>      <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">brep_obj</span><span class="o">-&gt;</span><span class="n">Brep</span><span class="p">();</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a Rhino brep object
+    const CRhinoBrepObject* brep_obj = CRhinoBrepObject::Cast( obj );
+    if( brep_obj )
+    {
+      // Get the brep object's brep geometry
+      const ON_Brep* brep = brep_obj-&gt;Brep();
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a Rhino mesh object
-</span>    <span class="k">const</span> <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">mesh_obj</span> <span class="o">=</span> <span class="n">CRhinoMeshObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">mesh_obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// Get the mesh object's mesh geometry
-</span>      <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh_obj</span><span class="o">-&gt;</span><span class="n">Mesh</span><span class="p">();</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a Rhino mesh object
+    const CRhinoMeshObject* mesh_obj = CRhinoMeshObject::Cast( obj );
+    if( mesh_obj )
+    {
+      // Get the mesh object's mesh geometry
+      const ON_Mesh* mesh = mesh_obj-&gt;Mesh();
+      // todo...
+    }
 
-    <span class="c1">// etc...
-</span>  <span class="p">}</span>
-<span class="p">}</span>
+    // etc...
+  }
+}
 </code></pre>
-</div>
 
 <p>and…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select something"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="o">==</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get the one (and only) object reference
-</span>  <span class="n">CRhinoObjRef</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select something" );
+go.GetObjects( 1, 1 );
+if( CRhinoCommand::success == go.CommandResult() )
+{
+  // Get the one (and only) object reference
+  CRhinoObjRef obj_ref = go.Object(0);
 
-  <span class="c1">// Get the Rhino object's geometry
-</span>  <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geo</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Geometry</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">geo</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Try casting as a point object
-</span>    <span class="k">const</span> <span class="n">ON_Point</span><span class="o">*</span> <span class="n">point</span> <span class="o">=</span> <span class="n">ON_Point</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">geo</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">point</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+  // Get the Rhino object's geometry
+  const ON_Geometry* geo = obj_ref.Geometry();
+  if( geo )
+  {
+    // Try casting as a point object
+    const ON_Point* point = ON_Point::Cast( geo );
+    if( point )
+    {
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a curve object
-</span>    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">ON_Curve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">geo</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a curve object
+    const ON_Curve* curve = ON_Curve::Cast( geo );
+    if( curve )
+    {
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a brep object
-</span>    <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">geo</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a brep object
+    const ON_Brep* brep = ON_Brep::Cast( geo );
+    if( brep )
+    {
+      // todo...
+    }
 
-    <span class="c1">// Try casting as a mesh object
-</span>    <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">ON_Mesh</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">geo</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// todo...
-</span>    <span class="p">}</span>
+    // Try casting as a mesh object
+    const ON_Mesh* mesh = ON_Mesh::Cast( geo );
+    if( mesh )
+    {
+      // todo...
+    }
 
-    <span class="c1">// etc...
-</span>  <span class="p">}</span>
-<span class="p">}</span>
+    // etc...
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

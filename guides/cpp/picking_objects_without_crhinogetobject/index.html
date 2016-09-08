@@ -302,81 +302,79 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>You can use <code class="highlighter-rouge">CRhinoPickContext</code> to build your own object picker.  For more details on <code class="highlighter-rouge">CRhinoPickContext</code>, see <em>rhinoSdkPick.h</em>. With the <code class="highlighter-rouge">CRhinoPickContext</code> class, you can define the rules for picking.  For example, you can specify a picking style (point, window, crossing).  You can also specify a filter so you only pick the types of objects you want. The most important part is to define a pick chord, which starts on near clipping plane and ends on far clipping plane.</p>
+<p>You can use <code>CRhinoPickContext</code> to build your own object picker.  For more details on <code>CRhinoPickContext</code>, see <em>rhinoSdkPick.h</em>. With the <code>CRhinoPickContext</code> class, you can define the rules for picking.  For example, you can specify a picking style (point, window, crossing).  You can also specify a filter so you only pick the types of objects you want. The most important part is to define a pick chord, which starts on near clipping plane and ends on far clipping plane.</p>
 
-<p>After you have created the <code class="highlighter-rouge">CRhinoPickContext</code> object and filled out its parameters, call <code class="highlighter-rouge">CRhinoDoc::PickObjects</code>.  This function goes through the list of eligible objects and intersects them with the pick frustum.  If they hit the frustum in an acceptable manner, the object is added to a pick list passed in by the caller.</p>
+<p>After you have created the <code>CRhinoPickContext</code> object and filled out its parameters, call <code>CRhinoDoc::PickObjects</code>.  This function goes through the list of eligible objects and intersects them with the pick frustum.  If they hit the frustum in an acceptable manner, the object is added to a pick list passed in by the caller.</p>
 
 <p>Here is a simple example of a function that might work for you:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">int</span> <span class="nf">MyObjectPicker</span><span class="p">(</span> <span class="n">CRhinoDoc</span><span class="o">&amp;</span> <span class="n">doc</span><span class="p">,</span> <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span><span class="p">,</span> <span class="n">POINT</span> <span class="n">point</span><span class="p">,</span> <span class="n">CRhinoObjRefArray</span><span class="o">&amp;</span> <span class="n">pick_list</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<pre><code class="language-cpp">static int MyObjectPicker( CRhinoDoc&amp; doc, CRhinoView* view, POINT point, CRhinoObjRefArray&amp; pick_list )
+{
+  if( 0 == view )
+    return 0;
 
-  <span class="n">CRhinoPickContext</span> <span class="n">pick_context</span><span class="p">;</span>
-  <span class="n">pick_context</span><span class="p">.</span><span class="n">m_view</span> <span class="o">=</span> <span class="n">view</span><span class="p">;</span>
-  <span class="n">pick_context</span><span class="p">.</span><span class="n">m_pick_style</span> <span class="o">=</span> <span class="n">CRhinoPickContext</span><span class="o">::</span><span class="n">point_pick</span><span class="p">;</span>
+  CRhinoPickContext pick_context;
+  pick_context.m_view = view;
+  pick_context.m_pick_style = CRhinoPickContext::point_pick;
 
-  <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">active_vp</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">();</span>
-  <span class="k">switch</span><span class="p">(</span> <span class="n">active_vp</span><span class="p">.</span><span class="n">DisplayMode</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">case</span> <span class="n">ON</span><span class="p">:</span><span class="o">:</span><span class="n">shaded_display</span><span class="o">:</span>
-    <span class="k">case</span> <span class="n">ON</span><span class="p">:</span><span class="o">:</span><span class="n">renderpreview_display</span><span class="o">:</span>
-      <span class="n">pick_context</span><span class="p">.</span><span class="n">m_pick_mode</span> <span class="o">=</span> <span class="n">CRhinoPickContext</span><span class="o">::</span><span class="n">shaded_pick</span><span class="p">;</span>
-      <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+  CRhinoViewport&amp; active_vp = view-&gt;ActiveViewport();
+  switch( active_vp.DisplayMode() )
+  {
+    case ON::shaded_display:
+    case ON::renderpreview_display:
+      pick_context.m_pick_mode = CRhinoPickContext::shaded_pick;
+      break;
+  }
 
-  <span class="kt">int</span> <span class="n">pick_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">active_vp</span><span class="p">.</span><span class="n">GetPickXform</span><span class="p">(</span><span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pick_context</span><span class="p">.</span><span class="n">m_pick_region</span><span class="p">.</span><span class="n">m_xform</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// adds objects to pick_list - does not change any status
-</span>    <span class="n">active_vp</span><span class="p">.</span><span class="n">VP</span><span class="p">().</span><span class="n">GetFrustumLine</span><span class="p">(</span> <span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pick_context</span><span class="p">.</span><span class="n">m_pick_line</span> <span class="p">);</span>
-    <span class="n">pick_context</span><span class="p">.</span><span class="n">UpdateClippingPlanes</span><span class="p">();</span>
-    <span class="n">pick_count</span> <span class="o">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">PickObjects</span><span class="p">(</span> <span class="n">pick_context</span><span class="p">,</span> <span class="n">pick_list</span> <span class="p">);</span>
-  <span class="p">}</span>
+  int pick_count = 0;
+  if( active_vp.GetPickXform(point.x, point.y, pick_context.m_pick_region.m_xform) )
+  {
+    // adds objects to pick_list - does not change any status
+    active_vp.VP().GetFrustumLine( point.x, point.y, pick_context.m_pick_line );
+    pick_context.UpdateClippingPlanes();
+    pick_count = doc.PickObjects( pick_context, pick_list );
+  }
 
-  <span class="k">return</span> <span class="n">pick_count</span><span class="p">;</span>
-<span class="p">}</span>
+  return pick_count;
+}
 </code></pre>
-</div>
 
 <p>And, here is a sample of its use:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetPoint gp;
+  gp.GetPoint();
+  if( gp.CommandResult() != CRhinoCommand::success )
+    return gp.CommandResult();
 
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  CRhinoView* view = gp.View();
+  if( 0 == view )
+    return failure;
 
-  <span class="n">ON_Xform</span> <span class="n">w2s</span><span class="p">;</span>
-  <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">VP</span><span class="p">().</span><span class="n">GetXform</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">screen_cs</span><span class="p">,</span> <span class="n">w2s</span> <span class="p">);</span>
+  ON_Xform w2s;
+  view-&gt;ActiveViewport().VP().GetXform( ON::world_cs, ON::screen_cs, w2s );
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt3d</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="n">pt3d</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span> <span class="n">w2s</span> <span class="p">);</span>
+  ON_3dPoint pt3d = gp.Point();
+  pt3d.Transform( w2s );
 
-  <span class="n">POINT</span> <span class="n">pt2d</span><span class="p">;</span>
-  <span class="n">pt2d</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">pt3d</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
-  <span class="n">pt2d</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">pt3d</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+  POINT pt2d;
+  pt2d.x = (int)pt3d.x;
+  pt2d.y = (int)pt3d.y;
 
-  <span class="n">CRhinoObjRefArray</span> <span class="n">pick_list</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">pick_count</span> <span class="o">=</span> <span class="n">MyObjectPicker</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">,</span> <span class="n">view</span><span class="p">,</span> <span class="n">pt2d</span><span class="p">,</span> <span class="n">pick_list</span> <span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">pick_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">pick_list</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-      <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">(</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  CRhinoObjRefArray pick_list;
+  int pick_count = MyObjectPicker( context.m_doc, view, pt2d, pick_list );
+  for( int i = 0; i &lt; pick_count; i++ )
+  {
+    const CRhinoObject* obj = pick_list[i].Object();
+    if( obj )
+      obj-&gt;Select( true, true, true );
+  }
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

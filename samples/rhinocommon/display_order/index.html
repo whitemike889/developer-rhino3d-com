@@ -222,65 +222,64 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">static</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RhinoObject</span><span class="p">&gt;</span> <span class="n">m_line_objects</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">RhinoObject</span><span class="p">&gt;();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  private static List&lt;RhinoObject&gt; m_line_objects = new List&lt;RhinoObject&gt;();
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DisplayOrder</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// make lines thick so draw order can be easily seen
-</span>    <span class="kt">var</span> <span class="n">dm</span> <span class="p">=</span> <span class="n">DisplayModeDescription</span><span class="p">.</span><span class="nf">GetDisplayModes</span><span class="p">().</span><span class="nf">Single</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">EnglishName</span> <span class="p">==</span> <span class="s">"Wireframe"</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">original_thikcness</span> <span class="p">=</span> <span class="n">dm</span><span class="p">.</span><span class="n">DisplayAttributes</span><span class="p">.</span><span class="n">CurveThickness</span><span class="p">;</span>
-    <span class="n">dm</span><span class="p">.</span><span class="n">DisplayAttributes</span><span class="p">.</span><span class="n">CurveThickness</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
-    <span class="n">DisplayModeDescription</span><span class="p">.</span><span class="nf">UpdateDisplayMode</span><span class="p">(</span><span class="n">dm</span><span class="p">);</span>
+  public static Result DisplayOrder(RhinoDoc doc)
+  {
+    // make lines thick so draw order can be easily seen
+    var dm = DisplayModeDescription.GetDisplayModes().Single(x =&gt; x.EnglishName == "Wireframe");
+    var original_thikcness = dm.DisplayAttributes.CurveThickness;
+    dm.DisplayAttributes.CurveThickness = 10;
+    DisplayModeDescription.UpdateDisplayMode(dm);
 
-    <span class="nf">AddLine</span><span class="p">(</span><span class="n">Point3d</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">,</span> <span class="n">doc</span><span class="p">);</span>
-    <span class="nf">AddLine</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">Blue</span><span class="p">,</span> <span class="n">doc</span><span class="p">);</span>
-    <span class="nf">AddLine</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">Green</span><span class="p">,</span> <span class="n">doc</span><span class="p">);</span>
-    <span class="nf">AddLine</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">0</span><span class="p">),</span> <span class="n">Color</span><span class="p">.</span><span class="n">Yellow</span><span class="p">,</span> <span class="n">doc</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="nf">Pause</span><span class="p">(</span><span class="s">"draw order: 1st line drawn in front, last line drawn in the back.  Any key to continue ..."</span><span class="p">);</span>
+    AddLine(Point3d.Origin, new Point3d(10,10,0), Color.Red, doc);
+    AddLine(new Point3d(10,0,0), new Point3d(0,10,0), Color.Blue, doc);
+    AddLine(new Point3d(8,0,0), new Point3d(8,10,0), Color.Green, doc);
+    AddLine(new Point3d(0,3,0), new Point3d(10,3,0), Color.Yellow, doc);
+    doc.Views.Redraw();
+    Pause("draw order: 1st line drawn in front, last line drawn in the back.  Any key to continue ...");
 
-    <span class="c1">//all objects have a DisplayOrder of 0 by default so changing it to 1 moves it to the front.  Here we move the 2nd line (blue) to the front
-</span>    <span class="n">m_line_objects</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="n">Attributes</span><span class="p">.</span><span class="n">DisplayOrder</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
-    <span class="n">m_line_objects</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="nf">CommitChanges</span><span class="p">();</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="nf">Pause</span><span class="p">(</span><span class="s">"Second (blue) line now in front.  Any key to continue ..."</span><span class="p">);</span>
+    //all objects have a DisplayOrder of 0 by default so changing it to 1 moves it to the front.  Here we move the 2nd line (blue) to the front
+    m_line_objects[1].Attributes.DisplayOrder = 1;
+    m_line_objects[1].CommitChanges();
+    doc.Views.Redraw();
+    Pause("Second (blue) line now in front.  Any key to continue ...");
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">m_line_objects</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">m_line_objects</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Attributes</span><span class="p">.</span><span class="n">DisplayOrder</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
-      <span class="n">m_line_objects</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">CommitChanges</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="nf">Pause</span><span class="p">(</span><span class="s">"Reverse order of original lines, i.e., Yellow 1st and Red last.  Any key to continue ..."</span><span class="p">);</span>
+    for (int i = 0; i &lt; m_line_objects.Count; i++)
+    {
+      m_line_objects[i].Attributes.DisplayOrder = i;
+      m_line_objects[i].CommitChanges();
+    }
+    doc.Views.Redraw();
+    Pause("Reverse order of original lines, i.e., Yellow 1st and Red last.  Any key to continue ...");
 
-    <span class="c1">// restore original line thickness
-</span>    <span class="n">dm</span><span class="p">.</span><span class="n">DisplayAttributes</span><span class="p">.</span><span class="n">CurveThickness</span> <span class="p">=</span> <span class="n">original_thikcness</span><span class="p">;</span>
-    <span class="n">DisplayModeDescription</span><span class="p">.</span><span class="nf">UpdateDisplayMode</span><span class="p">(</span><span class="n">dm</span><span class="p">);</span>
+    // restore original line thickness
+    dm.DisplayAttributes.CurveThickness = original_thikcness;
+    DisplayModeDescription.UpdateDisplayMode(dm);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+    doc.Views.Redraw();
+    return Result.Success;
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Pause</span><span class="p">(</span><span class="kt">string</span> <span class="n">msg</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-  <span class="p">}</span>
+  private static void Pause(string msg)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject(msg, true, ObjectType.AnyObject, out obj_ref);
+  }
 
-  <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">AddLine</span><span class="p">(</span><span class="n">Point3d</span> <span class="k">from</span><span class="p">,</span> <span class="n">Point3d</span> <span class="n">to</span><span class="p">,</span> <span class="n">Color</span> <span class="n">color</span><span class="p">,</span> <span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">guid</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLine</span><span class="p">(</span><span class="k">from</span><span class="p">,</span> <span class="n">to</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
-    <span class="n">m_line_objects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
-    <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ObjectColor</span> <span class="p">=</span> <span class="n">color</span><span class="p">;</span>
-    <span class="n">obj</span><span class="p">.</span><span class="n">Attributes</span><span class="p">.</span><span class="n">ColorSource</span> <span class="p">=</span> <span class="n">ObjectColorSource</span><span class="p">.</span><span class="n">ColorFromObject</span><span class="p">;</span>
-    <span class="n">obj</span><span class="p">.</span><span class="nf">CommitChanges</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  private static void AddLine(Point3d from, Point3d to, Color color, RhinoDoc doc)
+  {
+    var guid = doc.Objects.AddLine(from, to);
+    var obj = doc.Objects.Find(guid);
+    m_line_objects.Add(obj);
+    obj.Attributes.ObjectColor = color;
+    obj.Attributes.ColorSource = ObjectColorSource.ColorFromObject;
+    obj.CommitChanges();
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared m_line_objects As New List(Of RhinoObject)()
@@ -336,67 +335,66 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">System.Collections.Generic</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">System.Drawing</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Display</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from System.Collections.Generic import *
+from System.Drawing import *
+from Rhino import *
+from Rhino.Commands import *
+from Rhino.Display import *
+from Rhino.Geometry import *
+from Rhino.Input import *
+from Rhino.DocObjects import *
+from scriptcontext import doc
 
-<span class="n">m_line_objects</span> <span class="o">=</span> <span class="p">[]</span>
+m_line_objects = []
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="c"># make lines thick so draw order can be easily seen</span>
-  <span class="n">wfdm</span> <span class="o">=</span> <span class="p">[</span><span class="n">dm</span> <span class="k">for</span> <span class="n">dm</span> <span class="ow">in</span> <span class="n">DisplayModeDescription</span><span class="o">.</span><span class="n">GetDisplayModes</span><span class="p">()</span> <span class="k">if</span> <span class="n">dm</span><span class="o">.</span><span class="n">EnglishName</span> <span class="o">==</span> <span class="s">"Wireframe"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-  <span class="n">original_thikcness</span> <span class="o">=</span> <span class="n">wfdm</span><span class="o">.</span><span class="n">DisplayAttributes</span><span class="o">.</span><span class="n">CurveThickness</span>
-  <span class="n">wfdm</span><span class="o">.</span><span class="n">DisplayAttributes</span><span class="o">.</span><span class="n">CurveThickness</span> <span class="o">=</span> <span class="mi">10</span>
-  <span class="n">DisplayModeDescription</span><span class="o">.</span><span class="n">UpdateDisplayMode</span><span class="p">(</span><span class="n">wfdm</span><span class="p">)</span>
+def RunCommand():
+  # make lines thick so draw order can be easily seen
+  wfdm = [dm for dm in DisplayModeDescription.GetDisplayModes() if dm.EnglishName == "Wireframe"][0]
+  original_thikcness = wfdm.DisplayAttributes.CurveThickness
+  wfdm.DisplayAttributes.CurveThickness = 10
+  DisplayModeDescription.UpdateDisplayMode(wfdm)
 
-  <span class="n">AddLine</span><span class="p">(</span><span class="n">Point3d</span><span class="o">.</span><span class="n">Origin</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Color</span><span class="o">.</span><span class="n">Red</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="n">AddLine</span><span class="p">(</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Color</span><span class="o">.</span><span class="n">Blue</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="n">AddLine</span><span class="p">(</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Point3d</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Color</span><span class="o">.</span><span class="n">Green</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="n">AddLine</span><span class="p">(</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">Color</span><span class="o">.</span><span class="n">Yellow</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="n">Pause</span><span class="p">(</span><span class="s">"draw order: 1st line drawn in front, last line drawn in the back.  Any key to continue ..."</span><span class="p">)</span>
+  AddLine(Point3d.Origin, Point3d(10,10,0), Color.Red, doc)
+  AddLine(Point3d(10,0,0), Point3d(0,10,0), Color.Blue, doc)
+  AddLine(Point3d(8,0,0), Point3d(8,10,0), Color.Green, doc)
+  AddLine(Point3d(0,3,0), Point3d(10,3,0), Color.Yellow, doc)
+  doc.Views.Redraw()
+  Pause("draw order: 1st line drawn in front, last line drawn in the back.  Any key to continue ...")
 
-  <span class="c">#all objects have a DisplayOrder of 0 by default so changing it to 1 moves it to the front.  Here we move the 2nd line (blue) to the front</span>
-  <span class="n">m_line_objects</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">DisplayOrder</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="n">m_line_objects</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="n">Pause</span><span class="p">(</span><span class="s">"Second (blue) line now in front.  Any key to continue ..."</span><span class="p">)</span>
+  #all objects have a DisplayOrder of 0 by default so changing it to 1 moves it to the front.  Here we move the 2nd line (blue) to the front
+  m_line_objects[1].Attributes.DisplayOrder = 1
+  m_line_objects[1].CommitChanges()
+  doc.Views.Redraw()
+  Pause("Second (blue) line now in front.  Any key to continue ...")
 
-  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m_line_objects</span><span class="o">.</span><span class="n">Count</span><span class="p">):</span>
-    <span class="n">m_line_objects</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">DisplayOrder</span> <span class="o">=</span> <span class="n">i</span>
-    <span class="n">m_line_objects</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+  for i in range(1, m_line_objects.Count):
+    m_line_objects[i].Attributes.DisplayOrder = i
+    m_line_objects[i].CommitChanges()
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="n">Pause</span><span class="p">(</span><span class="s">"Reverse order of original lines, i.e., Yellow 1st and Red last.  Any key to continue ..."</span><span class="p">)</span>
+  doc.Views.Redraw()
+  Pause("Reverse order of original lines, i.e., Yellow 1st and Red last.  Any key to continue ...")
 
-  <span class="c"># restore original line thickness</span>
-  <span class="n">wfdm</span><span class="o">.</span><span class="n">DisplayAttributes</span><span class="o">.</span><span class="n">CurveThickness</span> <span class="o">=</span> <span class="n">original_thikcness</span>
-  <span class="n">DisplayModeDescription</span><span class="o">.</span><span class="n">UpdateDisplayMode</span><span class="p">(</span><span class="n">wfdm</span><span class="p">)</span>
+  # restore original line thickness
+  wfdm.DisplayAttributes.CurveThickness = original_thikcness
+  DisplayModeDescription.UpdateDisplayMode(wfdm)
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">def</span> <span class="nf">Pause</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span><span class="p">)</span>
+def Pause(msg):
+  rc, obj_ref = RhinoGet.GetOneObject(msg, True, ObjectType.AnyObject)
 
-<span class="k">def</span> <span class="nf">AddLine</span><span class="p">(</span><span class="n">from_pt</span><span class="p">,</span> <span class="n">to_pt</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">doc</span><span class="p">):</span>
-  <span class="n">guid</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddLine</span><span class="p">(</span><span class="n">from_pt</span><span class="p">,</span> <span class="n">to_pt</span><span class="p">)</span>
-  <span class="n">obj</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
-  <span class="n">m_line_objects</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-  <span class="n">obj</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">ObjectColor</span> <span class="o">=</span> <span class="n">color</span>
-  <span class="n">obj</span><span class="o">.</span><span class="n">Attributes</span><span class="o">.</span><span class="n">ColorSource</span> <span class="o">=</span> <span class="n">ObjectColorSource</span><span class="o">.</span><span class="n">ColorFromObject</span>
-  <span class="n">obj</span><span class="o">.</span><span class="n">CommitChanges</span><span class="p">()</span>
+def AddLine(from_pt, to_pt, color, doc):
+  guid = doc.Objects.AddLine(from_pt, to_pt)
+  obj = doc.Objects.Find(guid)
+  m_line_objects.Add(obj)
+  obj.Attributes.ObjectColor = color
+  obj.Attributes.ColorSource = ObjectColorSource.ColorFromObject
+  obj.CommitChanges()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

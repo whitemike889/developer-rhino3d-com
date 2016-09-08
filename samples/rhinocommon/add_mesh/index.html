@@ -222,42 +222,41 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddMesh</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Mesh</span><span class="p">();</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//0
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//1
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">2.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//2
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">3.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">);</span> <span class="c1">//3
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//4
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">2.0</span><span class="p">);</span> <span class="c1">//5
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">2.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//6
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">3.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="m">0.0</span><span class="p">);</span> <span class="c1">//7
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">0.0</span><span class="p">,</span> <span class="m">2.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//8
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span> <span class="m">2.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//9
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">2.0</span><span class="p">,</span> <span class="m">2.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//10
-</span>    <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">3.0</span><span class="p">,</span> <span class="m">2.0</span><span class="p">,</span> <span class="m">1.0</span><span class="p">);</span> <span class="c1">//11
-</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">4</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">6</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">8</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">9</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Faces</span><span class="p">.</span><span class="nf">AddFace</span><span class="p">(</span><span class="m">6</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="n">Normals</span><span class="p">.</span><span class="nf">ComputeNormals</span><span class="p">();</span>
-    <span class="n">mesh</span><span class="p">.</span><span class="nf">Compact</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddMesh(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.Mesh mesh = new Rhino.Geometry.Mesh();
+    mesh.Vertices.Add(0.0, 0.0, 1.0); //0
+    mesh.Vertices.Add(1.0, 0.0, 1.0); //1
+    mesh.Vertices.Add(2.0, 0.0, 1.0); //2
+    mesh.Vertices.Add(3.0, 0.0, 0.0); //3
+    mesh.Vertices.Add(0.0, 1.0, 1.0); //4
+    mesh.Vertices.Add(1.0, 1.0, 2.0); //5
+    mesh.Vertices.Add(2.0, 1.0, 1.0); //6
+    mesh.Vertices.Add(3.0, 1.0, 0.0); //7
+    mesh.Vertices.Add(0.0, 2.0, 1.0); //8
+    mesh.Vertices.Add(1.0, 2.0, 1.0); //9
+    mesh.Vertices.Add(2.0, 2.0, 1.0); //10
+    mesh.Vertices.Add(3.0, 2.0, 1.0); //11
+
+    mesh.Faces.AddFace(0, 1, 5, 4);
+    mesh.Faces.AddFace(1, 2, 6, 5);
+    mesh.Faces.AddFace(2, 3, 7, 6);
+    mesh.Faces.AddFace(4, 5, 9, 8);
+    mesh.Faces.AddFace(5, 6, 10, 9);
+    mesh.Faces.AddFace(6, 7, 11, 10);
+    mesh.Normals.ComputeNormals();
+    mesh.Compact();
+    if (doc.Objects.AddMesh(mesh) != Guid.Empty)
+    {
+      doc.Views.Redraw();
+      return Rhino.Commands.Result.Success;
+    }
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddMesh(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -292,43 +291,42 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddMesh</span><span class="p">():</span>
-    <span class="n">mesh</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Mesh</span><span class="p">()</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#0</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#1</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#2</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="c">#3</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#4</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span> <span class="c">#5</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#6</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="c">#7</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#8</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#9</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#10</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Vertices</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c">#11</span>
+def AddMesh():
+    mesh = Rhino.Geometry.Mesh()
+    mesh.Vertices.Add(0.0, 0.0, 1.0) #0
+    mesh.Vertices.Add(1.0, 0.0, 1.0) #1
+    mesh.Vertices.Add(2.0, 0.0, 1.0) #2
+    mesh.Vertices.Add(3.0, 0.0, 0.0) #3
+    mesh.Vertices.Add(0.0, 1.0, 1.0) #4
+    mesh.Vertices.Add(1.0, 1.0, 2.0) #5
+    mesh.Vertices.Add(2.0, 1.0, 1.0) #6
+    mesh.Vertices.Add(3.0, 1.0, 0.0) #7
+    mesh.Vertices.Add(0.0, 2.0, 1.0) #8
+    mesh.Vertices.Add(1.0, 2.0, 1.0) #9
+    mesh.Vertices.Add(2.0, 2.0, 1.0) #10
+    mesh.Vertices.Add(3.0, 2.0, 1.0) #11
 
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Faces</span><span class="o">.</span><span class="n">AddFace</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Normals</span><span class="o">.</span><span class="n">ComputeNormals</span><span class="p">()</span>
-    <span class="n">mesh</span><span class="o">.</span><span class="n">Compact</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    mesh.Faces.AddFace(0, 1, 5, 4)
+    mesh.Faces.AddFace(1, 2, 6, 5)
+    mesh.Faces.AddFace(2, 3, 7, 6)
+    mesh.Faces.AddFace(4, 5, 9, 8)
+    mesh.Faces.AddFace(5, 6, 10, 9)
+    mesh.Faces.AddFace(6, 7, 11, 10)
+    mesh.Normals.ComputeNormals()
+    mesh.Compact()
+    if scriptcontext.doc.Objects.AddMesh(mesh)!=System.Guid.Empty:
+        scriptcontext.doc.Views.Redraw()
+        return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddMesh</span><span class="p">()</span>
+if __name__=="__main__":
+    AddMesh()
 </code></pre>
-</div>
 
 </div>
 

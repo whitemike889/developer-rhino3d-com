@@ -222,55 +222,54 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">ConstrainedCopy</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get a single planar closed curve
-</span>    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">ClosedCurve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">objref</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">base_curve</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">first_point</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">SelectionPoint</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">base_curve</span><span class="p">==</span><span class="k">null</span> <span class="p">||</span> <span class="p">!</span><span class="n">first_point</span><span class="p">.</span><span class="n">IsValid</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result ConstrainedCopy(Rhino.RhinoDoc doc)
+  {
+    // Get a single planar closed curve
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select curve");
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    go.GeometryAttributeFilter = Rhino.Input.Custom.GeometryAttributeFilter.ClosedCurve;
+    go.Get();
+    if( go.CommandResult() != Rhino.Commands.Result.Success )
+      return go.CommandResult();
+    var objref = go.Object(0);
+    var base_curve = objref.Curve();
+    var first_point = objref.SelectionPoint();
+    if( base_curve==null || !first_point.IsValid )
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="p">!</span><span class="n">base_curve</span><span class="p">.</span><span class="nf">TryGetPlane</span><span class="p">(</span><span class="k">out</span> <span class="n">plane</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+    Rhino.Geometry.Plane plane;
+    if( !base_curve.TryGetPlane(out plane) )
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="c1">// Get a point constrained to a line passing through the initial selection
-</span>    <span class="c1">// point and parallel to the plane's normal
-</span>    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Offset point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">first_point</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">line</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Line</span><span class="p">(</span><span class="n">first_point</span><span class="p">,</span> <span class="n">first_point</span><span class="p">+</span><span class="n">plane</span><span class="p">.</span><span class="n">Normal</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Constrain</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">second_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Vector3d</span> <span class="n">vec</span> <span class="p">=</span> <span class="n">second_point</span> <span class="p">-</span> <span class="n">first_point</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">vec</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0.001</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">xf</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Transform</span><span class="p">.</span><span class="nf">Translation</span><span class="p">(</span><span class="n">vec</span><span class="p">);</span>
-      <span class="n">Guid</span> <span class="n">id</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">id</span><span class="p">!=</span><span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Get a point constrained to a line passing through the initial selection
+    // point and parallel to the plane's normal
+    var gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("Offset point");
+    gp.DrawLineFromPoint(first_point, true);
+    var line = new Rhino.Geometry.Line(first_point, first_point+plane.Normal);
+    gp.Constrain(line);
+    gp.Get();
+    if( gp.CommandResult() != Rhino.Commands.Result.Success )
+      return gp.CommandResult();
+    var second_point = gp.Point();
+    Rhino.Geometry.Vector3d vec = second_point - first_point;
+    if( vec.Length &gt; 0.001 )
+    {
+      var xf = Rhino.Geometry.Transform.Translation(vec);
+      Guid id = doc.Objects.Transform(objref, xf, false);
+      if( id!=Guid.Empty )
+      {
+        doc.Views.Redraw();
+        return Rhino.Commands.Result.Success;
+      }
+    }
+    return Rhino.Commands.Result.Cancel;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ConstrainedCopy(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -321,45 +320,44 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">constrainedcopy</span><span class="p">():</span>
-    <span class="c">#get a single closed curve</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select curve"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">ClosedCurve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
-    <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">base_curve</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="n">first_point</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">SelectionPoint</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">base_curve</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">first_point</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-        <span class="k">return</span>
-    <span class="n">isplanar</span><span class="p">,</span> <span class="n">plane</span> <span class="o">=</span> <span class="n">base_curve</span><span class="o">.</span><span class="n">TryGetPlane</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">isplanar</span><span class="p">:</span> <span class="k">return</span>
+def constrainedcopy():
+    #get a single closed curve
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select curve")
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
+    go.GeometryAttributeFilter = Rhino.Input.Custom.GeometryAttributeFilter.ClosedCurve
+    go.Get()
+    if go.CommandResult() != Rhino.Commands.Result.Success: return
+    objref = go.Object(0)
+    base_curve = objref.Curve()
+    first_point = objref.SelectionPoint()
+    if not base_curve or not first_point.IsValid:
+        return
+    isplanar, plane = base_curve.TryGetPlane()
+    if not isplanar: return
 
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Offset point"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">first_point</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Line</span><span class="p">(</span><span class="n">first_point</span><span class="p">,</span> <span class="n">first_point</span> <span class="o">+</span> <span class="n">plane</span><span class="o">.</span><span class="n">Normal</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Constrain</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span>
-    <span class="n">second_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-    <span class="n">vec</span> <span class="o">=</span> <span class="n">second_point</span> <span class="o">-</span> <span class="n">first_point</span>
-    <span class="k">if</span> <span class="n">vec</span><span class="o">.</span><span class="n">Length</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">:</span>
-        <span class="n">xf</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Transform</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
-        <span class="nb">id</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Transform</span><span class="p">(</span><span class="n">objref</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">id</span>
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.SetCommandPrompt("Offset point")
+    gp.DrawLineFromPoint(first_point, True)
+    line = Rhino.Geometry.Line(first_point, first_point + plane.Normal)
+    gp.Constrain(line)
+    gp.Get()
+    if gp.CommandResult() != Rhino.Commands.Result.Success:
+        return
+    second_point = gp.Point()
+    vec = second_point - first_point
+    if vec.Length &gt; 0.001:
+        xf = Rhino.Geometry.Transform.Translation(vec)
+        id = scriptcontext.doc.Objects.Transform(objref, xf, False)
+        scriptcontext.doc.Views.Redraw()
+        return id
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">constrainedcopy</span><span class="p">()</span>
+if __name__=="__main__":
+    constrainedcopy()
 </code></pre>
-</div>
 
 </div>
 

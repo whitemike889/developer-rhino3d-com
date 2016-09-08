@@ -319,48 +319,47 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>The state of Rhino’s orthogonal drawing mode is stored in Rhino’s application settings, or it’s <code class="highlighter-rouge">CRhinoAppSettings</code> object.  To check the current state of ortho, call <code class="highlighter-rouge">CRhinoAppSettings::Ortho</code>.  To enable or disable ortho, call <code class="highlighter-rouge">CRhinoAppSettings::EnableOrtho</code> and pass in the boolean value that is appropriate.  For more information on this and Rhino’s application settings class, see <em>rhinoSdkAppSettings.h</em>.</p>
+<p>The state of Rhino’s orthogonal drawing mode is stored in Rhino’s application settings, or it’s <code>CRhinoAppSettings</code> object.  To check the current state of ortho, call <code>CRhinoAppSettings::Ortho</code>.  To enable or disable ortho, call <code>CRhinoAppSettings::EnableOrtho</code> and pass in the boolean value that is appropriate.  For more information on this and Rhino’s application settings class, see <em>rhinoSdkAppSettings.h</em>.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample code illustrates how to use this feature:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">L"Starting point"</span><span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt(L"Starting point");
+  gp.GetPoint();
+  if (gp.CommandResult() != success)
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">start_point</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint start_point = gp.Point();
 
-  <span class="n">CRhinoAppSettings</span><span class="o">&amp;</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">();</span>
-  <span class="kt">bool</span> <span class="n">bOldValue</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">Ortho</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">bOldValue</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span>
-    <span class="n">settings</span><span class="p">.</span><span class="n">EnableOrtho</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+  CRhinoAppSettings&amp; settings = RhinoApp().AppSettings();
+  bool bOldValue = settings.Ortho();
+  if (bOldValue == false)
+    settings.EnableOrtho(true);
 
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">L"Ending point"</span><span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span><span class="n">start_point</span><span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">start_point</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
+  gp.SetCommandPrompt(L"Ending point");
+  gp.SetBasePoint(start_point);
+  gp.DrawLineFromPoint(start_point, true);
+  gp.GetPoint();
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">bOldValue</span> <span class="o">!=</span> <span class="n">settings</span><span class="p">.</span><span class="n">Ortho</span><span class="p">())</span>
-    <span class="n">settings</span><span class="p">.</span><span class="n">EnableOrtho</span><span class="p">(</span><span class="n">bOldValue</span><span class="p">);</span>
+  if (bOldValue != settings.Ortho())
+    settings.EnableOrtho(bOldValue);
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  if (gp.CommandResult() != success)
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">end_point</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint end_point = gp.Point();
 
-  <span class="n">ON_Line</span> <span class="n">line</span><span class="p">(</span><span class="n">start_point</span><span class="p">,</span> <span class="n">end_point</span><span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  ON_Line line(start_point, end_point);
+  context.m_doc.AddCurveObject(line);
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

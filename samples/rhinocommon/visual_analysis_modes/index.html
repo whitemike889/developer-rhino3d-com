@@ -222,150 +222,149 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AnalysisMode_on</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// make sure our custom visual analysis mode is registered
-</span>    <span class="kt">var</span> <span class="n">zmode</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">VisualAnalysisMode</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">ZAnalysisMode</span><span class="p">));</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AnalysisMode_on(RhinoDoc doc)
+  {
+    // make sure our custom visual analysis mode is registered
+    var zmode = Rhino.Display.VisualAnalysisMode.Register(typeof(ZAnalysisMode));
 
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span><span class="p">[]</span> <span class="n">objs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select objects for Z analysis"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Surface | Rhino.DocObjects.ObjectType.PolysrfFilter | Rhino.DocObjects.ObjectType.Mesh;
+    Rhino.DocObjects.ObjRef[] objs;
+    var rc = Rhino.Input.RhinoGet.GetMultipleObjects("Select objects for Z analysis", false, filter, out objs);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">obj</span> <span class="p">=</span> <span class="n">objs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">Object</span><span class="p">();</span>
+    int count = 0;
+    for (int i = 0; i &lt; objs.Length; i++)
+    {
+      var obj = objs[i].Object();
 
-      <span class="c1">// see if this object is alreay in Z analysis mode
-</span>      <span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="nf">InVisualAnalysisMode</span><span class="p">(</span><span class="n">zmode</span><span class="p">))</span>
-        <span class="k">continue</span><span class="p">;</span>
+      // see if this object is alreay in Z analysis mode
+      if (obj.InVisualAnalysisMode(zmode))
+        continue;
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="nf">EnableVisualAnalysisMode</span><span class="p">(</span><span class="n">zmode</span><span class="p">,</span> <span class="k">true</span><span class="p">))</span>
-        <span class="n">count</span><span class="p">++;</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} objects were put into Z-Analysis mode."</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
+      if (obj.EnableVisualAnalysisMode(zmode, true))
+        count++;
+    }
+    doc.Views.Redraw();
+    RhinoApp.WriteLine("{0} objects were put into Z-Analysis mode.", count);
+    return Rhino.Commands.Result.Success;
+  }
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AnalysisMode_off</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">zmode</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">VisualAnalysisMode</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">ZAnalysisMode</span><span class="p">));</span>
-    <span class="c1">// If zmode is null, we've never registered the mode so we know it hasn't been used
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">zmode</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">foreach</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">obj</span> <span class="k">in</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">obj</span><span class="p">.</span><span class="nf">EnableVisualAnalysisMode</span><span class="p">(</span><span class="n">zmode</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Z-Analysis is off."</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  public static Rhino.Commands.Result AnalysisMode_off(RhinoDoc doc)
+  {
+    var zmode = Rhino.Display.VisualAnalysisMode.Find(typeof(ZAnalysisMode));
+    // If zmode is null, we've never registered the mode so we know it hasn't been used
+    if (zmode != null)
+    {
+      foreach (Rhino.DocObjects.RhinoObject obj in doc.Objects)
+      {
+        obj.EnableVisualAnalysisMode(zmode, false);
+      }
+      doc.Views.Redraw();
+    }
+    RhinoApp.WriteLine("Z-Analysis is off.");
+    return Rhino.Commands.Result.Success;
+  }
+}
 
-<span class="c1">/// &lt;summary&gt;
+/// &lt;summary&gt;
 /// This simple example provides a false color based on the world z-coordinate.
 /// For details, see the implementation of the FalseColor() function.
 /// &lt;/summary&gt;
-</span><span class="k">public</span> <span class="k">class</span> <span class="nc">ZAnalysisMode</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">VisualAnalysisMode</span>
-<span class="p">{</span>
-  <span class="n">Interval</span> <span class="n">m_z_range</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Interval</span><span class="p">(-</span><span class="m">10</span><span class="p">,</span><span class="m">10</span><span class="p">);</span>
-  <span class="n">Interval</span> <span class="n">m_hue_range</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Interval</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">4</span><span class="p">*</span><span class="n">Math</span><span class="p">.</span><span class="n">PI</span> <span class="p">/</span> <span class="m">3</span><span class="p">);</span>
-  <span class="k">private</span> <span class="k">const</span> <span class="kt">bool</span> <span class="n">m_show_isocurves</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+public class ZAnalysisMode : Rhino.Display.VisualAnalysisMode
+{
+  Interval m_z_range = new Interval(-10,10);
+  Interval m_hue_range = new Interval(0,4*Math.PI / 3);
+  private const bool m_show_isocurves = true;
 
-  <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="s">"Z-Analysis"</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
-  <span class="k">public</span> <span class="k">override</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">VisualAnalysisMode</span><span class="p">.</span><span class="n">AnalysisStyle</span> <span class="n">Style</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">AnalysisStyle</span><span class="p">.</span><span class="n">FalseColor</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+  public override string Name { get { return "Z-Analysis"; } }
+  public override Rhino.Display.VisualAnalysisMode.AnalysisStyle Style { get { return AnalysisStyle.FalseColor; } }
 
-  <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">ObjectSupportsAnalysisMode</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">obj</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span> <span class="k">is</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">MeshObject</span> <span class="p">||</span> <span class="n">obj</span> <span class="k">is</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">BrepObject</span><span class="p">)</span>
-      <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-  <span class="p">}</span>
+  public override bool ObjectSupportsAnalysisMode(Rhino.DocObjects.RhinoObject obj)
+  {
+    if (obj is Rhino.DocObjects.MeshObject || obj is Rhino.DocObjects.BrepObject)
+      return true;
+    return false;
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">UpdateVertexColors</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">obj</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">[]</span> <span class="n">meshes</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// A "mapping tag" is used to determine if the colors need to be set
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Render</span><span class="p">.</span><span class="n">MappingTag</span> <span class="n">mt</span> <span class="p">=</span> <span class="nf">GetMappingTag</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">RuntimeSerialNumber</span><span class="p">);</span>
+  protected override void UpdateVertexColors(Rhino.DocObjects.RhinoObject obj, Mesh[] meshes)
+  {
+    // A "mapping tag" is used to determine if the colors need to be set
+    Rhino.Render.MappingTag mt = GetMappingTag(obj.RuntimeSerialNumber);
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">mi</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">mi</span> <span class="p">&lt;</span> <span class="n">meshes</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">mi</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">mesh</span> <span class="p">=</span> <span class="n">meshes</span><span class="p">[</span><span class="n">mi</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">mesh</span><span class="p">.</span><span class="n">VertexColors</span><span class="p">.</span><span class="n">Tag</span><span class="p">.</span><span class="n">Id</span> <span class="p">!=</span> <span class="k">this</span><span class="p">.</span><span class="n">Id</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="c1">// The mesh's mapping tag is different from ours. Either the mesh has
-</span>        <span class="c1">// no false colors, has false colors set by another analysis mode, has
-</span>        <span class="c1">// false colors set using different m_z_range[]/m_hue_range[] values, or
-</span>        <span class="c1">// the mesh has been moved.  In any case, we need to set the false
-</span>        <span class="c1">// colors to the ones we want.
-</span>        <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">[]</span> <span class="n">colors</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">];</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-        <span class="p">{</span>
-          <span class="kt">double</span> <span class="n">z</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">Vertices</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Z</span><span class="p">;</span>
-          <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="nf">FalseColor</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="n">mesh</span><span class="p">.</span><span class="n">VertexColors</span><span class="p">.</span><span class="nf">SetColors</span><span class="p">(</span><span class="n">colors</span><span class="p">);</span>
-        <span class="c1">// set the mesh's color tag
-</span>        <span class="n">mesh</span><span class="p">.</span><span class="n">VertexColors</span><span class="p">.</span><span class="n">Tag</span> <span class="p">=</span> <span class="n">mt</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    for (int mi = 0; mi &lt; meshes.Length; mi++)
+    {
+      var mesh = meshes[mi];
+      if( mesh.VertexColors.Tag.Id != this.Id )
+      {
+        // The mesh's mapping tag is different from ours. Either the mesh has
+        // no false colors, has false colors set by another analysis mode, has
+        // false colors set using different m_z_range[]/m_hue_range[] values, or
+        // the mesh has been moved.  In any case, we need to set the false
+        // colors to the ones we want.
+        System.Drawing.Color[] colors = new System.Drawing.Color[mesh.Vertices.Count];
+        for (int i = 0; i &lt; mesh.Vertices.Count; i++)
+        {
+          double z = mesh.Vertices[i].Z;
+          colors[i] = FalseColor(z);
+        }
+        mesh.VertexColors.SetColors(colors);
+        // set the mesh's color tag
+        mesh.VertexColors.Tag = mt;
+      }
+    }
+  }
 
-  <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">ShowIsoCurves</span>
-  <span class="p">{</span>
-    <span class="k">get</span>
-    <span class="p">{</span>
-      <span class="c1">// Most shaded analysis modes that work on breps have the option of
-</span>      <span class="c1">// showing or hiding isocurves.  Run the built-in Rhino ZebraAnalysis
-</span>      <span class="c1">// to see how Rhino handles the user interface.  If controlling
-</span>      <span class="c1">// iso-curve visability is a feature you want to support, then provide
-</span>      <span class="c1">// user interface to set this member variable.
-</span>      <span class="k">return</span> <span class="n">m_show_isocurves</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  public override bool ShowIsoCurves
+  {
+    get
+    {
+      // Most shaded analysis modes that work on breps have the option of
+      // showing or hiding isocurves.  Run the built-in Rhino ZebraAnalysis
+      // to see how Rhino handles the user interface.  If controlling
+      // iso-curve visability is a feature you want to support, then provide
+      // user interface to set this member variable.
+      return m_show_isocurves;
+    }
+  }
 
-  <span class="c1">/// &lt;summary&gt;
-</span>  <span class="c1">/// Returns a mapping tag that is used to detect when a mesh's colors need to
-</span>  <span class="c1">/// be set.
-</span>  <span class="c1">/// &lt;/summary&gt;
-</span>  <span class="c1">/// &lt;returns&gt;&lt;/returns&gt;
-</span>  <span class="n">Rhino</span><span class="p">.</span><span class="n">Render</span><span class="p">.</span><span class="n">MappingTag</span> <span class="nf">GetMappingTag</span><span class="p">(</span><span class="kt">uint</span> <span class="n">serialNumber</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Render</span><span class="p">.</span><span class="n">MappingTag</span> <span class="n">mt</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Render</span><span class="p">.</span><span class="nf">MappingTag</span><span class="p">();</span>
-    <span class="n">mt</span><span class="p">.</span><span class="n">Id</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Id</span><span class="p">;</span>
+  /// &lt;summary&gt;
+  /// Returns a mapping tag that is used to detect when a mesh's colors need to
+  /// be set.
+  /// &lt;/summary&gt;
+  /// &lt;returns&gt;&lt;/returns&gt;
+  Rhino.Render.MappingTag GetMappingTag(uint serialNumber)
+  {
+    Rhino.Render.MappingTag mt = new Rhino.Render.MappingTag();
+    mt.Id = this.Id;
 
-    <span class="c1">// Since the false colors that are shown will change if the mesh is
-</span>    <span class="c1">// transformed, we have to initialize the transformation.
-</span>    <span class="n">mt</span><span class="p">.</span><span class="n">MeshTransform</span> <span class="p">=</span> <span class="n">Transform</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
+    // Since the false colors that are shown will change if the mesh is
+    // transformed, we have to initialize the transformation.
+    mt.MeshTransform = Transform.Identity;
 
-    <span class="c1">// This is a 32 bit CRC or the information used to set the false colors.
-</span>    <span class="c1">// For this example, the m_z_range and m_hue_range intervals control the
-</span>    <span class="c1">// colors, so we calculate their crc.
-</span>    <span class="kt">uint</span> <span class="n">crc</span> <span class="p">=</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="nf">CRC32</span><span class="p">(</span><span class="n">serialNumber</span><span class="p">,</span> <span class="n">m_z_range</span><span class="p">.</span><span class="n">T0</span><span class="p">);</span>
-    <span class="n">crc</span> <span class="p">=</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="nf">CRC32</span><span class="p">(</span><span class="n">crc</span><span class="p">,</span> <span class="n">m_z_range</span><span class="p">.</span><span class="n">T1</span><span class="p">);</span>
-    <span class="n">crc</span> <span class="p">=</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="nf">CRC32</span><span class="p">(</span><span class="n">crc</span><span class="p">,</span> <span class="n">m_hue_range</span><span class="p">.</span><span class="n">T0</span><span class="p">);</span>
-    <span class="n">crc</span> <span class="p">=</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="nf">CRC32</span><span class="p">(</span><span class="n">crc</span><span class="p">,</span> <span class="n">m_hue_range</span><span class="p">.</span><span class="n">T1</span><span class="p">);</span>
-    <span class="n">mt</span><span class="p">.</span><span class="n">MappingCRC</span> <span class="p">=</span> <span class="n">crc</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">mt</span><span class="p">;</span>
-  <span class="p">}</span>
+    // This is a 32 bit CRC or the information used to set the false colors.
+    // For this example, the m_z_range and m_hue_range intervals control the
+    // colors, so we calculate their crc.
+    uint crc = RhinoMath.CRC32(serialNumber, m_z_range.T0);
+    crc = RhinoMath.CRC32(crc, m_z_range.T1);
+    crc = RhinoMath.CRC32(crc, m_hue_range.T0);
+    crc = RhinoMath.CRC32(crc, m_hue_range.T1);
+    mt.MappingCRC = crc;
+    return mt;
+  }
 
-  <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span> <span class="nf">FalseColor</span><span class="p">(</span><span class="kt">double</span> <span class="n">z</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Simple example of one way to change a number into a color.
-</span>    <span class="kt">double</span> <span class="n">s</span> <span class="p">=</span> <span class="n">m_z_range</span><span class="p">.</span><span class="nf">NormalizedParameterAt</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
-    <span class="n">s</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoMath</span><span class="p">.</span><span class="nf">Clamp</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="nf">FromArgb</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">s</span> <span class="p">*</span> <span class="m">255</span><span class="p">),</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-  <span class="p">}</span>
+  System.Drawing.Color FalseColor(double z)
+  {
+    // Simple example of one way to change a number into a color.
+    double s = m_z_range.NormalizedParameterAt(z);
+    s = Rhino.RhinoMath.Clamp(s, 0, 1);
+    return System.Drawing.Color.FromArgb((int)(s * 255), 0, 0);
+  }
 
-<span class="p">}</span>
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AnalysisMode_on(ByVal doc As RhinoDoc) As Rhino.Commands.Result
@@ -509,9 +508,8 @@ Public Class ZAnalysisMode
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

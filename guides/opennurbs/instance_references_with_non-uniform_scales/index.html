@@ -319,118 +319,116 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>Not all <code class="highlighter-rouge">ON_Geometry</code>-derived classes can be accurately modified with squishy transformations like projections, shears, and non-uniform scaling.  For example, if you were to apply a non-uniform scale to a circle, which is represented by an <code class="highlighter-rouge">ON_ArcCurve</code> curve, the resulting geometry is no longer a circle.</p>
+<p>Not all <code>ON_Geometry</code>-derived classes can be accurately modified with squishy transformations like projections, shears, and non-uniform scaling.  For example, if you were to apply a non-uniform scale to a circle, which is represented by an <code>ON_ArcCurve</code> curve, the resulting geometry is no longer a circle.</p>
 
-<p>When exploding an instance reference into its geometric form, first test to see if the instance reference’s transformation is a similarity transformation.  This can be done by using <code class="highlighter-rouge">ON_XForm::IsSimilarity()</code>.  See <em>opennurbs_xform.h</em> for more information.</p>
+<p>When exploding an instance reference into its geometric form, first test to see if the instance reference’s transformation is a similarity transformation.  This can be done by using <code>ON_XForm::IsSimilarity()</code>.  See <em>opennurbs_xform.h</em> for more information.</p>
 
-<p>If the transformation is not a similarity, then convert the geometry into a form that can be accurately modified.  This can be done by using the <code class="highlighter-rouge">ON_Geometry::MakeDeformable()</code> override on the geometric object…</p>
+<p>If the transformation is not a similarity, then convert the geometry into a form that can be accurately modified.  This can be done by using the <code>ON_Geometry::MakeDeformable()</code> override on the geometric object…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="n">bNeedXform</span> <span class="p">)</span>
-<span class="p">{</span>
- <span class="c1">// If not a similarity transformation, make sure geometry
-</span> <span class="c1">// can be deformed. Generally, this involves convert non-NURBS
-</span> <span class="c1">// geometry into NURBS geometry.
-</span> <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">xform</span><span class="p">.</span><span class="n">IsSimilarity</span><span class="p">()</span> <span class="p">)</span>
-   <span class="n">geom</span><span class="o">-&gt;</span><span class="n">MakeDeformable</span><span class="p">();</span>
+<pre><code class="language-cpp">if( bNeedXform )
+{
+ // If not a similarity transformation, make sure geometry
+ // can be deformed. Generally, this involves convert non-NURBS
+ // geometry into NURBS geometry.
+ if( 0 == xform.IsSimilarity() )
+   geom-&gt;MakeDeformable();
 
- <span class="c1">// Do the transformation
-</span> <span class="n">geom</span><span class="o">-&gt;</span><span class="n">Transform</span><span class="p">(</span> <span class="n">xform</span> <span class="p">);</span>
-<span class="p">}</span>
+ // Do the transformation
+ geom-&gt;Transform( xform );
+}
 </code></pre>
-</div>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample explodes a block in a 3dm file using the method outlined above…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "../opennurbs.h"
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON</span><span class="o">::</span><span class="n">Begin</span><span class="p">();</span>
+<pre><code class="language-cpp">#include "../opennurbs.h"
 
-	<span class="kt">FILE</span><span class="o">*</span> <span class="n">archive_fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="s">L"c:</span><span class="se">\\</span><span class="s">Sphere Non-uniform Scale.3dm"</span><span class="p">,</span> <span class="s">L"rb"</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">archive_fp</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+int main( int argc, const char *argv[] )
+{
+  ON::Begin();
 
-  <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">read3dm</span><span class="p">,</span> <span class="n">archive_fp</span> <span class="p">);</span>
+	FILE* archive_fp = ON::OpenFile( L"c:\\Sphere Non-uniform Scale.3dm", L"rb" );
+  if( 0 == archive_fp )
+    return 0;
 
-  <span class="n">ONX_Model</span> <span class="n">model</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span> <span class="n">archive</span> <span class="p">);</span>
+  ON_BinaryFile archive( ON::read3dm, archive_fp );
 
-  <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">archive_fp</span> <span class="p">);</span>
+  ONX_Model model;
+  bool rc = model.Read( archive );
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+  ON::CloseFile( archive_fp );
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ONX_Model_Object</span><span class="o">&amp;</span> <span class="n">object</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  if( !rc )
+    return 0;
 
-    <span class="c1">// Only look for instance reference objects
-</span>		<span class="k">const</span> <span class="n">ON_InstanceRef</span><span class="o">*</span> <span class="n">iref</span> <span class="o">=</span> <span class="n">ON_InstanceRef</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">object</span><span class="p">.</span><span class="n">m_object</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">iref</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
+  int i, j;
+  for( i = 0; i &lt; model.m_object_table.Count(); i++ )
+  {
+    const ONX_Model_Object&amp; object = model.m_object_table[i];
 
-    <span class="n">ON_Xform</span> <span class="n">xform</span> <span class="o">=</span> <span class="n">iref</span><span class="o">-&gt;</span><span class="n">m_xform</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">bool</span> <span class="n">bNeedXform</span> <span class="o">=</span> <span class="p">(</span> <span class="n">xform</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">xform</span><span class="p">.</span><span class="n">IsZero</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">xform</span><span class="p">.</span><span class="n">IsIdentity</span><span class="p">()</span> <span class="p">);</span>
+    // Only look for instance reference objects
+		const ON_InstanceRef* iref = ON_InstanceRef::Cast( object.m_object );
+    if( 0 == iref )
+      continue;
 
-    <span class="kt">int</span> <span class="n">idef_index</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">IDefIndex</span><span class="p">(</span> <span class="n">iref</span><span class="o">-&gt;</span><span class="n">m_instance_definition_uuid</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">idef_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">ON_InstanceDefinition</span><span class="o">&amp;</span> <span class="n">idef</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_idef_table</span><span class="p">[</span><span class="n">idef_index</span><span class="p">];</span>
+    ON_Xform xform = iref-&gt;m_xform;
+    const bool bNeedXform = ( xform.IsValid() &amp;&amp; !xform.IsZero() &amp;&amp; !xform.IsIdentity() );
 
-      <span class="k">for</span><span class="p">(</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">idef</span><span class="p">.</span><span class="n">m_object_uuid</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">idef_object_index</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">ObjectIndex</span><span class="p">(</span> <span class="n">idef</span><span class="p">.</span><span class="n">m_object_uuid</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">idef_object_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="k">const</span> <span class="n">ONX_Model_Object</span><span class="o">&amp;</span> <span class="n">idef_object</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">[</span><span class="n">idef_object_index</span><span class="p">];</span>
+    int idef_index = model.IDefIndex( iref-&gt;m_instance_definition_uuid );
+    if( idef_index &gt;= 0 )
+    {
+      const ON_InstanceDefinition&amp; idef = model.m_idef_table[idef_index];
 
-          <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">ON_Geometry</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">idef_object</span><span class="p">.</span><span class="n">m_object</span><span class="o">-&gt;</span><span class="n">Duplicate</span><span class="p">()</span> <span class="p">);</span>
-          <span class="k">if</span><span class="p">(</span> <span class="n">geom</span> <span class="p">)</span>
-          <span class="p">{</span>
-            <span class="k">if</span><span class="p">(</span> <span class="n">bNeedXform</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="c1">// If not a similarity transformation, make sure geometry
-</span>              <span class="c1">// can be deformed. Generally, this involves convert non-NURBS
-</span>              <span class="c1">// geometry into NURBS geometry.
-</span>              <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">xform</span><span class="p">.</span><span class="n">IsSimilarity</span><span class="p">()</span> <span class="p">)</span>
-                <span class="n">geom</span><span class="o">-&gt;</span><span class="n">MakeDeformable</span><span class="p">();</span>
+      for( j = 0; j &lt; idef.m_object_uuid.Count(); j++ )
+      {
+        int idef_object_index = model.ObjectIndex( idef.m_object_uuid[j] );
+        if( idef_object_index &gt;= 0 )
+        {
+          const ONX_Model_Object&amp; idef_object = model.m_object_table[idef_object_index];
 
-              <span class="c1">// Do the transformation
-</span>              <span class="n">geom</span><span class="o">-&gt;</span><span class="n">Transform</span><span class="p">(</span> <span class="n">xform</span> <span class="p">);</span>
-            <span class="p">}</span>
+          ON_Geometry* geom = ON_Geometry::Cast( idef_object.m_object-&gt;Duplicate() );
+          if( geom )
+          {
+            if( bNeedXform )
+            {
+              // If not a similarity transformation, make sure geometry
+              // can be deformed. Generally, this involves convert non-NURBS
+              // geometry into NURBS geometry.
+              if( 0 == xform.IsSimilarity() )
+                geom-&gt;MakeDeformable();
 
-            <span class="c1">// Save the geometry to a 3dm file
-</span>            <span class="n">ON_wString</span> <span class="n">filename</span><span class="p">;</span>
-            <span class="n">filename</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"c:</span><span class="se">\\</span><span class="s">Instance_Definition_Object_%d.3dm"</span><span class="p">,</span> <span class="n">j</span> <span class="p">);</span>
-            <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"wb"</span> <span class="p">);</span>
-            <span class="k">if</span><span class="p">(</span> <span class="n">fp</span> <span class="p">)</span>
-            <span class="p">{</span>
-              <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">write3dm</span><span class="p">,</span> <span class="n">fp</span> <span class="p">);</span>
-              <span class="n">ON_WriteOneObjectArchive</span><span class="p">(</span> <span class="n">archive</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">*</span><span class="n">geom</span> <span class="p">);</span>
-              <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-            <span class="p">}</span>
+              // Do the transformation
+              geom-&gt;Transform( xform );
+            }
 
-            <span class="c1">// Don't leak...
-</span>            <span class="k">delete</span> <span class="n">geom</span><span class="p">;</span>
-            <span class="n">geom</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+            // Save the geometry to a 3dm file
+            ON_wString filename;
+            filename.Format( L"c:\\Instance_Definition_Object_%d.3dm", j );
+            FILE* fp = ON::OpenFile( filename, L"wb" );
+            if( fp )
+            {
+              ON_BinaryFile archive( ON::write3dm, fp );
+              ON_WriteOneObjectArchive( archive, 4, *geom );
+              ON::CloseFile( fp );
+            }
 
-  <span class="n">model</span><span class="p">.</span><span class="n">Destroy</span><span class="p">();</span>
+            // Don't leak...
+            delete geom;
+            geom = 0;
+          }
+        }
+      }
+    }
+  }
 
-  <span class="n">ON</span><span class="o">::</span><span class="n">End</span><span class="p">();</span>
+  model.Destroy();
 
-  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
+  ON::End();
+
+  return 1;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,56 +217,55 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_wString</span> <span class="n">filename</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_wString filename;
 
-  <span class="c1">// Prompt for a bitmap filename
-</span>  <span class="n">CRhinoGetFileDialog</span> <span class="n">gf</span><span class="p">;</span>
-  <span class="n">gf</span><span class="p">.</span><span class="n">SetScriptMode</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="n">FALSE</span> <span class="o">:</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">DisplayFileDialog</span><span class="p">(</span>
-        <span class="n">CRhinoGetFileDialog</span><span class="o">::</span><span class="n">open_bitmap_dialog</span><span class="p">,</span>
-        <span class="n">filename</span><span class="p">,</span>
-        <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">)</span>
-        <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
+  // Prompt for a bitmap filename
+  CRhinoGetFileDialog gf;
+  gf.SetScriptMode( context.IsInteractive() ? FALSE : TRUE );
+  BOOL rc = gf.DisplayFileDialog(
+        CRhinoGetFileDialog::open_bitmap_dialog,
+        filename,
+        CWnd::FromHandle( RhinoApp().MainWnd() )
+        );
+  if( !rc )
+    return cancel;
 
-  <span class="c1">// Verify filename
-</span>  <span class="n">filename</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">FileName</span><span class="p">();</span>
-  <span class="n">filename</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">filename</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
+  // Verify filename
+  filename = gf.FileName();
+  filename.TrimLeftAndRight();
+  if( filename.IsEmpty() )
+    return cancel;
 
-  <span class="c1">// Verify the file
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">CRhinoFileUtilities</span><span class="o">::</span><span class="n">FileExists</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_wString</span> <span class="n">error</span> <span class="o">=</span> <span class="s">L"The specified file was not found.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="p">)</span>
-      <span class="o">::</span><span class="n">RhinoMessageBox</span><span class="p">(</span> <span class="n">error</span><span class="p">,</span> <span class="s">L"Test"</span><span class="p">,</span> <span class="n">MB_OK</span> <span class="o">|</span> <span class="n">MB_ICONEXCLAMATION</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="n">error</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Verify the file
+  if( !CRhinoFileUtilities::FileExists(filename) )
+  {
+    ON_wString error = L"The specified file was not found.\n";
+    if( context.IsInteractive() )
+      ::RhinoMessageBox( error, L"Test", MB_OK | MB_ICONEXCLAMATION );
+    else
+      RhinoApp().Print( error );
+    return CRhinoCommand::failure;
+  }
 
-  <span class="c1">// Verify the bitmap
-</span>  <span class="n">CRhinoDib</span> <span class="n">dib</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dib</span><span class="p">.</span><span class="n">ReadFromFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_wString</span> <span class="n">error</span> <span class="o">=</span> <span class="s">L"The specified file cannot be identifed as a supported type.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="p">)</span>
-      <span class="o">::</span><span class="n">RhinoMessageBox</span><span class="p">(</span> <span class="n">error</span><span class="p">,</span> <span class="s">L"Test"</span><span class="p">,</span> <span class="n">MB_OK</span> <span class="o">|</span> <span class="n">MB_ICONEXCLAMATION</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="n">error</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Verify the bitmap
+  CRhinoDib dib;
+  if( !dib.ReadFromFile(filename) )
+  {
+    ON_wString error = L"The specified file cannot be identifed as a supported type.\n";
+    if( context.IsInteractive() )
+      ::RhinoMessageBox( error, L"Test", MB_OK | MB_ICONEXCLAMATION );
+    else
+      RhinoApp().Print( error );
+    return CRhinoCommand::failure;
+  }
 
-  <span class="c1">// To do...
-</span>
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // To do...
+
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

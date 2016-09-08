@@ -440,7 +440,7 @@
   <li><strong>RhinoCommon</strong> is <em>the</em> critical reference for our purposes here.</li>
   <li><strong>System</strong>, <strong>System.Core</strong>, and <strong>System.Drawing</strong> are .NET foundational libraries…in this case, we are referencing the Mono versions of these libraries (on Windows, these references will point to the canonical, Microsoft-provided, versions).</li>
   <li><strong>Packages</strong> is used the the <a href="https://www.nuget.org/">NuGet</a> package-manager.  There are no referenced packages in this boilerplate project, but note that Xamarin Studio supports NuGet, just like Visual Studio does.</li>
-  <li><strong>Properties</strong> contains the <strong>AssemblyInfo.cs</strong> source file.  This file contains the meta-data (author, version, etc), including the very-important <code class="highlighter-rouge">Guid</code>, which identifies the plugin.</li>
+  <li><strong>Properties</strong> contains the <strong>AssemblyInfo.cs</strong> source file.  This file contains the meta-data (author, version, etc), including the very-important <code>Guid</code>, which identifies the plugin.</li>
   <li><strong>HelloRhinoCommonPlugin.cs</strong> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.</li>
   <li><strong>HelloRhinoCommonCommand.cs</strong> is where the action is.  Let’s take a look at this file…</li>
 </ol>
@@ -450,50 +450,44 @@
 <ol>
   <li>Open <strong>HelloRhinoCommonCommand.cs</strong> in Xamarin Studio’s Source Editor (if it isn’t already).</li>
   <li>
-    <p>Notice that <code class="highlighter-rouge">HelloRhinoCommonCommand</code> inherits from <code class="highlighter-rouge">Rhino.Commands.Command</code> …</p>
+    <p>Notice that <code>HelloRhinoCommonCommand</code> inherits from <code>Rhino.Commands.Command</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public class HelloRhinoCommonCommand : Rhino.Commands.Command
+    <pre><code> public class HelloRhinoCommonCommand : Rhino.Commands.Command
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>…and overrides one inherited property called <code class="highlighter-rouge">EnglishName</code> …</p>
+    <p>…and overrides one inherited property called <code>EnglishName</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public override string EnglishName {
+    <pre><code> public override string EnglishName {
    get { return "HelloRhinoCommonCommand"; }
  }
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>All Rhino commands must have a <code class="highlighter-rouge">EnglishName</code> property.  This command name is not very accurate.  We know from running the boilerplate code that this command prompts the user to draw a line.  Let’s rename the command to <em>HelloDrawLine</em>:</p>
+    <p>All Rhino commands must have a <code>EnglishName</code> property.  This command name is not very accurate.  We know from running the boilerplate code that this command prompts the user to draw a line.  Let’s rename the command to <em>HelloDrawLine</em>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public override string EnglishName {
+    <pre><code> public override string EnglishName {
    get { return "HelloDrawLine"; }
  }
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Further down, notice that <code class="highlighter-rouge">HelloRhinoCommandCommand</code> overrides the <code class="highlighter-rouge">RunCommand</code> method:</p>
+    <p>Further down, notice that <code>HelloRhinoCommandCommand</code> overrides the <code>RunCommand</code> method:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> protected override Result RunCommand (Rhino.RhinoDoc doc, RunMode mode)
+    <pre><code> protected override Result RunCommand (Rhino.RhinoDoc doc, RunMode mode)
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>All Rhino commands must have a <code class="highlighter-rouge">RunCommand</code> method.  As you can see, this is where the action happens.  Let’s create an intermediary line object that we can feed to the <code class="highlighter-rouge">AddLine</code> method.  Find the spot in <code class="highlighter-rouge">RunCommand</code> after the user has been prompted to select two points.  Type in…</p>
+    <p>All Rhino commands must have a <code>RunCommand</code> method.  As you can see, this is where the action happens.  Let’s create an intermediary line object that we can feed to the <code>AddLine</code> method.  Find the spot in <code>RunCommand</code> after the user has been prompted to select two points.  Type in…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> Rhino.Geometry.Line line1 = new Line (pt0, pt1);
+    <pre><code> Rhino.Geometry.Line line1 = new Line (pt0, pt1);
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Notice that - as you type - Xamarin Studio uses IntelliSense, just like Visual Studio (and many other editors).  Now, feed <code class="highlighter-rouge">line1</code> as an argument to the <code class="highlighter-rouge">doc.Objects.AddLine</code> method…</p>
+    <p>Notice that - as you type - Xamarin Studio uses IntelliSense, just like Visual Studio (and many other editors).  Now, feed <code>line1</code> as an argument to the <code>doc.Objects.AddLine</code> method…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> doc.Objects.AddLine (line1);
+    <pre><code> doc.Objects.AddLine (line1);
 </code></pre>
-    </div>
   </li>
   <li>Now that we have a line of our own, let’s examine it…</li>
 </ol>
@@ -505,34 +499,32 @@
 <img src="/images/your_first_plugin_mac_12.png" alt="Set a breakpoint" /></li>
   <li><strong>Build</strong> and <strong>Run</strong>.  Run <strong>HelloDrawLine</strong> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
 <img src="/images/your_first_plugin_mac_13.png" alt="Hit a breakpoint" /></li>
-  <li>With Rhino paused, in <strong>Xamarin Studio</strong> switch to the <strong>Locals</strong> tab.  In the list, find the <code class="highlighter-rouge">line1</code> object we authored.  Click the dropdown <strong>arrow</strong> to expand the list of members on <code class="highlighter-rouge">line1</code>.  Our <code class="highlighter-rouge">line1</code> is a <code class="highlighter-rouge">Rhino.Geometry.Line</code> this class has a <code class="highlighter-rouge">Length</code> property…<br />
+  <li>With Rhino paused, in <strong>Xamarin Studio</strong> switch to the <strong>Locals</strong> tab.  In the list, find the <code>line1</code> object we authored.  Click the dropdown <strong>arrow</strong> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
 <img src="/images/your_first_plugin_mac_14.png" alt="Locals panel" /></li>
   <li><strong>Continue Executing</strong> in Rhino by pressing the <strong>Play</strong> button in the upper navigation menu of <strong>Xamarin Studio</strong>…
 <img src="/images/your_first_plugin_mac_15.png" alt="Continue Executing" /></li>
   <li>Control is passed back to <strong>Rhino</strong> and your command finishes.  <strong>Quit</strong> Rhino or <strong>Stop</strong> the debugging session.</li>
   <li><strong>Remove</strong> the breakpoint you created above by clicking on it in the gutter.</li>
   <li>
-    <p>Now, let’s use the <code class="highlighter-rouge">Length</code> value to report something to the user.  Near the very end of <code class="highlighter-rouge">RunCommand</code>, add the following line…</p>
+    <p>Now, let’s use the <code>Length</code> value to report something to the user.  Near the very end of <code>RunCommand</code>, add the following line…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> RhinoApp.WriteLine ("The distance between the two points is {0}.", line1.Length);
+    <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0}.", line1.Length);
 </code></pre>
-    </div>
   </li>
-  <li><strong>Build</strong> and <strong>Run</strong>.  Run <code class="highlighter-rouge">HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
+  <li><strong>Build</strong> and <strong>Run</strong>.  Run <code>HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
   <li><strong>Quit</strong> Rhino to <strong>Stop</strong> the debugging session once more.</li>
   <li>
     <p>Let’s add a unit system and be explicit about what we’re reporting…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> RhinoApp.WriteLine ("The distance between the two points is {0} {1}.", line1.Length, doc.ModelUnitSystem.ToString().ToLower());
+    <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0} {1}.", line1.Length, doc.ModelUnitSystem.ToString().ToLower());
 </code></pre>
-    </div>
   </li>
-  <li><strong>Build</strong> and <strong>Run</strong> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code class="highlighter-rouge">doc.ModelUnitSystem</code>) with the proper case (<code class="highlighter-rouge">ToLower()</code>).  Much better.</li>
+  <li><strong>Build</strong> and <strong>Run</strong> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code>doc.ModelUnitSystem</code>) with the proper case (<code>ToLower()</code>).  Much better.</li>
 </ol>
 
 <p><strong>DONE!</strong></p>
 
-<p>Well, we could go on and on - <code class="highlighter-rouge">line1</code> was never necessary, we could have just used <code class="highlighter-rouge">pt0.DistanceTo(pt1).ToString()</code>, etc. - but that is beside the point:</p>
+<p>Well, we could go on and on - <code>line1</code> was never necessary, we could have just used <code>pt0.DistanceTo(pt1).ToString()</code>, etc. - but that is beside the point:</p>
 
 <p><strong>Congratulations!</strong>  You have just built your first RhinoCommon plugin for Rhino for Mac.  <strong>Now what?</strong></p>
 

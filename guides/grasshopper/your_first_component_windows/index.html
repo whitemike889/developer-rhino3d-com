@@ -425,17 +425,17 @@
   <li>Before we do anything, let’s <strong>build</strong> and <strong>run</strong> HelloGrasshopper to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click <strong>Start</strong> (play) button in toolbar corner of Visual Studio (or press <strong>F5</strong>) to <strong>Start Debugging</strong>…
 <img src="/images/your_first_plugin_windows_06.png" alt="Start Button" /></li>
   <li><strong>Rhinoceros</strong> launches.</li>
-  <li>Since this is the first time you are debugging the components, you need to tell Grasshopper where to look.  In the Rhino command prompt, run the <code class="highlighter-rouge">GrasshopperDeveloperSettings</code> command…
+  <li>Since this is the first time you are debugging the components, you need to tell Grasshopper where to look.  In the Rhino command prompt, run the <code>GrasshopperDeveloperSettings</code> command…
 <img src="/images/your_first_component_windows_05.png" alt="Grasshopper Developer Settings" /></li>
   <li><strong>Uncheck</strong> the <strong>Memory load *.GHA assemblies using COFF byte arrays</strong> checkbox.</li>
-  <li>Click the <strong>Add Folder</strong> button and add your <code class="highlighter-rouge">bin</code> output folder of your project to Grasshopper’s search path.  <em>NOTE</em>: You only need to do this step once during the development of your component, unless you move it elsewhere.</li>
+  <li>Click the <strong>Add Folder</strong> button and add your <code>bin</code> output folder of your project to Grasshopper’s search path.  <em>NOTE</em>: You only need to do this step once during the development of your component, unless you move it elsewhere.</li>
   <li>(Optional) Automatically start Grasshopper every time Rhino starts…
     <ol>
       <li>Navigate to <strong>Tools</strong> &gt; <strong>Options</strong> &gt; <strong>General</strong>.</li>
-      <li>In the <strong>Run these commands every time Rhino starts</strong> text area, type <code class="highlighter-rouge">_Grasshopper</code> then click <strong>OK</strong>.</li>
+      <li>In the <strong>Run these commands every time Rhino starts</strong> text area, type <code>_Grasshopper</code> then click <strong>OK</strong>.</li>
     </ol>
   </li>
-  <li>Run the <code class="highlighter-rouge">Grasshopper</code> command to start Grasshopper.  If you don’t blink, you might see Grasshopper say it is loading “HelloGrasshopper” in the status bar of the splash screen.</li>
+  <li>Run the <code>Grasshopper</code> command to start Grasshopper.  If you don’t blink, you might see Grasshopper say it is loading “HelloGrasshopper” in the status bar of the splash screen.</li>
   <li>Navigate to <strong>Curve</strong> &gt; <strong>Primitive</strong> in the components menus.  You should see HelloGrasshopper in the list with a blank icon.  Drag this onto the canvas.  The component should “work.”</li>
   <li><strong>Exit</strong> Rhinoceros.  This stops the session.  Go back to <strong>Visual Studio</strong>.  Let’s take a look at the…</li>
 </ol>
@@ -462,56 +462,49 @@
 <ol>
   <li>Open <strong>HelloGrasshopperComponent.cs</strong> in Visual Studio’s Source Editor (if it isn’t already).</li>
   <li>
-    <p>Notice that <code class="highlighter-rouge">HelloGrasshopperComponent</code> inherits from <code class="highlighter-rouge">GH_Component</code> …</p>
+    <p>Notice that <code>HelloGrasshopperComponent</code> inherits from <code>GH_Component</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public class HelloGrasshopperComponent : GH_Component
+    <pre><code> public class HelloGrasshopperComponent : GH_Component
 </code></pre>
-    </div>
   </li>
-  <li>If you hover over <code class="highlighter-rouge">GH_Component</code> you will notice this is actually <code class="highlighter-rouge">Grasshopper.Kernel.GH_Component</code>.</li>
+  <li>If you hover over <code>GH_Component</code> you will notice this is actually <code>Grasshopper.Kernel.GH_Component</code>.</li>
   <li>
-    <p><code class="highlighter-rouge">HelloGrasshopperComponent</code> also overrides two methods for determining the input and output parameters …</p>
+    <p><code>HelloGrasshopperComponent</code> also overrides two methods for determining the input and output parameters …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+    <pre><code> protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
  ...
  protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>The actual work done by the component is to be found in the <code class="highlighter-rouge">SolveInstance</code> method…</p>
+    <p>The actual work done by the component is to be found in the <code>SolveInstance</code> method…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> protected override void SolveInstance(IGH_DataAccess DA)
+    <pre><code> protected override void SolveInstance(IGH_DataAccess DA)
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>As you can see, this is where the action happens.  This boilerplate component creates a spiral on a plane.  Just to make sure everything is working, let’s change the default plane on which the spiral is constructed.  On line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 67, in <code class="highlighter-rouge">SolveInstance</code>, notice that an XY plane is constructed…</p>
+    <p>As you can see, this is where the action happens.  This boilerplate component creates a spiral on a plane.  Just to make sure everything is working, let’s change the default plane on which the spiral is constructed.  On line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 67, in <code>SolveInstance</code>, notice that an XY plane is constructed…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> Plane plane = Plane.WorldXY;
+    <pre><code> Plane plane = Plane.WorldXY;
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Further down in the <code class="highlighter-rouge">SolveInstance</code> method, you will notice that the input data is being fed into this plane…</p>
+    <p>Further down in the <code>SolveInstance</code> method, you will notice that the input data is being fed into this plane…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> if (!DA.GetData(0, ref plane)) return;
+    <pre><code> if (!DA.GetData(0, ref plane)) return;
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Go back to the <code class="highlighter-rouge">RegisterInputParams</code>, and find the line where the <em>Plane</em> input is registered.  The last argument being fed to the method - <code class="highlighter-rouge">Plane.WorldXY</code> - is the default value of the input…</p>
+    <p>Go back to the <code>RegisterInputParams</code>, and find the line where the <em>Plane</em> input is registered.  The last argument being fed to the method - <code>Plane.WorldXY</code> - is the default value of the input…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> pManager.AddPlaneParameter("Plane", "P", "Base plane for spiral", GH_ParamAccess.item, Plane.WorldXY);
+    <pre><code> pManager.AddPlaneParameter("Plane", "P", "Base plane for spiral", GH_ParamAccess.item, Plane.WorldXY);
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Change the default value of the <em>Plane</em> input to be <code class="highlighter-rouge">Plane.WorldYZ</code> …</p>
+    <p>Change the default value of the <em>Plane</em> input to be <code>Plane.WorldYZ</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> pManager.AddPlaneParameter("Plane", "P", "Base plane for spiral", GH_ParamAccess.item, Plane.WorldYZ);
+    <pre><code> pManager.AddPlaneParameter("Plane", "P", "Base plane for spiral", GH_ParamAccess.item, Plane.WorldYZ);
 </code></pre>
-    </div>
   </li>
   <li>Now let’s examine what happens when inputs are given to this component…</li>
 </ol>
@@ -524,10 +517,10 @@
   <li><strong>Build</strong> and <strong>Run</strong>.</li>
   <li>In Grasshopper, place a <em>HelloGrasshopper</em> component on the canvas…as soon as you do, you should hit your breakpoint and pause…
 <img src="/images/your_first_component_windows_08.png" alt="Hit a breakpoint" /></li>
-  <li>The reason you hit the breakpoint is because the <code class="highlighter-rouge">SolveInstance</code> method was called once initially when the component was placed on the canvas.  With Rhino and Grasshopper paused, in <strong>Visual Studio</strong> switch to the <strong>Autos</strong> tab (if it not already there).  In the list, find the <code class="highlighter-rouge">plane</code> object.  Our <code class="highlighter-rouge">plane</code> is a <code class="highlighter-rouge">Rhino.Geometry.Plane</code> with a value of <code class="highlighter-rouge"><span class="p">{</span><span class="err">Origin=0,0,0</span><span class="w"> </span><span class="err">XAxis=0,1,0,</span><span class="w"> </span><span class="err">YAxis=0,0,1,</span><span class="w"> </span><span class="err">ZAxis=1,0,0</span><span class="p">}</span></code> …an YZ plane, the default, as expected.</li>
+  <li>The reason you hit the breakpoint is because the <code>SolveInstance</code> method was called once initially when the component was placed on the canvas.  With Rhino and Grasshopper paused, in <strong>Visual Studio</strong> switch to the <strong>Autos</strong> tab (if it not already there).  In the list, find the <code>plane</code> object.  Our <code>plane</code> is a <code>Rhino.Geometry.Plane</code> with a value of <code>{Origin=0,0,0 XAxis=0,1,0, YAxis=0,0,1, ZAxis=1,0,0}</code> …an YZ plane, the default, as expected.</li>
   <li><strong>Continue</strong> in Grasshopper by pressing the <strong>Continue</strong> button in the upper menu of <strong>Visual Studio</strong> (or press <strong>F5</strong>)…
 <img src="/images/your_first_plugin_windows_11.png" alt="Continue Executing" /></li>
-  <li>Control is passed back to <strong>Grasshopper</strong> and the spiral draws in the Rhino viewport.  Now, place an <em>XY Plane</em> component on the canvas and feed it as an input into <em>HelloGrasshopper</em>’s <em>Plane</em> input.  Notice you hit your breakpoint again, because the <code class="highlighter-rouge">SolveInstance</code> is being called now that the input values have changed.</li>
+  <li>Control is passed back to <strong>Grasshopper</strong> and the spiral draws in the Rhino viewport.  Now, place an <em>XY Plane</em> component on the canvas and feed it as an input into <em>HelloGrasshopper</em>’s <em>Plane</em> input.  Notice you hit your breakpoint again, because the <code>SolveInstance</code> is being called now that the input values have changed.</li>
   <li><strong>Exit</strong> Grasshopper and Rhino or <strong>Stop</strong> the debugging session.</li>
   <li><strong>Remove</strong> the breakpoint you created above by clicking on it in the gutter.</li>
 </ol>

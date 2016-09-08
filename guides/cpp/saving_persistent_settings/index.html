@@ -319,69 +319,65 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>You can load and save persistent plugin setting from and to the Registry using the <code class="highlighter-rouge">CRhinoPlugIn::LoadProfile</code> and <code class="highlighter-rouge">CRhinoPlugIn::SaveProfile</code> virtual functions.  For information on these virtual function, see <em>rhinoSdkPlugIn.h</em>.</p>
+<p>You can load and save persistent plugin setting from and to the Registry using the <code>CRhinoPlugIn::LoadProfile</code> and <code>CRhinoPlugIn::SaveProfile</code> virtual functions.  For information on these virtual function, see <em>rhinoSdkPlugIn.h</em>.</p>
 
 <h2 id="how-to">How To</h2>
 
 <p>Lets say we have a sample plugin class declaration that looks something like the following:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CTestPlugIn</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoUtilityPlugIn</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CTestPlugIn</span><span class="p">();</span>
-  <span class="o">~</span><span class="n">CTestPlugIn</span><span class="p">();</span>
+<pre><code class="language-cpp">class CTestPlugIn : public CRhinoUtilityPlugIn
+{
+public:
+  CTestPlugIn();
+  ~CTestPlugIn();
 
-  <span class="c1">// Required overrides
-</span>  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">PlugInName</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">PlugInVersion</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="n">GUID</span> <span class="n">PlugInID</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-  <span class="n">BOOL</span> <span class="n">OnLoadPlugIn</span><span class="p">();</span>
-  <span class="kt">void</span> <span class="n">OnUnloadPlugIn</span><span class="p">();</span>
+  // Required overrides
+  const wchar_t* PlugInName() const;
+  const wchar_t* PlugInVersion() const;
+  GUID PlugInID() const;
+  BOOL OnLoadPlugIn();
+  void OnUnloadPlugIn();
 
- <span class="k">private</span><span class="o">:</span>
-  <span class="n">ON_wString</span> <span class="n">m_plugin_version</span><span class="p">;</span>
+ private:
+  ON_wString m_plugin_version;
 
-  <span class="c1">// Persistent data
-</span>  <span class="kt">bool</span> <span class="n">m_value0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">m_value1</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">m_value2</span><span class="p">;</span>
-  <span class="n">ON_wString</span> <span class="n">m_value3</span><span class="p">;</span>
-<span class="p">};</span>
+  // Persistent data
+  bool m_value0;
+  int m_value1;
+  double m_value2;
+  ON_wString m_value3;
+};
 </code></pre>
-</div>
 
-<p>Simply, overload the <code class="highlighter-rouge">CRhinoPlugIn::LoadProfile</code> and <code class="highlighter-rouge">CRhinoPlugIn::SaveProfile</code> virtual functions by adding the the following public declarations to our plugin class:</p>
+<p>Simply, overload the <code>CRhinoPlugIn::LoadProfile</code> and <code>CRhinoPlugIn::SaveProfile</code> virtual functions by adding the the following public declarations to our plugin class:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">LoadProfile</span><span class="p">(</span> <span class="n">LPCTSTR</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="n">CRhinoProfileContext</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="p">);</span>
-<span class="kt">void</span> <span class="n">SaveProfile</span><span class="p">(</span> <span class="n">LPCTSTR</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="n">CRhinoProfileContext</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="p">);</span>
+<pre><code class="language-cpp">void LoadProfile( LPCTSTR lpszSection, CRhinoProfileContext&amp; pc );
+void SaveProfile( LPCTSTR lpszSection, CRhinoProfileContext&amp; pc );
 </code></pre>
-</div>
 
 <p>Then, provide the definition:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="n">CTestPlugIn</span><span class="o">::</span><span class="n">LoadProfile</span><span class="p">(</span> <span class="n">LPCTSTR</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="n">CRhinoProfileContext</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">LoadProfileBool</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value0"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_value0</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">LoadProfileInt</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value1"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_value1</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">LoadProfileDouble</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value2"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_value2</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">LoadProfileString</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value3"</span><span class="p">,</span> <span class="n">m_value3</span> <span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">void CTestPlugIn::LoadProfile( LPCTSTR lpszSection, CRhinoProfileContext&amp; pc )
+{
+  pc.LoadProfileBool( lpszSection, L"value0", &amp;m_value0 );
+  pc.LoadProfileInt( lpszSection, L"value1", &amp;m_value1 );
+  pc.LoadProfileDouble( lpszSection, L"value2", &amp;m_value2 );
+  pc.LoadProfileString( lpszSection, L"value3", m_value3 );
+}
 
-<span class="kt">void</span> <span class="n">CTestPlugIn</span><span class="o">::</span><span class="n">SaveProfile</span><span class="p">(</span> <span class="n">LPCTSTR</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="n">CRhinoProfileContext</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">SaveProfileBool</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value0"</span><span class="p">,</span> <span class="n">m_value0</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">SaveProfileInt</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value1"</span><span class="p">,</span> <span class="n">m_value1</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">SaveProfileDouble</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value2"</span><span class="p">,</span> <span class="n">m_value2</span> <span class="p">);</span>
-  <span class="n">pc</span><span class="p">.</span><span class="n">SaveProfileString</span><span class="p">(</span> <span class="n">lpszSection</span><span class="p">,</span> <span class="s">L"value3"</span><span class="p">,</span> <span class="n">m_value3</span> <span class="p">);</span>
-<span class="p">}</span>
+void CTestPlugIn::SaveProfile( LPCTSTR lpszSection, CRhinoProfileContext&amp; pc )
+{
+  pc.SaveProfileBool( lpszSection, L"value0", m_value0 );
+  pc.SaveProfileInt( lpszSection, L"value1", m_value1 );
+  pc.SaveProfileDouble( lpszSection, L"value2", m_value2 );
+  pc.SaveProfileString( lpszSection, L"value3", m_value3 );
+}
 </code></pre>
-</div>
 
 <p>That’s it! Your data is now saved at the following location in the Registry:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\&lt;version&gt;\&lt;scheme&gt;\Plug-ins\&lt;plugin_id&gt;\Settings
+<pre><code>HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\&lt;version&gt;\&lt;scheme&gt;\Plug-ins\&lt;plugin_id&gt;\Settings
 </code></pre>
-</div>
 
         </article>
 

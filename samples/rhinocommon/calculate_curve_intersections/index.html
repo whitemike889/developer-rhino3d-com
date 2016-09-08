@@ -222,49 +222,48 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">IntersectCurves</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Select two curves to intersect
-</span>    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select two curves"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result IntersectCurves(Rhino.RhinoDoc doc)
+  {
+    // Select two curves to intersect
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select two curves");
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    go.GetMultiple(2, 2);
+    if (go.CommandResult() != Rhino.Commands.Result.Success)
+      return go.CommandResult();
 
-    <span class="c1">// Validate input
-</span>    <span class="kt">var</span> <span class="n">curveA</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">curveB</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curveA</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">curveB</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    // Validate input
+    var curveA = go.Object(0).Curve();
+    var curveB = go.Object(1).Curve();
+    if (curveA == null || curveB == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="c1">// Calculate the intersection
-</span>    <span class="k">const</span> <span class="kt">double</span> <span class="n">intersection_tolerance</span> <span class="p">=</span> <span class="m">0.001</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">overlap_tolerance</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">events</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Intersect</span><span class="p">.</span><span class="n">Intersection</span><span class="p">.</span><span class="nf">CurveCurve</span><span class="p">(</span><span class="n">curveA</span><span class="p">,</span> <span class="n">curveB</span><span class="p">,</span> <span class="n">intersection_tolerance</span><span class="p">,</span> <span class="n">overlap_tolerance</span><span class="p">);</span>
+    // Calculate the intersection
+    const double intersection_tolerance = 0.001;
+    const double overlap_tolerance = 0.0;
+    var events = Rhino.Geometry.Intersect.Intersection.CurveCurve(curveA, curveB, intersection_tolerance, overlap_tolerance);
 
-    <span class="c1">// Process the results
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">events</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">events</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">ccx_event</span> <span class="p">=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">ccx_event</span><span class="p">.</span><span class="n">PointA</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">ccx_event</span><span class="p">.</span><span class="n">PointA</span><span class="p">.</span><span class="nf">DistanceTo</span><span class="p">(</span><span class="n">ccx_event</span><span class="p">.</span><span class="n">PointB</span><span class="p">)</span> <span class="p">&gt;</span> <span class="kt">double</span><span class="p">.</span><span class="n">Epsilon</span><span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">ccx_event</span><span class="p">.</span><span class="n">PointB</span><span class="p">);</span>
-          <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLine</span><span class="p">(</span><span class="n">ccx_event</span><span class="p">.</span><span class="n">PointA</span><span class="p">,</span> <span class="n">ccx_event</span><span class="p">.</span><span class="n">PointB</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    // Process the results
+    if (events != null)
+    {
+      for (int i = 0; i &lt; events.Count; i++)
+      {
+        var ccx_event = events[i];
+        doc.Objects.AddPoint(ccx_event.PointA);
+        if (ccx_event.PointA.DistanceTo(ccx_event.PointB) &gt; double.Epsilon)
+        {
+          doc.Objects.AddPoint(ccx_event.PointB);
+          doc.Objects.AddLine(ccx_event.PointA, ccx_event.PointB);
+        }
+      }
+      doc.Views.Redraw();
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function IntersectCurves(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -306,40 +305,39 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">IntersectCurves</span><span class="p">():</span>
-    <span class="c"># Select two curves to intersect</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select two curves"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def IntersectCurves():
+    # Select two curves to intersect
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select two curves")
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
+    go.GetMultiple(2, 2)
+    if go.CommandResult()!=Rhino.Commands.Result.Success: return
 
-    <span class="c"># Validate input</span>
-    <span class="n">curveA</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="n">curveB</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">curveA</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">curveB</span><span class="p">:</span> <span class="k">return</span>
+    # Validate input
+    curveA = go.Object(0).Curve()
+    curveB = go.Object(1).Curve()
+    if not curveA or not curveB: return
 
-    <span class="c"># Calculate the intersection</span>
-    <span class="n">intersection_tolerance</span> <span class="o">=</span> <span class="mf">0.001</span>
-    <span class="n">overlap_tolerance</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Intersect</span><span class="o">.</span><span class="n">Intersection</span><span class="o">.</span><span class="n">CurveCurve</span><span class="p">(</span><span class="n">curveA</span><span class="p">,</span> <span class="n">curveB</span><span class="p">,</span> <span class="n">intersection_tolerance</span><span class="p">,</span> <span class="n">overlap_tolerance</span><span class="p">)</span>
+    # Calculate the intersection
+    intersection_tolerance = 0.001
+    overlap_tolerance = 0.0
+    events = Rhino.Geometry.Intersect.Intersection.CurveCurve(curveA, curveB, intersection_tolerance, overlap_tolerance)
 
-    <span class="c"># Process the results</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">events</span><span class="p">:</span> <span class="k">return</span>
-    <span class="k">for</span> <span class="n">ccx_event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">ccx_event</span><span class="o">.</span><span class="n">PointA</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ccx_event</span><span class="o">.</span><span class="n">PointA</span><span class="o">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">ccx_event</span><span class="o">.</span><span class="n">PointB</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">float</span><span class="o">.</span><span class="n">Epsilon</span><span class="p">:</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">ccx_event</span><span class="o">.</span><span class="n">PointB</span><span class="p">)</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddLine</span><span class="p">(</span><span class="n">ccx_event</span><span class="o">.</span><span class="n">PointA</span><span class="p">,</span> <span class="n">ccx_event</span><span class="o">.</span><span class="n">PointB</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    # Process the results
+    if not events: return
+    for ccx_event in events:
+        scriptcontext.doc.Objects.AddPoint(ccx_event.PointA)
+        if ccx_event.PointA.DistanceTo(ccx_event.PointB) &gt; float.Epsilon:
+            scriptcontext.doc.Objects.AddPoint(ccx_event.PointB)
+            scriptcontext.doc.Objects.AddLine(ccx_event.PointA, ccx_event.PointB)
+    scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">IntersectCurves</span><span class="p">()</span>
+if __name__=="__main__":
+    IntersectCurves()
 </code></pre>
-</div>
 
 </div>
 

@@ -344,11 +344,11 @@
 
 <h2 id="how-to">How To</h2>
 
-<p>Basically, you create a class derived from <code class="highlighter-rouge">CRhinoUndoEventHandler</code>, pass it to Rhino, and let Rhino deal with all the details.  Sample 1 below shows how to do this.</p>
+<p>Basically, you create a class derived from <code>CRhinoUndoEventHandler</code>, pass it to Rhino, and let Rhino deal with all the details.  Sample 1 below shows how to do this.</p>
 
-<p>In order to have stable plugins, developers must follow the rules for using <code class="highlighter-rouge">CRhinoDoc::AddCustomUndoEvent</code>…</p>
+<p>In order to have stable plugins, developers must follow the rules for using <code>CRhinoDoc::AddCustomUndoEvent</code>…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Description:
+<pre><code class="language-cpp">// Description:
 //   If you want to your plugin to do something when the Rhino
 //   Undo/Redo command runs, the call AddCustomUndoEvent during
 //   your command.
@@ -367,12 +367,11 @@
 //   serial number Rhino has assigned to this undo event.
 //   If zero is returned, then the user has disabled undo
 //   and undo_event_handler was deleted.
-</span>
-<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">AddCustomUndoEvent</span><span class="p">(</span>
-  <span class="n">CRhinoUndoEventHandler</span><span class="o">*</span> <span class="n">undo_event_handler</span>
-  <span class="p">);</span>
+
+unsigned int AddCustomUndoEvent(
+  CRhinoUndoEventHandler* undo_event_handler
+  );
 </code></pre>
-</div>
 
 <p>When you are debugging your code, you may find the <em>AuditUndo</em> command useful.  This command lists all the undo information saved in Rhino.</p>
 
@@ -382,289 +381,287 @@
 
 <h3 id="sample-1">Sample 1</h3>
 
-<p>This “plugin” has one piece of data, the account balance, and two commands, <em>EarnTenEuros</em> and <em>SpendFiveEuros</em>.  The commands use <code class="highlighter-rouge">CUndoEuroTransaction</code> class to provide integrated Undo/Redo support…</p>
+<p>This “plugin” has one piece of data, the account balance, and two commands, <em>EarnTenEuros</em> and <em>SpendFiveEuros</em>.  The commands use <code>CUndoEuroTransaction</code> class to provide integrated Undo/Redo support…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">////////////////////////////////////////////////////////////////
+<pre><code class="language-cpp">////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN CUndoEuroTransaction class definition
 //
-</span>
-<span class="k">static</span> <span class="kt">double</span> <span class="n">m_plugin_data_euro_balance</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
 
-<span class="k">class</span> <span class="nc">CUndoEuroTransaction</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoUndoEventHandler</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CUndoEuroTransaction</span><span class="p">();</span>
-  <span class="o">~</span><span class="n">CUndoEuroTransaction</span><span class="p">();</span>
+static double m_plugin_data_euro_balance = 0.0;
 
-  <span class="c1">// virtual CRhinoUndoEventHandler function
-</span>  <span class="kt">void</span> <span class="n">Undo</span><span class="p">(</span>
-    <span class="k">const</span> <span class="n">CRhinoCommand</span><span class="o">*</span> <span class="n">cmd</span><span class="p">,</span>
-    <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">action_description</span><span class="p">,</span>
-    <span class="kt">bool</span> <span class="n">bCreatedByRedo</span><span class="p">,</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">undo_event_sn</span>
-    <span class="p">);</span>
+class CUndoEuroTransaction : public CRhinoUndoEventHandler
+{
+public:
+  CUndoEuroTransaction();
+  ~CUndoEuroTransaction();
 
-  <span class="kt">double</span> <span class="n">m_amount</span><span class="p">;</span>
-<span class="p">};</span>
+  // virtual CRhinoUndoEventHandler function
+  void Undo(
+    const CRhinoCommand* cmd,
+    const wchar_t* action_description,
+    bool bCreatedByRedo,
+    unsigned int undo_event_sn
+    );
 
-<span class="n">CUndoEuroTransaction</span><span class="o">::</span><span class="n">CUndoEuroTransaction</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">m_amount</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<span class="p">}</span>
+  double m_amount;
+};
 
-<span class="n">CUndoEuroTransaction</span><span class="o">::~</span><span class="n">CUndoEuroTransaction</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="p">}</span>
+CUndoEuroTransaction::CUndoEuroTransaction()
+{
+  m_amount = 0.0;
+}
 
-<span class="kt">void</span> <span class="n">CUndoEuroTransaction</span><span class="o">::</span><span class="n">Undo</span><span class="p">(</span>
-  <span class="k">const</span> <span class="n">CRhinoCommand</span><span class="o">*</span> <span class="n">cmd</span><span class="p">,</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">action_description</span><span class="p">,</span>
-  <span class="kt">bool</span> <span class="n">bCreatedByRedo</span><span class="p">,</span>
-  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">undo_event_sn</span>
-  <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// undo the change to m_plugin_data_euro_balance
-</span>  <span class="n">m_plugin_data_euro_balance</span> <span class="o">-=</span> <span class="n">m_amount</span><span class="p">;</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"New balance %g euros.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">m_plugin_data_euro_balance</span><span class="p">);</span>
-<span class="p">}</span>
+CUndoEuroTransaction::~CUndoEuroTransaction()
+{
+}
 
-<span class="c1">//
+void CUndoEuroTransaction::Undo(
+  const CRhinoCommand* cmd,
+  const wchar_t* action_description,
+  bool bCreatedByRedo,
+  unsigned int undo_event_sn
+  )
+{
+  // undo the change to m_plugin_data_euro_balance
+  m_plugin_data_euro_balance -= m_amount;
+  RhinoApp().Print(L"New balance %g euros.\n",
+                  m_plugin_data_euro_balance);
+}
+
+//
 // END CUndoEuroTransaction class definition
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span>
-<span class="c1">////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN EarnTenEuros command
 //
-</span>
-<span class="k">class</span> <span class="nc">CCommandEarnTenEuros</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoCommand</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CCommandEarnTenEuros</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="o">~</span><span class="n">CCommandEarnTenEuros</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="n">UUID</span> <span class="n">CommandUUID</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="c1">// {658C21B8-221-4887-B4A4-09C39C3E38CA}
-</span>    <span class="k">static</span> <span class="k">const</span> <span class="n">GUID</span> <span class="n">EarnTenEurosCommand_UUID</span> <span class="o">=</span>
-    <span class="p">{</span> <span class="mh">0x658C21B8</span><span class="p">,</span> <span class="mh">0x221</span><span class="p">,</span> <span class="mh">0x4887</span><span class="p">,</span> <span class="p">{</span> <span class="mh">0xB4</span><span class="p">,</span> <span class="mh">0xA4</span><span class="p">,</span> <span class="mh">0x09</span><span class="p">,</span> <span class="mh">0xC3</span><span class="p">,</span> <span class="mh">0x9C</span><span class="p">,</span> <span class="mh">0x3E</span><span class="p">,</span> <span class="mh">0x38</span><span class="p">,</span> <span class="mh">0xCA</span> <span class="p">}</span> <span class="p">};</span>
-    <span class="k">return</span> <span class="n">EarnTenEurosCommand_UUID</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"EarnTenEuros"</span><span class="p">;</span> <span class="p">}</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="p">);</span>
-<span class="p">};</span>
 
-<span class="c1">// The one and only CCommandEarnTenEuros object
-</span><span class="k">static</span> <span class="k">class</span> <span class="nc">CCommandEarnTenEuros</span> <span class="n">theEarnTenEurosCommand</span><span class="p">;</span>
+class CCommandEarnTenEuros : public CRhinoCommand
+{
+public:
+  CCommandEarnTenEuros() {}
+  ~CCommandEarnTenEuros() {}
+  UUID CommandUUID()
+  {
+    // {658C21B8-221-4887-B4A4-09C39C3E38CA}
+    static const GUID EarnTenEurosCommand_UUID =
+    { 0x658C21B8, 0x221, 0x4887, { 0xB4, 0xA4, 0x09, 0xC3, 0x9C, 0x3E, 0x38, 0xCA } };
+    return EarnTenEurosCommand_UUID;
+  }
+  const wchar_t* EnglishCommandName() { return L"EarnTenEuros"; }
+  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
+};
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span>
-<span class="n">CCommandEarnTenEuros</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">double</span> <span class="n">amount</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">;</span>
+// The one and only CCommandEarnTenEuros object
+static class CCommandEarnTenEuros theEarnTenEurosCommand;
 
-  <span class="n">CUndoEuroTransaction</span><span class="o">*</span> <span class="n">pUndoHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CUndoEuroTransaction</span><span class="p">();</span>
-  <span class="n">pUndoHandler</span><span class="o">-&gt;</span><span class="n">m_amount</span> <span class="o">=</span> <span class="n">amount</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCustomUndoEvent</span><span class="p">(</span><span class="n">pUndoHandler</span><span class="p">);</span>
+CRhinoCommand::result
+CCommandEarnTenEuros::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  double amount = 10.0;
 
-  <span class="n">m_plugin_data_euro_balance</span> <span class="o">+=</span> <span class="n">amount</span><span class="p">;</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"New balance %g euros.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">m_plugin_data_euro_balance</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  CUndoEuroTransaction* pUndoHandler = new CUndoEuroTransaction();
+  pUndoHandler-&gt;m_amount = amount;
+  context.m_doc.AddCustomUndoEvent(pUndoHandler);
 
-<span class="c1">//
+  m_plugin_data_euro_balance += amount;
+  RhinoApp().Print(L"New balance %g euros.\n", m_plugin_data_euro_balance);
+  return CRhinoCommand::success;
+}
+
+//
 // END EarnTenEuros command
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span>
-<span class="c1">////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN SpendFiveEuros command
 //
-</span>
-<span class="k">class</span> <span class="nc">CCommandSpendFiveEuros</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoCommand</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CCommandSpendFiveEuros</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="o">~</span><span class="n">CCommandSpendFiveEuros</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="n">UUID</span> <span class="n">CommandUUID</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="c1">// {578712DE-D65C-4B9C-9EE6-401C57077057}
-</span>    <span class="k">static</span> <span class="k">const</span> <span class="n">GUID</span> <span class="n">SpendFiveEurosCommand_UUID</span> <span class="o">=</span>
-    <span class="p">{</span> <span class="mh">0x578712DE</span><span class="p">,</span> <span class="mh">0xD65C</span><span class="p">,</span> <span class="mh">0x4B9C</span><span class="p">,</span> <span class="p">{</span> <span class="mh">0x9E</span><span class="p">,</span> <span class="mh">0xE6</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x1C</span><span class="p">,</span> <span class="mh">0x57</span><span class="p">,</span> <span class="mh">0x07</span><span class="p">,</span> <span class="mh">0x70</span><span class="p">,</span> <span class="mh">0x57</span> <span class="p">}</span> <span class="p">};</span>
-    <span class="k">return</span> <span class="n">SpendFiveEurosCommand_UUID</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="s">L"SpendFiveEuros"</span><span class="p">;</span> <span class="p">}</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="p">);</span>
-<span class="p">};</span>
 
-<span class="c1">// The one and only CCommandSpendFiveEuros object
-</span><span class="k">static</span> <span class="k">class</span> <span class="nc">CCommandSpendFiveEuros</span> <span class="n">theSpendFiveEurosCommand</span><span class="p">;</span>
+class CCommandSpendFiveEuros : public CRhinoCommand
+{
+public:
+  CCommandSpendFiveEuros() {}
+  ~CCommandSpendFiveEuros() {}
+  UUID CommandUUID()
+  {
+    // {578712DE-D65C-4B9C-9EE6-401C57077057}
+    static const GUID SpendFiveEurosCommand_UUID =
+    { 0x578712DE, 0xD65C, 0x4B9C, { 0x9E, 0xE6, 0x40, 0x1C, 0x57, 0x07, 0x70, 0x57 } };
+    return SpendFiveEurosCommand_UUID;
+  }
+  const wchar_t* EnglishCommandName() { return L"SpendFiveEuros"; }
+  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
+};
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span>
-<span class="n">CCommandSpendFiveEuros</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">double</span> <span class="n">amount</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">;</span>
+// The one and only CCommandSpendFiveEuros object
+static class CCommandSpendFiveEuros theSpendFiveEurosCommand;
 
-  <span class="n">CUndoEuroTransaction</span><span class="o">*</span> <span class="n">pUndoHandler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CUndoEuroTransaction</span><span class="p">();</span>
-  <span class="n">pUndoHandler</span><span class="o">-&gt;</span><span class="n">m_amount</span> <span class="o">=</span> <span class="n">amount</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCustomUndoEvent</span><span class="p">(</span><span class="n">pUndoHandler</span><span class="p">);</span>
+CRhinoCommand::result
+CCommandSpendFiveEuros::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  double amount = -5.0;
 
-  <span class="n">m_plugin_data_euro_balance</span> <span class="o">+=</span> <span class="n">amount</span><span class="p">;</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"New balance %g euros.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">m_plugin_data_euro_balance</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  CUndoEuroTransaction* pUndoHandler = new CUndoEuroTransaction();
+  pUndoHandler-&gt;m_amount = amount;
+  context.m_doc.AddCustomUndoEvent(pUndoHandler);
 
-<span class="c1">//
+  m_plugin_data_euro_balance += amount;
+  RhinoApp().Print(L"New balance %g euros.\n", m_plugin_data_euro_balance);
+  return CRhinoCommand::success;
+}
+
+//
 // END SpendFiveEuros command
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span></code></pre>
-</div>
+</code></pre>
 
 <h3 id="sample-2">Sample 2</h3>
 
 <p>Using an event watcher to monitor undo events…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">////////////////////////////////////////////////////////////////
+<pre><code class="language-cpp">////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN CMyUndoSnooper undo event watcher
 //
-</span>
-<span class="k">class</span> <span class="nc">CMyUndoSnooper</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoEventWatcher</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="c1">// virtual
-</span>  <span class="kt">void</span> <span class="n">UndoEvent</span><span class="p">(</span>
-        <span class="n">CRhinoEventWatcher</span><span class="o">::</span><span class="n">undo_event</span> <span class="n">event</span><span class="p">,</span>
-        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">undo_record_serialnumber</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">CRhinoCommand</span><span class="o">*</span> <span class="n">cmd</span>
-        <span class="p">);</span>
-<span class="p">};</span>
 
-<span class="kt">void</span> <span class="n">CMyUndoSnooper</span><span class="o">::</span><span class="n">UndoEvent</span><span class="p">(</span>
-        <span class="n">CRhinoEventWatcher</span><span class="o">::</span><span class="n">undo_event</span> <span class="n">event</span><span class="p">,</span>
-        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">undo_record_serialnumber</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">CRhinoCommand</span><span class="o">*</span> <span class="n">cmd</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoApp</span><span class="o">&amp;</span> <span class="n">app</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">();</span>
+class CMyUndoSnooper : public CRhinoEventWatcher
+{
+public:
+  // virtual
+  void UndoEvent(
+        CRhinoEventWatcher::undo_event event,
+        unsigned int undo_record_serialnumber,
+        const CRhinoCommand* cmd
+        );
+};
 
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">cmd_name</span> <span class="o">=</span> <span class="n">cmd</span>
-                          <span class="o">?</span> <span class="n">cmd</span><span class="o">-&gt;</span><span class="n">LocalCommandName</span><span class="p">()</span>
-                          <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+void CMyUndoSnooper::UndoEvent(
+        CRhinoEventWatcher::undo_event event,
+        unsigned int undo_record_serialnumber,
+        const CRhinoCommand* cmd
+        )
+{
+  CRhinoApp&amp; app = RhinoApp();
 
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">cmd_name</span> <span class="p">)</span>
-    <span class="n">cmd_name</span> <span class="o">=</span> <span class="n">L</span><span class="p">;</span>
+  const wchar_t* cmd_name = cmd
+                          ? cmd-&gt;LocalCommandName()
+                          : 0;
 
-  <span class="k">switch</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-  <span class="p">{</span>
-  <span class="k">case</span> <span class="n">begin_recording</span><span class="p">:</span>  <span class="c1">// Begin recording changes
-</span>    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: Begin recording %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="n">end_recording</span><span class="p">:</span>
-    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: End recording %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
+  if( 0 == cmd_name )
+    cmd_name = L;
 
-  <span class="k">case</span> <span class="n">begin_undo</span><span class="p">:</span>       <span class="c1">// Begin undoing a changes
-</span>    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: Begin undoing %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="n">end_undo</span><span class="p">:</span>
-    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: End undoing %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
+  switch(event)
+  {
+  case begin_recording:  // Begin recording changes
+    app.Print(L"UNDO SNOOP %5d: Begin recording %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
+  case end_recording:
+    app.Print(L"UNDO SNOOP %5d: End recording %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
 
-  <span class="k">case</span> <span class="n">begin_redo</span><span class="p">:</span>       <span class="c1">// Begin redoing a changes
-</span>    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: Begin redoing %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="k">case</span> <span class="n">end_redo</span><span class="p">:</span>
-    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: End redoing %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
+  case begin_undo:       // Begin undoing a changes
+    app.Print(L"UNDO SNOOP %5d: Begin undoing %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
+  case end_undo:
+    app.Print(L"UNDO SNOOP %5d: End undoing %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
 
-  <span class="k">case</span> <span class="n">purge_record</span><span class="p">:</span>
-    <span class="n">app</span><span class="p">.</span><span class="n">Print</span><span class="p">(</span><span class="s">L"UNDO SNOOP %5d: Purging %s changes</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                  <span class="n">undo_record_serialnumber</span><span class="p">,</span><span class="n">cmd_name</span><span class="p">);</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  case begin_redo:       // Begin redoing a changes
+    app.Print(L"UNDO SNOOP %5d: Begin redoing %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
+  case end_redo:
+    app.Print(L"UNDO SNOOP %5d: End redoing %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
 
-<span class="c1">//
+  case purge_record:
+    app.Print(L"UNDO SNOOP %5d: Purging %s changes\n",
+                  undo_record_serialnumber,cmd_name);
+    break;
+  }
+}
+
+//
 // END CMyUndoSnooper undo event watcher
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span>
-<span class="c1">////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //
 // BEGIN TestUndoSnoop command
 //
-</span>
-<span class="k">class</span> <span class="nc">CCommandTestUndoSnoop</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoTestCommand</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CCommandTestUndoSnoop</span><span class="p">()</span> <span class="p">{</span> <span class="n">m_bRegistered</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
-  <span class="o">~</span><span class="n">CCommandTestUndoSnoop</span><span class="p">()</span> <span class="p">{}</span>
-  <span class="n">UUID</span> <span class="n">CommandUUID</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="c1">// {A7474CED-3C3D-4BCD-9124-4058D619BEA0}
-</span>    <span class="k">static</span> <span class="k">const</span> <span class="n">GUID</span> <span class="n">TestUndoSnoopCommand_UUID</span> <span class="o">=</span>
-    <span class="p">{</span> <span class="mh">0xA7474CED</span><span class="p">,</span> <span class="mh">0x3C3D</span><span class="p">,</span> <span class="mh">0x4BCD</span><span class="p">,</span> <span class="p">{</span> <span class="mh">0x91</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x58</span><span class="p">,</span> <span class="mh">0xD6</span><span class="p">,</span> <span class="mh">0x19</span><span class="p">,</span> <span class="mh">0xBE</span><span class="p">,</span> <span class="mh">0xA0</span> <span class="p">}</span> <span class="p">};</span>
-    <span class="k">return</span> <span class="n">TestUndoSnoopCommand_UUID</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">EnglishCommandName</span><span class="p">()</span> <span class="p">{</span> <span class="s">L"TestUndoSnoop"</span><span class="p">;</span> <span class="p">}</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="p">);</span>
 
-  <span class="n">CMyUndoSnooper</span> <span class="n">m_snooper</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">m_bRegistered</span><span class="p">;</span>
-<span class="p">};</span>
+class CCommandTestUndoSnoop : public CRhinoTestCommand
+{
+public:
+  CCommandTestUndoSnoop() { m_bRegistered = 0; }
+  ~CCommandTestUndoSnoop() {}
+  UUID CommandUUID()
+  {
+    // {A7474CED-3C3D-4BCD-9124-4058D619BEA0}
+    static const GUID TestUndoSnoopCommand_UUID =
+    { 0xA7474CED, 0x3C3D, 0x4BCD, { 0x91, 0x24, 0x40, 0x58, 0xD6, 0x19, 0xBE, 0xA0 } };
+    return TestUndoSnoopCommand_UUID;
+  }
+  const wchar_t* EnglishCommandName() { L"TestUndoSnoop"; }
+  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
 
-<span class="c1">// The one and only CCommandTestUndoSnoop object
-</span><span class="k">static</span> <span class="k">class</span> <span class="nc">CCommandTestUndoSnoop</span> <span class="n">theTestUndoSnoopCommand</span><span class="p">;</span>
+  CMyUndoSnooper m_snooper;
+  bool m_bRegistered;
+};
 
-<span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span>
-<span class="n">CCommandTestUndoSnoop</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">IDYES</span> <span class="o">==</span> <span class="n">RhinoMessageBox</span><span class="p">(</span> <span class="s">L"Watch undo events?"</span><span class="p">,</span>
-                                <span class="s">L"Undo Snooper"</span><span class="p">,</span>
-                                <span class="n">MB_YESNO</span> <span class="o">|</span> <span class="n">MB_ICONQUESTION</span><span class="p">)</span>
-                               <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">m_bRegistered</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_bRegistered</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-      <span class="n">m_snooper</span><span class="p">.</span><span class="n">Register</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="n">m_snooper</span><span class="p">.</span><span class="n">Enable</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">m_snooper</span><span class="p">.</span><span class="n">Enable</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="p">}</span>
+// The one and only CCommandTestUndoSnoop object
+static class CCommandTestUndoSnoop theTestUndoSnoopCommand;
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+CRhinoCommand::result
+CCommandTestUndoSnoop::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  if( IDYES == RhinoMessageBox( L"Watch undo events?",
+                                L"Undo Snooper",
+                                MB_YESNO | MB_ICONQUESTION)
+                               )
+  {
+    if( !m_bRegistered )
+    {
+      m_bRegistered = true;
+      m_snooper.Register();
+    }
+    m_snooper.Enable( true );
+  }
+  else
+  {
+    m_snooper.Enable( false );
+  }
 
-<span class="c1">//
+  return CRhinoCommand::success;
+}
+
+//
 // END TestUndoSnoop command
 //
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-</span></code></pre>
-</div>
+</code></pre>
 
         </article>
 

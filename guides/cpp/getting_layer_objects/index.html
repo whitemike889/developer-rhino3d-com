@@ -322,42 +322,41 @@
 <p>You can get all of the objects on a specified layer in two ways:</p>
 
 <ol>
-  <li>Use <code class="highlighter-rouge">CRhinoDoc::LookupObject</code>.</li>
-  <li>Use a <code class="highlighter-rouge">CRhinoObjectIterator</code>.</li>
+  <li>Use <code>CRhinoDoc::LookupObject</code>.</li>
+  <li>Use a <code>CRhinoObjectIterator</code>.</li>
 </ol>
 
-<p>The <code class="highlighter-rouge">CRhinoDoc::LookupObject</code> is somewhat easier.  So, we will demonstrate this in the following sample…</p>
+<p>The <code>CRhinoDoc::LookupObject</code> is somewhat easier.  So, we will demonstrate this in the following sample…</p>
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_wString</span> <span class="n">layer_name</span> <span class="o">=</span> <span class="s">L"Default"</span><span class="p">;</span> <span class="c1">// some layer name to search for
-</span>  <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">.</span><span class="n">FindLayer</span><span class="p">(</span> <span class="n">layer_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">[</span><span class="n">layer_index</span><span class="p">];</span>
-    <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">objects</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">object_count</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">LookupObject</span><span class="p">(</span> <span class="n">layer</span><span class="p">,</span> <span class="n">objects</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">object_count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"%s layer objects:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_wString layer_name = L"Default"; // some layer name to search for
+  int layer_index = context.m_doc.m_layer_table.FindLayer( layer_name );
+  if( layer_index &gt;= 0 )
+  {
+    const CRhinoLayer&amp; layer = context.m_doc.m_layer_table[layer_index];
+    ON_SimpleArray&lt;CRhinoObject*&gt; objects;
+    int object_count = context.m_doc.LookupObject( layer, objects );
+    if( object_count &gt; 0 )
+    {
+      const CRhinoObject* object = 0;
+      int i;
+      RhinoApp().Print( L"%s layer objects:\n", layer_name );
 
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">object_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">object</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span> <span class="n">i</span> <span class="p">];</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">object</span> <span class="p">)</span>
-          <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"  %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">object</span><span class="o">-&gt;</span><span class="n">ShortDescription</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      for( i = 0; i &lt; object_count; i++ )
+      {
+        object = objects[ i ];
+        if( object )
+          RhinoApp().Print( L"  %s\n", object-&gt;ShortDescription(false) );
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

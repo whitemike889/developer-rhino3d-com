@@ -217,57 +217,56 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get a reference to the layer table
-</span>  <span class="n">CRhinoLayerTable</span><span class="o">&amp;</span> <span class="n">layer_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">;</span>
-  <span class="c1">// Get the current layer
-</span>  <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">current_layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">CurrentLayer</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Get a reference to the layer table
+  CRhinoLayerTable&amp; layer_table = context.m_doc.m_layer_table;
+  // Get the current layer
+  const CRhinoLayer&amp; current_layer = layer_table.CurrentLayer();
 
-  <span class="c1">// Prompt for a layer name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Name of layer to select object"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetDefaultString</span><span class="p">(</span> <span class="n">current_layer</span><span class="p">.</span><span class="n">LayerName</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Prompt for a layer name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Name of layer to select object" );
+  gs.SetDefaultString( current_layer.LayerName() );
+  gs.AcceptNothing( TRUE );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Validate the string
-</span>  <span class="n">ON_wString</span> <span class="n">layer_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">layer_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  // Validate the string
+  ON_wString layer_name = gs.String();
+  layer_name.TrimLeftAndRight();
+  if( layer_name.IsEmpty() )
+    return CRhinoCommand::cancel;
 
-  <span class="c1">// Find the layer
-</span>  <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">FindLayer</span><span class="p">(</span> <span class="n">layer_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"</span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> does not exists.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Find the layer
+  int layer_index = layer_table.FindLayer( layer_name );
+  if( layer_index &lt; 0 )
+  {
+    RhinoApp().Print( L"\"%s\" does not exists.\n", layer_name );
+    return CRhinoCommand::cancel;
+  }
 
-  <span class="c1">// Get the layer
-</span>  <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">layer_index</span><span class="p">];</span>
+  // Get the layer
+  const CRhinoLayer&amp; layer = layer_table[layer_index];
 
-  <span class="c1">// Get all of the objects on the layer
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">obj_list</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">obj_count</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">LookupObject</span><span class="p">(</span> <span class="n">layer</span><span class="p">,</span> <span class="n">obj_list</span> <span class="p">);</span>
+  // Get all of the objects on the layer
+  ON_SimpleArray&lt;CRhinoObject*&gt; obj_list;
+  int i, obj_count = context.m_doc.LookupObject( layer, obj_list );
 
-  <span class="c1">// Select all of the layer objects
-</span>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="o">&amp;&amp;</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">IsSelectable</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">();</span>
-  <span class="p">}</span>
+  // Select all of the layer objects
+  for( i = 0; i &lt; obj_count; i++ )
+  {
+    CRhinoObject* obj = obj_list[i];
+    if( obj &amp;&amp; obj-&gt;IsSelectable() )
+      obj-&gt;Select();
+  }
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">obj_count</span> <span class="p">)</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  if( obj_count )
+    context.m_doc.Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

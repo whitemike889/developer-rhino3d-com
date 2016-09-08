@@ -361,13 +361,13 @@ End Sub
 
 <p>If your script is cancelled in operation (2), then Rhino can be left in a state unfamiliar to the user.</p>
 
-<p>It is possible for your script to be notified when it has been cancelled.  This is done through a special, user-defined subroutine named <code class="highlighter-rouge">OnCancelScript</code>.</p>
+<p>It is possible for your script to be notified when it has been cancelled.  This is done through a special, user-defined subroutine named <code>OnCancelScript</code>.</p>
 
-<p>When a script is running and the <kbd>ESC</kbd> key is pressed, RhinoScript searches for loaded, user-defined subroutine named <code class="highlighter-rouge">OnCancelScript</code>. If this subroutine is detected, RhinoScript will automatically run this procedure instead of just printing the “Script cancelled” message.</p>
+<p>When a script is running and the <kbd>ESC</kbd> key is pressed, RhinoScript searches for loaded, user-defined subroutine named <code>OnCancelScript</code>. If this subroutine is detected, RhinoScript will automatically run this procedure instead of just printing the “Script cancelled” message.</p>
 
-<p>In the above script scenario, the user-defined <code class="highlighter-rouge">OnCancelScript</code> subroutine could reset the parameters (3) that were modified when the script started (1).</p>
+<p>In the above script scenario, the user-defined <code>OnCancelScript</code> subroutine could reset the parameters (3) that were modified when the script started (1).</p>
 
-<p>The following is a simple example that demonstrates the <code class="highlighter-rouge">OnCancelScript</code> procedure…</p>
+<p>The following is a simple example that demonstrates the <code>OnCancelScript</code> procedure…</p>
 
 <pre><code class="language-vbnet">Sub TightLoopEscapeTest
 
@@ -392,7 +392,7 @@ Sub OnCancelScript
 End Sub
 </code></pre>
 
-<p><strong>NOTE</strong>: your user-defined <code class="highlighter-rouge">OnCancelScript</code> subroutine must not have any arguments.  If you define your <code class="highlighter-rouge">OnCancelScript</code> subroutine as one that requires one or more arguments, then RhinoScript will not execute it when <kbd>ESC</kbd> is pressed.</p>
+<p><strong>NOTE</strong>: your user-defined <code>OnCancelScript</code> subroutine must not have any arguments.  If you define your <code>OnCancelScript</code> subroutine as one that requires one or more arguments, then RhinoScript will not execute it when <kbd>ESC</kbd> is pressed.</p>
 
         </article>
 

@@ -302,42 +302,41 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>You can use the <code class="highlighter-rouge">RhinoUpdateObjectGroups</code> function.  See <em>rhinoSdkGrips.h</em> for details.</p>
+<p>You can use the <code>RhinoUpdateObjectGroups</code> function.  See <em>rhinoSdkGrips.h</em> for details.</p>
 
 <p>Here is a sample of its usage:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects to copy in-place"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableGroupSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects to copy in-place" );
+  go.EnableGroupSelect( TRUE );
+  go.EnableSubObjectSelect( FALSE );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="n">xform</span><span class="p">.</span><span class="n">Identity</span><span class="p">();</span>
+  ON_Xform xform;
+  xform.Identity();
 
-  <span class="n">ON_2dexMap</span> <span class="n">group_map</span><span class="p">;</span>
+  ON_2dexMap group_map;
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Object</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">object</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">duplicate</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">TransformObject</span><span class="p">(</span> <span class="n">object</span><span class="p">,</span> <span class="n">xform</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">duplicate</span> <span class="p">)</span>
-        <span class="n">RhinoUpdateObjectGroups</span><span class="p">(</span> <span class="n">duplicate</span><span class="p">,</span> <span class="n">group_map</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  for( int i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const CRhinoObject* object = go.Object(i).Object();
+    if( object )
+    {
+      CRhinoObject* duplicate = context.m_doc.TransformObject( object, xform, true, false, true );
+      if( duplicate )
+        RhinoUpdateObjectGroups( duplicate, group_map );
+    }
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

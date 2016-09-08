@@ -222,38 +222,37 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">OffsetCurve</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rs</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span>
-      <span class="s">"Select Curve"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rs</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result OffsetCurve(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rs = RhinoGet.GetOneObject(
+      "Select Curve", false, ObjectType.Curve, out obj_ref);
+    if (rs != Result.Success)
+      return rs;
+    var curve = obj_ref.Curve();
+    if (curve == null)
+      return Result.Nothing;
 
-    <span class="n">Point3d</span> <span class="n">point</span><span class="p">;</span>
-    <span class="n">rs</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">(</span><span class="s">"Select Side"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">out</span> <span class="n">point</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rs</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rs</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">point</span> <span class="p">==</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Unset</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+    Point3d point;
+    rs = RhinoGet.GetPoint("Select Side", false, out point);
+    if (rs != Result.Success)
+      return rs;
+    if (point == Point3d.Unset)
+      return Result.Nothing;
 
-    <span class="kt">var</span> <span class="n">curves</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">Offset</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">Vector3d</span><span class="p">.</span><span class="n">ZAxis</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">,</span> <span class="n">CurveOffsetCornerStyle</span><span class="p">.</span><span class="n">None</span><span class="p">);</span>
+    var curves = curve.Offset(point, Vector3d.ZAxis, 1.0,
+      doc.ModelAbsoluteTolerance, CurveOffsetCornerStyle.None);
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">offset_curve</span> <span class="k">in</span> <span class="n">curves</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">offset_curve</span><span class="p">);</span>
+    foreach (var offset_curve in curves)
+      doc.Objects.AddCurve(offset_curve);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function OffsetCurve(ByVal doc As RhinoDoc) As Result
@@ -288,41 +287,40 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
-<span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.DocObjects import *
+from Rhino.Geometry import *
+from Rhino.Input import *
+from Rhino.Commands import *
+from scriptcontext import doc
+import rhinoscriptsyntax as rs
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">rs</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select Curve"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rs</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rs</span>
-  <span class="n">curve</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">curve</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+def RunCommand():
+  rs, obj_ref = RhinoGet.GetOneObject("Select Curve", False, ObjectType.Curve)
+  if rs &lt;&gt; Result.Success:
+    return rs
+  curve = obj_ref.Curve()
+  if curve == None:
+    return Result.Nothing
 
-  <span class="n">rs</span><span class="p">,</span> <span class="n">point</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"Select Side"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rs</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rs</span>
-  <span class="k">if</span> <span class="n">point</span> <span class="o">==</span> <span class="n">Point3d</span><span class="o">.</span><span class="n">Unset</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  rs, point = RhinoGet.GetPoint("Select Side", False)
+  if rs &lt;&gt; Result.Success:
+    return rs
+  if point == Point3d.Unset:
+    return Result.Nothing
 
-  <span class="n">curves</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">Offset</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">Vector3d</span><span class="o">.</span><span class="n">ZAxis</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span><span class="p">,</span> <span class="n">CurveOffsetCornerStyle</span><span class="o">.</span><span class="bp">None</span><span class="p">)</span>
+  curves = curve.Offset(point, Vector3d.ZAxis, 1.0,
+    doc.ModelAbsoluteTolerance, CurveOffsetCornerStyle.None)
 
-  <span class="k">for</span> <span class="n">offset_curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">offset_curve</span><span class="p">)</span>
+  for offset_curve in curves:
+    doc.Objects.AddCurve(offset_curve)
 
-  <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  doc.Views.Redraw()
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

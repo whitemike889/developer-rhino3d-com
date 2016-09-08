@@ -222,24 +222,23 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddLinearDimension</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">LinearDimension</span> <span class="n">dimension</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetLinearDimension</span><span class="p">(</span><span class="k">out</span> <span class="n">dimension</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">==</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">&amp;&amp;</span> <span class="n">dimension</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddLinearDimension</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span> <span class="p">==</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-        <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-      <span class="k">else</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddLinearDimension(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.LinearDimension dimension;
+    Rhino.Commands.Result rc = Rhino.Input.RhinoGet.GetLinearDimension(out dimension);
+    if (rc == Rhino.Commands.Result.Success &amp;&amp; dimension != null)
+    {
+      if (doc.Objects.AddLinearDimension(dimension) == Guid.Empty)
+        rc = Rhino.Commands.Result.Failure;
+      else
+        doc.Views.Redraw();
+    }
+    return rc;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddLinearDimension(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -257,24 +256,23 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddLinearDimension</span><span class="p">():</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">dimension</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetLinearDimension</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">==</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddLinearDimension</span><span class="p">(</span><span class="n">dimension</span><span class="p">)</span><span class="o">==</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-            <span class="n">rc</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">rc</span>
+def AddLinearDimension():
+    rc, dimension = Rhino.Input.RhinoGet.GetLinearDimension()
+    if rc==Rhino.Commands.Result.Success:
+        if scriptcontext.doc.Objects.AddLinearDimension(dimension)==System.Guid.Empty:
+            rc = Rhino.Commands.Result.Failure
+        else:
+            scriptcontext.doc.Views.Redraw()
+    return rc
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddLinearDimension</span><span class="p">()</span>
+if __name__=="__main__":
+    AddLinearDimension()
 </code></pre>
-</div>
 
 </div>
 

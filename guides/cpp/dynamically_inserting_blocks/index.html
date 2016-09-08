@@ -315,140 +315,138 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>To dynamically insert and draw blocks, you can take advantage of the new display pipeline technology, which is capable of drawing block instance definitions.  For example, the following code demonstrates how to draw a block instance definition from a <code class="highlighter-rouge">CRhinoGetPoint</code>-derived object’s DynamicDraw member…</p>
+<p>To dynamically insert and draw blocks, you can take advantage of the new display pipeline technology, which is capable of drawing block instance definitions.  For example, the following code demonstrates how to draw a block instance definition from a <code>CRhinoGetPoint</code>-derived object’s DynamicDraw member…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CGetBlockInsertPoint</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-  <span class="n">CGetBlockInsertPoint</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span> <span class="p">);</span>
+<pre><code class="language-cpp">class CGetBlockInsertPoint : public CRhinoGetPoint
+{
+public:
+  CGetBlockInsertPoint( const CRhinoInstanceDefinition* idef );
 
-  <span class="c1">// CRhinoGetPoint overrides
-</span>  <span class="kt">void</span> <span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">UINT</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="p">);</span>
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="p">);</span>
+  // CRhinoGetPoint overrides
+  void OnMouseMove( CRhinoViewport&amp;, UINT, const ON_3dPoint&amp;, const CPoint* );
+  void DynamicDraw( HDC, CRhinoViewport&amp;, const ON_3dPoint&amp; );
 
-  <span class="kt">bool</span> <span class="n">CalculateTransform</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">ON_Xform</span><span class="o">&amp;</span> <span class="p">);</span>
+  bool CalculateTransform( CRhinoViewport&amp;, const ON_3dPoint&amp;, ON_Xform&amp; );
 
-<span class="k">private</span><span class="o">:</span>
-  <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">m_idef</span><span class="p">;</span>
-  <span class="n">ON_Xform</span> <span class="n">m_xform</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">m_bDraw</span><span class="p">;</span>
-<span class="p">};</span>
+private:
+  const CRhinoInstanceDefinition* m_idef;
+  ON_Xform m_xform;
+  bool m_bDraw;
+};
 
-<span class="n">CGetBlockInsertPoint</span><span class="o">::</span><span class="n">CGetBlockInsertPoint</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span> <span class="p">)</span>
-<span class="o">:</span> <span class="n">m_idef</span><span class="p">(</span><span class="n">idef</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_xform</span><span class="p">.</span><span class="n">Identity</span><span class="p">();</span>
-  <span class="n">m_bDraw</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-<span class="p">}</span>
+CGetBlockInsertPoint::CGetBlockInsertPoint( const CRhinoInstanceDefinition* idef )
+: m_idef(idef)
+{
+  m_xform.Identity();
+  m_bDraw = false;
+}
 
-<span class="kt">void</span> <span class="n">CGetBlockInsertPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span>
-    <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-    <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">p</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_bDraw</span> <span class="o">=</span> <span class="n">CalculateTransform</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">m_xform</span> <span class="p">);</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">p</span> <span class="p">);</span>
-<span class="p">}</span>
+void CGetBlockInsertPoint::OnMouseMove(
+    CRhinoViewport&amp; vp,
+    UINT flags,
+    const ON_3dPoint&amp; pt,
+    const CPoint* p
+    )
+{
+  m_bDraw = CalculateTransform( vp, pt, m_xform );
+  CRhinoGetPoint::OnMouseMove( vp, flags, pt, p );
+}
 
-<span class="kt">void</span> <span class="n">CGetBlockInsertPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span>
-    <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span>
-    <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">m_idef</span> <span class="o">&amp;&amp;</span> <span class="n">m_bDraw</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoDisplayPipeline</span><span class="o">*</span> <span class="n">dp</span> <span class="o">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">DisplayPipeline</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">dp</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">dp</span><span class="o">-&gt;</span><span class="n">PushObjectColor</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-      <span class="n">dp</span><span class="o">-&gt;</span><span class="n">DrawObject</span><span class="p">(</span> <span class="n">m_idef</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_xform</span> <span class="p">);</span>
-      <span class="n">dp</span><span class="o">-&gt;</span><span class="n">PopObjectColor</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">}</span>
+void CGetBlockInsertPoint::DynamicDraw(
+    HDC hdc,
+    CRhinoViewport&amp; vp,
+    const ON_3dPoint&amp; pt
+    )
+{
+  if( m_idef &amp;&amp; m_bDraw )
+  {
+    CRhinoDisplayPipeline* dp = vp.DisplayPipeline();
+    if( dp )
+    {
+      dp-&gt;PushObjectColor( 0 );
+      dp-&gt;DrawObject( m_idef, &amp;m_xform );
+      dp-&gt;PopObjectColor();
+    }
+  }
+  CRhinoGetPoint::DynamicDraw( hdc, vp, pt );
+}
 
-<span class="kt">bool</span> <span class="n">CGetBlockInsertPoint</span><span class="o">::</span><span class="n">CalculateTransform</span><span class="p">(</span>
-    <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-    <span class="n">ON_Xform</span><span class="o">&amp;</span> <span class="n">xform</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">ON_3dVector</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pt</span> <span class="o">-</span> <span class="n">BasePoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">v</span><span class="p">.</span><span class="n">IsTiny</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">xform</span><span class="p">.</span><span class="n">Identity</span><span class="p">();</span>
-  <span class="k">else</span>
-    <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">v</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">xform</span><span class="p">.</span><span class="n">IsValid</span><span class="p">();</span>
-<span class="p">}</span>
+bool CGetBlockInsertPoint::CalculateTransform(
+    CRhinoViewport&amp; vp,
+    const ON_3dPoint&amp; pt,
+    ON_Xform&amp; xform
+    )
+{
+  bool rc = false;
+  ON_3dVector v = pt - BasePoint();
+  if( v.IsTiny() )
+    xform.Identity();
+  else
+    xform.Translation( v );
+  return xform.IsValid();
+}
 </code></pre>
-</div>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample code demonstrates how to insert a block definition into the Rhino document and allow the user to interactively pick the insertion point.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Prompt for instance definition to insert
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Name of block to insert"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Prompt for instance definition to insert
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Name of block to insert" );
+  gs.GetString();
+  if( gs.CommandResult() != success )
+    return gs.CommandResult();
 
-  <span class="n">ON_wString</span> <span class="n">idef_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">idef_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  ON_wString idef_name = gs.String();
+  idef_name.TrimLeftAndRight();
+  if( idef_name.IsEmpty() )
+    return nothing;
 
-  <span class="c1">// Find specified instance definition
-</span>  <span class="n">CRhinoInstanceDefinitionTable</span><span class="o">&amp;</span> <span class="n">idef_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_instance_definition_table</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">idef_index</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">.</span><span class="n">FindInstanceDefinition</span><span class="p">(</span> <span class="n">idef_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">idef_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to insert </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s">. Block not found.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">idef_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Find specified instance definition
+  CRhinoInstanceDefinitionTable&amp; idef_table = context.m_doc.m_instance_definition_table;
+  int idef_index = idef_table.FindInstanceDefinition( idef_name );
+  if( idef_index &lt; 0 )
+  {
+    RhinoApp().Print( L"Unable to insert \"%s\". Block not found.\n", idef_name );
+    return nothing;
+  }
 
-  <span class="c1">// Get instance definition
-</span>  <span class="k">const</span> <span class="n">CRhinoInstanceDefinition</span><span class="o">*</span> <span class="n">idef</span> <span class="o">=</span> <span class="n">idef_table</span><span class="p">[</span><span class="n">idef_index</span><span class="p">];</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">idef</span> <span class="o">|</span> <span class="n">idef</span><span class="o">-&gt;</span><span class="n">IsDeleted</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  // Get instance definition
+  const CRhinoInstanceDefinition* idef = idef_table[idef_index];
+  if( !idef | idef-&gt;IsDeleted() )
+    return nothing;
 
-  <span class="c1">// Pick an insert point
-</span>  <span class="n">CGetBlockInsertPoint</span> <span class="n">gp</span><span class="p">(</span> <span class="n">idef</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Insertion point"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">ON_origin</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Pick an insert point
+  CGetBlockInsertPoint gp( idef );
+  gp.SetCommandPrompt( L"Insertion point" );
+  gp.SetBasePoint( ON_origin );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// Get active view
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">view</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Get active view
+  CRhinoView* view = gp.View();
+  if( !view )
+  {
+    view = RhinoApp().ActiveView();
+    if( !view )
+      return failure;
+  }
 
-  <span class="c1">// Calculate final xform
-</span>  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CalculateTransform</span><span class="p">(</span><span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">(),</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">(),</span> <span class="n">xform</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">idef_table</span><span class="p">.</span><span class="n">AddInstanceObject</span><span class="p">(</span> <span class="n">idef_index</span><span class="p">,</span> <span class="n">xform</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  // Calculate final xform
+  ON_Xform xform;
+  if( gp.CalculateTransform(view-&gt;ActiveViewport(), gp.Point(), xform) )
+  {
+    idef_table.AddInstanceObject( idef_index, xform );
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 <h2 id="related-topics">Related Topics</h2>
 

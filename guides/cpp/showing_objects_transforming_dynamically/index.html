@@ -298,125 +298,124 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>The <code class="highlighter-rouge">CRhinoViewport</code> class has two member functions, <code class="highlighter-rouge">GetModelXform()</code> and <code class="highlighter-rouge">SetModelXform()</code>, that either retrieve or modify the model transformation matrix that is applied to objects before they are drawn.  The model transformation matrix is intended to be used for dynamic drawing of objects.  Note, the default model transformation matrix is the identity.</p>
+<p>The <code>CRhinoViewport</code> class has two member functions, <code>GetModelXform()</code> and <code>SetModelXform()</code>, that either retrieve or modify the model transformation matrix that is applied to objects before they are drawn.  The model transformation matrix is intended to be used for dynamic drawing of objects.  Note, the default model transformation matrix is the identity.</p>
 
-<p>Some of the Rhino command that use this technique to dynamically draw transforming objects include the <em>Move</em>, <em>Copy</em>, <em>Scale</em>, and <em>Rotate</em> commands.  These commands derive new <code class="highlighter-rouge">CRhinoGetPoint</code> classes and override the virtual <code class="highlighter-rouge">DynamicDraw()</code> member function to draw objects dynamically as the mouse moves during a point picking operation.</p>
+<p>Some of the Rhino command that use this technique to dynamically draw transforming objects include the <em>Move</em>, <em>Copy</em>, <em>Scale</em>, and <em>Rotate</em> commands.  These commands derive new <code>CRhinoGetPoint</code> classes and override the virtual <code>DynamicDraw()</code> member function to draw objects dynamically as the mouse moves during a point picking operation.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following is an sample <code class="highlighter-rouge">CRhinoGetPoint</code>-derived class that demonstrates how to dynamically draw transforming objects during a point picking operation.  In this sample, the transformation is a simple translation, like used in the <em>Move</em> command.</p>
+<p>The following is an sample <code>CRhinoGetPoint</code>-derived class that demonstrates how to dynamically draw transforming objects during a point picking operation.  In this sample, the transformation is a simple translation, like used in the <em>Move</em> command.</p>
 
 <p>First, the class declaration…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">////////////////////////////////////////////////////////////////////
+<pre><code class="language-cpp">////////////////////////////////////////////////////////////////////
 // CRhinoGetTranslationPoint declaration
-</span>
-<span class="k">class</span> <span class="nc">CRhinoGetTranslationPoint</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CRhinoGetPoint</span>
-<span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
 
-  <span class="n">CRhinoGetTranslationPoint</span><span class="p">();</span>
-  <span class="o">~</span><span class="n">CRhinoGetTranslationPoint</span><span class="p">()</span> <span class="p">{}</span>
+class CRhinoGetTranslationPoint : public CRhinoGetPoint
+{
+public:
 
-  <span class="c1">// CRhinoGetPoint overrides  
-</span>  <span class="kt">void</span> <span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">ON_3dPoint</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">BOOL</span> <span class="n">bShowDistanceInStatusBar</span> <span class="o">=</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="kt">void</span> <span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">p</span> <span class="p">);</span>
-  <span class="kt">void</span> <span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="p">);</span>
+  CRhinoGetTranslationPoint();
+  ~CRhinoGetTranslationPoint() {}
 
-  <span class="c1">// Additional helpers
-</span>  <span class="kt">void</span> <span class="n">AddObject</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="p">);</span>
-  <span class="kt">void</span> <span class="n">CalculateTranslation</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span> <span class="n">ON_Xform</span><span class="o">&amp;</span> <span class="n">xform</span> <span class="p">);</span>
+  // CRhinoGetPoint overrides  
+  void SetBasePoint( ON_3dPoint base_point, BOOL bShowDistanceInStatusBar = false );
+  void OnMouseMove( CRhinoViewport&amp; vp, UINT flags, const ON_3dPoint&amp; pt, const CPoint* p );
+  void DynamicDraw( HDC hdc, CRhinoViewport&amp; vp, const ON_3dPoint&amp; pt );
 
-<span class="k">private</span><span class="o">:</span>
-  <span class="n">ON_3dPoint</span> <span class="n">m_start_point</span><span class="p">;</span> <span class="c1">// starting point of translation
-</span>  <span class="n">ON_Xform</span> <span class="n">m_xform</span><span class="p">;</span> <span class="c1">// transformation matrix
-</span>  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*&gt;</span> <span class="n">m_objects</span><span class="p">;</span> <span class="c1">//objects to transform
-</span><span class="p">};</span>
+  // Additional helpers
+  void AddObject( const CRhinoObject* object );
+  void CalculateTranslation( const ON_3dPoint&amp; pt, ON_Xform&amp; xform );
 
-<span class="c1">////////////////////////////////////////////////////////////////////
+private:
+  ON_3dPoint m_start_point; // starting point of translation
+  ON_Xform m_xform; // transformation matrix
+  ON_SimpleArray&lt;const CRhinoObject*&gt; m_objects; //objects to transform
+};
+
+////////////////////////////////////////////////////////////////////
 // CRhinoGetTranslationPoint definition
-</span>
-<span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">CRhinoGetTranslationPoint</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">m_xform</span><span class="p">.</span><span class="n">Identity</span><span class="p">();</span>
-<span class="p">}</span>
 
-<span class="kt">void</span> <span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">AddObject</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_objects</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">object</span> <span class="p">);</span>
-<span class="p">}</span>
+CRhinoGetTranslationPoint::CRhinoGetTranslationPoint()
+{
+  m_xform.Identity();
+}
 
-<span class="kt">void</span> <span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">SetBasePoint</span><span class="p">(</span>
-      <span class="n">ON_3dPoint</span> <span class="n">base_point</span><span class="p">,</span>
-      <span class="n">BOOL</span> <span class="n">bShowDistanceInStatusBar</span>
-      <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">m_start_point</span> <span class="o">=</span> <span class="n">base_point</span><span class="p">;</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">bShowDistanceInStatusBar</span> <span class="p">);</span>
-<span class="p">}</span>
+void CRhinoGetTranslationPoint::AddObject( const CRhinoObject* object )
+{
+  m_objects.Append( object );
+}
 
-<span class="kt">void</span> <span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">CalculateTranslation</span><span class="p">(</span>
-      <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-      <span class="n">ON_Xform</span><span class="o">&amp;</span> <span class="n">xform</span>
-      <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dVector</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pt</span> <span class="o">-</span> <span class="n">m_start_point</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">v</span><span class="p">.</span><span class="n">IsTiny</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">xform</span><span class="p">.</span><span class="n">Identity</span><span class="p">();</span>
-  <span class="k">else</span>
-    <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">v</span> <span class="p">);</span>
-<span class="p">}</span>
+void CRhinoGetTranslationPoint::SetBasePoint(
+      ON_3dPoint base_point,
+      BOOL bShowDistanceInStatusBar
+      )
+{
+  m_start_point = base_point;
+  CRhinoGetPoint::SetBasePoint( base_point, bShowDistanceInStatusBar );
+}
 
-<span class="kt">void</span> <span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span>
-     <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-     <span class="n">UINT</span> <span class="n">flags</span><span class="p">,</span>
-     <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span><span class="p">,</span>
-     <span class="k">const</span> <span class="n">CPoint</span><span class="o">*</span> <span class="n">p</span>
-     <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Everytime the mouse moves, calculate the translation
-</span>  <span class="n">CalculateTranslation</span><span class="p">(</span> <span class="n">pt</span><span class="p">,</span> <span class="n">m_xform</span> <span class="p">);</span>
-  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">OnMouseMove</span><span class="p">(</span> <span class="n">vp</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">p</span> <span class="p">);</span>
-<span class="p">}</span>
+void CRhinoGetTranslationPoint::CalculateTranslation(
+      const ON_3dPoint&amp; pt,
+      ON_Xform&amp; xform
+      )
+{
+  ON_3dVector v = pt - m_start_point;
+  if( v.IsTiny() )
+    xform.Identity();
+  else
+    xform.Translation( v );
+}
 
-<span class="kt">void</span> <span class="n">CRhinoGetTranslationPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span>
-     <span class="n">HDC</span> <span class="n">hdc</span><span class="p">,</span>
-     <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span><span class="p">,</span>
-     <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">pt</span>
-     <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Time to draw our objects dynamically
-</span>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">m_objects</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">m_xform</span><span class="p">.</span><span class="n">IsIdentity</span><span class="p">()</span> <span class="o">==</span> <span class="nb">false</span> <span class="o">&amp;&amp;</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Color</span> <span class="n">saved_color</span> <span class="o">=</span> <span class="n">vp</span><span class="p">.</span><span class="n">DrawColor</span><span class="p">();</span>
-    <span class="n">ON_Xform</span> <span class="n">saved_model_xform</span><span class="p">;</span>
-    <span class="c1">// Save the current model transformation, we will
-</span>    <span class="c1">// need to restore it later
-</span>    <span class="n">vp</span><span class="p">.</span><span class="n">GetModelXform</span><span class="p">(</span> <span class="n">saved_model_xform</span> <span class="p">);</span>
-    <span class="c1">// Set the model transformation to ours
-</span>    <span class="n">vp</span><span class="p">.</span><span class="n">SetModelXform</span><span class="p">(</span> <span class="n">m_xform</span> <span class="p">);</span>
-    <span class="c1">// Draw all of the objects in our array
-</span>    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_objects</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="n">m_objects</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">object</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-        <span class="k">continue</span><span class="p">;</span>
-      <span class="n">vp</span><span class="p">.</span><span class="n">SetDrawColor</span><span class="p">(</span> <span class="n">object</span><span class="o">-&gt;</span><span class="n">ObjectDrawColor</span><span class="p">(</span><span class="n">TRUE</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">object</span><span class="o">-&gt;</span><span class="n">Draw</span><span class="p">(</span> <span class="n">vp</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">vp</span><span class="p">.</span><span class="n">InterruptDrawing</span><span class="p">()</span> <span class="p">)</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="c1">// Reset modified viewport members
-</span>    <span class="n">vp</span><span class="p">.</span><span class="n">SetModelXform</span><span class="p">(</span> <span class="n">saved_model_xform</span> <span class="p">);</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">SetDrawColor</span><span class="p">(</span> <span class="n">saved_color</span> <span class="p">);</span>
-  <span class="p">}</span>
+void CRhinoGetTranslationPoint::OnMouseMove(
+     CRhinoViewport&amp; vp,
+     UINT flags,
+     const ON_3dPoint&amp; pt,
+     const CPoint* p
+     )
+{
+  // Everytime the mouse moves, calculate the translation
+  CalculateTranslation( pt, m_xform );
+  CRhinoGetPoint::OnMouseMove( vp, flags, pt, p );
+}
 
-  <span class="c1">// Let the base class do its drawing too
-</span>  <span class="n">CRhinoGetPoint</span><span class="o">::</span><span class="n">DynamicDraw</span><span class="p">(</span> <span class="n">hdc</span><span class="p">,</span> <span class="n">vp</span><span class="p">,</span> <span class="n">pt</span> <span class="p">);</span>
-<span class="p">}</span>
+void CRhinoGetTranslationPoint::DynamicDraw(
+     HDC hdc,
+     CRhinoViewport&amp; vp,
+     const ON_3dPoint&amp; pt
+     )
+{
+  // Time to draw our objects dynamically
+  int i, count = m_objects.Count();
+  if( m_xform.IsIdentity() == false &amp;&amp; count &gt; 0 )
+  {
+    ON_Color saved_color = vp.DrawColor();
+    ON_Xform saved_model_xform;
+    // Save the current model transformation, we will
+    // need to restore it later
+    vp.GetModelXform( saved_model_xform );
+    // Set the model transformation to ours
+    vp.SetModelXform( m_xform );
+    // Draw all of the objects in our array
+    for( i = 0; i &lt; m_objects.Count(); i++ )
+    {
+      const CRhinoObject* object = m_objects[i];
+      if( object == 0 )
+        continue;
+      vp.SetDrawColor( object-&gt;ObjectDrawColor(TRUE) );
+      object-&gt;Draw( vp );
+      if( vp.InterruptDrawing() )
+        break;
+    }
+    // Reset modified viewport members
+    vp.SetModelXform( saved_model_xform );
+    vp.SetDrawColor( saved_color );
+  }
+
+  // Let the base class do its drawing too
+  CRhinoGetPoint::DynamicDraw( hdc, vp, pt );
+}
 </code></pre>
-</div>
 
         </article>
 

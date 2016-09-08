@@ -217,35 +217,34 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoCommand::result rc = CRhinoCommand::cancel;
 
-  <span class="n">ON_3dPoint</span> <span class="n">center</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">;</span>
-  <span class="n">ON_Sphere</span> <span class="n">sphere</span><span class="p">(</span> <span class="n">center</span><span class="p">,</span> <span class="n">radius</span> <span class="p">);</span>
-  <span class="n">ON_RevSurface</span><span class="o">*</span> <span class="n">sphere_srf</span> <span class="o">=</span> <span class="n">sphere</span><span class="p">.</span><span class="n">RevSurfaceForm</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">sphere_srf</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  ON_3dPoint center( 0.0, 0.0, 0.0 );
+  double radius = 5.0;
+  ON_Sphere sphere( center, radius );
+  ON_RevSurface* sphere_srf = sphere.RevSurfaceForm();
+  if( !sphere_srf )
+    return rc;
 
-  <span class="n">CRhinoSurfaceObject</span><span class="o">*</span> <span class="n">sphere_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoSurfaceObject</span><span class="p">();</span>
-  <span class="n">sphere_obj</span><span class="o">-&gt;</span><span class="n">SetSurface</span><span class="p">(</span> <span class="n">sphere_srf</span> <span class="p">);</span>
+  CRhinoSurfaceObject* sphere_obj = new CRhinoSurfaceObject();
+  sphere_obj-&gt;SetSurface( sphere_srf );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">sphere_obj</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">sphere_obj</span><span class="p">;</span>
-    <span class="n">sphere_obj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( context.m_doc.AddObject(sphere_obj) )
+  {
+    context.m_doc.Redraw();
+    rc = CRhinoCommand::success;
+  }
+  else
+  {
+    delete sphere_obj;
+    sphere_obj = NULL;
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

@@ -222,48 +222,47 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddNamedView</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">RhinoView</span> <span class="n">view</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetView</span><span class="p">(</span><span class="s">"Select view to adjust"</span><span class="p">,</span> <span class="k">out</span> <span class="n">view</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddNamedView(Rhino.RhinoDoc doc)
+  {
+    Rhino.Display.RhinoView view;
+    Rhino.Commands.Result rc = Rhino.Input.RhinoGet.GetView("Select view to adjust", out view);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">location</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">(</span><span class="s">"Camera Location"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">out</span> <span class="n">location</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    Rhino.Geometry.Point3d location;
+    rc = Rhino.Input.RhinoGet.GetPoint("Camera Location", false, out location);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetPoint</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Look At Location"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">lookat</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    Rhino.Input.Custom.GetPoint gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("Look At Location");
+    gp.DrawLineFromPoint(location, false);
+    gp.Get();
+    if (gp.CommandResult() != Rhino.Commands.Result.Success)
+      return gp.CommandResult();
+    Rhino.Geometry.Point3d lookat = gp.Point();
 
-    <span class="kt">string</span> <span class="n">name</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">name</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    string name = view.ActiveViewport.Name;
+    rc = Rhino.Input.RhinoGet.GetString("Name", true, ref name);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">RhinoViewport</span> <span class="n">vp</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">;</span>
-    <span class="c1">// save the current viewport projection
-</span>    <span class="n">vp</span><span class="p">.</span><span class="nf">PushViewProjection</span><span class="p">();</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">CameraUp</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Vector3d</span><span class="p">.</span><span class="n">ZAxis</span><span class="p">;</span>
-    <span class="n">vp</span><span class="p">.</span><span class="nf">SetCameraLocation</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">vp</span><span class="p">.</span><span class="nf">SetCameraDirection</span><span class="p">(</span><span class="n">lookat</span> <span class="p">-</span> <span class="n">location</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
+    Rhino.Display.RhinoViewport vp = view.ActiveViewport;
+    // save the current viewport projection
+    vp.PushViewProjection();
+    vp.CameraUp = Rhino.Geometry.Vector3d.ZAxis;
+    vp.SetCameraLocation(location, false);
+    vp.SetCameraDirection(lookat - location, true);
+    vp.Name = name;
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">NamedViews</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vp</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
-    <span class="n">view</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.NamedViews.Add(name, vp.Id);
+    view.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddNamedView(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -309,45 +308,44 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddNamedView</span><span class="p">():</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">view</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetView</span><span class="p">(</span><span class="s">"Select view to adjust"</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+def AddNamedView():
+    rc, view = Rhino.Input.RhinoGet.GetView("Select view to adjust")
+    if rc!=Rhino.Commands.Result.Success: return rc
 
-    <span class="n">rc</span><span class="p">,</span> <span class="n">location</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"Camera Location"</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+    rc, location = Rhino.Input.RhinoGet.GetPoint("Camera Location", False)
+    if rc!=Rhino.Commands.Result.Success: return rc
 
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Look At Location"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-    <span class="n">lookat</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.SetCommandPrompt("Look At Location")
+    gp.DrawLineFromPoint(location, False)
+    gp.Get()
+    if gp.CommandResult()!=Rhino.Commands.Result.Success:
+        return gp.CommandResult()
+    lookat = gp.Point()
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">Name</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+    name = view.ActiveViewport.Name
+    rc, name = Rhino.Input.RhinoGet.GetString("Name", True, name)
+    if rc!=Rhino.Commands.Result.Success: return rc
 
-    <span class="n">vp</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span>
-    <span class="c"># save the current viewport projection</span>
-    <span class="n">vp</span><span class="o">.</span><span class="n">PushViewProjection</span><span class="p">()</span>
-    <span class="n">vp</span><span class="o">.</span><span class="n">CameraUp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Vector3d</span><span class="o">.</span><span class="n">ZAxis</span>
-    <span class="n">vp</span><span class="o">.</span><span class="n">SetCameraLocation</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">vp</span><span class="o">.</span><span class="n">SetCameraDirection</span><span class="p">(</span><span class="n">lookat</span> <span class="o">-</span> <span class="n">location</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="n">vp</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="n">name</span>
+    vp = view.ActiveViewport
+    # save the current viewport projection
+    vp.PushViewProjection()
+    vp.CameraUp = Rhino.Geometry.Vector3d.ZAxis
+    vp.SetCameraLocation(location, False)
+    vp.SetCameraDirection(lookat - location, True)
+    vp.Name = name
 
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">NamedViews</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">vp</span><span class="o">.</span><span class="n">Id</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    scriptcontext.doc.NamedViews.Add(name, vp.Id)
+    view.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddNamedView</span><span class="p">()</span>
+if __name__=="__main__":
+    AddNamedView()
 </code></pre>
-</div>
 
 </div>
 

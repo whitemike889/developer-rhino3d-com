@@ -217,43 +217,42 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span> <span class="n">bottom_pt</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">bottom_radius</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="n">ON_Circle</span> <span class="n">bottom_circle</span><span class="p">(</span> <span class="n">bottom_pt</span><span class="p">,</span> <span class="n">bottom_radius</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  ON_3dPoint bottom_pt( 0.0, 0.0, 0.0 );
+  double bottom_radius = 2;
+  ON_Circle bottom_circle( bottom_pt, bottom_radius );
 
-  <span class="n">ON_3dPoint</span> <span class="n">top_pt</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span> <span class="p">);</span>
-  <span class="kt">double</span> <span class="n">top_radius</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="n">ON_Circle</span> <span class="n">top_circle</span><span class="p">(</span> <span class="n">top_pt</span><span class="p">,</span> <span class="n">top_radius</span> <span class="p">);</span>
+  ON_3dPoint top_pt( 0.0, 0.0, 10.0 );
+  double top_radius = 6;
+  ON_Circle top_circle( top_pt, top_radius );
 
-  <span class="n">ON_RevSurface</span><span class="o">*</span> <span class="n">revsrf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_RevSurface</span><span class="p">;</span>
-  <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="n">pShapeCurve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ON_LineCurve</span><span class="p">;</span>
-  <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_curve</span> <span class="o">=</span> <span class="n">pShapeCurve</span><span class="p">;</span>
-  <span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_dim</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">.</span><span class="n">from</span> <span class="o">=</span> <span class="n">bottom_circle</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">.</span><span class="n">to</span> <span class="o">=</span> <span class="n">top_circle</span><span class="p">.</span><span class="n">PointAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_t</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">.</span><span class="n">from</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">pShapeCurve</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">.</span><span class="n">to</span><span class="p">));</span>
-  <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_axis</span><span class="p">.</span><span class="n">from</span> <span class="o">=</span> <span class="n">bottom_circle</span><span class="p">.</span><span class="n">Center</span><span class="p">();</span>
-  <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_axis</span><span class="p">.</span><span class="n">to</span> <span class="o">=</span> <span class="n">top_circle</span><span class="p">.</span><span class="n">Center</span><span class="p">();</span>
-  <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_angle</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">revsrf</span><span class="o">-&gt;</span><span class="n">m_t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">ON_PI</span><span class="p">;</span>
+  ON_RevSurface* revsrf = new ON_RevSurface;
+  ON_LineCurve* pShapeCurve = new ON_LineCurve;
+  revsrf-&gt;m_curve = pShapeCurve;
+  pShapeCurve-&gt;m_dim = 3;
+  pShapeCurve-&gt;m_line.from = bottom_circle.PointAt(0);
+  pShapeCurve-&gt;m_line.to = top_circle.PointAt(0);
+  pShapeCurve-&gt;m_t.Set(0, pShapeCurve-&gt;m_line.from.DistanceTo(pShapeCurve-&gt;m_line.to));
+  revsrf-&gt;m_axis.from = bottom_circle.Center();
+  revsrf-&gt;m_axis.to = top_circle.Center();
+  revsrf-&gt;m_angle[0] = revsrf-&gt;m_t[0] = 0.0;
+  revsrf-&gt;m_angle[1] = revsrf-&gt;m_t[1] = 2.0*ON_PI;
 
-  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">tcone_brep</span> <span class="o">=</span> <span class="n">ON_BrepRevSurface</span><span class="p">(</span><span class="n">revsrf</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">tcone_brep</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">tcone_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoBrepObject</span><span class="p">();</span>
-    <span class="n">tcone_object</span><span class="o">-&gt;</span><span class="n">SetBrep</span><span class="p">(</span> <span class="n">tcone_brep</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span><span class="n">tcone_object</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="k">else</span>
-      <span class="k">delete</span> <span class="n">tcone_object</span><span class="p">;</span>
-  <span class="p">}</span>
+  ON_Brep* tcone_brep = ON_BrepRevSurface(revsrf, TRUE, TRUE );
+  if( tcone_brep )
+  {
+    CRhinoBrepObject* tcone_object = new CRhinoBrepObject();
+    tcone_object-&gt;SetBrep( tcone_brep );
+    if( context.m_doc.AddObject(tcone_object) )
+      context.m_doc.Redraw();
+    else
+      delete tcone_object;
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

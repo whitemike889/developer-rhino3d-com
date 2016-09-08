@@ -217,34 +217,33 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">IsCircle</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">obj</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Is the object a circle?
-</span>    <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_ArcCurve</span><span class="o">*</span> <span class="n">arc</span> <span class="o">=</span> <span class="n">ON_ArcCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">())</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">arc</span><span class="o">-&gt;</span><span class="n">IsCircle</span><span class="p">()</span> <span class="p">)</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="c1">// Is the object an curve that just looks like a circle?
-</span>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">ON_Curve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">())</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_NurbsCurve</span> <span class="n">nurb</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nurb</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_Arc</span> <span class="n">arc</span><span class="p">;</span>
-        <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveDoc</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">nurb</span><span class="p">.</span><span class="n">IsArc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arc</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">arc</span><span class="p">.</span><span class="n">IsCircle</span><span class="p">()</span>  <span class="p">)</span>
-          <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">bool IsCircle( const CRhinoObject* obj )
+{
+  bool rc = false;
+  if( obj )
+  {
+    // Is the object a circle?
+    if( const ON_ArcCurve* arc = ON_ArcCurve::Cast(obj-&gt;Geometry()) )
+    {
+      if( arc-&gt;IsCircle() )
+        rc = true;
+    }
+    // Is the object an curve that just looks like a circle?
+    else if( const ON_Curve* crv = ON_Curve::Cast(obj-&gt;Geometry()) )
+    {
+      ON_NurbsCurve nurb;
+      if( crv-&gt;GetNurbForm(nurb) )
+      {
+        ON_Arc arc;
+        double tol = ::RhinoApp().ActiveDoc()-&gt;AbsoluteTolerance();
+        if( nurb.IsArc(0, &amp;arc, tol) &amp;&amp; arc.IsCircle()  )
+          rc = true;
+      }
+    }
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

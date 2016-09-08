@@ -302,42 +302,41 @@
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">//Given a brep and a face index
-</span><span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span><span class="p">;</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">face_index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">face_ti_list</span><span class="p">;</span> <span class="c1">//trims indeces list
-</span><span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">face_ei_list</span><span class="p">;</span> <span class="c1">//edges indeces list
-</span>
-<span class="c1">//Get the BrepFace of the given index
-</span><span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">brep</span><span class="o">-&gt;</span><span class="n">Face</span><span class="p">(</span><span class="n">face_index</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">//Given a brep and a face index
+const ON_Brep* brep;
+const int face_index = 0;
+ON_SimpleArray&lt;int&gt; face_ti_list; //trims indeces list
+ON_SimpleArray&lt;int&gt; face_ei_list; //edges indeces list
 
-<span class="c1">//Get the loop of the face
-</span><span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">fli</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">fli</span> <span class="o">&lt;</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">LoopCount</span><span class="p">();</span> <span class="n">fli</span><span class="o">++</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ON_BrepLoop</span><span class="o">*</span> <span class="n">loop</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">Loop</span><span class="p">(</span> <span class="n">fli</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">loop</span> <span class="p">)</span>
-    <span class="k">continue</span><span class="p">;</span>
+//Get the BrepFace of the given index
+const ON_BrepFace* face = brep-&gt;Face(face_index);
+if( 0 == face )
+  return false;
 
-  <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">lti</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">lti</span> <span class="o">&lt;</span> <span class="n">loop</span><span class="o">-&gt;</span><span class="n">TrimCount</span><span class="p">();</span> <span class="n">lti</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">//Find the trim
-</span>    <span class="k">const</span> <span class="n">ON_BrepTrim</span><span class="o">*</span> <span class="n">trim</span> <span class="o">=</span> <span class="n">loop</span><span class="o">-&gt;</span><span class="n">Trim</span><span class="p">(</span> <span class="n">lti</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">trim</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="n">face_ti_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">trim</span><span class="o">-&gt;</span><span class="n">m_trim_index</span> <span class="p">);</span>
+//Get the loop of the face
+for( int fli = 0; fli &lt; face-&gt;LoopCount(); fli++ )
+{
+  const ON_BrepLoop* loop = face-&gt;Loop( fli );
+  if( 0 == loop )
+    continue;
 
-    <span class="c1">//Find the edge of that trim
-</span>    <span class="c1">//Each trim has exactly one edge attached to it
-</span>    <span class="k">const</span> <span class="n">ON_BrepEdge</span><span class="o">*</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">trim</span><span class="o">-&gt;</span><span class="n">Edge</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">edge</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="n">face_ei_list</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">m_edge_index</span> <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  for( int lti = 0; lti &lt; loop-&gt;TrimCount(); lti++ )
+  {
+    //Find the trim
+    const ON_BrepTrim* trim = loop-&gt;Trim( lti );
+    if( 0 == trim )
+      continue;
+    face_ti_list.Append( trim-&gt;m_trim_index );
+
+    //Find the edge of that trim
+    //Each trim has exactly one edge attached to it
+    const ON_BrepEdge* edge = trim-&gt;Edge();
+    if( 0 == edge )
+      continue;
+    face_ei_list.Append( edge-&gt;m_edge_index );
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,58 +217,57 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">AFX_MANAGE_STATE</span><span class="p">(</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoModuleState</span><span class="p">()</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  AFX_MANAGE_STATE( ::RhinoApp().RhinoModuleState() );
 
-  <span class="n">CWnd</span><span class="o">*</span> <span class="n">pMainWnd</span> <span class="o">=</span> <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">pMainWnd</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  CWnd* pMainWnd = CWnd::FromHandle( RhinoApp().MainWnd() );
+  if( 0 == pMainWnd )
+    return failure;
 
-  <span class="n">CRhinoGetFileDialog</span> <span class="n">gf</span><span class="p">;</span>
-  <span class="n">gf</span><span class="p">.</span><span class="n">SetScriptMode</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">IsInteractive</span><span class="p">()</span> <span class="o">?</span> <span class="n">FALSE</span> <span class="o">:</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">BOOL</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">DisplayFileDialog</span><span class="p">(</span> <span class="n">CRhinoGetFileDialog</span><span class="o">::</span><span class="n">save_bitmap_dialog</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pMainWnd</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
+  CRhinoGetFileDialog gf;
+  gf.SetScriptMode( context.IsInteractive() ? FALSE : TRUE );
+  BOOL rc = gf.DisplayFileDialog( CRhinoGetFileDialog::save_bitmap_dialog, 0, pMainWnd );
+  if( !rc )
+    return cancel;
 
-  <span class="n">ON_wString</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">gf</span><span class="p">.</span><span class="n">FileName</span><span class="p">();</span>
-  <span class="n">filename</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">filename</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
+  ON_wString filename = gf.FileName();
+  filename.TrimLeftAndRight();
+  if( filename.IsEmpty() )
+    return nothing;
 
-  <span class="c1">// Wait for the dialog to disappear. Otherwise,
-</span>  <span class="c1">// we might see dialog artifacts in our image.
-</span>  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Wait</span><span class="p">(</span> <span class="mi">500</span> <span class="p">);</span>
+  // Wait for the dialog to disappear. Otherwise,
+  // we might see dialog artifacts in our image.
+  RhinoApp().Wait( 500 );
 
-  <span class="n">CMDIFrameWnd</span><span class="o">*</span> <span class="n">pFrameWnd</span> <span class="o">=</span> <span class="p">(</span><span class="n">CMDIFrameWnd</span><span class="o">*</span><span class="p">)</span><span class="n">pMainWnd</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pFrameWnd</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CWnd</span><span class="o">*</span> <span class="n">pClientWnd</span> <span class="o">=</span> <span class="n">CWnd</span><span class="o">::</span><span class="n">FromHandle</span><span class="p">(</span> <span class="n">pFrameWnd</span><span class="o">-&gt;</span><span class="n">m_hWndMDIClient</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">pClientWnd</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CClientDC</span> <span class="n">srcDC</span><span class="p">(</span> <span class="n">pClientWnd</span> <span class="p">);</span>
+  CMDIFrameWnd* pFrameWnd = (CMDIFrameWnd*)pMainWnd;
+  if( pFrameWnd )
+  {
+    CWnd* pClientWnd = CWnd::FromHandle( pFrameWnd-&gt;m_hWndMDIClient );
+    if( pClientWnd )
+    {
+      CClientDC srcDC( pClientWnd );
 
-      <span class="n">CRect</span> <span class="n">rect</span><span class="p">;</span>
-      <span class="n">pClientWnd</span><span class="o">-&gt;</span><span class="n">GetClientRect</span><span class="p">(</span> <span class="n">rect</span> <span class="p">);</span>
+      CRect rect;
+      pClientWnd-&gt;GetClientRect( rect );
 
-      <span class="n">CRhinoDib</span> <span class="n">dib</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">dib</span><span class="p">.</span><span class="n">CreateDib</span><span class="p">(</span><span class="n">rect</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span> <span class="n">rect</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span> <span class="mi">24</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">CDC</span><span class="o">*</span> <span class="n">dstDC</span> <span class="o">=</span> <span class="n">dib</span><span class="p">;</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">dstDC</span> <span class="p">)</span>
-        <span class="p">{</span>
-          <span class="n">dstDC</span><span class="o">-&gt;</span><span class="n">BitBlt</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rect</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span> <span class="n">rect</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">srcDC</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SRCCOPY</span> <span class="p">);</span>
-          <span class="n">dib</span><span class="p">.</span><span class="n">CopyToClipboard</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-          <span class="n">dib</span><span class="p">.</span><span class="n">WriteToFile</span><span class="p">(</span> <span class="n">filename</span> <span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      CRhinoDib dib;
+      if( dib.CreateDib(rect.Width(), rect.Height(), 24, true) )
+      {
+        CDC* dstDC = dib;
+        if( dstDC )
+        {
+          dstDC-&gt;BitBlt( 0, 0, rect.Width(), rect.Height(), &amp;srcDC, 0, 0, SRCCOPY );
+          dib.CopyToClipboard( 0 );
+          dib.WriteToFile( filename );
+        }
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

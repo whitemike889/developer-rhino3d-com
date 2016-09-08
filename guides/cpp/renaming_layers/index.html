@@ -298,77 +298,76 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Rhino layers (<code class="highlighter-rouge">CRhinoLayer</code>) are stored on a layer table (<code class="highlighter-rouge">CRhinoLayerTable</code>) which is located on the active document.  The process for modifying an existing layer, such as changing its name, is:</p>
+<p>Rhino layers (<code>CRhinoLayer</code>) are stored on a layer table (<code>CRhinoLayerTable</code>) which is located on the active document.  The process for modifying an existing layer, such as changing its name, is:</p>
 
 <ol>
   <li>Get the existing layer.</li>
   <li>Make a copy of it.</li>
   <li>Modify the copy.</li>
-  <li>Call <code class="highlighter-rouge">CRhinoLayerTable::ModifyLayer()</code>.</li>
+  <li>Call <code>CRhinoLayerTable::ModifyLayer()</code>.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following code sample demonstrates how to rename an existing layer…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTestSdk</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Get the layer name
-</span>  <span class="n">CRhinoGetString</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Name of layer to rename"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTestSdk::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  // Get the layer name
+  CRhinoGetString gs;
+  gs.SetCommandPrompt( L"Name of layer to rename" );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Validate the string
-</span>  <span class="n">ON_wString</span> <span class="n">layer_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">layer_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Validate the string
+  ON_wString layer_name = gs.String();
+  layer_name.TrimLeftAndRight();
+  if( layer_name.IsEmpty() )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Get a reference to the layer table  
-</span>  <span class="n">CRhinoLayerTable</span><span class="o">&amp;</span> <span class="n">layer_table</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">;</span>
+  // Get a reference to the layer table  
+  CRhinoLayerTable&amp; layer_table = context.m_doc.m_layer_table;
 
-  <span class="c1">// Find the layer
-</span>  <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">FindLayer</span><span class="p">(</span> <span class="n">layer_name</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Layer </span><span class="se">\"</span><span class="s">%s</span><span class="se">\"</span><span class="s"> does not exist.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">layer_name</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Find the layer
+  int layer_index = layer_table.FindLayer( layer_name );
+  if( layer_index &lt; 0 )
+  {
+    RhinoApp().Print( L"Layer \"%s\" does not exist.\n", layer_name );
+    return CRhinoCommand::cancel;
+  }
 
-  <span class="c1">// Get the new layer name  
-</span>  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New layer name"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetString</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Get the new layer name  
+  gs.SetCommandPrompt( L"New layer name" );
+  gs.GetString();
+  if( gs.CommandResult() != CRhinoCommand::success )
+    return gs.CommandResult();
 
-  <span class="c1">// Validate the string
-</span>  <span class="n">ON_wString</span> <span class="n">new_name</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">String</span><span class="p">();</span>
-  <span class="n">layer_name</span><span class="p">.</span><span class="n">TrimLeftAndRight</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_name</span><span class="p">.</span><span class="n">IsEmpty</span><span class="p">()</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Validate the string
+  ON_wString new_name = gs.String();
+  layer_name.TrimLeftAndRight();
+  if( layer_name.IsEmpty() )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Compare both names  
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">layer_name</span><span class="p">.</span><span class="n">CompareNoCase</span><span class="p">(</span><span class="n">new_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  // Compare both names  
+  if( layer_name.CompareNoCase(new_name) == 0 )
+    return CRhinoCommand::nothing;
 
-  <span class="c1">// Get the layer
-</span>  <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">layer_index</span><span class="p">];</span>
+  // Get the layer
+  const CRhinoLayer&amp; layer = layer_table[layer_index];
 
-  <span class="c1">// Make a copy of it, and modify the name
-</span>  <span class="n">ON_Layer</span> <span class="n">onlayer</span><span class="p">(</span> <span class="n">layer</span> <span class="p">);</span>
-  <span class="n">onlayer</span><span class="p">.</span><span class="n">SetLayerName</span><span class="p">(</span> <span class="n">new_name</span> <span class="p">);</span>
+  // Make a copy of it, and modify the name
+  ON_Layer onlayer( layer );
+  onlayer.SetLayerName( new_name );
 
-  <span class="c1">// Modify the exising layer with the new definition  
-</span>  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">ModifyLayer</span><span class="p">(</span><span class="n">onlayer</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
+  // Modify the exising layer with the new definition  
+  CRhinoCommand::result rc = CRhinoCommand::cancel;
+  if( layer_table.ModifyLayer(onlayer, layer_index) )
+    rc = CRhinoCommand::success;
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -298,87 +298,84 @@
 
 <h2 id="problem">Problem</h2>
 
-<p>You may run into problems determining the length of an <code class="highlighter-rouge">ON_NurbsCurve</code> created by calling <code class="highlighter-rouge">ON_Curve::GetNurbForm</code>.  The following block of code only gets the length of the <code class="highlighter-rouge">ON_Curve</code> object, not the ON_NurbsCurve object.</p>
+<p>You may run into problems determining the length of an <code>ON_NurbsCurve</code> created by calling <code>ON_Curve::GetNurbForm</code>.  The following block of code only gets the length of the <code>ON_Curve</code> object, not the ON_NurbsCurve object.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandFooBar</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandFooBar::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* curve = go.Object(0).Curve();
+  if( 0 == curve )
+    return failure;
 
-  <span class="kt">double</span> <span class="n">curve_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">GetLength</span><span class="p">(</span><span class="o">&amp;</span><span class="n">curve_length</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"ON_Curve::GetLength() = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">curve_length</span> <span class="p">);</span>
+  double curve_length = 0.0;
+  if( curve-&gt;GetLength(&amp;curve_length) )
+    RhinoApp().Print( L"ON_Curve::GetLength() = %g\n", curve_length );
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nurbs_curve</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nurbs_curve</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">nurbs_curve_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">nurbs_curve</span><span class="p">.</span><span class="n">GetLength</span><span class="p">(</span><span class="o">&amp;</span><span class="n">nurbs_curve_length</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"ON_NurbsCurve::GetLength() = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">nurbs_curve_length</span> <span class="p">);</span>
-  <span class="p">}</span>
+  ON_NurbsCurve nurbs_curve;
+  if( curve-&gt;GetNurbForm(nurbs_curve) )
+  {
+    double nurbs_curve_length = 0.0;
+    if( nurbs_curve.GetLength(&amp;nurbs_curve_length) )
+      RhinoApp().Print( L"ON_NurbsCurve::GetLength() = %g\n", nurbs_curve_length );
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 <p>What is going wrong?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>There is nothing wrong with the code above.  Rather, this exposes a flaw in Microsoft Visual C++ and the way it deals with stack variables with modified <em>vtables</em>.  The problem might sound complicated, but the solution is rather easy.  Just make a simple function that you can pass your <code class="highlighter-rouge">ON_NurbsCurve</code> object to that will calculate the curve length for you.  For example, the function below should work for most developers:</p>
+<p>There is nothing wrong with the code above.  Rather, this exposes a flaw in Microsoft Visual C++ and the way it deals with stack variables with modified <em>vtables</em>.  The problem might sound complicated, but the solution is rather easy.  Just make a simple function that you can pass your <code>ON_NurbsCurve</code> object to that will calculate the curve length for you.  For example, the function below should work for most developers:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">BOOL</span> <span class="nf">ON_NurbsCurve_GetLength</span><span class="p">(</span>
-        <span class="k">const</span> <span class="n">ON_NurbsCurve</span><span class="o">&amp;</span> <span class="n">curve</span><span class="p">,</span>
-        <span class="kt">double</span><span class="o">*</span> <span class="n">length</span><span class="p">,</span>
-        <span class="kt">double</span> <span class="n">fractional_tolerance</span> <span class="o">=</span> <span class="mf">1.0e-8</span><span class="p">,</span>
-        <span class="k">const</span> <span class="n">ON_Interval</span><span class="o">*</span> <span class="n">sub_domain</span> <span class="o">=</span> <span class="nb">NULL</span>
-        <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="n">curve</span><span class="p">.</span><span class="n">GetLength</span><span class="p">(</span> <span class="n">length</span><span class="p">,</span> <span class="n">fractional_tolerance</span><span class="p">,</span> <span class="n">sub_domain</span> <span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">BOOL ON_NurbsCurve_GetLength(
+        const ON_NurbsCurve&amp; curve,
+        double* length,
+        double fractional_tolerance = 1.0e-8,
+        const ON_Interval* sub_domain = NULL
+        )
+{
+  return curve.GetLength( length, fractional_tolerance, sub_domain );
+}
 </code></pre>
-</div>
 
 <p>Then, your code would look like this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandFooBar</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandFooBar::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* curve = go.Object(0).Curve();
+  if( 0 == curve )
+    return failure;
 
-  <span class="kt">double</span> <span class="n">curve_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">GetLength</span><span class="p">(</span><span class="o">&amp;</span><span class="n">curve_length</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"ON_Curve::GetLength() = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">curve_length</span> <span class="p">);</span>
+  double curve_length = 0.0;
+  if( curve-&gt;GetLength(&amp;curve_length) )
+    RhinoApp().Print( L"ON_Curve::GetLength() = %g\n", curve_length );
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nurbs_curve</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">GetNurbForm</span><span class="p">(</span><span class="n">nurbs_curve</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">nurbs_curve_length</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">ON_NurbsCurve_GetLength</span><span class="p">(</span><span class="n">nurbs_curve</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">nurbs_curve_length</span><span class="p">)</span> <span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"ON_NurbsCurve::GetLength() = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">nurbs_curve_length</span> <span class="p">);</span>
-  <span class="p">}</span>
+  ON_NurbsCurve nurbs_curve;
+  if( curve-&gt;GetNurbForm(nurbs_curve) )
+  {
+    double nurbs_curve_length = 0.0;
+    if( ON_NurbsCurve_GetLength(nurbs_curve, &amp;nurbs_curve_length) )
+      RhinoApp().Print( L"ON_NurbsCurve::GetLength() = %g\n", nurbs_curve_length );
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,25 +217,24 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( 0 == view )
+    return CRhinoCommand::failure;
 
-  <span class="n">CRhinoViewport</span><span class="o">&amp;</span> <span class="n">vp</span> <span class="o">=</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">();</span>
+  CRhinoViewport&amp; vp = view-&gt;ActiveViewport();
 
-  <span class="k">const</span> <span class="n">CDisplayPipelineAttributes</span><span class="o">*</span> <span class="n">pStdAttrs</span> <span class="o">=</span> <span class="n">CRhinoDisplayAttrsMgr</span><span class="o">::</span><span class="n">StdGhostedAttrs</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pStdAttrs</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">vp</span><span class="p">.</span><span class="n">SetDisplayMode</span><span class="p">(</span> <span class="n">pStdAttrs</span><span class="o">-&gt;</span><span class="n">Id</span><span class="p">()</span> <span class="p">);</span>
-    <span class="n">view</span><span class="o">-&gt;</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  const CDisplayPipelineAttributes* pStdAttrs = CRhinoDisplayAttrsMgr::StdGhostedAttrs();
+  if( pStdAttrs )
+  {
+    vp.SetDisplayMode( pStdAttrs-&gt;Id() );
+    view-&gt;Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

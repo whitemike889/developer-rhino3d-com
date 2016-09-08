@@ -315,64 +315,63 @@
 
 <h2 id="problem">Problem</h2>
 
-<p>You have found that <code class="highlighter-rouge">RhinoUnifyMeshNormals</code> C/C++ functions seems to behave differently than the <em>UnifyMeshNormals</em> command.  How can one achieve the same functionality in a plugin?</p>
+<p>You have found that <code>RhinoUnifyMeshNormals</code> C/C++ functions seems to behave differently than the <em>UnifyMeshNormals</em> command.  How can one achieve the same functionality in a plugin?</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>In addition to calling the <code class="highlighter-rouge">RhinoUnifyMeshNormals</code> function, the <em>UnifyMeshNormals</em> command also recomputes the mesh’s vertex normals, based on the new face normals, using <code class="highlighter-rouge">ON_Mesh::ComputeVertexNormals</code>.</p>
+<p>In addition to calling the <code>RhinoUnifyMeshNormals</code> function, the <em>UnifyMeshNormals</em> command also recomputes the mesh’s vertex normals, based on the new face normals, using <code>ON_Mesh::ComputeVertexNormals</code>.</p>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample demonstrates this.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select mesh to unify normals"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">mesh_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select mesh to unify normals" );
+  go.SetGeometryFilter( CRhinoGetObject::mesh_object );
+  go.GetObjects( 1, 1 );
+  CRhinoCommand::result rc = go.CommandResult();
+  if( rc != CRhinoCommand::success )
+    return rc;
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Mesh</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">mesh</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef ref = go.Object(0);
+  const ON_Mesh* mesh = ref.Mesh();
+  if( 0 == mesh )
+    return CRhinoCommand::failure;
 
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">ON_Mesh</span><span class="o">*</span> <span class="n">new_mesh</span> <span class="o">=</span> <span class="n">RhinoUnifyMeshNormals</span><span class="p">(</span> <span class="o">*</span><span class="n">mesh</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">count</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">new_mesh</span> <span class="o">&amp;&amp;</span> <span class="n">new_mesh</span><span class="o">-&gt;</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">new_mesh</span><span class="o">-&gt;</span><span class="n">ComputeVertexNormals</span><span class="p">();</span>
+  int count = 0;
+  ON_Mesh* new_mesh = RhinoUnifyMeshNormals( *mesh, 0, false, &amp;count );
+  if( new_mesh &amp;&amp; new_mesh-&gt;IsValid() )
+  {
+    new_mesh-&gt;ComputeVertexNormals();
 
-    <span class="n">CRhinoMeshObject</span><span class="o">*</span> <span class="n">new_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoMeshObject</span><span class="p">();</span>
-    <span class="n">new_obj</span><span class="o">-&gt;</span><span class="n">SetMesh</span><span class="p">(</span> <span class="n">new_mesh</span> <span class="p">);</span>
+    CRhinoMeshObject* new_obj = new CRhinoMeshObject();
+    new_obj-&gt;SetMesh( new_mesh );
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">ref</span><span class="p">,</span> <span class="n">new_obj</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+    context.m_doc.ReplaceObject( ref, new_obj );
+    context.m_doc.Redraw();
 
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Reversed the orientation of %d faces.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">count</span> <span class="p">);</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">!=</span> <span class="n">count</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to unify mesh normals.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"All face normals are already oriented in the same direction.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    RhinoApp().Print( L"Reversed the orientation of %d faces.\n", count );
+    rc = CRhinoCommand::success;
+  }
+  else
+  {
+    if( 0 != count )
+    {
+      RhinoApp().Print( L"Unable to unify mesh normals.\n" );
+      rc = CRhinoCommand::failure;
+    }
+    else
+    {
+      RhinoApp().Print( L"All face normals are already oriented in the same direction.\n" );
+      rc = CRhinoCommand::nothing;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

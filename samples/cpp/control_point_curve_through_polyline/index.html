@@ -217,37 +217,36 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="nf">RhControlPointsCurveThroughPolyline</span><span class="p">(</span>
-    <span class="k">const</span> <span class="n">ON_Polyline</span><span class="o">&amp;</span> <span class="n">polyline</span><span class="p">,</span>
-    <span class="kt">int</span> <span class="n">degree</span>
-    <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">polyline</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<pre><code class="language-cpp">ON_NurbsCurve* RhControlPointsCurveThroughPolyline(
+    const ON_Polyline&amp; polyline,
+    int degree
+    )
+{
+  const int count = polyline.Count();
+  if( count &lt; 2 )
+    return 0;
 
-  <span class="n">degree</span> <span class="o">=</span> <span class="p">(</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="n">degree</span><span class="p">)</span> <span class="o">?</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">degree</span><span class="p">;</span>
+  degree = ( count &lt;= degree) ? count - 1 : degree;
 
-  <span class="n">ON_NurbsCurve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="n">ON_NurbsCurve</span><span class="o">::</span><span class="n">New</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">curve</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">polyline</span><span class="p">.</span><span class="n">IsClosed</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">CreatePeriodicUniformNurbs</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">polyline</span> <span class="p">);</span>
-    <span class="k">else</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">curve</span><span class="o">-&gt;</span><span class="n">CreateClampedUniformNurbs</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="n">degree</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">polyline</span> <span class="p">);</span>
+  ON_NurbsCurve* curve = ON_NurbsCurve::New();
+  if( curve )
+  {
+    bool rc = false;
+    if( polyline.IsClosed() )
+      rc = curve-&gt;CreatePeriodicUniformNurbs( 3, degree + 1, count - 1, polyline );
+    else
+      rc = curve-&gt;CreateClampedUniformNurbs( 3, degree + 1, count, polyline );
 
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">delete</span> <span class="n">curve</span><span class="p">;</span>
-      <span class="n">curve</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    if( !rc )
+    {
+      delete curve;
+      curve = 0;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">curve</span><span class="p">;</span>
-<span class="p">}</span>
+  return curve;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

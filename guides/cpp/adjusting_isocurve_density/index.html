@@ -319,32 +319,31 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>The isocurve density for surface object is stored on the object’s attributes.  For C/C++ plugins, this would be the <code class="highlighter-rouge">CRhinoObjectAttributes</code> and <code class="highlighter-rouge">ON_3dmObjectAttributes</code> classes.  Just set the <code class="highlighter-rouge">m_wire_density</code> property.  Note: setting this property to zero (0) will disable the display of isocurves for that object.</p>
+<p>The isocurve density for surface object is stored on the object’s attributes.  For C/C++ plugins, this would be the <code>CRhinoObjectAttributes</code> and <code>ON_3dmObjectAttributes</code> classes.  Just set the <code>m_wire_density</code> property.  Note: setting this property to zero (0) will disable the display of isocurves for that object.</p>
 
 <h2 id="example">Example</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandFooBar</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">brep_obj</span> <span class="o">=</span> <span class="n">CRhinoBrepObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">()</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">brep_obj</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoObjectAttributes</span> <span class="n">atts</span> <span class="o">=</span> <span class="n">brep_obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-      <span class="n">atts</span><span class="p">.</span><span class="n">m_wire_density</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// for example
-</span>      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">objref</span><span class="p">,</span> <span class="n">atts</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandFooBar::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() == CRhinoCommand::success )
+  {
+    const CRhinoObjRef&amp; objref = go.Object(0);
+    const CRhinoBrepObject* brep_obj = CRhinoBrepObject::Cast( objref.Object() );
+    if( brep_obj )
+    {
+      CRhinoObjectAttributes atts = brep_obj-&gt;Attributes();
+      atts.m_wire_density = 3; // for example
+      context.m_doc.ModifyObjectAttributes( objref, atts );
+      context.m_doc.Redraw();
+    }
+  }
 
-  <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-<span class="p">}</span>
+  return go.CommandResult();
+}
 </code></pre>
-</div>
 
         </article>
 

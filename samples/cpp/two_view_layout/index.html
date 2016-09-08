@@ -217,59 +217,58 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommand2View</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dmView</span> <span class="n">views</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-  <span class="kt">double</span> <span class="n">def_size</span> <span class="o">=</span> <span class="mf">15.0</span><span class="p">;</span>
-  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span><span class="p">;</span>
-  <span class="n">bbox</span><span class="p">.</span><span class="n">m_min</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="o">-</span><span class="n">def_size</span><span class="p">,</span> <span class="o">-</span><span class="n">def_size</span><span class="p">,</span> <span class="o">-</span><span class="n">def_size</span> <span class="p">);</span>
-  <span class="n">bbox</span><span class="p">.</span><span class="n">m_max</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span>  <span class="n">def_size</span><span class="p">,</span> <span class="n">def_size</span><span class="p">,</span> <span class="n">def_size</span> <span class="p">);</span>
-  <span class="n">ON_3dPoint</span> <span class="n">target</span> <span class="o">=</span> <span class="n">ON_origin</span><span class="p">;</span>
-  <span class="k">const</span> <span class="n">CRhinoAppViewSettings</span><span class="o">&amp;</span> <span class="n">view_settings</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">AppSettings</span><span class="p">().</span><span class="n">ViewSettings</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommand2View::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_3dmView views[2];
+  double def_size = 15.0;
+  ON_BoundingBox bbox;
+  bbox.m_min.Set( -def_size, -def_size, -def_size );
+  bbox.m_max.Set(  def_size, def_size, def_size );
+  ON_3dPoint target = ON_origin;
+  const CRhinoAppViewSettings&amp; view_settings = RhinoApp().AppSettings().ViewSettings();
 
-  <span class="c1">// top view
-</span>  <span class="p">{</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_name</span> <span class="o">=</span> <span class="s">L"Top"</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_target</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
-    <span class="n">ON_3dVector</span> <span class="n">dir</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">100.0</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraLocation</span><span class="p">(</span> <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_target</span> <span class="o">-</span> <span class="n">dir</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraDirection</span><span class="p">(</span> <span class="n">dir</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraUp</span><span class="p">(</span> <span class="n">ON_yaxis</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetProjection</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">parallel_view</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetScreenPort</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">Extents</span><span class="p">(</span> <span class="n">atan</span><span class="p">(</span><span class="mf">12.0</span> <span class="o">/</span> <span class="n">view_settings</span><span class="p">.</span><span class="n">m_camera_lense_length</span><span class="p">),</span> <span class="n">bbox</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_cplane</span><span class="p">.</span><span class="n">m_plane</span> <span class="o">=</span> <span class="n">ON_xy_plane</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_left</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_right</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_top</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_bottom</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-  <span class="p">}</span>
+  // top view
+  {
+    views[0].m_name = L"Top";
+    views[0].m_target = target;
+    ON_3dVector dir( 0.0, 0.0, -100.0 );
+    views[0].m_vp.SetCameraLocation( views[0].m_target - dir );
+    views[0].m_vp.SetCameraDirection( dir );
+    views[0].m_vp.SetCameraUp( ON_yaxis );
+    views[0].m_vp.SetProjection( ON::parallel_view );
+    views[0].m_vp.SetScreenPort( 0, 100, 100, 0, 0, 1 );
+    views[0].m_vp.Extents( atan(12.0 / view_settings.m_camera_lense_length), bbox );
+    views[0].m_cplane.m_plane = ON_xy_plane;
+    views[0].m_position.m_wnd_left = 0.0;
+    views[0].m_position.m_wnd_right = 0.5;
+    views[0].m_position.m_wnd_top = 0.0;
+    views[0].m_position.m_wnd_bottom = 1.0;
+  }
 
-  <span class="c1">// perspective view
-</span>  <span class="p">{</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_name</span> <span class="o">=</span> <span class="s">L"Perspective"</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_target</span> <span class="o">=</span> <span class="n">target</span><span class="p">;</span>
-    <span class="n">ON_3dVector</span> <span class="n">dir</span><span class="p">(</span> <span class="o">-</span><span class="mf">43.30</span><span class="p">,</span> <span class="mf">75.00</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.00</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraLocation</span><span class="p">(</span> <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_target</span> <span class="o">-</span> <span class="n">dir</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraDirection</span><span class="p">(</span> <span class="n">dir</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetCameraUp</span><span class="p">(</span> <span class="n">ON_zaxis</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetProjection</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">perspective_view</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">SetScreenPort</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_vp</span><span class="p">.</span><span class="n">Extents</span><span class="p">(</span> <span class="n">atan</span><span class="p">(</span><span class="mf">12.0</span> <span class="o">/</span> <span class="n">view_settings</span><span class="p">.</span><span class="n">m_camera_lense_length</span><span class="p">),</span> <span class="n">bbox</span> <span class="p">);</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">m_cplane</span><span class="p">.</span><span class="n">m_plane</span> <span class="o">=</span> <span class="n">ON_xy_plane</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_left</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_right</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_top</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="n">views</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">m_position</span><span class="p">.</span><span class="n">m_wnd_bottom</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-  <span class="p">}</span>
+  // perspective view
+  {
+    views[1].m_name = L"Perspective";
+    views[1].m_target = target;
+    ON_3dVector dir( -43.30, 75.00, -50.00 );
+    views[1].m_vp.SetCameraLocation( views[1].m_target - dir );
+    views[1].m_vp.SetCameraDirection( dir );
+    views[1].m_vp.SetCameraUp( ON_zaxis );
+    views[1].m_vp.SetProjection( ON::perspective_view );
+    views[1].m_vp.SetScreenPort( 0, 100, 100, 0, 0, 1 );
+    views[1].m_vp.Extents( atan(12.0 / view_settings.m_camera_lense_length), bbox );
+    views[0].m_cplane.m_plane = ON_xy_plane;
+    views[1].m_position.m_wnd_left = 0.5;
+    views[1].m_position.m_wnd_right = 1.0;
+    views[1].m_position.m_wnd_top = 0.0;
+    views[1].m_position.m_wnd_bottom = 1.0;
+  }
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceModelViews</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="n">views</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  context.m_doc.ReplaceModelViews( 2, views );
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

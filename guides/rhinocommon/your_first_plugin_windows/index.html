@@ -449,51 +449,45 @@
 <ol>
   <li>Open <strong>HelloRhinoCommonCommand.cs</strong> in Visual Studio’s Source Editor (if it isn’t already).</li>
   <li>
-    <p>Notice that <code class="highlighter-rouge">HelloRhinoCommonCommand</code> inherits from <code class="highlighter-rouge">Command</code> …</p>
+    <p>Notice that <code>HelloRhinoCommonCommand</code> inherits from <code>Command</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public class HelloRhinoCommonCommand : Command
+    <pre><code> public class HelloRhinoCommonCommand : Command
 </code></pre>
-    </div>
   </li>
-  <li>If you hover over <code class="highlighter-rouge">Command</code> you will notice this is actually <code class="highlighter-rouge">Rhino.Commands.Command</code>.</li>
+  <li>If you hover over <code>Command</code> you will notice this is actually <code>Rhino.Commands.Command</code>.</li>
   <li>
-    <p><code class="highlighter-rouge">HelloRhinoCommonCommand</code> also overrides one inherited property called <code class="highlighter-rouge">EnglishName</code> …</p>
+    <p><code>HelloRhinoCommonCommand</code> also overrides one inherited property called <code>EnglishName</code> …</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public override string EnglishName {
+    <pre><code> public override string EnglishName {
    get { return "HelloRhinoCommonCommand"; }
  }
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>All Rhino commands must have a <code class="highlighter-rouge">EnglishName</code> property.  This command name is not very accurate.  We know from running the boilerplate code that this command prompts the user to draw a line.  Let’s rename the command to <em>HelloDrawLine</em>:</p>
+    <p>All Rhino commands must have a <code>EnglishName</code> property.  This command name is not very accurate.  We know from running the boilerplate code that this command prompts the user to draw a line.  Let’s rename the command to <em>HelloDrawLine</em>:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> public override string EnglishName {
+    <pre><code> public override string EnglishName {
    get { return "HelloDrawLine"; }
  }
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Further down, notice that <code class="highlighter-rouge">HelloRhinoCommandCommand</code> overrides the <code class="highlighter-rouge">RunCommand</code> method:</p>
+    <p>Further down, notice that <code>HelloRhinoCommandCommand</code> overrides the <code>RunCommand</code> method:</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> protected override Result RunCommand (Rhino.RhinoDoc doc, RunMode mode)
+    <pre><code> protected override Result RunCommand (Rhino.RhinoDoc doc, RunMode mode)
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>All Rhino commands must have a <code class="highlighter-rouge">RunCommand</code> method.  As you can see, this is where the action happens.  Let’s create an intermediary line object that we can feed to the <code class="highlighter-rouge">AddLine</code> method.  Find the spot in <code class="highlighter-rouge">RunCommand</code> after the user has been prompted to select two points.  Type in…</p>
+    <p>All Rhino commands must have a <code>RunCommand</code> method.  As you can see, this is where the action happens.  Let’s create an intermediary line object that we can feed to the <code>AddLine</code> method.  Find the spot in <code>RunCommand</code> after the user has been prompted to select two points.  Type in…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> Rhino.Geometry.Line line1 = new Line (pt0, pt1);
+    <pre><code> Rhino.Geometry.Line line1 = new Line (pt0, pt1);
 </code></pre>
-    </div>
   </li>
   <li>
-    <p>Notice that - as you type - Visual Studio uses IntelliSense to create an auto-complete list of members to call.  Now, feed <code class="highlighter-rouge">line1</code> as an argument to the <code class="highlighter-rouge">doc.Objects.AddLine</code> method…</p>
+    <p>Notice that - as you type - Visual Studio uses IntelliSense to create an auto-complete list of members to call.  Now, feed <code>line1</code> as an argument to the <code>doc.Objects.AddLine</code> method…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> doc.Objects.AddLine (line1);
+    <pre><code> doc.Objects.AddLine (line1);
 </code></pre>
-    </div>
   </li>
   <li>Now that we have a line of our own, let’s examine it…</li>
 </ol>
@@ -506,34 +500,32 @@
   <li><strong>Build</strong> and <strong>Run</strong>.  Because you have changed the name of the command, you will need to <strong>“install”</strong> the plugin again.  Follow the steps 3-5 in the <a href="#boilerplate-build">Boilerplate Build</a> section above.</li>
   <li>Run <strong>HelloDrawLine</strong> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
 <img src="/images/your_first_plugin_windows_09.png" alt="Hit a breakpoint" /></li>
-  <li>With Rhino paused, in <strong>Visual Studio</strong> switch to the <strong>Autos</strong> tab (if it not already there).  In the list, find the <code class="highlighter-rouge">line1</code> object we authored.  Click the dropdown <strong>arrow</strong> to expand the list of members on <code class="highlighter-rouge">line1</code>.  Our <code class="highlighter-rouge">line1</code> is a <code class="highlighter-rouge">Rhino.Geometry.Line</code> this class has a <code class="highlighter-rouge">Length</code> property…<br />
+  <li>With Rhino paused, in <strong>Visual Studio</strong> switch to the <strong>Autos</strong> tab (if it not already there).  In the list, find the <code>line1</code> object we authored.  Click the dropdown <strong>arrow</strong> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
 <img src="/images/your_first_plugin_windows_10.png" alt="Autos panel" /></li>
   <li><strong>Continue</strong> in Rhino by pressing the <strong>Continue</strong> button in the upper menu of <strong>Visual Studio</strong> (or press <strong>F5</strong>)…
 <img src="/images/your_first_plugin_windows_11.png" alt="Continue Executing" /></li>
   <li>Control is passed back to <strong>Rhino</strong> and your command finishes.  <strong>Exit</strong> Rhino or <strong>Stop</strong> the debugging session.</li>
   <li><strong>Remove</strong> the breakpoint you created above by clicking on it in the gutter.</li>
   <li>
-    <p>Now, let’s use the <code class="highlighter-rouge">Length</code> value to report something to the user.  Near the very end of <code class="highlighter-rouge">RunCommand</code>, add the following line…</p>
+    <p>Now, let’s use the <code>Length</code> value to report something to the user.  Near the very end of <code>RunCommand</code>, add the following line…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> RhinoApp.WriteLine ("The distance between the two points is {0}.", line1.Length);
+    <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0}.", line1.Length);
 </code></pre>
-    </div>
   </li>
-  <li><strong>Save</strong>, <strong>Build</strong>, and <strong>Run</strong>.  Run <code class="highlighter-rouge">HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
+  <li><strong>Save</strong>, <strong>Build</strong>, and <strong>Run</strong>.  Run <code>HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
   <li><strong>Exit</strong> Rhino to <strong>Stop</strong> the debugging session once more.</li>
   <li>
     <p>Let’s add a unit system and be explicit about what we’re reporting…</p>
 
-    <div class="highlighter-rouge"><pre class="highlight"><code> RhinoApp.WriteLine ("The distance between the two points is {0} {1}.", line1.Length, doc.ModelUnitSystem.ToString().ToLower());
+    <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0} {1}.", line1.Length, doc.ModelUnitSystem.ToString().ToLower());
 </code></pre>
-    </div>
   </li>
-  <li><strong>Save</strong>, <strong>Build</strong>, and <strong>Run</strong> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code class="highlighter-rouge">doc.ModelUnitSystem</code>) with the proper case (<code class="highlighter-rouge">ToLower()</code>).  Much better.</li>
+  <li><strong>Save</strong>, <strong>Build</strong>, and <strong>Run</strong> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code>doc.ModelUnitSystem</code>) with the proper case (<code>ToLower()</code>).  Much better.</li>
 </ol>
 
 <p><strong>DONE!</strong></p>
 
-<p>Well, we could go on and on - <code class="highlighter-rouge">line1</code> was never necessary, we could have just used <code class="highlighter-rouge">pt0.DistanceTo(pt1).ToString()</code>, etc. - but that is beside the point:</p>
+<p>Well, we could go on and on - <code>line1</code> was never necessary, we could have just used <code>pt0.DistanceTo(pt1).ToString()</code>, etc. - but that is beside the point:</p>
 
 <p><strong>Congratulations!</strong>  You have just built your first RhinoCommon plugin for Rhino for Windows.  <strong>Now what?</strong></p>
 

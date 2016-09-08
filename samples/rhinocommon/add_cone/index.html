@@ -222,29 +222,28 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddCone</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span><span class="p">.</span><span class="n">WorldXY</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">height</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">radius</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Cone</span> <span class="n">cone</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Cone</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">radius</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">cone</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">const</span> <span class="kt">bool</span> <span class="n">cap_bottom</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">cone_brep</span> <span class="p">=</span> <span class="n">cone</span><span class="p">.</span><span class="nf">ToBrep</span><span class="p">(</span><span class="n">cap_bottom</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">cone_brep</span><span class="p">!=</span><span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">cone_brep</span><span class="p">);</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddCone(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.Plane plane = Rhino.Geometry.Plane.WorldXY;
+    const double height = 10;
+    const double radius = 5;
+    Rhino.Geometry.Cone cone = new Rhino.Geometry.Cone(plane, height, radius);
+    if (cone.IsValid)
+    {
+      const bool cap_bottom = true;
+      Rhino.Geometry.Brep cone_brep = cone.ToBrep(cap_bottom);
+      if (cone_brep!=null)
+      {
+        doc.Objects.AddBrep(cone_brep);
+        doc.Views.Redraw();
+      }
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddCone(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -265,26 +264,25 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">AddCone</span><span class="p">():</span>
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="o">.</span><span class="n">WorldXY</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">cone</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Cone</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">cone</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-        <span class="n">cap_bottom</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="n">cone_brep</span> <span class="o">=</span> <span class="n">cone</span><span class="o">.</span><span class="n">ToBrep</span><span class="p">(</span><span class="n">cap_bottom</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cone_brep</span><span class="p">:</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">cone_brep</span><span class="p">)</span>
-            <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+def AddCone():
+    plane = Rhino.Geometry.Plane.WorldXY
+    height = 10
+    radius = 5
+    cone = Rhino.Geometry.Cone(plane, height, radius)
+    if cone.IsValid:
+        cap_bottom = True
+        cone_brep = cone.ToBrep(cap_bottom)
+        if cone_brep:
+            scriptcontext.doc.Objects.AddBrep(cone_brep)
+            scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddCone</span><span class="p">()</span>
+if __name__=="__main__":
+    AddCone()
 </code></pre>
-</div>
 
 </div>
 

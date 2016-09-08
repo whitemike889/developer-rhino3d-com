@@ -217,96 +217,95 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select rail curve"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select rail curve" );
+  go.SetGeometryFilter( CRhinoGetObject::curve_object );
+  go.GetObjects(1,1);
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">rail_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">rail_obj</span> <span class="o">=</span> <span class="n">rail_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rail_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">rail_crv</span> <span class="o">=</span> <span class="n">rail_ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rail_crv</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; rail_ref = go.Object(0);
+  const CRhinoObject* rail_obj = rail_ref.Object();
+  if( !rail_obj )
+    return failure;
+  const ON_Curve* rail_crv = rail_ref.Curve();
+  if( !rail_crv )
+    return failure;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">gx</span><span class="p">;</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select cross section curves"</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">EnablePreSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gx</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gx</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gx</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetObject gx;
+  gx.SetCommandPrompt( L"Select cross section curves" );
+  gx.SetGeometryFilter( CRhinoGetObject::curve_object );
+  gx.EnablePreSelect( false );
+  gx.EnableDeselectAllBeforePostSelect( false );
+  gx.GetObjects(1,0);
+  if( gx.CommandResult() != success )
+    return gx.CommandResult();
 
-  <span class="n">CRhinoPolyEdge</span> <span class="n">edge</span><span class="p">;</span>
-  <span class="n">edge</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">rail_crv</span><span class="p">,</span> <span class="n">rail_obj</span> <span class="p">);</span>
+  CRhinoPolyEdge edge;
+  edge.Create( rail_crv, rail_obj );
 
-  <span class="n">CArgsRhinoSweep1</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_rail_curve</span> <span class="o">=</span> <span class="n">edge</span><span class="p">.</span><span class="n">Duplicate</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bHaveRailPickPoint</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bClosed</span> <span class="o">=</span> <span class="n">rail_crv</span><span class="o">-&gt;</span><span class="n">IsClosed</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bUsePivotPoint</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  CArgsRhinoSweep1 args;
+  args.m_rail_curve = edge.Duplicate();
+  args.m_bHaveRailPickPoint = false;
+  args.m_bClosed = rail_crv-&gt;IsClosed();
+  args.m_bUsePivotPoint = false;
 
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">gx</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">gx</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">dup_crv</span> <span class="o">=</span> <span class="n">crv</span><span class="o">-&gt;</span><span class="n">DuplicateCurve</span><span class="p">();</span>
+  int i;
+  for( i = 0; i &lt; gx.ObjectCount(); i++ )
+  {
+    const CRhinoObjRef&amp; obj_ref = gx.Object(i);
+    const ON_Curve* crv = obj_ref.Curve();
+    if( crv )
+    {
+      ON_Curve* dup_crv = crv-&gt;DuplicateCurve();
 
-      <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="n">edge</span><span class="p">.</span><span class="n">GetClosestPoint</span><span class="p">(</span> <span class="n">dup_crv</span><span class="o">-&gt;</span><span class="n">PointAtStart</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">t</span> <span class="p">);</span>
+      double t = 0;
+      edge.GetClosestPoint( dup_crv-&gt;PointAtStart(), &amp;t );
 
-      <span class="n">args</span><span class="p">.</span><span class="n">m_shape_curves</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">dup_crv</span> <span class="p">);</span>
-      <span class="n">args</span><span class="p">.</span><span class="n">m_rail_params</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">t</span> <span class="p">);</span>
-      <span class="n">args</span><span class="p">.</span><span class="n">m_shape_objrefs</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">obj_ref</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      args.m_shape_curves.Append( dup_crv );
+      args.m_rail_params.Append( t );
+      args.m_shape_objrefs.Append( obj_ref );
+    }
+  }
 
-  <span class="c1">// Start and end points
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_bUsePoints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_bUsePoints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  // Start and end points
+  args.m_bUsePoints[0] = 0;
+  args.m_bUsePoints[1] = 0;
 
-  <span class="c1">// Point objects picked for endpoints
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_bClosed</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_style</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_planar_up</span> <span class="o">=</span> <span class="n">ON_zaxis</span><span class="p">;</span> <span class="c1">// Don't need this, but set it anyway..
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_simplify</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Simplify method for shape curves
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_rebuild_count</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// Sample point count for rebuilding shapes
-</span>  <span class="n">args</span><span class="p">.</span><span class="n">m_refit_tolerance</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_sweep_tolerance</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_angle_tolerance</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AngleToleranceRadians</span><span class="p">();</span>
-  <span class="n">args</span><span class="p">.</span><span class="n">m_miter_type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 0: don't miter
-</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_Brep</span><span class="o">*&gt;</span> <span class="n">breps</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">RhinoSweep1</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">breps</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">breps</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddBrepObject</span><span class="p">(</span> <span class="o">*</span><span class="n">breps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">);</span>
-      <span class="k">delete</span> <span class="n">breps</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Point objects picked for endpoints
+  args.m_bClosed = false;
+  args.m_style = 0;
+  args.m_planar_up = ON_zaxis; // Don't need this, but set it anyway..
+  args.m_simplify = 0; // Simplify method for shape curves
+  args.m_rebuild_count = -1; // Sample point count for rebuilding shapes
+  args.m_refit_tolerance = context.m_doc.AbsoluteTolerance();
+  args.m_sweep_tolerance = context.m_doc.AbsoluteTolerance();
+  args.m_angle_tolerance = context.m_doc.AngleToleranceRadians();
+  args.m_miter_type = 0; // 0: don't miter
 
-  <span class="c1">// Clean up
-</span>  <span class="k">delete</span> <span class="n">args</span><span class="p">.</span><span class="n">m_rail_curve</span><span class="p">;</span>
+  ON_SimpleArray&lt;ON_Brep*&gt; breps;
+  if( RhinoSweep1(args, breps) )
+  {
+    for( i = 0; i &lt; breps.Count(); i++ )
+    {
+      context.m_doc.AddBrepObject( *breps[i] );
+      delete breps[i];
+    }
+  }
 
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="p">.</span><span class="n">m_shape_curves</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="k">delete</span> <span class="n">args</span><span class="p">.</span><span class="n">m_shape_curves</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  // Clean up
+  delete args.m_rail_curve;
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  for( i = 0; i &lt; args.m_shape_curves.Count(); i++ )
+    delete args.m_shape_curves[i];
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  context.m_doc.Redraw();
+
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

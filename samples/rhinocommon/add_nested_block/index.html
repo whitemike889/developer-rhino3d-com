@@ -222,26 +222,25 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddNestedBlock</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">circle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Circle</span><span class="p">(</span><span class="n">Point3d</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="m">5</span><span class="p">);</span>
-    <span class="n">Curve</span><span class="p">[]</span> <span class="n">curveList</span> <span class="p">=</span> <span class="p">{</span> <span class="k">new</span> <span class="nf">ArcCurve</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span> <span class="p">};</span>
-    <span class="kt">var</span> <span class="n">circleIndex</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"Circle"</span><span class="p">,</span> <span class="s">"Circle with radius of 5"</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="n">curveList</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">transform</span> <span class="p">=</span> <span class="n">Transform</span><span class="p">.</span><span class="n">Identity</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">irefId</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">[</span><span class="n">circleIndex</span><span class="p">].</span><span class="n">Id</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">iref</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">InstanceReferenceGeometry</span><span class="p">(</span><span class="n">irefId</span><span class="p">,</span> <span class="n">transform</span><span class="p">);</span>
-    <span class="n">circle</span><span class="p">.</span><span class="n">Radius</span> <span class="p">=</span> <span class="n">circle</span><span class="p">.</span><span class="n">Radius</span> <span class="p">*</span> <span class="m">2.0</span><span class="p">;</span>
-    <span class="n">GeometryBase</span><span class="p">[]</span> <span class="n">blockList</span> <span class="p">=</span> <span class="p">{</span> <span class="n">iref</span><span class="p">,</span> <span class="k">new</span> <span class="nf">ArcCurve</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span> <span class="p">};</span>
-    <span class="kt">var</span> <span class="n">circle2Index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">InstanceDefinitions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"TwoCircles"</span><span class="p">,</span> <span class="s">"Nested block test"</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="n">blockList</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddInstanceObject</span><span class="p">(</span><span class="n">circle2Index</span><span class="p">,</span> <span class="n">transform</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddNestedBlock(RhinoDoc doc)
+  {
+    var circle = new Circle(Point3d.Origin, 5);
+    Curve[] curveList = { new ArcCurve(circle) };
+    var circleIndex = doc.InstanceDefinitions.Add("Circle", "Circle with radius of 5", Point3d.Origin, curveList);
+    var transform = Transform.Identity;
+    var irefId = doc.InstanceDefinitions[circleIndex].Id;
+    var iref = new InstanceReferenceGeometry(irefId, transform);
+    circle.Radius = circle.Radius * 2.0;
+    GeometryBase[] blockList = { iref, new ArcCurve(circle) };
+    var circle2Index = doc.InstanceDefinitions.Add("TwoCircles", "Nested block test", Point3d.Origin, blockList);
+    doc.Objects.AddInstanceObject(circle2Index, transform);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddNestedBlock(ByVal doc As RhinoDoc) As Rhino.Commands.Result
@@ -261,9 +260,8 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 
 </div>

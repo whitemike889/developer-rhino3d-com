@@ -222,52 +222,51 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">IntersectLines</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span> <span class="s">"Select lines"</span> <span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span> <span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span> <span class="p">!=</span> <span class="m">2</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result IntersectLines(Rhino.RhinoDoc doc)
+  {
+    Rhino.Input.Custom.GetObject go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt( "Select lines" );
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    go.GetMultiple( 2, 2);
+    if( go.CommandResult() != Rhino.Commands.Result.Success )
+      return go.CommandResult();
+    if( go.ObjectCount != 2 )
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">LineCurve</span> <span class="n">crv0</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Geometry</span><span class="p">()</span> <span class="k">as</span> <span class="n">LineCurve</span><span class="p">;</span>
-    <span class="n">LineCurve</span> <span class="n">crv1</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="nf">Geometry</span><span class="p">()</span> <span class="k">as</span> <span class="n">LineCurve</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">crv0</span><span class="p">==</span><span class="k">null</span> <span class="p">||</span> <span class="n">crv1</span><span class="p">==</span><span class="k">null</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    LineCurve crv0 = go.Object(0).Geometry() as LineCurve;
+    LineCurve crv1 = go.Object(1).Geometry() as LineCurve;
+    if( crv0==null || crv1==null )
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">Line</span> <span class="n">line0</span> <span class="p">=</span> <span class="n">crv0</span><span class="p">.</span><span class="n">Line</span><span class="p">;</span>
-    <span class="n">Line</span> <span class="n">line1</span> <span class="p">=</span> <span class="n">crv1</span><span class="p">.</span><span class="n">Line</span><span class="p">;</span>
-    <span class="n">Vector3d</span> <span class="n">v0</span> <span class="p">=</span> <span class="n">line0</span><span class="p">.</span><span class="n">Direction</span><span class="p">;</span>
-    <span class="n">v0</span><span class="p">.</span><span class="nf">Unitize</span><span class="p">();</span>
-    <span class="n">Vector3d</span> <span class="n">v1</span> <span class="p">=</span> <span class="n">line1</span><span class="p">.</span><span class="n">Direction</span><span class="p">;</span>
-    <span class="n">v1</span><span class="p">.</span><span class="nf">Unitize</span><span class="p">();</span>
+    Line line0 = crv0.Line;
+    Line line1 = crv1.Line;
+    Vector3d v0 = line0.Direction;
+    v0.Unitize();
+    Vector3d v1 = line1.Direction;
+    v1.Unitize();
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">v0</span><span class="p">.</span><span class="nf">IsParallelTo</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="p">!=</span> <span class="m">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Selected lines are parallel."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    if( v0.IsParallelTo(v1) != 0 )
+    {
+      Rhino.RhinoApp.WriteLine("Selected lines are parallel.");
+      return Rhino.Commands.Result.Nothing;
+    }
 
-    <span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="p">!</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Intersect</span><span class="p">.</span><span class="n">Intersection</span><span class="p">.</span><span class="nf">LineLine</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">line1</span><span class="p">,</span> <span class="k">out</span> <span class="n">a</span><span class="p">,</span> <span class="k">out</span> <span class="n">b</span><span class="p">))</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"No intersection found."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    double a, b;
+    if( !Rhino.Geometry.Intersect.Intersection.LineLine(line0, line1, out a, out b))
+    {
+      Rhino.RhinoApp.WriteLine("No intersection found.");
+      return Rhino.Commands.Result.Nothing;
+    }
 
-    <span class="n">Point3d</span> <span class="n">pt0</span> <span class="p">=</span> <span class="n">line0</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span> <span class="n">pt0</span> <span class="p">);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    Point3d pt0 = line0.PointAt(a);
+    doc.Objects.AddPoint( pt0 );
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function IntersectLines(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -314,49 +313,48 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">IntersectLines</span><span class="p">():</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">"Select lines"</span> <span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-      <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">ObjectCount</span><span class="o">!=</span><span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def IntersectLines():
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt( "Select lines" )
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
+    go.GetMultiple( 2, 2)
+    if go.CommandResult()!=Rhino.Commands.Result.Success:
+      return go.CommandResult()
+    if go.ObjectCount!=2: return Rhino.Commands.Result.Failure
 
-    <span class="n">crv0</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">Geometry</span><span class="p">()</span>
-    <span class="n">crv1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">Geometry</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">crv0</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">crv1</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    crv0 = go.Object(0).Geometry()
+    crv1 = go.Object(1).Geometry()
+    if not crv0 or not crv1: return Rhino.Commands.Result.Failure
 
-    <span class="n">line0</span> <span class="o">=</span> <span class="n">crv0</span><span class="o">.</span><span class="n">Line</span>
-    <span class="n">line1</span> <span class="o">=</span> <span class="n">crv1</span><span class="o">.</span><span class="n">Line</span>
-    <span class="n">v0</span> <span class="o">=</span> <span class="n">line0</span><span class="o">.</span><span class="n">Direction</span>
-    <span class="n">v0</span><span class="o">.</span><span class="n">Unitize</span><span class="p">()</span>
-    <span class="n">v1</span> <span class="o">=</span> <span class="n">line1</span><span class="o">.</span><span class="n">Direction</span>
-    <span class="n">v1</span><span class="o">.</span><span class="n">Unitize</span><span class="p">()</span>
+    line0 = crv0.Line
+    line1 = crv1.Line
+    v0 = line0.Direction
+    v0.Unitize()
+    v1 = line1.Direction
+    v1.Unitize()
 
-    <span class="k">if</span> <span class="n">v0</span><span class="o">.</span><span class="n">IsParallelTo</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Selected lines are parallel."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+    if v0.IsParallelTo(v1)!=0:
+        print "Selected lines are parallel."
+        return Rhino.Commands.Result.Nothing
 
-    <span class="n">rc</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Intersect</span><span class="o">.</span><span class="n">Intersection</span><span class="o">.</span><span class="n">LineLine</span><span class="p">(</span><span class="n">line0</span><span class="p">,</span> <span class="n">line1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">rc</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"No intersection found."</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+    rc, a, b = Rhino.Geometry.Intersect.Intersection.LineLine(line0, line1)
+    if not rc:
+        print "No intersection found."
+        return Rhino.Commands.Result.Nothing
 
-    <span class="n">pt0</span> <span class="o">=</span> <span class="n">line0</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-    <span class="n">pt1</span> <span class="o">=</span> <span class="n">line1</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-    <span class="c"># pt0 and pt1 should be equal, so we will only add pt0 to the document</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">pt0</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    pt0 = line0.PointAt(a)
+    pt1 = line1.PointAt(b)
+    # pt0 and pt1 should be equal, so we will only add pt0 to the document
+    scriptcontext.doc.Objects.AddPoint(pt0)
+    scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">IntersectLines</span><span class="p">()</span>
+if __name__=="__main__":
+    IntersectLines()
 </code></pre>
-</div>
 
 </div>
 

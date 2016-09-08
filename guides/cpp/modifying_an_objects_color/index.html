@@ -301,66 +301,64 @@
 <p>The color used to display an object is specified in one of four ways…</p>
 
 <ol>
-  <li><code class="highlighter-rouge">ON::color_from_layer</code> - the object’s layer color, <code class="highlighter-rouge">ON_Layer::Color()</code>, determines the object’s color.  This is the default method used when adding new objects to Rhino</li>
-  <li><code class="highlighter-rouge">ON::color_from_object</code> - the value of an object’s <code class="highlighter-rouge">m_color</code> attribute determines the object’s color.</li>
-  <li><code class="highlighter-rouge">ON::color_from_material</code> - the diffuse color of the object’s render material determines the object’s color.</li>
-  <li><code class="highlighter-rouge">ON::color_from_parent</code> - if the object is part of an instance reference, the color is taken from the instance</li>
+  <li><code>ON::color_from_layer</code> - the object’s layer color, <code>ON_Layer::Color()</code>, determines the object’s color.  This is the default method used when adding new objects to Rhino</li>
+  <li><code>ON::color_from_object</code> - the value of an object’s <code>m_color</code> attribute determines the object’s color.</li>
+  <li><code>ON::color_from_material</code> - the diffuse color of the object’s render material determines the object’s color.</li>
+  <li><code>ON::color_from_parent</code> - if the object is part of an instance reference, the color is taken from the instance</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following code sample demonstrates how to override the default “color by layer” behavior and set an object to use “color by object.”</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select object" );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; obj_ref = go.Object( 0 );
+  const CRhinoObject* obj = obj_ref.Object();
+  if( !obj )
+    return CRhinoCommand::failure;
 
-  <span class="n">ON_Color</span> <span class="n">old_color</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">().</span><span class="n">DrawColor</span><span class="p">();</span>
-  <span class="n">ON</span><span class="o">::</span><span class="n">object_color_source</span> <span class="n">color_source</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">().</span><span class="n">ColorSource</span><span class="p">();</span>
-  <span class="n">ON_Color</span> <span class="n">new_color</span><span class="p">(</span> <span class="n">old_color</span> <span class="p">);</span>
+  ON_Color old_color = obj-&gt;Attributes().DrawColor();
+  ON::object_color_source color_source = obj-&gt;Attributes().ColorSource();
+  ON_Color new_color( old_color );
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">RhinoColorDialog</span><span class="p">(</span> <span class="o">::</span><span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">(),</span> <span class="n">new_color</span><span class="p">)</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">cancel</span><span class="p">;</span>
+  if( !RhinoColorDialog( ::RhinoApp().MainWnd(), new_color) )
+    return CRhinoCommand::cancel;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">new_color</span> <span class="o">==</span> <span class="n">old_color</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">nothing</span><span class="p">;</span>
+  if( new_color == old_color )
+    return CRhinoCommand::nothing;
 
-  <span class="n">CRhinoObjectAttributes</span> <span class="n">att</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">att</span><span class="p">.</span><span class="n">m_color</span> <span class="o">=</span> <span class="n">new_color</span><span class="p">;</span>
-  <span class="n">att</span><span class="p">.</span><span class="n">SetColorSource</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">color_from_object</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">obj_ref</span><span class="p">,</span> <span class="n">att</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  CRhinoObjectAttributes att( obj-&gt;Attributes() );
+  att.m_color = new_color;
+  att.SetColorSource( ON::color_from_object );
+  context.m_doc.ModifyObjectAttributes( obj_ref, att );
+  context.m_doc.Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 <p>When adding new objects using the C/C++ SDK, you can specify the attributes of the object when adding it to Rhino.  Thus, if you want to override the default color behavior for new objects, just get a copy of the active document’s default new object attributes, modify it in whatever way you want, and pass it (along with the geometry) to the appropriate object creation function…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_Circle</span> <span class="n">circle</span><span class="p">;</span>
-  <span class="n">circle</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">RhinoActiveCPlane</span><span class="p">(),</span> <span class="mf">5.0</span> <span class="p">);</span>
-  <span class="n">ON_3dmObjectAttributes</span> <span class="n">att</span><span class="p">;</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">GetDefaultObjectAttributes</span><span class="p">(</span> <span class="n">att</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  ON_Circle circle;
+  circle.Create( RhinoActiveCPlane(), 5.0 );
+  ON_3dmObjectAttributes att;
+  context.m_doc.GetDefaultObjectAttributes( att );
 
-  <span class="n">att</span><span class="p">.</span><span class="n">m_color</span> <span class="o">=</span> <span class="n">RGB</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">191</span><span class="p">,</span><span class="mi">191</span><span class="p">);</span>
-  <span class="n">att</span><span class="p">.</span><span class="n">SetColorSource</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">color_from_object</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">circle</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">att</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  att.m_color = RGB(255,191,191);
+  att.SetColorSource( ON::color_from_object );
+  context.m_doc.AddCurveObject( circle, &amp;att );
+  context.m_doc.Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -319,46 +319,45 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>A document’s display precision, the number of decimal places used for the distance display, is maintained on an <code class="highlighter-rouge">ON_3dmUnitsAndTolerances</code> object, which in turn is stored on a <code class="highlighter-rouge">CRhinoDocProperties</code> object which is a member of the current <code class="highlighter-rouge">CRhinoDoc</code> object.  To modify this variable, you will need to:</p>
+<p>A document’s display precision, the number of decimal places used for the distance display, is maintained on an <code>ON_3dmUnitsAndTolerances</code> object, which in turn is stored on a <code>CRhinoDocProperties</code> object which is a member of the current <code>CRhinoDoc</code> object.  To modify this variable, you will need to:</p>
 
 <ol>
-  <li>Make a copy of the document’s <code class="highlighter-rouge">ON_3dmUnitsAndTolerances</code> object.</li>
-  <li>Modify the object’s <code class="highlighter-rouge">m_distance_display_precision</code> member variable.</li>
-  <li>Replace the current <code class="highlighter-rouge">ON_3dmUnitsAndTolerances</code> with the newly modified one.</li>
+  <li>Make a copy of the document’s <code>ON_3dmUnitsAndTolerances</code> object.</li>
+  <li>Modify the object’s <code>m_distance_display_precision</code> member variable.</li>
+  <li>Replace the current <code>ON_3dmUnitsAndTolerances</code> with the newly modified one.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample code demonstrates how to change the unit’s display precision of the current document using the Rhino C/C++ SDK…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Make a copy of the current model units and tolerances
-</span>  <span class="n">ON_3dmUnitsAndTolerances</span> <span class="n">units</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Properties</span><span class="p">().</span><span class="n">ModelUnitsAndTolerances</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Make a copy of the current model units and tolerances
+  ON_3dmUnitsAndTolerances units = context.m_doc.Properties().ModelUnitsAndTolerances();
 
-  <span class="c1">// Prompt the user to enter a new display precision value
-</span>  <span class="n">CRhinoGetInteger</span> <span class="n">gi</span><span class="p">;</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"New display precision"</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetDefaultInteger</span><span class="p">(</span> <span class="n">units</span><span class="p">.</span><span class="n">m_distance_display_precision</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetLowerLimit</span><span class="p">(</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">SetUpperLimit</span><span class="p">(</span> <span class="mi">6</span> <span class="p">);</span>
-  <span class="n">gi</span><span class="p">.</span><span class="n">GetInteger</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gi</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// The the user's input
-</span>    <span class="kt">int</span> <span class="n">distance_display_precision</span> <span class="o">=</span> <span class="n">gi</span><span class="p">.</span><span class="n">Number</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">distance_display_precision</span> <span class="o">!=</span> <span class="n">units</span><span class="p">.</span><span class="n">m_distance_display_precision</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">units</span><span class="p">.</span><span class="n">m_distance_display_precision</span> <span class="o">=</span> <span class="n">distance_display_precision</span><span class="p">;</span>
-      <span class="c1">// Replace the current setting with our updated value
-</span>      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Properties</span><span class="p">().</span><span class="n">SetModelUnitsAndTolerances</span><span class="p">(</span> <span class="n">units</span><span class="p">,</span> <span class="nb">false</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  // Prompt the user to enter a new display precision value
+  CRhinoGetInteger gi;
+  gi.SetCommandPrompt( L"New display precision" );
+  gi.SetDefaultInteger( units.m_distance_display_precision );
+  gi.SetLowerLimit( 0 );
+  gi.SetUpperLimit( 6 );
+  gi.GetInteger();
+  if( gi.CommandResult() == CRhinoCommand::success )
+  {
+    // The the user's input
+    int distance_display_precision = gi.Number();
+    if( distance_display_precision != units.m_distance_display_precision )
+    {
+      units.m_distance_display_precision = distance_display_precision;
+      // Replace the current setting with our updated value
+      context.m_doc.Properties().SetModelUnitsAndTolerances( units, false );
+    }
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

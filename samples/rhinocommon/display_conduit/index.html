@@ -222,57 +222,56 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">static</span> <span class="n">MyConduit</span> <span class="n">m_conduit</span><span class="p">;</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DisplayConduit</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// The following code lets you toggle the conduit on and off by repeatedly running the command
-</span>    <span class="k">if</span> <span class="p">(</span><span class="n">m_conduit</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">m_conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-      <span class="n">m_conduit</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">m_conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MyConduit</span> <span class="p">{</span> <span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span> <span class="p">};</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  static MyConduit m_conduit;
+  public static Result DisplayConduit(RhinoDoc doc)
+  {
+    // The following code lets you toggle the conduit on and off by repeatedly running the command
+    if (m_conduit != null)
+    {
+      m_conduit.Enabled = false;
+      m_conduit = null;
+    }
+    else
+    {
+      m_conduit = new MyConduit { Enabled = true };
+    }
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 
-<span class="k">class</span> <span class="nc">MyConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">CalculateBoundingBoxEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">CalculateBoundingBox</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">BoundingBox</span><span class="p">.</span><span class="nf">Union</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">().</span><span class="n">Origin</span><span class="p">);</span>
-  <span class="p">}</span>
+class MyConduit : Rhino.Display.DisplayConduit
+{
+  protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+  {
+    base.CalculateBoundingBox(e);
+    e.BoundingBox.Union(e.Display.Viewport.ConstructionPlane().Origin);
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">PreDrawObjects</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+  protected override void PreDrawObjects(DrawEventArgs e)
+  {
+    base.PreDrawObjects(e);
 
-    <span class="kt">var</span> <span class="n">c_plane</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">x_color</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridXAxisLineColor</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">y_color</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridYAxisLineColor</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">z_color</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">ApplicationSettings</span><span class="p">.</span><span class="n">AppearanceSettings</span><span class="p">.</span><span class="n">GridZAxisLineColor</span><span class="p">;</span>
+    var c_plane = e.Display.Viewport.ConstructionPlane();
+    var x_color = Rhino.ApplicationSettings.AppearanceSettings.GridXAxisLineColor;
+    var y_color = Rhino.ApplicationSettings.AppearanceSettings.GridYAxisLineColor;
+    var z_color = Rhino.ApplicationSettings.AppearanceSettings.GridZAxisLineColor;
 
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">PushDepthWriting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">PushDepthTesting</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+    e.Display.PushDepthWriting(false);
+    e.Display.PushDepthTesting(false);
 
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">XAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">x_color</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">YAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">y_color</span><span class="p">);</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawArrow</span><span class="p">(</span><span class="k">new</span> <span class="nf">Line</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">Origin</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Vector3d</span><span class="p">(</span><span class="n">c_plane</span><span class="p">.</span><span class="n">ZAxis</span><span class="p">)</span> <span class="p">*</span> <span class="m">10.0</span><span class="p">),</span> <span class="n">z_color</span><span class="p">);</span>
+    e.Display.DrawPoint(c_plane.Origin, System.Drawing.Color.White);
+    e.Display.DrawArrow(new Line(c_plane.Origin, new Vector3d(c_plane.XAxis) * 10.0), x_color);
+    e.Display.DrawArrow(new Line(c_plane.Origin, new Vector3d(c_plane.YAxis) * 10.0), y_color);
+    e.Display.DrawArrow(new Line(c_plane.Origin, new Vector3d(c_plane.ZAxis) * 10.0), z_color);
 
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">PopDepthWriting</span><span class="p">();</span>
-    <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">PopDepthTesting</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    e.Display.PopDepthWriting();
+    e.Display.PopDepthTesting();
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared m_conduit As MyConduit
@@ -319,9 +318,8 @@ Friend Class MyConduit
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 

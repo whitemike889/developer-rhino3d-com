@@ -217,35 +217,34 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Description: Calculates the angle between two 3-D vectors.
+<pre><code class="language-cpp">// Description: Calculates the angle between two 3-D vectors.
 // Parameters:
 //  v0           - [in]  The first angle.
 //  v1           - [in]  The second angle.
 //  reflex_angle - [out] The reflex angle.
 // Returns: The angle in radians.
-</span><span class="kt">double</span> <span class="nf">ON_3dVectorAngle</span><span class="p">(</span> <span class="n">ON_3dVector</span> <span class="n">v0</span><span class="p">,</span> <span class="n">ON_3dVector</span> <span class="n">v1</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">reflex_angle</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Unitize the input vectors
-</span>  <span class="n">v0</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
-  <span class="n">v1</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+double ON_3dVectorAngle( ON_3dVector v0, ON_3dVector v1, double* reflex_angle = 0 )
+{
+  // Unitize the input vectors
+  v0.Unitize();
+  v1.Unitize();
 
-  <span class="kt">double</span> <span class="n">dot</span> <span class="o">=</span> <span class="n">ON_DotProduct</span><span class="p">(</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span> <span class="p">);</span>
+  double dot = ON_DotProduct( v0, v1 );
 
-  <span class="c1">// Force the dot product of the two input vectors to
-</span>  <span class="c1">// fall within the domain for inverse cosine, which
-</span>  <span class="c1">// is -1 &lt;= x &lt;= 1. This will prevent runtime
-</span>  <span class="c1">// "domain error" math exceptions.
-</span>  <span class="n">dot</span> <span class="o">=</span> <span class="p">(</span> <span class="n">dot</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">?</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">:</span> <span class="p">(</span> <span class="n">dot</span> <span class="o">&gt;</span> <span class="mf">1.0</span> <span class="o">?</span> <span class="mf">1.0</span> <span class="o">:</span> <span class="n">dot</span> <span class="p">)</span> <span class="p">);</span>
+  // Force the dot product of the two input vectors to
+  // fall within the domain for inverse cosine, which
+  // is -1 &lt;= x &lt;= 1. This will prevent runtime
+  // "domain error" math exceptions.
+  dot = ( dot &lt; -1.0 ? -1.0 : ( dot &gt; 1.0 ? 1.0 : dot ) );
 
-  <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span> <span class="n">dot</span> <span class="p">);</span>
+  double angle = acos( dot );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">reflex_angle</span> <span class="p">)</span>
-    <span class="o">*</span><span class="n">reflex_angle</span> <span class="o">=</span> <span class="p">(</span><span class="n">ON_PI</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">angle</span><span class="p">;</span>
+  if( reflex_angle )
+    *reflex_angle = (ON_PI * 2) - angle;
 
-  <span class="k">return</span> <span class="n">angle</span><span class="p">;</span>
-<span class="p">}</span>
+  return angle;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

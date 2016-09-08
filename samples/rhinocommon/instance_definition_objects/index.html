@@ -222,31 +222,30 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">InstanceDefinitionObjects</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select instance"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">InstanceReference</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result InstanceDefinitionObjects(Rhino.RhinoDoc doc)
+  {
+    Rhino.DocObjects.ObjRef objref;
+    var rc = Rhino.Input.RhinoGet.GetOneObject("Select instance", false, Rhino.DocObjects.ObjectType.InstanceReference, out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="kt">var</span> <span class="n">iref</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">()</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">InstanceObject</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">iref</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">idef</span> <span class="p">=</span> <span class="n">iref</span><span class="p">.</span><span class="n">InstanceDefinition</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">idef</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">rhino_objects</span> <span class="p">=</span> <span class="n">idef</span><span class="p">.</span><span class="nf">GetObjects</span><span class="p">();</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">rhino_objects</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-          <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Object {0} = {1}"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">rhino_objects</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Id</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var iref = objref.Object() as Rhino.DocObjects.InstanceObject;
+    if (iref != null)
+    {
+      var idef = iref.InstanceDefinition;
+      if (idef != null)
+      {
+        var rhino_objects = idef.GetObjects();
+        for (int i = 0; i &lt; rhino_objects.Length; i++)
+          Rhino.RhinoApp.WriteLine("Object {0} = {1}", i, rhino_objects[i].Id);
+      }
+    }
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function InstanceDefinitionObjects(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -271,25 +270,24 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">InstanceDefinitionObjects</span><span class="p">():</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select instance"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">InstanceReference</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def InstanceDefinitionObjects():
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select instance", False, Rhino.DocObjects.ObjectType.InstanceReference)
+    if rc != Rhino.Commands.Result.Success: return
 
-    <span class="n">iref</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">iref</span><span class="p">:</span>
-        <span class="n">idef</span> <span class="o">=</span> <span class="n">iref</span><span class="o">.</span><span class="n">InstanceDefinition</span>
-        <span class="k">if</span> <span class="n">idef</span><span class="p">:</span>
-            <span class="n">rhino_objects</span> <span class="o">=</span> <span class="n">idef</span><span class="o">.</span><span class="n">GetObjects</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rhobj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rhino_objects</span><span class="p">):</span>
-                <span class="k">print</span> <span class="s">"Object"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s">"="</span><span class="p">,</span> <span class="n">rhobj</span><span class="o">.</span><span class="n">Id</span>
+    iref = objref.Object()
+    if iref:
+        idef = iref.InstanceDefinition
+        if idef:
+            rhino_objects = idef.GetObjects()
+            for i, rhobj in enumerate(rhino_objects):
+                print "Object", i, "=", rhobj.Id
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">InstanceDefinitionObjects</span><span class="p">()</span>
+if __name__=="__main__":
+    InstanceDefinitionObjects()
 </code></pre>
-</div>
 
 </div>
 

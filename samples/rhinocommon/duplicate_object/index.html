@@ -222,26 +222,25 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DuplicateObject</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span> <span class="n">obj_ref</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select object to duplicate"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_ref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rhino_object</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result DuplicateObject(RhinoDoc doc)
+  {
+    ObjRef obj_ref;
+    var rc = RhinoGet.GetOneObject("Select object to duplicate", false, ObjectType.AnyObject, out obj_ref);
+    if (rc != Result.Success)
+      return rc;
+    var rhino_object = obj_ref.Object();
 
-    <span class="kt">var</span> <span class="n">geometry_base</span> <span class="p">=</span> <span class="n">rhino_object</span><span class="p">.</span><span class="nf">DuplicateGeometry</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">geometry_base</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">geometry_base</span><span class="p">)</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-        <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+    var geometry_base = rhino_object.DuplicateGeometry();
+    if (geometry_base != null)
+      if (doc.Objects.Add(geometry_base) != Guid.Empty)
+        doc.Views.Redraw();
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DuplicateObject(ByVal doc As RhinoDoc) As Result
@@ -264,31 +263,30 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">System</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from System import *
+from Rhino import *
+from Rhino.Commands import *
+from Rhino.DocObjects import *
+from Rhino.Input import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
+def RunCommand():
 
-  <span class="n">rc</span><span class="p">,</span> <span class="n">obj_ref</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select object to duplicate"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="n">rhino_object</span> <span class="o">=</span> <span class="n">obj_ref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
+  rc, obj_ref = RhinoGet.GetOneObject("Select object to duplicate", False, ObjectType.AnyObject)
+  if rc &lt;&gt; Result.Success:
+    return rc
+  rhino_object = obj_ref.Object()
 
-  <span class="n">geometry_base</span> <span class="o">=</span> <span class="n">rhino_object</span><span class="o">.</span><span class="n">DuplicateGeometry</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">geometry_base</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">geometry_base</span><span class="p">)</span> <span class="o">&lt;&gt;</span> <span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-      <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+  geometry_base = rhino_object.DuplicateGeometry()
+  if geometry_base &lt;&gt; None:
+    if doc.Objects.Add(geometry_base) &lt;&gt; Guid.Empty:
+      doc.Views.Redraw()
 
-  <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+  return Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

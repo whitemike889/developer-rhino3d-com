@@ -217,44 +217,43 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">dimension</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="n">BOOL</span> <span class="n">bIsRational</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">cv_count</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context )
+{
+  int dimension = 3;
+  BOOL bIsRational = TRUE;
+  int order = 3;
+  int cv_count = 9;
 
-  <span class="n">ON_NurbsCurve</span> <span class="n">nc</span><span class="p">(</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">bIsRational</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">cv_count</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="o">-</span><span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="o">-</span><span class="mf">0.707107</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">0.707107</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.707107</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.707107</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetCV</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ON_4dPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="mf">1.5</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
-  <span class="n">nc</span><span class="p">.</span><span class="n">SetKnot</span><span class="p">(</span> <span class="mi">9</span><span class="p">,</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">ON_PI</span> <span class="p">);</span>
+  ON_NurbsCurve nc( dimension, bIsRational, order, cv_count );
+  nc.SetCV( 0, ON_4dPoint(1.0, 0.0, 0.0, 1.0) );
+  nc.SetCV( 1, ON_4dPoint(0.707107, 0.707107, 0.0, 0.707107) );
+  nc.SetCV( 2, ON_4dPoint(0.0, 1.0, 0.0, 1.0) );
+  nc.SetCV( 3, ON_4dPoint(-0.707107, 0.707107, 0.0, 0.707107) );
+  nc.SetCV( 4, ON_4dPoint(-1.0, 0.0, 0.0, 1.0) );
+  nc.SetCV( 5, ON_4dPoint(-0.707107, -0.707107, 0.0, 0.707107) );
+  nc.SetCV( 6, ON_4dPoint(0.0, -1.0, 0.0, 1.0) );
+  nc.SetCV( 7, ON_4dPoint(0.707107, -0.707107, 0.0, 0.707107) );
+  nc.SetCV( 8, ON_4dPoint(1.0, 0.0, 0.0, 1.0) );
+  nc.SetKnot( 0, 0.0 );
+  nc.SetKnot( 1, 0.0 );
+  nc.SetKnot( 2, 0.5*ON_PI );
+  nc.SetKnot( 3, 0.5*ON_PI );
+  nc.SetKnot( 4, ON_PI );
+  nc.SetKnot( 5, ON_PI );
+  nc.SetKnot( 6, 1.5*ON_PI );
+  nc.SetKnot( 7, 1.5*ON_PI );
+  nc.SetKnot( 8, 2.0*ON_PI );
+  nc.SetKnot( 9, 2.0*ON_PI );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">nc</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddCurveObject</span><span class="p">(</span> <span class="n">nc</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if( nc.IsValid() )
+  {
+    context.m_doc.AddCurveObject( nc );
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

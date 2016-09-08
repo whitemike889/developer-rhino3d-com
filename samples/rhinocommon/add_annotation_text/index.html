@@ -222,27 +222,26 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddAnnotationText</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">pt</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Point3d</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">const</span> <span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="s">"Hello RhinoCommon"</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">height</span> <span class="p">=</span> <span class="m">2.0</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">string</span> <span class="n">font</span> <span class="p">=</span> <span class="s">"Arial"</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span> <span class="p">=</span> <span class="n">pt</span><span class="p">;</span>
-    <span class="n">Guid</span> <span class="n">id</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">font</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">id</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddAnnotationText(Rhino.RhinoDoc doc)
+  {
+    Rhino.Geometry.Point3d pt = new Rhino.Geometry.Point3d(10, 0, 0);
+    const string text = "Hello RhinoCommon";
+    const double height = 2.0;
+    const string font = "Arial";
+    Rhino.Geometry.Plane plane = doc.Views.ActiveView.ActiveViewport.ConstructionPlane();
+    plane.Origin = pt;
+    Guid id = doc.Objects.AddText(text, plane, height, font, false, false);
+    if( id != Guid.Empty )
+    {
+      doc.Views.Redraw();
+      return Rhino.Commands.Result.Success;
+    }
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddAnnotationText(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -262,28 +261,27 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddAnnotationText</span><span class="p">():</span>
-    <span class="n">pt</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point3d</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="s">"Hello RhinoCommon"</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="mf">2.0</span>
-    <span class="n">font</span> <span class="o">=</span> <span class="s">"Arial"</span>
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
-    <span class="n">plane</span><span class="o">.</span><span class="n">Origin</span> <span class="o">=</span> <span class="n">pt</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">font</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">id</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+def AddAnnotationText():
+    pt = Rhino.Geometry.Point3d(10, 0, 0)
+    text = "Hello RhinoCommon"
+    height = 2.0
+    font = "Arial"
+    plane = scriptcontext.doc.Views.ActiveView.ActiveViewport.ConstructionPlane()
+    plane.Origin = pt
+    id = scriptcontext.doc.Objects.AddText(text, plane, height, font, False, False)
+    if id!=System.Guid.Empty:
+        scriptcontext.doc.Views.Redraw()
+        return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddAnnotationText</span><span class="p">()</span>
+if __name__=="__main__":
+    AddAnnotationText()
 </code></pre>
-</div>
 
 </div>
 

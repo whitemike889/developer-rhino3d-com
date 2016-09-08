@@ -222,47 +222,46 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">HatchCurve</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select closed planar curve"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">ClosedCurve</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result HatchCurve(Rhino.RhinoDoc doc)
+  {
+    var go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select closed planar curve");
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve;
+    go.GeometryAttributeFilter = Rhino.Input.Custom.GeometryAttributeFilter.ClosedCurve;
+    go.SubObjectSelect = false;
+    go.Get();
+    if( go.CommandResult() != Rhino.Commands.Result.Success )
+      return go.CommandResult();
 
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">).</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">curve</span><span class="p">==</span><span class="k">null</span> <span class="p">||</span> <span class="p">!</span><span class="n">curve</span><span class="p">.</span><span class="n">IsClosed</span> <span class="p">||</span> <span class="p">!</span><span class="n">curve</span><span class="p">.</span><span class="nf">IsPlanar</span><span class="p">()</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    var curve = go.Object(0).Curve();
+    if( curve==null || !curve.IsClosed || !curve.IsPlanar() )
+      return Rhino.Commands.Result.Failure;
 
-    <span class="kt">string</span> <span class="n">hatch_name</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">HatchPatterns</span><span class="p">[</span><span class="n">doc</span><span class="p">.</span><span class="n">HatchPatterns</span><span class="p">.</span><span class="n">CurrentHatchPatternIndex</span><span class="p">].</span><span class="n">Name</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="s">"Hatch pattern"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">ref</span> <span class="n">hatch_name</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span><span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">hatch_name</span> <span class="p">=</span> <span class="n">hatch_name</span><span class="p">.</span><span class="nf">Trim</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">hatch_name</span><span class="p">)</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">HatchPatterns</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="n">hatch_name</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">index</span> <span class="p">&lt;</span> <span class="m">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Hatch pattern does not exist."</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    string hatch_name = doc.HatchPatterns[doc.HatchPatterns.CurrentHatchPatternIndex].Name;
+    var rc = Rhino.Input.RhinoGet.GetString("Hatch pattern", true, ref hatch_name);
+    if( rc!= Rhino.Commands.Result.Success )
+      return rc;
+    hatch_name = hatch_name.Trim();
+    if( string.IsNullOrWhiteSpace(hatch_name) )
+      return Rhino.Commands.Result.Nothing;
+    int index = doc.HatchPatterns.Find(hatch_name, true);
+    if( index &lt; 0 )
+    {
+      Rhino.RhinoApp.WriteLine("Hatch pattern does not exist.");
+      return Rhino.Commands.Result.Nothing;
+    }
 
-    <span class="kt">var</span> <span class="n">hatches</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Hatch</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span> <span class="n">curve</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="p">&lt;</span><span class="n">hatches</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddHatch</span><span class="p">(</span><span class="n">hatches</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">hatches</span><span class="p">.</span><span class="n">Length</span><span class="p">&gt;</span><span class="m">0</span> <span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    var hatches = Rhino.Geometry.Hatch.Create( curve, index, 0, 1);
+    for( int i=0; i&lt;hatches.Length; i++ )
+      doc.Objects.AddHatch(hatches[i]);
+    if( hatches.Length&gt;0 )
+      doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function HatchCurve(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -308,39 +307,38 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">HatchCurve</span><span class="p">():</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select closed planar curve"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">ClosedCurve</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SubObjectSelect</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span>
+def HatchCurve():
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select closed planar curve")
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
+    go.GeometryAttributeFilter = Rhino.Input.Custom.GeometryAttributeFilter.ClosedCurve
+    go.SubObjectSelect = False
+    go.Get()
+    if go.CommandResult()!=Rhino.Commands.Result.Success: return
 
-    <span class="n">curve</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">curve</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">curve</span><span class="o">.</span><span class="n">IsClosed</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">curve</span><span class="o">.</span><span class="n">IsPlanar</span><span class="p">()):</span> <span class="k">return</span>
+    curve = go.Object(0).Curve()
+    if (not curve or not curve.IsClosed or not curve.IsPlanar()): return
 
-    <span class="n">hatch_name</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">HatchPatterns</span><span class="p">[</span><span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">HatchPatterns</span><span class="o">.</span><span class="n">CurrentHatchPatternIndex</span><span class="p">]</span><span class="o">.</span><span class="n">Name</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">hatch_name</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetString</span><span class="p">(</span><span class="s">"Hatch pattern"</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">hatch_name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">hatch_name</span><span class="p">:</span> <span class="k">return</span>
+    hatch_name = scriptcontext.doc.HatchPatterns[scriptcontext.doc.HatchPatterns.CurrentHatchPatternIndex].Name
+    rc, hatch_name = Rhino.Input.RhinoGet.GetString("Hatch pattern", True, hatch_name)
+    if rc!=Rhino.Commands.Result.Success or not hatch_name: return
 
-    <span class="n">index</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">HatchPatterns</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="n">hatch_name</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">index</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">"Hatch pattern does not exist."</span>
-        <span class="k">return</span>
+    index = scriptcontext.doc.HatchPatterns.Find(hatch_name, True)
+    if index&lt;0:
+        print "Hatch pattern does not exist."
+        return
 
-    <span class="n">hatches</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Hatch</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">hatch</span> <span class="ow">in</span> <span class="n">hatches</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddHatch</span><span class="p">(</span><span class="n">hatch</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">hatches</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    hatches = Rhino.Geometry.Hatch.Create(curve, index, 0, 1)
+    for hatch in hatches:
+        scriptcontext.doc.Objects.AddHatch(hatch)
+    if hatches: scriptcontext.doc.Views.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">HatchCurve</span><span class="p">()</span>
+if __name__=="__main__":
+    HatchCurve()
 </code></pre>
-</div>
 
 </div>
 

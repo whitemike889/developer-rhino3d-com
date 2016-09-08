@@ -389,11 +389,11 @@
 
 <ol>
   <li>Add a new <em>.cpp</em> file to your project.</li>
-  <li>In this <em>.cpp</em> file, declare a new class that is derived from <code class="highlighter-rouge">CRhinoLicenseValidator</code>.</li>
-  <li>Override the <code class="highlighter-rouge">CRhinoLicenseValidator::ProductBuildType</code> virtual function and return the build type of the license that your product requires.</li>
-  <li>Override and implement the <code class="highlighter-rouge">CRhinoLicenseValidator::ValidateProductKey</code> virtual function.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).  For details, see the sample Rhino C/C++ plugins in Related Topics below.</li>
+  <li>In this <em>.cpp</em> file, declare a new class that is derived from <code>CRhinoLicenseValidator</code>.</li>
+  <li>Override the <code>CRhinoLicenseValidator::ProductBuildType</code> virtual function and return the build type of the license that your product requires.</li>
+  <li>Override and implement the <code>CRhinoLicenseValidator::ValidateProductKey</code> virtual function.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).  For details, see the sample Rhino C/C++ plugins in Related Topics below.</li>
   <li>Create one (and only one) static instance of your object.</li>
-  <li>In your plugin’s <code class="highlighter-rouge">CRhinoPlugIn::OnLoadPlugIn</code> member, call <code class="highlighter-rouge">CRhinoPlugIn::GetLicense</code> to get a license.</li>
+  <li>In your plugin’s <code>CRhinoPlugIn::OnLoadPlugIn</code> member, call <code>CRhinoPlugIn::GetLicense</code> to get a license.</li>
   <li>Build your plugin.</li>
   <li><a href="/guides/rhinocommon/digitally_signing_plugins_for_zoo">Digitally sign your plugin</a>.</li>
   <li>Launch Rhino and test your plugin.  When your plugin is loaded for the first time, you will be prompted to enter a license.</li>

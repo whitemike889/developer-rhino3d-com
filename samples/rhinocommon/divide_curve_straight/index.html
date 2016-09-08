@@ -222,86 +222,85 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">NextintersectParamAndPoint</span><span class="p">(</span><span class="n">Curve</span><span class="p">[]</span> <span class="n">overlapCurves</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">[]</span> <span class="n">intersectPoints</span><span class="p">,</span>
-    <span class="n">Curve</span> <span class="n">curve</span><span class="p">,</span> <span class="k">out</span> <span class="kt">double</span> <span class="n">intersectParam</span><span class="p">,</span> <span class="k">out</span> <span class="n">Point3d</span> <span class="n">intersectPoint</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">intersect_params_and_points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="n">Point3d</span><span class="p">&gt;();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">point</span> <span class="k">in</span> <span class="n">intersectPoints</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">double</span> <span class="n">curve_param</span><span class="p">;</span>
-      <span class="n">curve</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="k">out</span> <span class="n">curve_param</span><span class="p">);</span>
-      <span class="n">intersect_params_and_points</span><span class="p">[</span><span class="n">curve_param</span><span class="p">]</span> <span class="p">=</span> <span class="n">point</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">overlap_curve</span> <span class="k">in</span> <span class="n">overlapCurves</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">intersect_params_and_points</span><span class="p">[</span><span class="n">overlap_curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Min</span><span class="p">]</span> <span class="p">=</span> <span class="n">overlap_curve</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">overlap_curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Min</span><span class="p">);</span>
-      <span class="n">intersect_params_and_points</span><span class="p">[</span><span class="n">overlap_curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Max</span><span class="p">]</span> <span class="p">=</span> <span class="n">overlap_curve</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">overlap_curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Max</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="kt">var</span> <span class="n">min_t</span> <span class="p">=</span> <span class="n">intersect_params_and_points</span><span class="p">.</span><span class="n">Keys</span><span class="p">.</span><span class="nf">Min</span><span class="p">();</span>
-    <span class="n">intersectParam</span> <span class="p">=</span> <span class="n">min_t</span><span class="p">;</span>
-    <span class="n">intersectPoint</span> <span class="p">=</span> <span class="n">intersect_params_and_points</span><span class="p">[</span><span class="n">intersectParam</span><span class="p">];</span>
-  <span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  private static void NextintersectParamAndPoint(Curve[] overlapCurves, Point3d[] intersectPoints,
+    Curve curve, out double intersectParam, out Point3d intersectPoint)
+  {
+    var intersect_params_and_points = new Dictionary&lt;double, Point3d&gt;();
+    foreach (var point in intersectPoints)
+    {
+      double curve_param;
+      curve.ClosestPoint(point, out curve_param);
+      intersect_params_and_points[curve_param] = point;
+    }
+    foreach (var overlap_curve in overlapCurves)
+    {
+      intersect_params_and_points[overlap_curve.Domain.Min] = overlap_curve.PointAt(overlap_curve.Domain.Min);
+      intersect_params_and_points[overlap_curve.Domain.Max] = overlap_curve.PointAt(overlap_curve.Domain.Max);
+    }
+    var min_t = intersect_params_and_points.Keys.Min();
+    intersectParam = min_t;
+    intersectPoint = intersect_params_and_points[intersectParam];
+  }
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">DivideCurveStraight</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// user input
-</span>    <span class="n">ObjRef</span><span class="p">[]</span> <span class="n">obj_refs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select curve to divide"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>
-      <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">EdgeFilter</span><span class="p">,</span> <span class="k">out</span> <span class="n">obj_refs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">obj_refs</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  public static Result DivideCurveStraight(RhinoDoc doc)
+  {
+    // user input
+    ObjRef[] obj_refs;
+    var rc = RhinoGet.GetMultipleObjects("Select curve to divide", false,
+      ObjectType.Curve | ObjectType.EdgeFilter, out obj_refs);
+    if (rc != Result.Success || obj_refs == null)
+      return rc;
 
-    <span class="kt">double</span> <span class="n">distance_between_divisions</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="s">"Distance between divisions"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span>
-      <span class="k">ref</span> <span class="n">distance_between_divisions</span><span class="p">,</span> <span class="m">1.0</span><span class="p">,</span> <span class="n">Double</span><span class="p">.</span><span class="n">MaxValue</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    double distance_between_divisions = 5;
+    rc = RhinoGet.GetNumber("Distance between divisions", false,
+      ref distance_between_divisions, 1.0, Double.MaxValue);
+    if (rc != Result.Success)
+      return rc;
 
 
-    <span class="c1">// generate the points
-</span>    <span class="kt">var</span> <span class="n">points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">obj_ref</span> <span class="k">in</span> <span class="n">obj_refs</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">obj_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    // generate the points
+    var points = new List&lt;Point3d&gt;();
+    foreach (var obj_ref in obj_refs)
+    {
+      var curve = obj_ref.Curve();
+      if (curve == null) return Result.Failure;
 
-      <span class="kt">var</span> <span class="n">t0</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Min</span><span class="p">;</span>
-      <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">curve</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">t0</span><span class="p">));</span>
+      var t0 = curve.Domain.Min;
+      points.Add(curve.PointAt(t0));
 
-      <span class="kt">var</span> <span class="n">sphere_center</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">PointAt</span><span class="p">(</span><span class="n">t0</span><span class="p">);</span>
-      <span class="kt">var</span> <span class="n">t</span> <span class="p">=</span> <span class="n">t0</span><span class="p">;</span>
-      <span class="kt">var</span> <span class="n">rest_of_curve</span> <span class="p">=</span> <span class="n">curve</span><span class="p">;</span>
-      <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">sphere</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">sphere_center</span><span class="p">,</span> <span class="n">distance_between_divisions</span><span class="p">);</span>
-        <span class="n">Curve</span><span class="p">[]</span> <span class="n">overlap_curves</span><span class="p">;</span>
-        <span class="n">Point3d</span><span class="p">[]</span> <span class="n">intersect_points</span><span class="p">;</span>
-        <span class="kt">var</span> <span class="n">b</span> <span class="p">=</span> <span class="n">Intersection</span><span class="p">.</span><span class="nf">CurveBrep</span><span class="p">(</span><span class="n">rest_of_curve</span><span class="p">,</span> <span class="n">sphere</span><span class="p">.</span><span class="nf">ToBrep</span><span class="p">(),</span> <span class="m">0.0</span><span class="p">,</span>
-          <span class="k">out</span> <span class="n">overlap_curves</span><span class="p">,</span> <span class="k">out</span> <span class="n">intersect_points</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="n">b</span> <span class="p">||</span> <span class="p">(</span><span class="n">overlap_curves</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span> <span class="p">&amp;&amp;</span> <span class="n">intersect_points</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">))</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="kt">double</span> <span class="n">intersect_param</span><span class="p">;</span>
-        <span class="n">Point3d</span> <span class="n">intersect_point</span><span class="p">;</span>
-        <span class="nf">NextintersectParamAndPoint</span><span class="p">(</span><span class="n">overlap_curves</span><span class="p">,</span> <span class="n">intersect_points</span><span class="p">,</span> <span class="n">rest_of_curve</span><span class="p">,</span>
-          <span class="k">out</span> <span class="n">intersect_param</span><span class="p">,</span> <span class="k">out</span> <span class="n">intersect_point</span><span class="p">);</span>
-        <span class="n">points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">intersect_point</span><span class="p">);</span>
-        <span class="n">t</span> <span class="p">=</span> <span class="n">intersect_param</span><span class="p">;</span>
-        <span class="n">sphere_center</span> <span class="p">=</span> <span class="n">intersect_point</span><span class="p">;</span>
-        <span class="n">rest_of_curve</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="m">1</span><span class="p">];</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+      var sphere_center = curve.PointAt(t0);
+      var t = t0;
+      var rest_of_curve = curve;
+      while (true)
+      {
+        var sphere = new Sphere(sphere_center, distance_between_divisions);
+        Curve[] overlap_curves;
+        Point3d[] intersect_points;
+        var b = Intersection.CurveBrep(rest_of_curve, sphere.ToBrep(), 0.0,
+          out overlap_curves, out intersect_points);
+        if (!b || (overlap_curves.Length == 0 &amp;&amp; intersect_points.Length == 0))
+          break;
+        double intersect_param;
+        Point3d intersect_point;
+        NextintersectParamAndPoint(overlap_curves, intersect_points, rest_of_curve,
+          out intersect_param, out intersect_point);
+        points.Add(intersect_point);
+        t = intersect_param;
+        sphere_center = intersect_point;
+        rest_of_curve = curve.Split(t)[1];
+      }
+    }
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">point</span> <span class="k">in</span> <span class="n">points</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+    foreach (var point in points)
+      doc.Objects.AddPoint(point);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Views.Redraw();
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared Sub NextintersectParamAndPoint(ByVal overlapCurves() As Curve, ByVal intersectPoints() As Point3d, ByVal curve As Curve, ByRef intersectParam As Double, ByRef intersectPoint As Point3d)
@@ -377,64 +376,63 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
-<span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry.Intersect</span> <span class="kn">import</span> <span class="o">*</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import rhinoscriptsyntax as rs
+import Rhino
+from Rhino.Input import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Geometry import *
+from Rhino.Geometry.Intersect import *
 
-<span class="k">def</span> <span class="nf">nextIntersectParamAndPoint</span><span class="p">(</span><span class="n">overlapCurves</span><span class="p">,</span> <span class="n">intersectPoints</span><span class="p">,</span> <span class="n">curve</span><span class="p">):</span>
-    <span class="n">intersectParamsAndPoints</span> <span class="o">=</span> <span class="p">[(</span><span class="n">curve</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">point</span><span class="p">)</span>
-                                <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">intersectPoints</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">overlapCurve</span> <span class="ow">in</span> <span class="n">overlapCurves</span><span class="p">:</span>
-        <span class="n">intersectParamsAndPoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-          <span class="p">(</span><span class="n">overlapCurve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="n">Min</span><span class="p">,</span> <span class="n">overlapCurve</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">overlapCurve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="n">Min</span><span class="p">)))</span>
-        <span class="n">intersectParamsandPoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-          <span class="p">(</span><span class="n">overlapCurve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="n">Max</span><span class="p">,</span> <span class="n">overlapCurve</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">overlapCurve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="nb">max</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">intersectParamsAndPoints</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span>  <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+def nextIntersectParamAndPoint(overlapCurves, intersectPoints, curve):
+    intersectParamsAndPoints = [(curve.ClosestPoint(point)[1], point)
+                                for point in intersectPoints]
+    for overlapCurve in overlapCurves:
+        intersectParamsAndPoints.append(
+          (overlapCurve.Domain.Min, overlapCurve.PointAt(overlapCurve.Domain.Min)))
+        intersectParamsandPoints.append(
+          (overlapCurve.Domain.Max, overlapCurve.PointAt(overlapCurve.Domain.max)))
+    return min(intersectParamsAndPoints, key =  lambda t: t[0])
 
-<span class="k">def</span> <span class="nf">divide_curve</span><span class="p">():</span>
-    <span class="c"># get user input</span>
-    <span class="n">res</span><span class="p">,</span> <span class="n">obj_refs</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetMultipleObjects</span><span class="p">(</span><span class="s">"Curves to divide"</span><span class="p">,</span>
-        <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">EdgeFilter</span> <span class="o">|</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">res</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">res</span>
-    <span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj_ref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span> <span class="k">for</span> <span class="n">obj_ref</span> <span class="ow">in</span> <span class="n">obj_refs</span><span class="p">]</span>
+def divide_curve():
+    # get user input
+    res, obj_refs = RhinoGet.GetMultipleObjects("Curves to divide",
+        False, ObjectType.EdgeFilter | ObjectType.Curve)
+    if res &lt;&gt; Result.Success: return res
+    curves = [obj_ref.Curve() for obj_ref in obj_refs]
 
-    <span class="n">distance_between_divisions</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetReal</span><span class="p">(</span>
-      <span class="n">message</span> <span class="o">=</span> <span class="s">"Distance between divisions"</span><span class="p">,</span>
-      <span class="n">number</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">minimum</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">distance_between_divisions</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span>
+    distance_between_divisions = rs.GetReal(
+      message = "Distance between divisions",
+      number = 5.0, minimum = 1.0)
+    if distance_between_divisions == None: return
 
-    <span class="c"># generate the points</span>
-    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
-      <span class="n">t0</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="n">Min</span>
-      <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curve</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t0</span><span class="p">))</span>
+    # generate the points
+    points = []
+    for curve in curves:
+      t0 = curve.Domain.Min
+      points.append(curve.PointAt(t0))
 
-      <span class="n">sphere_center</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span>
-      <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span>
-      <span class="n">rest_of_curve</span> <span class="o">=</span> <span class="n">curve</span>
-      <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">sphere</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">(</span><span class="n">sphere_center</span><span class="p">,</span> <span class="n">distance_between_divisions</span><span class="p">)</span>
-        <span class="n">b</span><span class="p">,</span> <span class="n">overlapCurves</span><span class="p">,</span> <span class="n">intersectPoints</span> <span class="o">=</span> <span class="n">Intersection</span><span class="o">.</span><span class="n">CurveBrep</span><span class="p">(</span>
-                               <span class="n">rest_of_curve</span><span class="p">,</span> <span class="n">sphere</span><span class="o">.</span><span class="n">ToBrep</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="bp">False</span> <span class="ow">or</span> <span class="p">(</span><span class="n">overlapCurves</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">intersectPoints</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-          <span class="k">break</span>
-        <span class="n">t</span><span class="p">,</span> <span class="n">point</span> <span class="o">=</span> <span class="n">nextIntersectParamAndPoint</span><span class="p">(</span>
-          <span class="n">overlapCurves</span><span class="p">,</span> <span class="n">intersectPoints</span><span class="p">,</span> <span class="n">rest_of_curve</span><span class="p">)</span>
-        <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-        <span class="n">sphere_center</span> <span class="o">=</span> <span class="n">point</span>
-        <span class="n">rest_of_curve</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">Split</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+      sphere_center = curve.PointAt(t0)
+      t = t0
+      rest_of_curve = curve
+      while True:
+        sphere = Sphere(sphere_center, distance_between_divisions)
+        b, overlapCurves, intersectPoints = Intersection.CurveBrep(
+                               rest_of_curve, sphere.ToBrep(), 0.0)
+        if b == False or (overlapCurves.Length == 0 and intersectPoints.Length == 0):
+          break
+        t, point = nextIntersectParamAndPoint(
+          overlapCurves, intersectPoints, rest_of_curve)
+        points.append(point)
+        sphere_center = point
+        rest_of_curve = curve.Split(t)[1]
 
-    <span class="n">rs</span><span class="o">.</span><span class="n">AddPoints</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-    <span class="n">rs</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
+    rs.AddPoints(points)
+    rs.Redraw()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">divide_curve</span><span class="p">()</span>
+if __name__ == "__main__":
+    divide_curve()
 </code></pre>
-</div>
 
 </div>
 

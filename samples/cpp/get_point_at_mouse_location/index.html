@@ -217,29 +217,28 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">GetPointAtCursorPos</span><span class="p">(</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">point</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">view</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">POINT</span> <span class="n">pt</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">::</span><span class="n">GetCursorPos</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pt</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">view</span><span class="o">-&gt;</span><span class="n">ScreenToClient</span><span class="p">(</span> <span class="o">&amp;</span><span class="n">pt</span> <span class="p">);</span>
-      <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">VP</span><span class="p">().</span><span class="n">GetXform</span><span class="p">(</span><span class="n">ON</span><span class="o">::</span><span class="n">screen_cs</span><span class="p">,</span> <span class="n">ON</span><span class="o">::</span><span class="n">world_cs</span><span class="p">,</span> <span class="n">xform</span><span class="p">)</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">point</span> <span class="o">=</span> <span class="n">ON_3dPoint</span><span class="p">(</span> <span class="n">pt</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="mf">0.0</span> <span class="p">);</span>
-        <span class="n">point</span><span class="p">.</span><span class="n">Transform</span><span class="p">(</span> <span class="n">xform</span> <span class="p">);</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">static bool GetPointAtCursorPos( ON_3dPoint&amp; point )
+{
+  bool rc = false;
+  CRhinoView* view = RhinoApp().ActiveView();
+  if (view)
+  {
+    POINT pt;
+    if (::GetCursorPos(&amp;pt) )
+    {
+      view-&gt;ScreenToClient( &amp;pt );
+      ON_Xform xform;
+      if( view-&gt;ActiveViewport().VP().GetXform(ON::screen_cs, ON::world_cs, xform) )
+      {
+        point = ON_3dPoint( pt.x, pt.y, 0.0 );
+        point.Transform( xform );
+        rc = true;
+      }
+    }
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

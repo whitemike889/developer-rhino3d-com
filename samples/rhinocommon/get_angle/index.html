@@ -222,34 +222,33 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">GetAngle</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Base point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">base_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result GetAngle(RhinoDoc doc)
+  {
+    var gp = new GetPoint();
+    gp.SetCommandPrompt("Base point");
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var base_point = gp.Point();
 
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"First reference point"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">DrawLineFromPoint</span><span class="p">(</span><span class="n">base_point</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">first_point</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
+    gp.SetCommandPrompt("First reference point");
+    gp.DrawLineFromPoint(base_point, true);
+    gp.Get();
+    if (gp.CommandResult() != Result.Success)
+      return gp.CommandResult();
+    var first_point = gp.Point();
 
-    <span class="kt">double</span> <span class="n">angle_radians</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetAngle</span><span class="p">(</span><span class="s">"Second reference point"</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">first_point</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="k">out</span> <span class="n">angle_radians</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">==</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Angle = {0} degrees"</span><span class="p">,</span> <span class="n">RhinoMath</span><span class="p">.</span><span class="nf">ToDegrees</span><span class="p">(</span><span class="n">angle_radians</span><span class="p">));</span>
+    double angle_radians;
+    var rc = RhinoGet.GetAngle("Second reference point", base_point, first_point, 0, out angle_radians);
+    if (rc == Result.Success)
+      RhinoApp.WriteLine("Angle = {0} degrees", RhinoMath.ToDegrees(angle_radians));
 
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return rc;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function GetAngle(ByVal doc As RhinoDoc) As Result
@@ -280,36 +279,35 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Commands import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
-  <span class="n">gp</span> <span class="o">=</span> <span class="n">GetPoint</span><span class="p">()</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Base point"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">base_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+def RunCommand():
+  gp = GetPoint()
+  gp.SetCommandPrompt("Base point")
+  gp.Get()
+  if gp.CommandResult() &lt;&gt; Result.Success:
+    return gp.CommandResult()
+  base_point = gp.Point()
 
-  <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"First reference point"</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span><span class="n">base_point</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-  <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">first_point</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
+  gp.SetCommandPrompt("First reference point")
+  gp.DrawLineFromPoint(base_point, True)
+  gp.Get()
+  if gp.CommandResult() &lt;&gt; Result.Success:
+    return gp.CommandResult()
+  first_point = gp.Point()
 
 
-  <span class="n">rc</span><span class="p">,</span> <span class="n">angle_radians</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetAngle</span><span class="p">(</span><span class="s">"Second reference point"</span><span class="p">,</span> <span class="n">base_point</span><span class="p">,</span> <span class="n">first_point</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">print</span> <span class="s">"Angle = {0} degrees"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">RhinoMath</span><span class="o">.</span><span class="n">ToDegrees</span><span class="p">(</span><span class="n">angle_radians</span><span class="p">))</span>
-  <span class="k">return</span> <span class="n">rc</span>
+  rc, angle_radians = RhinoGet.GetAngle("Second reference point", base_point, first_point, 0)
+  if rc == Result.Success:
+    print "Angle = {0} degrees".format(RhinoMath.ToDegrees(angle_radians))
+  return rc
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

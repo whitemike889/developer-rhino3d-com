@@ -298,15 +298,15 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>User Data is a powerful set of APIs that allow plugin developers to attach custom data of any kind to any object derived from <code class="highlighter-rouge">ON_Object</code>.  In order to take advantage of User Data, you are required to implement your own user data object by deriving a class from <code class="highlighter-rouge">ON_UserData</code> and overriding the required virtual functions.</p>
+<p>User Data is a powerful set of APIs that allow plugin developers to attach custom data of any kind to any object derived from <code>ON_Object</code>.  In order to take advantage of User Data, you are required to implement your own user data object by deriving a class from <code>ON_UserData</code> and overriding the required virtual functions.</p>
 
-<p>In Rhino, the SDK adds a new standardized approach for adding User Data to objects called User Strings.  The Rhino C/C++ SDK allows you to quickly attaches User Data in the form of a key-value string pair to any object derived from <code class="highlighter-rouge">ON_Object</code>.  This feature is exposed to the C/C++ SDK as member functions on <code class="highlighter-rouge">ON_Object</code>:</p>
+<p>In Rhino, the SDK adds a new standardized approach for adding User Data to objects called User Strings.  The Rhino C/C++ SDK allows you to quickly attaches User Data in the form of a key-value string pair to any object derived from <code>ON_Object</code>.  This feature is exposed to the C/C++ SDK as member functions on <code>ON_Object</code>:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">ON_Object::SetUserString</code>: attaches a user string to an object. This information will persist through copy construction, operator=, and file IO.</li>
-  <li><code class="highlighter-rouge">ON_Object::GetUserString</code>: gets a user string from an object.</li>
-  <li><code class="highlighter-rouge">ON_Object::GetUserStringKeys</code>: retrieves a list of all user string keys on an object.</li>
-  <li><code class="highlighter-rouge">ON_Object::GetUserStrings</code>: retrieves a list of all user strings on an object.</li>
+  <li><code>ON_Object::SetUserString</code>: attaches a user string to an object. This information will persist through copy construction, operator=, and file IO.</li>
+  <li><code>ON_Object::GetUserString</code>: gets a user string from an object.</li>
+  <li><code>ON_Object::GetUserStringKeys</code>: retrieves a list of all user string keys on an object.</li>
+  <li><code>ON_Object::GetUserStrings</code>: retrieves a list of all user strings on an object.</li>
 </ul>
 
 <p>There are a number of advantages to User Strings:</p>
@@ -322,64 +322,63 @@
 
 <p>The following example demonstrates how to add User Strings to a selected object…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">bAttribute</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  bool bAttribute = true;
 
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select object to attach user text"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">AddCommandOptionToggle</span><span class="p">(</span>
-        <span class="n">RHCMDOPTNAME</span><span class="p">(</span><span class="s">L"Location"</span><span class="p">),</span>
-        <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Object"</span><span class="p">),</span>
-        <span class="n">RHCMDOPTVALUE</span><span class="p">(</span><span class="s">L"Attribute"</span><span class="p">),</span>
-        <span class="n">bAttribute</span><span class="p">,</span>
-        <span class="o">&amp;</span><span class="n">bAttribute</span>
-        <span class="p">);</span>
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select object to attach user text" );
+  go.AddCommandOptionToggle(
+        RHCMDOPTNAME(L"Location"),
+        RHCMDOPTVALUE(L"Object"),
+        RHCMDOPTVALUE(L"Attribute"),
+        bAttribute,
+        &amp;bAttribute
+        );
 
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">option</span> <span class="p">)</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">!=</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">cancel</span><span class="p">;</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+  for(;;)
+  {
+    CRhinoGet::result res = go.GetObjects( 1, 1 );
+    if( res == CRhinoGet::option )
+      continue;
+    if( res != CRhinoGet::object )
+      return cancel;
+    break;
+  }
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const CRhinoObjRef&amp; ref = go.Object(0);
+  const CRhinoObject* obj = ref.Object();
+  if( !obj )
+    return failure;
 
-  <span class="n">ON_wString</span> <span class="n">key</span> <span class="o">=</span> <span class="s">L"test"</span><span class="p">;</span>
-  <span class="n">ON_wString</span> <span class="n">text</span> <span class="o">=</span> <span class="s">L"sample text"</span><span class="p">;</span>
+  ON_wString key = L"test";
+  ON_wString text = L"sample text";
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">bAttribute</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Attach user string to object's attributes
-</span>    <span class="n">CRhinoObjectAttributes</span> <span class="n">attribs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Attributes</span><span class="p">();</span>
-    <span class="n">attribs</span><span class="p">.</span><span class="n">SetUserString</span><span class="p">(</span> <span class="n">key</span><span class="p">,</span> <span class="n">text</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ModifyObjectAttributes</span><span class="p">(</span> <span class="n">ref</span><span class="p">,</span> <span class="n">attribs</span> <span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="c1">// Attach user string to object's geometry
-</span>    <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">dupe</span> <span class="o">=</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">DuplicateRhinoObject</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">dupe</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="k">const_cast</span><span class="o">&lt;</span><span class="n">ON_Geometry</span><span class="o">*&gt;</span><span class="p">(</span> <span class="n">dupe</span><span class="o">-&gt;</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">geom</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">geom</span><span class="o">-&gt;</span><span class="n">SetUserString</span><span class="p">(</span> <span class="n">key</span><span class="p">,</span> <span class="n">text</span> <span class="p">);</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">ref</span><span class="p">,</span> <span class="n">dupe</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  if( bAttribute )
+  {
+    // Attach user string to object's attributes
+    CRhinoObjectAttributes attribs = obj-&gt;Attributes();
+    attribs.SetUserString( key, text );
+    context.m_doc.ModifyObjectAttributes( ref, attribs );
+  }
+  else
+  {
+    // Attach user string to object's geometry
+    CRhinoObject* dupe = obj-&gt;DuplicateRhinoObject();
+    if( dupe )
+    {
+      ON_Geometry* geom = const_cast&lt;ON_Geometry*&gt;( dupe-&gt;Geometry() );
+      if( geom )
+      {
+        geom-&gt;SetUserString( key, text );
+        context.m_doc.ReplaceObject( ref, dupe );
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

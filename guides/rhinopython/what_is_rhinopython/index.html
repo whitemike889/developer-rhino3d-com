@@ -427,7 +427,7 @@
 
 <h3 id="rhinoscript-style-functions-windows">RhinoScript Style Functions (Windows)</h3>
 
-<p>One of the key features of RhinoScript that make it easy to write powerful scripts is a large library of Rhino specific functions that can be called from scripts.  Our python implementation includes a set of similar functions that can be imported and used in any python script for Rhino.  This set of functions is known as the <code class="highlighter-rouge">rhinoscript</code> package.</p>
+<p>One of the key features of RhinoScript that make it easy to write powerful scripts is a large library of Rhino specific functions that can be called from scripts.  Our python implementation includes a set of similar functions that can be imported and used in any python script for Rhino.  This set of functions is known as the <code>rhinoscript</code> package.</p>
 
 <p>Let’s compare scripts for letting a user pick two points and adding a line to Rhino…</p>
 
@@ -445,14 +445,13 @@ End If
 
 <p>compared with Python:</p>
 
-<div class="language-py highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">rhinoscriptsyntax</span> <span class="kn">as</span> <span class="nn">rs</span>
+<pre><code class="language-py">import rhinoscriptsyntax as rs
 
-<span class="n">start</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"Start of line"</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">start</span><span class="p">:</span>
-  <span class="n">end</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="s">"End of line"</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">end</span><span class="p">:</span> <span class="n">rs</span><span class="o">.</span><span class="n">AddLine</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
+start = rs.GetPoint("Start of line")
+if start:
+  end = rs.GetPoint("End of line")
+  if end: rs.AddLine(start,end)
 </code></pre>
-</div>
 
 <p>Yes, different…but similar enough that you should be able to figure out what is happening in python if you’ve written RhinoScript.</p>
 

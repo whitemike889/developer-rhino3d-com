@@ -217,67 +217,66 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select solids for volume centroid calculation"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span>
-        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="o">|</span>
-        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">polysrf_object</span>
-        <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryAttributeFilter</span><span class="p">(</span>
-        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">closed_surface</span> <span class="o">|</span>
-        <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">closed_polysrf</span>
-        <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableGroupSelect</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select solids for volume centroid calculation" );
+  go.SetGeometryFilter(
+        CRhinoGetObject::surface_object |
+        CRhinoGetObject::polysrf_object
+        );
+  go.SetGeometryAttributeFilter(
+        CRhinoGetObject::closed_surface |
+        CRhinoGetObject::closed_polysrf
+        );
+  go.EnableSubObjectSelect( false );
+  go.EnableGroupSelect( true );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*&gt;</span> <span class="n">geom</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="p">);</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Geometry</span><span class="o">*</span> <span class="n">geo</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">Geometry</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">geo</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-    <span class="n">geom</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span> <span class="n">geo</span> <span class="p">);</span>
-  <span class="p">}</span>
+  ON_SimpleArray&lt;const ON_Geometry*&gt; geom( go.ObjectCount() );
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const ON_Geometry* geo = go.Object(i).Geometry();
+    if( 0 == geo )
+      return failure;
+    geom.Append( geo );
+  }
 
-  <span class="c1">// Get bounding box of all objects
-</span>  <span class="n">ON_BoundingBox</span> <span class="n">bbox</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">geom</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="n">geom</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">GetBoundingBox</span><span class="p">(</span> <span class="n">bbox</span><span class="p">,</span> <span class="n">bbox</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">);</span>
+  // Get bounding box of all objects
+  ON_BoundingBox bbox;
+  for( i = 0; i &lt; geom.Count(); i++ )
+    geom[i]-&gt;GetBoundingBox( bbox, bbox.IsValid() );
 
-  <span class="n">ON_3dPoint</span> <span class="n">base_point</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">.</span><span class="n">Center</span><span class="p">();</span>
-  <span class="n">ON_SimpleArray</span><span class="o">&lt;</span><span class="n">ON_MassProperties</span><span class="o">&gt;</span> <span class="n">MassProp</span><span class="p">;</span>
-  <span class="n">MassProp</span><span class="p">.</span><span class="n">Reserve</span><span class="p">(</span> <span class="n">geom</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">);</span>
+  ON_3dPoint base_point = bbox.Center();
+  ON_SimpleArray&lt;ON_MassProperties&gt; MassProp;
+  MassProp.Reserve( geom.Count() );
 
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">geom</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_MassProperties</span><span class="o">*</span> <span class="n">mp</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">MassProp</span><span class="p">.</span><span class="n">AppendNew</span><span class="p">();</span>
+  for( i = 0; i &lt; geom.Count(); i++ )
+  {
+    ON_MassProperties* mp = &amp;MassProp.AppendNew();
 
-    <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">srf</span> <span class="o">=</span> <span class="n">ON_Surface</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">geom</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">)</span>
-      <span class="n">srf</span><span class="o">-&gt;</span><span class="n">VolumeMassProperties</span><span class="p">(</span> <span class="o">*</span><span class="n">mp</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">base_point</span> <span class="p">);</span>       
+    if( const ON_Surface* srf = ON_Surface::Cast(geom[i]) )
+      srf-&gt;VolumeMassProperties( *mp, true, true, false, false, base_point );       
 
-    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">brep</span> <span class="o">=</span> <span class="n">ON_Brep</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span><span class="n">geom</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">)</span>
-      <span class="n">brep</span><span class="o">-&gt;</span><span class="n">VolumeMassProperties</span><span class="p">(</span> <span class="o">*</span><span class="n">mp</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">base_point</span> <span class="p">);</span>
-  <span class="p">}</span>
+    else if( const ON_Brep* brep = ON_Brep::Cast(geom[i]) )
+      brep-&gt;VolumeMassProperties( *mp, true, true, false, false, base_point );
+  }
 
-  <span class="n">ON_MassProperties</span> <span class="n">results</span><span class="p">;</span>
-  <span class="n">results</span><span class="p">.</span><span class="n">Sum</span><span class="p">(</span> <span class="n">MassProp</span><span class="p">.</span><span class="n">Count</span><span class="p">(),</span> <span class="n">MassProp</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
+  ON_MassProperties results;
+  results.Sum( MassProp.Count(), MassProp.Array() );
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt</span><span class="p">(</span> <span class="n">results</span><span class="p">.</span><span class="n">m_x0</span><span class="p">,</span> <span class="n">results</span><span class="p">.</span><span class="n">m_y0</span><span class="p">,</span> <span class="n">results</span><span class="p">.</span><span class="n">m_z0</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  ON_3dPoint pt( results.m_x0, results.m_y0, results.m_z0 );
+  context.m_doc.AddPointObject( pt );
+  context.m_doc.Redraw();
 
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Volume centroid = %g,%g,%g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
+  RhinoApp().Print( L"Volume centroid = %g,%g,%g\n", pt.x, pt.y, pt.z );
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

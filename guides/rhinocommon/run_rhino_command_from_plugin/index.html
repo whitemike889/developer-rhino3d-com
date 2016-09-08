@@ -323,7 +323,7 @@
 
 <h2 id="the-solution">The Solution</h2>
 
-<p>When defining your command class, make sure to add the <code class="highlighter-rouge">ScriptRunner</code> command style attribute.  In other words, instead of defining your command classes like this:</p>
+<p>When defining your command class, make sure to add the <code>ScriptRunner</code> command style attribute.  In other words, instead of defining your command classes like this:</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
@@ -331,10 +331,9 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs1"><pre class="highlight"><code><span class="na">[System.Runtime.InteropServices.Guid(&lt;&lt;test_command_guid&gt;&gt;)]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">TestCommand</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Command</span>
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">[System.Runtime.InteropServices.Guid(&lt;&lt;test_command_guid&gt;&gt;)]
+public class TestCommand : Rhino.Commands.Command
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">&lt;System.Runtime.InteropServices.Guid(&lt;&lt;test_command_guid&gt;&gt;)&gt; _
 Public Class TestCommand
@@ -351,13 +350,12 @@ Public Class TestCommand
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs2"><pre class="highlight"><code><span class="p">[</span>
- <span class="n">System</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">InteropServices</span><span class="p">.</span><span class="nf">Guid</span><span class="p">(&lt;&lt;</span><span class="n">test_command_guid</span><span class="p">&gt;&gt;),</span>
- <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="nf">CommandStyle</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Style</span><span class="p">.</span><span class="n">ScriptRunner</span><span class="p">)</span>
-<span class="p">]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">TestCommand</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Command</span>
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">[
+ System.Runtime.InteropServices.Guid(&lt;&lt;test_command_guid&gt;&gt;),
+ Rhino.Commands.CommandStyle(Rhino.Commands.Style.ScriptRunner)
+]
+public class TestCommand : Rhino.Commands.Command
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">&lt; _
   System.Runtime.InteropServices.Guid(&lt;&lt;test_command_guid&gt;&gt;), _
@@ -369,7 +367,7 @@ Public Class TestCommand
 
 </div>
 
-<p>Then, from within your command class’s <code class="highlighter-rouge">RunCommand()</code> method, you can call <code class="highlighter-rouge">RhinoApp.RunScript()</code> to script the running of a Rhino command.  For example…</p>
+<p>Then, from within your command class’s <code>RunCommand()</code> method, you can call <code>RhinoApp.RunScript()</code> to script the running of a Rhino command.  For example…</p>
 
 <ul class="nav nav-pills">
   <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
@@ -377,13 +375,12 @@ Public Class TestCommand
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs3"><pre class="highlight"><code><span class="k">protected</span> <span class="k">override</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">RunCommand</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">RunMode</span> <span class="n">mode</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">RunScript</span><span class="p">(</span><span class="s">"_-Line 0,0,0 10,10,10"</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-<span class="p">}</span>
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">protected override Rhino.Commands.Result RunCommand(Rhino.RhinoDoc doc, Rhino.Commands.RunMode mode)
+{
+  Rhino.RhinoApp.RunScript("_-Line 0,0,0 10,10,10", false);
+  return Rhino.Commands.Result.Success;
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">Protected Overrides Function RunCommand(ByVal doc As Rhino.RhinoDoc, ByVal mode As Rhino.Commands.RunMode) As Rhino.Commands.Result
   Rhino.RhinoApp.RunScript("_-Line 0,0,0 10,10,10", False)
@@ -398,17 +395,17 @@ End Function
 <p>This kind of command can be very dangerous. Please be sure you understand the following:</p>
 
 <ol>
-  <li>If you are not very familiar with how references work, you should only call <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code> from within a <code class="highlighter-rouge">RhinoScriptCommand</code> derived command.</li>
+  <li>If you are not very familiar with how references work, you should only call <code>Rhino.RhinoApp.RunScript()</code> from within a <code>RhinoScriptCommand</code> derived command.</li>
   <li>If you are very familiar with references, then please observe the following rules:
     <ol>
-      <li>If you get a reference or pointer to any part of the Rhino run-time database, this reference or pointer will not be valid after you call <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code>.</li>
-      <li>If you get a reference or a pointer, then call <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code>, and then use the reference, Rhino will probably crash.</li>
-      <li>All pointers and references used by the command should be scoped such that they are only valid for the time between calls to <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code>.</li>
+      <li>If you get a reference or pointer to any part of the Rhino run-time database, this reference or pointer will not be valid after you call <code>Rhino.RhinoApp.RunScript()</code>.</li>
+      <li>If you get a reference or a pointer, then call <code>Rhino.RhinoApp.RunScript()</code>, and then use the reference, Rhino will probably crash.</li>
+      <li>All pointers and references used by the command should be scoped such that they are only valid for the time between calls to <code>Rhino.RhinoApp.RunScript()</code>.</li>
     </ol>
   </li>
 </ol>
 
-<p>This is because <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code> can change the dynamic arrays in the run-time database. The result is that all pointers and references become invalid. Be sure to scope your variables between <code class="highlighter-rouge">Rhino.RhinoApp.RunScript()</code> calls.</p>
+<p>This is because <code>Rhino.RhinoApp.RunScript()</code> can change the dynamic arrays in the run-time database. The result is that all pointers and references become invalid. Be sure to scope your variables between <code>Rhino.RhinoApp.RunScript()</code> calls.</p>
 
 <p>Never allow references and pointers from one section to be used in another section.</p>
 

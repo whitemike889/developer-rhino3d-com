@@ -319,80 +319,79 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>The curve and surface grips you see on the screen, after running Rhino’s <em>PointsOn</em> command, are represented by <code class="highlighter-rouge">CRhinoGripObject</code>-derived objects.  To move a grip object, you have to do a few things:</p>
+<p>The curve and surface grips you see on the screen, after running Rhino’s <em>PointsOn</em> command, are represented by <code>CRhinoGripObject</code>-derived objects.  To move a grip object, you have to do a few things:</p>
 
 <ol>
-  <li>Get a <code class="highlighter-rouge">CRhinoGripObject</code>.  You can use a <code class="highlighter-rouge">CRhinoGetObject</code> object to do this.</li>
-  <li>Call <code class="highlighter-rouge">CRhinoGripObject::MoveGrip</code> to transform the grip’s location.</li>
-  <li>Call <code class="highlighter-rouge">CRhinoGripObject::Owner</code> to get the grips owning <code class="highlighter-rouge">CRhinoObject</code> object.</li>
-  <li>Call <code class="highlighter-rouge">CRhinoObject::NewObject</code> to create a new <code class="highlighter-rouge">CRhinoObject</code> object based on the new grip location.</li>
-  <li>Call <code class="highlighter-rouge">CRhinoDoc::ReplaceObject</code> to replace the original owning object with the new one.</li>
+  <li>Get a <code>CRhinoGripObject</code>.  You can use a <code>CRhinoGetObject</code> object to do this.</li>
+  <li>Call <code>CRhinoGripObject::MoveGrip</code> to transform the grip’s location.</li>
+  <li>Call <code>CRhinoGripObject::Owner</code> to get the grips owning <code>CRhinoObject</code> object.</li>
+  <li>Call <code>CRhinoObject::NewObject</code> to create a new <code>CRhinoObject</code> object based on the new grip location.</li>
+  <li>Call <code>CRhinoDoc::ReplaceObject</code> to replace the original owning object with the new one.</li>
 </ol>
 
 <h2 id="sample">Sample</h2>
 
 <p>The following sample code demonstrates this.</p>
 
-<p><strong>NOTE</strong>: This sample uses a <code class="highlighter-rouge">CRhinoXformObjectList</code> object to maintain the list of grips and grip owners.</p>
+<p><strong>NOTE</strong>: This sample uses a <code>CRhinoXformObjectList</code> object to maintain the list of grips and grip owners.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandMoveGrips</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select grips to move"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">grip_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandMoveGrips::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select grips to move" );
+  go.SetGeometryFilter( CRhinoGetObject::grip_object );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="n">CRhinoXformObjectList</span> <span class="n">xform_list</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">xform_list</span><span class="p">.</span><span class="n">AddObjects</span><span class="p">(</span><span class="n">go</span><span class="p">,</span> <span class="nb">true</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  CRhinoXformObjectList xform_list;
+  if( xform_list.AddObjects(go, true) &lt; 1 )
+    return failure;
 
-  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point to move from"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Point to move from" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">from</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint from = gp.Point();
 
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point to move to"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetBasePoint</span><span class="p">(</span> <span class="n">from</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">DrawLineFromPoint</span><span class="p">(</span> <span class="n">from</span><span class="p">,</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  gp.SetCommandPrompt( L"Point to move to" );
+  gp.SetBasePoint( from );
+  gp.DrawLineFromPoint( from, TRUE );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="n">ON_3dPoint</span> <span class="n">to</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
+  ON_3dPoint to = gp.Point();
 
-  <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-  <span class="n">xform</span><span class="p">.</span><span class="n">Translation</span><span class="p">(</span> <span class="n">to</span> <span class="o">-</span> <span class="n">from</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">xform</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Transform the grip objects
-</span>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">xform_list</span><span class="p">.</span><span class="n">m_grips</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="n">xform_list</span><span class="p">.</span><span class="n">m_grips</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">MoveGrip</span><span class="p">(</span> <span class="n">xform</span> <span class="p">);</span>
+  ON_Xform xform;
+  xform.Translation( to - from );
+  if( xform.IsValid() )
+  {
+    // Transform the grip objects
+    int i;
+    for( i = 0; i &lt; xform_list.m_grips.Count(); i++ )
+      xform_list.m_grips[i]-&gt;MoveGrip( xform );
 
-    <span class="c1">// Replace the old owner with a new one
-</span>    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">xform_list</span><span class="p">.</span><span class="n">m_grip_owners</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">old_object</span> <span class="o">=</span> <span class="n">xform_list</span><span class="p">.</span><span class="n">m_grip_owners</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">old_object</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">new_object</span> <span class="o">=</span> <span class="n">old_object</span><span class="o">-&gt;</span><span class="n">m_grips</span><span class="o">-&gt;</span><span class="n">NewObject</span><span class="p">();</span>
-        <span class="k">if</span><span class="p">(</span> <span class="n">new_object</span> <span class="p">)</span>
-          <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span> <span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">old_object</span><span class="p">),</span> <span class="n">new_object</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+    // Replace the old owner with a new one
+    for( i = 0; i &lt; xform_list.m_grip_owners.Count(); i++ )
+    {
+      CRhinoObject* old_object = xform_list.m_grip_owners[i];
+      if( old_object )
+      {
+        CRhinoObject* new_object = old_object-&gt;m_grips-&gt;NewObject();
+        if( new_object )
+          context.m_doc.ReplaceObject( CRhinoObjRef(old_object), new_object, true );
+      }
+    }
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+    context.m_doc.Redraw();
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -217,99 +217,98 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span>
-      <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Allow for picking of either a surface or a brep face.
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select surface to attach data"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(
+      const CRhinoCommandContext&amp; context)
+{
+  // Allow for picking of either a surface or a brep face.
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select surface to attach data" );
+  go.SetGeometryFilter( CRhinoGetObject::surface_object );
+  go.EnableSubObjectSelect( TRUE );
+  go.GetObjects( 1, 1 );
+  if( go.CommandResult() != CRhinoCommand::success )
+    return go.CommandResult();
 
-  <span class="c1">// Get first object reference. Note, this reference
-</span>  <span class="c1">// reprsents the picked surface or face, not the
-</span>  <span class="c1">// top level brep.
-</span>  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  // Get first object reference. Note, this reference
+  // reprsents the picked surface or face, not the
+  // top level brep.
+  const CRhinoObjRef&amp; objref = go.Object(0);
 
-  <span class="c1">// Get face on brep that was picked
-</span>  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get face on brep that was picked
+  const ON_BrepFace* face = objref.Face();
+  if( !face )
+    return failure;
 
-  <span class="c1">// Get the faces underlying surface
-</span>  <span class="k">const</span> <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">srf</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">SurfaceOf</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">srf</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the faces underlying surface
+  const ON_Surface* srf = face-&gt;SurfaceOf();
+  if( !srf )
+    return failure;
 
-  <span class="c1">// Query surface for user data
-</span>  <span class="n">CTestUserData</span><span class="o">*</span> <span class="n">ud</span> <span class="o">=</span> <span class="n">CTestUserData</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">srf</span><span class="o">-&gt;</span><span class="n">GetUserData</span><span class="p">(</span><span class="n">ud</span><span class="o">-&gt;</span><span class="n">m_uuid</span><span class="p">)</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">ud</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Data already attached.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Query surface for user data
+  CTestUserData* ud = CTestUserData::Cast( srf-&gt;GetUserData(ud-&gt;m_uuid) );
+  if( ud )
+  {
+    RhinoApp().Print( L"Data already attached.\n" );
+    return nothing;
+  }
 
-  <span class="c1">// Get the top level object
-</span>  <span class="k">const</span> <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">CRhinoBrepObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the top level object
+  const CRhinoBrepObject* obj = CRhinoBrepObject::Cast( objref.Object() );
+  if( !obj )
+    return failure;
 
-  <span class="c1">// Duplicate the top level object.
-</span>  <span class="n">CRhinoBrepObject</span><span class="o">*</span> <span class="n">dupe_obj</span> <span class="o">=</span> <span class="n">CRhinoBrepObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">DuplicateObject</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe_obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Duplicate the top level object.
+  CRhinoBrepObject* dupe_obj = CRhinoBrepObject::Cast( obj-&gt;DuplicateObject() );
+  if( !dupe_obj )
+    return failure;
 
-  <span class="c1">// Get the brep
-</span>  <span class="n">ON_Brep</span><span class="o">*</span> <span class="n">dupe_brep</span> <span class="o">=</span> <span class="n">dupe_obj</span><span class="o">-&gt;</span><span class="n">Brep</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe_brep</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the brep
+  ON_Brep* dupe_brep = dupe_obj-&gt;Brep();
+  if( !dupe_brep )
+    return failure;
 
-  <span class="c1">// Get the surface
-</span>  <span class="n">ON_Surface</span><span class="o">*</span> <span class="n">dupe_srf</span> <span class="o">=</span> <span class="n">dupe_brep</span><span class="o">-&gt;</span><span class="n">m_S</span><span class="p">[</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">SurfaceIndexOf</span><span class="p">()];</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe_srf</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  // Get the surface
+  ON_Surface* dupe_srf = dupe_brep-&gt;m_S[face-&gt;SurfaceIndexOf()];
+  if( !dupe_srf )
+    return failure;
 
-  <span class="c1">// New up the user data
-</span>  <span class="n">ud</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CTestUserData</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">ud</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">dupe_obj</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // New up the user data
+  ud = new CTestUserData();
+  if( !ud )
+  {
+    delete dupe_obj;
+    return failure;
+  }
 
-  <span class="c1">// TODO: Initialize user data object here
-</span>
-  <span class="c1">// Attach user data to surface, not face. Note, ud
-</span>  <span class="c1">// is now owned by dupe_srf, not by us. So, we are
-</span>  <span class="c1">// not responsible for deleting it;
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">dupe_srf</span><span class="o">-&gt;</span><span class="n">AttachUserData</span><span class="p">(</span><span class="n">ud</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">ud</span><span class="p">;</span>
-    <span class="k">delete</span> <span class="n">dupe_obj</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // TODO: Initialize user data object here
 
-  <span class="c1">// Replace object. Note, we cannot reuse objref for it references
-</span>  <span class="c1">// the picked face, not the top level brep.
-</span>  <span class="c1">// Note, dupe_obj is now owned by Rhino, so we are not
-</span>  <span class="c1">// responsible for deleting it.
-</span>  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">ReplaceObject</span><span class="p">(</span><span class="n">CRhinoObjRef</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">dupe_obj</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">delete</span> <span class="n">dupe_obj</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
+  // Attach user data to surface, not face. Note, ud
+  // is now owned by dupe_srf, not by us. So, we are
+  // not responsible for deleting it;
+  if( !dupe_srf-&gt;AttachUserData(ud) )
+  {
+    delete ud;
+    delete dupe_obj;
+    return failure;
+  }
 
-  <span class="c1">// Done deal
-</span>  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Data attached successfully.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  // Replace object. Note, we cannot reuse objref for it references
+  // the picked face, not the top level brep.
+  // Note, dupe_obj is now owned by Rhino, so we are not
+  // responsible for deleting it.
+  if( !context.m_doc.ReplaceObject(CRhinoObjRef(obj), dupe_obj) )
+  {
+    delete dupe_obj;
+    return failure;
+  }
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // Done deal
+  RhinoApp().Print( L"Data attached successfully.\n" );
+  context.m_doc.Redraw();
+
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

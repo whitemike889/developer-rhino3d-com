@@ -332,24 +332,24 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>The VBScript <code class="highlighter-rouge">Err</code> object provides access to run-time error information.</p>
+<p>The VBScript <code>Err</code> object provides access to run-time error information.</p>
 
-<p>The <code class="highlighter-rouge">Err</code> object encapsulates errors for a VBScript script.  By default, if an error occurs, VBScript terminates script execution and RhinoScript reports the error back to the user.  Sometimes this default error processing is not desirable.  In this case, the <code class="highlighter-rouge">Err</code> object and the <code class="highlighter-rouge">On Error</code> statement can be used to let scripts perform their own error handling.</p>
+<p>The <code>Err</code> object encapsulates errors for a VBScript script.  By default, if an error occurs, VBScript terminates script execution and RhinoScript reports the error back to the user.  Sometimes this default error processing is not desirable.  In this case, the <code>Err</code> object and the <code>On Error</code> statement can be used to let scripts perform their own error handling.</p>
 
 <h2 id="details">Details</h2>
 
-<p>The <code class="highlighter-rouge">Err</code> object is a predefined global object.  It does not need to be declared before it can be used.  The object is used to encapsulate all the information relating to an error condition.  This information is presented as a series of properties:</p>
+<p>The <code>Err</code> object is a predefined global object.  It does not need to be declared before it can be used.  The object is used to encapsulate all the information relating to an error condition.  This information is presented as a series of properties:</p>
 
 <ul>
-  <li>The <code class="highlighter-rouge">.Number</code> property is the error number (or code) for the error.  This is the default property of the Err object.</li>
-  <li>The <code class="highlighter-rouge">.Source</code> property contains a string that specifies the source of the error.  This is typically the <code class="highlighter-rouge">ProgID</code> (Programmatic Identifier) of the object that generated the error.</li>
-  <li>The <code class="highlighter-rouge">.Description</code> property contains a string describing the error.</li>
-  <li>The <code class="highlighter-rouge">.HelpFile</code> and <code class="highlighter-rouge">.HelpContext</code> properties store information to reference a help topic in a help file.  This allows the error to refer to information on possible causes of the error.</li>
+  <li>The <code>.Number</code> property is the error number (or code) for the error.  This is the default property of the Err object.</li>
+  <li>The <code>.Source</code> property contains a string that specifies the source of the error.  This is typically the <code>ProgID</code> (Programmatic Identifier) of the object that generated the error.</li>
+  <li>The <code>.Description</code> property contains a string describing the error.</li>
+  <li>The <code>.HelpFile</code> and <code>.HelpContext</code> properties store information to reference a help topic in a help file.  This allows the error to refer to information on possible causes of the error.</li>
 </ul>
 
 <h2 id="using-on-error">Using On Error</h2>
 
-<p>To generate a user-defined run-time error, first clear the <code class="highlighter-rouge">Err</code> object using the <code class="highlighter-rouge">.Clear</code> method.  Then raise the error using the <code class="highlighter-rouge">.Raise</code> method.  This method takes up to five arguments that correspond, in order, to the properties previously listed.  For example:</p>
+<p>To generate a user-defined run-time error, first clear the <code>Err</code> object using the <code>.Clear</code> method.  Then raise the error using the <code>.Raise</code> method.  This method takes up to five arguments that correspond, in order, to the properties previously listed.  For example:</p>
 
 <pre><code class="language-vbnet">Err.Clear
 Err.Raise 1000, "This is a script-defined error", "Test Script"
@@ -357,12 +357,12 @@ Err.Raise 1000, "This is a script-defined error", "Test Script"
 
 <p>This example displays the standard RhinoScript error dialog box showing the error information.</p>
 
-<p>To intercept run-time errors and process them in scripts, use the <code class="highlighter-rouge">On Error</code> statement.  The syntax of this statement is:</p>
+<p>To intercept run-time errors and process them in scripts, use the <code>On Error</code> statement.  The syntax of this statement is:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 </code></pre>
 
-<p>After this statement executes, the next run-time errors do not cause script execution to end.  Instead, the <code class="highlighter-rouge">Err</code> object properties are set to reflect the error information and processing continues with the next statement.  For example:</p>
+<p>After this statement executes, the next run-time errors do not cause script execution to end.  Instead, the <code>Err</code> object properties are set to reflect the error information and processing continues with the next statement.  For example:</p>
 
 <pre><code class="language-vbnet">Err.Clear
 On Error Resume Next
@@ -370,9 +370,9 @@ Err.Raise 100, "Script Error"
 If Err.Number Then Rhino.Print "Error=" &amp; CInt(Err.Number)
 </code></pre>
 
-<p>In this example, the <code class="highlighter-rouge">Err.Raise</code> method is used to raise a run-time error.  Normally, this would stop script execution.  However, the earlier <code class="highlighter-rouge">On Error</code> statement allows script execution to continue.  So the If statement executes and displays the error number.</p>
+<p>In this example, the <code>Err.Raise</code> method is used to raise a run-time error.  Normally, this would stop script execution.  However, the earlier <code>On Error</code> statement allows script execution to continue.  So the If statement executes and displays the error number.</p>
 
-<p>In the preceding example, the error was generated by the <code class="highlighter-rouge">Err.Raise</code> method. Yet, the same processing applies to any run-time error, regardless of how it is generated.  For example:</p>
+<p>In the preceding example, the error was generated by the <code>Err.Raise</code> method. Yet, the same processing applies to any run-time error, regardless of how it is generated.  For example:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 Err.Clear
@@ -384,11 +384,11 @@ If Err.Number &lt;&gt; 0 Then
 End If
 </code></pre>
 
-<p>Here, an attempt is made to convert the string <code class="highlighter-rouge">"foo"</code> into an integer.  Because this is an invalid conversion, a run-time type mismatch error is generated.  The information on this error is placed in the <code class="highlighter-rouge">Err</code> object.  This is then processed by the <code class="highlighter-rouge">If</code> statement.</p>
+<p>Here, an attempt is made to convert the string <code>"foo"</code> into an integer.  Because this is an invalid conversion, a run-time type mismatch error is generated.  The information on this error is placed in the <code>Err</code> object.  This is then processed by the <code>If</code> statement.</p>
 
-<p>After an <code class="highlighter-rouge">On Error</code> statement executes, it remains in effect for the rest of the procedure in which it executes.  If the <code class="highlighter-rouge">On Error</code> statement executes in global scope, it remains in effect until the script terminates.  Nested procedures can each have their own <code class="highlighter-rouge">On Error</code> statement.  For example, subroutine A can execute an <code class="highlighter-rouge">On Error</code> statement and then execute subroutine B, which in turn, executes an <code class="highlighter-rouge">On Error</code> statement.</p>
+<p>After an <code>On Error</code> statement executes, it remains in effect for the rest of the procedure in which it executes.  If the <code>On Error</code> statement executes in global scope, it remains in effect until the script terminates.  Nested procedures can each have their own <code>On Error</code> statement.  For example, subroutine A can execute an <code>On Error</code> statement and then execute subroutine B, which in turn, executes an <code>On Error</code> statement.</p>
 
-<p>If an error occurs while an <code class="highlighter-rouge">On Error</code> statement is active, execution continues with the following statement in the same scope as the most recently executed <code class="highlighter-rouge">On Error</code> statement.  For example:</p>
+<p>If an error occurs while an <code>On Error</code> statement is active, execution continues with the following statement in the same scope as the most recently executed <code>On Error</code> statement.  For example:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 Rhino.Print "Begin"
@@ -401,14 +401,14 @@ Sub Sub1
 End Sub
 </code></pre>
 
-<p>In this example, an <code class="highlighter-rouge">On Error</code> statement executes at global scope, and then the <code class="highlighter-rouge">Sub1</code> procedure executes. Within this procedure, an <code class="highlighter-rouge">Err.Raise</code> method is used to generate an error.  Because the most recently executed error is at global scope, the next statement to execute is the <code class="highlighter-rouge">Rhino.Print</code> statement at global scope, and not the <code class="highlighter-rouge">Rhino.Print</code> statement following the <code class="highlighter-rouge">Err.Raise</code> statement.  In fact, the error causes VBScript to abandon further execution of the statements in <code class="highlighter-rouge">Sub1</code> and continue execution at global scope.  Thus, the output of this script is:</p>
+<p>In this example, an <code>On Error</code> statement executes at global scope, and then the <code>Sub1</code> procedure executes. Within this procedure, an <code>Err.Raise</code> method is used to generate an error.  Because the most recently executed error is at global scope, the next statement to execute is the <code>Rhino.Print</code> statement at global scope, and not the <code>Rhino.Print</code> statement following the <code>Err.Raise</code> statement.  In fact, the error causes VBScript to abandon further execution of the statements in <code>Sub1</code> and continue execution at global scope.  Thus, the output of this script is:</p>
 
 <pre><code class="language-vbs">Begin
 Enter Sub1
 End
 </code></pre>
 
-<p>Notice that the final <code class="highlighter-rouge">Rhino.Print</code> statement in <code class="highlighter-rouge">Sub1</code> never executes. When an error occurs, VBScript immediately abandons execution of any running procedures necessary to resume with the correct statement after an error.  For example:</p>
+<p>Notice that the final <code>Rhino.Print</code> statement in <code>Sub1</code> never executes. When an error occurs, VBScript immediately abandons execution of any running procedures necessary to resume with the correct statement after an error.  For example:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 Rhino.Print "Begin"
@@ -428,9 +428,9 @@ Sub Sub2
 End Sub
 </code></pre>
 
-<p>Here, the <code class="highlighter-rouge">Err.Raise</code> method invocation is nested even more deeply.  In this case, when the error occurs, VBScript abandons further execution of both <code class="highlighter-rouge">Sub1</code> and <code class="highlighter-rouge">Sub2</code> to continue execution at the global level.</p>
+<p>Here, the <code>Err.Raise</code> method invocation is nested even more deeply.  In this case, when the error occurs, VBScript abandons further execution of both <code>Sub1</code> and <code>Sub2</code> to continue execution at the global level.</p>
 
-<p>Because VBScript abandons execution of procedures only until it finds the most recently executed <code class="highlighter-rouge">On Error</code> statement, it is possible to capture an error within a procedure simply by placing an <code class="highlighter-rouge">On Error</code> statement in that procedure.  For example:</p>
+<p>Because VBScript abandons execution of procedures only until it finds the most recently executed <code>On Error</code> statement, it is possible to capture an error within a procedure simply by placing an <code>On Error</code> statement in that procedure.  For example:</p>
 
 <pre><code class="language-vbnet">On Error Resume Next
 Rhino.Print "Begin"
@@ -451,7 +451,7 @@ Sub Sub2
 End Sub
 </code></pre>
 
-<p>This example modifies the previous example by adding an <code class="highlighter-rouge">On Error</code> statement to the <code class="highlighter-rouge">Sub1</code> procedure.  So, when the <code class="highlighter-rouge">Err.Raise</code> method in <code class="highlighter-rouge">Sub2</code> executes, execution continues with the next statement in <code class="highlighter-rouge">Sub1</code>. Notice that the <code class="highlighter-rouge">Leave Sub2</code> line never executes.  The output from this example is:</p>
+<p>This example modifies the previous example by adding an <code>On Error</code> statement to the <code>Sub1</code> procedure.  So, when the <code>Err.Raise</code> method in <code>Sub2</code> executes, execution continues with the next statement in <code>Sub1</code>. Notice that the <code>Leave Sub2</code> line never executes.  The output from this example is:</p>
 
 <pre><code class="language-vbs">Begin
 Enter Sub1
@@ -462,11 +462,11 @@ End
 
 <h2 id="structured-exception-handling">Structured Exception Handling</h2>
 
-<p>The <code class="highlighter-rouge">On Error</code> statement is a simple form of a technique known as structured exception handling.  The basic idea behind this technique is to centralize all the error handling code in a single location outside of the main flow of the program.  This is the reason for the complex behavior of the <code class="highlighter-rouge">On Error</code> statement.</p>
+<p>The <code>On Error</code> statement is a simple form of a technique known as structured exception handling.  The basic idea behind this technique is to centralize all the error handling code in a single location outside of the main flow of the program.  This is the reason for the complex behavior of the <code>On Error</code> statement.</p>
 
-<p>The assumption is that a large script might contain many procedures that interact in complex ways.  It is possible that an error will occur when procedures are nested very deeply.  Without the <code class="highlighter-rouge">On Error</code> statement, each procedure must return some form of error code to the procedure from which it was called.  In turn, this procedure must do the same thing, and so on for all the nested procedures.  This can greatly add to the complexity of the script.</p>
+<p>The assumption is that a large script might contain many procedures that interact in complex ways.  It is possible that an error will occur when procedures are nested very deeply.  Without the <code>On Error</code> statement, each procedure must return some form of error code to the procedure from which it was called.  In turn, this procedure must do the same thing, and so on for all the nested procedures.  This can greatly add to the complexity of the script.</p>
 
-<p>With the <code class="highlighter-rouge">On Error</code> statement, this complexity can be avoided.  When an error occurs, VBScript automatically takes care of unwinding out of the complex nest of procedures back to the statement that followed the original procedure invocation.</p>
+<p>With the <code>On Error</code> statement, this complexity can be avoided.  When an error occurs, VBScript automatically takes care of unwinding out of the complex nest of procedures back to the statement that followed the original procedure invocation.</p>
 
         </article>
 

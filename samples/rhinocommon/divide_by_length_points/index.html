@@ -222,42 +222,41 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">DivideByLengthPoints</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select curve to divide"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">objref</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result DivideByLengthPoints(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Curve;
+    Rhino.DocObjects.ObjRef objref;
+    Rhino.Commands.Result rc = Rhino.Input.RhinoGet.GetOneObject("Select curve to divide", false, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success || objref == null)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span> <span class="n">crv</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">crv</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">crv</span><span class="p">.</span><span class="nf">IsShort</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoMath</span><span class="p">.</span><span class="n">ZeroTolerance</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.Geometry.Curve crv = objref.Curve();
+    if (crv == null || crv.IsShort(Rhino.RhinoMath.ZeroTolerance))
+      return Rhino.Commands.Result.Failure;
 
-    <span class="kt">double</span> <span class="n">crv_length</span> <span class="p">=</span> <span class="n">crv</span><span class="p">.</span><span class="nf">GetLength</span><span class="p">();</span>
-    <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Curve length is {0:f3}. Segment length"</span><span class="p">,</span> <span class="n">crv_length</span><span class="p">);</span>
+    double crv_length = crv.GetLength();
+    string s = string.Format("Curve length is {0:f3}. Segment length", crv_length);
 
-    <span class="kt">double</span> <span class="n">seg_length</span> <span class="p">=</span> <span class="n">crv_length</span> <span class="p">/</span> <span class="m">2.0</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">ref</span> <span class="n">seg_length</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">crv_length</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+    double seg_length = crv_length / 2.0;
+    rc = Rhino.Input.RhinoGet.GetNumber(s, false, ref seg_length, 0, crv_length);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span><span class="p">[]</span> <span class="n">points</span><span class="p">;</span>
-    <span class="n">crv</span><span class="p">.</span><span class="nf">DivideByLength</span><span class="p">(</span><span class="n">seg_length</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">out</span> <span class="n">points</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">points</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.Geometry.Point3d[] points;
+    crv.DivideByLength(seg_length, true, out points);
+    if (points == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span> <span class="n">point</span> <span class="k">in</span> <span class="n">points</span><span class="p">)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+    foreach (Rhino.Geometry.Point3d point in points)
+      doc.Objects.AddPoint(point);
 
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DivideByLengthPoints(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -298,35 +297,34 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">DivideByLengthPoints</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select curve to divide"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">objref</span> <span class="ow">or</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+def DivideByLengthPoints():
+    filter = Rhino.DocObjects.ObjectType.Curve
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select curve to divide", False, filter)
+    if not objref or rc!=Rhino.Commands.Result.Success: return rc
 
-    <span class="n">crv</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">crv</span> <span class="ow">or</span> <span class="n">crv</span><span class="o">.</span><span class="n">IsShort</span><span class="p">(</span><span class="n">Rhino</span><span class="o">.</span><span class="n">RhinoMath</span><span class="o">.</span><span class="n">ZeroTolerance</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    crv = objref.Curve()
+    if not crv or crv.IsShort(Rhino.RhinoMath.ZeroTolerance):
+        return Rhino.Commands.Result.Failure
 
-    <span class="n">crv_length</span> <span class="o">=</span> <span class="n">crv</span><span class="o">.</span><span class="n">GetLength</span><span class="p">()</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="s">"Curve length is {0:.3f}. Segment length"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crv_length</span><span class="p">)</span>
-    <span class="n">seg_length</span> <span class="o">=</span> <span class="n">crv_length</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetNumber</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">seg_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">crv_length</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
-    <span class="n">t_vals</span> <span class="o">=</span> <span class="n">crv</span><span class="o">.</span><span class="n">DivideByLength</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">t_vals</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    crv_length = crv.GetLength()
+    s = "Curve length is {0:.3f}. Segment length".format(crv_length)
+    seg_length = crv_length / 2.0
+    rc, length = Rhino.Input.RhinoGet.GetNumber(s, False, seg_length, 0, crv_length)
+    if rc!=Rhino.Commands.Result.Success: return rc
+    t_vals = crv.DivideByLength(length, True)
+    if not t_vals:
+        return Rhino.Commands.Result.Failure
 
-    <span class="p">[</span><span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">crv</span><span class="o">.</span><span class="n">PointAt</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_vals</span><span class="p">]</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    [scriptcontext.doc.Objects.AddPoint(crv.PointAt(t)) for t in t_vals]
+    scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">DivideByLengthPoints</span><span class="p">()</span>
+if __name__=="__main__":
+    DivideByLengthPoints()
 </code></pre>
-</div>
 
 </div>
 

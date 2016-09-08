@@ -331,78 +331,76 @@
 
 <p>The following example code can be used to detect an object’s true visibility when using the openNURBS toolkit:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsLayerVisible</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_ObjectArray</span><span class="o">&lt;</span><span class="n">ON_Layer</span><span class="o">&gt;&amp;</span> <span class="n">layer_table</span><span class="p">,</span> <span class="kt">int</span> <span class="n">layer_index</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="c1">// Validate the layer index
-</span>  <span class="k">if</span><span class="p">(</span> <span class="n">layer_index</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">layer_index</span> <span class="o">&lt;</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Get the layer
-</span>    <span class="k">const</span> <span class="n">ON_Layer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">layer_index</span><span class="p">];</span>
-    <span class="c1">// Get the layer's visibility
-</span>    <span class="n">rc</span> <span class="o">=</span> <span class="n">layer</span><span class="p">.</span><span class="n">IsVisible</span><span class="p">();</span>
-    <span class="c1">// If the layer is visible, see if the layer has a parent. If so,
-</span>    <span class="c1">// check to see if the layer's parent is visible. If not, then
-</span>    <span class="c1">// the layer is also not visible.
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">ON_UuidIsNotNil</span><span class="p">(</span><span class="n">layer</span><span class="p">.</span><span class="n">m_parent_layer_id</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_count</span> <span class="o">=</span> <span class="n">layer_table</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">layer_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">ON_UuidCompare</span><span class="p">(</span><span class="n">layer</span><span class="p">.</span><span class="n">m_parent_layer_id</span><span class="p">,</span> <span class="n">layer_table</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m_layer_id</span><span class="p">)</span> <span class="p">)</span>
-          <span class="k">return</span> <span class="n">IsLayerVisible</span><span class="p">(</span> <span class="n">layer_table</span><span class="p">,</span> <span class="n">i</span> <span class="p">);</span> <span class="c1">// recursive
-</span>      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">static bool IsLayerVisible( const ON_ObjectArray&lt;ON_Layer&gt;&amp; layer_table, int layer_index )
+{
+  bool rc = false;
+  // Validate the layer index
+  if( layer_index &gt;= 0 &amp;&amp; layer_index &lt; layer_table.Count() )
+  {
+    // Get the layer
+    const ON_Layer&amp; layer = layer_table[layer_index];
+    // Get the layer's visibility
+    rc = layer.IsVisible();
+    // If the layer is visible, see if the layer has a parent. If so,
+    // check to see if the layer's parent is visible. If not, then
+    // the layer is also not visible.
+    if( rc &amp;&amp; ON_UuidIsNotNil(layer.m_parent_layer_id) )
+    {
+      int i, layer_count = layer_table.Count();
+      for( i = 0; i &lt; layer_count; i++ )
+      {
+        if( 0 == ON_UuidCompare(layer.m_parent_layer_id, layer_table[i].m_layer_id) )
+          return IsLayerVisible( layer_table, i ); // recursive
+      }
+    }
+  }
+  return rc;
+}
 
-<span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsModelObjectVisible</span><span class="p">(</span> <span class="k">const</span> <span class="n">ONX_Model</span><span class="o">&amp;</span> <span class="n">model</span><span class="p">,</span> <span class="k">const</span> <span class="n">ONX_Model_Object</span><span class="o">&amp;</span> <span class="n">model_object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-  <span class="k">switch</span><span class="p">(</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_attributes</span><span class="p">.</span><span class="n">Mode</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-  <span class="k">case</span> <span class="n">ON</span><span class="p">:</span><span class="o">:</span><span class="n">normal_object</span><span class="o">:</span>
-  <span class="k">case</span> <span class="n">ON</span><span class="p">:</span><span class="o">:</span><span class="n">idef_object</span><span class="o">:</span>
-  <span class="k">case</span> <span class="n">ON</span><span class="p">:</span><span class="o">:</span><span class="n">locked_object</span><span class="o">:</span>
-    <span class="p">{</span>
-      <span class="c1">// Get the object's layer
-</span>      <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_attributes</span><span class="p">.</span><span class="n">m_layer_index</span><span class="p">;</span>
-      <span class="c1">// See if the layer is visible
-</span>      <span class="n">rc</span> <span class="o">=</span> <span class="n">IsLayerVisible</span><span class="p">(</span> <span class="n">model</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">,</span> <span class="n">layer_index</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+static bool IsModelObjectVisible( const ONX_Model&amp; model, const ONX_Model_Object&amp; model_object )
+{
+  bool rc = false;
+  switch( model_object.m_attributes.Mode() )
+  {
+  case ON::normal_object:
+  case ON::idef_object:
+  case ON::locked_object:
+    {
+      // Get the object's layer
+      int layer_index = model_object.m_attributes.m_layer_index;
+      // See if the layer is visible
+      rc = IsLayerVisible( model.m_layer_table, layer_index );
+    }
+    break;
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
 <p>You can test the above static functions by adding the following sample code to the <em>Example_Read</em> project included with the openNURBS toolkit:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// create a text dump of the model
-</span><span class="k">if</span> <span class="p">(</span> <span class="n">bVerboseTextDump</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">//dump-&gt;PushIndent();
-</span>  <span class="c1">//model.Dump(*dump);
-</span>  <span class="c1">//dump-&gt;PopIndent();
-</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">object_count</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">object_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ONX_Model_Object</span><span class="o">&amp;</span> <span class="n">model_object</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">m_object_table</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_object</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">bool</span> <span class="n">bVisible</span> <span class="o">=</span> <span class="n">IsModelObjectVisible</span><span class="p">(</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_object</span> <span class="p">);</span>
-      <span class="n">dump</span><span class="o">-&gt;</span><span class="n">Print</span><span class="p">(</span><span class="s">"Object uuid: "</span><span class="p">);</span>
-      <span class="n">dump</span><span class="o">-&gt;</span><span class="n">Print</span><span class="p">(</span> <span class="n">model_object</span><span class="p">.</span><span class="n">m_attributes</span><span class="p">.</span><span class="n">m_uuid</span> <span class="p">);</span>
-      <span class="n">dump</span><span class="o">-&gt;</span><span class="n">Print</span><span class="p">(</span><span class="s">", visible: %s"</span><span class="p">,</span> <span class="n">bVisible</span> <span class="o">?</span> <span class="s">"true"</span> <span class="o">:</span> <span class="s">"false"</span> <span class="p">);</span>
-      <span class="n">dump</span><span class="o">-&gt;</span><span class="n">Print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">// create a text dump of the model
+if ( bVerboseTextDump )
+{
+  //dump-&gt;PushIndent();
+  //model.Dump(*dump);
+  //dump-&gt;PopIndent();
+
+  int i, object_count = model.m_object_table.Count();
+  for( i = 0; i &lt; object_count; i++ )
+  {
+    const ONX_Model_Object&amp; model_object = model.m_object_table[i];
+    if( model_object.m_object )
+    {
+      bool bVisible = IsModelObjectVisible( model, model_object );
+      dump-&gt;Print("Object uuid: ");
+      dump-&gt;Print( model_object.m_attributes.m_uuid );
+      dump-&gt;Print(", visible: %s", bVisible ? "true" : "false" );
+      dump-&gt;Print("\n");
+    }
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

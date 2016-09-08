@@ -298,7 +298,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Rhino orients objects onto a surface by defining a rotation transformation.  With the Rhino C/C++ SDK, you define transformations with the <code class="highlighter-rouge">ON_Xform</code> class.  See <em>opennurbs_xform.h</em> for details.  The transformation that is defined rotates objects from one plane to another.  The source plane is defined from the active view’s construction plane and a user-selected base point.  The target plane is defined by the location the user picks on the surface.</p>
+<p>Rhino orients objects onto a surface by defining a rotation transformation.  With the Rhino C/C++ SDK, you define transformations with the <code>ON_Xform</code> class.  See <em>opennurbs_xform.h</em> for details.  The transformation that is defined rotates objects from one plane to another.  The source plane is defined from the active view’s construction plane and a user-selected base point.  The target plane is defined by the location the user picks on the surface.</p>
 
 <h2 id="sample">Sample</h2>
 
@@ -306,102 +306,101 @@
 
 <p><strong>NOTE</strong>: This sample does not contain all of the options available in the Rhino command, nor does it show the objects transforming dynamically, but it is a good example on how to build the transformation.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Select objects to orient
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select objects to orient"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">FALSE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableGroupSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Select objects to orient
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select objects to orient" );
+  go.EnableSubObjectSelect( FALSE );
+  go.EnableGroupSelect( TRUE );
+  go.GetObjects( 1, 0 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="c1">// Point to orient from
-</span>  <span class="n">CRhinoGetPoint</span> <span class="n">gp</span><span class="p">;</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point to orient from"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Point to orient from
+  CRhinoGetPoint gp;
+  gp.SetCommandPrompt( L"Point to orient from" );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// Define source plane
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="p">.</span><span class="n">View</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span> <span class="p">)</span>
-      <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">ON_Plane</span> <span class="n">source_plane</span><span class="p">(</span> <span class="n">view</span><span class="o">-&gt;</span><span class="n">Viewport</span><span class="p">().</span><span class="n">ConstructionPlane</span><span class="p">().</span><span class="n">m_plane</span> <span class="p">);</span>
-  <span class="n">source_plane</span><span class="p">.</span><span class="n">SetOrigin</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">()</span> <span class="p">);</span>
+  // Define source plane
+  CRhinoView* view = gp.View();
+  if( 0 == view )
+  {
+    view = RhinoApp().ActiveView();
+    if( 0 == view )
+      return failure;
+  }
+  ON_Plane source_plane( view-&gt;Viewport().ConstructionPlane().m_plane );
+  source_plane.SetOrigin( gp.Point() );
 
-  <span class="c1">// Surface to orient on
-</span>  <span class="n">CRhinoGetObject</span> <span class="n">gs</span><span class="p">;</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Surface to orient on"</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">surface_object</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="n">TRUE</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableDeselectAllBeforePostSelect</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">EnableOneByOnePostSelect</span><span class="p">();</span>
-  <span class="n">gs</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gs</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Surface to orient on
+  CRhinoGetObject gs;
+  gs.SetCommandPrompt( L"Surface to orient on" );
+  gs.SetGeometryFilter( CRhinoGetObject::surface_object );
+  gs.EnableSubObjectSelect( TRUE );
+  gs.EnableDeselectAllBeforePostSelect( false );
+  gs.EnableOneByOnePostSelect();
+  gs.GetObjects( 1, 1 );
+  if( gs.CommandResult() != success )
+    return gs.CommandResult();
 
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">ref</span> <span class="o">=</span> <span class="n">gs</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="c1">// Get selected surface object
-</span>  <span class="k">const</span> <span class="n">CRhinoObject</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Object</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">obj</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="c1">// Get selected surface (face)
-</span>  <span class="k">const</span> <span class="n">ON_BrepFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">ref</span><span class="p">.</span><span class="n">Face</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">face</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="c1">// Unselect surface
-</span>  <span class="n">obj</span><span class="o">-&gt;</span><span class="n">Select</span><span class="p">(</span> <span class="nb">false</span> <span class="p">);</span>
+  const CRhinoObjRef&amp; ref = gs.Object(0);
+  // Get selected surface object
+  const CRhinoObject* obj = ref.Object();
+  if( 0 == obj )
+    return failure;
+  // Get selected surface (face)
+  const ON_BrepFace* face = ref.Face();
+  if( 0 == face )
+    return failure;
+  // Unselect surface
+  obj-&gt;Select( false );
 
-  <span class="c1">// Point on surface to orient to
-</span>  <span class="n">gp</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Point on surface to orient to"</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">Constrain</span><span class="p">(</span> <span class="o">*</span><span class="n">face</span> <span class="p">);</span>
-  <span class="n">gp</span><span class="p">.</span><span class="n">GetPoint</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+  // Point on surface to orient to
+  gp.SetCommandPrompt( L"Point on surface to orient to" );
+  gp.Constrain( *face );
+  gp.GetPoint();
+  if( gp.CommandResult() != success )
+    return gp.CommandResult();
 
-  <span class="c1">// Do transformation
-</span>  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">failure</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">u</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">GetClosestPoint</span><span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="n">Point</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ON_Plane</span> <span class="n">target_plane</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">FrameAt</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">target_plane</span><span class="p">)</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="c1">// If the face orientation is opposite
-</span>      <span class="c1">// of natural surface orientation, then
-</span>      <span class="c1">// flip the plane's zaxis.
-</span>      <span class="k">if</span><span class="p">(</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">m_bRev</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">target_plane</span><span class="p">.</span><span class="n">yaxis</span><span class="p">.</span><span class="n">Reverse</span><span class="p">();</span>
-        <span class="n">target_plane</span><span class="p">.</span><span class="n">zaxis</span><span class="p">.</span><span class="n">Reverse</span><span class="p">();</span>
-        <span class="n">target_plane</span><span class="p">.</span><span class="n">UpdateEquation</span><span class="p">();</span>
-      <span class="p">}</span>
+  // Do transformation
+  CRhinoCommand::result rc = failure;
+  double u = 0.0, v = 0.0;
+  if( face-&gt;GetClosestPoint(gp.Point(), &amp;u, &amp;v) )
+  {
+    ON_Plane target_plane;
+    if( face-&gt;FrameAt(u, v, target_plane) )
+    {
+      // If the face orientation is opposite
+      // of natural surface orientation, then
+      // flip the plane's zaxis.
+      if( face-&gt;m_bRev )
+      {
+        target_plane.yaxis.Reverse();
+        target_plane.zaxis.Reverse();
+        target_plane.UpdateEquation();
+      }
 
-      <span class="c1">// Build transformation
-</span>      <span class="n">ON_Xform</span> <span class="n">xform</span><span class="p">;</span>
-      <span class="n">xform</span><span class="p">.</span><span class="n">Rotation</span><span class="p">(</span> <span class="n">source_plane</span><span class="p">,</span> <span class="n">target_plane</span> <span class="p">);</span>
+      // Build transformation
+      ON_Xform xform;
+      xform.Rotation( source_plane, target_plane );
 
-      <span class="c1">// Do the transformation. In this example,
-</span>      <span class="c1">// we will copy the original objects
-</span>      <span class="kt">bool</span> <span class="n">bDeleteOriginal</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">TransformObject</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">xform</span><span class="p">,</span> <span class="n">bDeleteOriginal</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">success</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      // Do the transformation. In this example,
+      // we will copy the original objects
+      bool bDeleteOriginal = false;
+      int i;
+      for( i = 0; i &lt; go.ObjectCount(); i++ )
+        context.m_doc.TransformObject( go.Object(i), xform, bDeleteOriginal );
+      context.m_doc.Redraw();
+      rc = success;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

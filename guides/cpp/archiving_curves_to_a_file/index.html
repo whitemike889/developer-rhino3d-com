@@ -340,130 +340,126 @@
 
 <h2 id="problem">Problem</h2>
 
-<p>Writing curves to a file has some special considerations.  Curves come in many variations: the curve could be a circle, simple curve, or a polycurve.  You cannot know in advance what the user will be selecting.  As such, the class containing my data declares it as an <code class="highlighter-rouge">ON_Curve</code>.</p>
+<p>Writing curves to a file has some special considerations.  Curves come in many variations: the curve could be a circle, simple curve, or a polycurve.  You cannot know in advance what the user will be selecting.  As such, the class containing my data declares it as an <code>ON_Curve</code>.</p>
 
-<p>Writing the data is not an issue.  You simply call <code class="highlighter-rouge">ON_Curve::Write</code>.  However, things don’t go so well when you try to read the data.  You need a way to simply read curve data without going to a non-abstract class. What is needed is a way to read/write curve data that represents any kind of curve possible.</p>
+<p>Writing the data is not an issue.  You simply call <code>ON_Curve::Write</code>.  However, things don’t go so well when you try to read the data.  You need a way to simply read curve data without going to a non-abstract class. What is needed is a way to read/write curve data that represents any kind of curve possible.</p>
 
 <h2 id="solution">Solution</h2>
 
-<p>It is probably best not to call <code class="highlighter-rouge">ON_Curve::Write</code> for this very reason.  When serializing anything derived from <code class="highlighter-rouge">ON_Object</code>, just use <code class="highlighter-rouge">ON_BinaryArchive::WriteObject</code> and <code class="highlighter-rouge">ON_BinaryArchive::ReadObject</code>…</p>
+<p>It is probably best not to call <code>ON_Curve::Write</code> for this very reason.  When serializing anything derived from <code>ON_Object</code>, just use <code>ON_BinaryArchive::WriteObject</code> and <code>ON_BinaryArchive::ReadObject</code>…</p>
 
 <h3 id="write">Write</h3>
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">WriteCurveFile</span><span class="p">(</span> <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span> <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">fp</span> <span class="o">||</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">curve</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">static bool WriteCurveFile( FILE* fp, const ON_Curve* curve )
+{
+  if( 0 == fp || 0 == curve )
+    return false;
 
-  <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">write3dm</span><span class="p">,</span> <span class="n">fp</span> <span class="p">);</span>
+  ON_BinaryFile archive( ON::write3dm, fp );
 
-  <span class="kt">int</span> <span class="n">major_version</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">archive</span><span class="p">.</span><span class="n">BeginWrite3dmChunk</span><span class="p">(</span> <span class="n">TCODE_ANONYMOUS_CHUNK</span><span class="p">,</span> <span class="n">major_version</span><span class="p">,</span> <span class="n">minor_version</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  int major_version = 1;
+  int minor_version = 0;
+  bool rc = archive.BeginWrite3dmChunk( TCODE_ANONYMOUS_CHUNK, major_version, minor_version );
+  if( !rc )
+    return false;
 
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="c1">// version 1.0 fields
-</span>    <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span> <span class="n">archive</span><span class="p">.</span><span class="n">WriteObject</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+  for(;;)
+  {
+    // version 1.0 fields
+    rc = ( archive.WriteObject(curve) ? true : false );
+    if( !rc ) break;
 
-    <span class="c1">// todo...
-</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+    // todo...
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">EndWrite3dmChunk</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    break;
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  if( !archive.EndWrite3dmChunk() )
+    rc = false;
+
+  return rc;
+}
 </code></pre>
-</div>
 
 <h3 id="read">Read</h3>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="kt">bool</span> <span class="nf">ReadCurveFile</span><span class="p">(</span> <span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">,</span> <span class="n">ON_Curve</span><span class="o">*&amp;</span> <span class="n">curve</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">fp</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">static bool ReadCurveFile( FILE* fp, ON_Curve*&amp; curve )
+{
+  if( 0 == fp )
+    return false;
 
-  <span class="n">ON_BinaryFile</span> <span class="n">archive</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">read3dm</span><span class="p">,</span> <span class="n">fp</span> <span class="p">);</span>
+  ON_BinaryFile archive( ON::read3dm, fp );
 
-  <span class="kt">int</span> <span class="n">major_version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">minor_version</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">archive</span><span class="p">.</span><span class="n">BeginRead3dmChunk</span><span class="p">(</span> <span class="n">TCODE_ANONYMOUS_CHUNK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">major_version</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">minor_version</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+  int major_version = 0;
+  int minor_version = 0;
+  bool rc = archive.BeginRead3dmChunk( TCODE_ANONYMOUS_CHUNK, &amp;major_version, &amp;minor_version );
+  if( !rc )
+    return false;
 
-  <span class="k">for</span><span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">major_version</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+  for(;;)
+  {
+    rc = ( 1 == major_version );
+    if( !rc ) break;
 
-    <span class="c1">// version 1.0 fields
-</span>    <span class="n">ON_Object</span><span class="o">*</span> <span class="n">object</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span> <span class="n">archive</span><span class="p">.</span><span class="n">ReadObject</span><span class="p">(</span><span class="o">&amp;</span><span class="n">object</span><span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span> <span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">rc</span> <span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    // version 1.0 fields
+    ON_Object* object = 0;
+    rc = ( archive.ReadObject(&amp;object) ? true : false );
+    if( !rc ) break;
 
-    <span class="n">curve</span> <span class="o">=</span> <span class="n">ON_Curve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">object</span> <span class="p">);</span>
+    curve = ON_Curve::Cast( object );
 
-    <span class="c1">// todo...
-</span>
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+    // todo...
 
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">archive</span><span class="p">.</span><span class="n">EndRead3dmChunk</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    break;
+  }
 
-  <span class="k">return</span> <span class="p">(</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">curve</span> <span class="p">);</span>
-<span class="p">}</span>
+  if( !archive.EndRead3dmChunk() )
+    rc = false;
+
+  return ( rc &amp;&amp; curve );
+}
 </code></pre>
-</div>
 
 <h2 id="sample">Sample</h2>
 
 <p>To use the above functions, you could do the following:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<pre><code class="language-cpp">bool rc = false;
 
-<span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"wb"</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">fp</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">rc</span> <span class="o">=</span> <span class="n">WriteCurveFile</span><span class="p">(</span> <span class="n">fp</span><span class="p">,</span> <span class="n">curve</span> <span class="p">);</span>
-  <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-<span class="p">}</span>
+FILE* fp = ON::OpenFile( filename, L"wb" );
+if( fp )
+{
+  rc = WriteCurveFile( fp, curve );
+  ON::CloseFile( fp );
+}
 
-<span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Successfully wrote %s.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
-<span class="k">else</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Errors while writing %s.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
+if( rc )
+  RhinoApp().Print( L"Successfully wrote %s.\n", filename.Array() );
+else
+  RhinoApp().Print( L"Errors while writing %s.\n", filename.Array() );
 </code></pre>
-</div>
 
 <p>and</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-<span class="n">ON_Curve</span><span class="o">*</span> <span class="n">curve</span> <span class="o">=</span> <span class="mi">0</span>
+<pre><code class="language-cpp">bool rc = false;
+ON_Curve* curve = 0
 
-<span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">ON</span><span class="o">::</span><span class="n">OpenFile</span><span class="p">(</span> <span class="n">filename</span><span class="p">,</span> <span class="s">L"rb"</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">fp</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ReadCurveFile</span><span class="p">(</span> <span class="n">fp</span><span class="p">,</span> <span class="n">curve</span> <span class="p">);</span>
-  <span class="n">ON</span><span class="o">::</span><span class="n">CloseFile</span><span class="p">(</span> <span class="n">fp</span> <span class="p">);</span>
-<span class="p">}</span>
+FILE* fp = ON::OpenFile( filename, L"rb" );
+if( fp )
+{
+  ReadCurveFile( fp, curve );
+  ON::CloseFile( fp );
+}
 
-<span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoCurveObject</span><span class="o">*</span> <span class="n">curve_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCurveObject</span><span class="p">();</span>
-  <span class="n">curve_object</span><span class="o">-&gt;</span><span class="n">SetCurve</span><span class="p">(</span> <span class="n">curve</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="k">else</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Errors while reading %s.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
+if( rc )
+{
+  CRhinoCurveObject* curve_object = new CRhinoCurveObject();
+  curve_object-&gt;SetCurve( curve );
+  context.m_doc.AddObject( curve_object );
+  context.m_doc.Redraw();
+}
+else
+  RhinoApp().Print( L"Errors while reading %s.\n", filename.Array() );
 </code></pre>
-</div>
 
         </article>
 

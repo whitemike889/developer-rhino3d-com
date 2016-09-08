@@ -217,60 +217,59 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select lines"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select lines" );
+  go.SetGeometryFilter( ON::curve_object );
+  go.GetObjects( 2, 2 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  if( go.ObjectCount() != 2 )
+    return failure;
 
-  <span class="k">const</span> <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="n">crv0</span> <span class="o">=</span> <span class="n">ON_LineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_LineCurve</span><span class="o">*</span> <span class="n">crv1</span> <span class="o">=</span> <span class="n">ON_LineCurve</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">Geometry</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv0</span> <span class="o">|</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">crv1</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>  
+  const ON_LineCurve* crv0 = ON_LineCurve::Cast( go.Object(0).Geometry() );
+  const ON_LineCurve* crv1 = ON_LineCurve::Cast( go.Object(1).Geometry() );
+  if( 0 == crv0 | 0 == crv1 )
+    return failure;  
 
-  <span class="n">ON_Line</span> <span class="n">line0</span> <span class="o">=</span> <span class="n">crv0</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">;</span>
-  <span class="n">ON_Line</span> <span class="n">line1</span> <span class="o">=</span> <span class="n">crv1</span><span class="o">-&gt;</span><span class="n">m_line</span><span class="p">;</span>
+  ON_Line line0 = crv0-&gt;m_line;
+  ON_Line line1 = crv1-&gt;m_line;
 
-  <span class="n">ON_3dVector</span> <span class="n">v0</span> <span class="o">=</span> <span class="n">line0</span><span class="p">.</span><span class="n">to</span> <span class="o">-</span> <span class="n">line0</span><span class="p">.</span><span class="n">from</span><span class="p">;</span>
-  <span class="n">v0</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+  ON_3dVector v0 = line0.to - line0.from;
+  v0.Unitize();
 
-  <span class="n">ON_3dVector</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">line1</span><span class="p">.</span><span class="n">to</span> <span class="o">-</span> <span class="n">line1</span><span class="p">.</span><span class="n">from</span><span class="p">;</span>
-  <span class="n">v1</span><span class="p">.</span><span class="n">Unitize</span><span class="p">();</span>
+  ON_3dVector v1 = line1.to - line1.from;
+  v1.Unitize();
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">v0</span><span class="p">.</span><span class="n">IsParallelTo</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Selected lines are parallel.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  if( v0.IsParallelTo(v1) != 0 )
+  {
+    RhinoApp().Print( L"Selected lines are parallel.\n" );
+    return nothing;
+  }
 
-  <span class="n">ON_Line</span> <span class="n">ray0</span><span class="p">(</span> <span class="n">line0</span><span class="p">.</span><span class="n">from</span><span class="p">,</span> <span class="n">line0</span><span class="p">.</span><span class="n">from</span> <span class="o">+</span> <span class="n">v0</span> <span class="p">);</span>
-  <span class="n">ON_Line</span> <span class="n">ray1</span><span class="p">(</span> <span class="n">line1</span><span class="p">.</span><span class="n">from</span><span class="p">,</span> <span class="n">line1</span><span class="p">.</span><span class="n">from</span> <span class="o">+</span> <span class="n">v1</span> <span class="p">);</span>
+  ON_Line ray0( line0.from, line0.from + v0 );
+  ON_Line ray1( line1.from, line1.from + v1 );
 
-  <span class="kt">double</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">ON_Intersect</span><span class="p">(</span><span class="n">ray0</span><span class="p">,</span> <span class="n">ray1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"No intersection found.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="k">return</span> <span class="n">nothing</span><span class="p">;</span>
-  <span class="p">}</span>
+  double s = 0, t = 0;
+  if( !ON_Intersect(ray0, ray1, &amp;s, &amp;t) )
+  {
+    RhinoApp().Print( L"No intersection found.\n" );
+    return nothing;
+  }
 
-  <span class="n">ON_3dPoint</span> <span class="n">pt0</span> <span class="o">=</span> <span class="n">line0</span><span class="p">.</span><span class="n">from</span> <span class="o">+</span> <span class="n">s</span> <span class="o">*</span> <span class="n">v0</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">pt1</span> <span class="o">=</span> <span class="n">line1</span><span class="p">.</span><span class="n">from</span> <span class="o">+</span> <span class="n">t</span> <span class="o">*</span> <span class="n">v1</span><span class="p">;</span>
+  ON_3dPoint pt0 = line0.from + s * v0;
+  ON_3dPoint pt1 = line1.from + t * v1;
 
-  <span class="c1">// pt0 and pt1 should be equal, so we will
-</span>  <span class="c1">// only add pt0 to the document
-</span>  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">pt0</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  // pt0 and pt1 should be equal, so we will
+  // only add pt0 to the document
+  context.m_doc.AddPointObject( pt0 );
+  context.m_doc.Redraw();
 
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

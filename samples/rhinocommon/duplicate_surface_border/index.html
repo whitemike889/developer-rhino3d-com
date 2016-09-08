@@ -222,36 +222,35 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">DupBorder</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or polysurface"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span> <span class="p">||</span> <span class="n">objref</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result DupBorder(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Surface | Rhino.DocObjects.ObjectType.PolysrfFilter;
+    Rhino.DocObjects.ObjRef objref;
+    Rhino.Commands.Result rc = Rhino.Input.RhinoGet.GetOneObject("Select surface or polysurface", false, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success || objref == null)
+      return rc;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObject</span> <span class="n">rhobj</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Object</span><span class="p">();</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rhobj</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">brep</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    Rhino.DocObjects.RhinoObject rhobj = objref.Object();
+    Rhino.Geometry.Brep brep = objref.Brep();
+    if (rhobj == null || brep == null)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="n">rhobj</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">[]</span> <span class="n">curves</span> <span class="p">=</span> <span class="n">brep</span><span class="p">.</span><span class="nf">DuplicateEdgeCurves</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="kt">double</span> <span class="n">tol</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">ModelAbsoluteTolerance</span> <span class="p">*</span> <span class="m">2.1</span><span class="p">;</span>
-    <span class="n">curves</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">.</span><span class="nf">JoinCurves</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">tol</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">curves</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">Guid</span> <span class="n">id</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    rhobj.Select(false);
+    Rhino.Geometry.Curve[] curves = brep.DuplicateEdgeCurves(true);
+    double tol = doc.ModelAbsoluteTolerance * 2.1;
+    curves = Rhino.Geometry.Curve.JoinCurves(curves, tol);
+    for (int i = 0; i &lt; curves.Length; i++)
+    {
+      Guid id = doc.Objects.AddCurve(curves[i]);
+      doc.Objects.Select(id);
+    }
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function DupBorder(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -282,31 +281,30 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">DupBorder</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">PolysrfFilter</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or polysurface"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span>
+def DupBorder():
+    filter = Rhino.DocObjects.ObjectType.Surface | Rhino.DocObjects.ObjectType.PolysrfFilter
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select surface or polysurface", False, filter)
+    if rc != Rhino.Commands.Result.Success: return rc
 
-    <span class="n">rhobj</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Object</span><span class="p">()</span>
-    <span class="n">brep</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Brep</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">rhobj</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">brep</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="n">rhobj</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">curves</span> <span class="o">=</span> <span class="n">brep</span><span class="o">.</span><span class="n">DuplicateEdgeCurves</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">tol</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">ModelAbsoluteTolerance</span> <span class="o">*</span> <span class="mf">2.1</span>
-    <span class="n">curves</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Curve</span><span class="o">.</span><span class="n">JoinCurves</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span>
-        <span class="nb">id</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    rhobj = objref.Object()
+    brep = objref.Brep()
+    if not rhobj or not brep: return Rhino.Commands.Result.Failure
+    rhobj.Select(False)
+    curves = brep.DuplicateEdgeCurves(True)
+    tol = scriptcontext.doc.ModelAbsoluteTolerance * 2.1
+    curves = Rhino.Geometry.Curve.JoinCurves(curves, tol)
+    for curve in curves:
+        id = scriptcontext.doc.Objects.AddCurve(curve)
+        scriptcontext.doc.Objects.Select(id)
+    scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">DupBorder</span><span class="p">()</span>
+if __name__=="__main__":
+    DupBorder()
 </code></pre>
-</div>
 
 </div>
 

@@ -455,21 +455,21 @@
 
 <h2 id="rounding-down">Rounding Down</h2>
 
-<p>The simplest form of rounding is truncation.  Any digits after the desired precision are simply ignored.  The <code class="highlighter-rouge">Fix</code> function is an example of truncation.  For example:</p>
+<p>The simplest form of rounding is truncation.  Any digits after the desired precision are simply ignored.  The <code>Fix</code> function is an example of truncation.  For example:</p>
 
 <pre><code class="language-vbnet">Rhino.Print Fix( 3.5) '  3
 Rhino.Print Fix(-3.5) ' -3
 </code></pre>
 
-<p>The <code class="highlighter-rouge">Int</code> function rounds down to the highest integer less than the value.  Both <code class="highlighter-rouge">Int</code> and <code class="highlighter-rouge">Fix</code> act the same way with positive numbers - truncating - but give different results for negative numbers:</p>
+<p>The <code>Int</code> function rounds down to the highest integer less than the value.  Both <code>Int</code> and <code>Fix</code> act the same way with positive numbers - truncating - but give different results for negative numbers:</p>
 
 <pre><code class="language-vbnet">Rhino.Print Int( 3.5) '  3
 Rhino.Print Int(-3.5) ' -4
 </code></pre>
 
-<p>The <code class="highlighter-rouge">Fix</code> function is an example of symmetric rounding because it affects the magnitude (absolute value) of positive and negative numbers in the same way.  The <code class="highlighter-rouge">Int</code> function is an example of asymmetric rounding because it affects the magnitude of positive and negative numbers differently.</p>
+<p>The <code>Fix</code> function is an example of symmetric rounding because it affects the magnitude (absolute value) of positive and negative numbers in the same way.  The <code>Int</code> function is an example of asymmetric rounding because it affects the magnitude of positive and negative numbers differently.</p>
 
-<p>RhinoScript has a <code class="highlighter-rouge">Floor</code> function that truncates positive values, but does not work with negative numbers:</p>
+<p>RhinoScript has a <code>Floor</code> function that truncates positive values, but does not work with negative numbers:</p>
 
 <pre><code class="language-vbnet">Rhino.Print Rhino.Floor( 3.5) '  3
 Rhino.Print Rhino.Floor(-3.5) ' -4
@@ -477,21 +477,21 @@ Rhino.Print Rhino.Floor(-3.5) ' -4
 
 <h2 id="rounding-up">Rounding Up</h2>
 
-<p>RhinoScript has a <code class="highlighter-rouge">Ceil</code> function which always rounds fraction values up (more positive) to the next value.</p>
+<p>RhinoScript has a <code>Ceil</code> function which always rounds fraction values up (more positive) to the next value.</p>
 
 <pre><code class="language-vbnet">Rhino.Print Rhino.Ceil( 3.5) '  4
 Rhino.Print Rhino.Ceil(-3.5) ' -3
 </code></pre>
 
-<p>VBScript does not have a corresponding round-up function.  However, for negative numbers, both <code class="highlighter-rouge">Fix</code> and <code class="highlighter-rouge">Int</code> can be used to round upward, in different ways.</p>
+<p>VBScript does not have a corresponding round-up function.  However, for negative numbers, both <code>Fix</code> and <code>Int</code> can be used to round upward, in different ways.</p>
 
-<p><code class="highlighter-rouge">Fix</code> rounds towards 0 (up in the absolute sense, but down in absolute magnitude):</p>
+<p><code>Fix</code> rounds towards 0 (up in the absolute sense, but down in absolute magnitude):</p>
 
 <pre><code class="language-vbnet">Rhino.Print Fix( 3.5) '  3
 Rhino.Print Fix(-3.5) ' -3
 </code></pre>
 
-<p><code class="highlighter-rouge">Int</code> rounds away from 0 (up in terms of absolute magnitude, but down in the absolute sense):</p>
+<p><code>Int</code> rounds away from 0 (up in terms of absolute magnitude, but down in the absolute sense):</p>
 
 <pre><code class="language-vbnet">Rhino.Print Int( 3.5) '  3
 Rhino.Print Int(-3.5) ' -4
@@ -513,7 +513,7 @@ Rhino.Print Int(-3.5) ' -4
 
 <p>Banker’s rounding rounds .5 up sometimes and down sometimes.  The convention is to round to the nearest even number, so that both 1.5 and 2.5 round to 2, and 3.5 and 4.5 both round to 4.  Banker’s rounding is symmetric.</p>
 
-<p>In VBScript, the following numeric functions perform banker’s rounding: <code class="highlighter-rouge">CByte</code>, <code class="highlighter-rouge">CInt</code>, <code class="highlighter-rouge">CLng</code>, <code class="highlighter-rouge">CCur</code>, and <code class="highlighter-rouge">Round</code>.</p>
+<p>In VBScript, the following numeric functions perform banker’s rounding: <code>CByte</code>, <code>CInt</code>, <code>CLng</code>, <code>CCur</code>, and <code>Round</code>.</p>
 
 <h2 id="random-rounding">Random Rounding</h2>
 
@@ -558,11 +558,10 @@ End Function
 
 <p>The above script can be used as follows…</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>MsgBox RoundToNearest(1.36, 0.25, True)
+<pre><code>MsgBox RoundToNearest(1.36, 0.25, True)
 MsgBox RoundToNearest(1.36, 0.05, False)
 MsgBox RoundToNearest(1.36, 0.75, True)
 </code></pre>
-</div>
 
 <h2 id="kitchen-sink">Kitchen Sink</h2>
 
@@ -690,7 +689,7 @@ End Function
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">AsymArith(2.5)</code></td>
+      <td style="text-align: left"><code>AsymArith(2.5)</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -701,7 +700,7 @@ End Function
       <td style="text-align: left">Rounds up to next integer.</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">BRound(2.18, 20)</code></td>
+      <td style="text-align: left"><code>BRound(2.18, 20)</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
@@ -712,7 +711,7 @@ End Function
       <td style="text-align: left">Rounds to the nearest 1/20.</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">SymDown(25, .1)</code></td>
+      <td style="text-align: left"><code>SymDown(25, .1)</code></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>

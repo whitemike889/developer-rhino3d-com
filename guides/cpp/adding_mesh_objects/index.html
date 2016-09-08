@@ -298,157 +298,155 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>To create an <code class="highlighter-rouge">ON_Mesh</code>:</p>
+<p>To create an <code>ON_Mesh</code>:</p>
 
 <ol>
-  <li>Create the <code class="highlighter-rouge">ON_Mesh</code> object.  The constructor requires the number of faces and vertices, and whether or not you have vertex normals or texture coordinates.</li>
-  <li>Fill in the mesh vertex array, <code class="highlighter-rouge">ON_Mesh::m_V</code>.  You can also use <code class="highlighter-rouge">ON_Mesh::SetVertex</code>.</li>
-  <li>Fill in the mesh faces array, <code class="highlighter-rouge">ON_Mesh::m_F</code>.  You can also use <code class="highlighter-rouge">ON_Mesh::SetTriangle</code> and <code class="highlighter-rouge">ON_Mesh::SetQuad</code>.</li>
-  <li>If you have vertex normals, fill in the normals array, <code class="highlighter-rouge">ON_Mesh::m_N</code>.  You can also use <code class="highlighter-rouge">ON_Mesh::SetVertexNormal</code>.</li>
-  <li>If you have texture coordinates, fill in the texture coordinate array, <code class="highlighter-rouge">ON_Mesh::m_T</code>. You can also use <code class="highlighter-rouge">ON_Mesh::SetTextureCoordinate</code>.</li>
-  <li>If you did not specify vertex normals, have Rhino compute them for you using <code class="highlighter-rouge">ON_Mesh::ComputeVertexNormals()</code>.</li>
-  <li>Clean up everything using <code class="highlighter-rouge">ON_Mesh::Compact</code>.</li>
+  <li>Create the <code>ON_Mesh</code> object.  The constructor requires the number of faces and vertices, and whether or not you have vertex normals or texture coordinates.</li>
+  <li>Fill in the mesh vertex array, <code>ON_Mesh::m_V</code>.  You can also use <code>ON_Mesh::SetVertex</code>.</li>
+  <li>Fill in the mesh faces array, <code>ON_Mesh::m_F</code>.  You can also use <code>ON_Mesh::SetTriangle</code> and <code>ON_Mesh::SetQuad</code>.</li>
+  <li>If you have vertex normals, fill in the normals array, <code>ON_Mesh::m_N</code>.  You can also use <code>ON_Mesh::SetVertexNormal</code>.</li>
+  <li>If you have texture coordinates, fill in the texture coordinate array, <code>ON_Mesh::m_T</code>. You can also use <code>ON_Mesh::SetTextureCoordinate</code>.</li>
+  <li>If you did not specify vertex normals, have Rhino compute them for you using <code>ON_Mesh::ComputeVertexNormals()</code>.</li>
+  <li>Clean up everything using <code>ON_Mesh::Compact</code>.</li>
 </ol>
 
 <p>You are now ready to add this mesh object to the document. The <em>opennurbs_mesh.h</em> header file is well documented.  It’s worth reading through at least once.</p>
 
 <h2 id="example">Example</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Example demonstrates how to create a mesh and add it to Rhino
-</span>
-  <span class="c1">// Create a mesh to write.
-</span>  <span class="c1">// The mesh is a pyramid with 4 triangular sides and a quadranglar
-</span>  <span class="c1">// base.  The mesh has 5 vertices and 5 faces.  
-</span>  <span class="c1">// The side faces share normals at their common vertices.  The
-</span>  <span class="c1">// quadrangular base has normals different from the side normal.
-</span>  <span class="c1">// Coincident vertices that have distinct normals must be
-</span>  <span class="c1">// duplicated in the vertex list.
-</span>  <span class="c1">//
-</span>  <span class="c1">// The apex will be at (1,1.5,4) with normal (0,0,1).
-</span>  <span class="c1">// The base corners will be at (0,0,0), (0,2,0), (2,3,0), (0,3,0).
-</span>
-  <span class="kt">bool</span> <span class="n">bHasVertexNormals</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// we will specify vertex normals
-</span>  <span class="kt">bool</span> <span class="n">bHasTexCoords</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>    <span class="c1">// we will not specify texture coordinates
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">vertex_count</span> <span class="o">=</span> <span class="mi">5</span><span class="o">+</span><span class="mi">4</span><span class="p">;</span>  <span class="c1">// 4 duplicates for different base normals
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">face_count</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>      <span class="c1">// 4 triangle sides and a quad base
-</span>  <span class="n">ON_Mesh</span> <span class="n">mesh</span><span class="p">(</span> <span class="n">face_count</span><span class="p">,</span> <span class="n">vertex_count</span><span class="p">,</span> <span class="n">bHasVertexNormals</span><span class="p">,</span> <span class="n">bHasTexCoords</span> <span class="p">);</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Example demonstrates how to create a mesh and add it to Rhino
 
-  <span class="c1">// The SetVertex(), SetNormal(), SetTCoord() and SetFace() functions
-</span>  <span class="c1">// return true if successful and false if input is illegal.  It is
-</span>  <span class="c1">// a good idea to inspect this returned value.
-</span>
-  <span class="c1">// vertex #0: apex location and normal
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">1.5</span><span class="p">,</span>  <span class="mf">5.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
+  // Create a mesh to write.
+  // The mesh is a pyramid with 4 triangular sides and a quadranglar
+  // base.  The mesh has 5 vertices and 5 faces.  
+  // The side faces share normals at their common vertices.  The
+  // quadrangular base has normals different from the side normal.
+  // Coincident vertices that have distinct normals must be
+  // duplicated in the vertex list.
+  //
+  // The apex will be at (1,1.5,4) with normal (0,0,1).
+  // The base corners will be at (0,0,0), (0,2,0), (2,3,0), (0,3,0).
 
-  <span class="c1">// vertex #1: SW corner vertex for sides
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// set normal will unitize if needed
-</span>
-  <span class="c1">// vertex #2: SE corner vertex for sides
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="o">+</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
+  bool bHasVertexNormals = true; // we will specify vertex normals
+  bool bHasTexCoords = false;    // we will not specify texture coordinates
+  const int vertex_count = 5+4;  // 4 duplicates for different base normals
+  const int face_count = 5;      // 4 triangle sides and a quad base
+  ON_Mesh mesh( face_count, vertex_count, bHasVertexNormals, bHasTexCoords );
 
-  <span class="c1">// vertex #3: NE corner vertex for sides
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="o">+</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">+</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
+  // The SetVertex(), SetNormal(), SetTCoord() and SetFace() functions
+  // return true if successful and false if input is illegal.  It is
+  // a good idea to inspect this returned value.
 
-  <span class="c1">// vertex #4: NW corner vertex for sides
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">+</span><span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span>
+  // vertex #0: apex location and normal
+  mesh.SetVertex( 0, ON_3dPoint(1.0,  1.5,  5.0) );
+  mesh.SetVertexNormal( 0, ON_3dVector(0.0,  0.0,  1.0) );
 
-  <span class="c1">// vertex #5: SW corner vertex for base
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// == location of v1
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
+  // vertex #1: SW corner vertex for sides
+  mesh.SetVertex( 1, ON_3dPoint(0.0,  0.0,  0.0) );
+  mesh.SetVertexNormal( 1, ON_3dVector(-1.0, -1.0,  0.0) ); // set normal will unitize if needed
 
-  <span class="c1">// vertex #6: SE corner vertex for base
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// == location of v2
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">6</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
+  // vertex #2: SE corner vertex for sides
+  mesh.SetVertex( 2, ON_3dPoint(2.0,  0.0,  0.0) );
+  mesh.SetVertexNormal( 2, ON_3dVector(+1.0, -1.0,  0.0) );
 
-  <span class="c1">// vertex #7: SW corner vertex for base
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// == location of v3
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">7</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
+  // vertex #3: NE corner vertex for sides
+  mesh.SetVertex( 3, ON_3dPoint(2.0,  3.0,  0.0) );
+  mesh.SetVertexNormal( 3, ON_3dVector(+1.0, +1.0,  0.0) );
 
-  <span class="c1">// vertex #8: SW corner vertex for base
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ON_3dPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">)</span> <span class="p">);</span> <span class="c1">// == location of v4
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertexNormal</span><span class="p">(</span> <span class="mi">8</span><span class="p">,</span> <span class="n">ON_3dVector</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="p">);</span>
+  // vertex #4: NW corner vertex for sides
+  mesh.SetVertex( 4, ON_3dPoint(0.0,  3.0,  0.0) );
+  mesh.SetVertexNormal( 4, ON_3dVector(-1.0, +1.0,  0.0) );
 
-  <span class="c1">// Faces have vertices ordered counter-clockwise
-</span>
-  <span class="c1">// South side triangle
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetTriangle</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // vertex #5: SW corner vertex for base
+  mesh.SetVertex( 5, ON_3dPoint(0.0,  0.0,  0.0) ); // == location of v1
+  mesh.SetVertexNormal( 5, ON_3dVector(0.0,  0.0, -1.0) );
 
-  <span class="c1">// East side triangle
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetTriangle</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // vertex #6: SE corner vertex for base
+  mesh.SetVertex( 6, ON_3dPoint(2.0,  0.0,  0.0) ); // == location of v2
+  mesh.SetVertexNormal( 6, ON_3dVector(0.0,  0.0, -1.0) );
 
-  <span class="c1">// North side triangle
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetTriangle</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // vertex #7: SW corner vertex for base
+  mesh.SetVertex( 7, ON_3dPoint(2.0,  3.0,  0.0) ); // == location of v3
+  mesh.SetVertexNormal( 7, ON_3dVector(0.0,  0.0, -1.0) );
 
-  <span class="c1">// West side triangle
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetTriangle</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+  // vertex #8: SW corner vertex for base
+  mesh.SetVertex( 8, ON_3dPoint(0.0,  3.0,  0.0) ); // == location of v4
+  mesh.SetVertexNormal( 8, ON_3dVector(0.0,  0.0, -1.0) );
 
-  <span class="c1">// last face is quadrangular base
-</span>  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span> <span class="p">);</span>
+  // Faces have vertices ordered counter-clockwise
 
-  <span class="c1">//////////////////////////////////////////////////////////////
-</span>  <span class="c1">//////////////////////////////////////////////////////////////
-</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">mesh</span><span class="p">.</span><span class="n">IsValid</span><span class="p">()</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Most applications expect vertex normals.
-</span>    <span class="c1">// If they are not present, ComputeVertexNormals sets
-</span>    <span class="c1">// them by averaging face normals.
-</span>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">mesh</span><span class="p">.</span><span class="n">HasVertexNormals</span><span class="p">()</span> <span class="p">)</span>
-      <span class="n">mesh</span><span class="p">.</span><span class="n">ComputeVertexNormals</span><span class="p">();</span>
+  // South side triangle
+  mesh.SetTriangle( 0, 1, 2, 0 );
 
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddMeshObject</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">);</span>
-    <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  // East side triangle
+  mesh.SetTriangle( 1, 2, 3, 0 );
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  // North side triangle
+  mesh.SetTriangle( 2, 3, 4, 0 );
+
+  // West side triangle
+  mesh.SetTriangle( 3, 4, 1, 0 );
+
+  // last face is quadrangular base
+  mesh.SetQuad( 4, 5, 8, 7, 6 );
+
+  //////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
+
+  if( mesh.IsValid() )
+  {
+    // Most applications expect vertex normals.
+    // If they are not present, ComputeVertexNormals sets
+    // them by averaging face normals.
+    if ( !mesh.HasVertexNormals() )
+      mesh.ComputeVertexNormals();
+
+    context.m_doc.AddMeshObject( mesh );
+    context.m_doc.Redraw();
+  }
+
+  return success;
+}
 </code></pre>
-</div>
 
 <p>Here is another example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span><span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">face_count</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">vertex_count</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
-  <span class="n">BOOL</span> <span class="n">bVertexNormals</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
-  <span class="n">BOOL</span> <span class="n">bTextureCoordinates</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
+{
+  int face_count = 6;
+  int vertex_count = 12;
+  BOOL bVertexNormals = FALSE;
+  BOOL bTextureCoordinates = FALSE;
 
-  <span class="n">ON_Mesh</span> <span class="n">mesh</span><span class="p">(</span> <span class="n">face_count</span><span class="p">,</span> <span class="n">vertex_count</span><span class="p">,</span> <span class="n">bVertexNormals</span><span class="p">,</span> <span class="n">bTextureCoordinates</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">0</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">2</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">3</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">4</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">5</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">6</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">7</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">0.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">8</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">0.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span>  <span class="mi">9</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">1.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetVertex</span><span class="p">(</span> <span class="mi">11</span><span class="p">,</span> <span class="n">ON_3fPoint</span><span class="p">(</span><span class="mf">3.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">2.0</span><span class="n">f</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>  <span class="mi">6</span><span class="p">,</span>  <span class="mi">5</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>  <span class="mi">7</span><span class="p">,</span>  <span class="mi">6</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span>  <span class="mi">9</span><span class="p">,</span>  <span class="mi">8</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span>  <span class="mi">9</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">SetQuad</span><span class="p">(</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">10</span> <span class="p">);</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">ComputeVertexNormals</span><span class="p">();</span>
-  <span class="n">mesh</span><span class="p">.</span><span class="n">Compact</span><span class="p">();</span>
+  ON_Mesh mesh( face_count, vertex_count, bVertexNormals, bTextureCoordinates );
+  mesh.SetVertex(  0, ON_3fPoint(0.0f, 0.0f, 1.0f) );
+  mesh.SetVertex(  1, ON_3fPoint(1.0f, 0.0f, 1.0f) );
+  mesh.SetVertex(  2, ON_3fPoint(2.0f, 0.0f, 1.0f) );
+  mesh.SetVertex(  3, ON_3fPoint(3.0f, 0.0f, 0.0f) );
+  mesh.SetVertex(  4, ON_3fPoint(0.0f, 1.0f, 1.0f) );
+  mesh.SetVertex(  5, ON_3fPoint(1.0f, 1.0f, 2.0f) );
+  mesh.SetVertex(  6, ON_3fPoint(2.0f, 1.0f, 1.0f) );
+  mesh.SetVertex(  7, ON_3fPoint(3.0f, 1.0f, 0.0f) );
+  mesh.SetVertex(  8, ON_3fPoint(0.0f, 2.0f, 1.0f) );
+  mesh.SetVertex(  9, ON_3fPoint(1.0f, 2.0f, 1.0f) );
+  mesh.SetVertex( 10, ON_3fPoint(2.0f, 2.0f, 1.0f) );
+  mesh.SetVertex( 11, ON_3fPoint(3.0f, 2.0f, 1.0f) );
+  mesh.SetQuad( 0, 0, 1,  5,  4 );
+  mesh.SetQuad( 1, 1, 2,  6,  5 );
+  mesh.SetQuad( 2, 2, 3,  7,  6 );
+  mesh.SetQuad( 3, 4, 5,  9,  8 );
+  mesh.SetQuad( 4, 5, 6, 10,  9 );
+  mesh.SetQuad( 5, 6, 7, 11, 10 );
+  mesh.ComputeVertexNormals();
+  mesh.Compact();
 
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddMeshObject</span><span class="p">(</span> <span class="n">mesh</span> <span class="p">);</span>
-  <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  context.m_doc.AddMeshObject( mesh );
+  context.m_doc.Redraw();
+  return CRhinoCommand::success;
+}
 </code></pre>
-</div>
 
         </article>
 

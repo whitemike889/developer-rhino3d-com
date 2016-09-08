@@ -323,48 +323,47 @@
 
 <h2 id="sample">Sample</h2>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">BOOL</span> <span class="n">CTestPlugIn</span><span class="o">::</span><span class="n">OnLoadPlugIn</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="cp">#if defined(WIP)
-</span>
-  <span class="c1">// Easy cheezy way of testing to see if plugin has expired.
-</span>  <span class="n">COleDateTime</span> <span class="n">compile_time</span><span class="p">;</span>
-  <span class="n">compile_time</span><span class="p">.</span><span class="n">ParseDateTime</span><span class="p">(</span> <span class="n">ON_wString</span><span class="p">(</span><span class="n">__DATE__</span><span class="s">" "</span><span class="n">__TIME__</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mh">0x0409</span> <span class="p">);</span>
+<pre><code class="language-cpp">BOOL CTestPlugIn::OnLoadPlugIn()
+{
+#if defined(WIP)
 
-  <span class="n">COleDateTime</span> <span class="n">current_time</span><span class="p">(</span> <span class="n">COleDateTime</span><span class="o">::</span><span class="n">GetCurrentTime</span><span class="p">()</span> <span class="p">);</span>
+  // Easy cheezy way of testing to see if plugin has expired.
+  COleDateTime compile_time;
+  compile_time.ParseDateTime( ON_wString(__DATE__" "__TIME__), 0, 0x0409 );
 
-  <span class="n">COleDateTimeSpan</span> <span class="n">span</span> <span class="o">=</span> <span class="n">current_time</span> <span class="o">-</span> <span class="n">compile_time</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">elapsed_days</span> <span class="o">=</span> <span class="n">span</span><span class="p">.</span><span class="n">GetDays</span><span class="p">();</span>
+  COleDateTime current_time( COleDateTime::GetCurrentTime() );
 
-  <span class="k">const</span> <span class="kt">int</span> <span class="n">warn_after_days</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>   <span class="c1">// or whatever...
-</span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">expire_after_days</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span> <span class="c1">// or whatever...
-</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">elapsed_days</span> <span class="o">&gt;=</span> <span class="n">warn_after_days</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">HWND</span> <span class="n">hWnd</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">MainWnd</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">elapsed_days</span> <span class="o">&gt;=</span> <span class="n">expire_after_days</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_wString</span> <span class="n">str</span> <span class="o">=</span> <span class="s">L"This WIP has expired. Please download the latest and greatest..."</span><span class="p">;</span>
-      <span class="o">::</span><span class="n">MessageBox</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">PlugInName</span><span class="p">(),</span> <span class="n">MB_OK</span> <span class="o">|</span> <span class="n">MB_ICONERROR</span> <span class="p">);</span>
-      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// This will cause the plugin not to load and not display an Rhino error.
-</span>    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-      <span class="n">str</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span> <span class="s">L"This WIP will expire in %d days. Please download the latest and greatest..."</span><span class="p">,</span> <span class="n">expire_after_days</span> <span class="o">-</span> <span class="n">elapsed_days</span> <span class="p">);</span>
-      <span class="o">::</span><span class="n">MessageBox</span><span class="p">(</span> <span class="n">hWnd</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">PlugInName</span><span class="p">(),</span> <span class="n">MB_OK</span> <span class="o">|</span> <span class="n">MB_ICONEXCLAMATION</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="cp">#endif
-</span>
-  <span class="c1">// If we got here, then the WIP was good.
-</span>  <span class="c1">// So, do other plugin initialization
-</span>  <span class="c1">// and return TRUE to run.
-</span>
-  <span class="k">return</span> <span class="n">TRUE</span><span class="p">;</span>
-<span class="p">}</span>
+  COleDateTimeSpan span = current_time - compile_time;
+  int elapsed_days = span.GetDays();
+
+  const int warn_after_days = 30;   // or whatever...
+  const int expire_after_days = 40; // or whatever...
+
+  if( elapsed_days &gt;= warn_after_days )
+  {
+    HWND hWnd = RhinoApp().MainWnd();
+    if( elapsed_days &gt;= expire_after_days )
+    {
+      ON_wString str = L"This WIP has expired. Please download the latest and greatest...";
+      ::MessageBox( hWnd, str, PlugInName(), MB_OK | MB_ICONERROR );
+      return -1; // This will cause the plugin not to load and not display an Rhino error.
+    }
+    else
+    {
+      ON_wString str;
+      str.Format( L"This WIP will expire in %d days. Please download the latest and greatest...", expire_after_days - elapsed_days );
+      ::MessageBox( hWnd, str, PlugInName(), MB_OK | MB_ICONEXCLAMATION );
+    }
+  }
+#endif
+
+  // If we got here, then the WIP was good.
+  // So, do other plugin initialization
+  // and return TRUE to run.
+
+  return TRUE;
+}
 </code></pre>
-</div>
 
         </article>
 

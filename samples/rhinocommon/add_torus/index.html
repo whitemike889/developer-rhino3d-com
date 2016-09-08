@@ -222,26 +222,25 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddTorus</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">major_radius</span> <span class="p">=</span> <span class="m">4.0</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">double</span> <span class="n">minor_radius</span> <span class="p">=</span> <span class="m">2.0</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddTorus(Rhino.RhinoDoc doc)
+  {
+    const double major_radius = 4.0;
+    const double minor_radius = 2.0;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span><span class="p">.</span><span class="n">WorldXY</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Torus</span> <span class="n">torus</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Torus</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">major_radius</span><span class="p">,</span> <span class="n">minor_radius</span><span class="p">);</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">RevSurface</span> <span class="n">revsrf</span> <span class="p">=</span> <span class="n">torus</span><span class="p">.</span><span class="nf">ToRevSurface</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddSurface</span><span class="p">(</span><span class="n">revsrf</span><span class="p">)</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    Rhino.Geometry.Plane plane = Rhino.Geometry.Plane.WorldXY;
+    Rhino.Geometry.Torus torus = new Rhino.Geometry.Torus(plane, major_radius, minor_radius);
+    Rhino.Geometry.RevSurface revsrf = torus.ToRevSurface();
+    if (doc.Objects.AddSurface(revsrf) != Guid.Empty)
+    {
+      doc.Views.Redraw();
+      return Rhino.Commands.Result.Success;
+    }
+    return Rhino.Commands.Result.Failure;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddTorus(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -260,28 +259,27 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Guid</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Guid
 
-<span class="k">def</span> <span class="nf">AddTorus</span><span class="p">():</span>
-    <span class="n">major_radius</span> <span class="o">=</span> <span class="mf">4.0</span>
-    <span class="n">minor_radius</span> <span class="o">=</span> <span class="mf">2.0</span>
+def AddTorus():
+    major_radius = 4.0
+    minor_radius = 2.0
 
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Plane</span><span class="o">.</span><span class="n">WorldXY</span>
-    <span class="n">torus</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Torus</span><span class="p">(</span><span class="n">plane</span><span class="p">,</span> <span class="n">major_radius</span><span class="p">,</span> <span class="n">minor_radius</span><span class="p">)</span>
-    <span class="n">revsrf</span> <span class="o">=</span> <span class="n">torus</span><span class="o">.</span><span class="n">ToRevSurface</span><span class="p">()</span>
+    plane = Rhino.Geometry.Plane.WorldXY
+    torus = Rhino.Geometry.Torus(plane, major_radius, minor_radius)
+    revsrf = torus.ToRevSurface()
 
-    <span class="k">if</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddSurface</span><span class="p">(</span><span class="n">revsrf</span><span class="p">)</span><span class="o">!=</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
-        <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    if scriptcontext.doc.Objects.AddSurface(revsrf)!=System.Guid.Empty:
+        scriptcontext.doc.Views.Redraw()
+        return Rhino.Commands.Result.Success
+    return Rhino.Commands.Result.Failure
 
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddTorus</span><span class="p">()</span>
+if __name__=="__main__":
+    AddTorus()
 </code></pre>
-</div>
 
 </div>
 

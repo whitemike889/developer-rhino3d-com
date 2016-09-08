@@ -332,59 +332,58 @@
 
 <p>The following sample functions demonstrate how to determine whether or not a polysurface is a box.</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">IsBrepBox</span><span class="p">(</span> <span class="k">const</span> <span class="n">ON_Brep</span><span class="o">&amp;</span> <span class="n">brep</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">double</span> <span class="n">zero_tolerance</span> <span class="o">=</span> <span class="mf">1.0e-6</span><span class="p">;</span> <span class="c1">// or whatever
-</span>  <span class="n">ON_3dVector</span> <span class="n">N</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<pre><code class="language-cpp">bool IsBrepBox( const ON_Brep&amp; brep )
+{
+  double zero_tolerance = 1.0e-6; // or whatever
+  ON_3dVector N[6];
 
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">brep</span><span class="p">.</span><span class="n">IsSolid</span><span class="p">();</span>
+  bool rc = brep.IsSolid();
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-    <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span><span class="n">brep</span><span class="p">.</span><span class="n">m_F</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span><span class="p">);</span>
+  if (rc)
+    rc = (brep.m_F.Count() == 6);
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">brep</span><span class="p">.</span><span class="n">m_F</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">IsPlanar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">plane</span><span class="p">,</span> <span class="n">zero_tolerance</span><span class="p">))</span>
-      <span class="p">{</span>
-        <span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">plane</span><span class="p">.</span><span class="n">zaxis</span><span class="p">;</span>
-        <span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Unitize</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  if (rc)
+  {
+    for (int i = 0; rc &amp;&amp; i &lt; 6; i++)
+    {
+      ON_Plane plane;
+      if (brep.m_F[i].IsPlanar(&amp;plane, zero_tolerance))
+      {
+        N[i] = plane.zaxis;
+        N[i].Unitize();
+      }
+      else
+        rc = false;
+    }
+  }
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">rc</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">dot</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span><span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">zero_tolerance</span><span class="p">)</span>
-          <span class="k">continue</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">dot</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">zero_tolerance</span><span class="p">)</span>
-          <span class="n">count</span><span class="o">++</span><span class="p">;</span>
-        <span class="k">else</span>
-          <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-      <span class="p">}</span>
+  if (rc)
+  {
+    for (int i = 0; rc &amp;&amp; i &lt; 6; i++)
+    {
+      int count = 0;
+      for (int j = 0; rc &amp;&amp; j &lt; 6; j++)
+      {
+        double dot = fabs(N[i] * N[j]);
+        if (fabs(dot) &lt;= zero_tolerance)
+          continue;
+        if (fabs(dot - 1.0) &lt;= zero_tolerance)
+          count++;
+        else
+          rc = false;
+      }
 
-      <span class="k">if</span> <span class="p">(</span><span class="n">rc</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="mi">2</span> <span class="o">!=</span> <span class="n">count</span><span class="p">)</span>
-          <span class="n">rc</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+      if (rc)
+      {
+        if (2 != count)
+          rc = false;
+      }
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

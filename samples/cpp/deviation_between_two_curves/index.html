@@ -217,106 +217,105 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select curves to test"</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">ON</span><span class="o">::</span><span class="n">curve_object</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">EnableSubObjectSelect</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">AcceptNothing</span><span class="p">();</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">!=</span> <span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="n">CommandResult</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  CRhinoGetObject go;
+  go.SetCommandPrompt( L"Select curves to test" );
+  go.SetGeometryFilter( ON::curve_object );
+  go.EnableSubObjectSelect( true );
+  go.AcceptNothing();
+  go.GetObjects( 2, 2 );
+  if( go.CommandResult() != success )
+    return go.CommandResult();
+  if( go.ObjectCount() != 2 )
+    return failure;
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv_a</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv_a</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv_a = go.Object(0).Curve();
+  if( !crv_a )
+    return failure;
 
-  <span class="k">const</span> <span class="n">ON_Curve</span><span class="o">*</span> <span class="n">crv_b</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">Curve</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">crv_b</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">failure</span><span class="p">;</span>
+  const ON_Curve* crv_b = go.Object(1).Curve();
+  if( !crv_b )
+    return failure;
 
-  <span class="kt">double</span> <span class="n">tol</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AbsoluteTolerance</span><span class="p">();</span>
-  <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">int_a</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
-  <span class="kt">double</span> <span class="n">int_b</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">2</span><span class="p">];</span>
-  <span class="kt">double</span> <span class="n">max_a</span><span class="p">,</span> <span class="n">max_b</span><span class="p">,</span> <span class="n">max_d</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">min_a</span><span class="p">,</span> <span class="n">min_b</span><span class="p">,</span> <span class="n">min_d</span><span class="p">;</span>
+  double tol = context.m_doc.AbsoluteTolerance();
+  int count = 0;
+  double int_a[3][2];
+  double int_b[3][2];
+  double max_a, max_b, max_d;
+  double min_a, min_b, min_d;
 
-  <span class="kt">bool</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetOverlapDistance</span><span class="p">(</span>
-        <span class="n">crv_a</span><span class="p">,</span>  <span class="c1">// curve A
-</span>        <span class="mi">0</span><span class="p">,</span>      <span class="c1">// optional domain for curve A
-</span>        <span class="n">crv_b</span><span class="p">,</span>  <span class="c1">// curve B
-</span>        <span class="mi">0</span><span class="p">,</span>      <span class="c1">// optional domain for curve B
-</span>        <span class="n">tol</span><span class="p">,</span>    <span class="c1">// tolerance for common normal detection
-</span>        <span class="mf">0.0</span><span class="p">,</span>    <span class="c1">// limits acceptable overlap distance
-</span>        <span class="o">&amp;</span><span class="n">count</span><span class="p">,</span> <span class="c1">// overlap interval count (0 to 3)
-</span>        <span class="n">int_a</span><span class="p">,</span>  <span class="c1">// curve A interval(s)
-</span>        <span class="n">int_b</span><span class="p">,</span>  <span class="c1">// curve B interval(s)
-</span>        <span class="o">&amp;</span><span class="n">max_a</span><span class="p">,</span> <span class="c1">// curve B parameter at maximum overlap distance point
-</span>        <span class="o">&amp;</span><span class="n">max_b</span><span class="p">,</span> <span class="c1">// curve B parameter at maximum overlap distance point
-</span>        <span class="o">&amp;</span><span class="n">max_d</span><span class="p">,</span> <span class="c1">// maximum overlap distance
-</span>        <span class="o">&amp;</span><span class="n">min_a</span><span class="p">,</span> <span class="c1">// curve A parameter at minimum distance point
-</span>        <span class="o">&amp;</span><span class="n">min_b</span><span class="p">,</span> <span class="c1">// curve B parameter at minimum distance point
-</span>        <span class="o">&amp;</span><span class="n">min_d</span>  <span class="c1">// minimum distance between curves
-</span>        <span class="p">);</span>
+  bool rc = RhinoGetOverlapDistance(
+        crv_a,  // curve A
+        0,      // optional domain for curve A
+        crv_b,  // curve B
+        0,      // optional domain for curve B
+        tol,    // tolerance for common normal detection
+        0.0,    // limits acceptable overlap distance
+        &amp;count, // overlap interval count (0 to 3)
+        int_a,  // curve A interval(s)
+        int_b,  // curve B interval(s)
+        &amp;max_a, // curve B parameter at maximum overlap distance point
+        &amp;max_b, // curve B parameter at maximum overlap distance point
+        &amp;max_d, // maximum overlap distance
+        &amp;min_a, // curve A parameter at minimum distance point
+        &amp;min_b, // curve B parameter at minimum distance point
+        &amp;min_d  // minimum distance between curves
+        );
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">min_d</span> <span class="o">&lt;=</span> <span class="n">ON_ZERO_TOLERANCE</span> <span class="p">)</span>
-    <span class="n">min_d</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+  if( min_d &lt;= ON_ZERO_TOLERANCE )
+    min_d = 0.0;
 
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Curves do not overlap.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">crv_a</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span><span class="n">max_a</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">crv_b</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span><span class="n">max_b</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">crv_a</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span><span class="n">min_a</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddPointObject</span><span class="p">(</span> <span class="n">crv_b</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span><span class="n">min_b</span><span class="p">)</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
+  if( rc )
+  {
+    if( count == 0 )
+    {
+      RhinoApp().Print( L"Curves do not overlap.\n" );
+    }
+    else
+    {
+      context.m_doc.AddPointObject( crv_a-&gt;PointAt(max_a) );
+      context.m_doc.AddPointObject( crv_b-&gt;PointAt(max_b) );
+      context.m_doc.AddPointObject( crv_a-&gt;PointAt(min_a) );
+      context.m_doc.AddPointObject( crv_b-&gt;PointAt(min_b) );
+      context.m_doc.Redraw();
 
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">ON_3dPoint</span> <span class="n">sp_a</span> <span class="o">=</span> <span class="n">crv_a</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">int_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-        <span class="n">ON_3dPoint</span> <span class="n">sp_b</span> <span class="o">=</span> <span class="n">crv_b</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">int_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">);</span>
-        <span class="kt">double</span> <span class="n">sd</span> <span class="o">=</span> <span class="n">sp_a</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span> <span class="n">sp_b</span> <span class="p">);</span>
+      int i;
+      for( i = 0; i &lt; count; i++ )
+      {
+        ON_3dPoint sp_a = crv_a-&gt;PointAt( int_a[i][0] );
+        ON_3dPoint sp_b = crv_b-&gt;PointAt( int_b[i][0] );
+        double sd = sp_a.DistanceTo( sp_b );
 
-        <span class="n">ON_3dPoint</span> <span class="n">ep_a</span> <span class="o">=</span> <span class="n">crv_a</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">int_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-        <span class="n">ON_3dPoint</span> <span class="n">ep_b</span> <span class="o">=</span> <span class="n">crv_b</span><span class="o">-&gt;</span><span class="n">PointAt</span><span class="p">(</span> <span class="n">int_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
-        <span class="kt">double</span> <span class="n">ed</span> <span class="o">=</span> <span class="n">ep_a</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span> <span class="n">ep_b</span> <span class="p">);</span>
+        ON_3dPoint ep_a = crv_a-&gt;PointAt( int_a[i][1] );
+        ON_3dPoint ep_b = crv_b-&gt;PointAt( int_b[i][1] );
+        double ed = ep_a.DistanceTo( ep_b );
 
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Overlap interval %d of %d:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">count</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"          start: distance = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sd</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"                 crvA(%10g) = (%g, %g, %g)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                          <span class="n">int_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">sp_a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sp_a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sp_a</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"                 crvB(%10g) = (%g, %g, %g)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                          <span class="n">int_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">sp_b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sp_b</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sp_b</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"            end: distance = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ed</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"                 crvA(%10g) = (%g, %g, %g)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                          <span class="n">int_a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">ep_a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ep_a</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">ep_a</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
-        <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"                 crvB(%10g) = (%g, %g, %g)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
-                          <span class="n">int_b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">ep_b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ep_b</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">ep_b</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
-      <span class="p">}</span>
+        RhinoApp().Print( L"Overlap interval %d of %d:\n", i+1, count );
+        RhinoApp().Print( L"          start: distance = %g\n", sd );
+        RhinoApp().Print( L"                 crvA(%10g) = (%g, %g, %g)\n",
+                          int_a[i][0], sp_a.x, sp_a.y, sp_a.z );
+        RhinoApp().Print( L"                 crvB(%10g) = (%g, %g, %g)\n",
+                          int_b[i][0], sp_b.x, sp_b.y, sp_b.z );
+        RhinoApp().Print( L"            end: distance = %g\n", ed );
+        RhinoApp().Print( L"                 crvA(%10g) = (%g, %g, %g)\n",
+                          int_a[i][1], ep_a.x, ep_a.y, ep_a.z );
+        RhinoApp().Print( L"                 crvB(%10g) = (%g, %g, %g)\n",
+                          int_b[i][1], ep_b.x, ep_b.y, ep_b.z );
+      }
 
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Minimum deviation = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">min_d</span> <span class="p">);</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Maximum deviation = %g</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">max_d</span> <span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Unable to find overlap intervals.</span><span class="se">\n</span><span class="s">"</span> <span class="p">);</span>
-  <span class="p">}</span>
+      RhinoApp().Print( L"Minimum deviation = %g\n", min_d );
+      RhinoApp().Print( L"Maximum deviation = %g\n", max_d );
+    }
+  }
+  else
+  {
+    RhinoApp().Print( L"Unable to find overlap intervals.\n" );
+  }
 
-  <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
-<span class="p">}</span>
+  return success;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

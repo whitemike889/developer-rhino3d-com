@@ -289,7 +289,7 @@
   <li><a href="/api/RhinoCommon/html/P_Rhino_Input_Custom_GetObject_DeselectAllBeforePostSelect.htm">GetObject.DeselectAllBeforePostSelect</a></li>
 </ul>
 
-<p>Also, after clicking a command line option, turn off pre-selection, using <code class="highlighter-rouge">GetObject.EnablePreSelect</code>.  Otherwise, <code class="highlighter-rouge">GetObject.GetMultiple</code> will return with a <code class="highlighter-rouge">GetResult.Object</code> return code.</p>
+<p>Also, after clicking a command line option, turn off pre-selection, using <code>GetObject.EnablePreSelect</code>.  Otherwise, <code>GetObject.GetMultiple</code> will return with a <code>GetResult.Object</code> return code.</p>
 
 <p>For example:</p>
 
@@ -300,89 +300,88 @@
 
 <div class="tab-content">
 
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.Commands</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.DocObjects</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.Input</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.Input.Custom</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">using System;
+using Rhino;
+using Rhino.Commands;
+using Rhino.DocObjects;
+using Rhino.Input;
+using Rhino.Input.Custom;
 
-<span class="p">...</span>
+...
 
-<span class="k">protected</span> <span class="k">override</span> <span class="n">Result</span> <span class="nf">RunCommand</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">,</span> <span class="n">RunMode</span> <span class="n">mode</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">geometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">PolysrfFilter</span> <span class="p">|</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Mesh</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">integer1</span> <span class="p">=</span> <span class="m">300</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">integer2</span> <span class="p">=</span> <span class="m">300</span><span class="p">;</span>
+protected override Result RunCommand(RhinoDoc doc, RunMode mode)
+{
+  const ObjectType geometryFilter = ObjectType.Surface | ObjectType.PolysrfFilter | ObjectType.Mesh;
+  int integer1 = 300;
+  int integer2 = 300;
 
-  <span class="n">OptionInteger</span> <span class="n">optionInteger1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptionInteger</span><span class="p">(</span><span class="n">integer1</span><span class="p">,</span> <span class="m">200</span><span class="p">,</span> <span class="m">900</span><span class="p">);</span>
-  <span class="n">OptionInteger</span> <span class="n">optionInteger2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OptionInteger</span><span class="p">(</span><span class="n">integer2</span><span class="p">,</span> <span class="m">200</span><span class="p">,</span> <span class="m">900</span><span class="p">);</span>
+  OptionInteger optionInteger1 = new OptionInteger(integer1, 200, 900);
+  OptionInteger optionInteger2 = new OptionInteger(integer2, 200, 900);
 
-  <span class="n">GetObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-  <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select surfaces, polysurfaces, or meshes"</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">geometryFilter</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="nf">AddOptionInteger</span><span class="p">(</span><span class="s">"Option1"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optionInteger1</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="nf">AddOptionInteger</span><span class="p">(</span><span class="s">"Option2"</span><span class="p">,</span> <span class="k">ref</span> <span class="n">optionInteger2</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">GroupSelect</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">SubObjectSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-  <span class="n">go</span><span class="p">.</span><span class="nf">EnableClearObjectsOnEntry</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="nf">EnableUnselectObjectsOnExit</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-  <span class="n">go</span><span class="p">.</span><span class="n">DeselectAllBeforePostSelect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+  GetObject go = new GetObject();
+  go.SetCommandPrompt("Select surfaces, polysurfaces, or meshes");
+  go.GeometryFilter = geometryFilter;
+  go.AddOptionInteger("Option1", ref optionInteger1);
+  go.AddOptionInteger("Option2", ref optionInteger2);
+  go.GroupSelect = true;
+  go.SubObjectSelect = false;
+  go.EnableClearObjectsOnEntry(false);
+  go.EnableUnselectObjectsOnExit(false);
+  go.DeselectAllBeforePostSelect = false;
 
-  <span class="kt">bool</span> <span class="n">bHavePreselectedObjects</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+  bool bHavePreselectedObjects = false;
 
-  <span class="k">for</span> <span class="p">(;;)</span>
-  <span class="p">{</span>
-    <span class="n">GetResult</span> <span class="n">res</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+  for (;;)
+  {
+    GetResult res = go.GetMultiple(1, 0);
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="p">==</span> <span class="n">GetResult</span><span class="p">.</span><span class="n">Option</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">go</span><span class="p">.</span><span class="nf">EnablePreSelect</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (res == GetResult.Option)
+    {
+      go.EnablePreSelect(false, true);
+      continue;
+    }
 
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="p">!=</span> <span class="n">GetResult</span><span class="p">.</span><span class="n">Object</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+    else if (res != GetResult.Object)
+      return Result.Cancel;
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="n">ObjectsWerePreselected</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">bHavePreselectedObjects</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-      <span class="n">go</span><span class="p">.</span><span class="nf">EnablePreSelect</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-      <span class="k">continue</span><span class="p">;</span>
-    <span class="p">}</span>
+    if (go.ObjectsWerePreselected)
+    {
+      bHavePreselectedObjects = true;
+      go.EnablePreSelect(false, true);
+      continue;
+    }
 
-    <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
+    break;
+  }
 
-  <span class="k">if</span> <span class="p">(</span><span class="n">bHavePreselectedObjects</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="c1">// Normally, pre-selected objects will remain selected, when a
-</span>    <span class="c1">// command finishes, and post-selected objects will be unselected.
-</span>    <span class="c1">// This this way of picking, it is possible to have a combination
-</span>    <span class="c1">// of pre-selected and post-selected. So, to make sure everything
-</span>    <span class="c1">// "looks the same", lets unselect everything before finishing
-</span>    <span class="c1">// the command.
-</span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">RhinoObject</span> <span class="n">rhinoObject</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="nf">Object</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">null</span> <span class="p">!=</span> <span class="n">rhinoObject</span><span class="p">)</span>
-        <span class="n">rhinoObject</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-  <span class="p">}</span>
+  if (bHavePreselectedObjects)
+  {
+    // Normally, pre-selected objects will remain selected, when a
+    // command finishes, and post-selected objects will be unselected.
+    // This this way of picking, it is possible to have a combination
+    // of pre-selected and post-selected. So, to make sure everything
+    // "looks the same", lets unselect everything before finishing
+    // the command.
+    for (int i = 0; i &lt; go.ObjectCount; i++)
+    {
+      RhinoObject rhinoObject = go.Object(i).Object();
+      if (null != rhinoObject)
+        rhinoObject.Select(false);
+    }
+    doc.Views.Redraw();
+  }
 
-  <span class="kt">int</span> <span class="n">objectCount</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span>
-  <span class="n">integer1</span> <span class="p">=</span> <span class="n">optionInteger1</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">;</span>
-  <span class="n">integer2</span> <span class="p">=</span> <span class="n">optionInteger2</span><span class="p">.</span><span class="n">CurrentValue</span><span class="p">;</span>
+  int objectCount = go.ObjectCount;
+  integer1 = optionInteger1.CurrentValue;
+  integer2 = optionInteger2.CurrentValue;
 
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Select object count = {0}"</span><span class="p">,</span> <span class="n">objectCount</span><span class="p">));</span>
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Value of integer1 = {0}"</span><span class="p">,</span> <span class="n">integer1</span><span class="p">));</span>
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Value of integer2 = {0}"</span><span class="p">,</span> <span class="n">integer2</span><span class="p">));</span>
+  RhinoApp.WriteLine(string.Format("Select object count = {0}", objectCount));
+  RhinoApp.WriteLine(string.Format("Value of integer1 = {0}", integer1));
+  RhinoApp.WriteLine(string.Format("Value of integer2 = {0}", integer2));
 
-  <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-<span class="p">}</span>
+  return Result.Success;
+}
 </code></pre>
-  </div>
 
   <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Imports Rhino
 Imports Rhino.Commands

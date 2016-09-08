@@ -217,37 +217,36 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandFooBar</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_3dPoint</span> <span class="n">box_corners</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
-  <span class="n">CArgsRhinoGetBox</span> <span class="n">args</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandFooBar::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_3dPoint box_corners[8];
+  CArgsRhinoGetBox args;
 
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetBox</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">box_corners</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">==</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">degree</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">};</span>   <span class="c1">// defaults
-</span>    <span class="kt">int</span> <span class="n">cv_count</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span> <span class="c1">// defaults
-</span>
-    <span class="n">ON_NurbsCage</span> <span class="n">nurbs_cage</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">nurbs_cage</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span> <span class="n">box_corners</span><span class="p">,</span>
-        <span class="n">degree</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">degree</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">cv_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cv_count</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cv_count</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">CRhinoCageObject</span><span class="o">*</span> <span class="n">cage_object</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoCageObject</span><span class="p">();</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">cage_object</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">cage_object</span><span class="o">-&gt;</span><span class="n">SetCage</span><span class="p">(</span> <span class="n">nurbs_cage</span> <span class="p">);</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">cage_object</span> <span class="p">);</span>
-        <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Redraw</span><span class="p">();</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  CRhinoCommand::result rc = RhinoGetBox( args, box_corners, 0 );
+  if( rc == CRhinoCommand::success )
+  {
+    int degree[3] = {3,3,3};   // defaults
+    int cv_count[3] = {4,4,4}; // defaults
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+    ON_NurbsCage nurbs_cage;
+    if( nurbs_cage.Create( box_corners,
+        degree[0]+1, degree[1]+1, degree[2]+1,
+        cv_count[0], cv_count[1], cv_count[2])
+        )
+    {
+      CRhinoCageObject* cage_object = new CRhinoCageObject();
+      if( cage_object )
+      {
+        cage_object-&gt;SetCage( nurbs_cage );
+        context.m_doc.AddObject( cage_object );
+        context.m_doc.Redraw();
+      }
+    }
+  }
+
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

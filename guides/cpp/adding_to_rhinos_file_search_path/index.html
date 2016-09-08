@@ -319,49 +319,47 @@
 
 <h2 id="solution">Solution</h2>
 
-<p>Rhino’s file search path is held by Rhino’s <code class="highlighter-rouge">CRhinoDirectoryManager</code> object.  You can get the one and only <code class="highlighter-rouge">CRhinoDirectoryManager</code> singleton as follows:</p>
+<p>Rhino’s file search path is held by Rhino’s <code>CRhinoDirectoryManager</code> object.  You can get the one and only <code>CRhinoDirectoryManager</code> singleton as follows:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoDirectoryManager</span><span class="o">&amp;</span> <span class="n">dm</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoDirectoryManager</span><span class="p">();</span>
+<pre><code class="language-cpp">CRhinoDirectoryManager&amp; dm = RhinoApp().RhinoDirectoryManager();
 </code></pre>
-</div>
 
 <h2 id="example">Example</h2>
 
 <p>The following utility function demonstrates how to add (insert append or insert) to Rhino’s file search path:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">RhAddSearchPath</span><span class="p">(</span> <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">pszFolder</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">pszFolder</span> <span class="o">||</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">pszFolder</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<pre><code class="language-cpp">int RhAddSearchPath( const wchar_t* pszFolder, int index = -1 )
+{
+  int rc = -1;
+  if( 0 == pszFolder || 0 == pszFolder[0] )
+    return -1;
 
-  <span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">CRhinoFileUtilities</span><span class="o">::</span><span class="n">DirExists</span><span class="p">(</span><span class="n">pszFolder</span><span class="p">)</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">CRhinoDirectoryManager</span><span class="o">&amp;</span> <span class="n">dm</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">RhinoDirectoryManager</span><span class="p">();</span>
-    <span class="k">const</span> <span class="kt">int</span> <span class="n">path_count</span> <span class="o">=</span> <span class="n">dm</span><span class="p">.</span><span class="n">SearchPathCount</span><span class="p">();</span>
-    <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">path_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">on_wcsicmp</span><span class="p">(</span><span class="n">pszFolder</span><span class="p">,</span> <span class="n">dm</span><span class="p">.</span><span class="n">SearchPath</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+  int rc = -1;
+  if( CRhinoFileUtilities::DirExists(pszFolder) )
+  {
+    CRhinoDirectoryManager&amp; dm = RhinoApp().RhinoDirectoryManager();
+    const int path_count = dm.SearchPathCount();
+    for( int i = 0; i &lt; path_count; i++ )
+    {
+      if( 0 == on_wcsicmp(pszFolder, dm.SearchPath(i)) )
+      {
+        rc = i;
+        break;
+      }
+    }
 
-    <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">index</span> <span class="o">=</span> <span class="n">RHINO_CLAMP</span><span class="p">(</span> <span class="n">index</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">path_count</span> <span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span> <span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="n">dm</span><span class="p">.</span><span class="n">AppendSearchPath</span><span class="p">(</span> <span class="n">pszFolder</span> <span class="p">);</span>
-      <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">dm</span><span class="p">.</span><span class="n">InsertSearchPath</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">pszFolder</span><span class="p">)</span> <span class="p">)</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+    if( rc == -1 )
+    {
+      index = RHINO_CLAMP( index, -1, path_count );
+      if( index == -1 )
+        rc = dm.AppendSearchPath( pszFolder );
+      else if( dm.InsertSearchPath(index, pszFolder) )
+        rc = index;
+    }
+  }
+  return rc;
+}
 </code></pre>
-</div>
 
         </article>
 

@@ -222,53 +222,52 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Result</span> <span class="nf">ExtendCurve</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">ObjRef</span><span class="p">[]</span> <span class="n">boundary_obj_refs</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select boundary objects"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">AnyObject</span><span class="p">,</span> <span class="k">out</span> <span class="n">boundary_obj_refs</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">boundary_obj_refs</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">boundary_obj_refs</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Result ExtendCurve(RhinoDoc doc)
+  {
+    ObjRef[] boundary_obj_refs;
+    var rc = RhinoGet.GetMultipleObjects("Select boundary objects", false, ObjectType.AnyObject, out boundary_obj_refs);
+    if (rc != Result.Success)
+      return rc;
+    if (boundary_obj_refs == null || boundary_obj_refs.Length == 0)
+      return Result.Nothing;
 
-    <span class="kt">var</span> <span class="n">gc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select curve to extend"</span><span class="p">);</span>
-    <span class="n">gc</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-    <span class="n">gc</span><span class="p">.</span><span class="n">GeometryAttributeFilter</span> <span class="p">=</span> <span class="n">GeometryAttributeFilter</span><span class="p">.</span><span class="n">OpenCurve</span><span class="p">;</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">DisablePreSelect</span> <span class="p">();</span>
-    <span class="n">gc</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gc</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">curve_obj_ref</span> <span class="p">=</span> <span class="n">gc</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+    var gc = new GetObject();
+    gc.SetCommandPrompt("Select curve to extend");
+    gc.GeometryFilter = ObjectType.Curve;
+    gc.GeometryAttributeFilter = GeometryAttributeFilter.OpenCurve;
+    gc.DisablePreSelect ();
+    gc.Get();
+    if (gc.CommandResult() != Result.Success)
+      return gc.CommandResult();
+    var curve_obj_ref = gc.Object(0);
 
-    <span class="kt">var</span> <span class="n">curve</span> <span class="p">=</span> <span class="n">curve_obj_ref</span><span class="p">.</span><span class="nf">Curve</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">curve</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">t</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">curve</span><span class="p">.</span><span class="nf">ClosestPoint</span><span class="p">(</span><span class="n">curve_obj_ref</span><span class="p">.</span><span class="nf">SelectionPoint</span><span class="p">(),</span> <span class="k">out</span> <span class="n">t</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">curve_end</span> <span class="p">=</span> <span class="n">t</span> <span class="p">&lt;=</span> <span class="n">curve</span><span class="p">.</span><span class="n">Domain</span><span class="p">.</span><span class="n">Mid</span> <span class="p">?</span> <span class="n">CurveEnd</span><span class="p">.</span><span class="n">Start</span> <span class="p">:</span> <span class="n">CurveEnd</span><span class="p">.</span><span class="n">End</span><span class="p">;</span>
+    var curve = curve_obj_ref.Curve();
+    if (curve == null) return Result.Failure;
+    double t;
+    if (!curve.ClosestPoint(curve_obj_ref.SelectionPoint(), out t))
+      return Result.Failure;
+    var curve_end = t &lt;= curve.Domain.Mid ? CurveEnd.Start : CurveEnd.End;
 
-    <span class="kt">var</span> <span class="n">geometry</span> <span class="p">=</span> <span class="n">boundary_obj_refs</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">obj</span><span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">());</span>
-    <span class="kt">var</span> <span class="n">extended_curve</span> <span class="p">=</span> <span class="n">curve</span><span class="p">.</span><span class="nf">Extend</span><span class="p">(</span><span class="n">curve_end</span><span class="p">,</span> <span class="n">CurveExtensionStyle</span><span class="p">.</span><span class="n">Line</span><span class="p">,</span> <span class="n">geometry</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">extended_curve</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">extended_curve</span><span class="p">.</span><span class="n">IsValid</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(!</span><span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="n">curve_obj_ref</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">extended_curve</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"No boundary object was intersected so curve not extended"</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Nothing</span><span class="p">;</span>
-    <span class="p">}</span>
+    var geometry = boundary_obj_refs.Select(obj=&gt; obj.Geometry());
+    var extended_curve = curve.Extend(curve_end, CurveExtensionStyle.Line, geometry);
+    if (extended_curve != null &amp;&amp; extended_curve.IsValid)
+    {
+      if (!doc.Objects.Replace(curve_obj_ref.ObjectId, extended_curve))
+        return Result.Failure;
+      doc.Views.Redraw();
+    }
+    else
+    {
+      RhinoApp.WriteLine("No boundary object was intersected so curve not extended");
+      return Result.Nothing;
+    }
 
-    <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function ExtendCurve(ByVal doc As RhinoDoc) As Result
@@ -319,52 +318,51 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">Rhino</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Geometry</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.DocObjects</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Commands</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">Rhino.Input.Custom</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">scriptcontext</span> <span class="kn">import</span> <span class="n">doc</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">from Rhino import *
+from Rhino.Geometry import *
+from Rhino.DocObjects import *
+from Rhino.Commands import *
+from Rhino.Input import *
+from Rhino.Input.Custom import *
+from scriptcontext import doc
 
-<span class="k">def</span> <span class="nf">RunCommand</span><span class="p">():</span>
+def RunCommand():
 
-  <span class="n">rc</span><span class="p">,</span> <span class="n">boundary_obj_refs</span> <span class="o">=</span> <span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetMultipleObjects</span><span class="p">(</span><span class="s">"Select boundary objects"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">AnyObject</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">rc</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">rc</span>
-  <span class="k">if</span> <span class="n">boundary_obj_refs</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">boundary_obj_refs</span><span class="o">.</span><span class="n">Length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  rc, boundary_obj_refs = RhinoGet.GetMultipleObjects("Select boundary objects", False, ObjectType.AnyObject)
+  if rc &lt;&gt; Result.Success:
+    return rc
+  if boundary_obj_refs == None or boundary_obj_refs.Length == 0:
+    return Result.Nothing
 
-  <span class="n">gc</span> <span class="o">=</span> <span class="n">GetObject</span><span class="p">()</span>
-  <span class="n">gc</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select curve to extend"</span><span class="p">)</span>
-  <span class="n">gc</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span>
-  <span class="n">gc</span><span class="o">.</span><span class="n">GeometryAttributeFilter</span> <span class="o">=</span> <span class="n">GeometryAttributeFilter</span><span class="o">.</span><span class="n">OpenCurve</span>
-  <span class="n">gc</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">gc</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span> <span class="o">&lt;&gt;</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">gc</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
-  <span class="n">curve_obj_ref</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  gc = GetObject()
+  gc.SetCommandPrompt("Select curve to extend")
+  gc.GeometryFilter = ObjectType.Curve
+  gc.GeometryAttributeFilter = GeometryAttributeFilter.OpenCurve
+  gc.Get()
+  if gc.CommandResult() &lt;&gt; Result.Success:
+    return gc.CommandResult()
+  curve_obj_ref = gc.Object(0)
 
-  <span class="n">curve</span> <span class="o">=</span> <span class="n">curve_obj_ref</span><span class="o">.</span><span class="n">Curve</span><span class="p">()</span>
-  <span class="k">if</span> <span class="n">curve</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-  <span class="n">b</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">ClosestPoint</span><span class="p">(</span><span class="n">curve_obj_ref</span><span class="o">.</span><span class="n">SelectionPoint</span><span class="p">())</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span> <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-  <span class="n">curve_end</span> <span class="o">=</span> <span class="n">CurveEnd</span><span class="o">.</span><span class="n">Start</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="n">curve</span><span class="o">.</span><span class="n">Domain</span><span class="o">.</span><span class="n">Mid</span> <span class="k">else</span> <span class="n">CurveEnd</span><span class="o">.</span><span class="n">End</span>
+  curve = curve_obj_ref.Curve()
+  if curve == None: return Result.Failure
+  b, t = curve.ClosestPoint(curve_obj_ref.SelectionPoint())
+  if not b: return Result.Failure
+  curve_end = CurveEnd.Start if t &lt;= curve.Domain.Mid else CurveEnd.End
 
-  <span class="n">geometry</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">Geometry</span><span class="p">()</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">boundary_obj_refs</span><span class="p">]</span>
-  <span class="n">extended_curve</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span class="n">Extend</span><span class="p">(</span><span class="n">curve_end</span><span class="p">,</span> <span class="n">CurveExtensionStyle</span><span class="o">.</span><span class="n">Line</span><span class="p">,</span> <span class="n">geometry</span><span class="p">)</span>
-  <span class="k">if</span> <span class="n">extended_curve</span> <span class="o">&lt;&gt;</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">extended_curve</span><span class="o">.</span><span class="n">IsValid</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">curve_obj_ref</span><span class="o">.</span><span class="n">ObjectId</span><span class="p">,</span> <span class="n">extended_curve</span><span class="p">):</span>
-      <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">RhinoApp</span><span class="o">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"No boundary object was intersected so curve not extended"</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Result</span><span class="o">.</span><span class="n">Nothing</span>
+  geometry = [obj.Geometry() for obj in boundary_obj_refs]
+  extended_curve = curve.Extend(curve_end, CurveExtensionStyle.Line, geometry)
+  if extended_curve &lt;&gt; None and extended_curve.IsValid:
+    if not doc.Objects.Replace(curve_obj_ref.ObjectId, extended_curve):
+      return Result.Failure
+    doc.Views.Redraw()
+    return Result.Success
+  else:
+    RhinoApp.WriteLine("No boundary object was intersected so curve not extended")
+    return Result.Nothing
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-  <span class="n">RunCommand</span><span class="p">()</span>
+if __name__ == "__main__":
+  RunCommand()
 </code></pre>
-</div>
 
 </div>
 

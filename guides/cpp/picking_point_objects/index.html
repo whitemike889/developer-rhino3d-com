@@ -281,64 +281,61 @@
 
 <h2 id="how-to">How To</h2>
 
-<p>If you need the user to define a 3D point location, you can use a <code class="highlighter-rouge">CRhinoGetPoint</code> object.  But, if the points already exist as objects in Rhino, you will need to use a <code class="highlighter-rouge">CRhinoGetObject</code> object to pick them.  Then, you can determine the 3D coordinates of that point object, for example:</p>
+<p>If you need the user to define a 3D point location, you can use a <code>CRhinoGetPoint</code> object.  But, if the points already exist as objects in Rhino, you will need to use a <code>CRhinoGetObject</code> object to pick them.  Then, you can determine the 3D coordinates of that point object, for example:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select point"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">point_object</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">ON_Point</span><span class="o">*</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">pt</span> <span class="p">)</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"Point: %f,%f,%f"</span><span class="p">,</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pt</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select point" );
+go.SetGeometryFilter( CRhinoGetObject::point_object );
+CRhinoGet::result res = go.GetObjects( 1, 1 );
+if( res == CRhinoGet::object )
+{
+  const CRhinoObjRef&amp; objref = go.Object(0);
+  const ON_Point* pt = objref.Point();
+  if( pt )
+    RhinoApp().Print(L"Point: %f,%f,%f", pt-&gt;point.x, pt-&gt;point.y, pt-&gt;point.z);
+}
 </code></pre>
-</div>
 
-<p>If you needed access to the <code class="highlighter-rouge">CRhinoPointObject</code> object, you could do this:</p>
+<p>If you needed access to the <code>CRhinoPointObject</code> object, you could do this:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select point"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">point_object</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="k">const</span> <span class="n">CRhinoPointObject</span><span class="o">*</span> <span class="n">point_object</span> <span class="o">=</span> <span class="n">CRhinoPointObject</span><span class="o">::</span><span class="n">Cast</span><span class="p">(</span> <span class="n">objref</span><span class="p">.</span><span class="n">Object</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">point_object</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ON_Point</span><span class="o">&amp;</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">point_object</span><span class="o">-&gt;</span><span class="n">Point</span><span class="p">();</span>
-    <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span><span class="s">L"Point: %f,%f,%f"</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pt</span><span class="p">.</span><span class="n">point</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select point" );
+go.SetGeometryFilter( CRhinoGetObject::point_object );
+CRhinoGet::result res = go.GetObjects( 1, 1 );
+if( res == CRhinoGet::object )
+{
+  const CRhinoObjRef&amp; objref = go.Object(0);
+  const CRhinoPointObject* point_object = CRhinoPointObject::Cast( objref.Object() );
+  if( point_object )
+  {
+    const ON_Point&amp; pt = point_object-&gt;Point();
+    RhinoApp().Print(L"Point: %f,%f,%f", pt.point.x, pt.point.y, pt.point.z);
+  }
+}
 </code></pre>
-</div>
 
 <p>Here is how you can pick one or more point objects:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoGetObject</span> <span class="n">go</span><span class="p">;</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span> <span class="s">L"Select points"</span> <span class="p">);</span>
-<span class="n">go</span><span class="p">.</span><span class="n">SetGeometryFilter</span><span class="p">(</span> <span class="n">CRhinoGetObject</span><span class="o">::</span><span class="n">point_object</span> <span class="p">);</span>
-<span class="n">CRhinoGet</span><span class="o">::</span><span class="n">result</span> <span class="n">res</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">GetObjects</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-<span class="k">if</span><span class="p">(</span> <span class="n">res</span> <span class="o">==</span> <span class="n">CRhinoGet</span><span class="o">::</span><span class="n">object</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">CRhinoObjRef</span><span class="o">&amp;</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="p">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="k">const</span> <span class="n">ON_Point</span><span class="o">*</span> <span class="n">point</span> <span class="o">=</span> <span class="n">objref</span><span class="p">.</span><span class="n">Point</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">point</span> <span class="p">)</span>
-      <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"Point %d: %f,%f,%f"</span><span class="p">,</span>
-                        <span class="n">i</span><span class="p">,</span>
-                        <span class="n">point</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
-                        <span class="n">point</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span>
-                        <span class="n">point</span><span class="o">-&gt;</span><span class="n">point</span><span class="p">.</span><span class="n">z</span> <span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">CRhinoGetObject go;
+go.SetCommandPrompt( L"Select points" );
+go.SetGeometryFilter( CRhinoGetObject::point_object );
+CRhinoGet::result res = go.GetObjects( 1, 0 );
+if( res == CRhinoGet::object )
+{
+  int i;
+  for( i = 0; i &lt; go.ObjectCount(); i++ )
+  {
+    const CRhinoObjRef&amp; objref = go.Object(i);
+    const ON_Point* point = objref.Point();
+    if( point )
+      RhinoApp().Print( L"Point %d: %f,%f,%f",
+                        i,
+                        point-&gt;point.x,
+                        point-&gt;point.y,
+                        point-&gt;point.z );
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

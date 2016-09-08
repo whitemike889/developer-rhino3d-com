@@ -217,65 +217,64 @@
 
 <p style="color:#337ab7; padding-left:10px">C/C++</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="c1">// Define the corners of the clipping plane
-</span>  <span class="n">CArgsRhinoGetPlane</span> <span class="n">args</span><span class="p">;</span>
-  <span class="n">ON_3dPoint</span> <span class="n">corners</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
-  <span class="n">CRhinoHistory</span> <span class="n">history</span><span class="p">(</span> <span class="o">*</span><span class="k">this</span> <span class="p">);</span>
-  <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">RhinoGetRectangle</span><span class="p">(</span> <span class="n">args</span><span class="p">,</span> <span class="n">corners</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">history</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">rc</span> <span class="o">!=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span> <span class="p">)</span>
-    <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  // Define the corners of the clipping plane
+  CArgsRhinoGetPlane args;
+  ON_3dPoint corners[4];
+  CRhinoHistory history( *this );
+  CRhinoCommand::result rc = RhinoGetRectangle( args, corners, &amp;history );
+  if( rc != CRhinoCommand::success )
+    return rc;
 
-  <span class="c1">// Get the active view
-</span>  <span class="n">CRhinoView</span><span class="o">*</span> <span class="n">view</span> <span class="o">=</span> <span class="n">RhinoApp</span><span class="p">().</span><span class="n">ActiveView</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="mi">0</span> <span class="o">==</span> <span class="n">view</span>  <span class="p">)</span>
-    <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
+  // Get the active view
+  CRhinoView* view = RhinoApp().ActiveView();
+  if( 0 == view  )
+    return CRhinoCommand::failure;
 
-  <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p0</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-  <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-  <span class="k">const</span> <span class="n">ON_3dPoint</span><span class="o">&amp;</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">corners</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+  const ON_3dPoint&amp; p0 = corners[0];
+  const ON_3dPoint&amp; p1 = corners[1];
+  const ON_3dPoint&amp; p2 = corners[2];
+  const ON_3dPoint&amp; p3 = corners[3];
 
-  <span class="n">ON_Interval</span> <span class="n">domain0</span><span class="p">,</span> <span class="n">domain1</span><span class="p">;</span>
-  <span class="n">domain0</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span> <span class="p">);</span>
-  <span class="n">domain1</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p0</span><span class="p">.</span><span class="n">DistanceTo</span><span class="p">(</span><span class="n">p3</span><span class="p">)</span> <span class="p">);</span>
+  ON_Interval domain0, domain1;
+  domain0.Set( 0.0, p0.DistanceTo(p1) );
+  domain1.Set( 0.0, p0.DistanceTo(p3) );
 
-  <span class="c1">// Create a plane from the corner points
-</span>  <span class="n">ON_Plane</span> <span class="n">plane</span><span class="p">(</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p3</span><span class="p">);</span>
+  // Create a plane from the corner points
+  ON_Plane plane( p0, p1, p3);
 
-  <span class="c1">// Create a plane surface
-</span>  <span class="n">ON_PlaneSurface</span> <span class="n">plane_srf</span><span class="p">(</span> <span class="n">plane</span> <span class="p">);</span>
-  <span class="n">plane_srf</span><span class="p">.</span><span class="n">SetExtents</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">domain0</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">plane_srf</span><span class="p">.</span><span class="n">SetExtents</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">domain1</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="n">plane_srf</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">domain0</span><span class="p">.</span><span class="n">Min</span><span class="p">(),</span> <span class="n">domain0</span><span class="p">.</span><span class="n">Max</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">plane_srf</span><span class="p">.</span><span class="n">SetDomain</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="n">domain1</span><span class="p">.</span><span class="n">Min</span><span class="p">(),</span> <span class="n">domain1</span><span class="p">.</span><span class="n">Max</span><span class="p">()</span> <span class="p">);</span>
+  // Create a plane surface
+  ON_PlaneSurface plane_srf( plane );
+  plane_srf.SetExtents( 0, domain0, true );
+  plane_srf.SetExtents( 1, domain1, true );
+  plane_srf.SetDomain( 0, domain0.Min(), domain0.Max() );
+  plane_srf.SetDomain( 1, domain1.Min(), domain1.Max() );
 
-  <span class="c1">// Create a clipping plane object
-</span>  <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">failure</span><span class="p">;</span>
-  <span class="n">CRhinoClippingPlaneObject</span><span class="o">*</span> <span class="n">plane_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CRhinoClippingPlaneObject</span><span class="p">();</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">plane_obj</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">plane_obj</span><span class="o">-&gt;</span><span class="n">SetPlaneSurface</span><span class="p">(</span> <span class="n">plane_srf</span> <span class="p">);</span>
+  // Create a clipping plane object
+  rc = CRhinoCommand::failure;
+  CRhinoClippingPlaneObject* plane_obj = new CRhinoClippingPlaneObject();
+  if( plane_obj )
+  {
+    plane_obj-&gt;SetPlaneSurface( plane_srf );
 
-    <span class="c1">// Add the clipping plane
-</span>    <span class="k">if</span><span class="p">(</span> <span class="n">plane_obj</span><span class="o">-&gt;</span><span class="n">AddClipViewport</span><span class="p">(</span><span class="n">view</span><span class="o">-&gt;</span><span class="n">ActiveViewport</span><span class="p">().</span><span class="n">ViewportId</span><span class="p">())</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">AddObject</span><span class="p">(</span> <span class="n">plane_obj</span> <span class="p">);</span>
-      <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">Regen</span><span class="p">();</span>
-      <span class="n">rc</span> <span class="o">=</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="k">delete</span> <span class="n">plane_obj</span><span class="p">;</span>
-      <span class="n">plane_obj</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    // Add the clipping plane
+    if( plane_obj-&gt;AddClipViewport(view-&gt;ActiveViewport().ViewportId()) )
+    {
+      context.m_doc.AddObject( plane_obj );
+      context.m_doc.Regen();
+      rc = CRhinoCommand::success;
+    }
+    else
+    {
+      delete plane_obj;
+      plane_obj = 0;
+    }
+  }
 
-  <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-<span class="p">}</span>
+  return rc;
+}
 </code></pre>
-</div>
 
 
         <!--/div-->

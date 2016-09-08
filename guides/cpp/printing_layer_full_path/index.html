@@ -300,44 +300,42 @@
 
 <p>You could like to print a layer’s full path.  That is, if a layer “MyLayer””” is nested, I would like to print out the nesting like this:</p>
 
-<p><code class="highlighter-rouge">"GreatGrandParent / GrandParent / Parent / MyLayer"</code></p>
+<p><code>"GreatGrandParent / GrandParent / Parent / MyLayer"</code></p>
 
 <h2 id="solution">Solution</h2>
 
 <p>The following sample function ought to do the trick:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="n">ON_wString</span> <span class="nf">RhinoFullLayerPath</span><span class="p">(</span> <span class="n">CRhinoDoc</span><span class="o">&amp;</span> <span class="n">doc</span><span class="p">,</span> <span class="k">const</span> <span class="n">CRhinoLayer</span><span class="o">&amp;</span> <span class="n">layer</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_wString</span> <span class="n">layer_path</span><span class="p">;</span>
+<pre><code class="language-cpp">static ON_wString RhinoFullLayerPath( CRhinoDoc&amp; doc, const CRhinoLayer&amp; layer )
+{
+  ON_wString layer_path;
 
-  <span class="n">CRhinoLayerNode</span> <span class="n">layer_node</span><span class="p">;</span>
-  <span class="n">layer_node</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">layer</span><span class="p">.</span><span class="n">m_layer_index</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">true</span> <span class="p">);</span>
-  <span class="k">if</span><span class="p">(</span> <span class="n">layer_node</span><span class="p">.</span><span class="n">m_parent_count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="n">layer_node</span><span class="p">.</span><span class="n">m_parent_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span> <span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">layer_index</span> <span class="o">=</span> <span class="n">layer_node</span><span class="p">.</span><span class="n">m_parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">layer_path</span> <span class="o">+=</span> <span class="n">doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">[</span><span class="n">layer_index</span><span class="p">].</span><span class="n">LayerName</span><span class="p">();</span>
-      <span class="n">layer_path</span> <span class="o">+=</span> <span class="s">L" / "</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="n">layer_path</span> <span class="o">+=</span> <span class="n">layer</span><span class="p">.</span><span class="n">LayerName</span><span class="p">();</span>
+  CRhinoLayerNode layer_node;
+  layer_node.Create(layer.m_layer_index, 2, 0, true );
+  if( layer_node.m_parent_count &gt; 0 )
+  {
+    int i, layer_index = -1;
+    for( i = layer_node.m_parent_count - 1; i &gt;= 0; i-- )
+    {
+      layer_index = layer_node.m_parent_list[i];
+      layer_path += doc.m_layer_table[layer_index].LayerName();
+      layer_path += L" / ";
+    }
+  }
+  layer_path += layer.LayerName();
 
-  <span class="k">return</span> <span class="n">layer_path</span><span class="p">;</span>
-<span class="p">}</span>
+  return layer_path;
+}
 </code></pre>
-</div>
 
 <p>You can use the function like this…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">result</span> <span class="n">CCommandTest</span><span class="o">::</span><span class="n">RunCommand</span><span class="p">(</span> <span class="k">const</span> <span class="n">CRhinoCommandContext</span><span class="o">&amp;</span> <span class="n">context</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">ON_wString</span> <span class="n">s</span> <span class="o">=</span> <span class="n">RhinoFullLayerPath</span><span class="p">(</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">m_doc</span><span class="p">.</span><span class="n">m_layer_table</span><span class="p">.</span><span class="n">CurrentLayer</span><span class="p">()</span> <span class="p">);</span>
-  <span class="n">RhinoApp</span><span class="p">().</span><span class="n">Print</span><span class="p">(</span> <span class="s">L"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">Array</span><span class="p">()</span> <span class="p">);</span>
-  <span class="k">return</span> <span class="n">CRhinoCommand</span><span class="o">::</span><span class="n">success</span><span class="p">;</span>
+<pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+{
+  ON_wString s = RhinoFullLayerPath( context.m_doc, context.m_doc.m_layer_table.CurrentLayer() );
+  RhinoApp().Print( L"%s\n", s.Array() );
+  return CRhinoCommand::success;
 </code></pre>
-</div>
 
         </article>
 

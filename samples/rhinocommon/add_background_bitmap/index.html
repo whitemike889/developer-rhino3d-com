@@ -222,69 +222,68 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">AddBackgroundBitmap</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span> <span class="p">(</span><span class="s">"hey"</span><span class="p">);</span>
-    <span class="c1">// Allow the user to select a bitmap file
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">UI</span><span class="p">.</span><span class="n">OpenFileDialog</span> <span class="n">fd</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">UI</span><span class="p">.</span><span class="nf">OpenFileDialog</span><span class="p">();</span>
-    <span class="n">fd</span><span class="p">.</span><span class="n">Filter</span> <span class="p">=</span> <span class="s">"Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg"</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(!</span><span class="n">fd</span><span class="p">.</span><span class="nf">ShowDialog</span><span class="p">())</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result AddBackgroundBitmap(Rhino.RhinoDoc doc)
+  {
+    Rhino.RhinoApp.WriteLine ("hey");
+    // Allow the user to select a bitmap file
+    Rhino.UI.OpenFileDialog fd = new Rhino.UI.OpenFileDialog();
+    fd.Filter = "Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg";
+    if (!fd.ShowDialog())
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="c1">// Verify the file that was selected
-</span>    <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Image</span> <span class="n">image</span><span class="p">;</span>
-    <span class="k">try</span>
-    <span class="p">{</span>
-      <span class="n">image</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Image</span><span class="p">.</span><span class="nf">FromFile</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">FileName</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Verify the file that was selected
+    System.Drawing.Image image;
+    try
+    {
+      image = System.Drawing.Image.FromFile(fd.FileName);
+    }
+    catch (Exception)
+    {
+      return Rhino.Commands.Result.Failure;
+    }
 
-    <span class="c1">// Allow the user to pick the bitmap origin
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetPoint</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Bitmap Origin"</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">ConstrainToConstructionPlane</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Allow the user to pick the bitmap origin
+    Rhino.Input.Custom.GetPoint gp = new Rhino.Input.Custom.GetPoint();
+    gp.SetCommandPrompt("Bitmap Origin");
+    gp.ConstrainToConstructionPlane(true);
+    gp.Get();
+    if (gp.CommandResult() != Rhino.Commands.Result.Success)
+      return gp.CommandResult();
 
-    <span class="c1">// Get the view that the point was picked in.
-</span>    <span class="c1">// This will be the view that the bitmap appears in.
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">RhinoView</span> <span class="n">view</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">View</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">view</span> <span class="p">=</span> <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">view</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
-    <span class="p">}</span>
+    // Get the view that the point was picked in.
+    // This will be the view that the bitmap appears in.
+    Rhino.Display.RhinoView view = gp.View();
+    if (view == null)
+    {
+      view = doc.Views.ActiveView;
+      if (view == null)
+        return Rhino.Commands.Result.Failure;
+    }
 
-    <span class="c1">// Allow the user to specify the bitmap with in model units
-</span>    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetNumber</span> <span class="n">gn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetNumber</span><span class="p">();</span>
-    <span class="n">gn</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Bitmap width"</span><span class="p">);</span>
-    <span class="n">gn</span><span class="p">.</span><span class="nf">SetLowerLimit</span><span class="p">(</span><span class="m">1.0</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">gn</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">gn</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">gn</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
+    // Allow the user to specify the bitmap with in model units
+    Rhino.Input.Custom.GetNumber gn = new Rhino.Input.Custom.GetNumber();
+    gn.SetCommandPrompt("Bitmap width");
+    gn.SetLowerLimit(1.0, false);
+    gn.Get();
+    if (gn.CommandResult() != Rhino.Commands.Result.Success)
+      return gn.CommandResult();
 
-    <span class="c1">// Cook up some scale factors
-</span>    <span class="kt">double</span> <span class="n">w</span> <span class="p">=</span> <span class="n">gn</span><span class="p">.</span><span class="nf">Number</span><span class="p">();</span>
-    <span class="kt">double</span> <span class="n">image_width</span> <span class="p">=</span> <span class="n">image</span><span class="p">.</span><span class="n">Width</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">image_height</span> <span class="p">=</span> <span class="n">image</span><span class="p">.</span><span class="n">Height</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">h</span> <span class="p">=</span> <span class="n">w</span> <span class="p">*</span> <span class="p">(</span><span class="n">image_height</span> <span class="p">/</span> <span class="n">image_width</span><span class="p">);</span>
+    // Cook up some scale factors
+    double w = gn.Number();
+    double image_width = image.Width;
+    double image_height = image.Height;
+    double h = w * (image_height / image_width);
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Plane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">ConstructionPlane</span><span class="p">();</span>
-    <span class="n">plane</span><span class="p">.</span><span class="n">Origin</span> <span class="p">=</span> <span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">();</span>
-    <span class="n">view</span><span class="p">.</span><span class="n">ActiveViewport</span><span class="p">.</span><span class="nf">SetTraceImage</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">FileName</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-    <span class="n">view</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    Rhino.Geometry.Plane plane = view.ActiveViewport.ConstructionPlane();
+    plane.Origin = gp.Point();
+    view.ActiveViewport.SetTraceImage(fd.FileName, plane, w, h, false, false);
+    view.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function AddBackgroundBitmap(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -347,62 +346,61 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
-<span class="kn">import</span> <span class="nn">System.Windows.Forms.DialogResult</span>
-<span class="kn">import</span> <span class="nn">System.Drawing.Image</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
+import System.Windows.Forms.DialogResult
+import System.Drawing.Image
 
-<span class="k">def</span> <span class="nf">AddBackgroundBitmap</span><span class="p">():</span>
-    <span class="c"># Allow the user to select a bitmap file</span>
-    <span class="n">fd</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">UI</span><span class="o">.</span><span class="n">OpenFileDialog</span><span class="p">()</span>
-    <span class="n">fd</span><span class="o">.</span><span class="n">Filter</span> <span class="o">=</span> <span class="s">"Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg"</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">fd</span><span class="o">.</span><span class="n">ShowDialog</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Cancel</span>
+def AddBackgroundBitmap():
+    # Allow the user to select a bitmap file
+    fd = Rhino.UI.OpenFileDialog()
+    fd.Filter = "Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg"
+    if not fd.ShowDialog():
+        return Rhino.Commands.Result.Cancel
 
-    <span class="c"># Verify the file that was selected</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">FromFile</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">FileName</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    # Verify the file that was selected
+    image = None
+    try:
+        image = System.Drawing.Image.FromFile(fd.FileName)
+    except:
+        return Rhino.Commands.Result.Failure
 
-    <span class="c"># Allow the user to pick the bitmap origin</span>
-    <span class="n">gp</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">()</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Bitmap Origin"</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">ConstrainToConstructionPlane</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">gp</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gp</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Allow the user to pick the bitmap origin
+    gp = Rhino.Input.Custom.GetPoint()
+    gp.SetCommandPrompt("Bitmap Origin")
+    gp.ConstrainToConstructionPlane(True)
+    gp.Get()
+    if gp.CommandResult()!=Rhino.Commands.Result.Success:
+        return gp.CommandResult()
 
-    <span class="c"># Get the view that the point was picked in.</span>
-    <span class="c"># This will be the view that the bitmap appears in.</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">View</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">view</span> <span class="o">=</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">ActiveView</span>
-        <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
+    # Get the view that the point was picked in.
+    # This will be the view that the bitmap appears in.
+    view = gp.View()
+    if view is None:
+        view = scriptcontext.doc.Views.ActiveView
+        if view is None: return Rhino.Commands.Result.Failure
 
-    <span class="c"># Allow the user to specify the bitmap with in model units</span>
-    <span class="n">gn</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetNumber</span><span class="p">()</span>
-    <span class="n">gn</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Bitmap width"</span><span class="p">)</span>
-    <span class="n">gn</span><span class="o">.</span><span class="n">SetLowerLimit</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">gn</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">gn</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">gn</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    # Allow the user to specify the bitmap with in model units
+    gn = Rhino.Input.Custom.GetNumber()
+    gn.SetCommandPrompt("Bitmap width")
+    gn.SetLowerLimit(1.0, False)
+    gn.Get()
+    if gn.CommandResult()!=Rhino.Commands.Result.Success:
+        return gn.CommandResult()
 
-    <span class="c"># Cook up some scale factors</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">gn</span><span class="o">.</span><span class="n">Number</span><span class="p">()</span>
-    <span class="n">h</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">Width</span> <span class="o">/</span> <span class="n">image</span><span class="o">.</span><span class="n">Height</span><span class="p">)</span>
+    # Cook up some scale factors
+    w = gn.Number()
+    h = w * (image.Width / image.Height)
 
-    <span class="n">plane</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">ConstructionPlane</span><span class="p">()</span>
-    <span class="n">plane</span><span class="o">.</span><span class="n">Origin</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Point</span><span class="p">()</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">ActiveViewport</span><span class="o">.</span><span class="n">SetTraceImage</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">FileName</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
-    <span class="n">view</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    plane = view.ActiveViewport.ConstructionPlane()
+    plane.Origin = gp.Point()
+    view.ActiveViewport.SetTraceImage(fd.FileName, plane, w, h, False, False)
+    view.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">AddBackgroundBitmap</span><span class="p">()</span>
+if __name__=="__main__":
+    AddBackgroundBitmap()
 </code></pre>
-</div>
 
 </div>
 

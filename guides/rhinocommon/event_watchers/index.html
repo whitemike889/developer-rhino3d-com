@@ -300,176 +300,172 @@
 
 <p>Applications can not update any user interface controls from any thread other than the main UI thread. Changing a property on a windows control typically causes the control to immediately update its display. But if the call is made from another thread then the UI thread windows will crash the application.</p>
 
-<p>If you are updating a control from inside your event handler, you should check to see if <code class="highlighter-rouge">CheckAccess()</code> on the Dispatcher associated with your control evaluates to <code class="highlighter-rouge">True</code>. If this is the case, you must invoke a delegate that handles the UI updating and make sure that this delegate is called from the UI thread. This is actually easier than it sounds.</p>
+<p>If you are updating a control from inside your event handler, you should check to see if <code>CheckAccess()</code> on the Dispatcher associated with your control evaluates to <code>True</code>. If this is the case, you must invoke a delegate that handles the UI updating and make sure that this delegate is called from the UI thread. This is actually easier than it sounds.</p>
 
-<p>Here is a C# sample of <code class="highlighter-rouge">RhinoDoc.AddRhinoObject</code> event handler that handles the thrown exception when called from a thread other than the UI thread…</p>
+<p>Here is a C# sample of <code>RhinoDoc.AddRhinoObject</code> event handler that handles the thrown exception when called from a thread other than the UI thread…</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">rhinoObjectAdded</span><span class="p">(</span><span class="n">Object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObjectEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">var</span> <span class="n">msg</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"thread id = {0}, obj id = {1}"</span><span class="p">,</span>
-        <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">ManagedThreadId</span><span class="p">,</span>
-        <span class="n">e</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<pre><code class="language-cs">private void rhinoObjectAdded(Object sender, Rhino.DocObjects.RhinoObjectEventArgs e)
+{
+  var msg = String.Format("thread id = {0}, obj id = {1}",
+        Thread.CurrentThread.ManagedThreadId,
+        e.ObjectId.ToString());
 
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+  RhinoApp.WriteLine(msg);
 
-  <span class="k">try</span> <span class="p">{</span>
-    <span class="c1">// when a sphere is added from a secondary thread this line will
-</span>    <span class="c1">// throw an exception because UI controls can only be accessed from
-</span>    <span class="c1">// the main UI thread
-</span>    <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">msg</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">InvalidOperationException</span> <span class="n">ioe</span><span class="p">)</span> <span class="p">{</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ioe</span><span class="p">.</span><span class="n">Message</span><span class="p">);}</span>
-<span class="p">}</span>
+  try {
+    // when a sphere is added from a secondary thread this line will
+    // throw an exception because UI controls can only be accessed from
+    // the main UI thread
+    _label.Content = msg;
+  } catch (InvalidOperationException ioe) {RhinoApp.WriteLine(ioe.Message);}
+}
 </code></pre>
-</div>
 
 <h2 id="other-threads">Other Threads</h2>
 
 <p>But… I really do need to update my control’s state, even when in the wrong thread!</p>
 
-<p>This is where <code class="highlighter-rouge">Dispatcher.Invoke</code> or <code class="highlighter-rouge">Dispatcher.BeginInvoke</code> comes into play. You can force the code that modifies the control to run from the UI thread. Here is a C# sample of how to do this…</p>
+<p>This is where <code>Dispatcher.Invoke</code> or <code>Dispatcher.BeginInvoke</code> comes into play. You can force the code that modifies the control to run from the UI thread. Here is a C# sample of how to do this…</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">rhinoObjectAddedSafe</span><span class="p">(</span><span class="n">Object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObjectEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">var</span> <span class="n">msg</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"thread id = {0}, obj id = {1}"</span><span class="p">,</span>
-        <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">ManagedThreadId</span><span class="p">,</span>
-        <span class="n">e</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<pre><code class="language-cs">private void rhinoObjectAddedSafe(Object sender, Rhino.DocObjects.RhinoObjectEventArgs e)
+{
+  var msg = String.Format("thread id = {0}, obj id = {1}",
+        Thread.CurrentThread.ManagedThreadId,
+        e.ObjectId.ToString());
 
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+  RhinoApp.WriteLine(msg);
 
-  <span class="c1">// checks if the calling thread is the thread the dispatcher is associated with.
-</span>  <span class="c1">// In other words, checks if the calling thread is the UI thread
-</span>  <span class="k">if</span> <span class="p">(</span><span class="n">_label</span><span class="p">.</span><span class="n">Dispatcher</span><span class="p">.</span><span class="nf">CheckAccess</span><span class="p">())</span>
-    <span class="c1">// if we're on the UI thread then just update the component
-</span>    <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">msg</span><span class="p">;</span>
-  <span class="k">else</span>
-  <span class="p">{</span>
-    <span class="c1">// invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
-</span>    <span class="kt">var</span> <span class="n">setLabelTextDelegate</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Action</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">txt</span> <span class="p">=&gt;</span> <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">txt</span><span class="p">);</span>
-    <span class="n">_label</span><span class="p">.</span><span class="n">Dispatcher</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">setLabelTextDelegate</span><span class="p">,</span> <span class="k">new</span> <span class="n">String</span><span class="p">[]</span> <span class="p">{</span> <span class="n">msg</span> <span class="p">});</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  // checks if the calling thread is the thread the dispatcher is associated with.
+  // In other words, checks if the calling thread is the UI thread
+  if (_label.Dispatcher.CheckAccess())
+    // if we're on the UI thread then just update the component
+    _label.Content = msg;
+  else
+  {
+    // invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
+    var setLabelTextDelegate = new Action&lt;string&gt;(txt =&gt; _label.Content = txt);
+    _label.Dispatcher.Invoke(setLabelTextDelegate, new String[] { msg });
+  }
+}
 </code></pre>
-</div>
 
 <p>The above function could be rewritten to just always call the delegate…</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">rhinoObjectAddedSafe</span><span class="p">(</span><span class="n">Object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">RhinoObjectEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">var</span> <span class="n">msg</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"thread id = {0}, obj id = {1}"</span><span class="p">,</span>
-        <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">ManagedThreadId</span><span class="p">,</span>
-        <span class="n">e</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<pre><code class="language-cs">private void rhinoObjectAddedSafe(Object sender, Rhino.DocObjects.RhinoObjectEventArgs e)
+{
+  var msg = String.Format("thread id = {0}, obj id = {1}",
+        Thread.CurrentThread.ManagedThreadId,
+        e.ObjectId.ToString());
 
-  <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+  RhinoApp.WriteLine(msg);
 
-  <span class="c1">// invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
-</span>  <span class="kt">var</span> <span class="n">setLabelTextDelegate</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Action</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">txt</span> <span class="p">=&gt;</span> <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">txt</span><span class="p">);</span>
-  <span class="n">_label</span><span class="p">.</span><span class="n">Dispatcher</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">setLabelTextDelegate</span><span class="p">,</span> <span class="k">new</span> <span class="n">String</span><span class="p">[]</span> <span class="p">{</span> <span class="n">msg</span> <span class="p">});</span>
-<span class="p">}</span>
+  // invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
+  var setLabelTextDelegate = new Action&lt;string&gt;(txt =&gt; _label.Content = txt);
+  _label.Dispatcher.Invoke(setLabelTextDelegate, new String[] { msg });
+}
 </code></pre>
-</div>
 
-<p><strong>NOTE</strong>: If Windows Forms (on Windows) is used instead of WPF then <code class="highlighter-rouge">_label.Dispatcher.CheckAccess()</code> becomes <code class="highlighter-rouge">_label.InvokeRequired</code> and <code class="highlighter-rouge">_label.Dispatcher.Invoke(...)</code> becomes <code class="highlighter-rouge">_label.Invoke(...)</code>.</p>
+<p><strong>NOTE</strong>: If Windows Forms (on Windows) is used instead of WPF then <code>_label.Dispatcher.CheckAccess()</code> becomes <code>_label.InvokeRequired</code> and <code>_label.Dispatcher.Invoke(...)</code> becomes <code>_label.Invoke(...)</code>.</p>
 
 <p>Here is the complete example:</p>
 
-<div class="language-cs highlighter-rouge"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.Commands</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.DocObjects</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">Rhino.Geometry</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Threading</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Windows</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Windows.Controls</span><span class="p">;</span>
+<pre><code class="language-cs">using System;
+using Rhino;
+using Rhino.Commands;
+using Rhino.DocObjects;
+using Rhino.Geometry;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
-<span class="k">namespace</span> <span class="nn">examples_cs</span>
-<span class="p">{</span>
-  <span class="p">[</span><span class="n">System</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">InteropServices</span><span class="p">.</span><span class="nf">Guid</span><span class="p">(</span><span class="s">"E4A93905-6E61-43BB-9FF0-4D5F6AF76704"</span><span class="p">)]</span>
-  <span class="k">public</span> <span class="k">class</span> <span class="nc">ChangeUiFromDifferentThreadCommand</span> <span class="p">:</span> <span class="n">Command</span>
-  <span class="p">{</span>
-    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">EnglishName</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="s">"csChangeUIFromDifferentThread"</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
-    <span class="k">private</span> <span class="n">RhinoDoc</span> <span class="n">_doc</span><span class="p">;</span>
-    <span class="k">private</span> <span class="n">Label</span> <span class="n">_label</span><span class="p">;</span>
-    <span class="k">private</span> <span class="n">Window</span> <span class="n">_window</span><span class="p">;</span>
+namespace examples_cs
+{
+  [System.Runtime.InteropServices.Guid("E4A93905-6E61-43BB-9FF0-4D5F6AF76704")]
+  public class ChangeUiFromDifferentThreadCommand : Command
+  {
+    public override string EnglishName { get { return "csChangeUIFromDifferentThread"; } }
+    private RhinoDoc _doc;
+    private Label _label;
+    private Window _window;
 
-    <span class="k">protected</span> <span class="k">override</span> <span class="n">Result</span> <span class="nf">RunCommand</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">,</span> <span class="n">RunMode</span> <span class="n">mode</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">_doc</span> <span class="p">=</span> <span class="n">doc</span><span class="p">;</span>
+    protected override Result RunCommand(RhinoDoc doc, RunMode mode)
+    {
+      _doc = doc;
 
-      <span class="n">_window</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Window</span> <span class="p">{</span><span class="n">Title</span> <span class="p">=</span> <span class="s">"Object ID and Thread ID"</span><span class="p">,</span> <span class="n">Width</span> <span class="p">=</span> <span class="m">500</span><span class="p">,</span> <span class="n">Height</span> <span class="p">=</span> <span class="m">75</span><span class="p">};</span>
-      <span class="n">_label</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Label</span><span class="p">();</span>
-      <span class="n">_window</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">_label</span><span class="p">;</span>
-      <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Interop</span><span class="p">.</span><span class="nf">WindowInteropHelper</span><span class="p">(</span><span class="n">_window</span><span class="p">).</span><span class="n">Owner</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">MainWindowHandle</span><span class="p">();</span>
-      <span class="n">_window</span><span class="p">.</span><span class="nf">Show</span><span class="p">();</span>
+      _window = new Window {Title = "Object ID and Thread ID", Width = 500, Height = 75};
+      _label = new Label();
+      _window.Content = _label;
+      new System.Windows.Interop.WindowInteropHelper(_window).Owner = Rhino.RhinoApp.MainWindowHandle();
+      _window.Show();
 
 
-      <span class="c1">// register the rhinoObjectAdded method with the AddRhinoObject event
-</span>      <span class="n">RhinoDoc</span><span class="p">.</span><span class="n">AddRhinoObject</span> <span class="p">+=</span> <span class="n">RhinoObjectAdded</span><span class="p">;</span>
+      // register the rhinoObjectAdded method with the AddRhinoObject event
+      RhinoDoc.AddRhinoObject += RhinoObjectAdded;
 
-      <span class="c1">// add a sphere from the main UI thread.  All is good
-</span>      <span class="nf">AddSphere</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">));</span>
+      // add a sphere from the main UI thread.  All is good
+      AddSphere(new Point3d(0,0,0));
 
-      <span class="c1">// add a sphere from a secondary thread. Not good: the rhinoObjectAdded method
-</span>      <span class="c1">// doesn't work well when called from another thread
-</span>      <span class="kt">var</span> <span class="n">addSphereDelegate</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">Point3d</span><span class="p">&gt;(</span><span class="n">AddSphere</span><span class="p">);</span>
-      <span class="n">addSphereDelegate</span><span class="p">.</span><span class="nf">BeginInvoke</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+      // add a sphere from a secondary thread. Not good: the rhinoObjectAdded method
+      // doesn't work well when called from another thread
+      var addSphereDelegate = new Action&lt;Point3d&gt;(AddSphere);
+      addSphereDelegate.BeginInvoke(new Point3d(0, 10, 0), null, null);
 
-      <span class="c1">// handle the AddRhinoObject event with rhinoObjectAddedSafe which is
-</span>      <span class="c1">// desgined to work no matter which thread the call is comming from.
-</span>      <span class="n">RhinoDoc</span><span class="p">.</span><span class="n">AddRhinoObject</span> <span class="p">-=</span> <span class="n">RhinoObjectAdded</span><span class="p">;</span>
-      <span class="n">RhinoDoc</span><span class="p">.</span><span class="n">AddRhinoObject</span> <span class="p">+=</span> <span class="n">RhinoObjectAddedSafe</span><span class="p">;</span>
+      // handle the AddRhinoObject event with rhinoObjectAddedSafe which is
+      // desgined to work no matter which thread the call is comming from.
+      RhinoDoc.AddRhinoObject -= RhinoObjectAdded;
+      RhinoDoc.AddRhinoObject += RhinoObjectAddedSafe;
 
-      <span class="c1">// try again adding a sphere from a secondary thread.  All is good!
-</span>      <span class="n">addSphereDelegate</span><span class="p">.</span><span class="nf">BeginInvoke</span><span class="p">(</span><span class="k">new</span> <span class="nf">Point3d</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">0</span><span class="p">),</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+      // try again adding a sphere from a secondary thread.  All is good!
+      addSphereDelegate.BeginInvoke(new Point3d(0, 20, 0), null, null);
 
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
+      doc.Views.Redraw();
 
-      <span class="k">return</span> <span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-    <span class="p">}</span>
+      return Result.Success;
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">AddSphere</span><span class="p">(</span><span class="n">Point3d</span> <span class="n">center</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">_doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddSphere</span><span class="p">(</span><span class="k">new</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="m">3</span><span class="p">));</span>
-    <span class="p">}</span>
+    private void AddSphere(Point3d center) {
+      _doc.Objects.AddSphere(new Sphere(center, 3));
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">RhinoObjectAdded</span><span class="p">(</span><span class="n">Object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">RhinoObjectEventArgs</span> <span class="n">e</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">message</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"thread id = {0}, obj id = {1}"</span><span class="p">,</span>
-            <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">ManagedThreadId</span><span class="p">,</span>
-            <span class="n">e</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+    private void RhinoObjectAdded(Object sender, RhinoObjectEventArgs e)
+    {
+      var message = String.Format("thread id = {0}, obj id = {1}",
+            Thread.CurrentThread.ManagedThreadId,
+            e.ObjectId.ToString());
 
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+      RhinoApp.WriteLine(message);
 
-      <span class="k">try</span> <span class="p">{</span>
-        <span class="c1">// when a sphere is added from a secondary thread this line will
-</span>        <span class="c1">// throw an exception because UI controls can only be accessed from
-</span>        <span class="c1">// the main UI thread
-</span>        <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">message</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">InvalidOperationException</span> <span class="n">ioe</span><span class="p">)</span> <span class="p">{</span><span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ioe</span><span class="p">.</span><span class="n">Message</span><span class="p">);}</span>
-    <span class="p">}</span>
+      try {
+        // when a sphere is added from a secondary thread this line will
+        // throw an exception because UI controls can only be accessed from
+        // the main UI thread
+        _label.Content = message;
+      } catch (InvalidOperationException ioe) {RhinoApp.WriteLine(ioe.Message);}
+    }
 
-    <span class="k">private</span> <span class="k">void</span> <span class="nf">RhinoObjectAddedSafe</span><span class="p">(</span><span class="n">Object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">RhinoObjectEventArgs</span> <span class="n">e</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">message</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"thread id = {0}, obj id = {1}"</span><span class="p">,</span>
-            <span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">.</span><span class="n">ManagedThreadId</span><span class="p">,</span>
-            <span class="n">e</span><span class="p">.</span><span class="n">ObjectId</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+    private void RhinoObjectAddedSafe(Object sender, RhinoObjectEventArgs e)
+    {
+      var message = String.Format("thread id = {0}, obj id = {1}",
+            Thread.CurrentThread.ManagedThreadId,
+            e.ObjectId.ToString());
 
-      <span class="n">RhinoApp</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+      RhinoApp.WriteLine(message);
 
-      <span class="c1">// checks if the calling thread is the thread the dispatcher is associated with.
-</span>      <span class="c1">// In other words, checks if the calling thread is the UI thread
-</span>      <span class="k">if</span> <span class="p">(</span><span class="n">_label</span><span class="p">.</span><span class="n">Dispatcher</span><span class="p">.</span><span class="nf">CheckAccess</span><span class="p">())</span>
-        <span class="c1">// if we're on the UI thread then just update the component
-</span>        <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">message</span><span class="p">;</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="c1">// invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
-</span>        <span class="kt">var</span> <span class="n">setLabelTextDelegate</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Action</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">txt</span> <span class="p">=&gt;</span> <span class="n">_label</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">txt</span><span class="p">);</span>
-        <span class="n">_label</span><span class="p">.</span><span class="n">Dispatcher</span><span class="p">.</span><span class="nf">BeginInvoke</span><span class="p">(</span><span class="n">setLabelTextDelegate</span><span class="p">,</span> <span class="k">new</span> <span class="n">String</span><span class="p">[]</span> <span class="p">{</span> <span class="n">message</span> <span class="p">});</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+      // checks if the calling thread is the thread the dispatcher is associated with.
+      // In other words, checks if the calling thread is the UI thread
+      if (_label.Dispatcher.CheckAccess())
+        // if we're on the UI thread then just update the component
+        _label.Content = message;
+      else
+      {
+        // invoke the setLabelTextDelegate on the thread the dispatcher is associated with, i.e., the UI thread
+        var setLabelTextDelegate = new Action&lt;string&gt;(txt =&gt; _label.Content = txt);
+        _label.Dispatcher.BeginInvoke(setLabelTextDelegate, new String[] { message });
+      }
+    }
+  }
+}
 </code></pre>
-</div>
 
         </article>
 

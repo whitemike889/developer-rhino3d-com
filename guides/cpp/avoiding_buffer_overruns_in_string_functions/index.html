@@ -302,91 +302,86 @@
 
 <p>Consider the following function:</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">GetName</span><span class="p">(</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">pInput</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">pBuffer</span> <span class="o">=</span> <span class="p">(</span><span class="kt">wchar_t</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-  <span class="n">wcscpy</span><span class="p">(</span> <span class="n">pBuffer</span><span class="p">,</span> <span class="n">pInput</span> <span class="p">);</span> <span class="c1">// might overrun buffer!
-</span>  <span class="n">wcscat</span><span class="p">(</span> <span class="n">pBuffer</span><span class="p">,</span> <span class="s">L".txt"</span><span class="p">);</span> <span class="c1">// also might overrun buffer!
-</span>  <span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
-<span class="p">}</span>
+<pre><code class="language-cpp">int GetName( wchar_t* pInput )
+{
+  wchar_t* pBuffer = (wchar_t*)malloc(100);
+  wcscpy( pBuffer, pInput ); // might overrun buffer!
+  wcscat( pBuffer, L".txt"); // also might overrun buffer!
+  &lt;...&gt;
+}
 </code></pre>
-</div>
 
 <h2 id="a-safer-method">A Safer Method</h2>
 
 <p>Use the following techniques to write safer functions…</p>
 
-<p>Add a <code class="highlighter-rouge">size_t</code> argument for buffer size…</p>
+<p>Add a <code>size_t</code> argument for buffer size…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Pass pointer to buffer and buffer size
-</span><span class="kt">int</span> <span class="n">GetName</span><span class="p">(</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">buffer</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">buffer_size</span> <span class="p">);</span>
+<pre><code class="language-cpp">// Pass pointer to buffer and buffer size
+int GetName( wchar_t* buffer, size_t buffer_size );
 
-<span class="c1">// Ex:
-</span><span class="kt">wchar_t</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">_countof</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="p">);</span>
+// Ex:
+wchar_t buffer[100];
+int rc = GetName( buffer, _countof(buffer) );
 
-<span class="c1">// Ex:
-</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">kBufLen</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-<span class="kt">wchar_t</span><span class="o">*</span> <span class="n">pBuffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">wchar_t</span><span class="p">[</span><span class="n">kBufLen</span><span class="p">];</span>
-<span class="n">GetName</span><span class="p">(</span> <span class="n">pBuffer</span><span class="p">,</span> <span class="n">kBufLen</span> <span class="p">);</span>
-<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
-<span class="k">delete</span> <span class="n">pBuffer</span><span class="p">;</span>
+// Ex:
+const size_t kBufLen = 100;
+wchar_t* pBuffer = new wchar_t[kBufLen];
+GetName( pBuffer, kBufLen );
+&lt;...&gt;
+delete pBuffer;
 
-<span class="c1">// Ex:
-</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">kBufLen</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-<span class="n">ON_wString</span> <span class="n">strBuffer</span><span class="p">;</span>
-<span class="n">strBuffer</span><span class="p">.</span><span class="n">ReserveArray</span><span class="p">(</span> <span class="n">kBufLen</span> <span class="p">);</span>
-<span class="n">GetName</span><span class="p">(</span> <span class="n">strBuffer</span><span class="p">.</span><span class="n">Array</span><span class="p">(),</span> <span class="n">kBufLen</span> <span class="p">);</span>
+// Ex:
+const size_t kBufLen = 100;
+ON_wString strBuffer;
+strBuffer.ReserveArray( kBufLen );
+GetName( strBuffer.Array(), kBufLen );
 
-<span class="c1">// Ex:
-</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">kBufLen</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-<span class="n">CString</span> <span class="n">strBuffer</span><span class="p">;</span>
-<span class="n">GetName</span><span class="p">(</span> <span class="n">strBuffer</span><span class="p">.</span><span class="n">GetBuffer</span><span class="p">(</span><span class="n">kBufLen</span><span class="p">),</span> <span class="n">kBufLen</span> <span class="p">);</span>
-<span class="n">strBuffer</span><span class="p">.</span><span class="n">ReleaseBuffer</span><span class="p">();</span>
+// Ex:
+const size_t kBufLen = 100;
+CString strBuffer;
+GetName( strBuffer.GetBuffer(kBufLen), kBufLen );
+strBuffer.ReleaseBuffer();
 </code></pre>
-</div>
 
 <p>Change buffer argument to use a string object reference…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Pass a reference to a ON_wString object
-</span><span class="kt">int</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">ON_wString</span><span class="o">&amp;</span> <span class="n">str</span> <span class="p">);</span>
-<span class="c1">// Pass a reference to a CString object
-</span><span class="kt">int</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">CString</span><span class="o">&amp;</span> <span class="n">str</span> <span class="p">);</span>
+<pre><code class="language-cpp">// Pass a reference to a ON_wString object
+int GetName( ON_wString&amp; str );
+// Pass a reference to a CString object
+int GetName( CString&amp; str );
 
-<span class="c1">// Ex:
-</span><span class="n">ON_wString</span> <span class="n">str</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">str</span> <span class="p">);</span>
+// Ex:
+ON_wString str;
+int rc = GetName( str );
 
-<span class="c1">// Ex:
-</span><span class="n">CString</span> <span class="n">str</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">str</span> <span class="p">);</span>
+// Ex:
+CString str;
+int rc = GetName( str );
 </code></pre>
-</div>
 
 <p>…change buffer argument to a fixed size array reference…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Pass a reference to a fixed size array
-</span><span class="kt">int</span> <span class="n">GetName</span><span class="p">(</span> <span class="kt">wchar_t</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">)[</span><span class="mi">100</span><span class="p">]</span> <span class="p">);</span>
+<pre><code class="language-cpp">// Pass a reference to a fixed size array
+int GetName( wchar_t(&amp;buffer)[100] );
 
-<span class="c1">// Ex:
-</span><span class="kt">wchar_t</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">buffer</span> <span class="p">);</span>
+// Ex:
+wchar_t buffer[100];
+int rc = GetName( buffer );
 </code></pre>
-</div>
 
 <p>Change buffer point argument to reference to a pointer…</p>
 
-<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="c1">// Pass a reference to a pointer
+<pre><code class="language-cpp">// Pass a reference to a pointer
 // API allocates buffer, caller required to free it
-</span><span class="kt">int</span> <span class="n">GetName</span><span class="p">(</span> <span class="kt">wchar_t</span><span class="o">*&amp;</span> <span class="n">pBuffer</span> <span class="p">);</span>
+int GetName( wchar_t*&amp; pBuffer );
 
-<span class="c1">// Ex:
-</span><span class="kt">wchar_t</span><span class="o">*</span> <span class="n">pBuffer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="kt">int</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">GetName</span><span class="p">(</span> <span class="n">pBuffer</span> <span class="p">);</span>
-<span class="o">&lt;</span><span class="p">...</span><span class="o">&gt;</span>
-<span class="k">delete</span> <span class="n">pBuffer</span><span class="p">;</span>
+// Ex:
+wchar_t* pBuffer = 0;
+int rc = GetName( pBuffer );
+&lt;...&gt;
+delete pBuffer;
 </code></pre>
-</div>
 
         </article>
 

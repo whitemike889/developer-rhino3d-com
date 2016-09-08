@@ -222,74 +222,73 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">UnrollSurface</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">const</span> <span class="n">ObjectType</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Brep</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Surface</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjRef</span> <span class="n">objref</span><span class="p">;</span>
-    <span class="n">Result</span> <span class="n">rc</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">RhinoGet</span><span class="p">.</span><span class="nf">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or brep to unroll"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="k">out</span> <span class="n">objref</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">rc</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Unroller</span> <span class="n">unroll</span><span class="p">=</span><span class="k">null</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span> <span class="n">brep</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Brep</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">brep</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="n">unroll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Unroller</span><span class="p">(</span><span class="n">brep</span><span class="p">);</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Surface</span> <span class="n">srf</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Surface</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">srf</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">unroll</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="nf">Unroller</span><span class="p">(</span><span class="n">srf</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">unroll</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Cancel</span><span class="p">;</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  public static Rhino.Commands.Result UnrollSurface(Rhino.RhinoDoc doc)
+  {
+    const ObjectType filter = Rhino.DocObjects.ObjectType.Brep | Rhino.DocObjects.ObjectType.Surface;
+    Rhino.DocObjects.ObjRef objref;
+    Result rc = Rhino.Input.RhinoGet.GetOneObject("Select surface or brep to unroll", false, filter, out objref);
+    if (rc != Rhino.Commands.Result.Success)
+      return rc;
+    Rhino.Geometry.Unroller unroll=null;
+    Rhino.Geometry.Brep brep = objref.Brep();
+    if (brep != null)
+      unroll = new Rhino.Geometry.Unroller(brep);
+    else
+    {
+      Rhino.Geometry.Surface srf = objref.Surface();
+      if (srf != null)
+        unroll = new Rhino.Geometry.Unroller(srf);
+    }
+    if (unroll == null)
+      return Rhino.Commands.Result.Cancel;
 
-    <span class="n">unroll</span><span class="p">.</span><span class="n">AbsoluteTolerance</span> <span class="p">=</span> <span class="m">0.01</span><span class="p">;</span>
-    <span class="n">unroll</span><span class="p">.</span><span class="n">RelativeTolerance</span> <span class="p">=</span> <span class="m">0.01</span><span class="p">;</span>
+    unroll.AbsoluteTolerance = 0.01;
+    unroll.RelativeTolerance = 0.01;
 
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="n">GetObject</span> <span class="n">go</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetObject</span><span class="p">();</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select points, curves, and dots to unroll with surface"</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="n">GeometryFilter</span> <span class="p">=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Point</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">Curve</span> <span class="p">|</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">DocObjects</span><span class="p">.</span><span class="n">ObjectType</span><span class="p">.</span><span class="n">TextDot</span><span class="p">;</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-    <span class="n">go</span><span class="p">.</span><span class="nf">GetMultiple</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">go</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">go</span><span class="p">.</span><span class="n">ObjectCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="n">objref</span> <span class="p">=</span> <span class="n">go</span><span class="p">.</span><span class="nf">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">GeometryBase</span> <span class="n">g</span> <span class="p">=</span> <span class="n">objref</span><span class="p">.</span><span class="nf">Geometry</span><span class="p">();</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point</span> <span class="n">pt</span> <span class="p">=</span> <span class="n">g</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point</span><span class="p">;</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span> <span class="n">crv</span> <span class="p">=</span> <span class="n">g</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">;</span>
-      <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">TextDot</span> <span class="n">dot</span> <span class="p">=</span> <span class="n">g</span> <span class="k">as</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">TextDot</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">pt</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">unroll</span><span class="p">.</span><span class="nf">AddFollowingGeometry</span><span class="p">(</span><span class="n">pt</span><span class="p">.</span><span class="n">Location</span><span class="p">);</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">crv</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">unroll</span><span class="p">.</span><span class="nf">AddFollowingGeometry</span><span class="p">(</span><span class="n">crv</span><span class="p">);</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dot</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="n">unroll</span><span class="p">.</span><span class="nf">AddFollowingGeometry</span><span class="p">(</span><span class="n">dot</span><span class="p">);</span>
-    <span class="p">}</span>
+    Rhino.Input.Custom.GetObject go = new Rhino.Input.Custom.GetObject();
+    go.SetCommandPrompt("Select points, curves, and dots to unroll with surface");
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Point | Rhino.DocObjects.ObjectType.Curve | Rhino.DocObjects.ObjectType.TextDot;
+    go.AcceptNothing(true);
+    go.GetMultiple(0, 0);
+    if (go.CommandResult() != Rhino.Commands.Result.Success)
+      return go.CommandResult();
+    for (int i = 0; i &lt; go.ObjectCount; i++)
+    {
+      objref = go.Object(i);
+      Rhino.Geometry.GeometryBase g = objref.Geometry();
+      Rhino.Geometry.Point pt = g as Rhino.Geometry.Point;
+      Rhino.Geometry.Curve crv = g as Rhino.Geometry.Curve;
+      Rhino.Geometry.TextDot dot = g as Rhino.Geometry.TextDot;
+      if (pt != null)
+        unroll.AddFollowingGeometry(pt.Location);
+      else if (crv != null)
+        unroll.AddFollowingGeometry(crv);
+      else if (dot != null)
+        unroll.AddFollowingGeometry(dot);
+    }
 
-    <span class="n">unroll</span><span class="p">.</span><span class="n">ExplodeOutput</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Curve</span><span class="p">[]</span> <span class="n">curves</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Point3d</span><span class="p">[]</span> <span class="n">points</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">TextDot</span><span class="p">[]</span> <span class="n">dots</span><span class="p">;</span>
-    <span class="n">Rhino</span><span class="p">.</span><span class="n">Geometry</span><span class="p">.</span><span class="n">Brep</span><span class="p">[]</span> <span class="n">breps</span> <span class="p">=</span> <span class="n">unroll</span><span class="p">.</span><span class="nf">PerformUnroll</span><span class="p">(</span><span class="k">out</span> <span class="n">curves</span><span class="p">,</span> <span class="k">out</span> <span class="n">points</span><span class="p">,</span> <span class="k">out</span> <span class="n">dots</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">breps</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">breps</span><span class="p">.</span><span class="n">Length</span> <span class="p">&lt;</span> <span class="m">1</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Failure</span><span class="p">;</span>
+    unroll.ExplodeOutput = false;
+    Rhino.Geometry.Curve[] curves;
+    Rhino.Geometry.Point3d[] points;
+    Rhino.Geometry.TextDot[] dots;
+    Rhino.Geometry.Brep[] breps = unroll.PerformUnroll(out curves, out points, out dots);
+    if (breps == null || breps.Length &lt; 1)
+      return Rhino.Commands.Result.Failure;
 
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">breps</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddBrep</span><span class="p">(</span><span class="n">breps</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">curves</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddCurve</span><span class="p">(</span><span class="n">curves</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddPoints</span><span class="p">(</span><span class="n">points</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">dots</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Objects</span><span class="p">.</span><span class="nf">AddTextDot</span><span class="p">(</span><span class="n">dots</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    for (int i = 0; i &lt; breps.Length; i++)
+      doc.Objects.AddBrep(breps[i]);
+    for (int i = 0; i &lt; curves.Length; i++)
+      doc.Objects.AddCurve(curves[i]);
+    doc.Objects.AddPoints(points);
+    for (int i = 0; i &lt; dots.Length; i++)
+      doc.Objects.AddTextDot(dots[i]);
+    doc.Views.Redraw();
+    return Rhino.Commands.Result.Success;
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Public Shared Function UnrollSurface(ByVal doc As Rhino.RhinoDoc) As Rhino.Commands.Result
@@ -364,42 +363,41 @@
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Rhino</span>
-<span class="kn">import</span> <span class="nn">scriptcontext</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python">import Rhino
+import scriptcontext
 
-<span class="k">def</span> <span class="nf">UnrollSurface</span><span class="p">():</span>
-    <span class="nb">filter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Brep</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Surface</span>
-    <span class="n">rc</span><span class="p">,</span> <span class="n">objref</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">RhinoGet</span><span class="o">.</span><span class="n">GetOneObject</span><span class="p">(</span><span class="s">"Select surface or brep to unroll"</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rc</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span> <span class="k">return</span> <span class="n">rc</span><span class="p">;</span>
+def UnrollSurface():
+    filter = Rhino.DocObjects.ObjectType.Brep | Rhino.DocObjects.ObjectType.Surface
+    rc, objref = Rhino.Input.RhinoGet.GetOneObject("Select surface or brep to unroll", False, filter)
+    if rc!=Rhino.Commands.Result.Success: return rc;
 
-    <span class="n">unroll</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Unroller</span><span class="p">(</span><span class="n">objref</span><span class="o">.</span><span class="n">Geometry</span><span class="p">())</span>
-    <span class="n">go</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Input</span><span class="o">.</span><span class="n">Custom</span><span class="o">.</span><span class="n">GetObject</span><span class="p">()</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">SetCommandPrompt</span><span class="p">(</span><span class="s">"Select points, curves, and dots to unroll with surface"</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GeometryFilter</span> <span class="o">=</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Point</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">Curve</span> <span class="o">|</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">DocObjects</span><span class="o">.</span><span class="n">ObjectType</span><span class="o">.</span><span class="n">TextDot</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">AcceptNothing</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">go</span><span class="o">.</span><span class="n">GetMultiple</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span><span class="o">!=</span><span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">CommandResult</span><span class="p">()</span>
+    unroll = Rhino.Geometry.Unroller(objref.Geometry())
+    go = Rhino.Input.Custom.GetObject()
+    go.SetCommandPrompt("Select points, curves, and dots to unroll with surface")
+    go.GeometryFilter = Rhino.DocObjects.ObjectType.Point | Rhino.DocObjects.ObjectType.Curve | Rhino.DocObjects.ObjectType.TextDot
+    go.AcceptNothing(True)
+    go.GetMultiple(0, 0)
+    if go.CommandResult()!=Rhino.Commands.Result.Success:
+        return go.CommandResult()
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">ObjectCount</span><span class="p">):</span>
-        <span class="n">objref</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="n">objref</span><span class="o">.</span><span class="n">Geometry</span><span class="p">();</span>
-        <span class="n">unroll</span><span class="o">.</span><span class="n">AddFollowingGeometry</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    for i in range(go.ObjectCount):
+        objref = go.Object(i);
+        g = objref.Geometry();
+        unroll.AddFollowingGeometry(g)
 
-    <span class="n">unroll</span><span class="o">.</span><span class="n">ExplodeOutput</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">breps</span><span class="p">,</span> <span class="n">curves</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">dots</span> <span class="o">=</span> <span class="n">unroll</span><span class="o">.</span><span class="n">PerformUnroll</span><span class="p">()</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">breps</span><span class="p">:</span> <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Failure</span>
-    <span class="k">for</span> <span class="n">brep</span> <span class="ow">in</span> <span class="n">breps</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddBrep</span><span class="p">(</span><span class="n">brep</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span class="n">curves</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddCurve</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">dot</span> <span class="ow">in</span> <span class="n">dots</span><span class="p">:</span> <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Objects</span><span class="o">.</span><span class="n">AddTextDot</span><span class="p">(</span><span class="n">dot</span><span class="p">)</span>
-    <span class="n">scriptcontext</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">Views</span><span class="o">.</span><span class="n">Redraw</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">Rhino</span><span class="o">.</span><span class="n">Commands</span><span class="o">.</span><span class="n">Result</span><span class="o">.</span><span class="n">Success</span>
+    unroll.ExplodeOutput = False
+    breps, curves, points, dots = unroll.PerformUnroll()
+    if not breps: return Rhino.Commands.Result.Failure
+    for brep in breps: scriptcontext.doc.Objects.AddBrep(brep)
+    for curve in curves: scriptcontext.doc.Objects.AddCurve(curve)
+    for point in points: scriptcontext.doc.Objects.AddPoint(point)
+    for dot in dots: scriptcontext.doc.Objects.AddTextDot(dot)
+    scriptcontext.doc.Views.Redraw()
+    return Rhino.Commands.Result.Success
 
-<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">UnrollSurface</span><span class="p">()</span>
+if __name__=="__main__":
+    UnrollSurface()
 </code></pre>
-</div>
 
 </div>
 

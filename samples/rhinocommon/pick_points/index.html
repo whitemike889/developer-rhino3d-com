@@ -222,103 +222,102 @@
 </ul>
 
 <div class="tab-content">
-  <div class="language-cs tab-pane fade in active highlighter-rouge" id="cs"><pre class="highlight"><code><span class="k">partial</span> <span class="k">class</span> <span class="nc">Examples</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;</span> <span class="n">m_conduit_points</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;();</span>
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">partial class Examples
+{
+  private static readonly List&lt;ConduitPoint&gt; m_conduit_points = new List&lt;ConduitPoint&gt;();
 
-  <span class="k">public</span> <span class="k">static</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span> <span class="nf">PickPoints</span><span class="p">(</span><span class="n">RhinoDoc</span> <span class="n">doc</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="kt">var</span> <span class="n">conduit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PointsConduit</span><span class="p">(</span><span class="n">m_conduit_points</span><span class="p">);</span>
-    <span class="n">conduit</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+  public static Rhino.Commands.Result PickPoints(RhinoDoc doc)
+  {
+    var conduit = new PointsConduit(m_conduit_points);
+    conduit.Enabled = true;
 
-    <span class="kt">var</span> <span class="n">gp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Input</span><span class="p">.</span><span class="n">Custom</span><span class="p">.</span><span class="nf">GetPoint</span><span class="p">();</span>
-    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">gp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"click location to create point. (&lt;ESC&gt; exit)"</span><span class="p">);</span>
-      <span class="n">gp</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-      <span class="n">gp</span><span class="p">.</span><span class="nf">Get</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-        <span class="k">break</span><span class="p">;</span>
-      <span class="n">m_conduit_points</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">ConduitPoint</span><span class="p">(</span><span class="n">gp</span><span class="p">.</span><span class="nf">Point</span><span class="p">()));</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-    <span class="p">}</span>
+    var gp = new Rhino.Input.Custom.GetPoint();
+    while (true)
+    {
+      gp.SetCommandPrompt("click location to create point. (&lt;ESC&gt; exit)");
+      gp.AcceptNothing(true);
+      gp.Get();
+      if (gp.CommandResult() != Rhino.Commands.Result.Success)
+        break;
+      m_conduit_points.Add(new ConduitPoint(gp.Point()));
+      doc.Views.Redraw();
+    }
 
-    <span class="kt">var</span> <span class="n">gcp</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GetConduitPoint</span><span class="p">(</span><span class="n">m_conduit_points</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">gcp</span><span class="p">.</span><span class="nf">SetCommandPrompt</span><span class="p">(</span><span class="s">"select conduit point. (&lt;ESC&gt; to exit)"</span><span class="p">);</span>
-      <span class="n">gcp</span><span class="p">.</span><span class="nf">AcceptNothing</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-      <span class="n">gcp</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-      <span class="n">doc</span><span class="p">.</span><span class="n">Views</span><span class="p">.</span><span class="nf">Redraw</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">gcp</span><span class="p">.</span><span class="nf">CommandResult</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">)</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
+    var gcp = new GetConduitPoint(m_conduit_points);
+    while (true)
+    {
+      gcp.SetCommandPrompt("select conduit point. (&lt;ESC&gt; to exit)");
+      gcp.AcceptNothing(true);
+      gcp.Get(true);
+      doc.Views.Redraw();
+      if (gcp.CommandResult() != Rhino.Commands.Result.Success)
+        break;
+    }
 
-    <span class="k">return</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Commands</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    return Rhino.Commands.Result.Success;
+  }
+}
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">ConduitPoint</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="nf">ConduitPoint</span><span class="p">(</span><span class="n">Point3d</span> <span class="n">point</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">Color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">;</span>
-    <span class="n">Point</span> <span class="p">=</span> <span class="n">point</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">public</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span> <span class="n">Color</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">public</span> <span class="n">Point3d</span> <span class="n">Point</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
+public class ConduitPoint
+{
+  public ConduitPoint(Point3d point)
+  {
+    Color = System.Drawing.Color.White;
+    Point = point;
+  }
+  public System.Drawing.Color Color { get; set; }
+  public Point3d Point { get; set; }
+}
 
-<span class="k">public</span> <span class="k">class</span> <span class="nc">GetConduitPoint</span> <span class="p">:</span> <span class="n">GetPoint</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;</span> <span class="n">m_conduit_points</span><span class="p">;</span>
+public class GetConduitPoint : GetPoint
+{
+  private readonly List&lt;ConduitPoint&gt; m_conduit_points;
 
-  <span class="k">public</span> <span class="nf">GetConduitPoint</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;</span> <span class="n">conduitPoints</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_conduit_points</span> <span class="p">=</span> <span class="n">conduitPoints</span><span class="p">;</span>
-  <span class="p">}</span>
+  public GetConduitPoint(List&lt;ConduitPoint&gt; conduitPoints )
+  {
+    m_conduit_points = conduitPoints;
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnMouseDown</span><span class="p">(</span><span class="n">GetPointMouseEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">base</span><span class="p">.</span><span class="nf">OnMouseDown</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">picker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PickContext</span><span class="p">();</span>
-    <span class="n">picker</span><span class="p">.</span><span class="n">View</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="n">ParentView</span><span class="p">;</span>
+  protected override void OnMouseDown(GetPointMouseEventArgs e)
+  {
+    base.OnMouseDown(e);
+    var picker = new PickContext();
+    picker.View = e.Viewport.ParentView;
 
-    <span class="n">picker</span><span class="p">.</span><span class="n">PickStyle</span> <span class="p">=</span> <span class="n">PickStyle</span><span class="p">.</span><span class="n">PointPick</span><span class="p">;</span>
+    picker.PickStyle = PickStyle.PointPick;
 
-    <span class="kt">var</span> <span class="n">xform</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Viewport</span><span class="p">.</span><span class="nf">GetPickTransform</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">WindowPoint</span><span class="p">);</span>
-    <span class="n">picker</span><span class="p">.</span><span class="nf">SetPickTransform</span><span class="p">(</span><span class="n">xform</span><span class="p">);</span>
+    var xform = e.Viewport.GetPickTransform(e.WindowPoint);
+    picker.SetPickTransform(xform);
 
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">cp</span> <span class="k">in</span> <span class="n">m_conduit_points</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="kt">double</span> <span class="n">depth</span><span class="p">;</span>
-      <span class="kt">double</span> <span class="n">distance</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">picker</span><span class="p">.</span><span class="nf">PickFrustumTest</span><span class="p">(</span><span class="n">cp</span><span class="p">.</span><span class="n">Point</span><span class="p">,</span> <span class="k">out</span> <span class="n">depth</span><span class="p">,</span> <span class="k">out</span> <span class="n">distance</span><span class="p">))</span>
-        <span class="n">cp</span><span class="p">.</span><span class="n">Color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">Red</span><span class="p">;</span>
-      <span class="k">else</span>
-        <span class="n">cp</span><span class="p">.</span><span class="n">Color</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Drawing</span><span class="p">.</span><span class="n">Color</span><span class="p">.</span><span class="n">White</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    foreach (var cp in m_conduit_points)
+    {
+      double depth;
+      double distance;
+      if (picker.PickFrustumTest(cp.Point, out depth, out distance))
+        cp.Color = System.Drawing.Color.Red;
+      else
+        cp.Color = System.Drawing.Color.White;
+    }
+  }
+}
 
-<span class="k">class</span> <span class="nc">PointsConduit</span> <span class="p">:</span> <span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DisplayConduit</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;</span> <span class="n">m_conduit_points</span><span class="p">;</span>
+class PointsConduit : Rhino.Display.DisplayConduit
+{
+  private readonly List&lt;ConduitPoint&gt; m_conduit_points;
 
-  <span class="k">public</span> <span class="nf">PointsConduit</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ConduitPoint</span><span class="p">&gt;</span> <span class="n">conduitPoints</span> <span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">m_conduit_points</span> <span class="p">=</span> <span class="n">conduitPoints</span><span class="p">;</span>
-  <span class="p">}</span>
+  public PointsConduit(List&lt;ConduitPoint&gt; conduitPoints )
+  {
+    m_conduit_points = conduitPoints;
+  }
 
-  <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">DrawForeground</span><span class="p">(</span><span class="n">Rhino</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="n">DrawEventArgs</span> <span class="n">e</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">m_conduit_points</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-      <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">cp</span> <span class="k">in</span> <span class="n">m_conduit_points</span><span class="p">)</span>
-      <span class="n">e</span><span class="p">.</span><span class="n">Display</span><span class="p">.</span><span class="nf">DrawPoint</span><span class="p">(</span><span class="n">cp</span><span class="p">.</span><span class="n">Point</span><span class="p">,</span> <span class="n">PointStyle</span><span class="p">.</span><span class="n">Simple</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="n">cp</span><span class="p">.</span><span class="n">Color</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  protected override void DrawForeground(Rhino.Display.DrawEventArgs e)
+  {
+    if (m_conduit_points != null)
+      foreach (var cp in m_conduit_points)
+      e.Display.DrawPoint(cp.Point, PointStyle.Simple, 3, cp.Color);
+  }
+}
 </code></pre>
-</div>
 
 <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Partial Friend Class Examples
   Private Shared ReadOnly m_conduit_points As New List(Of ConduitPoint)()
@@ -413,9 +412,8 @@ Friend Class PointsConduit
 End Class
 </code></pre>
 
-<div class="language-python tab-pane fade in highlighter-rouge" id="py"><pre class="highlight"><code><span class="c"># No Python sample available</span>
+<pre class="tab-pane fade in" id="py"><code class="language-python"># No Python sample available
 </code></pre>
-</div>
 
 </div>
 
