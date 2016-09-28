@@ -368,11 +368,15 @@ $(document).ready(function()
   <li>At Startup. Plugin is loaded when Rhino is loaded and initialized.</li>
 </ol>
 
-<p>To set your plugin to load on startup, you need to override your plugin object’s <code>PlugInLoadTime</code> virtual function and return the <code>load_plugin_at_startup</code> enumerated value.</p>
+<p>To set your plugin to load on startup, you need to override your plugin object’s <code>CRhinoPlugIn::PlugInLoadTime()</code> virtual function and return the <code>CRhinoPlugIn::load_plugin_at_startup</code> enumerated value.  See <em>rhinoSdkPlugIn.h</em> for details.</p>
 
 <h2 id="sample">Sample</h2>
 
-<pre><code class="language-cpp">CRhinoPlugIn::plugin_load_time PlugInLoadTime()
+<pre><code class="language-cpp">// Description:
+//    Called by Rhino when writing plug-in information to the registry.  This
+//    information will be read the next time Rhino starts to identify properly
+//    installed plug-ins.
+CRhinoPlugIn::plugin_load_time CTestPlugIn::PlugInLoadTime()
 {
   return CRhinoPlugIn::load_plugin_at_startup;
 }
