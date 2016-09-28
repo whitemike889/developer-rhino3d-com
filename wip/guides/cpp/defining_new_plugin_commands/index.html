@@ -352,22 +352,23 @@ $(document).ready(function()
 
 <p>The <em>Rhino Command Generator</em> wizard is a standalone application that will generate new skeleton <code>CRhinoCommand</code>-derived class.  The generated source code is copied to the Windows clipboard so you can easily paste it into your source files.</p>
 
-<p>To use this tool in Visual Studio 2010:</p>
+<p>To use this tool in Visual Studio 2015:</p>
 
 <ol>
-  <li>Launch Visual Studio.</li>
-  <li>Navigate to <em>Tools</em> &gt; <em>External Tools…</em></li>
-  <li>Use the Add button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  This file can be found in the following folder: <em>C:\Program Files\Rhino 5.0 x64 SDK\Wizards\Command</em>.</li>
+  <li>Launch Visual Studio 2015.</li>
+  <li>Navigate to <em>Tools</em> &gt; <em>External Tools…</em>.</li>
+  <li>Use the <em>Add</em> button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  The file can be found in the following location: <em>C:\Program Files\Rhino 6.0 SDK\Wizards\Command</em>
+<img src="/wip/images/your_first_plugin_windows_cpp_07.png" alt="Rhino Command Generator" /></li>
 </ol>
 
-<p>Once the tool is installed, you can create a new command by selecting <em>Tools</em> &gt; <em>Rhino Command</em>. If you add the command declaration to a new header file, be sure to <code>#include "stdafx.h"</code> at the top.</p>
+<p>Once the tool is installed, you can create a new command by selecting <em>Tools</em> &gt; <em>Rhino Command</em>. If you add the command declaration to a new .cpp file, be sure to <code>#include "stdafx.h"</code> at the top.</p>
 
 <h2 id="sample">Sample</h2>
 
-<p>The following sample code demonstrates a simple command class that essentially does nothing…</p>
+<p>The following sample code demonstrates a simple command class that essentially does nothing:</p>
 
 <pre><code class="language-cpp">// Do NOT put the definition of class CCommandTest in a header
-// file.  There is only ONE instance of a CCommandTest class
+// file. There is only ONE instance of a CCommandTest class
 // and that instance is the static theTestCommand that appears
 // immediately below the class definition.
 
@@ -375,71 +376,69 @@ class CCommandTest : public CRhinoCommand
 {
 public:
   // The one and only instance of CCommandTest is created below.
-  // No copy constructor or operator= is required.  Values of
-  // member variables persist for the duration of the application.
+  // No copy constructor or operator= is required.
+  // Values of member variables persist for the duration of the application.
 
   // CCommandTest::CCommandTest()
   // is called exactly once when static theTestCommand is created.
-  CCommandTest() {}
+  CCommandTest() = default;
 
   // CCommandTest::~CCommandTest()
-  // is called exactly once when static theTestCommand is
-  // destroyed.  The destructor should not make any calls to
-  // the Rhino SDK.  If your command has persistent settings,
-  // then override CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
-  ~CCommandTest() {}
+  // is called exactly once when static theTestCommand is destroyed.
+  // The destructor should not make any calls to the Rhino SDK. 
+  // If your command has persistent settings, then override 
+  // CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
+  ~CCommandTest() = default;
 
   // Returns a unique UUID for this command.
   // If you try to use an id that is already being used, then
-  // your command will not work.  Use GUIDGEN.EXE to make unique UUID.
-  UUID CommandUUID()
+  // your command will not work. Use GUIDGEN.EXE to make unique UUID.
+  UUID CommandUUID() override
   {
-    // {5333C9DE-5F01-45B8-9154-28B765E453E0}
+    // {F502C783-C0CE-4118-8869-EFB0CB34CCCB}
     static const GUID TestCommand_UUID =
-    { 0x5333C9DE, 0x5F01, 0x45B8, { 0x91, 0x54, 0x28, 0xB7, 0x65, 0xE4, 0x53, 0xE0 } };
+    { 0xF502C783, 0xC0CE, 0x4118, { 0x88, 0x69, 0xEF, 0xB0, 0xCB, 0x34, 0xCC, 0xCB } };
     return TestCommand_UUID;
   }
 
   // Returns the English command name.
-  const wchar_t* EnglishCommandName() { return L"Test"; }
-
-  // Returns the localized command name.
-  const wchar_t* LocalCommandName() { return L"Test"; }
+  // If you want to provide a localized command name, then override 
+  // CRhinoCommand::LocalCommandName.
+  const wchar_t* EnglishCommandName() override { return L"Test"; }
 
   // Rhino calls RunCommand to run the command.
-  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
+  CRhinoCommand::result RunCommand(const CRhinoCommandContext&amp; context) override;
 };
 
-// The one and only CCommandTest object.  
+// The one and only CCommandTest object
 // Do NOT create any other instance of a CCommandTest class.
 static class CCommandTest theTestCommand;
 
-CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
 {
-  // CCommandTest::RunCommand() is called when the user runs the "Test"
-  // command or the "Test" command is run by a history operation.
+  // CCommandTest::RunCommand() is called when the user
+  // runs the "Test".
 
   // TODO: Add command code here.
 
   // Rhino command that display a dialog box interface should also support
   // a command-line, or scriptable interface.
 
-  ON_wString wStr;
-  wStr.Format( L"The \"%s\" command is under construction.\n", EnglishCommandName() );
-  if( context.IsInteractive() )
-    RhinoMessageBox( wStr, PlugIn()-&gt;PlugInName(), MB_OK );
+  ON_wString str;
+  str.Format(L"The \"%s\" command is under construction.\n", EnglishCommandName());
+  if (context.IsInteractive())
+    RhinoMessageBox(str, TestPlugIn().PlugInName(), MB_OK);
   else
-    RhinoApp().Print( wStr );
+    RhinoApp().Print(str);
 
   // TODO: Return one of the following values:
   //   CRhinoCommand::success:  The command worked.
   //   CRhinoCommand::failure:  The command failed because of invalid input, inability
   //                            to compute the desired result, or some other reason
   //                            computation reason.
-  //   CRhinoCommand::cancel:   The user interactively canceled the command
+  //   CRhinoCommand::cancel:   The user interactively canceled the command 
   //                            (by pressing ESCAPE, clicking a CANCEL button, etc.)
   //                            in a Get operation, dialog, time consuming computation, etc.
-  //   CRhinoCommand::nothing:  The command did nothing but CANCEL was not pressed.
 
   return CRhinoCommand::success;
 }
