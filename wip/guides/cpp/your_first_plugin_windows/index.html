@@ -308,6 +308,15 @@ $(document).ready(function()
                       
                       
                       <li>
+                          <a href="#property-sheets">Property Sheets</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
                           <a href="#boilerplate-build">Boilerplate Build</a>
                       </li>
                     
@@ -454,7 +463,7 @@ $(document).ready(function()
       <li><em>Online help</em>: Select this option if you want your plugin to support online help.  If selected, a menu item will be displayed on Rhino’s <em>Help</em> menu.</li>
       <li><em>Automation</em>: Select this option to allow your program to manipulate objects implemented in another program.  Selecting this option also exposes your program to other Automation client plugins.</li>
       <li><em>Windows sockets</em>: Select this option to indicate that your program supports Windows sockets.  Windows sockets allow you to write programs that communicate over TCP/IP networks.</li>
-      <li><em>Security Development Lifecycle (SDL) checks</em>: Select this option to add recommended Security Development Lifecycle (SDL) checks to the project. These checks include extra security-relevant warnings as errors, and additional secure code-generation features.  For more information see <a href="https://msdn.microsoft.com/en-us/library/jj161081.aspx">Enable Additional Security Checks</a>.</li>
+      <li><em>Security Development Lifecycle (SDL) checks</em>: Select this option to add recommended Security Development Lifecycle (SDL) checks to the project. These checks include extra security-relevant warnings as errors, and additional secure code-generation features.  For more information, see <a href="https://msdn.microsoft.com/en-us/library/jj161081.aspx">Enable Additional Security Checks</a>.</li>
     </ol>
   </li>
   <li>For this tutorial, just accept the default settings. Click the <em>Finish</em> button, and the wizard begins to generate your plugin project’s folders, files, and classes.  When the wizard is finished, look through the plugin project using <em>Visual Studio’s Solution Explorer</em>…</li>
@@ -481,19 +490,21 @@ $(document).ready(function()
 
 <h3 id="project-settings">Project Settings</h3>
 
-<p>With <em>Visual Studio 2015</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[Project] Properties…</em> or by pressing <Alt><F7>.</F7></Alt></p>
+<p>With <em>Visual Studio 2015</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[Project] Properties…</em>.</p>
 
 <p><img src="/wip/images/your_first_plugin_windows_cpp_04.png" alt="Test Property Pages" /></p>
 
-<p>Reviewing the above settings, you can see that the Rhino 5 plugin project wizard configures 32-bit builds to use the <em>v80rhinos</em> platform toolset, which equates to using Visual Studio 2005’s libraries and compiler.  This platform toolset configuration is installed on your system by the Rhino C++ SDK Installer.</p>
+<p>Reviewing the above settings, you can see that, unlike Rhino 5 plugin projects, there is no 32-bit platform.  This is because the is no 32-bit version of Rhino 6.</p>
 
-<p>If you change the active platform from Win32 to x64, you will see that 64-bit builds will use v100, or Visual Studio 2010.</p>
+<h3 id="property-sheets">Property Sheets</h3>
+<p>Visual Studio projects have hundreds of compiler switches and options to choose from. Using custom <a href="https://msdn.microsoft.com/en-us/library/669zx6zc.aspx">Project Property Sheets</a> is a convenient way to synchronize or share these common settings among other projects.</p>
 
-<p>The advantage that platform toolsets provide is that they enable you to take advantage of the IDE enhancements in Visual Studio 2010 while you continue to use an older version of the Visual C++ libraries and compiler.</p>
+<p>The Plugin Wizard, used to generate the plugin project, adds Rhino plugin-specific property sheets to the project.  To view these propety sheets, click <em>View</em> &gt; <em>Property Manager</em>.
+<img src="/wip/images/your_first_plugin_windows_cpp_06.png" alt="Test Property Manager" /></p>
 
 <h3 id="boilerplate-build">Boilerplate Build</h3>
 
-<p>The <em>Rhino plugin wizard</em>, in addition to generating code, creates a custom project file for your plugin.  This file, <em>Test.vcxproj</em>, specifies all of the file dependencies together with the compile and link option flags.</p>
+<p>The <em>Rhino Plugin Wizard</em>, in addition to generating code, creates a custom project file for your plugin.  This file, <em>Test.vcxproj</em>, specifies all of the file dependencies together with the compile and link option flags.</p>
 
 <p>Before we can build our project, we need to fill in the Rhino plugin developer declarations.  These declarations will let the user of our plugin know who produced the plugin and where they can support information if needed.</p>
 
@@ -501,14 +512,14 @@ $(document).ready(function()
   <li>
     <p>Open <em>TestPlugIn.cpp</em> and modify the following lines of code, providing your company name and other support information:</p>
 
-    <pre><code> RHINO_PLUG_IN_DEVELOPER_ORGANIZATION( L"My Company Name" );
- RHINO_PLUG_IN_DEVELOPER_ADDRESS( L"123 Developer Street\r\nCity State 12345-6789" );
- RHINO_PLUG_IN_DEVELOPER_COUNTRY( L"My Country" );
- RHINO_PLUG_IN_DEVELOPER_PHONE( L"123.456.7890" );
- RHINO_PLUG_IN_DEVELOPER_FAX( L"123.456.7891" );
- RHINO_PLUG_IN_DEVELOPER_EMAIL( L"support@mycompany.com" );
- RHINO_PLUG_IN_DEVELOPER_WEBSITE( L"http://www.mycompany.com" );
- RHINO_PLUG_IN_UPDATE_URL( L"http://www.mycompany.com/support" );
+    <pre><code> RHINO_PLUG_IN_DEVELOPER_ORGANIZATION(L"My Company Name");
+ RHINO_PLUG_IN_DEVELOPER_ADDRESS(L"123 Developer Street\r\nCity State 12345-6789");
+ RHINO_PLUG_IN_DEVELOPER_COUNTRY(L"My Country");
+ RHINO_PLUG_IN_DEVELOPER_PHONE(L"123.456.7890");
+ RHINO_PLUG_IN_DEVELOPER_FAX(L"123.456.7891");
+ RHINO_PLUG_IN_DEVELOPER_EMAIL(L"support@mycompany.com");
+ RHINO_PLUG_IN_DEVELOPER_WEBSITE(L"http://www.mycompany.com");
+ RHINO_PLUG_IN_UPDATE_URL(L"http://www.mycompany.com/support");
 </code></pre>
   </li>
   <li>
@@ -518,7 +529,7 @@ $(document).ready(function()
 </code></pre>
   </li>
   <li>
-    <p><em>NOTE</em>: If you do not delete this line, the plugin will build.  You are now ready to build the project by picking <em>Build Test</em> from the <em>Build</em> menu. If the build was successful, a plugin file named <em>Test_d.rhp</em> is created in the project’s <em>Debug</em> folder.</p>
+    <p><em>NOTE</em>: If you do not delete this line, the plugin will build.  You are now ready to build the project by picking <em>Build Test</em> from the <em>Build</em> menu. If the build was successful, a plugin file named <em>Test.rhp</em> is created in the project’s <em>Debug</em> folder.</p>
   </li>
 </ol>
 
@@ -527,9 +538,9 @@ $(document).ready(function()
 <ol>
   <li>From <em>Visual Studio</em>, navigate to <em>Debug</em> &gt; <em>Start Debugging</em>.  This will load Rhino.  The version of Rhino that is launched depends on the configuration that you build.  The wizard adds the following configurations to your project:
     <ul>
-      <li><em>Debug</em>: The Debug configuration of your program is compiled with full symbolic debug information and no optimization.  Optimization complicates debugging, because the relationship between source code and generated instructions is more complex.  The <em>Debug</em> configuration also links with debug runtime libraries.  Plugins built with the <em>Debug</em> configuration will only load in the debug version of Rhino included with the Rhino C/C++ SDK.</li>
-      <li><em>PseudoDebug</em>: The <em>PseudoDebug</em> project is a <em>Release</em> project that disables optimizations and generates debugging information using the compiler’s <em>Program Database</em> (<code>/Zi</code>) option and the linker’s <em>Generate Debug Information</em> (<code>/DEBUG</code>) option.  These option settings let you use the debugger while you are developing your custom plugin. The <em>PseudoDebug</em> configuration also links with release runtime libraries.  Plugins built with the <em>PseudoDebug</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
+      <li><em>Debug</em>: The <em>Debug</em> project is a <em>Release</em> project that disables optimizations and generates debugging information using the compiler’s <em>Program Database</em> (<code>/Zi</code>) option and the linker’s <em>Generate Debug Information</em> (<code>/DEBUG</code>) option.  These option settings let you use the debugger while you are developing your custom plugin. The <em>PseudoDebug</em> configuration also links with release runtime libraries.  Plugins built with the <em>PseudoDebug</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
       <li><em>Release</em>: The <em>Release</em> configuration of your program contains no symbolic debug information and is fully optimized.  <em>Debug</em> information can be generated in PDB Files (C++) depending on the compiler options used.  Creating PDB files can be very useful if you later need to debug your release version.  The <em>Release</em> configuration also links with release runtime libraries.  Plugins built with the <em>Release</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
+      <li><em>DebugRhino</em>: The DebugRhino configuration of your program is compiled with full symbolic debug information and no optimization.  Optimization complicates debugging, because the relationship between source code and generated instructions is more complex.  The <em>DebugRhino</em> configuration also links with debug runtime libraries.  Plugins built with the <em>DebugRhino</em> configuration will only load in the debug version of Rhino included with the Rhino C/C++ SDK.</li>
     </ul>
   </li>
   <li>For this guide, build the <em>Debug</em> configuration.</li>
@@ -547,7 +558,7 @@ $(document).ready(function()
 <p>The following example code demonstrates a simple command class that essentially does nothing:</p>
 
 <pre><code class="language-cpp">// Do NOT put the definition of class CCommandTest in a header
-// file.  There is only ONE instance of a CCommandTest class
+// file. There is only ONE instance of a CCommandTest class
 // and that instance is the static theTestCommand that appears
 // immediately below the class definition.
 
@@ -555,71 +566,69 @@ class CCommandTest : public CRhinoCommand
 {
 public:
   // The one and only instance of CCommandTest is created below.
-  // No copy constructor or operator= is required.  Values of
-  // member variables persist for the duration of the application.
+  // No copy constructor or operator= is required.
+  // Values of member variables persist for the duration of the application.
 
   // CCommandTest::CCommandTest()
   // is called exactly once when static theTestCommand is created.
-  CCommandTest() {}
+  CCommandTest() = default;
 
   // CCommandTest::~CCommandTest()
-  // is called exactly once when static theTestCommand is
-  // destroyed.  The destructor should not make any calls to
-  // the Rhino SDK.  If your command has persistent settings,
-  // then override CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
-  ~CCommandTest() {}
+  // is called exactly once when static theTestCommand is destroyed.
+  // The destructor should not make any calls to the Rhino SDK. 
+  // If your command has persistent settings, then override 
+  // CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
+  ~CCommandTest() = default;
 
   // Returns a unique UUID for this command.
   // If you try to use an id that is already being used, then
-  // your command will not work.  Use GUIDGEN.EXE to make unique UUID.
-  UUID CommandUUID()
+  // your command will not work. Use GUIDGEN.EXE to make unique UUID.
+  UUID CommandUUID() override
   {
-    // {5333C9DE-5F01-45B8-9154-28B765E453E0}
+    // {F502C783-C0CE-4118-8869-EFB0CB34CCCB}
     static const GUID TestCommand_UUID =
-    { 0x5333C9DE, 0x5F01, 0x45B8, { 0x91, 0x54, 0x28, 0xB7, 0x65, 0xE4, 0x53, 0xE0 } };
+    { 0xF502C783, 0xC0CE, 0x4118, { 0x88, 0x69, 0xEF, 0xB0, 0xCB, 0x34, 0xCC, 0xCB } };
     return TestCommand_UUID;
   }
 
   // Returns the English command name.
-  const wchar_t* EnglishCommandName() { return L"Test"; }
-
-  // Returns the localized command name.
-  const wchar_t* LocalCommandName() { return L"Test"; }
+  // If you want to provide a localized command name, then override 
+  // CRhinoCommand::LocalCommandName.
+  const wchar_t* EnglishCommandName() override { return L"Test"; }
 
   // Rhino calls RunCommand to run the command.
-  CRhinoCommand::result RunCommand( const CRhinoCommandContext&amp; );
+  CRhinoCommand::result RunCommand(const CRhinoCommandContext&amp; context) override;
 };
 
-// The one and only CCommandTest object.  
+// The one and only CCommandTest object
 // Do NOT create any other instance of a CCommandTest class.
 static class CCommandTest theTestCommand;
 
-CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
+CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; context)
 {
-  // CCommandTest::RunCommand() is called when the user runs the "Test"
-  // command or the "Test" command is run by a history operation.
+  // CCommandTest::RunCommand() is called when the user
+  // runs the "Test".
 
   // TODO: Add command code here.
 
   // Rhino command that display a dialog box interface should also support
   // a command-line, or scriptable interface.
 
-  ON_wString wStr;
-  wStr.Format( L"The \"%s\" command is under construction.\n", EnglishCommandName() );
-  if( context.IsInteractive() )
-    RhinoMessageBox( wStr, PlugIn()-&gt;PlugInName(), MB_OK );
+  ON_wString str;
+  str.Format(L"The \"%s\" command is under construction.\n", EnglishCommandName());
+  if (context.IsInteractive())
+    RhinoMessageBox(str, TestPlugIn().PlugInName(), MB_OK);
   else
-    RhinoApp().Print( wStr );
+    RhinoApp().Print(str);
 
   // TODO: Return one of the following values:
   //   CRhinoCommand::success:  The command worked.
   //   CRhinoCommand::failure:  The command failed because of invalid input, inability
   //                            to compute the desired result, or some other reason
   //                            computation reason.
-  //   CRhinoCommand::cancel:   The user interactively canceled the command
+  //   CRhinoCommand::cancel:   The user interactively canceled the command 
   //                            (by pressing ESCAPE, clicking a CANCEL button, etc.)
   //                            in a Get operation, dialog, time consuming computation, etc.
-  //   CRhinoCommand::nothing:  The command did nothing but CANCEL was not pressed.
 
   return CRhinoCommand::success;
 }
@@ -639,15 +648,15 @@ CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; 
 
 <p>The <em>Rhino Command Generator</em> wizard is a standalone application that will generate new skeleton <code>CRhinoCommand</code>-derived class.  The generated source code is copied to the Windows clipboard so you can easily paste it into your source files.</p>
 
-<p>To use this tool in Visual Studio 2010:</p>
+<p>To use this tool in Visual Studio 2015:</p>
 
 <ol>
-  <li>Launch Visual Studio 2010.</li>
+  <li>Launch Visual Studio 2015.</li>
   <li>Navigate to <em>Tools</em> &gt; <em>External Tools…</em>.</li>
-  <li>Use the <em>Add</em> button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  The file can be found in the following location: <em>C:\Program Files\Rhino 5.0 x64 SDK\Wizards\Command</em></li>
+  <li>Use the <em>Add</em> button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  The file can be found in the following location: <em>C:\Program Files\Rhino 6.0 SDK\Wizards\Command</em>
+<img src="/wip/images/your_first_plugin_windows_cpp_07.png" alt="Rhino Command Generator" />
+—</li>
 </ol>
-
-<hr />
 
 <h2 id="related-topics">Related Topics</h2>
 
