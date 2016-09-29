@@ -271,27 +271,26 @@ $(document).ready(function()
                 <a href="#migrate-the-project">Migrate the project</a>
 
                 
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#plugin-anatomy">Plugin Anatomy</a>
+
+                
                   <ul class="nav nav-stacked">
                     
 
-                    
-                      
-                      
-                      
-                      
-                      
-                      <li>
-                          <a href="#plugin-anatomy">Plugin Anatomy</a>
-                      </li>
-                    
-                      
-                      
-                      
-                      
-                      
-                      <li>
-                          <a href="#project-settings">Project Settings</a>
-                      </li>
                     
                       
                       
@@ -436,28 +435,72 @@ $(document).ready(function()
 <img src="/wip/images/migrate_plugin_windows_cpp.png" alt="Plugin Settings" /></li>
 </ol>
 
-<h3 id="plugin-anatomy">Plugin Anatomy</h3>
+<h2 id="plugin-anatomy">Plugin Anatomy</h2>
 
 <p>The following files are of interest:</p>
 
 <ol>
-  <li><em>Test.vcxproj</em> is the project file that allows Visual C++ to build your plugin.</li>
-  <li><em>stdafx.h</em> is the main project header.</li>
-  <li><em>stdafx.cpp</em> is used to generate precompiled header.</li>
-  <li><em>TestApp.h</em> is the application class header that contains the <code>CTestApp</code> class declaration.</li>
-  <li><em>TestApp.cpp</em> is the application class implementation that contains the <code>CTestApp</code> member functions.</li>
-  <li><em>TestPlugIn.h</em> is the plugin class header that contains the <code>CTestPlugIn</code> class declaration.</li>
-  <li><em>TestPlugIn.cpp</em> is the plugin class implementation that contains the <code>CTestPlugIn</code> member functions.</li>
-  <li><em>cmdTest.cpp</em> is the sample <code>Test</code> Rhino command.</li>
-  <li><em>Resource.h</em> is the <code>#define</code> constant definitions for resources.</li>
-  <li><em>Test.rc</em> is the resource script.</li>
-  <li><em>Test.def</em> is the module definition.</li>
-  <li><em>targetver.h</em> is used to define the support Windows platform.</li>
+  <li>
+    <p>Using <em>Visual Studio’s Solution Explorer</em>, open <em>stdafx.h</em> and add the following preprocessor definitons:</p>
+
+    <pre><code> /////////////////////////////////////////////////////////////////////////////
+ // stdafx.h : include file for standard system include files,
+ // or project specific include files that are used frequently, but
+ // are changed infrequently
+
+ #pragma once
+
+ #ifndef VC_EXTRALEAN
+ #define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
+ #endif
+
+ // Added for Rhino 6 Migration
+ #define RHINO_V6_READY
+ #if defined(DEBUG)
+ #define RHINO_LIB_DIR "C:/Program Files/Rhino 6.0 SDK/lib/Debug"
+ #else
+ #define RHINO_LIB_DIR "C:/Program Files/Rhino 6.0 SDK/lib/Release"
+ #endif
+    
+ ...
+</code></pre>
+  </li>
+  <li>
+    <p>Also, modify the path to SDK headers, found in <em>stdafx.h</em> to reflect the path to the Rhino 6 C/C++ SDK:</p>
+
+    <pre><code> // Rhino SDK Preamble
+ //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhinoSdkStdafxPreamble.h"
+ #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhinoSdkStdafxPreamble.h"
+    
+ ...
+
+ // Rhino Plug-in
+ //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhinoSdk.h"
+ #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhinoSdk.h"
+
+ // Render Development Kit
+ //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhRdkHeaders.h"
+ #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhRdkHeaders.h"
+    
+ ...
+    
+ // Rhino Plug-in Linking Pragmas
+ //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\rhinoSdkPlugInLinkingPragmas.h"
+ #include "C:/Program Files/Rhino 6.0 SDK/Inc/rhinoSdkPlugInLinkingPragmas.h"
+</code></pre>
+  </li>
+  <li>
+    <p>Again using <em>Visual Studio’s Solution Explorer</em>, open <em>[PlugInName]PlugIn.cpp</em> and add the following SDK include statement:</p>
+
+    <pre><code> #include "StdAfx.h"
+ #include "SamplePlugIn.h"
+ // Added for Rhino 6 Migration
+ #include "C:/Program Files/Rhino 6.0 SDK/Inc/rhinoSdkPlugInDeclare.h"
+    
+ ...
+</code></pre>
+  </li>
 </ol>
-
-<h3 id="project-settings">Project Settings</h3>
-
-<p>With <em>Visual Studio 2015</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</p>
 
 <p><img src="/wip/images/your_first_plugin_windows_cpp_04.png" alt="Test Property Pages" /></p>
 
