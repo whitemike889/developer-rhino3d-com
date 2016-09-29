@@ -268,21 +268,12 @@ $(document).ready(function()
               
               
               <li>
-                <a href="#barebones-plugin">Barebones Plugin</a>
+                <a href="#migrate-the-project">Migrate the project</a>
 
                 
                   <ul class="nav nav-stacked">
                     
 
-                    
-                      
-                      
-                      
-                      
-                      
-                      <li>
-                          <a href="#plugin-wizard">Plugin Wizard</a>
-                      </li>
                     
                       
                       
@@ -435,38 +426,14 @@ $(document).ready(function()
 
 <p>It is presumed you already have the necessary tools installed and are ready to go.  If you are not there yet, see <a href="/wip/guides/cpp/installing_tools_windows">Installing Tools (Windows)</a>.</p>
 
-<h2 id="barebones-plugin">Barebones Plugin</h2>
-
-<p>The Rhino SDK includes a Visual Studio Project Wizard.  The wizard program generates the code for a functioning plugin.  Follow these steps to build the plugin…</p>
-
-<h3 id="plugin-wizard">Plugin Wizard</h3>
+<h2 id="migrate-the-project">Migrate the project</h2>
 
 <ol>
-  <li>Launch <em>Visual Studio 2015</em> and navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project…</em>.</li>
-  <li>From the <em>New Project</em> dialog, select the <em>Rhinoceros 6 Plug-in</em> template from the list of installed templates…
-<img src="/wip/images/your_first_plugin_windows_cpp_01.png" alt="New Project Template" /></li>
-  <li>Type the project name as shown above.  You can enter a different name if you want.  The wizard uses the project name when it creates files and classes.  If you enter a different name, your files and classes will have a name different from that of the files and classes mentioned in this tutorial.  Don’t forget to choose a location to store the project.  When finished, click the <em>OK</em> button.</li>
-  <li>Upon clicking <em>OK</em>, the <em>Overview</em> page of the <em>Rhinoceros 6 Plug-In Wizard</em> dialog will appear.  This page gives you an overview of the type of project that the wizard is going to create.<br />
-<img src="/wip/images/your_first_plugin_windows_cpp_02.png" alt="New Project Overview" /></li>
-  <li>Not that, by default, the wizard will do the following:
-    <ol>
-      <li>Create a general utility plugin.</li>
-    </ol>
-  </li>
-  <li>If you are satisfied with the default settings, just click the <em>Finish</em> button.  If you want to change any of these settings, click the <em>Next</em> button…
-<img src="/wip/images/your_first_plugin_windows_cpp_03.png" alt="Plugin Settings" /></li>
-  <li>The <em>Plug-in Settings</em> page allows you to modify a number of settings used by the wizard when generating the plugin source code:
-    <ol>
-      <li><em>Plug-in name</em>: Modify this field if you want to change the name of the plugin.  <em>NOTE</em>: modifying this field does not modify the project name but rather the name of the plugin as listed in Rhino’s <em>PlugInManager</em> dialog box.</li>
-      <li><em>Plug-in type</em>: Select the type of plugin that you want the wizard to create.</li>
-      <li><em>Source file comments</em>: Select this option if you want the wizard to add verbose comments to the generated source files.</li>
-      <li><em>Online help</em>: Select this option if you want your plugin to support online help.  If selected, a menu item will be displayed on Rhino’s <em>Help</em> menu.</li>
-      <li><em>Automation</em>: Select this option to allow your program to manipulate objects implemented in another program.  Selecting this option also exposes your program to other Automation client plugins.</li>
-      <li><em>Windows sockets</em>: Select this option to indicate that your program supports Windows sockets.  Windows sockets allow you to write programs that communicate over TCP/IP networks.</li>
-      <li><em>Security Development Lifecycle (SDL) checks</em>: Select this option to add recommended Security Development Lifecycle (SDL) checks to the project. These checks include extra security-relevant warnings as errors, and additional secure code-generation features.  For more information, see <a href="https://msdn.microsoft.com/en-us/library/jj161081.aspx">Enable Additional Security Checks</a>.</li>
-    </ol>
-  </li>
-  <li>For this tutorial, just accept the default settings. Click the <em>Finish</em> button, and the wizard begins to generate your plugin project’s folders, files, and classes.  When the wizard is finished, look through the plugin project using <em>Visual Studio’s Solution Explorer</em>…</li>
+  <li>Launch <em>Visual Studio 2015</em> and navigate to <em>File</em> &gt; <em>Open</em> &gt; <em>Project/Solution…</em>.</li>
+  <li>Navigate to your project’s folder and open either your plugin project <em>(.vcxproj)</em> or solution <em>(.sln)</em></li>
+  <li>When your plugin project opens, navigate to the project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</li>
+  <li>In the project’s settings, select <em>All Configurations</em> and set the platform to <em>x64</em>. Then, set the <em>Platform Toolset</em> to <em>Visual Studio 2015 (v140)</em> and the click <em>Apply</em>.
+<img src="/wip/images/migrate_plugin_windows_cpp.png" alt="Plugin Settings" /></li>
 </ol>
 
 <h3 id="plugin-anatomy">Plugin Anatomy</h3>
