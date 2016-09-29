@@ -415,7 +415,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>We present a sample solution that uses Platform Invoke (PInvoke), which allows .NET code to call functions that are implemented in a C/C++ DLL (Windows) or dylib (Mac OS X).  It is important to understand that the main utility of this advanced approach is in the ability to call the same C/C++ code on both platforms from .NET.</p>
+<p>We present a sample solution that uses Platform Invoke (PInvoke), which allows .NET code to call functions that are implemented in a C/C++ DLL (Windows) or dylib (macOS).  It is important to understand that the main utility of this advanced approach is in the ability to call the same C/C++ code on both platforms from .NET.</p>
 
 <p>First, we will build a simple C/C++ library that adds two numbers together.  After that, we will examine the wrapping .NET code required to call into our library from a RhinoCommon plugin on both Windows and Mac.</p>
 
@@ -423,18 +423,18 @@
 
 <p>This guide does not presume you are a C/C++ or .NET expert, but assumes you have a functional working knowledge of both.  This is an advanced guide; that said, the intent of this guide is to illustrate basic considerations of wrapping a C/C++ library and the logistical issues calling it from a RhinoCommon plugin on both Windows and Mac.</p>
 
-<p>We will be analyzing a sample solution called <strong><a href="https://github.com/dalefugier/SampleNativeLibrary">SampleNativeLibrary</a></strong>.  Please clone or download this repository.  <strong>SampleNativeLibrary</strong> builds against the RhinoWIP (on Windows) and Rhino 5 for Mac (on OS X).  (On Windows, it is possible to use Rhino 5, but you will have to change the RhinoCommon references).</p>
+<p>We will be analyzing a sample solution called <strong><a href="https://github.com/dalefugier/SampleNativeLibrary">SampleNativeLibrary</a></strong>.  Please clone or download this repository.  <strong>SampleNativeLibrary</strong> builds against the RhinoWIP (on Windows) and Rhino 5 for Mac (on macOS).  (On Windows, it is possible to use Rhino 5, but you will have to change the RhinoCommon references).</p>
 
 <p>It is presumed you already have <em>all</em> the necessary tools installed and are ready to go.  If you are not there yet, see both <a href="/guides/rhinocommon/installing_tools_windows">Installing Tools (Windows)</a> and <a href="/guides/rhinocommon/installing_tools_mac">Installing Tools (Mac)</a>.  It is also helpful to have read and understood <a href="/guides/rhinocommon/your_first_plugin_crossplatform">Your First Plugin (Cross-Platform)</a>.</p>
 
 <div class="bs-callout bs-callout-danger">
   <h4>WARNING</h4>
-  <p>Other methods to create a .NET binding to a C# library exist. A notorious one is based on the compilation of the C++ library with the C++/CLI compiler. To keep things compatible with the Apple Mac OS X, and because the IJW (it just works) technology sometimes does not, we suggest the use of PInvoke.</p>
+  <p>Other methods to create a .NET binding to a C# library exist. A notorious one is based on the compilation of the C++ library with the C++/CLI compiler. To keep things compatible with the Apple macOS, and because the IJW (it just works) technology sometimes does not, we suggest the use of PInvoke.</p>
 </div>
 
 <h2 id="samplelibrary">SampleLibrary</h2>
 
-<p>Let’s begin by taking a look at an absurdly simple C/C++ “library” - SampleLibrary - that does one thing: add two numbers together.  We’ll start on Windows, but it really doesn’t matter if you start on a OS X, nearly everything that follows applies on each platform…</p>
+<p>Let’s begin by taking a look at an absurdly simple C/C++ “library” - SampleLibrary - that does one thing: add two numbers together.  We’ll start on Windows, but it really doesn’t matter if you start on a macOS, nearly everything that follows applies on each platform…</p>
 
 <h3 id="windows">Windows</h3>
 
@@ -455,7 +455,7 @@
 
     <p>…even if you are not a C/C++ programmer, this C function should be clear to you.  <code>Add</code> takes a native <code>int</code> and a native <code>double</code>, and returns the sum of the inputs as a native <code>double</code>.  Take note of the <code>SAMPLELIBRARY_C_FUNCTION</code> decoration above the implementation…we will talk about that in a moment.</p>
   </li>
-  <li>In the <strong>Header Files</strong> filter, find and open the <strong>SampleLibraryInclude.h</strong> header file.  The first thing to note is that there are two well <code>#defined</code> sections to this header: one that relates to Windows (<code>#if defined (_WIN32)</code>) and one that relates to Mac (<code>#if defined(__APPLE__)</code>).  The code in these #defines are basically telling the linker to export functions in a specific way.  The reason they are different on each platform is that Dynamic Link Libraries (DLLs) are implemented differently in Windows and OS X - each platform has a unique way of telling the linker what to do with the library.  How this works is not really important at this juncture, just know that these MACROs tell the linker to export the functions.  More importantly…</li>
+  <li>In the <strong>Header Files</strong> filter, find and open the <strong>SampleLibraryInclude.h</strong> header file.  The first thing to note is that there are two well <code>#defined</code> sections to this header: one that relates to Windows (<code>#if defined (_WIN32)</code>) and one that relates to Mac (<code>#if defined(__APPLE__)</code>).  The code in these #defines are basically telling the linker to export functions in a specific way.  The reason they are different on each platform is that Dynamic Link Libraries (DLLs) are implemented differently in Windows and macOS - each platform has a unique way of telling the linker what to do with the library.  How this works is not really important at this juncture, just know that these MACROs tell the linker to export the functions.  More importantly…</li>
   <li>
     <p>Take a look at the function declaration at the bottom of the file:</p>
 
@@ -466,18 +466,18 @@
     <p>…is decorated with the same <code>SAMPLELIBRARY_C_FUNCTION</code>.</p>
   </li>
   <li>This is the decoration that tells the linker to make the function available to outside callers.  By decorating with this macro, the linker adds information to the DLL that makes these functions public.  Without this decoration, these functions would not be available outside the the assembly (.dll or .dylib).  By providing this decoration, we are doing the .NET equivalent of making them “public”.</li>
-  <li>Do a “sanity check” and <strong>Build</strong> SampleLibrary to make sure that all your tools are working as expected.  SampleLibrary should build without errors as the native <em>SampleLibrary.dll</em> in the project <em>/bin</em> folder.  Ok, now that we know roughly what is in the native SampleLibrary on Windows, let’s take a look at it on Mac OS X…</li>
+  <li>Do a “sanity check” and <strong>Build</strong> SampleLibrary to make sure that all your tools are working as expected.  SampleLibrary should build without errors as the native <em>SampleLibrary.dll</em> in the project <em>/bin</em> folder.  Ok, now that we know roughly what is in the native SampleLibrary on Windows, let’s take a look at it on macOS…</li>
 </ol>
 
 <h3 id="mac">Mac</h3>
 
 <ol>
-  <li>Launch <strong>Xcode</strong> and open <strong>SampleLibrary.xcodeproj</strong>.  (Unlike Visual Studio on Windows, on OS X, we cannot do all of our development in a single IDE, but we have to build our native C/C++ <strong>SampleLibrary</strong> using the native Apple Tools - Xcode and xcodebuild).</li>
+  <li>Launch <strong>Xcode</strong> and open <strong>SampleLibrary.xcodeproj</strong>.  (Unlike Visual Studio on Windows, on macOS, we cannot do all of our development in a single IDE, but we have to build our native C/C++ <strong>SampleLibrary</strong> using the native Apple Tools - Xcode and xcodebuild).</li>
   <li>In the <strong>Project Navigator</strong>, notice that this project is referencing the <em>exact same source code</em> as its Windows counterpart…
-<img src="/images/wrapping_native_libraries_03.png" alt="SampleLibrary on OS X" /></li>
-  <li>Instead of building a .dll, on OS X we are building <strong>libSampleLibrary.dylib</strong> which - despite the extension - amounts to exactly the same thing as a dll.  For all intents and purposes, SampleLibrary does exactly the same thing on OS X that it does on Windows and the source is the same.</li>
+<img src="/images/wrapping_native_libraries_03.png" alt="SampleLibrary on macOS" /></li>
+  <li>Instead of building a .dll, on macOS we are building <strong>libSampleLibrary.dylib</strong> which - despite the extension - amounts to exactly the same thing as a dll.  For all intents and purposes, SampleLibrary does exactly the same thing on macOS that it does on Windows and the source is the same.</li>
   <li><strong>Build</strong> SampleLibrary using Xcode to make sure that it builds successfully.</li>
-  <li><strong>Quit</strong> Xcode.  On OS X, we are actually going to use command line <code>xcodebuild</code> from Xamarin Studio to build our native library, but we’ll talk about that below.</li>
+  <li><strong>Quit</strong> Xcode.  On macOS, we are actually going to use command line <code>xcodebuild</code> from Xamarin Studio to build our native library, but we’ll talk about that below.</li>
 </ol>
 
 <p>Now that we have examined the simple native SampleLibrary, let’s turn our attention to the .NET portion of our wrapping code…</p>
@@ -525,7 +525,7 @@
  }
 </code></pre>
 
-    <p>…which declares a <code>lib</code> string member.  On Windows, it is necessary to explicitly state the name of the native dll being called (on OS X, a <em>.dll.config</em> file is used to point to a .dylib - see below).</p>
+    <p>…which declares a <code>lib</code> string member.  On Windows, it is necessary to explicitly state the name of the native dll being called (on macOS, a <em>.dll.config</em> file is used to point to a .dylib - see below).</p>
   </li>
   <li>
     <p>The <code>UnsafeNativeMethods</code> class itself contains a single function…</p>
@@ -562,9 +562,9 @@
   <li>First, let’s turn our attention to the <strong>SampleRhino.Mac</strong> project.  Make sure that <strong>SampleRhino.Mac</strong> is set as the Startup Project and expand it so you can see the source files…
 <img src="/images/wrapping_native_libraries_06.png" alt="SampleRhino on Mac" /></li>
   <li>Just as with <strong>SampleLibrary</strong>, <strong>SampleRhino</strong> is exactly the same source on both platform: the platform-specific <em>.csproj</em> files are referencing exactly the same <em>.cs</em> files.</li>
-  <li><strong>Build</strong>, run, and test <strong>SampleRhinoCommand</strong> in Rhino for Mac.  Everything should work as expected.  No surprises here…all the code is the same (if you skipped the <a href="#windows-1">Windows section above</a>, read it now; all of it applies on OS X).</li>
+  <li><strong>Build</strong>, run, and test <strong>SampleRhinoCommand</strong> in Rhino for Mac.  Everything should work as expected.  No surprises here…all the code is the same (if you skipped the <a href="#windows-1">Windows section above</a>, read it now; all of it applies on macOS).</li>
   <li>
-    <p>There is one critical difference between how the Windows and OS X wrapping works and it has little to do with code.  As we saw above, <strong>UnsafeNativeMethods.cs</strong> contains the class:</p>
+    <p>There is one critical difference between how the Windows and macOS wrapping works and it has little to do with code.  As we saw above, <strong>UnsafeNativeMethods.cs</strong> contains the class:</p>
 
     <pre><code> internal static class Import
  {
@@ -572,7 +572,7 @@
  }
 </code></pre>
 
-    <p>…which declares a <code>lib</code> string member.  On Windows, it was necessary to explicitly state the name of the native dll being called.  On OS X, this works a little differently.  In order to understand what is different, let’s look at how <strong>SampleLibrary.dll</strong> gets built on OS X…</p>
+    <p>…which declares a <code>lib</code> string member.  On Windows, it was necessary to explicitly state the name of the native dll being called.  On macOS, this works a little differently.  In order to understand what is different, let’s look at how <strong>SampleLibrary.dll</strong> gets built on macOS…</p>
   </li>
   <li>In the <a href="#mac">SampleLibrary (Mac) section above</a>, we built SampleLibrary using Xcode.  We mentioned in passing that we could build this using <code>xcodebuild</code> command line from Xamarin Studio.  Let’s take a look.</li>
   <li>In the <strong>Solution Explorer</strong>, <strong>double-click</strong> the name of the <strong>SampleRhino.Mac</strong> project to bring up the <strong>Project Options</strong> dialog.  Navigate to the <strong>Build</strong> &gt; <strong>Custom Commands</strong> section…
@@ -588,7 +588,7 @@
  &lt;/configuration&gt;
 </code></pre>
 
-        <p>On OS X, both the <em>.dll.config</em> file and the <em>.dylib</em> must be in the same folder as the calling .NET dll.</p>
+        <p>On macOS, both the <em>.dll.config</em> file and the <em>.dylib</em> must be in the same folder as the calling .NET dll.</p>
       </li>
       <li><strong>After Build 2</strong>: This after build step copies <em>libSampleLibrary.dylib</em> to the same folder as the calling .NET dll.</li>
       <li><strong>After Clean 1</strong>: This after build step deletes the <em>libSampleLibrary.dylib</em> when a clean is performed.</li>
