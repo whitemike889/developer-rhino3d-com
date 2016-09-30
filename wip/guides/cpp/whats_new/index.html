@@ -420,6 +420,19 @@ $(document).ready(function()
     context.m_doc.Redraw();
 </code></pre>
 
+<p>A number of SDK functions have been modified to require some data from the active document. This is because SDK functions can no longer assume there is a single document.</p>
+
+<p>An example of this is the RhinoPointInPlanarClosedCurve() function, which now requires the absolute tolerance from the active document. In Rhino 5, you could use this function in a command as follows:</p>
+
+<pre><code>    int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane);
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    double tolerance = context.m_doc.AbsoluteTolerance();
+    int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane, tolerance);
+</code></pre>
+
 <h2 id="deprecation">Deprecation</h2>
 
 <p>Obsolete functions from Rhino 5 are marked as deprecated with a message to help accomplish the same goal through alternate functions in the Rhino 6 SDK. These deprecations will generate compiler warnings when plug-in code attempts to call these functions.</p>
