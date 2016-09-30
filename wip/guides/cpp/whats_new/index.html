@@ -13,14 +13,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/cpp/whats_new/" />
   <meta property="og:title" content="What's New?" />
-  <meta property="og:description" content="This brief guide outlines the new object types and features in the Rhino C/C++ SDK." />
+  <meta property="og:description" content="This brief guide outlines the new and changed features in the Rhino C/C++ SDK." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="What's New?" />
-  <meta name="twitter:description" value="This brief guide outlines the new object types and features in the Rhino C/C++ SDK." />
+  <meta name="twitter:description" value="This brief guide outlines the new and changed features in the Rhino C/C++ SDK." />
   
     
       <meta name="twitter:image" content="/wip/images/rhinodev_logo_unfurl.png" />
@@ -285,6 +285,40 @@ $(document).ready(function()
               
               
               <li>
+                <a href="#breaking-changes">Breaking Changes</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#multi-document-support">Multi-Document Support</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
                 <a href="#deprecation">Deprecation</a>
 
                 
@@ -353,11 +387,39 @@ $(document).ready(function()
 
           <h1 id="whats-new">What’s New?</h1>
 
-<p>This brief guide outlines the new object types and features in the Rhino C/C++ SDK.</p>
+<p>This brief guide outlines the new and changed features in the Rhino C/C++ SDK.</p>
 
 <h2 id="overview">Overview</h2>
 
-<p>The Rhino 6.0 C++ SDK is similar to the 5.0 SDK, but also has “breaking” changes. The following document attempts to describe what has been added, what has changed, and how to deal with these changes.</p>
+<p>The Rhino C/C++ SDK is not an abstract SDK. That is, the native classes and functions that are made available in the SDK are also used internally by Rhino. Thus, when the signatures of classes or functions change, all developers, both internal and external, are required to modify their source code to accommodate for the change. For this reason, the Rhino C/C++ SDK was not broken between Rhino 4 and 5. In doing this, plug-ins that worked in Rhino 4 also worked in Rhino 5.</p>
+
+<p>A lot of time has passed since the Rhino 4 C/C++ SDK was made available. And although there was quite a bit of new functionality added to Rhino 5, some of it required some “creative” programming in order not to break backwards compatibility with Rhino 4.</p>
+
+<p>In order to continue to move Rhino forward, breaking changes needed to be made to the SDK. The following document attempts to describe what has been added, what has changed, and how to deal with these changes.</p>
+
+<h2 id="breaking-changes">Breaking Changes</h2>
+
+<p>Although the breaking changes seem numerous, most fall within the following categories.</p>
+
+<h2 id="multi-document-support">Multi-Document Support</h2>
+
+<p>One of the primary goals for Rhino 6 was to consolidate the Rhino for Windows and Rhino for Mac source code into a single branch. In order to do this, the source code had to become more multiple-document aware, as Rhino for Mac handle multiple documents. Note, Rhino 6 for Windows is still a single document application.</p>
+
+<p>Thus, many SDK functions now require the developer to pass either a pointer or a reference to the active document or the active document’s runtime serial number.</p>
+
+<p>An example of this is <em>CRhinoDisplayConduit</em> class. In Rhino 5, you could enable a display conduit in a plug-in command like this:</p>
+
+<pre><code>    CMyDisplayConduit conduit;
+    conduit.Enable();
+    context.m_doc.Redraw();
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    CMyDisplayConduit conduit;
+    conduit.Enable(context.m_doc.RuntimeSerialNumber());
+    context.m_doc.Redraw();
+</code></pre>
 
 <h2 id="deprecation">Deprecation</h2>
 
