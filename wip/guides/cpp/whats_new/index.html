@@ -509,7 +509,17 @@ $(document).ready(function()
   <li>Old-style enums do not have their own scope</li>
 </ul>
 
-<p>There are a number of places in the Rhino 6 C/C++ SDK were old-style enums have been converted to scoped and strongly typed enums.</p>
+<p>There are a number of places in the Rhino 6 C/C++ SDK were old-style enums have been converted to scoped and strongly typed enums by convert <em>enum</em> declarations to <em>enum class</em>. Enumerators of these types of enums require a qualified name such as <em>enumname::enumerator</em> when you refer to them.</p>
+
+<p>For example, in Rhino 5, you could specify a unit system in millimeters as follows:</p>
+
+<pre><code>    ON_UnitSystem units(ON::millimeters);
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    ON_UnitSystem units(ON::LengthUnitSystem::Millimeters);
+</code></pre>
 
 <h2 id="deprecation">Deprecation</h2>
 
