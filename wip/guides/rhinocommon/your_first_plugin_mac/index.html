@@ -420,60 +420,60 @@ $(document).ready(function()
 <h3 id="file-new">File New</h3>
 
 <ol>
-  <li>If you have not done so already, <strong>launch Xamarin Studio</strong>.</li>
-  <li>Navigate to <strong>File</strong> &gt; <strong>New</strong> &gt; <strong>Solution</strong>…
+  <li>If you have not done so already, <em>launch Xamarin Studio</em>.</li>
+  <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Solution</em>…
 <img src="/wip/images/your_first_plugin_mac_01.png" alt="File New Solution" /></li>
-  <li>A <strong>New Project</strong> wizard should appear.  In the left column, find the <strong>Other</strong> &gt; <strong>Miscellaneous</strong> section.  Under General, select the RhinoCommon Plug-In template…
+  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Other</em> &gt; <em>Miscellaneous</em> section.  Under General, select the RhinoCommon Plug-In template…
 <img src="/wip/images/your_first_plugin_mac_02.png" alt="New Project" /></li>
-  <li>Click the <strong>Next</strong> button.</li>
-  <li>You will now <strong>Configure your new project</strong>.  For the purposes of this Guide, we will name our demo plugin <em>HelloRhinoCommon</em>.  Fill in the <strong>Project Name</strong> field.  <strong>Browse</strong> and select a location for this plugin on your Mac…
+  <li>Click the <em>Next</em> button.</li>
+  <li>You will now <em>Configure your new project</em>.  For the purposes of this Guide, we will name our demo plugin <em>HelloRhinoCommon</em>.  Fill in the <em>Project Name</em> field.  <em>Browse</em> and select a location for this plugin on your Mac…
 <img src="/wip/images/your_first_plugin_mac_03.png" alt="Project Configuration" /></li>
-  <li>Check <strong>Create a project within the solution directory</strong>.  <em>NOTE</em>: This is optional depending on how you want to structure your projects.</li>
-  <li>Click the <strong>Create</strong> button.  <em>NOTE</em>: You don’t have to create a .git repository for this demo.</li>
-  <li>A <strong>new solution</strong> called <strong>HelloRhinoCommon</strong> should open…
+  <li>Check <em>Create a project within the solution directory</em>.  <em>Note</em>: This is optional depending on how you want to structure your projects.</li>
+  <li>Click the <em>Create</em> button.  <em>Note</em>: You don’t have to create a .git repository for this demo.</li>
+  <li>A <em>new solution</em> called <em>HelloRhinoCommon</em> should open…
 <img src="/wip/images/your_first_plugin_mac_04.png" alt="HelloRhinoCommon Solution" /></li>
-  <li>Right-click on the <strong>HelloRhinoCommon</strong> project and select <strong>Set As Startup Project</strong> from the menu.</li>
+  <li>Right-click on the <em>HelloRhinoCommon</em> project and select <em>Set As Startup Project</em> from the menu.</li>
 </ol>
 
 <h3 id="boilerplate-build">Boilerplate Build</h3>
 
 <ol>
-  <li>Before we do anything, let’s <strong>build</strong> and <strong>run</strong> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click the large <strong>Build &gt; Run</strong> (play) button in the upper-left corner of Xamarin Studio…
+  <li>Before we do anything, let’s <em>build</em> and <em>run</em> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click the large <em>Build</em> &gt; <em>Run</em> (play) button in the upper-left corner of Xamarin Studio…
 <img src="/wip/images/your_first_plugin_mac_05.png" alt="Play Button" /></li>
-  <li><strong>Rhinoceros</strong> launches.  Create a <strong>New Model</strong>…
+  <li><em>Rhinoceros</em> launches.  Create a <em>New Model</em>…
 <img src="/wip/images/your_first_plugin_mac_06.png" alt="New Model Button" /></li>
-  <li>Enter the <strong>HelloRhinoCommonCommand</strong> command.  Notice that the command autocompletes…
+  <li>Enter the <em>HelloRhinoCommonCommand</em> command.  Notice that the command autocompletes…
 <img src="/wip/images/your_first_plugin_mac_07.png" alt="Command Autocompletes" /></li>
-  <li>The <strong>HelloRhinoCommonCommand</strong> command begins and prompts you…
+  <li>The <em>HelloRhinoCommonCommand</em> command begins and prompts you…
 <img src="/wip/images/your_first_plugin_mac_08.png" alt="Command Prompt" /></li>
-  <li>Notice there is <strong>also a command status</strong> in Rhino’s command history area when the command begins…
+  <li>Notice there is <em>also a command status</em> in Rhino’s command history area when the command begins…
 <img src="/wip/images/your_first_plugin_mac_09.png" alt="Command Starts" /></li>
-  <li>Also note there is <strong>a command status</strong> in Rhino’s command history area when the command ends…
+  <li>Also note there is <em>a command status</em> in Rhino’s command history area when the command ends…
 <img src="/wip/images/your_first_plugin_mac_10.png" alt="Command Ends" /></li>
-  <li><strong>Quit</strong> Rhinoceros.  This stops the session.  Go back to <strong>Xamarin Studio</strong>.  Let’s take a look at the…</li>
+  <li><em>Quit</em> Rhinoceros.  This stops the session.  Go back to <em>Xamarin Studio</em>.  Let’s take a look at the…</li>
 </ol>
 
 <h3 id="plugin-anatomy">Plugin Anatomy</h3>
 
 <ol>
-  <li>Use the <strong>Solution Explorer</strong> to expand the <strong>Solution</strong> (<em>.sln</em>) so that it looks like this…
+  <li>Use the <em>Solution Explorer</em> to expand the <em>Solution</em> (<em>.sln</em>) so that it looks like this…
 <img src="/wip/images/your_first_plugin_mac_11.png" alt="Solution Anatomy" /></li>
-  <li>The <strong>HelloRhinoCommon</strong> project (<em>.csproj</em>) has the same name as its parent solution…this is the project that was created for us by the <strong>RhinoCommon Plugin</strong> template wizard earlier.</li>
-  <li><strong>References</strong>: Just as with most projects, you will be referencing other libraries.  The <strong>RhinoCommon Plugin</strong> template added the necessary references to create a basic RhinoCommon plugin.</li>
-  <li><strong>Eto</strong> is the cross-platform User Interface (UI) library Rhino uses.  If you examine its properties, you will notice it comes bundled as part of Rhino for Mac.</li>
-  <li><strong>Rhino.UI</strong> is the Rhino-specific User Interface (UI) library associated with…</li>
-  <li><strong>RhinoCommon</strong> is <em>the</em> critical reference for our purposes here.</li>
-  <li><strong>System</strong>, <strong>System.Core</strong>, and <strong>System.Drawing</strong> are .NET foundational libraries…in this case, we are referencing the Mono versions of these libraries (on Windows, these references will point to the canonical, Microsoft-provided, versions).</li>
-  <li><strong>Packages</strong> is used the the <a href="https://www.nuget.org/">NuGet</a> package-manager.  There are no referenced packages in this boilerplate project, but note that Xamarin Studio supports NuGet, just like Visual Studio does.</li>
-  <li><strong>Properties</strong> contains the <strong>AssemblyInfo.cs</strong> source file.  This file contains the meta-data (author, version, etc), including the very-important <code>Guid</code>, which identifies the plugin.</li>
-  <li><strong>HelloRhinoCommonPlugin.cs</strong> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.</li>
-  <li><strong>HelloRhinoCommonCommand.cs</strong> is where the action is.  Let’s take a look at this file…</li>
+  <li>The <em>HelloRhinoCommon</em> project (<em>.csproj</em>) has the same name as its parent solution…this is the project that was created for us by the <em>RhinoCommon Plugin</em> template wizard earlier.</li>
+  <li><em>References</em>: Just as with most projects, you will be referencing other libraries.  The <em>RhinoCommon Plugin</em> template added the necessary references to create a basic RhinoCommon plugin.</li>
+  <li><em>Eto</em> is the cross-platform User Interface (UI) library Rhino uses.  If you examine its properties, you will notice it comes bundled as part of Rhino for Mac.</li>
+  <li><em>Rhino.UI</em> is the Rhino-specific User Interface (UI) library associated with…</li>
+  <li><em>RhinoCommon</em> is <em>the</em> critical reference for our purposes here.</li>
+  <li><em>System</em>, <em>System.Core</em>, and <em>System.Drawing</em> are .NET foundational libraries…in this case, we are referencing the Mono versions of these libraries (on Windows, these references will point to the canonical, Microsoft-provided, versions).</li>
+  <li><em>Packages</em> is used the the <a href="https://www.nuget.org/">NuGet</a> package-manager.  There are no referenced packages in this boilerplate project, but note that Xamarin Studio supports NuGet, just like Visual Studio does.</li>
+  <li><em>Properties</em> contains the <em>AssemblyInfo.cs</em> source file.  This file contains the meta-data (author, version, etc), including the very-important <code>Guid</code>, which identifies the plugin.</li>
+  <li><em>HelloRhinoCommonPlugin.cs</em> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.</li>
+  <li><em>HelloRhinoCommonCommand.cs</em> is where the action is.  Let’s take a look at this file…</li>
 </ol>
 
 <h3 id="make-changes">Make Changes</h3>
 
 <ol>
-  <li>Open <strong>HelloRhinoCommonCommand.cs</strong> in Xamarin Studio’s Source Editor (if it isn’t already).</li>
+  <li>Open <em>HelloRhinoCommonCommand.cs</em> in Xamarin Studio’s Source Editor (if it isn’t already).</li>
   <li>
     <p>Notice that <code>HelloRhinoCommonCommand</code> inherits from <code>Rhino.Commands.Command</code> …</p>
 
@@ -522,36 +522,36 @@ $(document).ready(function()
 <ol>
   <li>Set a breakpoint on line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 55 of <em>HelloRhinoCommonCommand.cs</em>.  You set breakpoints in Xamarin Studio by clicking in the gutter…
 <img src="/wip/images/your_first_plugin_mac_12.png" alt="Set a breakpoint" /></li>
-  <li><strong>Build</strong> and <strong>Run</strong>.  Run <strong>HelloDrawLine</strong> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
+  <li><em>Build</em> and <em>Run</em>.  Run <em>HelloDrawLine</em> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
 <img src="/wip/images/your_first_plugin_mac_13.png" alt="Hit a breakpoint" /></li>
-  <li>With Rhino paused, in <strong>Xamarin Studio</strong> switch to the <strong>Locals</strong> tab.  In the list, find the <code>line1</code> object we authored.  Click the dropdown <strong>arrow</strong> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
+  <li>With Rhino paused, in <em>Xamarin Studio</em> switch to the <em>Locals</em> tab.  In the list, find the <code>line1</code> object we authored.  Click the dropdown <em>arrow</em> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
 <img src="/wip/images/your_first_plugin_mac_14.png" alt="Locals panel" /></li>
-  <li><strong>Continue Executing</strong> in Rhino by pressing the <strong>Play</strong> button in the upper navigation menu of <strong>Xamarin Studio</strong>…
+  <li><em>Continue Executing</em> in Rhino by pressing the <em>Play</em> button in the upper navigation menu of <em>Xamarin Studio</em>…
 <img src="/wip/images/your_first_plugin_mac_15.png" alt="Continue Executing" /></li>
-  <li>Control is passed back to <strong>Rhino</strong> and your command finishes.  <strong>Quit</strong> Rhino or <strong>Stop</strong> the debugging session.</li>
-  <li><strong>Remove</strong> the breakpoint you created above by clicking on it in the gutter.</li>
+  <li>Control is passed back to <em>Rhino</em> and your command finishes.  <em>Quit</em> Rhino or <em>Stop</em> the debugging session.</li>
+  <li><em>Remove</em> the breakpoint you created above by clicking on it in the gutter.</li>
   <li>
     <p>Now, let’s use the <code>Length</code> value to report something to the user.  Near the very end of <code>RunCommand</code>, add the following line…</p>
 
     <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0}.", line1.Length);
 </code></pre>
   </li>
-  <li><strong>Build</strong> and <strong>Run</strong>.  Run <code>HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
-  <li><strong>Quit</strong> Rhino to <strong>Stop</strong> the debugging session once more.</li>
+  <li><em>Build</em> and <em>Run</em>.  Run <code>HelloDrawLine</code> in Rhino yet again (create the two points…).  Rhino now reports the length of the line you created.  However, this is not very clean.</li>
+  <li><em>Quit</em> Rhino to <em>Stop</em> the debugging session once more.</li>
   <li>
     <p>Let’s add a unit system and be explicit about what we’re reporting…</p>
 
     <pre><code> RhinoApp.WriteLine ("The distance between the two points is {0} {1}.", line1.Length, doc.ModelUnitSystem.ToString().ToLower());
 </code></pre>
   </li>
-  <li><strong>Build</strong> and <strong>Run</strong> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code>doc.ModelUnitSystem</code>) with the proper case (<code>ToLower()</code>).  Much better.</li>
+  <li><em>Build</em> and <em>Run</em> again.  Now we’re reporting the length of the line we created with the document’s unit system (<code>doc.ModelUnitSystem</code>) with the proper case (<code>ToLower()</code>).  Much better.</li>
 </ol>
 
 <p><strong>DONE!</strong></p>
 
 <p>Well, we could go on and on - <code>line1</code> was never necessary, we could have just used <code>pt0.DistanceTo(pt1).ToString()</code>, etc. - but that is beside the point:</p>
 
-<p><strong>Congratulations!</strong>  You have just built your first RhinoCommon plugin for Rhino for Mac.  <strong>Now what?</strong></p>
+<p><em>Congratulations!</em>  You have just built your first RhinoCommon plugin for Rhino for Mac.  <em>Now what?</em></p>
 
 <hr />
 
@@ -576,7 +576,7 @@ $(document).ready(function()
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p><strong>Line numbers</strong> in Xamarin Studio can be enabled and disabled in <strong>Xamarin Studio</strong> &gt; <strong>Preferences…</strong> &gt; <strong>Text Editor</strong> section &gt; <strong>Markers and Rulers</strong> entry &gt; check <strong>Show line numbers</strong>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p><em>Line numbers</em> in Xamarin Studio can be enabled and disabled in <em>Xamarin Studio</em> &gt; <em>Preferences…</em> &gt; <em>Text Editor</em> section &gt; <em>Markers and Rulers</em> entry &gt; check <em>Show line numbers</em>. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>

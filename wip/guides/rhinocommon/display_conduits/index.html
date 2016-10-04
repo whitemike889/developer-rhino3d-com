@@ -353,14 +353,14 @@ $(document).ready(function()
 <p>Note that the pipeline itself is not bound to the channels.  It just executes its code and raises events during specific phases of drawing.  During the drawing of a single frame the events are raised in the following order.  You hook into the pipeline by extending DisplayConduit and overriding the event handlers that have the same name as the pipeline events:</p>
 
 <ol>
-  <li><strong>ObjectCulling</strong>: Create a list of all the objects to draw.</li>
-  <li><strong>CalculateBoundingBox</strong>: Determine the extent of the entire scene.  Override this function to increase the bounding box of scene so it includes the geometry that you plan to draw.</li>
-  <li><strong>CalculateBoundingBoxZoomExtents</strong>: If you want to participate in the Zoom Extents command with your display conduit, then you need to override ZoomExtentsBoundingBox.  Typically you could just call your CalculateBoundingBox override, but you may also want to spend a little more time here and compute a tighter bounding box for your conduit geometry.</li>
-  <li><strong>PreDrawObjects</strong>: Called before objects are drawn.  Depth writing and testing are on. Here you could set up the object’s display attributes.</li>
-  <li><strong>PreDrawObject</strong>: Called before every object in the scene is drawn.</li>
-  <li><strong>PostDrawObjects</strong>: Called after all non-highlighted objects are drawn.  Depth writing and testing are still turned on. If you want to draw without depth writing and testing, see DrawForeground.  Here you draw stuff on top of all the objects, like selection wireframes.</li>
-  <li><strong>DrawForeground</strong>: Called after all non-highlighted objects are drawn and PostDrawObjects called. Depth writing and testing are turned <strong>off</strong>.  If you want to draw with depth writing and testing, see PostDrawObjects.  For example, here you could draw objects like the little axis-system in the lower left corner of viewports.</li>
-  <li><strong>DrawOverlay</strong>: If Rhino is in a feedback mode, the draw overlay call lets temporary geometry be drawn on top of everything in the scene.  This is similar to the dynamic draw routine that occurs with custom get point.</li>
+  <li><em>ObjectCulling</em>: Create a list of all the objects to draw.</li>
+  <li><em>CalculateBoundingBox</em>: Determine the extent of the entire scene.  Override this function to increase the bounding box of scene so it includes the geometry that you plan to draw.</li>
+  <li><em>CalculateBoundingBoxZoomExtents</em>: If you want to participate in the Zoom Extents command with your display conduit, then you need to override ZoomExtentsBoundingBox.  Typically you could just call your CalculateBoundingBox override, but you may also want to spend a little more time here and compute a tighter bounding box for your conduit geometry.</li>
+  <li><em>PreDrawObjects</em>: Called before objects are drawn.  Depth writing and testing are on. Here you could set up the object’s display attributes.</li>
+  <li><em>PreDrawObject</em>: Called before every object in the scene is drawn.</li>
+  <li><em>PostDrawObjects</em>: Called after all non-highlighted objects are drawn.  Depth writing and testing are still turned on. If you want to draw without depth writing and testing, see DrawForeground.  Here you draw stuff on top of all the objects, like selection wireframes.</li>
+  <li><em>DrawForeground</em>: Called after all non-highlighted objects are drawn and PostDrawObjects called. Depth writing and testing are turned <em>off</em>.  If you want to draw with depth writing and testing, see PostDrawObjects.  For example, here you could draw objects like the little axis-system in the lower left corner of viewports.</li>
+  <li><em>DrawOverlay</em>: If Rhino is in a feedback mode, the draw overlay call lets temporary geometry be drawn on top of everything in the scene.  This is similar to the dynamic draw routine that occurs with custom get point.</li>
 </ol>
 
 <p>You hook into the pipeline by extending DisplayConduit and overriding the key event handlers which have the same name as the pipeline events.</p>
