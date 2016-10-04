@@ -301,76 +301,35 @@ $(document).ready(function()
                           <a href="#multi-document-support">Multi-Document Support</a>
                       </li>
                     
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#model-components">Model Components</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#scoped-and-strongly-typed-enums">Scoped and Strongly Typed...</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#deprecation">Deprecation</a>
+                      </li>
+                    
 
                   </ul>
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#model-components">Model Components</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#scoped-and-strongly-typed-enums">Scoped and Strongly Typed...</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#deprecation">Deprecation</a>
-
-                
-
-              </li>
-            
-
-
-          
-            
-
-            
-              
-              
-              
-              
-              <li>
-                <a href="#additions">Additions</a>
-
                 
 
               </li>
@@ -467,7 +426,7 @@ $(document).ready(function()
     int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane, tolerance);
 </code></pre>
 
-<h2 id="model-components">Model Components</h2>
+<h3 id="model-components">Model Components</h3>
 <p>Rhino has a number of model components, such as layers, group, render materials, dimensions style, and more. Over the years, common properties, such as name, index, and id, have been added to these components, but done so in an inconsistent manner. For example, the method for obtaining the id of a layer was different that of a render material.</p>
 
 <p>The Rhino 6 C/C++ SDK contains a new <code>ON_ModelComponent</code> class that remedies this. Model component classes now inherit from this class.</p>
@@ -500,7 +459,7 @@ $(document).ready(function()
       ON_UUID group_id = group-&gt;Id();
 </code></pre>
 
-<h2 id="scoped-and-strongly-typed-enums">Scoped and Strongly Typed Enums</h2>
+<h3 id="scoped-and-strongly-typed-enums">Scoped and Strongly Typed Enums</h3>
 <p>C++11 provides some great new features for C++ programmers. One such feature is scoped and strongly typed enumerations, which ensures some measure of compatibility across compilers. They also make up for some shortcomings of old-style enums:</p>
 
 <ul>
@@ -521,17 +480,13 @@ $(document).ready(function()
 <pre><code>    ON_UnitSystem units(ON::LengthUnitSystem::Millimeters);
 </code></pre>
 
-<h2 id="deprecation">Deprecation</h2>
+<h3 id="deprecation">Deprecation</h3>
 
 <p>Obsolete functions from Rhino 5 are marked as deprecated with a message to help accomplish the same goal through alternate functions in the Rhino 6 SDK. These deprecations will generate compiler warnings when plug-in code attempts to call these functions.</p>
 
 <p>Functions marked as deprecated may or may not continue to work in Rhino 6. Thus, you should replace all calls to deprecated functions with calls to their replacements before distributing any plug-in.</p>
 
 <p>In Rhino 7, all functions marked as deprecated in Rhino 6 will be removed.</p>
-
-<h2 id="additions">Additions</h2>
-
-<p>TODO: what has been added?</p>
 
 <h2 id="changes">Changes</h2>
 
