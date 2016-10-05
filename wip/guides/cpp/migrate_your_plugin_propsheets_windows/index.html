@@ -355,7 +355,7 @@ $(document).ready(function()
 
 <ol>
   <li>
-    <p>Using <em>Visual Studio’s Solution Explorer</em>, open <em>stdafx.h</em> and add the following preprocessor definitons:</p>
+    <p>Using <em>Visual Studio’s Solution Explorer</em>, open <em>stdafx.h</em> and add the following preprocessor directive:</p>
 
     <pre><code> /////////////////////////////////////////////////////////////////////////////
  // stdafx.h : include file for standard system include files,
@@ -370,37 +370,32 @@ $(document).ready(function()
 
  // Added for Rhino 6 Migration
  #define RHINO_V6_READY
- #if defined(DEBUG)
- #define RHINO_LIB_DIR "C:/Program Files/Rhino 6.0 SDK/lib/Debug"
- #else
- #define RHINO_LIB_DIR "C:/Program Files/Rhino 6.0 SDK/lib/Release"
- #endif
     
  ...
 </code></pre>
   </li>
   <li>
-    <p>Also, modify the path to SDK headers, found in <em>stdafx.h</em> to reflect the path to the Rhino 6 C/C++ SDK:</p>
+    <p>Also, remove the path specifiers to Rhino SDK headers, found in <em>stdafx.h</em>:</p>
 
     <pre><code> // Rhino SDK Preamble
  //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhinoSdkStdafxPreamble.h"
- #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhinoSdkStdafxPreamble.h"
+ #include "RhinoSdkStdafxPreamble.h"
     
  ...
 
  // Rhino Plug-in
  //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhinoSdk.h"
- #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhinoSdk.h"
+ #include "RhinoSdk.h"
 
  // Render Development Kit
  //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhRdkHeaders.h"
- #include "C:/Program Files/Rhino 6.0 SDK/Inc/RhRdkHeaders.h"
+ #include "RhRdkHeaders.h"
     
  ...
     
  // Rhino Plug-in Linking Pragmas
  //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\rhinoSdkPlugInLinkingPragmas.h"
- #include "C:/Program Files/Rhino 6.0 SDK/Inc/rhinoSdkPlugInLinkingPragmas.h"
+ #include "rhinoSdkPlugInLinkingPragmas.h"
 </code></pre>
   </li>
   <li>
@@ -408,8 +403,9 @@ $(document).ready(function()
 
     <pre><code> #include "StdAfx.h"
  #include "SamplePlugIn.h"
+    
  // Added for Rhino 6 Migration
- #include "C:/Program Files/Rhino 6.0 SDK/Inc/rhinoSdkPlugInDeclare.h"
+ #include "rhinoSdkPlugInDeclare.h"
     
  ...
 </code></pre>
