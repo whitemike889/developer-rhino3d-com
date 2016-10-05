@@ -394,11 +394,11 @@
 <p>The following key combinations can be used to rotate emulators:</p>
 
 <ul>
-  <li><strong>fn</strong> + <strong>control</strong> + <strong>F12</strong> = Rotate Emulator (macOS)</li>
-  <li><strong>(left)control</strong> + <strong>F12</strong> = Rotate Emulator (Windows)</li>
+  <li><kbd>fn</kbd> + <kbd>control</kbd> + <kbd>F12</kbd> = Rotate Emulator (macOS)</li>
+  <li><kbd>left-control</kbd> + <kbd>F12</kbd> = Rotate Emulator (Windows)</li>
 </ul>
 
-<p><strong>NOTE</strong>: You cannot simulate multiple touches on the Android Emulator</p>
+<p><em>Note</em>: You cannot simulate multiple touches on the Android Emulator</p>
 
 <h3 id="emulator-file-system">Emulator File System</h3>
 
@@ -427,20 +427,20 @@ export _JAVA_OPTIONS="-Xmx1g"
 <p>Before launching into the adb tools, let’s make sure that the Android SDK and NDK are part environment variables. Here’s how to do that:</p>
 
 <ol>
-  <li>Navigate to the <strong>System Controls</strong> in the Control Panel (<strong>Start</strong> &gt; <strong>Control Panel</strong> &gt; <strong>System</strong>)</li>
-  <li>Click on the <strong>Advanced systems settings</strong> button on the left side.</li>
-  <li>You should now be the <strong>System Properties</strong> window. Click on the <strong>Environment Variables…</strong> button in the Advanced Tab.</li>
-  <li>In the <strong>System variables</strong> box (the lower box), scroll through the list until you see <strong>Path</strong> under the Variable column.</li>
-  <li>Click on <strong>Path</strong> to highlight it, then click the <strong>Edit…</strong> button.</li>
+  <li>Navigate to the <em>System Controls</em> in the Control Panel (<em>Start</em> &gt; <em>Control Panel</em> &gt; <em>System</em>)</li>
+  <li>Click on the <em>Advanced systems settings</em> button on the left side.</li>
+  <li>You should now be the <em>System Properties</em> window. Click on the <em>Environment Variables…</em> button in the Advanced Tab.</li>
+  <li>In the <em>System variables</em> box (the lower box), scroll through the list until you see <em>Path</em> under the Variable column.</li>
+  <li>Click on <em>Path</em> to highlight it, then click the <em>Edit…</em> button.</li>
   <li>We are going to add our path to adb, where Xamarin installed the android-sdk. Make sure your curson is at the end of the last entry and then type: <em>;C:\Users\you\AppData\Local\Android\android-sdk\platform-tools* replacing *you</em> with the name of your account. Make sure there aren’t any spaces in this path. If the path to your android-sdk is somewhere custom, replace it with that path.</li>
-  <li>Click <strong>OK</strong> on everything and <strong>close the Control Panel</strong> if it’s still open.</li>
+  <li>Click <em>OK</em> on everything and <em>close the Control Panel</em> if it’s still open.</li>
 </ol>
 
 <p>Open a <code>cmd.exe</code> prompt. Now type <code>adb shell</code>. Make sure you have an Emulator started or a device connected and you should see an adb shell tool similar to that shown above in the Mac instructions. You may use many standard linux commands to get around and mess with files. Note there are a number of special commands for pushing and pulling file on and off the device/emulator. See the <a href="http://developer.android.com/tools/help/adb.html">Android ADB documentation</a> for a handy list. Data for many apps is store in the <em>data/data/AppName/</em> folder.</p>
 
 <h3 id="resetting-emulators">Resetting Emulators</h3>
 
-<p>It is rarely necessary to reset the Android Emulators as the entire app is removed between builds. Should you need to reset it, the best way is to delete the entire AVD itself and create a new one from scratch. Open the Android Virtual Device Manager (In Xamarin Studio, navigate to <strong>Tools</strong> &gt; <strong>Open Android Emulator Manager…</strong> in the Application toolbar), in the <strong>Android Virtual Devices Tab</strong>, select the Emulator from the list of AVDs and click the <strong>Delete</strong> button.</p>
+<p>It is rarely necessary to reset the Android Emulators as the entire app is removed between builds. Should you need to reset it, the best way is to delete the entire AVD itself and create a new one from scratch. Open the Android Virtual Device Manager (In Xamarin Studio, navigate to <em>Tools</em> &gt; <em>Open Android Emulator Manager…</em> in the Application toolbar), in the <em>Android Virtual Devices Tab</em>, select the Emulator from the list of AVDs and click the <em>Delete</em> button.</p>
 
 <hr />
 
@@ -455,23 +455,23 @@ export _JAVA_OPTIONS="-Xmx1g"
   <p>Simulators are NOT a good substitute for testing on actual iOS hardware. App behavior/performance on a device can vary substantially from the Simulator, especially with OpenGL ES 2.0 code.</p>
 </div>
 
-<p>To install older versions of the iOS Simulator, launch Xcode, and navigate to <strong>Xcode</strong> &gt; <strong>Preferences</strong> &gt; <strong>Downloads</strong> tab &gt; <strong>Components</strong> section &gt; <em>click small download arrows</em> to the right of the Simulator version you wish to install.</p>
+<p>To install older versions of the iOS Simulator, launch Xcode, and navigate to <em>Xcode</em> &gt; <em>Preferences</em> &gt; <em>Downloads</em> tab &gt; <em>Components</em> section &gt; <em>click small download arrows</em> to the right of the Simulator version you wish to install.</p>
 
 <h3 id="rotation--multi-touch-1">Rotation &amp; Multi-touch</h3>
 
 <p>The following key combinations can be used to rotate simulate and simulate multiple touches:</p>
 
 <ul>
-  <li><strong>Command</strong> + <strong>Left/Right arrow keys</strong> = Rotate the Simulator</li>
-  <li><strong>alt/option</strong> + <strong>move the cursor around</strong> = Simulate two touches</li>
-  <li><strong>alt/option</strong> + <strong>Shift</strong> + <strong>move the cursor around</strong> = Two-touch panning</li>
+  <li><kbd>command</kbd> + <kbd>Left/Right</kbd> arrow keys = Rotate the Simulator</li>
+  <li><kbd>option</kbd> + <em>move the cursor around</em> = Simulate two touches</li>
+  <li><kbd>option</kbd> + <kbd>Shift</kbd> + <em>move the cursor around</em> = Two-touch panning</li>
 </ul>
 
 <h3 id="simulator-file-system">Simulator File System</h3>
 
 <p>The best way to access the contents of the Simulator filesystem is to use a Terminal. In macOS, open a terminal window and navigate to:</p>
 
-<p>*~/Developer/CoreSimulator/Devices/<code>/data/Containers/Data/Application/<app UDID="" number="">/*</app></code></p>
+<p><code>~/Developer/CoreSimulator/Devices/&lt;code&gt;/data/Containers/Data/Application/&lt;app UDID number&gt;/</code></p>
 
 <p>(Remember you can use Tab to autocomplete paths as you change directories - useful for auto-completing the longer app UDIDs).</p>
 
@@ -481,7 +481,7 @@ export _JAVA_OPTIONS="-Xmx1g"
 
 <h3 id="resetting-simulators">Resetting Simulators</h3>
 
-<p>It is often necessary to clean out the entire contents of the simulator between builds, especially those builds in which you have modified or removed resources that may get cached on the simulator. If you want a fresh start, you can reset the simulator to the virtual “factory settings” by navigating to the <strong>iOS Simulator</strong> &gt; <strong>Reset Content and Settings…</strong> in the <strong>Application</strong> menu. Note that this deletes all app data as well as resets the App’s UDID number.</p>
+<p>It is often necessary to clean out the entire contents of the simulator between builds, especially those builds in which you have modified or removed resources that may get cached on the simulator. If you want a fresh start, you can reset the simulator to the virtual “factory settings” by navigating to the <em>iOS Simulator</em> &gt; <em>Reset Content and Settings…</em> in the <em>Application</em> menu. Note that this deletes all app data as well as resets the App’s UDID number.</p>
 
 <hr />
 
