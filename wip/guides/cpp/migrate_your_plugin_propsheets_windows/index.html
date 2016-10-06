@@ -396,7 +396,7 @@ $(document).ready(function()
 <ol>
   <li>Launch <em>Visual Studio 2015</em> and click <em>File</em> &gt; <em>Open</em> &gt; <em>Project/Solution…</em>.</li>
   <li>Navigate to your project’s folder and open either your plugin project <em>(.vcxproj)</em> or solution <em>(.sln)</em></li>
-  <li>When your plugin project opens, navigate to the project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</li>
+  <li>When your plugin project opens, navigate to the project’s setting by clicking <em>Project</em> &gt; <em>Properties…</em>.</li>
   <li>In the project’s settings, set the <em>Configuration</em> to <em>All Configurations</em>, and set the platform to <em>x64</em>.</li>
   <li>Then, set the <em>Platform Toolset</em> to <em>Visual Studio 2015 (v140)</em> and the click <em>Apply</em>.
 <img src="/wip/images/migrate_plugin_windows_cpp.png" alt="Plugin Settings" /></li>
@@ -404,7 +404,7 @@ $(document).ready(function()
 
 <h2 id="remove-32-bit-support">Remove 32-bit support</h2>
 
-<p>Rhino 6 plugins are 64-bit only. If your plugin project has <em>Win32</em> platform support, then it is safe to remove using <em>Visual Studio’s Configuation Manager</em>.</p>
+<p>Rhino 6 plugins are 64-bit only. If your plugin project has <em>Win32</em> platform support, then it is safe to remove it using <em>Visual Studio’s Configuation Manager</em>.</p>
 
 <ol>
   <li>From <em>Visual Studio 2015</em>, click <em>Build</em> &gt; <em>Configuation Manager…</em>.
@@ -424,9 +424,10 @@ $(document).ready(function()
 <ol>
   <li>In <em>Project Contexts</em>, click <em>Configuration &gt; Edit…</em>.
  <img src="/wip/images/migrate_plugin_windows_cpp_05.png" alt="Select Project Configurations" /></li>
-  <li>In <em>Edit Project Configurations</em>, rename the <em>Debug</em> configuration to <em>DebugRhino</em>, and then rename the <em>PseudoDebug</em> configuration to <em>Debug</em>. 
+  <li>In <em>Edit Project Configurations</em>, rename the <em>Debug</em> configuration to <em>DebugRhino</em>.</li>
+  <li>And then, rename the <em>PseudoDebug</em> configuration to <em>Debug</em>. 
  <img src="/wip/images/migrate_plugin_windows_cpp_06.png" alt="Edit Project Configurations" /></li>
-  <li>When finished, click <em>Close</em>.
+  <li>When you have finished renaming the configurations, click <em>Close</em>.
  <img src="/wip/images/migrate_plugin_windows_cpp_07.png" alt="Rename Project Configurations" /></li>
   <li>Repeat the above step for the solution by click <em>Active solution Configuration &gt; Edit…</em>.</li>
   <li>In <em>Edit Solution Configurations</em>, rename the <em>Debug</em> configuration to <em>DebugRhino</em>, and then rename the <em>PseudoDebug</em> configuration to <em>Debug</em>.</li>
@@ -450,7 +451,7 @@ $(document).ready(function()
 
 <h2 id="modify-the-project">Modify the project</h2>
 
-<p>The project’s pre-compiled header file, <em>stdafx.h</em>, needs to be modified so SDK header file inclusions point to the correct SDK. Also, the plugin .cpp file needs to include an additional SDK header. Finally, Visual Studio’s resource editor and compiler requires the project contain a <em>targerver.h</em> file that identifies the target platform.</p>
+<p>The project’s pre-compiled header file, <em>stdafx.h</em>, needs to be modified so SDK header file inclusions point to the correct location. Also, the plugin .cpp file needs to include an additional SDK header. Finally, Visual Studio’s resource editor and compiler requires the project contain a <em>targerver.h</em> file that identifies the target platform.</p>
 
 <ol>
   <li>
@@ -474,7 +475,7 @@ $(document).ready(function()
 </code></pre>
   </li>
   <li>
-    <p>Also, remove the path specifiers to Rhino SDK header files found in <em>stdafx.h</em>:</p>
+    <p>Also, remove the path specifiers to Rhino SDK header files found in <em>stdafx.h</em>, as the path to the SDK is provided by the SDK Property Sheet added above.</p>
 
     <pre><code> // Rhino SDK Preamble
  //#include "C:\Program Files (x86)\Rhino 5.0 x64 SDK\Inc\RhinoSdkStdafxPreamble.h"
