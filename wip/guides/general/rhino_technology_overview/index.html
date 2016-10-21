@@ -213,6 +213,16 @@ $(document).ready(function()
             
           
         
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
         <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
@@ -260,6 +270,176 @@ $(document).ready(function()
           
 
           
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#overview">Overview</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#foundation">Foundation</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#c-rhino-core">C++ Rhino Core</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#opennurbs">openNURBS</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#c-sdk">C++ SDK</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#c">C++</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#c-plugins">C++ Plugins</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#rhinoscript">RhinoScript</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#net">.NET</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#c-api">C API</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#net-framework">.NET Framework</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#rhinocommon">RhinoCommon</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#net-plugins">.NET Plugins</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
         
 
         <!-- </ul>
@@ -287,10 +467,89 @@ $(document).ready(function()
 
 <p>An overview of the Rhino technology or architecture.</p>
 
-<div class="bs-callout bs-callout-danger">
-  <h4>UNDER CONSTRUCTION</h4>
-  <p>This guide has yet to be written.  Please check back soon for updates.</p>
-</div>
+<h2 id="overview">Overview</h2>
+
+<p>Rhinoceros is composed of many layers - written in many languages - all stacked on top of each other.  The most foundational are at the bottom, but the top layers should by no means be considered superficial…</p>
+
+<p><img src="/wip/images/rhino_technology_overview_01.png" alt="The Rhino Stack" /></p>
+
+<p>Let’s discuss each of the layers in turn, starting at the bottom with the…</p>
+
+<h2 id="foundation">Foundation</h2>
+
+<h3 id="c-rhino-core">C++ Rhino Core</h3>
+
+<p>The C++ Core of Rhino is the oldest and broadest set of code.  We use Microsoft’s MFC in places, including the SDK.  This is where the runtime document is managed, where all the OpenGL viewport drawing code exists, and it’s where the computational geometry code written by our mathematicians lives.  Many of Rhino’s commands are here.</p>
+
+<p>Lots of user interface - the command line, the application mainframe, status bar, and the dialog boxes for many commands in the Rhino core.</p>
+
+<h3 id="opennurbs">openNURBS</h3>
+
+<p>openNURBS is free C++ source code that lets you read and write Rhino <em>3dm</em> files - all the way back to version 1.  openNURBS was our first open-source project.</p>
+
+<p>The code compiles on Windows, macOS, Linux, iOS, and Android.  It’s used in various third-party applications like ArchiCAD, SolidWorks, Inventor, SketchUp and many other products to read or write <em>3dm</em> files directly.</p>
+
+<p>openNURBS is what Rhino uses natively to read/write <em>3dm</em> files.  This toolkit is released before Rhino, so any product, including our competitors, can be compatible with the latest <em>3dm</em> files.  There is no difference between the <em>3dm</em> files Rhino writes and those of other applications using openNURBS to read and write <em>3dm</em>.</p>
+
+<p>See also…</p>
+
+<h3 id="c-sdk">C++ SDK</h3>
+
+<p>On top of all of this is our C++ SDK, available only on Windows.</p>
+
+<p>Compiling against the C++ SDK requires a specific version of Microsoft Visual Studio and the Microsoft C-Runtime.  You have to recompile for every major version of Rhino.</p>
+
+<p>Virtually everything Rhino can do is exposed through the C++ SDK. Some commands and features haven’t been exposed yet, but this SDK is very broad and rich.</p>
+
+<p>Unfortunately, because it’s so tightly coupled to the Rhino Core, plugin developers need to recompile their plugins for every Rhino release.</p>
+
+<h2 id="c">C++</h2>
+
+<p>On the right column of the stack diagram above is the C++ portion of Rhino.  The C++ stack allows us - as well as third-party plugin developers - to write Rhino plugins using the same C++ SDK that we use to develop Rhino itself.  Note that you cannot author Grasshopper components using C++.</p>
+
+<h3 id="c-plugins">C++ Plugins</h3>
+
+<p>On top of the C++ SDK are C++ plugins.  Many features that ship with Rhino, including some Commands, File I/O, Renderers are actually C++ plugins.  There are also dozens of third-party C++ plugins, like VisualARQ, RhinoCAM, Vray, etc.</p>
+
+<p>See also…</p>
+
+<h3 id="rhinoscript">RhinoScript</h3>
+
+<p>One of the C++ plugins we ship with Rhino is <a href="/wip/guides/rhinoscript/what_are_vbscript_rhinoscript/">RhinoScript</a>.  RhinoScript exposes a useful subset of Rhino’s SDK via VBScript - a widely used and popular scripting language.  RhinoScript gives you access not only to Rhino, but to any other COM object on Windows.</p>
+
+<p>For more information, see the <a href="/wip/guides/rhinoscript/">RhinoScript guides</a>, and more specifically the <a href="/wip/guides/rhinoscript/what_are_vbscript_rhinoscript/">What are VBScript and RhinoScript?</a> guide.</p>
+
+<h2 id="net">.NET</h2>
+
+<p>The .NET SDK is represented here in three layers:</p>
+
+<ul>
+  <li>C API</li>
+  <li>.NET Framework</li>
+  <li>RhinoCommon</li>
+</ul>
+
+<h3 id="c-api">C API</h3>
+
+<p>A straight C API wraps the C++ SDK, allowing us to Platform Invoke (P/Invoke) into the C++ SDK, forming a bridge between the native C++ code and the managed .NET layers.</p>
+
+<h3 id="net-framework">.NET Framework</h3>
+
+<p>Microsoft develops the .NET Framework.  .NET makes it possible to write plugins in C#, F#, VB.NET, and any other language that compiles down to Microsoft’s IL.</p>
+
+<p>The Microsoft .NET framework ships with Windows.</p>
+
+<p>In Rhino for Mac product, we embed the Mono Runtime, a partial cross-platform implementation of the .NET Runtime.</p>
+
+<p>For more information about .NET, see the <a href="/wip/guides/rhinocommon/what_are_mono_and_xamarin/">What are Mono &amp; Xamarin?</a>.</p>
+
+<h3 id="rhinocommon">RhinoCommon</h3>
+
+<p>RhinoCommon is our .NET SDK for Rhino, built atop the portions of the .NET framework that are <em>common</em> on both Windows and macOS (via Mono).  RhinoCommon allows developers to run .NET code on both Rhino for Windows and Rhino for Mac.</p>
+
+<p>For more information about RhinoCommon, see the <a href="/wip/guides/rhinocommon/">RhinoCommon guides</a>, or more specifically, the <a href="/wip/guides/rhinocommon/what_is_rhinocommon">What is RhinoCommon?</a> guide.</p>
+
+<h3 id="net-plugins">.NET Plugins</h3>
 
         </article>
 
