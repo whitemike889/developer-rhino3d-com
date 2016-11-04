@@ -433,29 +433,29 @@ $(document).ready(function()
 
 <ol>
   <li>If you have not done so already, <em>launch Visual Studio</em> (for the purposes of this guide, we are using Visual Studio 2015 Community Edition and C#).</li>
-  <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project</em>…
+  <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project</em>…<br />
 <img src="/wip/images/your_first_plugin_windows_01.png" alt="File New Project" /></li>
-  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Installed</em> &gt; <em>Templates</em> &gt; <em>Visual C#</em> &gt; <em>Rhinoceros</em> section.  In the central list, select the RhinoCommon Plug-In template…
+  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Installed</em> &gt; <em>Templates</em> &gt; <em>Visual C#</em> &gt; <em>Rhinoceros</em> section.  In the central list, select the RhinoCommon Plug-In template…<br />
 <img src="/wip/images/your_first_plugin_windows_02.png" alt="New Project" /></li>
-  <li>For the purposes of this Guide, we will name our demo plugin <em>HelloRhinoCommon</em>.  At the bottom of the window, fill in the <em>Name</em> field.  <em>Browse</em> and select a location for this plugin on your disk…
+  <li>For the purposes of this Guide, we will name our demo plugin <em>HelloRhinoCommon</em>.  At the bottom of the window, fill in the <em>Name</em> field.  <em>Browse</em> and select a location for this plugin on your disk…<br />
 <img src="/wip/images/your_first_plugin_windows_03.png" alt="Project Configuration" /></li>
   <li>Check <em>Create directory for solution</em>.  <em>Note</em>: This is optional depending on how you want to structure your projects.</li>
   <li>Click the <em>OK</em> button.  <em>Note</em>: You don’t have to add the project to source control for this demo.</li>
-  <li>The <em>New RhinoCommon Plug-In</em> dialog appears.  This dialog allows you to <em>Configure your new plugin project</em>, as well as select which RhinoCommon references to use and which debug version of Rhino you would like to launch…<br />
+  <li>The <em>New RhinoCommon Plug-In</em> dialog appears.  This dialog allows you to <em>Configure your new plugin project</em>, as well as select which RhinoCommon references to use and which debug version of Rhino you would like to launch…  <br />
 <img src="/wip/images/your_first_plugin_windows_04.png" alt="HelloRhinoCommon Solution" /></li>
   <li>For the purposes of this guide, we will <em>accept the defaults</em> and click <em>Finish</em>…</li>
-  <li>A <em>new solution</em> called <em>HelloRhinoCommon</em> should open…
+  <li>A <em>new solution</em> called <em>HelloRhinoCommon</em> should open…<br />
 <img src="/wip/images/your_first_plugin_windows_05.png" alt="HelloRhinoCommon Solution" /></li>
 </ol>
 
 <h3 id="boilerplate-build">Boilerplate Build</h3>
 
 <ol>
-  <li>Before we do anything, let’s <em>build</em> and <em>run</em> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click <em>Start</em> (play) button in toolbar corner of Visual Studio (or press <kbd>F5</kbd>) to <em>Start Debugging</em>…
+  <li>Before we do anything, let’s <em>build</em> and <em>run</em> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click <em>Start</em> (play) button in toolbar corner of Visual Studio (or press <kbd>F5</kbd>) to <em>Start Debugging</em>…<br />
 <img src="/wip/images/your_first_plugin_windows_06.png" alt="Start Button" /></li>
   <li><em>Rhinoceros</em> launches.  Create a new, empty model.</li>
   <li>Since this is the first time you are running the plugin, you need to <em>“install”</em> it.  (The RhinoCommon template has set things up so when you compile the solution an <em>.rhp</em> file is compiled in the <em>bin</em> subdirectory of the project directory.) In the Rhino command prompt type the <em>PlugInManager</em> command.  Click the <em>Install…</em> button.</li>
-  <li><em>Browse</em> to the <em>HelloRhinoCommon.rhp</em> file (in our case, this is in <em>C:\dev\repositories\HelloRhinoCommon\HelloRhinoCommon\bin\</em>) and click <em>Open</em>.</li>
+  <li><em>Browse</em> to the <em>HelloRhinoCommon.rhp</em> file (in our case, this is in <em>C:\dev\repositories\HelloRhinoCommon\HelloRhinoCommon\bin\</em>) and click <em>Open</em>.  </li>
   <li>The HelloRhinoCommon plugin is now installed.  Click <em>OK</em> to close the Rhino Options dialog.</li>
   <li>Enter the <em>HelloRhinoCommonCommand</em> command.  Notice that the command autocompletes…</li>
   <li>The <em>HelloRhinoCommonCommand</em> command begins and prompts you to <em>Please select the start point:</em>.</li>
@@ -468,8 +468,8 @@ $(document).ready(function()
 <h3 id="plugin-anatomy">Plugin Anatomy</h3>
 
 <ol>
-  <li>Use the <em>Solution Explorer</em> to expand the <em>Solution</em> (<em>.sln</em>) so that it looks like this…
-<img src="/wip/images/your_first_plugin_windows_07.png" alt="Solution Anatomy" />
+  <li>Use the <em>Solution Explorer</em> to expand the <em>Solution</em> (<em>.sln</em>) so that it looks like this…<br />
+<img src="/wip/images/your_first_plugin_windows_07.png" alt="Solution Anatomy" /><br />
 <em>Note</em>: Depending on your edition of Visual Studio, it may look slightly different.</li>
   <li>The <em>HelloRhinoCommon</em> project (<em>.csproj</em>) has the same name as its parent solution…this is the project that was created for us by the <em>RhinoCommon Plugin</em> template wizard earlier.</li>
   <li><em>Properties</em> contains the <em>AssemblyInfo.cs</em> source file.  This file contains the meta-data (author, version, etc) about the plugin.</li>
@@ -477,7 +477,7 @@ $(document).ready(function()
   <li><em>Microsoft.CSharp</em> contains classes required for C# code compilation.</li>
   <li><em>RhinoCommon</em> is <em>the</em> critical reference for our purposes here.</li>
   <li><em>System</em>, <em>System.Core</em>, <em>System.Drawing</em>, <em>System.Windows.Forms</em> are .NET foundational libraries.</li>
-  <li><em>HelloRhinoCommonPlugin.cs</em> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.</li>
+  <li><em>HelloRhinoCommonPlugin.cs</em> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.  </li>
   <li><em>HelloRhinoCommonCommand.cs</em> is where the action is.  Let’s take a look at this file…</li>
 </ol>
 
@@ -532,14 +532,14 @@ $(document).ready(function()
 <h3 id="debugging">Debugging</h3>
 
 <ol>
-  <li>Set a breakpoint on line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 67 of <em>HelloRhinoCommonCommand.cs</em>.  You set breakpoints in Visual Studio by clicking in the gutter…
+  <li>Set a breakpoint on line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 67 of <em>HelloRhinoCommonCommand.cs</em>.  You set breakpoints in Visual Studio by clicking in the gutter…<br />
 <img src="/wip/images/your_first_plugin_windows_08.png" alt="Set a breakpoint" /></li>
   <li><em>Build</em> and <em>Run</em>.  Because you have changed the name of the command, you will need to <em>“install”</em> the plugin again.  Follow the steps 3-5 in the <a href="#boilerplate-build">Boilerplate Build</a> section above.</li>
-  <li>Run <em>HelloDrawLine</em> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
+  <li>Run <em>HelloDrawLine</em> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…<br />
 <img src="/wip/images/your_first_plugin_windows_09.png" alt="Hit a breakpoint" /></li>
-  <li>With Rhino paused, in <em>Visual Studio</em> switch to the <em>Autos</em> tab (if it not already there).  In the list, find the <code>line1</code> object we authored.  Click the dropdown <em>arrow</em> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
+  <li>With Rhino paused, in <em>Visual Studio</em> switch to the <em>Autos</em> tab (if it not already there).  In the list, find the <code>line1</code> object we authored.  Click the dropdown <em>arrow</em> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…  <br />
 <img src="/wip/images/your_first_plugin_windows_10.png" alt="Autos panel" /></li>
-  <li><em>Continue</em> in Rhino by pressing the <em>Continue</em> button in the upper menu of <em>Visual Studio</em> (or press <kbd>F5</kbd>)…
+  <li><em>Continue</em> in Rhino by pressing the <em>Continue</em> button in the upper menu of <em>Visual Studio</em> (or press <kbd>F5</kbd>)…<br />
 <img src="/wip/images/your_first_plugin_windows_11.png" alt="Continue Executing" /></li>
   <li>Control is passed back to <em>Rhino</em> and your command finishes.  <em>Exit</em> Rhino or <em>Stop</em> the debugging session.</li>
   <li><em>Remove</em> the breakpoint you created above by clicking on it in the gutter.</li>
@@ -621,7 +621,7 @@ $(document).ready(function()
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinocommon/your_first_plugin_windows.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip//home/travis/build/mcneel/developer-rhino3d-com/_guide_topics/rhinocommon/your_first_plugin_windows.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
