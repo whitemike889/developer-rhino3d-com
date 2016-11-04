@@ -412,17 +412,17 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>There are three steps in creating and loading a tool palette collection for your plugin in Rhino for Mac:</p>
+<p>There are three steps in creating and loading a tool palette collection for your plugin in Rhino for Mac:  </p>
 
 <ol>
-  <li>The first step is to <a href="#create-or-convert-a-tool-palette-collection">create (or convert) a tool palette collection</a> that calls the appropriate commands - or to convert a Rhino for Windows <em>.rui</em> file - to <em>ToolPaletteCollection.plist</em> file.</li>
-  <li>The second step is to <a href="#add-the-palette-to-your-project">add this <em>.plist</em> in your plugin project</a> as a resource.</li>
+  <li>The first step is to <a href="#create-or-convert-a-tool-palette-collection">create (or convert) a tool palette collection</a> that calls the appropriate commands - or to convert a Rhino for Windows <em>.rui</em> file - to <em>ToolPaletteCollection.plist</em> file.  </li>
+  <li>The second step is to <a href="#add-the-palette-to-your-project">add this <em>.plist</em> in your plugin project</a> as a resource.  </li>
   <li>The third and final step is to tell Rhino for Mac to <a href="#load-the-tool-palette">load the tool palette from the appropriate file</a> when your plugin is being loaded.</li>
 </ol>
 
 <h2 id="create-or-convert-a-tool-palette-collection">Create or Convert A Tool Palette Collection</h2>
 
-<p>If you are familiar with the <a href="http://docs.mcneel.com/rhino/mac/help/en-us/index.htm#macpreferencesandsettings/commands.htm">Command Editor</a> in Rhino for Mac, you are already well on your way to understanding how to create a custom tool palette collection for use in your plugin.  If not, don’t worry: creating a tool palette collection is relatively easy.</p>
+<p>If you are familiar with the <a href="http://docs.mcneel.com/rhino/mac/help/en-us/index.htm#macpreferencesandsettings/commands.htm">Command Editor</a> in Rhino for Mac, you are already well on your way to understanding how to create a custom tool palette collection for use in your plugin.  If not, don’t worry: creating a tool palette collection is relatively easy.  </p>
 
 <p>If you already have an existing <em>rui</em> file from Rhino for Windows, this job is even easier: you can <a href="#convert-rui-to-plist">import that <em>rui</em> and convert it to a <em>plist</em></a>.</p>
 
@@ -431,20 +431,20 @@
 <ol>
   <li>Open Rhino - if it is not already open - and start a new modeling window.</li>
   <li>Enter the <code>TestEditToolPaletteCollection</code> command.  (You will need to type the entire command; it will not autocomplete).  This launches a developer tool similar to the Command Editor where tool palette collections can be created, organized, and saved to <em>plist</em> files…</li>
-  <li>By default, the <code>TestEditToolPaletteCollection</code> editor presumes you have a Rhino for Windows <em>rui</em> file you would like to convert.  A finder window opens where you can navigate to the <em>rui</em> file to import.</li>
+  <li>By default, the <code>TestEditToolPaletteCollection</code> editor presumes you have a Rhino for Windows <em>rui</em> file you would like to convert.  A finder window opens where you can navigate to the <em>rui</em> file to import.  </li>
   <li>If you do not have a Rhino for Windows <em>rui</em> file that you would like to convert, you will need to create your Tool Palette Collection “from scratch.”  On the finder window, press <em>Cancel</em>.  An interface much like the <a href="http://docs.mcneel.com/rhino/mac/help/en-us/index.htm#macpreferencesandsettings/commands.htm">Command Editor</a> window appears.  This is where you can create, configure, organize, and save your tool palette collection.</li>
-  <li>Press the <em>+</em> (add) button in the <em>Palette Browser</em>…
+  <li>Press the <em>+</em> (add) button in the <em>Palette Browser</em>…<br />
 <img src="/images/loading_tool_palettes_mac_01.png" alt="TestEditToolPaletteCollection" /></li>
-  <li>An <em>Untitled</em> tool palette appears in the <em>Palette Browser</em> (upper left).  Click on the name of the <em>Untitled</em> palette and give your tool palette a name…
+  <li>An <em>Untitled</em> tool palette appears in the <em>Palette Browser</em> (upper left).  Click on the name of the <em>Untitled</em> palette and give your tool palette a name…<br />
 <img src="/images/loading_tool_palettes_mac_02.png" alt="Name Tool Palette" /></li>
-  <li>In the <em>Command Button Browser</em> (the area in the lower-left corner), click the <em>+</em> button to <em>add a new button</em>.  An <em>Untitled</em> button should appear.  Select it.
+  <li>In the <em>Command Button Browser</em> (the area in the lower-left corner), click the <em>+</em> button to <em>add a new button</em>.  An <em>Untitled</em> button should appear.  Select it.<br />
 <img src="/images/loading_tool_palettes_mac_03.png" alt="Add a button" /></li>
-  <li>In the <em>Button Editor</em> (area at lower-right), you can configure your button.  Add a Text title, some Menu text, some informative tooltip, and - most importantly - the macro or command (from your plugin) that you wish to run when this button is clicked.
+  <li>In the <em>Button Editor</em> (area at lower-right), you can configure your button.  Add a Text title, some Menu text, some informative tooltip, and - most importantly - the macro or command (from your plugin) that you wish to run when this button is clicked.<br />
 <img src="/images/loading_tool_palettes_mac_04.png" alt="Button Editor" /></li>
-  <li>You can drag new images onto the button icon displayed in the <em>Button Editor</em>.  Rhino for Mac prefers PDF icons as they will scale nicely between Retina and non-Retina displays.  If you do not have PDF assets for your icons, use 64 x 64 png images.
+  <li>You can drag new images onto the button icon displayed in the <em>Button Editor</em>.  Rhino for Mac prefers PDF icons as they will scale nicely between Retina and non-Retina displays.  If you do not have PDF assets for your icons, use 64 x 64 png images.<br />
 <img src="/images/loading_tool_palettes_mac_05.png" alt="Add a PNG" /></li>
   <li>You may add as many buttons as you need to the <em>Command Button Browser</em>.  These are the buttons that can be added to Tool Palettes.</li>
-  <li>With the tool palette you want to add buttons to, drag buttons from the <em>Command Button Browser</em> into the <em>Palette Contents</em> area (top, center)…
+  <li>With the tool palette you want to add buttons to, drag buttons from the <em>Command Button Browser</em> into the <em>Palette Contents</em> area (top, center)…<br />
 <img src="/images/loading_tool_palettes_mac_07.png" alt="Add to Palette" /></li>
   <li>When you are satisfied with the contents of your tool palette(s), you can save your converted tool palette collection to a <em>plist</em> by clicking on the <em>Save</em> button in the lower-right corner of the <em>Command Editor</em> window.</li>
   <li><em>NOTE</em>: Should you want to make changes to this tool palette collection, you can always reload the tool palette collection by re-running the <code>TestEditToolPaletteCollection</code> command and opening the <em>plist</em> file you created.  In order to add a menu to a tool palette button you must save and reload the tool palette in order for the menu to show up in the available menus.</li>
@@ -456,11 +456,11 @@
   <li>Open Rhino - if it is not already open - and start a new modeling window.</li>
   <li>Enter the <code>TestEditToolPaletteCollection</code> command.  (You will need to type the entire command; it will not autocomplete).  This launches a developer tool similar to the Command Editor where tool palette collections can be created, organized, and saved to <em>plist</em> files…</li>
   <li>By default, the <code>TestEditToolPaletteCollection</code> editor presumes you have a Rhino for Windows <em>rui</em> file you would like to convert.  A finder window opens where you can navigate to the <em>rui</em> file to import.  Navigate to the folder containing your <em>rui</em>, select it, click <em>Open</em>.  Rhino for Mac imports this <em>rui</em> and uses it as a template.</li>
-  <li>The contents of your <em>rui</em> should appear.  Notice that there is a <em>Modified Tool Palette</em> with the name of your toolbar(s)…
+  <li>The contents of your <em>rui</em> should appear.  Notice that there is a <em>Modified Tool Palette</em> with the name of your toolbar(s)…<br />
 <img src="/images/loading_tool_palettes_mac_06.png" alt="Imported RUI" /></li>
-  <li>The buttons with their associated icons should appear in the <em>Command Button Browser</em> (the area in the lower-left corner).  If you select buttons in this area, you will notice their editable details appear in the <em>Button Editor</em> (area at lower-right).</li>
+  <li>The buttons with their associated icons should appear in the <em>Command Button Browser</em> (the area in the lower-left corner).  If you select buttons in this area, you will notice their editable details appear in the <em>Button Editor</em> (area at lower-right).  </li>
   <li>You can drag new images onto the button icon displayed in the <em>Button Editor</em>.  Rhino for Mac prefers PDF icons as they will scale nicely between Retina and non-Retina displays.  If you do not have PDF assets for your icons, use 64 x 64 png images.</li>
-  <li>With the tool palette you want to add buttons to, drag buttons from the <em>Command Button Browser</em> into the <em>Palette Contents</em> area (top, center)…
+  <li>With the tool palette you want to add buttons to, drag buttons from the <em>Command Button Browser</em> into the <em>Palette Contents</em> area (top, center)…<br />
 <img src="/images/loading_tool_palettes_mac_07.png" alt="Add to Palette" /></li>
   <li>When you are satisfied with the contents of your tool palette(s), you can save your converted tool palette collection to a <em>plist</em> by clicking on the <em>Save</em> button in the lower-right corner of the <em>Command Editor</em> window.</li>
   <li><em>NOTE</em>: Should you want to make changes to this tool palette collection, you can always reload the tool palette collection by re-running the <code>TestEditToolPaletteCollection</code> command and opening the <em>plist</em> file you created.  In order to add a menu to a tool palette button you must save and reload the tool palette in order for the menu to show up in the available menus.</li>
@@ -556,7 +556,7 @@
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinocommon/loading_tool_palettes_mac.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master//home/travis/build/mcneel/developer-rhino3d-com/_guide_topics/rhinocommon/loading_tool_palettes_mac.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
