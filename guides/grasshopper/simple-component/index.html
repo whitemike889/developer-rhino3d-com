@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple Component with C#, VB</title>
+  <meta name="description" content="This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component.  Using C#, VB">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/grasshopper/simple-component/" />
+  <meta property="og:title" content="Simple Component" />
+  <meta property="og:description" content="This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Simple Component" />
+  <meta name="twitter:description" value="This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component." />
+  
+    
+      <meta name="twitter:image" content="/images/grasshopper_logo_unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#, VB" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/grasshopper/simple-component/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+
+      <!-- Find the h1 handle and title -->
+      <!-- 
+      
+      
+      
+      
+      
+      
+      
+      <li>
+        <a href="#simple-component">Simple Component</a>
+
+        <ul class="nav nav-stacked"> -->
+          <!-- Find the h2 group and any h3 subgroups -->
+          
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#prerequisites">Prerequisites</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#kernelghcomponent">Kernel.GH_Component</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-component-constructor">The Component Constructor</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#component-guids">Component Guids</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#parameter-registration">Parameter Registration</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-solver-routine">The Solver Routine</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#next-steps">Next Steps</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related Topics</a>
+
+                
+
+              </li>
+            
+
+
+          
+        
+
+        <!-- </ul>
+
+      </li> -->
+
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/grasshopper">Grasshopper</a></li>
+              
+              <li class="active">Fundamentals</li>
+              
+          </ol>
+
+          <h1 id="simple-component">Simple Component</h1>
+
+<p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a></span></p>
+
+<p>This guide gives an exhaustive, step by step explanation of how to build a simple Grasshopper component.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>This guide presumes you have all the necessary tools installed and have managed to debug a simple boilerplate component.  If you are not there yet, please read <a href="/guides/grasshopper/installing-tools-windows/">Installing Tools (Windows)</a> and <a href="/guides/grasshopper/your-first-component-windows">Your First Component (Windows)</a></p>
+
+<p>This guide will skip over any complicated issues (such as mathematics, geometry and data handling) in order to reduce the totality of new concepts.  You will however need to have a good understanding of basic OOP concepts such as classes, types and inheritance.  If you do not understand these essentials, we recommend you start with <a href="/guides/general/rhino-developer-prerequisites/#programming-knowledge">some other reading material first</a>.</p>
+
+<h2 id="kernelghcomponent">Kernel.GH_Component</h2>
+
+<p>The Grasshopper component wizards (in both Visual Studio and Xamarin Studio) include an empty Grasshopper component template.  For the moment, let’s ignore this and construct a simple component “from scratch.”  This guide presumes that you already have a component library setup or are continuing from in the <em>HelloGrasshopper</em> solution from the <a href="/guides/grasshopper/your-first-component-windows">Your First Component (Windows)</a> guide.</p>
+
+<p>Add an empty class to your solution, call it <em>MyFirstComponent</em>.  At this point a new file should be created (<em>MyFirstComponent</em>).  At this point a new file should be created with (something close to) the following content:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
+  <li><a href="#vb" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace HelloGrasshopper
+{
+    class MyFirstComponent
+    {
+    }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">Class MyFirstComponent
+
+End Class
+</code></pre>
+
+</div>
+
+<p>Since we’ll be using primarily types from the <code>Grasshopper.Kernel</code> namespace.  We’ll import this namespace so that we have easy access to all types contained within it (unless otherwise specified, all further types discussed in this topic belong to <code>Grasshopper.Kernel</code>).  In C#, we can also remove some unnecessary using statements while we’re at it:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
+  <li><a href="#vb1" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">using System;
+using Grasshopper.Kernel;
+
+namespace HelloGrasshopper
+{
+    class MyFirstComponent
+    {
+    }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">Imports Grasshopper.Kernel
+Class MyFirstComponent
+
+End Class
+</code></pre>
+
+</div>
+
+<p>The idea is that this class will be loaded by Grasshopper whenever this component library is loaded, but in order for that to happen we must make sure that this class is “visible” from outside this project. I.e., we need to make the accessor “public”:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
+  <li><a href="#vb2" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">using System;
+using Grasshopper.Kernel;
+
+namespace HelloGrasshopper
+{
+  // If a class is not public, it won't be visible
+  // from where Grasshopper is sitting.
+  public class MyFirstComponent
+  {
+  }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+
+End Class
+</code></pre>
+
+</div>
+
+<p>Now, we need to derive our <code>MyFirstComponent</code> class from the <a href="/api/grasshopper/html/T_Grasshopper_Kernel_GH_Component.htm">GH_Component</a> base class defined inside Grasshopper.  <code>GH_Component</code> takes care of almost all the complicated actions and mannerisms that constitute a component.  It will handle data conversion, GUI, menus, file Input/Output, Error trapping and much, much more.  This allows us to focus only on the unique aspects of our component. In order to derive from <code>GH_Component</code>, add this to the class…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
+  <li><a href="#vb3" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">using System;
+using Grasshopper.Kernel;
+
+namespace HelloGrasshopper
+{
+  public class MyFirstComponent : GH_Component
+  {
+  }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+End Class
+</code></pre>
+
+</div>
+
+<p>Deriving (inheriting) from <code>GH_Component</code> requires you to implement a number of methods.  (Visual Studio can insert default implementations for all of these via the <em>Implement Abstract Class</em> menu option when right-clicking <code>GH_Component</code>.  In Xamarin Studio, you can right-click <code>GH_Component</code> and select <em>Refactoring</em> &gt; <em>Implement abstract members</em>.)  At this point, you should have the following…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs4" data-toggle="pill">C#</a></li>
+  <li><a href="#vb4" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs4"><code class="language-cs">using System;
+using Grasshopper.Kernel;
+
+namespace HelloGrasshopper
+{
+  public class MyFirstComponent : GH_Component
+  {
+    protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+    {
+      throw new NotImplementedException();
+    }
+
+    protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+    {
+      throw new NotImplementedException();
+    }
+
+    protected override void SolveInstance(IGH_DataAccess DA)
+    {
+      throw new NotImplementedException();
+    }
+
+    public override Guid ComponentGuid
+    {
+      get { throw new NotImplementedException(); }
+    }
+  }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb4"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+  Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
+    'Don't worry about this just yet!
+  End Sub
+
+  Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+    'We'll get to it soon enough.
+  End Sub
+
+  Protected Overrides Sub SolveInstance(ByVal DA As IGH_DataAccess)
+    'I know it all looks scary.
+  End Sub
+
+  Public Overrides ReadOnly Property ComponentGuid() As System.Guid
+    Get
+      'But we'll deal with it one item at a time.  
+    End Get
+  End Property
+End Class
+</code></pre>
+
+</div>
+
+<h2 id="the-component-constructor">The Component Constructor</h2>
+
+<p>As we’ve seen in the previous section, Visual Studio (or Xamarin Studio) can populate the <code>MyFirstComponent</code> class with a collection of properties and methods that we need to implement.  There is however another method that requires our attention that is missing.  This is the constructor.  The constructor is a special method inside each class which gets called when the class is instantiated (or “constructed”).  This can happen only once (we feeble humans can only be born once as well after all) and it necessarily happens before anything else is allowed to happen. The <code>GH_Component</code> base class has a constructor which is not empty, so we have to call that constructor from within our constructor and supply it with all the information it needs.  Add the following code near the top of the <code>MyFirstComponent</code> class…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs5" data-toggle="pill">C#</a></li>
+  <li><a href="#vb5" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs5"><code class="language-cs">using System;
+using Grasshopper.Kernel;
+
+namespace HelloGrasshopper
+{
+  public class MyFirstComponent : GH_Component
+  {
+    public MyFirstComponent() : base("MyFirst", "MFC", "My first component", "Extra", "Simple")
+    {
+    }
+  ...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb5"><code class="language-vbnet">Imports Grasshopper.Kernel
+Public Class MyFirstComponent
+  Inherits GH_Component
+
+  Public Sub New()
+    MyBase.New("MyFirst", "MFC", "My first component", "Extra", "Simple")
+  End Sub
+
+  ...
+</code></pre>
+
+</div>
+
+<p>As you can see we need to supply a set of text constants, which are used to name and identify our component within the Grasshopper GUI.  The text fields are…</p>
+
+<ul>
+  <li><em>name</em> is the name of our component. The name is what appears on tooltips and panel dropdowns.</li>
+  <li><em>abbreviation</em> is the abbreviation of our component.  The abbreviation is what is written on the component once it appears on the canvas.</li>
+  <li><em>description</em> is a description of our component. The description is used on tooltips to provide users with a more detailed idea about what this component is for.</li>
+  <li><em>category</em> is the tab category for the component. The category equals the name of the tab onto which the component will appear. If a non-existing category is supplied, a new Tab will be added to the Grasshopper GUI.</li>
+</ul>
+
+<p><img src="/images/simple-component-01.png" alt="Component labels" /></p>
+
+<h2 id="component-guids">Component Guids</h2>
+
+<p>Every type of object inside a Grasshopper document must have a <code>ComponentGuid</code> associated with it.  When a Grasshopper file (*<em>.gh</em> or *<em>.ghx</em>) is written these Guids are used as markers, so it becomes clear what portions of the file belong to which object.  When the file is read back in, that marker is compared against the list of all cached components and if a match is found the appropriate component is asked to deserialize itself from the appropriate file portion.  When no matching component can be found it is assumed that whoever wrote the file had access to certain components that are not available locally, and that portion of the file is dutifully skipped.</p>
+
+<p>So, long story short, we need to invent a Guid (Globally Unique IDentifier) that will positively and unerringly indicate <em>this</em> component.  You can generate new Guids using an <a href="https://www.guidgenerator.com/">Online Guid Generator</a> or Microsoft’s popular <em>guidgen.exe</em>.  <strong>Never</strong> re-use a Guid and <strong>never</strong> edit one by hand.  Always generate a proper one using an official tool.</p>
+
+<p>Once you have a new Guid standing by, modify the <a href="/api/grasshopper/html/P_Grasshopper_Kernel_IGH_DocumentObject_ComponentGuid.htm">ComponentGuid</a> property to return it:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs6" data-toggle="pill">C#</a></li>
+  <li><a href="#vb6" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs6"><code class="language-cs">...
+public override Guid ComponentGuid
+{
+  // Don't copy this GUID, make a new one
+  get { return new Guid("419c3a3a-cc48-4717-8cef-5f5647a5ecfc"); }
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb6"><code class="language-vbnet">...
+Public Overrides ReadOnly Property ComponentGuid() As System.Guid
+  Get
+    'Don't copy this GUID, make a new one
+    Return New Guid("419c3a3a-cc48-4717-8cef-5f5647a5ecfc")  
+  End Get
+End Property
+...
+</code></pre>
+
+</div>
+
+<h2 id="parameter-registration">Parameter Registration</h2>
+
+<p>Components have unique input and output parameters which are most often fixed.  We are ignoring those rare cases where a component either has no inputs or no outputs, or where there is a variable number of parameters.  There are two methods that allow you to define (or “register”) these parameters.  These routines are called from within the base class constructor and they are only called once.  Let’s have a look at the default implementation again:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs7" data-toggle="pill">C#</a></li>
+  <li><a href="#vb7" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs7"><code class="language-cs">...
+protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+{
+  throw new NotImplementedException();
+}
+
+protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+{
+  throw new NotImplementedException();
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb7"><code class="language-vbnet">...
+Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
+
+End Sub
+
+Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>Although it would technically be possible to manually register parameters, we highly recommend you use the methods on <code>pManager</code>.  <code>pManager</code> has methods for adding all the basic parameter types and it often even allows you to specify default values.</p>
+
+<p>In this example we’ll only create two parameters (one input, one output) and they will both be of type <code>String</code>…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs8" data-toggle="pill">C#</a></li>
+  <li><a href="#vb8" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs8"><code class="language-cs">...
+protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+{
+  pManager.AddTextParameter("String", "S", "String to reverse", GH_ParamAccess.item);
+}
+
+protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+{
+  pManager.AddTextParameter("Reverse", "R", "Reversed string", GH_ParamAccess.item);
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb8"><code class="language-vbnet">...
+Protected Overrides Sub RegisterInputParams(ByVal pManager As Grasshopper.Kernel.GH_Component.GH_InputParamManager)
+  pManager.AddTextParameter("String", "S", "String to reverse")
+End Sub
+
+Protected Overrides Sub RegisterOutputParams(ByVal pManager As Grasshopper.Kernel.GH_Component.GH_OutputParamManager)
+  pManager.AddTextParameter("Reverse", "R", "Reversed string")
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>When we compile this project (assuming it has been setup correctly), the component will already be available on the Grasshopper tabs and it can be placed onto the canvas:</p>
+
+<p><img src="/images/simple-component-02.png" alt="Sanity Check" /></p>
+
+<h2 id="the-solver-routine">The Solver Routine</h2>
+
+<p>Our new component sure looks perky and expensive, but it doesn’t do anything yet.  We still need to write the contents of the <code>SolveInstance()</code> subroutine, which is where all the action takes place.  The <code>SolveInstance()</code> method is called upon whenever the component needs to handle input data.  In this particular example, if we plug a list of twelve strings into the <code>[S]</code> parameter, <code>SolveInstance()</code> will be called twelve times.</p>
+
+<p>As you may already have guessed, the component we’re writing will reverse a given textual string from <code>[S]</code> and output the result to <code>[R]</code>. Since we’re operating on individual items of data (the default behaviour), all we need to do inside the <code>SolveInstance()</code> function is retrieve the current String from <code>[S]</code>, reverse it and assign it to <code>[R]</code>.  Now, String reversal is not a function that is directly available in the framework <code>String</code> type, so we need to actually do some thinking:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs9" data-toggle="pill">C#</a></li>
+  <li><a href="#vb9" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs9"><code class="language-cs">...
+protected override void SolveInstance(IGH_DataAccess DA)
+{
+  // Declare a variable for the input String
+  string data = null;
+
+  // Use the DA object to retrieve the data inside the first input parameter.
+  // If the retieval fails (for example if there is no data) we need to abort.
+  if (!DA.GetData(0, ref data)) { return; }
+
+  // If the retrieved data is Nothing, we need to abort.
+  // We're also going to abort on a zero-length String.
+  if (data == null) { return; }
+  if (data.Length == 0) { return; }
+
+  // Convert the String to a character array.
+  char[] chars = data.ToCharArray();
+
+  // Reverse the array of character.
+  System.Array.Reverse(chars);
+
+  // Use the DA object to assign a new String to the first output parameter.
+  DA.SetData(0, new string(chars));
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb9"><code class="language-vbnet">...
+Protected Overrides Sub SolveInstance(ByVal DA As Grasshopper.Kernel.IGH_DataAccess)
+  'Declare a variable for the input String
+  Dim data As String = Nothing
+
+  'Use the DA object to retrieve the data inside the first input parameter.
+  'If the retieval fails (for example if there is no data) we need to abort.
+  If (Not DA.GetData(0, data)) Then Return
+
+  'If the retrieved data is Nothing, we need to abort.
+  'We're also going to abort on a zero-length String.
+  If (data Is Nothing) Then Return
+  If (data.Length = 0) Then Return
+
+  'Convert the String to a character array.
+  Dim chars As Char() = data.ToCharArray()
+
+  'Reverse the array of character.
+  Array.Reverse(chars)
+
+  'Use the DA object to assign a new String to the first output parameter.
+  DA.SetData(0, New String(chars))
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>Build, run, and …</p>
+
+<p><img src="/images/simple-component-03.png" alt="That was easy" /></p>
+
+<p><strong>DONE!</strong></p>
+
+<p>You have just built your first Grasshopper component from the ground up.  <strong>Now what?</strong></p>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>Now that you have built a component from scratch, let’s discuss parameter order, default values for inputs, and go a little further in depth.  Next, check out the <a href="/guides/grasshopper/simple-mathematics-component">Simple Mathematics Component</a> guide.</p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/guides/grasshopper/what-is-a-grasshopper-component">What is a Grasshopper Component?</a></li>
+  <li><a href="/guides/grasshopper/installing-tools-windows/">Installing Tools (Windows)</a></li>
+  <li><a href="/guides/grasshopper/your-first-component-windows">Your First Component (Windows)</a></li>
+  <li><a href="/guides/grasshopper/simple-mathematics-component">Simple Mathematics Component</a></li>
+  <li><a href="/guides/grasshopper/simple-geometry-component">Simple Geometry Component</a></li>
+  <li><a href="/guides/grasshopper/simple-data-types">Simple Data Types</a></li>
+  <li><a href="/guides/grasshopper/simple-parameters">Simple Parameters</a></li>
+  <li><a href="/guides/grasshopper/custom-component-options">Custom Component Options</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/grasshopper/simple-component.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2016 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>

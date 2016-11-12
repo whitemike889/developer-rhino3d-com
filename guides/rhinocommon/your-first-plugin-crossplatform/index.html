@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Your First Plugin (Cross-Platform) with C#</title>
+  <meta name="description" content="This guide walks you through your first plugin that targets both Rhino for Windows and Rhino for Mac.  Using C#">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinocommon/your-first-plugin-crossplatform/" />
+  <meta property="og:title" content="Your First Plugin (Cross-Platform)" />
+  <meta property="og:description" content="This guide walks you through your first plugin that targets both Rhino for Windows and Rhino for Mac." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Your First Plugin (Cross-Platform)" />
+  <meta name="twitter:description" value="This guide walks you through your first plugin that targets both Rhino for Windows and Rhino for Mac." />
+  
+    
+      <meta name="twitter:image" content="/images/rhinodev_logo_unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinocommon/your-first-plugin-crossplatform/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+
+      <!-- Find the h1 handle and title -->
+      <!-- 
+      
+      
+      
+      
+      
+      
+      
+      <li>
+        <a href="#your-first-plugin-cross-platform">Your First Plugin (Cross-Platform)</a>
+
+        <ul class="nav nav-stacked"> -->
+          <!-- Find the h2 group and any h3 subgroups -->
+          
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#overview">Overview</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#hellorhinocrossplatform">HelloRhino.CrossPlatform</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#file-new">File New</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#add-project">Add Project</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#clone-project">Clone Project</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#platform-defines">Platform Defines</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#common-code">Common Code</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related topics</a>
+
+                
+
+              </li>
+            
+
+
+          
+        
+
+        <!-- </ul>
+
+      </li> -->
+
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/rhinocommon">RhinoCommon</a></li>
+              
+              <li class="active">Getting Started</li>
+              
+          </ol>
+
+          <h1 id="your-first-plugin-cross-platform">Your First Plugin (Cross-Platform)</h1>
+
+<p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a></span></p>
+
+<p>This guide walks you through your first plugin that targets both Rhino for Windows and Rhino for Mac.</p>
+
+<p>It is presumed you already have <em>all</em> the necessary tools installed and are ready to go.  If you are not there yet, see both <a href="/guides/rhinocommon/installing-tools-windows">Installing Tools (Windows)</a> and <a href="/guides/rhinocommon/installing-tools-mac">Installing Tools (Mac)</a>.  It is also helpful to have read and understood <a href="/guides/rhinocommon/your-first-plugin-windows">Your First Plugin (Windows)</a> and <a href="/guides/rhinocommon/your-first-plugin-mac">Your First Plugin (Mac)</a>.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>There are many ways to architect a cross-platform solution, depending on your plugin, your projects, and your preferences.  In this guide we will employ a method called “cloned project files.”  This method uses two very similar <em>.csproj</em> files - each with platform-specific dependencies - that share the same source files.  The main goal is to illustrate a straightforward way of handling platform-specific needs while sharing the maximum amount of code.</p>
+
+<p>We will build on what we learned in the HelloRhinoCommon sample projects seen in <a href="/guides/rhinocommon/your-first-plugin-windows">Your First Plugin (Windows)</a> and <a href="/guides/rhinocommon/your-first-plugin-mac">Your First Plugin (Mac)</a>…</p>
+
+<h2 id="hellorhinocrossplatform">HelloRhino.CrossPlatform</h2>
+
+<p>Let’s begin by creating a new solution to contain both platforms’ projects.  For the sake of illustration, we’ll begin on macOS in Xamarin Studio, but the reverse - on Windows in Visual Studio - should work.  It is useful to work in a folder that is visible to both macOS and Windows and/or use a version control system like git that can be used on both platforms.</p>
+
+<h3 id="file-new">File New</h3>
+
+<ol>
+  <li>If you have not done so already, <em>launch Xamarin Studio</em>.</li>
+  <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Solution</em>…
+<img src="/images/your-first-plugin-mac-01.png" alt="File New Solution" /></li>
+  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Other</em> &gt; <em>Miscellaneous</em> section.  Under Generic, select the <em>Blank Solution</em> template…
+<img src="/images/your-first-plugin-crossplatform-01.png" alt="New Solution" /></li>
+  <li>Click the <em>Next</em> button.</li>
+  <li>You will now <em>Configure your new solution</em>.  For the purposes of this guide, we will name our solution <em>HelloRhino.CrossPlatform</em>.  Fill in the <em>Solution Name</em> field.  <em>Browse</em> and select a location for this plugin that is visible to both macOS and Windows.
+<img src="/images/your-first-plugin-crossplatform-02.png" alt="Solution Configuration" /></li>
+  <li>Click the <em>Create</em> button.  <em>Note</em>: It is recommended that you create a .git repository for this demo.</li>
+  <li>A new <em>blank solution</em> called <em>HelloRhino.CrossPlatform</em> should open.</li>
+</ol>
+
+<h3 id="add-project">Add Project</h3>
+
+<h4 id="mac">Mac</h4>
+
+<ol>
+  <li>As in the <a href="/guides/rhinocommon/your-first-plugin-mac">Your First Plugin (Mac)</a> guide, let’s add a template project to the solution.  Right-click the <em>HelloRhino.CrossPlatform</em> solution entry in the Solution panel.  Navigate to <em>Add</em> &gt; <em>Add New Project…</em>.
+<img src="/images/your-first-plugin-crossplatform-03.png" alt="New Project" /></li>
+  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Other</em> &gt; <em>Miscellaneous</em> section.  Under General, select the RhinoCommon Plug-In template…
+<img src="/images/your-first-plugin-mac-02.png" alt="New Project" /></li>
+  <li>Click the <em>Next</em> button.</li>
+  <li>You will now <em>Configure your new project</em>.  Fill in the <em>Project Name</em> field…call it  <em>HelloRhino.Common</em>.  <em>Browse</em> and select the <em>HelloRhino.CrossPlatform</em> folder.  <em>Check</em> the <em>Create a project within the solution directory</em> checkbox; we want the <em>HelloRhino.Common.csproj</em> to be created in the <em>HelloRhino.Common</em> folder.
+<img src="/images/your-first-plugin-crossplatform-04.png" alt="New Mac Project" /></li>
+  <li>In the Solution panel, <em>right-click</em> the <em>HelloRhino.Common</em> project and select <em>Rename</em>.  Rename the project <em>HelloRhino.Common.Mac</em>.</li>
+  <li>Rename <em>HelloRhino.CommonCommand.cs</em> to <em>HelloRhinoCommonCommand.cs</em>.</li>
+  <li>Rename <em>HelloRhino.CommonPlugin.cs</em> to <em>HelloRhinoCommonPlugin.cs</em>.</li>
+  <li>Open <em>HelloRhinoCommonPlugin.cs</em> and remove the period (<code>.</code>) between the <code>HelloRhino</code> and the <code>Common</code>:</li>
+</ol>
+
+<pre><code class="language-cs">public class HelloRhinoCommonPlugin : Rhino.PlugIns.PlugIn
+  {  
+    ///&lt;summary&gt;Gets the only instance of the HelloRhinoCommonPlugin plugin.&lt;/summary&gt;
+    public static HelloRhinoCommonPlugin Instance { get; private set; }
+
+    public HelloRhinoCommonPlugin()
+    {
+      Instance = this;
+    }
+  }
+</code></pre>
+
+<h3 id="clone-project">Clone Project</h3>
+
+<h4 id="windows">Windows</h4>
+
+<ol>
+  <li>In Visual Studio, open the <em>HelloRhino.CrossPlatform</em> solution you created above.</li>
+  <li>You may get a warning about trusting this project.  Click <em>OK</em>.</li>
+  <li>Expand the <em>References</em> section of the <em>HelloRhino.Common.Mac</em> project.  Notice that Visual Studio cannot resolve the references to <em>RhinoCommon</em>, <em>Rhino.UI</em> and <em>Eto</em>.  This is to be expected, as this is not the Windows plugin project file.
+<img src="/images/your-first-plugin-crossplatform-05.png" alt="Bad References" /></li>
+  <li>In the <em>Solution Explorer</em>, <em>right-click</em> the <em>HelloRhino.Common.Mac</em> project and select <em>Unload Project</em> from the drop-down menu.
+<img src="/images/your-first-plugin-crossplatform-06.png" alt="Unload Project" /></li>
+  <li>In <em>Windows File Explorer</em>, navigate to the <em>HelloRhino.CrossPlatform/HelloRhino.Common</em> folder.  We are going to <em>“clone”</em> (copy) the <em>HelloRhino.Common.Mac.csproj</em> as our template for the Windows <em>.csproj</em>.</li>
+  <li><em>Copy</em> the <em>HelloRhino.Common.Mac.csproj</em> file and rename it <em>HelloRhino.Common.Windows.csproj</em>:
+<img src="/images/your-first-plugin-crossplatform-07.png" alt="Copy Project" /></li>
+  <li>In Visual Studio, right-click on the <em>HelloRhino.CrossPlatform</em> solution in the Solution Explorer and navigate to <em>Add</em> &gt; <em>Existing Project…</em>
+<img src="/images/your-first-plugin-crossplatform-08.png" alt="Add Existing Project" /></li>
+  <li>Navigate to the <em>HelloRhino.Common.Windows.csproj</em> you just copied in Step 6 above.</li>
+  <li>In the Solution Explorer, expand the <em>References</em> section of <em>HelloRhino.Common.Windows</em> project.  Because we copied (“cloned”) the <em>.csproj</em> file, these Mac-specific references are still present.  Let’s delete those…</li>
+  <li><em>Shift Select</em> the three references <em>Eto**, *Rhino.UI</em>, and <em>RhinoCommon</em> in the list.  <em>Right-click</em> and <em>Remove</em> those references.
+<img src="/images/your-first-plugin-crossplatform-09.png" alt="Remove Old References" /></li>
+  <li><em>Right-click</em> the <em>References</em> to <em>Add</em> new references.</li>
+  <li>Browse to <em>RhinoCommon.dll</em>.  (Let’s presume we’re targeting Rhino for Windows 64-bit).  The location of <em>RhinoCommon.dll</em> is <em>C:\Program Files\Rhinoceros 5 (64-bit)\System\RhinoCommon.dll</em>.  Click <em>OK</em>.</li>
+  <li>In the <em>Solution Explorer</em>, select the <em>RhinoCommon</em> reference you just added to <em>HelloRhino.Common.Windows</em>.  Open the <em>Properties</em> panel if it is not already visible (<em>View</em> &gt; <em>Properties Window</em>).  Make sure <em>Copy Local</em> is <em>False</em>:
+<img src="/images/your-first-plugin-crossplatform-10.png" alt="Copy Local False" /></li>
+  <li>In the <em>Solution Explorer</em>, <em>right-click</em> the <em>HelloRhino.Common.Windows</em> project and select <em>Properties</em> from the menu.</li>
+  <li>In the <em>Build Events</em> section, in the <em>Post-build event command line:</em> enter <code>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).rhp" Erase "$(TargetPath)"</code>…
+<img src="/images/your-first-plugin-crossplatform-11.png" alt="Build Events" /></li>
+  <li>In the <em>Debug</em> section, in the <em>Start external program</em>, browse to: <code>C:\Program Files\Rhinoceros 5 (64-bit)\System\Rhino.exe</code>…
+<img src="/images/your-first-plugin-crossplatform-12.png" alt="Debug Properties" /></li>
+  <li><em>Build</em> and <em>Start Debugging</em>.  You should get two build errors concerning Eto.  Let’s take this opportunity to do create some…</li>
+</ol>
+
+<h3 id="platform-defines">Platform Defines</h3>
+
+<p>Though we are sharing cross-platform code, there will be inevitably be situations where you want to do one thing on Windows and another on Mac.  Within shared code, the way to manage this is with platform-specific defines in your platform-targeted projects.  Let’s define a symbol to get around the reference errors we just encountered.</p>
+
+<h4 id="windows-1">Windows</h4>
+
+<ol>
+  <li>In the <em>Solution Explorer</em>, <em>right-click</em> the <em>HelloRhino.Common.Windows</em> project and select <em>Properties</em> from the menu.</li>
+  <li>In the <em>Build</em> section, switch the <em>Configuration:</em> to <em>All Configurations</em> and, in <em>Conditional compilation symbols</em>, create a define called <code>ON_RUNTIME_WIN</code>…
+<img src="/images/your-first-plugin-crossplatform-13.png" alt="Windows Define" /></li>
+  <li>Open <em>HelloRhinoCommonCommand.cs</em>.</li>
+  <li>
+    <p>In the <code>using</code> section at the top, create a conditional define around the Eto references like this:</p>
+
+    <pre><code> #if ON_RUNTIME_APPLE
+ using Eto.Drawing;
+ using Eto.Forms;
+ #endif
+</code></pre>
+  </li>
+  <li><em>Build</em> and <em>Start Debugging</em>.  Your build errors should disappear and debugging should begin.  You can use the PluginManager to install your plugin and the HelloRhino command should work.  When you are done testing out the command, stop the debugging session, close Visual Studio and switch back to…</li>
+</ol>
+
+<h4 id="mac-1">Mac</h4>
+
+<ol>
+  <li>In <em>Xamarin Studio</em> on <em>macOS</em>, open the <em>HelloRhino.CrossPlatform</em> solution (if it is not already open).</li>
+  <li>Notice that <em>HelloRhino.Common.Windows</em> is now present in your solution (as expected).  In the <em>Solution</em> panel, <em>right-click</em> the <em>HelloRhino.Common.Windows</em> project and select <em>Unload</em>…
+<img src="/images/your-first-plugin-crossplatform-14.png" alt="Unload Windows Project" /></li>
+  <li>In the <em>Solution</em> panel, <em>double-click</em> the <em>HelloRhino.Common.Mac</em> project to bring up its <em>Project Options</em> (Properties).</li>
+  <li>Navigate to the <em>Build</em> &gt; <em>Compiler</em> section in the <em>Project Options</em>.  Notice that the configuration is set to <em>Debug</em>.  In the <em>Define Symbols</em>: add a <code>ON_RUNTIME_APPLE</code> after <code>DEBUG</code>.  You must separate these with a semi-colon.  It should read: <code>DEBUG;ON_RUNTIME_APPLE</code>.  Switch the <em>Configuration</em> to <em>Release</em>.  Add the <code>ON_RUNTIME_APPLE</code> again (Xamarin Studio lacks an “All Configurations” like Visual Studio)…
+<img src="/images/your-first-plugin-crossplatform-15.png" alt="Add Mac Defines" /></li>
+  <li>Click <em>OK</em> to close the <em>Project Options</em> dialog.</li>
+  <li><em>Build</em> and <em>Run</em>.  The <em>HelloRhino</em> command from the plugin should autocomplete and run.</li>
+</ol>
+
+<h3 id="common-code">Common Code</h3>
+
+<p>You have just created two platform-specific plugins using the same, shared code.  In review, let’s take a look at the Solution architecture…simply open the <em>HelloRhino.CrossPlatform</em> folder using either Finder or Windows File Explorer…</p>
+
+<p><img src="/images/your-first-plugin-crossplatform-16.png" alt="Solution Architecture" /></p>
+
+<p>In summary…</p>
+
+<ul>
+  <li>The <em>HelloRhino.CrossPlatform</em> solution (<em>.sln</em>) contains the:
+    <ul>
+      <li><em>HelloRhino.Common</em> folder, which contains the common code for the:
+        <ul>
+          <li><em>HelloRhino.Common.Mac</em> project (<em>.csproj</em>) and the</li>
+          <li><em>HelloRhino.Common.Windows</em> project (<em>.csproj</em>)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>The cloned projects have platform-specific defines and platform-specific references, but otherwise reference the same shared (common) code.  Notice that the namespace of your common code is:</p>
+
+<pre><code class="language-cs">namespace HelloRhino.Common
+</code></pre>
+
+<p>This common (sometimes called “core”) namespace can be thought of as a shared library.  This is where the “business logic” of your plugin should be stored.</p>
+
+<p>Even though it was possible - in this simple example - to share <em>all</em> of the code, in some real-life plugins, it may be necessary to separate out platform-specific projects that share the same Common core.</p>
+
+<p>For example, you might want to structure a project this way:</p>
+
+<ul>
+  <li>The <em>YourPlugin.CrossPlatform</em> solution (<em>.sln</em>) contains the:
+    <ul>
+      <li><em>YourPlugin.Common</em> folder, which contains the common code for the:
+        <ul>
+          <li><em>YourPlugin.Common.Mac</em> project (<em>.csproj</em>) and the</li>
+          <li><em>YourPlugin.Common.Windows</em> project (<em>.csproj</em>), each of which reference:
+            <ul>
+              <li><em>YourCommonBusinessLogic.cs</em> files in the <em>YourPlugin.Common</em> namespace.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>YourPlugin.Mac</em> folder, which contains the:
+        <ul>
+          <li><em>YourPlugin.Mac</em> project (<em>.csproj</em>), which references <em>YourPlugin.Common.Mac</em>.</li>
+          <li><em>YourMacSpecific.cs</em> files which do Mac-specific stuff.</li>
+        </ul>
+      </li>
+      <li><em>YourPlugin.Windows</em> folder, which contains the:
+        <ul>
+          <li><em>YourPlugin.Windows</em> project (<em>.csproj</em>), which references <em>*YourPlugin.Common.Windows</em>.</li>
+          <li><em>YourWindowsSpecific.cs</em> files which do Windows-specific stuff.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>This is merely one example; the architecture of the project depends on the needs of the plugin.  It is even possible to share much of the user interface code using Eto…but this is a subject for another guide.</p>
+
+<p><em>Congratulations!</em>  You have just built your first RhinoCommon plugin sharing common code between Rhino for Mac and Rhino for Windows.</p>
+
+<hr />
+
+<h2 id="related-topics">Related topics</h2>
+
+<ul>
+  <li><a href="/guides/rhinocommon/installing-tools-windows">Installing Tools (Windows)</a></li>
+  <li><a href="/guides/rhinocommon/installing-tools-mac">Installing Tools (Mac)</a></li>
+  <li><a href="/guides/rhinocommon/your-first-plugin-windows">Your First Plugin (Windows)</a></li>
+  <li><a href="/guides/rhinocommon/your-first-plugin-mac">Your First Plugin (Mac)</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinocommon/your-first-plugin-crossplatform.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2016 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Plugin User Data with C#</title>
+  <meta name="description" content="This guide gives an overview of user data and how to use it with RhinoCommon.  Using C#">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinocommon/plugin-user-data/" />
+  <meta property="og:title" content="Plugin User Data" />
+  <meta property="og:description" content="This guide gives an overview of user data and how to use it with RhinoCommon." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Plugin User Data" />
+  <meta name="twitter:description" value="This guide gives an overview of user data and how to use it with RhinoCommon." />
+  
+    
+      <meta name="twitter:image" content="/images/rhinodev_logo_unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinocommon/plugin-user-data/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+
+      <!-- Find the h1 handle and title -->
+      <!-- 
+      
+      
+      
+      
+      
+      
+      
+      <li>
+        <a href="#plugin-user-data">Plugin User Data</a>
+
+        <ul class="nav nav-stacked"> -->
+          <!-- Find the h2 group and any h3 subgroups -->
+          
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#document-user-data">Document User Data</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#object-user-data">Object User Data</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related topics</a>
+
+                
+
+              </li>
+            
+
+
+          
+        
+
+        <!-- </ul>
+
+      </li> -->
+
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/rhinocommon">RhinoCommon</a></li>
+              
+              <li class="active">Fundamentals</li>
+              
+          </ol>
+
+          <h1 id="plugin-user-data">Plugin User Data</h1>
+
+<p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/stevebaer/activity">Steve Baer</a></span></p>
+
+<p>This guide gives an overview of user data and how to use it with RhinoCommon.</p>
+
+<p>There are two basic ways plugins can store information in Rhino .3dm files:</p>
+
+<ol>
+  <li><a href="#document-user-data">Document User Data</a></li>
+  <li><a href="#object-user-data">Object User Data</a></li>
+</ol>
+
+<p>For example, a rendering plugin might save a scene descriptions as document user data and use object user data to attach rendering material information to individual surfaces.</p>
+
+<h2 id="document-user-data">Document User Data</h2>
+
+<p>To save document user data your plugin must override three PlugIn base class functions:</p>
+
+<pre><code class="language-cs">PlugIn.ShouldCallWriteDocument
+PlugIn.WriteDocument
+PlugIn.ReadDocument
+</code></pre>
+
+<p>SDK references for these functions can be found <a href="/api/RhinoCommon/html/Methods_T_Rhino_PlugIns_PlugIn.htm">here</a>.</p>
+
+<p>When Rhino writes a .3dm file, it goes through all the plugins that are currently loaded. First Rhino calls <code>ShouldCallWriteDocument()</code> to see if the plugin wants to save document user data.  If <code>ShouldWriteDocument()</code> returns true, Rhino saves information that identifies the plugin and then calls <code>WriteDocument()</code> when it is time for the plugin to save its “document” user data.</p>
+
+<p>When Rhino reads a .3dm file and it encounters document user data, it uses the plugin identification information to load the plugin and then calls the plugin’s <code>ReadDocument()</code> to read the plugin’s “document” user data.</p>
+
+<h2 id="object-user-data">Object User Data</h2>
+
+<p>Object user data can be attached to things like layers, materials, geometry objects, and object attributes. In fact object user data can be attached to any class derived from CommonObject. This user data is stored in a linked list on CommonObject and can be copied, transformed and saved along with the parent object. For example, you could attach object user data to a mesh. When the mesh is copied the object user data would be copied and attached to the copy. When the mesh is transformed, the transformation would be recored by the object user data. When the mesh is saved in a .3dm file, the object user data will be saved too.</p>
+
+<p>There are three forms of object user data:</p>
+
+<ol>
+  <li>User strings</li>
+  <li>UserDictionary</li>
+  <li>Custom UserData</li>
+</ol>
+
+<p>It is <em>recommended to typically use the User Strings or the UserDictionary on an object</em> since the data is automatically serialized for you and it is easily shared between plugins and scripts.</p>
+
+<p>In the case that you want to write your own private custom user data, you would derive a class from <code>Rhino.DocObjects.Custom.UserData</code>. Here’s a sample:</p>
+
+<pre><code class="language-cs">using System;
+using Rhino;
+using System.Runtime.InteropServices;
+
+namespace examples_cs
+{
+  // You must define a Guid attribute for your user data derived class
+  // in order to support serialization. Every custom user data class
+  // needs a custom Guid
+  [Guid("DAAA9791-01DB-4F5F-B89B-4AE46767C783")]
+  public class PhysicalData : Rhino.DocObjects.Custom.UserData
+  {
+    public int Weight{ get; set; }
+    public double Density {get; set;}
+
+
+    // Your UserData class must have a public parameterless constructor
+    public PhysicalData(){}
+
+    public PhysicalData(int weight, double density)
+    {
+      Weight = weight;
+      Density = density;
+    }
+
+    public override string Description
+    {
+      get { return "Physical Properties"; }
+    }
+
+    public override string ToString()
+    {
+      return String.Format("weight={0}, density={1}", Weight, Density);
+    }
+
+    protected override void OnDuplicate(Rhino.DocObjects.Custom.UserData source)
+    {
+      PhysicalData src = source as PhysicalData;
+      if (src != null)
+      {
+        Weight = src.Weight;
+        Density = src.Density;
+      }
+    }
+
+    // return true if you have information to save
+    public override bool ShouldWrite
+    {
+      get
+      {
+        if (Weight &gt; 0 &amp;&amp; Density &gt; 0)
+          return true;
+        return false;
+      }
+    }
+
+    protected override bool Read(Rhino.FileIO.BinaryArchiveReader archive)
+    {
+      Rhino.Collections.ArchivableDictionary dict = archive.ReadDictionary();
+      if (dict.ContainsKey("Weight") &amp;&amp; dict.ContainsKey("Density"))
+      {
+        Weight = (int)dict["Weight"];
+        Density = (double)dict["Density"];
+      }
+      return true;
+    }
+    protected override bool Write(Rhino.FileIO.BinaryArchiveWriter archive)
+    {
+      // you can implement File IO however you want... but the dictionary class makes
+      // issues like versioning in the 3dm file a bit easier.  If you didn't want to use
+      // the dictionary for writing, your code would look something like.
+      //
+      //  archive.Write3dmChunkVersion(1, 0);
+      //  archive.WriteInt(Weight);
+      //  archive.WriteDouble(Density);
+      var dict = new Rhino.Collections.ArchivableDictionary(1, "Physical");
+      dict.Set("Weight", Weight);
+      dict.Set("Density", Density);
+      archive.WriteDictionary(dict);
+      return true;
+    }
+  }
+
+
+  [Guid("ca9a110e-3969-49ec-9d59-a7c2ee0b85bd")]
+  public class ex_userdataCommand : Rhino.Commands.Command
+  {
+    public override string EnglishName { get { return "cs_userdataCommand"; } }
+
+    protected override Rhino.Commands.Result RunCommand(RhinoDoc doc, Rhino.Commands.RunMode mode)
+    {
+      Rhino.DocObjects.ObjRef objref;
+      var rc = Rhino.Input.RhinoGet.GetOneObject("Select Object", false, Rhino.DocObjects.ObjectType.AnyObject, out objref);
+      if (rc != Rhino.Commands.Result.Success)
+        return rc;
+
+      // See if user data of my custom type is attached to the geomtry
+      var ud = objref.Geometry().UserData.Find(typeof(PhysicalData)) as PhysicalData;
+      if (ud == null)
+      {
+        // No user data found; create one and add it
+        int weight = 0;
+        rc = Rhino.Input.RhinoGet.GetInteger("Weight", false, ref weight);
+        if (rc != Rhino.Commands.Result.Success)
+          return rc;
+
+        ud = new PhysicalData(weight, 12.34);
+        objref.Geometry().UserData.Add(ud);
+      }
+      else
+      {
+        RhinoApp.WriteLine("{0} = {1}", ud.Description, ud);
+      }
+      return Rhino.Commands.Result.Success;
+    }
+  }
+}
+</code></pre>
+
+<hr />
+
+<h2 id="related-topics">Related topics</h2>
+
+<ul>
+  <li><a href="/api/RhinoCommon/html/Methods_T_Rhino_PlugIns_PlugIn.htm">Rhino.PlugIns.PlugIn Methods (API Reference)</a></li>
+  <li><a href="/samples/rhinocommon/user-data/">RhinoCommon object plugin user data</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/stevebaer/activity">Steve Baer</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinocommon/plugin-user-data.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2016 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>

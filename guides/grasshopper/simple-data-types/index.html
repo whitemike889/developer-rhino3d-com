@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple Data Types with C#, VB</title>
+  <meta name="description" content="This guide discusses how Grasshopper deals with data items and types.  Using C#, VB">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/grasshopper/simple-data-types/" />
+  <meta property="og:title" content="Simple Data Types" />
+  <meta property="og:description" content="This guide discusses how Grasshopper deals with data items and types." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Simple Data Types" />
+  <meta name="twitter:description" value="This guide discusses how Grasshopper deals with data items and types." />
+  
+    
+      <meta name="twitter:image" content="/images/grasshopper_logo_unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#, VB" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/grasshopper/simple-data-types/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+
+      <!-- Find the h1 handle and title -->
+      <!-- 
+      
+      
+      
+      
+      
+      
+      
+      <li>
+        <a href="#simple-data-types">Simple Data Types</a>
+
+        <ul class="nav nav-stacked"> -->
+          <!-- Find the h2 group and any h3 subgroups -->
+          
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#overview">Overview</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#prerequisites">Prerequisites</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-ighgoo-interface">The IGH_Goo interface</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#isvalid">IsValid</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#typename">TypeName</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#typedescription">TypeDescription</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#duplicate">Duplicate</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#tostring">ToString</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#emitproxy">EmitProxy</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#castto">CastTo</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#castfrom">CastFrom</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#scriptvariable">ScriptVariable</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#the-ghgoo-abstract-class">The GH_Goo abstract class</a>
+
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#an-example-type">An Example Type</a>
+
+                
+                  <ul class="nav nav-stacked">
+                    
+
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#constructors">Constructors</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#formatters">Formatters</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#serialization">Serialization</a>
+                      </li>
+                    
+                      
+                      
+                      
+                      
+                      
+                      <li>
+                          <a href="#casting">Casting</a>
+                      </li>
+                    
+
+                  </ul>
+                
+
+              </li>
+            
+
+
+          
+            
+
+            
+              
+              
+              
+              
+              <li>
+                <a href="#related-topics">Related Topics</a>
+
+                
+
+              </li>
+            
+
+
+          
+        
+
+        <!-- </ul>
+
+      </li> -->
+
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/grasshopper">Grasshopper</a></li>
+              
+              <li class="active">Fundamentals</li>
+              
+          </ol>
+
+          <h1 id="simple-data-types">Simple Data Types</h1>
+
+<p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a></span></p>
+
+<p>This guide discusses how Grasshopper deals with data items and types.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>It’s a rather complicated topic as data is an integral part of the Grasshopper process and GUI.  Grasshopper needs to be able to (de)serialize data, display data in tooltips, convert data to other types of data, prompt the user for persistent data, draw geometry preview data in viewports and bake geometric data.  In this topic I’ll only talk about non-geometric data, we’ll get to previews and baking in a later topic.</p>
+
+<p>Practically all native data types in Grasshopper are based either on a .NET Framework type or a RhinoCommon type.  For example <code>System.Boolean</code>, <code>System.String</code>, <code>Rhino.Geometry.Point3d</code> and <code>Rhino.Geometry.Brep</code> to name but a few.  However, the parameters in Grasshopper don’t directly store Booleans, String, Points and Breps as these types can’t handle themselves in the cauldron that is Grasshopper.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>We will not be dealing with any of the basics of component development in this guide.  Please start with the <a href="/guides/grasshopper/your-first-component-windows">Your First Component</a> guide and the <a href="/guides/grasshopper/simple-component">Simple Component</a> guide before starting this one.</p>
+
+<p>Before you start, create a new class that derives from <code>Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/guides/grasshopper/simple-component">Simple Component</a> guide.</p>
+
+<h2 id="the-ighgoo-interface">The IGH_Goo interface</h2>
+
+<p>In this section I’ll briefly discuss all the methods and properties that are defined in IGH_Goo.  What they’re for, who uses them at what time, etc, etc.</p>
+
+<p>All data used in Grasshopper must implement the <a href="/api/grasshopper/html/T_Grasshopper_Kernel_Types_IGH_Goo.htm">IGH_Goo</a> interface.  <code>IGH_Goo</code> defines the bare minimum of methods and properties for any kind of data before it is allowed to play ball.</p>
+
+<h3 id="isvalid">IsValid</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
+  <li><a href="#vb" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">bool IsValid { get{} }
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">ReadOnly Property IsValid() As Boolean
+</code></pre>
+
+</div>
+
+<p>Not all data types are valid all the time, and this property allows you to test the current instance of your data.  When data is invalid it will often be ignored by components.</p>
+
+<h3 id="typename">TypeName</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
+  <li><a href="#vb1" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">string TypeName { get{} }
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">ReadOnly Property TypeName() As String
+</code></pre>
+
+</div>
+
+<p>This property must return a human-readable name for your data type.</p>
+
+<h3 id="typedescription">TypeDescription</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
+  <li><a href="#vb2" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">string TypeDescription { get{} }
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">ReadOnly Property TypeDescription() As String
+</code></pre>
+
+</div>
+
+<p>This property must return a human-readable description of your data type.</p>
+
+<h3 id="duplicate">Duplicate</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
+  <li><a href="#vb3" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">IGH_Goo Duplicate()
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">Function Duplicate() As IGH_Goo
+</code></pre>
+
+</div>
+
+<p>This function must return an exact duplicate of the data item.  Data is typically shared amongst multiple Grasshopper parameters, so before data is changed, it first needs to copy itself.  When data only contains ValueTypes and Primitives, making a copy of an instance is usually quite easy.</p>
+
+<h3 id="tostring">ToString</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs4" data-toggle="pill">C#</a></li>
+  <li><a href="#vb4" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs4"><code class="language-cs">string ToString()
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb4"><code class="language-vbnet">Function ToString() As String
+</code></pre>
+
+</div>
+
+<p>This function is called whenever Grasshopper needs a human-readable version of your data.  It is this function that populates the data panel in parameter tooltips.  You don’t need to create a String that is parsable, it only needs to be somewhat informative.</p>
+
+<h3 id="emitproxy">EmitProxy</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs5" data-toggle="pill">C#</a></li>
+  <li><a href="#vb5" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs5"><code class="language-cs">IGH_GooProxy EmitProxy()
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb5"><code class="language-vbnet">Function EmitProxy() As IGH_GooProxy
+</code></pre>
+
+</div>
+
+<p>Data proxies are used in the Data Collection Manager.  You can ignore this function (i.e. Return Nothing) without crippling your data type.</p>
+
+<h3 id="castto">CastTo</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs6" data-toggle="pill">C#</a></li>
+  <li><a href="#vb6" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs6"><code class="language-cs">bool CastTo&lt;T&gt;(out T target)
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb6"><code class="language-vbnet">Function CastTo(Of T)(ByRef target As T) As Boolean
+</code></pre>
+
+</div>
+
+<p>Data Casting is a core feature of Grasshopper data.  It basically allows data types defined in Grasshopper add-ons to become an integral part of Grasshopper.  Lets assume that we have a Component that operates on data type [A].  But instead of playing nice, we provide data of type [B]. Two conversion (casting) attempts will be made in order to change [B] into [A].  If [B] implements IGH_Goo, then it is asked if it knows how to convert itself into an instance of [A].  Failing that, if [A] implements <code>IGH_Goo</code>, it is asked whether or not it knows how to construct itself from an instance of [B].</p>
+
+<p>The <code>CastTo()</code> function is responsible for step 1.  The <code>CastTo()</code> method is a generic method, meaning the types on which it operates are not defined until the method is actually called.  This allows the function to operate “intelligently” on data types.  It also unfortunately means you have to be “intelligent” when implementing this function.</p>
+
+<p>See the <a href="/guides/grasshopper/grasshopper-data-types">Grasshopper Data Types</a> guide for more information on conversion.</p>
+
+<h3 id="castfrom">CastFrom</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs7" data-toggle="pill">C#</a></li>
+  <li><a href="#vb7" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs7"><code class="language-cs">bool CastFrom(object source)
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb7"><code class="language-vbnet">Function CastFrom(ByVal source As Object) As Boolean
+</code></pre>
+
+</div>
+
+<p>The <code>CastFrom()</code> function is responsible for step 2 of data casting.  Some kind of data is provided as a source object and if the local Type knows how to “read” the source data it can perform the conversion.</p>
+
+<p>See the <a href="/guides/grasshopper/grasshopper-data-types">Grasshopper Data Types</a> guide for more information on conversion.</p>
+
+<h3 id="scriptvariable">ScriptVariable</h3>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs8" data-toggle="pill">C#</a></li>
+  <li><a href="#vb8" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs8"><code class="language-cs">object ScriptVariable()
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb8"><code class="language-vbnet">Function ScriptVariable() As Object
+</code></pre>
+
+</div>
+
+<p>When data is fed into a VB or C# script component, it is usually stripped of <code>IGH_Goo</code> specific data and methods.  The <code>ScriptVariable()</code> method allows a data type to provide a stripped down version of itself for use in a Script component.</p>
+
+<h2 id="the-ghgoo-abstract-class">The GH_Goo abstract class</h2>
+
+<p>Although all data in Grasshopper must implement the <code>IGH_Goo</code> interface, it is not necessary to actually write a type from scratch.  It is good practice to inherit from the abstract class <code>GH_Goo&lt;T&gt;</code>, as it takes care of some of the basic functionality.  <code>GH_Goo</code> is a generic type (that’s what the “<code>&lt;T&gt;</code>” bit means), where <code>T</code> is the actual type you’re wrapping.  <code>GH_Goo&lt;T&gt;</code> has several abstract methods and properties which <em>must</em> be implemented, but a lot of the other methods are already implemented with basic (though usually useless) functionality.</p>
+
+<h2 id="an-example-type">An Example Type</h2>
+
+<p>We’ll now create a very simple custom type.  This will introduce the basic concept of custom type development, without dealing with any of the baking and previewing logic yet.  Our custom type will be a TriState flag, similar to boolean values but with an extra state called “Unknown”.  We’ll represent these different states using integers:</p>
+
+<ul>
+  <li>Negative One <code>-1</code> = Unknown</li>
+  <li>Zero <code>0</code> = False</li>
+  <li>One <code>1</code> = True</li>
+</ul>
+
+<p>We’ll start with the general class layout, then drill down into each individual function.  Create a new public class called <code>TriStateType</code> and inherit from <code>GH_Goo&lt;Integer&gt;</code>.  Be sure to import the Grasshopper <code>Kernel</code> and <code>Kernel.Types</code> namespaces as we’ll need them both:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs9" data-toggle="pill">C#</a></li>
+  <li><a href="#vb9" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs9"><code class="language-cs">using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+
+namespace MyTypes
+{
+  public class TriStateType : GH_Goo&lt;int&gt;
+  {
+
+  }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb9"><code class="language-vbnet">Imports Grasshopper.Kernel
+Imports Grasshopper.Kernel.Types
+
+Namespace MyTypes
+  Public Class TriStateType
+    Inherits GH_Goo(Of Integer)
+
+  End Class
+End Namespace
+</code></pre>
+
+</div>
+
+<h3 id="constructors">Constructors</h3>
+
+<p>Unless a constructor is defined, .NET classes always have a default constructor which initializes all the fields of the class to their default values.  This constructor does not require any inputs and when you develop custom types it is a good idea to always provide a default constructor.  If there is no default constructor, then class instances cannot be created automatically which thwarts certain algorithms in Grasshopper.</p>
+
+<p>In addition to a default constructor I also find it useful to supply so called copy constructors which create a new instance of the type class with a preset value.</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs10" data-toggle="pill">C#</a></li>
+  <li><a href="#vb10" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs10"><code class="language-cs">// Default Constructor, sets the state to Unknown.
+public TriStateType()
+{
+  this.Value = -1;
+}
+
+// Constructor with initial value
+public TriStateType(int tristateValue)
+{
+  this.Value = tristateValue;
+}
+
+// Copy Constructor
+public TriStateType(TriStateType tristateSource)
+{
+  this.Value = tristateSource.Value;
+}
+
+// Duplication method (technically not a constructor)
+public override IGH_Goo Duplicate()
+{
+  return new TriStateType(this);
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb10"><code class="language-vbnet">'' Default Constructor, sets the state to Unknown.
+Public Sub New()
+  Me.Value = -1
+End Sub
+
+'' Constructor with initial value
+Public Sub New(ByVal tristateValue As Integer)
+  Me.Value = tristateValue
+End Sub
+
+'' Copy Constructor
+Public Sub New(ByVal tristateSource As TriStateType)
+  Value = tristateSource.Value
+End Sub
+
+'' Duplication method (technically not a constructor)
+Public Overrides Function Duplicate() As Kernel.Types.IGH_Goo
+  Return New TriStateType(Me)
+End Function
+</code></pre>
+
+</div>
+
+<p>Incidentally, the Value property which we are using to assign integers to our local instance is provided by the <code>GH_Goo&lt;T&gt;</code> base class.  <code>GH_Goo&lt;T&gt;</code> defines a protected field of type <code>T</code> called <code>m_value</code> and also a public accessor property called <code>Value</code> which gets or sets the <code>m_value</code> field.</p>
+
+<p>In this particular case, it actually makes sense to override the default <code>Value</code> property implementation, as the number of sensible values we can assign (-1, 0 and +1) is a subset of the total number values available through the Integer data type.  It makes no sense to assign -62 for example. We <em>could</em> of course agree that all negative values indicate an “Unknown” state, but we should try to restrict ourselves to only three integer values:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs11" data-toggle="pill">C#</a></li>
+  <li><a href="#vb11" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs11"><code class="language-cs">// Override the Value property to strip non-sensical states.
+public override int Value
+{
+  get { return base.Value; }
+  set
+  {
+    if (value &lt; -1) { value = -1; }
+    if (value &gt; +1) { value = +1; }
+    base.Value = value;
+  }
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb11"><code class="language-vbnet">'' Override the Value property to strip non-sensical states.
+Public Overrides Property Value() As Integer
+  Get
+    Return MyBase.Value
+  End Get
+  Set(ByVal value As Integer)
+    If (value &lt; -1) Then value = -1
+    If (value &gt; +1) Then value = +1
+    MyBase.Value = value
+  End Set
+End Property
+</code></pre>
+
+</div>
+
+<h3 id="formatters">Formatters</h3>
+
+<p>Formatting data is primarily a User Interface task.  Both the data type and the data state need to be presented in human-readable form every now and again.  This mostly involves readonly properties as looking at data does not change its state:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs12" data-toggle="pill">C#</a></li>
+  <li><a href="#vb12" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs12"><code class="language-cs">// TriState instances are always valid
+public override bool IsValid
+{
+  get { return true; }
+}
+
+// Return a string with the name of this Type.
+public override string TypeName
+{
+  get { return "TriState"; }
+}
+
+// Return a string describing what this Type is about.
+public override string TypeDescription
+{
+  get { return "A TriState Value (True, False or Unknown)"; }
+}
+
+// Return a string representation of the state (value) of this instance.
+public override string ToString()
+{
+  if (this.Value == 0) { return "False"; }
+  if (this.Value &gt; 0) { return "True"; }
+  return "Unknown";
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb12"><code class="language-vbnet">'' TriState instances are always valid
+Public Overrides ReadOnly Property IsValid() As Boolean
+  Get
+    Return True
+  End Get
+End Property
+
+'' Return a string with the name of this Type.
+Public Overrides ReadOnly Property TypeName() As String
+  Get
+    Return "TriState"
+  End Get
+End Property
+
+'' Return a string describing what this Type is about.
+Public Overrides ReadOnly Property TypeDescription() As String
+  Get
+    Return "A TriState Value (True, False or Unknown)"
+  End Get
+End Property
+
+'' Return a string representation of the state (value) of this instance.
+Public Overrides Function ToString() As String
+  If (Value = 0) Then Return "False"
+  If (Value &gt; 0) Then Return "True"
+  Return "Unknown"
+End Function
+</code></pre>
+
+</div>
+
+<h3 id="serialization">Serialization</h3>
+
+<p>Some data types can be stored as <em>persistent data</em>.  Persistent data must be able to serialize and deserialize itself from a Grasshopper file. Most simple types support this feature (Booleans, Integers, Strings, Colours, Circles, Planes etc.), most complex geometry types cannot be stored as persistent data (Curves, Breps, Meshes). If possible, you should aim to provide robust (de)serialization for your data:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs13" data-toggle="pill">C#</a></li>
+  <li><a href="#vb13" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs13"><code class="language-cs">// Serialize this instance to a Grasshopper writer object.
+public override bool Write(GH_IO.Serialization.GH_IWriter writer)
+{
+  writer.SetInt32("tri", this.Value);
+  return true;
+}
+
+// Deserialize this instance from a Grasshopper reader object.
+public override bool Read(GH_IO.Serialization.GH_IReader reader)
+{
+  this.Value = reader.GetInt32("tri");
+  return true;
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb13"><code class="language-vbnet">'' Serialize this instance to a Grasshopper writer object.
+Public Overrides Function Write(ByVal writer As GH_IO.Serialization.GH_IWriter) As Boolean
+  writer.SetInt32("tri", Value)
+  Return True
+End Function
+
+'' Deserialize this instance from a Grasshopper reader object.
+Public Overrides Function Read(ByVal reader As GH_IO.Serialization.GH_IReader) As Boolean
+  Value = reader.GetInt32("tri")
+  Return True
+End Function
+</code></pre>
+
+</div>
+
+<h3 id="casting">Casting</h3>
+
+<p>There are three casting methods on <code>IGH_Goo</code>; the <code>CastFrom()</code> and <code>CastTo()</code> methods that facilitate conversions between different types of data and the <code>ScriptVariable()</code> method which creates a safe instance of this data to be used inside untrusted code (such as VB or C# Script components).</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs14" data-toggle="pill">C#</a></li>
+  <li><a href="#vb14" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs14"><code class="language-cs">// Return the Integer we use to represent the TriState flag.
+public override object ScriptVariable()
+{
+  return this.Value;
+}
+
+// This function is called when Grasshopper needs to convert this
+// instance of TriStateType into some other type Q.
+public override bool CastTo&lt;Q&gt;(ref Q target)
+{
+  //First, see if Q is similar to the Integer primitive.
+  if (typeof(Q).IsAssignableFrom(typeof(int)))
+  {
+    object ptr = this.Value;
+    target = (Q)ptr;
+    return true;
+  }
+
+  //Then, see if Q is similar to the GH_Integer type.
+  if (typeof(Q).IsAssignableFrom(typeof(GH_Integer)))
+  {
+    object ptr = new GH_Integer(this.Value);
+    target = (Q)ptr;
+    return true;
+  }
+
+  //We could choose to also handle casts to Boolean, GH_Boolean,
+  //Double and GH_Number, but this is left as an exercise for the reader.
+  return false;
+}
+
+// This function is called when Grasshopper needs to convert other data
+// into TriStateType.
+public override bool CastFrom(object source)
+{
+  //Abort immediately on bogus data.
+  if (source == null) { return false; }
+
+  //Use the Grasshopper Integer converter. By specifying GH_Conversion.Both
+  //we will get both exact and fuzzy results. You should always try to use the
+  //methods available through GH_Convert as they are extensive and consistent.
+  int val;
+  if (GH_Convert.ToInt32(source, out val, GH_Conversion.Both))
+  {
+    this.Value = val;
+    return true;
+  }
+
+  //If the integer conversion failed, we can still try to parse Strings.
+  //If possible, you should ensure that your data type can 'deserialize' itself
+  //from the output of the ToString() method.
+  string str = null;
+  if (GH_Convert.ToString(source, out str, GH_Conversion.Both))
+  {
+    switch (str.ToUpperInvariant())
+    {
+      case "FALSE":
+      case "F":
+      case "NO":
+      case "N":
+        this.Value = 0;
+        return true;
+
+      case "TRUE":
+      case "T":
+      case "YES":
+      case "Y":
+        this.Value = +1;
+        return true;
+
+      case "UNKNOWN":
+      case "UNSET":
+      case "MAYBE":
+      case "DUNNO":
+      case "?":
+        this.Value = -1;
+        return true;
+    }
+  }
+
+  //We've exhausted the possible conversions, it seems that source
+  //cannot be converted into a TriStateType after all.
+  return false;
+}
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb14"><code class="language-vbnet">'' Return the Integer we use to represent the TriState flag.
+Public Overrides Function ScriptVariable() As Object
+  Return Value
+End Function
+
+'' This function is called when Grasshopper needs to convert this
+'' instance of TriStateType into some other type Q.
+Public Overrides Function CastTo(Of Q)(ByRef target As Q) As Boolean
+  'First, see if Q is similar to the Integer primitive.
+  If (GetType(Q).IsAssignableFrom(GetType(Integer))) Then
+    Dim ptr As Object = Value
+    target = DirectCast(ptr, Q)
+    Return True
+  End If
+
+  'Then, see if Q is similar to the GH_Integer type.
+  If (GetType(Q).IsAssignableFrom(GetType(GH_Integer))) Then
+    Dim int As Object = New GH_Integer(Value)
+    target = DirectCast(int, Q)
+    Return True
+  End If
+
+  'We could choose to also handle casts to Boolean, GH_Boolean,
+  'Double and GH_Number, but this is left as an exercise for the reader.
+  Return False
+End Function
+
+'' This function is called when Grasshopper needs to convert other data
+'' into TriStateType.
+Public Overrides Function CastFrom(ByVal source As Object) As Boolean
+  'Abort immediately on bogus data.
+  If (source Is Nothing) Then Return False
+
+  'Use the Grasshopper Integer converter. By specifying GH_Conversion.Both
+  'we will get both exact and fuzzy results. You should always try to use the
+  'methods available through GH_Convert as they are extensive and consistent.
+  Dim int As Integer
+  If (GH_Convert.ToInt32(source, int, GH_Conversion.Both)) Then
+    Value = int
+    Return True
+  End If
+
+  'If the integer conversion failed, we can still try to parse Strings.
+  'If possible, you should ensure that your data type can 'deserialize' itself
+  'from the output of the ToString() method.
+  Dim str As String = Nothing
+  If (GH_Convert.ToString(source, str, GH_Conversion.Both)) Then
+    Select Case str.ToUpperInvariant()
+      Case "FALSE", "F", "NO", "N"
+        Value = 0
+        Return True
+      Case "TRUE", "T", "YES", "Y"
+        Value = +1
+        Return True
+      Case "UNKNOWN", "UNSET", "MAYBE", "DUNNO", "?"
+        Value = -1
+        Return True
+    End Select
+  End If
+
+  'We've exhausted the possible conversions, it seems that source
+  'cannot be converted into a TriStateType after all.
+  Return False
+End Function
+</code></pre>
+
+</div>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/guides/grasshopper/grasshopper-data-types">Grasshopper Data Types</a></li>
+  <li><a href="/guides/grasshopper/simple-component">Simple Component</a></li>
+  <li><a href="/guides/grasshopper/simple-parameters">Simple Parameters</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/grasshopper/simple-data-types.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2016 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>
