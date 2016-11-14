@@ -307,13 +307,14 @@ $(document).ready(function()
               
           </ol>
 
-          <h1 id="lofting-surfaces-that-maintain-tangency">Lofting Surfaces that Maintain Tangency</h1>
+          <h1>Lofting Surfaces that Maintain Tangency</h1>
 
-<p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span></p>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span>
+</p>
 
-<p>This guide demonstrates how to loft surfaces that maintain tangency using C/C++.</p>
+          <p>This guide demonstrates how to loft surfaces that maintain tangency using C/C++.</p>
 
-<h2 id="overview">Overview</h2>
+          <h2 id="overview">Overview</h2>
 
 <p>When trying to loft a surface with starting or ending tangency, it is not enough just to set <code>CArgsRhinoLoft</code> object’s <code>m_start_condition</code> and <code>m_end_condition</code> members to <code>CArgsRhinoLoft::leTangent</code>.  You also need to tell Rhino’s lofter what it is that this lofted surface need to be tangent to.  You do this by setting the <code>m_trim</code> parameter of the starting and ending <code>CRhinoLoftCurve</code> objects.  This is a constant <code>ON_BrepTrim</code> pointer.  If you are lofting curves that you have picked using a <code>CRhinoGetObject</code> object, you can retrieve this pointer by simply calling <code>CRhinoObjRef::Trim()</code>.</p>
 
