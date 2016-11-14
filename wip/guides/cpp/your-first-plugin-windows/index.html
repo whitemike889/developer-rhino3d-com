@@ -458,10 +458,10 @@ $(document).ready(function()
 <ol>
   <li>Launch <em>Visual Studio 2015</em> and navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project…</em>.</li>
   <li>From the <em>New Project</em> dialog, select the <em>Rhinoceros 6 Plug-in</em> template from the list of installed templates…
-<img src="/wip/images/your_first_plugin_windows_cpp_01.png" alt="New Project Template" /></li>
+<img src="/wip/images/your-first-plugin-windows-cpp-01.png" alt="New Project Template" /></li>
   <li>Type the project name as shown above.  You can enter a different name if you want.  The wizard uses the project name when it creates files and classes.  If you enter a different name, your files and classes will have a name different from that of the files and classes mentioned in this tutorial.  Don’t forget to choose a location to store the project.  When finished, click the <em>OK</em> button.</li>
   <li>Upon clicking <em>OK</em>, the <em>Overview</em> page of the <em>Rhinoceros 6 Plug-In Wizard</em> dialog will appear.  This page gives you an overview of the type of project that the wizard is going to create.<br />
-<img src="/wip/images/your_first_plugin_windows_cpp_02.png" alt="New Project Overview" /></li>
+<img src="/wip/images/your-first-plugin-windows-cpp-02.png" alt="New Project Overview" /></li>
   <li>Not that, by default, the wizard will do the following:
     <ol>
       <li>Create a general utility plugin.</li>
@@ -472,7 +472,7 @@ $(document).ready(function()
   <li>The <em>Plug-in Settings</em> page allows you to modify a number of settings used by the wizard when generating the plugin source code:
     <ol>
       <li><em>Plug-in name</em>: Modify this field if you want to change the name of the plugin.  <em>NOTE</em>: modifying this field does not modify the project name but rather the name of the plugin as listed in Rhino’s <em>PlugInManager</em> dialog box.</li>
-      <li><em>Plug-in type</em>: Select the <a href="/wip/guides/general/what_is_a_rhino_plugin">type of plugin</a> that you want the wizard to create.</li>
+      <li><em>Plug-in type</em>: Select the <a href="/wip/guides/general/what-is-a-rhino-plugin">type of plugin</a> that you want the wizard to create.</li>
       <li><em>Source file comments</em>: Select this option if you want the wizard to add verbose comments to the generated source files.</li>
       <li><em>Online help</em>: Select this option if you want your plugin to support online help.  If selected, a menu item will be displayed on Rhino’s <em>Help</em> menu.</li>
       <li><em>Automation</em>: Select this option to allow your program to manipulate objects implemented in another program.  Selecting this option also exposes your program to other Automation client plugins.</li>
@@ -506,7 +506,7 @@ $(document).ready(function()
 
 <p>With <em>Visual Studio 2015</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</p>
 
-<p><img src="/wip/images/your-first-plugin-windows_cpp-04.png" alt="Test Property Pages" /></p>
+<p><img src="/wip/images/your-first-plugin-windows-cpp-04.png" alt="Test Property Pages" /></p>
 
 <p>Reviewing the above settings, you can see that, unlike Rhino 5 plugin projects, there is no 32-bit platform.  This is because Rhino 6 is only available as a 64-bit application.</p>
 
@@ -515,7 +515,7 @@ $(document).ready(function()
 
 <p>The Plugin Wizard, used to generate the plugin project, adds Rhino plugin-specific property sheets to the project.  To view these propety sheets, click <em>View</em> &gt; <em>Property Manager</em>.</p>
 
-<p><img src="/wip/images/your_first_plugin_windows_cpp_06.png" alt="Test Property Manager" /></p>
+<p><img src="/wip/images/your-first-plugin-windows-cpp-06.png" alt="Test Property Manager" /></p>
 
 <h3 id="boilerplate-build">Boilerplate Build</h3>
 
@@ -560,7 +560,7 @@ $(document).ready(function()
   </li>
   <li>For this guide, build the <em>Debug</em> configuration.</li>
   <li>From within Rhino, navigate to <em>Tools</em> &gt; <em>Options</em>.  Navigate to the <em>Plugins</em> page under <em>Rhino Options</em> and install your plugin.
-<img src="/wip/images/your-first-plugin-windows_cpp-05.png" alt="Rhino Options" /></li>
+<img src="/wip/images/your-first-plugin-windows-cpp-05.png" alt="Rhino Options" /></li>
   <li>Once your plugin is loaded, close the options dialog and run your <code>Test</code> command.  You have finished creating your first plugin!</li>
 </ol>
 
@@ -590,8 +590,8 @@ public:
 
   // CCommandTest::~CCommandTest()
   // is called exactly once when static theTestCommand is destroyed.
-  // The destructor should not make any calls to the Rhino SDK. 
-  // If your command has persistent settings, then override 
+  // The destructor should not make any calls to the Rhino SDK.
+  // If your command has persistent settings, then override
   // CRhinoCommand::SaveProfile and CRhinoCommand::LoadProfile.
   ~CCommandTest() = default;
 
@@ -607,7 +607,7 @@ public:
   }
 
   // Returns the English command name.
-  // If you want to provide a localized command name, then override 
+  // If you want to provide a localized command name, then override
   // CRhinoCommand::LocalCommandName.
   const wchar_t* EnglishCommandName() override { return L"Test"; }
 
@@ -640,7 +640,7 @@ CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; c
   //   CRhinoCommand::success:  The command worked.
   //   CRhinoCommand::failure:  The command failed because of invalid input, inability
   //                            to compute the desired result, or some other reason
-  //   CRhinoCommand::cancel:   The user interactively canceled the command 
+  //   CRhinoCommand::cancel:   The user interactively canceled the command
   //                            (by pressing ESCAPE, clicking a CANCEL button, etc.)
   //                            in a Get operation, dialog, time consuming computation, etc.
 
@@ -670,7 +670,7 @@ CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; c
   <li>Use the <em>Add</em> button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  The file can be found in the following location: <em>C:\Program Files\Rhino 6.0 SDK\Wizards\Command</em></li>
 </ol>
 
-<p><img src="/wip/images/your_first_plugin_windows_cpp_07.png" alt="Rhino Command Generator" /></p>
+<p><img src="/wip/images/your-first-plugin-windows-cpp-07.png" alt="Rhino Command Generator" /></p>
 
 <hr />
 
