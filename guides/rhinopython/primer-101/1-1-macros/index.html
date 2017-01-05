@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Getting Started with Rhino.Python on the Mac with Python</title>
-  <meta name="description" content="This guide covers the basics of getting started writing Python in Rhino for Mac.  Using Python">
+  <title>1.1 Macros with Python</title>
+  <meta name="description" content="">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/get-started-with-rhinopython/" />
-  <meta property="og:title" content="Getting Started with Rhino.Python on the Mac" />
-  <meta property="og:description" content="This guide covers the basics of getting started writing Python in Rhino for Mac." />
+  <meta property="og:url" content="/guides/rhinopython/primer-101/1-1-macros/" />
+  <meta property="og:title" content="1.1 Macros" />
+  <meta property="og:description" content="" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Getting Started with Rhino.Python on the Mac" />
-  <meta name="twitter:description" value="This guide covers the basics of getting started writing Python in Rhino for Mac." />
+  <meta name="twitter:title" value="1.1 Macros" />
+  <meta name="twitter:description" value="" />
   
     
       <meta name="twitter:image" content="/images/rhinodev_logo_unfurl.png" />
@@ -29,7 +29,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Mac" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -51,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/get-started-with-rhinopython/">
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/primer-101/1-1-macros/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -246,32 +246,69 @@
               
               <li><a href="/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">Getting Started</li>
+              <li class="active">Python Primer</li>
               
           </ol>
 
-          <h1>Getting Started with Rhino.Python on the Mac</h1>
+          <h1>1.1 Macros</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/Alain/activity">Alain Cormier</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide covers the basics of getting started writing Python in Rhino for Mac.</p>
+          <p></p>
 
-          <p>To get acquainted with how Python scripts can help you model in Rhino first run some of the sample scripts that are provided.</p>
+          <p>Rhinoceros is based on a command-line interface. This means you can control it by using only the keyboard. You type in the commands and the program will execute them. Ever since the advent of the mouse, a user interface which is purely command-line based is considered to be primitive, and rightly so. Instead of typing:</p>
+
+<pre><code>Line 0,0,0 10,0,0
+</code></pre>
+<p>you can also click on the Line button and then twice in the viewport to define the starting and ending points of a line-curve. Because of this second (graphical) interface some people have done away with the 
+command-line entirely. Emotions run high on the subject; some users are command-line fanatics, others use only toolbars and menus. Programmers have no emotions in this respect, they are all wedded to the command-line. It’s no use programming the mouse to go to a certain coordinate and then simulate a mouse click, that is just plain silly. Programmers pump text into Rhino and they expect to get text in return.</p>
+
+<p>The lowest form of programming in Rhino is using macros. I do not wish to offend those of you who write macros for a living, but it cannot be denied that it is a very primitive way to automate processes. I shall only briefly pause at the subject of macros, partly so we know which is which and partly because we might at some point simulate macros using RhinoScript.</p>
+
+<p>A macro is a prerecorded list of orders for Rhino to execute. The <em>_Line</em> command at the top of this page is an example of a very simple macro. If your job is to open Rhino files, add a line from 0,0,0 to 10,0,0 to each one and save the file again, you would probably get very tired very quickly from typing <code>_Line w0,0,0 w10,0,0</code> six times a minute. Enter macros. Macros allow you to automate tasks you would normally do by hand but not by brain. Macros cannot be made smart, nor do they react to the things they help create. They’re a bit like traffic wardens in that respect. An example of a more sophisticated macro would be:</p>
+
+<pre><code>_SelNone
+_Polygon _NumSides=6 w0,0,0 w10,0,0
+_SelLast
+-_Properties _Object _Name RailPolygon _Enter _Enter
+_SelNone
+_Polygon _NumSides=6 w10,0,0 w12,0,0
+_SelLast
+_Rotate3D w0,0,0 w10,0,0 90
+-_Properties _Object _Name ProfilePolygon _Enter _Enter
+_SelNone
+-_Sweep1 _SelName RailPolygon _SelName ProfilePolygon _Enter _Enter _Closed=Yes Enter
+</code></pre>
+
+<table>
+<tr>
+<td>
+The above code will create the same hexagonal torus over and over again. It might be useful, but it's not flexible. You can type the above text into the command-line by hand, or you can put it into a button. You can even copy-paste the text directly into Rhino.
+
+Incidentally, the underscores before all the command names are due to Rhino localization. Using underscores will force Rhino to use English command names instead of -say- Italian or Japanese or whatever the custom setting is. You should always force English command names since that is the only guarantee that your code will work on all copies of Rhino worldwide.
+</td>
+<td width="30%"><img src="/images/hexagonaltorus.svg" width="100%" height="300" float="right" /></td>
+</tr>
+</table>
+
+<p>The hyphen in front of the <em>_Properties</em> and <em>_Sweep1</em> command is used to suppress dialog boxes. If you take the hyphens out you will no longer be able to change the way a command works through the command -line.</p>
+
+<p>There’s no limit to how complex a macro can become, you can keep adding commands without restrictions, but you’ll never be able to get around the limitations that lie at the heart of macros.</p>
+
+<hr />
+
+<h4 id="related-topics">Related Topics</h4>
 
 <ul>
-  <li>In the Command prompt edit box (top left by default) type the RunPythonScript command.</li>
-  <li>If it’s the first time you run this command the dialog box that comes up will show the files in the samples directory.  If it’s not then navigate to it.  It should be under:
-  <code>bash
-  /Users/HOME/Library/Application\ Support/McNeel/Rhinoceros/Scripts/samples
- </code>
-  (replace HOME with your home directory name).</li>
-  <li>Experiment by running the various samples starting with HelloPython.py</li>
+  <li><a href="/guides/rhinopython/primer-101/1-2-where-to-find-help/">Where to find help - Next Topic »</a></li>
+  <li><a href="/guides/rhinopython/primer-101/rhinopython101">Rhino.Python Primer 101</a></li>
+  <li><a href="/guides/rhinopython/python-running-scripts">Running Scripts</a></li>
+  <li><a href="/guides/rhinopython/python-canceling-scripts">Canceling Scripts</a></li>
+  <li><a href="/guides/rhinopython/python-editing-scripts">Editing Scripts</a></li>
+  <li><a href="/guides/rhinopython/python-scripting-options">Scripting Options</a></li>
+  <li><a href="/guides/rhinopython/python-scripting-reinitialize">Reinitializing Python</a></li>
 </ul>
-
-<p>You can open any of the sample Python scripts in a text editor to see what they look like.  From Finder navigate to the samples directory and right-click on any of the scripts and from the context menu that pops up select Open With -&gt; TextEdit.app which is the text editor that comes with macOS.  You can try editing and saving the files and then re-run them but when you’re ready start writing more complex scripts you can use the <a href="https://atom.io" target="_blank">Atom text editor</a> that’s been specifically enhanced with the <a href="https://atom.io/packages/rhino-python" target="_blank">rhino-python</a> package to help with scripts that will be run by Rhino.</p>
-
-<p>After you’ve followed the above links and setup Atom the next step is to get familiar with the different <a href="../apis-for-python/">application programming interfaces (API)</a> you’ll need to write scripts that interact with Rhino.</p>
 
         </article>
 
@@ -296,7 +333,7 @@
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/Alain/activity">Alain Cormier</a>
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
               
             </p>
           </div>
@@ -306,7 +343,7 @@
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/get-started-with-rhinopython.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/primer-101/1-1-macros.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
@@ -316,7 +353,7 @@
         </div>
 
         <div class="row text-center">
-          © 1997 - 2016 Robert McNeel &amp; Associates
+          © 1997 - 2017 Robert McNeel &amp; Associates
         </div>
 
       
