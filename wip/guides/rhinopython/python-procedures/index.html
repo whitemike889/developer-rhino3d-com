@@ -418,12 +418,19 @@ $(document).ready(function()
 print (time.strftime("%H:%M:%S")) #strftime is a proccedure in the time module.
 </code></pre>
 
-<p>The <code>import</code> statement can also be used to change the renference mname of the incoming module.  Use thsi function to make module names shorter to use and easier to read in the code.  A very common example of this is how we normally will shorted the <code>rhinoscriptsyntax</code> module to <code>rs</code> for convenience:</p>
+<p>The <code>import</code> statement can also be used to change the renference mname of the incoming module.  Use this function to make module names shorter to use and easier to read in the code.  A very common example of this is how we normally will shorted the <code>rhinoscriptsyntax</code> module to <code>rs</code> for convenience:</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
 rs.AddPoint (1, 2, 3) # The Rhinoscriptsyntax module is accessed throught 'rs' abreviation.
 </code></pre>
+
+<p>It is also possible to import only a portion of a module. In the following case, only certain namespaces are imported from the larger <code>Syste.IO</code> module:</p>
+
+<pre><code class="language-python">from System.IO import Path, File, FileInfo, FileAttributes
+</code></pre>
+
+<p>The imported modules above are referenced by using <code>Path</code>, <code>File</code>, <code>FileInfo</code>, <code>FileAttributes</code> as namespaces.</p>
 
 <h2 id="common-modules">Common Modules</h2>
 
@@ -458,7 +465,7 @@ rs.AddPoint (1, 2, 3) # The Rhinoscriptsyntax module is accessed throught 'rs' a
   </li>
   <li>File and Directory Access
     <ul>
-      <li>os.path — Common pathname manipulations</li>
+      <li>System.IO — Common pathname manipulations</li>
       <li>tempfile — Generate temporary files and directories</li>
       <li>csv — CSV File Reading and Writing</li>
     </ul>
@@ -508,7 +515,7 @@ MsgBox "The temperature is " &amp; Celsius(temp) &amp; " degrees C."
 
 <ul>
   <li><a href="/wip/guides/rhinopython/what-is-rhinopython">What are Python and RhinoScriptSyntax?</a></li>
-  <li><a href="https://www.tutorialspoint.com/python/python_functions.htm">Additional information onf Functions in Python</a></li>
+  <li><a href="https://www.tutorialspoint.com/python/python_functions.htm">Additional information on Functions in Python</a></li>
 </ul>
 
         </article>

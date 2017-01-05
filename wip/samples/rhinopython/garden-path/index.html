@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Garden Path Sample with Python</title>
+  <meta name="description" content="Demonstrates Basic syntax for writing python scripts.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/samples/rhinopython/garden-path/" />
+  <meta property="og:title" content="Garden Path Sample" />
+  <meta property="og:description" content="Demonstrates Basic syntax for writing python scripts." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Garden Path Sample" />
+  <meta name="twitter:description" value="Demonstrates Basic syntax for writing python scripts." />
+  
+    
+      <meta name="twitter:image" content="/wip/images/rhinodev_logo_unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/samples/rhinopython/garden-path/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the <strong>wip</strong> version of this page!
+    <a href="/samples/rhinopython/garden-path/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <h3>Garden Path Sample</h3>
+
+<p>Demonstrates Basic syntax for writing python scripts.</p>
+
+<p style="color:#337ab7; padding-left:10px">Python</p>
+
+<p>The goal of the garden path tutorial is to develop a script that draws a garden path and fills it with circular concrete tiles. For those familiar with AutoLISP®, the programming language of Autodesk’s AutoCAD®, you are probably also familiar with the garden path tutorial.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+import math #Use this to get sine, cosine and radians.
+import scriptcontext as sc
+
+def test():
+    
+        #Assign variables to the sin and cos functions for use later.
+    Sin = math.sin
+    Cos = math.cos
+    
+    
+    	# Acquire information for the garden path
+    	
+    	# set default values for the distances
+    default_hwidth = 1
+    default_trad = 1
+    default_tspace = 1
+    	
+    	
+    	# look for any previously used values stored in sticky and use those if available.
+    if sc.sticky.has_key("GP_WIDTH"):
+        default_hwidth = sc.sticky["GP_WIDTH"]
+        
+    if sc.sticky.has_key("GP_RAD"):
+        default_trad = sc.sticky["GP_RAD"]
+        
+    if sc.sticky.has_key("GP_Space"):
+        default_tspace = sc.sticky["GP_SPACE"]	
+    	    
+        #get the path direction, length and location from two points entered by the user
+    sp = rs.GetPoint("Start point of path centerline")
+    if sp is None: return
+    
+    ep = rs.GetPoint("End point of path centerline", sp)
+    if ep is None: return
+    
+        #now ask the user what the distances should be, offering the defaults arrived at above
+        
+    hwidth = rs.GetDistance(sp, default_hwidth,  second_pt_msg = "Half width of path")
+    if hwidth is None: return
+    
+        #Store the new value in sticky for use next time
+    sc.sticky["GP_WIDTH"] = hwidth
+    
+    trad = rs.GetDistance(sp, default_trad, second_pt_msg = "Radius of tiles")
+    if trad is None: return
+    
+        #Store  the new value in sticky for use next time
+    sc.sticky["GP_RAD"] = trad
+    
+    tspace = rs .GetDistance(sp, default_tspace, second_pt_msg = "Distance between tiles")
+    if tspace is None: return
+    
+        #Store  the new value in sticky for use next time
+    sc.sticky["GP_SPACE"] = tspace
+    
+    	# Calculate angles
+    
+    temp = rs.Angle(sp, ep)
+    
+    pangle = temp[0]
+    
+    plength = rs.Distance(sp, ep)
+    
+    width = hwidth * 2
+    
+    angp90 = pangle + 90.0
+    
+    angm90 = pangle - 90.0
+    
+    
+	# To increase speed, disable redrawing
+
+    rs.EnableRedraw (False)
+    
+	# Draw the outline of the path
+    #make an empty list
+    pline = []
+    
+    #add points to the list
+    pline.append(rs.Polar(sp, angm90, hwidth))
+    
+    pline.append(rs.Polar(pline[0], pangle, plength))
+    
+    pline.append(rs.Polar(pline[1], angp90, width))
+    
+    pline.append(rs.Polar(pline[2], pangle + 180.0, plength))
+    
+    #add the first point back on to the end of the list to close the pline
+    pline.append (pline[0])
+    
+    #create the polyline from the lst of points.
+    rs.AddPolyline (pline)
+    
+    
+
+    # Draw the rows of tiles
+    
+    #define a plane - 
+    #using the WorldXY plane the reults will always be added parallel to that plane, 
+    #regardless of the active plane where the points are picked.
+    
+    plane = rs.WorldXYPlane()
+    
+    pdist = trad + tspace
+    
+    off = 0.0
+    
+    while (pdist &lt;= plength - trad):
+    
+        #Place one row of tiles given distance along path
+        
+        # and possibly offset it
+        
+        pfirst = rs.Polar(sp, pangle, pdist)
+        
+        pctile = rs.Polar(pfirst, angp90, off)
+        
+        pltile = pctile
+        
+        while (rs.Distance(pfirst, pltile) &lt; hwidth - trad):
+        
+            plane = rs.MovePlane(plane, pltile)
+            
+            rs.AddCircle (plane, trad)
+            
+            pltile = rs.Polar(pltile, angp90, tspace + trad + trad)
+        
+        
+        pltile = rs.Polar(pctile, angm90, tspace + trad + trad)
+        
+        while (rs.Distance(pfirst, pltile) &lt; hwidth - trad):
+        
+            plane = rs.MovePlane(plane, pltile)
+            
+            rs.AddCircle (plane, trad)
+            
+            pltile = rs.Polar(pltile, angm90, tspace + trad + trad)
+
+        pdist = pdist + ((tspace + trad + trad) * Sin(math.radians(60)))
+        
+        if off == 0.0:
+        
+            off = (tspace + trad + trad) * Cos(math.radians(60))
+        
+        else:
+        
+            off = 0.0
+    
+   
+
+	
+
+    
+if __name__ == "__main__":
+    
+    test()
+
+</code></pre>
+
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_samples/rhinopython/garden-path.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>
