@@ -264,6 +264,22 @@ $(document).ready(function()
             
             
             <li>
+              <a href="#overview">Overview</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
               <a href="#rhinoscriptsyntax">RhinoScriptSyntax</a>
 
               
@@ -281,6 +297,22 @@ $(document).ready(function()
             
             <li>
               <a href="#rhinocommon">RhinoCommon</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#common-python-modules">Common Python Modules</a>
 
               
 
@@ -314,26 +346,77 @@ $(document).ready(function()
 
           <p>This guide covers the APIs available to Python in Rhino.</p>
 
-          <h2 id="rhinoscriptsyntax">RhinoScriptSyntax</h2>
+          <h2 id="overview">Overview</h2>
 
-<p>RhinoScriptSyntax is divided into <a href="/api/RhinoScriptSyntax/win">modules</a> and each module contains functions that are meant to duplicate the functionality provided by the RhinoScript language that’s supported in Rhino for Windows.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.  In other words this is a Python equivalent of those RhinoScript functions so if you are familiar with RhinoScript in Rhino for Windows the transition to Python in Rhino for the Mac should be natural.  Not all of the RhinoScript functions have been added yet but this document will be updated as more functions are added.</p>
+<p>Python is an extensable programming language with hundreds of additional modules.  This allows Python to be used in many situations both inside Rhinoa and outside Rhino.  There are some specific additional models that are specifically of interest related to Rhino and Grasshopper.</p>
+
+<p>These new modules can be accessed in a Python script by including the <code>import</code> method at the top of each Python script:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+import math
+</code></pre>
+
+<h2 id="rhinoscriptsyntax">RhinoScriptSyntax</h2>
+
+<p>The RhinoScriptSyntax methods library contains hundreds of easy-to-use functions that perform a variety of operations on Rhino.  The library allows Python to be aware of the Rhino’s:</p>
+
+<ul>
+  <li>Geometry</li>
+  <li>Commands</li>
+  <li>Document objects</li>
+  <li>Application methods</li>
+</ul>
+
+<p>To make these methods easy-to-use, all RhinoScriptSyntax methods return simple Python variables or Python List-based data structures. Thus, once you are familiar with Python, you will be able to use any and all functions in the RhinoScriptSyntax methods library. RhinoScriptSyntax is divided into <a href="/api/RhinoScriptSyntax/win">modules</a> that mirror standard Rhino commands.</p>
+
+<p>For those that are familiar with the RhinoScript language in Rhino for Windows.  RhinoScriptSyntax is meant to duplicate the functionality provided by the RhinoScript language. If you are familiar with RhinoScript in Rhino for Windows the transition to Python in Rhino should be natural.</p>
 
 <h2 id="rhinocommon">RhinoCommon</h2>
+
+<p>RhinoCommon is an extensive, low level .NET library of the Rhino SDK. It is meanst for more experienced programmers that would like to most extensive access to Rhino and its classes.</p>
 
 <p>An important detail that will become important as you are learning to script Rhino with Python is that the implementation of Python that is embedded in Rhino is called IronPython: a Python implementation in C# that runs on the .Net/mono platform which means that in addition to the Python language features and the <a href="/api/RhinoScriptSyntax/win">rhinoscriptsyntax package</a>, you also have access to all the libraries in .Net/mono and <a href="../../rhinocommon/what-is-rhinocommon/">RhinoCommon</a>.</p>
 
 <p>The rhinoscriptsyntax package is implemented on top of RhinoCommon so reading the source code is a great way to learn how to use RhinoCommon from Python.  The source code files are included in the Rhino distribution on your computer and the default location is:
-<code>bash
+<code>
 /Users/&lt;YOUR_HOME_DIRECTORY&gt;/Library/Application Support/McNeel/Rhinoceros/MacPlugIns/ironpython/settings/lib/rhinoscript
 </code></p>
 
-<div class="footnotes">
-  <ol>
-    <li id="fn:1">
-      <p>Rhino for Mac supports Python whereas Rhino for Windows supports both RhinoScript and Python. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
-    </li>
-  </ol>
-</div>
+<h2 id="common-python-modules">Common Python Modules</h2>
+
+<p>There are many modules other modules for Python. Here are a list of the most useful to modules for Rhino.Python are:</p>
+
+<ul>
+  <li>Date and Time
+    <ul>
+      <li>datetime — Basic date and time types</li>
+      <li>time — Time access and conversions</li>
+    </ul>
+  </li>
+  <li>Numeric and Mathematical Modules
+    <ul>
+      <li>math — Mathematical functions</li>
+      <li>fractions — Rational numbers</li>
+      <li>random — Generate pseudo-random numbers</li>
+    </ul>
+  </li>
+  <li>File and Directory Access
+    <ul>
+      <li>os.path — Common pathname manipulations</li>
+      <li>tempfile — Generate temporary files and directories</li>
+      <li>csv — CSV File Reading and Writing</li>
+    </ul>
+  </li>
+  <li>String Services
+    <ul>
+      <li>string — Common string operations</li>
+      <li>StringIO — Read and write strings as files</li>
+      <li>fpformat — Floating point conversions</li>
+    </ul>
+  </li>
+</ul>
+
+<p>A complete list of predefined modules in Python, see the <a href="https://docs.python.org/2/library/">Python Standard Library modules</a></p>
 
         </article>
 
