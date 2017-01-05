@@ -460,14 +460,28 @@ $(document).ready(function()
 
 <p>There are many ways to access the data in this datastore:</p>
 
-<p># print database[“store”][“book”][0:2]
-  # print database[“store”][“book”][1][“author”]
-  # print database[“store”][“bicycle”]</p>
+<pre><code class="language-python">print database["store"]["bicycle"]
+</code></pre>
 
-<p># Use this method to create a reference to a portion of the database.  In this case the list of books.
-  # A list object is mutable in Python, therfore it is easy to walk though it with a for statement
-  # becase this is dereived from database, any changing the books list will change in database.
-  books = database[‘store’][‘bookshelf’]</p>
+<p>This returns the bicycle dictionary object<code>{ "color":"blue, "style":"trail", "price":49.95 }</code></p>
+
+<p>Knowing that the <code>value</code> for <code>bookshelf</code> is a list.  Use and index number to access any single book:</p>
+
+<pre><code class="language-python"> print database["store"]["bookshelf"][1]
+</code></pre>
+
+<p>This returns the dictionary object for The Grapes of Wrath.</p>
+
+<p>The objects and values in the datastore can also be accessed with the <code>.get</code> method.  The direct method shown above will return an error if a key does not exist. The <code>.get</code> method is a little safer.  It will return a value or <code>None</code>.  This is much safer if you are not sure the key is always present.  The <code>isbn</code> key is a goot example of this.</p>
+
+<pre><code class="language-python">print database["store"]["toy"] # this produces an error.
+print database["store"].get("toy")  #This will produce the value of None.
+</code></pre>
+<p>A convenient way to efficiently address a portion of the datastore is to assign the portion to a variable. In this case the list of books.</p>
+
+<pre><code class="language-python">books = database['store']['bookshelf']
+</code></pre>
+<p>The variable is a reference to the object. so any changes made with books will also be reflected in the original datastore.</p>
 
 <p># for item in books:
   #     if “author” in item:
