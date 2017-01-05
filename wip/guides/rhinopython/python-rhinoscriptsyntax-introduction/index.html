@@ -348,29 +348,53 @@ $(document).ready(function()
 
           <h2 id="overview">Overview</h2>
 
-<p>The RhinoScriptSyntax methods library contains hundreds of easy-to-use functions that perform a variety of operations on Rhino.  The library allows Python to be aware of the Rhino application, its documents and objects.</p>
+<p>The RhinoScriptSyntax methods library contains hundreds of easy-to-use functions that perform a variety of operations on Rhino.  The library allows Python to be aware of the Rhino’s:</p>
 
-<p>To make these methods easy-to-use, all RhinoScriptSyntax methods require and return simple Python variables or Python List-based data structures. Thus, once you are familiar with Python, you will be able to use any and all functions in the RhinoScriptSyntax methods library.</p>
+<ul>
+  <li>Geometry</li>
+  <li>Commands</li>
+  <li>Document objects</li>
+  <li>Application methods</li>
+</ul>
+
+<p>To make these methods easy-to-use, all RhinoScriptSyntax methods return simple Python variables or Python List-based data structures. Thus, once you are familiar with Python, you will be able to use any and all functions in the RhinoScriptSyntax methods library.</p>
 
 <h2 id="importing-rhinoscriptsyntax">Importing RhinoScriptSyntax</h2>
 
-<p>Before using RhinoScriptSyntax a line must be added to the top of each Python file to allow the RhinoScriptSyntax:</p>
+<p>Before using RhinoScriptSyntax a line must be added to the top of each Python file to allow access to the RhinoScriptSyntax:</p>
 
 <pre><code class="language-pyhon">import rhinoscriptsyntax as rs
 </code></pre>
 
-<p>The <code>import</code> above not only imports the library, but also renames the namespace to <code>rs.</code>.  This is done to just make it easier to type when accessing the methods in RhinoScriptSyntax.  Access the methods can now be made by starting methods with ‘rs.’:</p>
+<p>The <code>import</code> above not only imports the library, but also renames the namespace to <code>rs.</code>.  This is done to just make it easier to type when accessing the methods in RhinoScriptSyntax.  Access the methods can now be made by starting methods with ‘rs.’.  For example, accessing the <code>Addpoint()</code> method in the RhinoScriptSyntax namespace can  be entered:</p>
 
 <pre><code class="language-python">rs.AddPoint(1,4,5)
 </code></pre>
 
 <h2 id="geometry">Geometry</h2>
 
+<p>Creating, accessing and maniputlating Geometry is one of the first places RhinoScriptSytnax is used.  SImple gemetory scuh as points, lines, planes can be described with simple lists in Python.  More complicated geomtry objects such as NURBS curves, Surfaces and Poly-surfaces can be created by Rhino and referenced by an object ID by RhinoScriptSyntax.</p>
+
 <p>Although not required, having some understanding of the computational methods used in 3-D modeling and computer graphics can be helpful when using RhinoScriptSyntax. A good introductory resource is the <a href="http://www.rhino3d.com/download/Rhino/4.0/EssentialMathematicsSecondEdition">Essential Mathematics for Computational Design</a>. This material is directed towards designers who have little or no background in mathematics beyond high school. And although all concepts are explained visually using Grasshopper®, they are directly applicable to RhinoScriptSyntax.</p>
+
+<h4 id="basic-geometry">Basic Geometry</h4>
+
+<p>Herea re the basic geometry types of RhinoScript:</p>
+
+<ul>
+  <li>Points</li>
+  <li>Arrays of Points</li>
+  <li>Vectors</li>
+  <li>Lines</li>
+  <li>Planes</li>
+  <li>Objects</li>
+</ul>
+
+<p>Basic Gemotry such and points and lines can be describe directly through points and lists. More complicated NURBS gemetory requires a more sophisticated description.</p>
 
 <h4 id="nurbs-geometry">NURBS Geometry</h4>
 
-<p>NURBS curves and surfaces behave in similar ways and share terminology. Since curves are easiest to describe, we will cover them in detail. A NURBS curve is defined by four things: degree, control points, knots, and an evaluation rule.</p>
+<p>All NURBS curves and surfaces behave in similar ways and share terminology. Since curves are easiest to describe, we will cover them in detail. A NURBS curve is defined by four things: degree, control points, knots, and an evaluation rule.</p>
 
 <h4 id="degree">Degree</h4>
 
