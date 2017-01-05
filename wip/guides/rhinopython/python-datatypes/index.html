@@ -406,17 +406,17 @@ $(document).ready(function()
   <li><a href="#dictionary">Dictionary</a></li>
 </ul>
 
-<p>Python sets the variable type based on the value that is assigned to it.  Unlike more riggeros lenguages, Python will change the variable type if the variable value is set to another value. For example:</p>
+<p>Python sets the variable type based on the value that is assigned to it.  Unlike more riggers languages, Python will change the variable type if the variable value is set to another value. For example:</p>
 
-<pre><code class="language-python">var1 = 123 # This will create a number integer assignment
-var1 = 'john' # the `var1` varaible is now a string type.
+<pre><code class="language-python">var = 123 # This will create a number integer assignment
+var = 'john' # the `var` variable is now a string type.
 </code></pre>
 
 <h2 id="numbers">Numbers</h2>
 
 <p>Python numbers variables are created by the standard Python method:</p>
 
-<pre><code class="language-python">var1 = 382
+<pre><code class="language-python">var = 382
 </code></pre>
 
 <p>Most of the time using the standard Python number type is fine. Python will automatically convert a number from one type to another if it needs. But, under certain circumstances that a specific number type is needed (ie. complex, hexidecimal), the format can be forced into a format by using additional syntax in the table below:</p>
@@ -486,13 +486,22 @@ var1 = 'john' # the `var1` varaible is now a string type.
 
 <p>Most of the time Python will do varibale convertion automatically. You can also use Python conversion functions <a href="https://docs.python.org/2/library/stdtypes.html#id2">(int(), long(), float(), complex())</a> to convert data from one type to another. In addition, the <code>type</code> function returns information about how your data is stored within a variable.</p>
 
+<pre><code class="language-python">message = "Good morning"
+num = 85
+pi = 3.14159
+
+print(type(message))  # This will return a string
+print(type(n))  # This will return an integer
+print(type(pi))  # This will return a float
+</code></pre>
+
 <h2 id="string">String</h2>
 
 <p>Create string variables by enclosing characters in quotes. Python uses single quotes (‘) double quotes (“) and triple quotes (“””) to denote literal strings.  Only the triple quoted strings (“””) also will automatically continue across the end of line statement.</p>
 
-<pre><code class="language-python">var1 = 'john'
-var2 = "smith"
-var3 = """This is a string that will span across multiple lines. \nUsing newline characters
+<pre><code class="language-python">firstName = 'john'
+lastName = "smith"
+message = """This is a string that will span across multiple lines. Using newline characters
 and no spaces for the next lines. The end of lines within this string also count as a newline when printed"""
 </code></pre>
 
@@ -519,18 +528,19 @@ C = [2, 4, 'john'] # lists can contain different variable types.
 <p>All lists in Python are zero-based indexed. When referencing a member or the legnth of a list the number of list elements is always the number shown plus one.</p>
 
 <pre><code class="language-python">mylist = ['Rhino', 'Grasshopper', 'Flamingo', 'Bongo']
-B = Len(Mylist) # This will return 3. The index is 0 - 3.
-print = Mylist[1] # This will return the value at index 1, which is 'Grasshopper'
-print = mylist[0:2] # This will return the first 3 elements in the list.
+B = len(mylist) # This will return the length of the list which is 3. The index is 0, 1, 2, 3.
+print mylist[1] # This will return the value at index 1, which is 'Grasshopper'
+print mylist[0:2] # This will return the first 3 elements in the list.
 </code></pre>
 
 <p>You can assign data to a specific element of the list using an index into the list. The list index starts at zero. Data can be assigned to the elements of an array as follows:</p>
 
-<pre><code class="language-python">myList = [0, 0, 0, 0]
+<pre><code class="language-python">mylist = [0, 1, 2, 3]
 mylist[0] = 'Rhino'
 mylist[1] = 'Grasshopper'
 mylist[2] = 'Flamingo'
 mylist[3] = 'Bongo'
+print mylist[1]
 </code></pre>
 
 <p>Lists aren’t limited to a single dimension. Although most people can’t comprehend more than three or four dimensions. You can declare multiple dimensions by separating an with commas.  In the following example, the MyTable variable is a two-dimensional array :</p>
@@ -544,18 +554,18 @@ mylist[3] = 'Bongo'
 
 <h2 id="tuple">Tuple</h2>
 
-<p>Tuples are a group of values like a list.  But tuples cannot be changed once they are assigned.  Tuples us paranthesis ().</p>
+<p>Tuples are a group of values like a list.  But tuples cannot be changed once they are assigned.  Tuples use parenthesis ().</p>
 
-<pre><code class="language-python">var1 = ('Rhino', "Grasshopper, 'Flamingo', 'Bongo')
+<pre><code class="language-python">myGroup = ('Rhino', 'Grasshopper', 'Flamingo', 'Bongo')
 </code></pre>
 
 <p>For more information on Tuples, see the <a href="https://www.tutorialspoint.com/python/python_tuples.htm">TutorialPoint Python Tutorial on Tuples</a></p>
 
 <h2 id="dictionary">Dictionary</h2>
 
-<p>Dictionaries in Python are lists of <code>Key</code>:<code>Value</code> pairs. This is a very powerful datatype to hold a lot of related information that can be associated through <code>keys</code>. The main operation od a dictionary is to extract a value based on the <code>key</code> name. Unlike lists, where index numbers are used, dictionaries allow the use of a <code>key</code> to access its members.  Dictionaries can also be used to sort, iterate and compare data.</p>
+<p>Dictionaries in Python are lists of <code>Key</code>:<code>Value</code> pairs. This is a very powerful datatype to hold a lot of related information that can be associated through <code>keys</code>. The main operation of a dictionary is to extract a value based on the <code>key</code> name. Unlike lists, where index numbers are used, dictionaries allow the use of a <code>key</code> to access its members.  Dictionaries can also be used to sort, iterate and compare data.</p>
 
-<p>Dictionaries are created by using braces ({}) with pairs seperated by a comma (,) and the key values associated with a colon(:). In Dictionaries the <code>Key</code> must be unique.  Here is a quick example on how ditionaires might be used:</p>
+<p>Dictionaries are created by using braces ({}) with pairs separated by a comma (,) and the key values associated with a colon(:). In Dictionaries the <code>Key</code> must be unique.  Here is a quick example on how dictionaries might be used:</p>
 
 <pre><code class="language-python">room_num = {'john': 425, 'tom': 212}
 room_num['john'] = 645  # set the value associated with the 'john' key to 645
