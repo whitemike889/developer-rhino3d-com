@@ -447,7 +447,7 @@ b = False
 
 <h2 id="scope--lifetime">Scope &amp; Lifetime</h2>
 
-<p>Scope of a variable defines where that variable can be accessed in your code.  For instance a <code>global</code> variable can be accessed from anywhere in you code.  A <code>local</code> variable can only be accessed within the function it was declared in.  Generally a variable’s scope is determined by where you declare it.</p>
+<p>Scope of a variable defines where that variable can be accessed in your code.  For instance a <code>global</code> variable can be accessed from anywhere in your code.  A <code>local</code> variable can only be accessed within the function it was declared in.  Generally a variable’s scope is determined by where you declare it.</p>
 
 <p>When you declare a variable within a procedure, only code within that procedure can access or change the value of that variable.  It has local scope and is a procedure-level variable.  If you declare a variable outside a procedure, you make it recognizable to all the procedures in your script.  This is a global variable, and it has global scope.</p>
 
@@ -467,15 +467,15 @@ print local_var  # this gives an error because we are outside function1
 
 <p>It is important to be careful when declaring variables.  It is easy to create duplicate variable names that do not reference the correct values.  For instance do not declare a global variable this way:</p>
 
-<pre><code class="language-python">global_var = 'True'
+<pre><code class="language-python">g_var = 'True'
 def function2():
-    global_var = 'False'
-    print 'inside the function var is ', var
+    g_var = 'False'
+    print 'inside the function var is ', g_var
 
 ex2()
-print 'outside the function var is ', var
+print 'outside the function var is ', g_var
 </code></pre>
-<p>The example above will create a <code>Global</code> variable named <code>g_var</code>.  When dropping in the <code>function2</code> function, there will be a second <code>local</code> variable created named <code>g_var</code> with a different value. The proper way to work with a global variable is to be very explicate with the <code>global</code> statement in the <code>local</code> scope:</p>
+<p>The example above will create a <code>Global</code> variable named <code>g_var</code>.  When dropping in the <code>function2</code> function, there will be a second <code>local</code> variable created named <code>g_var</code> with a different value. The proper way to work with a global variable is to be very explicit with the <code>global</code> statement in the <code>local</code> scope:</p>
 
 <pre><code class="language-python">g_var = "Global"
 def function2():
