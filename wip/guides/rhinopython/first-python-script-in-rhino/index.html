@@ -272,6 +272,38 @@ $(document).ready(function()
           
 
         
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-helloworld-function">The HelloWorld Function</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
     </ul>
 </nav>
 
@@ -304,97 +336,96 @@ $(document).ready(function()
 
 <h4 id="the-complete-script">The Complete Script</h4>
 
-<pre><code class="language-python">MsgBox "Hello World"
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+rs.MessageBox ("Hello World")
 </code></pre>
-<p>Test the Script</p>
+<p>To test the Script:</p>
 
-<p>•Start Rhino</p>
+<ul>
+  <li>Start Rhino</li>
+  <li>At the command prompt, type EditScript and press Enter.</li>
+  <li>The Edit Script dialog box appears.</li>
+  <li>In the script Code window, type the code sample above.</li>
+  <li>Click the “Run the script” button.</li>
+  <li>The Edit Script dialog box disappears, and the message below appears:</li>
+</ul>
 
-<p>•At the command prompt, type EditScript and press Enter.</p>
-
-<p>•The Edit Script dialog box appears.</p>
-
-<p>•In the script Code window, type</p>
-
-<p>MsgBox “Hello World”</p>
-
-<p>•Click the “Run the script” button.</p>
-
-<p>•The Edit Script dialog box disappears, and the message below appears:</p>
-
-<p>The HelloWorld Subroutine</p>
+<h2 id="the-helloworld-function">The HelloWorld Function</h2>
 
 <p>If you were writing a more complex script, and wanted to display “Hello World” at strategic points throughout the script, you could write this code every time you wanted the message to appear.</p>
 
 <p>But if you changed your mind and wanted it to say “Howdy World” instead, you’d have to search for all the places “Hello World” was used, and replace them.</p>
 
-<p>An easier way to solve this problem is to write a Subroutine (Sub for short).  At several places throughout your script, you call the Sub.  The Sub handles displaying the message, so you only have to change the message in one place.</p>
+<p>An easier way to solve this problem is to write a Function (<code>def</code> is used to define the function).  At several places throughout your script, you call the function.  The function handles displaying the message, so you only have to change the message in one place.</p>
 
-<p>Here’s what the subroutine looks like:</p>
+<p>Here’s what the function definition looks like:</p>
 
-<p>Sub HelloWorld()</p>
+<pre><code class="language-python">import rhinoscriptsyntax as rs
 
-<p>MsgBox “Hello World”</p>
+def HelloWorld()
+    rs.MessageBox ("Hello World")
+</code></pre>
 
-<p>End Sub</p>
+<p>If you click the run button at this time nothing will happen. Nothing happened? That’s because the RhinoScript defined the Subroutine but did not actually call it. To call the subroutine, either add this line of code and click Run.</p>
 
-<p>To call this subroutine, simply type:</p>
+<p>To call this function, simply add this to the bottom of the script:</p>
 
-<p>HelloWorld</p>
+<pre><code class="language-python">HelloWorld()
+</code></pre>
 
-<p>Testing HelloWorld</p>
+<p>In Python the functions definitions need to come before being called in the code.</p>
 
-<p>•At the command prompt, type EditScript and press Enter.</p>
+<h4 id="testing-helloworld">Testing HelloWorld</h4>
 
-<p>•The Edit Script dialog box appears.</p>
+<ul>
+  <li>At the command prompt, type EditScript and press Enter.</li>
+  <li>The Edit Script dialog box appears.</li>
+  <li>In the script Code window, type</li>
+</ul>
 
-<p>•In the script Code window, type</p>
+<pre><code class="language-python">import rhinoscriptsyntax as rs
 
-<p>Sub HelloWorld()</p>
-
-<p>MsgBox “Hello World”</p>
-
-<p>End Sub</p>
-
-<p>•Click the Run button.</p>
-
-<p>Nothing happened? That’s because the RhinoScript defined the Subroutine but did not actually call it.</p>
-
-<p>•To call the subroutine, either add this line of code and click Run.</p>
-
-<p>Sub HelloWorld()</p>
-
-<p>MsgBox “Hello World”</p>
-
-<p>End Sub</p>
-
-<p>HelloWorld</p>
-
-<p>Saving HelloWorld</p>
+def HelloWorld()
+    rs.MessageBox ("Hello World")
+    
+HelloWorld()
+</code></pre>
+<ul>
+  <li>Click the Run button.</li>
+</ul>
 
 <p>When you do more than write a couple lines of script, it becomes necessary to save the script to a file so that you can run the script without typing it every time.</p>
 
-<p>To save your script:</p>
+<h4 id="to-save-your-script">To save your script:</h4>
 
-<p>•In the Edit Script dialog box, Click the Save button.</p>
+<p>In the Edit Script dialog box, Click the Save button. Save the file as “Hello World.rvb”.</p>
 
-<p>•Save the file as “Hello World.rvb”.</p>
+<h4 id="running-helloworldrvb">Running HelloWorld.rvb</h4>
 
-<p>Running HelloWorld.rvb</p>
-
-<p>•At the Command prompt, type LoadScript and press Enter.</p>
-
-<p>•In the Load Scrip Filet dialog box, click Add…</p>
-
-<p>•Select “Hello World.rvb” and click Open.</p>
-
-<p>•In the Select Script File list, select “Hello World.rvb”.</p>
-
-<p>•Click Load.</p>
+<ul>
+  <li>At the Command prompt, type LoadScript and press Enter.</li>
+  <li>In the Load Scrip Filet dialog box, click Add…</li>
+  <li>Select “Hello World.rvb” and click Open.</li>
+  <li>In the Select Script File list, select “Hello World.rvb”.</li>
+  <li>Click Load.</li>
+</ul>
 
 <p>Your script will run, and display the familiar “Hello World” dialog box.</p>
 
 <hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/wip/guides/rhinopython/what-are-python-rhinoscript">What is Python and RhinoScript?</a></li>
+  <li><a href="/wip/guides/rhinopython/python-loading-scripts">Loading Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-running-scripts">Running Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-canceling-scripts">Canceling Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-editing-scripts">Editing Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-scripting-options">Scripting Options</a></li>
+  <li><a href="/wip/guides/rhinopython/python-scripting-reinitialize">Reinitializing Python</a></li>
+</ul>
 
         </article>
 
