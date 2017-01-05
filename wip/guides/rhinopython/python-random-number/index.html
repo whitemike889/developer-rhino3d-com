@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Rhinoscript Syntax in Python with Python</title>
-  <meta name="description" content="This guide provides an overview of the RhinoScriptSytntax in Python.  Using Python">
+  <title>Generating Random Numbers in Python with Python</title>
+  <meta name="description" content="This guide discusses using Python to generate random numbers in a certain range.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/python-rhinoscriptsyntax-introduction/" />
-  <meta property="og:title" content="Rhinoscript Syntax in Python" />
-  <meta property="og:description" content="This guide provides an overview of the RhinoScriptSytntax in Python." />
+  <meta property="og:url" content="/guides/rhinopython/python-random-number/" />
+  <meta property="og:title" content="Generating Random Numbers in Python" />
+  <meta property="og:description" content="This guide discusses using Python to generate random numbers in a certain range." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Rhinoscript Syntax in Python" />
-  <meta name="twitter:description" value="This guide provides an overview of the RhinoScriptSytntax in Python." />
+  <meta name="twitter:title" value="Generating Random Numbers in Python" />
+  <meta name="twitter:description" value="This guide discusses using Python to generate random numbers in a certain range." />
   
     
       <meta name="twitter:image" content="/wip/images/rhinodev_logo_unfurl.png" />
@@ -51,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/python-rhinoscriptsyntax-introduction/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/python-random-number/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -100,7 +100,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/rhinopython/python-rhinoscriptsyntax-introduction/">View the current version instead.</a>
+    <a href="/guides/rhinopython/python-random-number/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -280,7 +280,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#importing-rhinoscriptsyntax">Importing RhinoScriptSyntax</a>
+              <a href="#simple-random-numbers">Simple Random numbers</a>
 
               
 
@@ -296,7 +296,55 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#geometry">Geometry</a>
+              <a href="#advanced-random-numbers">Advanced Random numbers</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#choosing-randomly">Choosing Randomly</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#os-and-system-random">Os and System Random</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-links">Related Links</a>
 
               
 
@@ -319,62 +367,91 @@ $(document).ready(function()
               
               <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">rhinoscriptsyntax-fundamentals</li>
+              <li class="active">intermediate</li>
               
           </ol>
 
-          <h1>Rhinoscript Syntax in Python</h1>
+          <h1>Generating Random Numbers in Python</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scott/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide provides an overview of the RhinoScriptSytntax in Python.</p>
+          <p>This guide discusses using Python to generate random numbers in a certain range.</p>
 
           <h2 id="overview">Overview</h2>
 
-<p>The RhinoScriptSyntax methods library contains hundreds of easy-to-use functions that perform a variety of operations on Rhino.  The library allows Python to be aware of the Rhino’s:</p>
+<p>Python comes with a random number generator which can be used to generate various distributions of numbers.  These random number generators are suitable for generate numbers for spacial and graphical distributions.  To access the random numebr generators, the <code>random</code> module must be imported.</p>
 
-<ul>
-  <li>Geometry</li>
-  <li>Commands</li>
-  <li>Document objects</li>
-  <li>Application methods</li>
-</ul>
+<p>IMPORTANT NOTE: The pseudo-random generators of this module should not be used for security purposes. Use <code>os.urandom()</code> or <code>SystemRandom</code> if you require a cryptographically secure pseudo-random number generator.</p>
 
-<p>To make these methods easy-to-use, all RhinoScriptSyntax methods return simple Python variables or Python List-based data structures. Thus, once you are familiar with Python, you will be able to use any and all functions in the RhinoScriptSyntax methods library.</p>
+<h2 id="simple-random-numbers">Simple Random numbers</h2>
 
-<h2 id="importing-rhinoscriptsyntax">Importing RhinoScriptSyntax</h2>
+<p>The basic method to create a random number is:</p>
 
-<p>Before using RhinoScriptSyntax a line must be added to the top of each Python file to allow access to the RhinoScriptSyntax:</p>
+<pre><code class="language-python">import random
 
-<pre><code class="language-pyhon">import rhinoscriptsyntax as rs
+# use random.uniform to gnerate a number between to numbers.
+low = 4; high = 8
+ran_number = random.uniform(low, high)
+print str(ran_number)
 </code></pre>
 
-<p>The <code>import</code> above not only imports the library, but also renames the namespace to <code>rs.</code>.  This is done to just make it easier to type when accessing the methods in RhinoScriptSyntax.  Access the methods can now be made by starting methods with ‘rs.’.  For example, accessing the <code>AddCircle()</code> method in the RhinoScriptSyntax namespace can be used to create a circle:</p>
+<p>Use random.random to generate a random number between 0 and 1. The random.random number can be used to generate a number between two numbers using this formula:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre><code class="language-python">import random
 
-centerpoint = [1, 2, 4]
-rs.AddCircle( centerpoint, 5.0 )
+low = 4; high = 8
+ran_number = low + ((high-low)*random.random())
+print str(ran_number)
 </code></pre>
 
-<h2 id="geometry">Geometry</h2>
+<h2 id="advanced-random-numbers">Advanced Random numbers</h2>
 
-<p>Rhino is a 3D modeler, therefore creating and modifing geometry is key to developing in Rhino.  Here are the primitive geometry types of Rhino:</p>
+<p>For graphic and special random distributions, many times better distributions can be generated by usin one of the advanced distributions. These random numbers can generate cumulative distribution functions. There are functions to compute <a href="https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)">uniform</a>, <a href="https://en.wikipedia.org/wiki/Normal_distribution">normal (Gaussian)</a>, <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">lognormal</a>, <a href="https://en.wikipedia.org/wiki/Exponential_distribution">negative exponential</a>, <a href="https://en.wikipedia.org/wiki/Gamma_distribution">gamma</a>, and <a href="https://en.wikipedia.org/wiki/Beta_distribution">beta</a> distributions. For generating distributions of angles, the <a href="https://en.wikipedia.org/wiki/Von_Mises_distribution">von Mises distribution</a> is also available.</p>
 
-<ul>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-points">Points</a></li>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-list-points">List of Points</a></li>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-vectors">Vectors</a></li>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-lines">Lines</a></li>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-planes">Planes</a></li>
-  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-objects">Rhino Geometry Objects</a></li>
-</ul>
+<p>For more detailed information on these advanced number generators go to the <a href="https://docs.python.org/2/library/random.html">Generate pseudo-random numbers documentation</a></p>
 
-<p>Creating, accessing and maniputlating geometry is one of the first places RhinoScriptSytnax is used.  SImple geometry such as points, lines, planes can be described with simple lists in Python.  More complicated geometry objects such as NURBS curves, Surfaces and Poly-surfaces can be created by Rhino and referenced by an object ID by RhinoScriptSyntax.</p>
+<p>The Random module contains functions to integers, uniform selection from a range. For sequences, uniform selection of a random element, a function to generate a random permutation of a list in-place, and a function for random sampling without replacement.</p>
+
+<p>The Random number generator may also be started with a seed number.  When this is done, the generator can create a reapeatable set of pseudo-random numbers. If reapeatbaility is important, this may be worth using.  Normally the current system time is used which leads to a different solution each time.</p>
+
+<h2 id="choosing-randomly">Choosing Randomly</h2>
+
+<p>The random functions also have the ability to choose a random element from a list</p>
+
+<pre><code class="language-python">import random
+
+print random.choice('abcdefghijklmnopqrstuvmxyz')  # Choose a random letter from the string
+</code></pre>
+
+<p>Or random can generate a set of samples from a larger list of values.</p>
+
+<pre><code class="language-python">import random
+
+random.sample([1, 2, 3, 4, 5],  3)  # Choose 3 random elements from the list
+</code></pre>
+
+<p>For more detailed information on these advanced methods go to the <a href="https://docs.python.org/2/library/random.html">Generate pseudo-random numbers documentation</a></p>
+
+<h2 id="os-and-system-random">Os and System Random</h2>
+
+<p>For a random number gerator that does not rely on the software state and the sequenses are not reproducable, use the SystemRandom method. This function returns random bytes from an OS-specific randomness source.</p>
+
+<pre><code class="language-python">import sys
+import random
+
+key_num = random.SystemRandom()
+print key_num.random() #produces a number between 0 and 1
+print key_num.randint(0, sys.maxint) # produces a integer between 0 and the highest allowed by the OS.
+</code></pre>
 
 <hr />
 
+<h2 id="related-links">Related Links</h2>
+
+<ul>
+  <li><a href="https://docs.python.org/2/library/random.html">Generate pseudo-random numbers documentation</a></li>
+</ul>
 
         </article>
 
@@ -399,7 +476,7 @@ rs.AddCircle( centerpoint, 5.0 )
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a>
+                Author: <a href="https://discourse.mcneel.com/users/scott/activity">Scott Davidson</a>
               
             </p>
           </div>
@@ -409,7 +486,7 @@ rs.AddCircle( centerpoint, 5.0 )
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/python-rhinoscriptsyntax-introduction.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/python-random-number.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
