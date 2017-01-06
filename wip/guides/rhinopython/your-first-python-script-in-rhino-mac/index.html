@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Your first Script in Windows with Python</title>
-  <meta name="description" content="This guide demonstrates how to create Python scripts in Rhino.  Using Python">
+  <title>Your First Python Script in Rhino (Mac) with Python</title>
+  <meta name="description" content="This guide covers the basics of getting started writing Python in Rhino for Mac.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/first-python-script-in-rhino/" />
-  <meta property="og:title" content="Your first Script in Windows" />
-  <meta property="og:description" content="This guide demonstrates how to create Python scripts in Rhino." />
+  <meta property="og:url" content="/guides/rhinopython/your-first-python-script-in-rhino-mac/" />
+  <meta property="og:title" content="Your First Python Script in Rhino (Mac)" />
+  <meta property="og:description" content="This guide covers the basics of getting started writing Python in Rhino for Mac." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev_logo_unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Your first Script in Windows" />
-  <meta name="twitter:description" value="This guide demonstrates how to create Python scripts in Rhino." />
+  <meta name="twitter:title" value="Your First Python Script in Rhino (Mac)" />
+  <meta name="twitter:description" value="This guide covers the basics of getting started writing Python in Rhino for Mac." />
   
     
       <meta name="twitter:image" content="/wip/images/rhinodev_logo_unfurl.png" />
@@ -29,7 +29,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows, Mac" />
+  <meta name="twitter:data1" value="Mac" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -51,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/first-python-script-in-rhino/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/your-first-python-script-in-rhino-mac/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -100,7 +100,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/rhinopython/first-python-script-in-rhino/">View the current version instead.</a>
+    <a href="/guides/rhinopython/your-first-python-script-in-rhino-mac/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -264,7 +264,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#your-first-script">Your first Script</a>
+              <a href="#running-a-python-script">Running a Python script</a>
 
               
 
@@ -280,7 +280,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#the-helloworld-function">The HelloWorld Function</a>
+              <a href="#editing-a-python-script">Editing a Python Script</a>
 
               
 
@@ -319,112 +319,60 @@ $(document).ready(function()
               
               <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">Python Windows</li>
+              <li class="active"></li>
               
           </ol>
 
-          <h1>Your first Script in Windows</h1>
+          <h1>Your First Python Script in Rhino (Mac)</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/Alain/activity">Alain Cormier</a></span>
 </p>
 
-          <p>This guide demonstrates how to create Python scripts in Rhino.</p>
+          <p>This guide covers the basics of getting started writing Python in Rhino for Mac.</p>
 
-          <h2 id="your-first-script">Your first Script</h2>
+          <h2 id="running-a-python-script">Running a Python script</h2>
 
-<p>This tutorial shows you how to display a message box in Rhino that says “Hello World”. It covers the most basic concepts for editing,  loading and running scripts.</p>
+<p>To get acquainted with how Python scripts can help you model first run some of the sample scripts that are provided.</p>
 
-<h4 id="the-complete-script">The Complete Script</h4>
+<ol>
+  <li>In the Command prompt edit box (top left by default) type the RunPythonScript command.</li>
+  <li>If it’s the first time you run this command the dialog box that comes up will show the files in the samples directory.  If it’s not then navigate to it.  It should be under:
+  <code>
+  ~/Library/Application/Support/McNeel/Rhinoceros/Scripts/samples
+ </code>
+  (the begining tilde (~) character is normally in the far upper left of the keyboard).</li>
+  <li>Experiment by running HelloPython.py</li>
+</ol>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<h2 id="editing-a-python-script">Editing a Python Script</h2>
 
-rs.MessageBox ("Hello World")
+<p>You can open any of the sample Python scripts in a text editor. From Finder navigate to the samples directory:</p>
+
+<pre><code>/Users/HOME/Library/Application\ Support/McNeel/Rhinoceros/Scripts/samples
 </code></pre>
-<p>To test the Script:</p>
+<p>(replace HOME with your home directory name).</p>
 
-<ul>
-  <li>Start Rhino</li>
-  <li>At the command prompt, type EditScript and press Enter.</li>
-  <li>The Edit Script dialog box appears.</li>
-  <li>In the script Code window, type the code sample above.</li>
-  <li>Click the “Run the script” button.</li>
-  <li>The Edit Script dialog box disappears, and the message below appears:</li>
-</ul>
+<p>Or in the Finder, use the Go pulldown &gt; Go To Folder… and type:</p>
 
-<h2 id="the-helloworld-function">The HelloWorld Function</h2>
-
-<p>If you were writing a more complex script, and wanted to display “Hello World” at strategic points throughout the script, you could write this code every time you wanted the message to appear.</p>
-
-<p>But if you changed your mind and wanted it to say “Howdy World” instead, you’d have to search for all the places “Hello World” was used, and replace them.</p>
-
-<p>An easier way to solve this problem is to write a Function (<code>def</code> is used to define the function).  At several places throughout your script, you call the function.  The function handles displaying the message, so you only have to change the message in one place.</p>
-
-<p>Here’s what the function definition looks like:</p>
-
-<pre><code class="language-python">import rhinoscriptsyntax as rs
-
-def HelloWorld()
-    rs.MessageBox ("Hello World")
+<pre><code>~/Library/Application/Support/McNeel/Rhinoceros/Scripts/samples
 </code></pre>
 
-<p>If you click the run button at this time nothing will happen. Nothing happened? That’s because the RhinoScript defined the Subroutine but did not actually call it. To call the subroutine, either add this line of code and click Run.</p>
+<p>Right-click on any of the scripts and from the context menu that pops up select Open With -&gt; TextEdit.app which is the text editor that comes with macOS.  You can try editing and saving the files and then re-run them in Rhino with the <code>RunPythonScript</code> command.</p>
 
-<p>To call this function, simply add this to the bottom of the script:</p>
+<p>When you’re ready start writing more complex scripts you can install the <a href="https://atom.io/packages/rhino-python">Atom text editor</a> that’s been specifically enhanced for <a href="https://atom.io/packages/rhino-python" target="_blank">rhino-python</a> package to help with scripts that will be run by Rhino.</p>
 
-<pre><code class="language-python">HelloWorld()
-</code></pre>
-
-<p>In Python the functions definitions need to come before being called in the code.</p>
-
-<h4 id="testing-helloworld">Testing HelloWorld</h4>
-
-<ul>
-  <li>At the command prompt, type EditScript and press Enter.</li>
-  <li>The Edit Script dialog box appears.</li>
-  <li>In the script Code window, type</li>
-</ul>
-
-<pre><code class="language-python">import rhinoscriptsyntax as rs
-
-def HelloWorld()
-    rs.MessageBox ("Hello World")
-    
-HelloWorld()
-</code></pre>
-<ul>
-  <li>Click the Run button.</li>
-</ul>
-
-<p>When you do more than write a couple lines of script, it becomes necessary to save the script to a file so that you can run the script without typing it every time.</p>
-
-<h4 id="to-save-your-script">To save your script:</h4>
-
-<p>In the Edit Script dialog box, Click the Save button. Save the file as “Hello World.rvb”.</p>
-
-<h4 id="running-helloworldrvb">Running HelloWorld.rvb</h4>
-
-<ul>
-  <li>At the Command prompt, type LoadScript and press Enter.</li>
-  <li>In the Load Scrip Filet dialog box, click Add…</li>
-  <li>Select “Hello World.rvb” and click Open.</li>
-  <li>In the Select Script File list, select “Hello World.rvb”.</li>
-  <li>Click Load.</li>
-</ul>
-
-<p>Your script will run, and display the familiar “Hello World” dialog box.</p>
+<p>After you’ve followed the above links and setup Atom the next step is to get familiar with the different <a href="../apis-for-python/">application programming interfaces (API)</a> you’ll need to write scripts that interact with Rhino.</p>
 
 <hr />
 
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
-  <li><a href="/wip/guides/rhinopython/what-are-python-rhinoscript">What is Python and RhinoScript?</a></li>
-  <li><a href="/wip/guides/rhinopython/python-loading-scripts">Loading Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-running-scripts">Running Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-canceling-scripts">Canceling Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-editing-scripts">Editing Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-scripting-options">Scripting Options</a></li>
-  <li><a href="/wip/guides/rhinopython/python-scripting-reinitialize">Reinitializing Python</a></li>
+  <li><a href="/wip/guides/rhinopython/what-are-python-rhinoscript">What are Python and RhinoScriptSyntax?</a></li>
+  <li><a href="https://atom.io/packages/rhino-python">Using the Atom.io editor with Rhino.Python</a></li>
+  <li><a href="/wip/guides/rhinopython/python-statements/">Python Basic Syntax</a></li>
+  <li><a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-introduction/">Rhinoscript Syntax in Python</a></li>
+  <li><a href="/wip/guides/rhinopython/">Rhino.Python Home Page</a></li>
 </ul>
 
         </article>
@@ -450,7 +398,7 @@ HelloWorld()
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+                Author: <a href="https://discourse.mcneel.com/users/Alain/activity">Alain Cormier</a>
               
             </p>
           </div>
@@ -460,7 +408,7 @@ HelloWorld()
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/first-python-script-in-rhino.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/your-first-python-script-in-rhino-mac.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
