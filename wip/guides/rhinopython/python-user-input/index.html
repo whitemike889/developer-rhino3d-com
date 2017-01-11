@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Python Conditionals with Python</title>
-  <meta name="description" content="This guide is an survey of Python conditional statements.  Using Python">
+  <title>How to get user input in a script with Python</title>
+  <meta name="description" content="How to prompt the user for input into a script.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/python-conditionals/" />
-  <meta property="og:title" content="Python Conditionals" />
-  <meta property="og:description" content="This guide is an survey of Python conditional statements." />
+  <meta property="og:url" content="/guides/rhinopython/python-user-input/" />
+  <meta property="og:title" content="How to get user input in a script" />
+  <meta property="og:description" content="How to prompt the user for input into a script." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Python Conditionals" />
-  <meta name="twitter:description" value="This guide is an survey of Python conditional statements." />
+  <meta name="twitter:title" value="How to get user input in a script" />
+  <meta name="twitter:description" value="How to prompt the user for input into a script." />
   
     
       <meta name="twitter:image" content="/wip/images/rhinodev-logo-unfurl.png" />
@@ -51,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/python-conditionals/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/python-user-input/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -100,7 +100,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/rhinopython/python-conditionals/">View the current version instead.</a>
+    <a href="/guides/rhinopython/python-user-input/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -277,29 +277,43 @@ $(document).ready(function()
                     
                     
                     <li>
-                        <a href="#if">if</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#ifelse">if..else</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#ifelifelifelse">if..elif..elif..else</a>
+                        <a href="#the-get-methods">The GET methods</a>
                     </li>
                   
 
                 </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#dialog-methods">Dialog Methods</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#file-system-dialogs">File System dialogs</a>
+
               
 
             </li>
@@ -337,87 +351,266 @@ $(document).ready(function()
               
               <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">Fundamentals</li>
+              <li class="active">intermediate</li>
               
           </ol>
 
-          <h1>Python Conditionals</h1>
+          <h1>How to get user input in a script</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide is an survey of Python conditional statements.</p>
+          <p>How to prompt the user for input into a script.</p>
 
           <h2 id="overview">Overview</h2>
 
-<p>You can control the flow of your script with conditional statements and looping statements.  Using conditional statements, you can write Python code that makes decisions and repeats actions.  The following conditional statements are available in Python:</p>
+<p>Prompting the user of a script for the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts.</p>
+
+<p>The RhinoscriptSyntax module contains many ways to interactively prompt for several different types of input. There are three main styles of input that are contained in Rhinosciptsyntax:</p>
 
 <ul>
-  <li><code>if</code> statement</li>
-  <li><code>if</code>…<code>else</code> statement</li>
-  <li><code>if</code>…<code>elif</code>…<code>elif</code>…<code>else</code> nested statement</li>
+  <li>Get methods. These are methods that work with the command line, wait for mouse input or prompt for specifc input.</li>
+  <li>Dialog methods.  There are some simple specfic dialogs to prompt for input</li>
+  <li>File sytem dialogs. Browsing, saving and opening files on the system with Python.</li>
 </ul>
 
-<p>The <code>if</code>… statement is used to evaluate whether a condition is True or False and, depending on the result, to specify one or more statements to run.  Usually the condition is an expression that uses a comparison operator to compare one value or variable with another.  For information about comparison operators, see the <a href="/wip/guides/rhinopython/python-operators">Python Operators</a> guide. <code>if</code>…<code>then</code>…<code>else</code> statements can be nested to as many levels as you need.</p>
+<p>Many input methods will also validate the user input to make sure only the proper input is accepted.</p>
 
-<p>Python programming language assumes any non-zero and non-null values as TRUE, and if it is either zero or null, then it is assumed as FALSE value.</p>
+<h3 id="the-get-methods">The GET methods</h3>
 
-<h3 id="if">if</h3>
+<h4 id="getpoint">GetPoint()</h4>
 
-<p>To run only one statement when a condition is True, use the single-line syntax for the <code>if</code>… statement.  The following example shows the single-line syntax.</p>
+<p>Use <code>rs.GetPoint()</code> to ask the user for a single point location, say for the center of a circle. Like most if not all of the Get methods, rs.GetPoint() allows you to specify some parameters- in this case they are all optional, the function will run without any of them specified in the code you type. For example, the default prompt is “Pick point”, but you can specify a different prompt, for example, “Set center point” depending on what you wish to convey to the user.</p>
 
-<pre><code class="language-python">var1 = 350
-if var1 == 350 : print "The value of the variable is 350"
+<pre><code class="language-python">pt = rs.GetPoint("Set center point")
 </code></pre>
 
-<p>To run more than one line of code, you must use the multiple-line (or block) syntax. The first line ends in a colo (:). As with all Python block syntax, the whitespaces to the left of the lines must be the same throughout the block. As an example:</p>
+<p>If the function succeeds, a Rhino point is returned, which can be treated as a list of three numbers representing the world x, y and z coordinates of the point.</p>
 
-<pre><code class="language-python">var1 = 350
-if var1 == 350 : 
-    print "The value of the variable is 350"
-    var2 = 450
-    print "The value of variable 2 is 450"
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pt = rs.GetPoint("Click to get information about a point location")
+if pt is not None:# note it is a good idea to check if there is a result you can use
+    print "That point has an x coordinate of " + str(pt[0]) # when you build a string that includes elements that are not text, convert to a string with str()
 </code></pre>
 
-<h3 id="ifelse">if..else</h3>
+<h4 id="getpoints">GetPoints()</h4>
 
-<p>You can use an <code>if</code>…<code>else</code> statement to define two blocks of executable statements: one block to run if the condition is True, the other block to run if the condition is False…</p>
+<p>Use <code>rs.GetPoints()</code> to ask the user for multiple point locations. As in rs.GetPoint(), all parameters are optional. Note that there is a separate prompt for the first point, and a second one for subsequent points.</p>
 
-<pre><code class="language-python">var1 = 350
-if var1 == 0 :
-    MyLayerColor = 'vbRed'
-    MyObjectColor = 'vbBlue'
-else :
-    MyLayerColor = 'vbGreen'
-    MyObjectColor = 'vbBlack'
-print MyLayerColor
+<p>You need to set the parameters in order, separated by commas. If you do not want to specify a paramter at all, and accept the default, you can leave it out but you must then specify any following parameters explicitly using the parameter name. For example, this will not work to set a custom first prompt:</p>
+
+<pre><code class="language-python">
+import rhinoscriptsyntax as rs
+
+pts = rs.GetPoints(  "Set the first point", "Set the next point")
 </code></pre>
 
-<h3 id="ifelifelifelse">if..elif..elif..else</h3>
+<p>Why? because the function has two paramters that come before the first prompt, ‘draw_lines’ and ‘in_plane’. If you leave these out, you must specify what paramters you are setting explicitly in order for it to be recognized:</p>
 
-<p>A variation on the <code>if</code>…<code>else</code> statement allows you to choose from several alternatives.  Adding <code>elif</code> clauses expands the functionality of the <code>if</code>…<code>else</code> statement so you can control program flow based on multiple different possibilities. For example:</p>
-
-<pre><code class="language-python">var1 = 0
-if var1 == 0 :
-    print "This is the first " + str(var1)
-elif var1 == 1 :
-    print "This is the second " + str(var1)
-elif var1 == 2 :
-    print "This is the third " + str(var1)
-else :
-    print "Value out of range!"
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pts = rs.GetPoints(  message1= "Set the first point", message2= "Set the next point")
 </code></pre>
 
-<p>You can add as many <code>elif</code> clauses as you need to provide alternative choices. Thie <code>elif</code> statement takes the place of the <code>Select Case</code> statement in other languages.</p>
+<p>You could also make sure to set the other parameters even if you don’t care what they are i.e. defaults are OK:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pts = rs.GetPoints( None, None, "Set the first point", "Set the next point")
+</code></pre>
+
+<h4 id="getreal">Getreal()</h4>
+
+<p>Another common Get method is prompting for a <em>number</em> on the commandline with <code>rs.GetReal()</code>.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+# GetReal prompts on the command line with optional defaults and a minimum allowable value
+radius = rs.GetReal("Radius of new circle", 3.14, 1.0)
+if radius: rs.AddCircle( (0,0,0), radius )
+</code></pre>
+<p>rs.GetReal() accepts any number, including decimals. In some cases your code may need only whole numbers- in this case use <code>rs.GetInteger()</code></p>
+
+<p>There are 22 different Get methods. For details on all the Get functions in RhinoScriptSyntax for Python go to the <a href="/wip/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></p>
+
+<h2 id="dialog-methods">Dialog Methods</h2>
+
+<p>The Dialog methods in RhinoScript syntax are used to prompt of with generic custom information. Dialogs can be used to draw more attention to a required interaction with the user.</p>
+
+<h4 id="messagebox">MessageBox()</h4>
+
+<p>The simplest dialog box is the <code>rs.MessageBox()</code> function.  The rs.MessageBox() comes with many options to customize the buttons based on your needs:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+rs.MessageBox("Hello Rhino!") # Simple message dialog
+rs.MessageBox("Hello Rhino!", 4 | 32) # A Yes, No dialog
+rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
+</code></pre>
+
+<p><img src="/wip/images/yes_no-dialog.png" alt="RunPythonScript" width="35%" /></p>
+
+<p>Note that rs.MessageBox() returns a value - you can set a variable to records the result from a message box so that you can tell which button the user has clicked.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+button = rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
+</code></pre>
+<p>The value of ‘button’ in the code above will tell the script which button was clicked and it can proceed appropriately. See the Rhino IronPython Help for details on the available buttons and the return codes from rs.MessageBox()</p>
+
+<h4 id="listbox">ListBox()</h4>
+
+<p>Some of the more advanced dialogs can be polulated with custom selections:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+options = ('First Pick', 'Second Pick', 'Third Pick')
+if options:
+    result = rs.ListBox(options, "Pick an option")
+    if result: rs.MessageBox( result + " was selected" )
+</code></pre>
+<p>Here is a list of dialog box methods:</p>
+
+<table rules="groups">
+  <thead>
+    <tr>
+      <th style="text-align: left">Method</th>
+      <th> </th>
+      <th> </th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">CheckListBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a list of strings in a checkable list.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ComboListBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a list of strings in a combo list.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">EditBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a dialog box with a multi-line edit control.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ListBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a list of strings in a simple list box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">MessageBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows message box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">PopupMenu</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a context-like popup menu.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">PropertyListBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a list of items and values in a property list.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">RealBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a dialog box prompting the user to enter a number.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">StringBox</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a dialog box prompting the user to enter a string.</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tfoot>
+</table>
+
+<p>For details on all the dialog box functions in RhinoScriptSyntax for Python go to the <a href="/wip/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></p>
+
+<h2 id="file-system-dialogs">File System dialogs</h2>
+
+<p>Working with files and folders on the computer take a special class of dialogs.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+filename = rs.OpenFileName()
+if filename: rs.MessageBox(filename)
+</code></pre>
+<p><img src="/wip/images/openfile_dialog.png" alt="RunPythonScript" width="55%" /></p>
+
+<table rules="groups">
+  <thead>
+    <tr>
+      <th style="text-align: left">Method</th>
+      <th> </th>
+      <th> </th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">BrowseForFolder</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows browse-for-folder dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">OpenFileName</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file open dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">OpenFileNames</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file open dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">SaveFileName</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file save dialog box.</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tfoot>
+</table>
 
 <hr />
 
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
-  <li><a href="/wip/guides/rhinopython/what-are-python-rhinoscript">What are Python and RhinoScriptSyntax?</a></li>
-  <li><a href="/wip/guides/rhinopython/python-operators">Python Operators</a></li>
+  <li><a href="/wip/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
+  <li><a href="/wip/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
 </ul>
+
 
         </article>
 
@@ -442,7 +635,7 @@ else :
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a>
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
               
             </p>
           </div>
@@ -452,7 +645,7 @@ else :
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/python-conditionals.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/python-user-input.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
