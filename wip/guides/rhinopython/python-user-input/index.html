@@ -433,7 +433,7 @@ if radius: rs.AddCircle( (0,0,0), radius )
 
 <h2 id="dialog-methods">Dialog Methods</h2>
 
-<p>The Dialog methods in RhinoScript syntax are used to prompt of with generic custom information. Dialogs can be used to draw more attention to a required interaction with the user.</p>
+<p>The Dialog methods in RhinoScript syntax are used to prompt of with generic custom information. Dialogs can be used to draw more attention to a required interaction with the user.  Dialogs generally interrupt the workflow - the script cannot continue until the dialog is dealt with by the user.</p>
 
 <h4 id="messagebox">MessageBox()</h4>
 
@@ -448,7 +448,7 @@ rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
 
 <p><img src="/wip/images/yes_no-dialog.png" alt="RunPythonScript" width="35%" /></p>
 
-<p>Note that rs.MessageBox() returns a value - you can set a variable to records the result from a message box so that you can tell which button the user has clicked.</p>
+<p>Note that rs.MessageBox() returns a value - you can set a variable to record the result from a message box so that you can tell which button the user has clicked.</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
@@ -483,7 +483,7 @@ if options:
       <td style="text-align: left">CheckListBox</td>
       <td> </td>
       <td> </td>
-      <td style="text-align: left">Displays a list of strings in a checkable list.</td>
+      <td style="text-align: left">Displays a list of strings in a checkable list. The user can pick multiple items.</td>
     </tr>
     <tr>
       <td style="text-align: left">ComboListBox</td>
@@ -501,7 +501,7 @@ if options:
       <td style="text-align: left">ListBox</td>
       <td> </td>
       <td> </td>
-      <td style="text-align: left">Displays a list of strings in a simple list box.</td>
+      <td style="text-align: left">Displays a list of strings in a simple list box. The user can pick one item.</td>
     </tr>
     <tr>
       <td style="text-align: left">MessageBox</td>
@@ -555,6 +555,7 @@ if options:
 filename = rs.OpenFileName()
 if filename: rs.MessageBox(filename)
 </code></pre>
+
 <p><img src="/wip/images/openfile_dialog.png" alt="RunPythonScript" width="55%" /></p>
 
 <table rules="groups">
