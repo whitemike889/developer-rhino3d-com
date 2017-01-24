@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>4 Operators and functions with Python</title>
+  <meta name="description" content="">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/primer-101/4-operators-and-functions_BACKUP_1532/" />
+  <meta property="og:title" content="4 Operators and functions" />
+  <meta property="og:description" content="" />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="/wip/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="4 Operators and functions" />
+  <meta name="twitter:description" value="" />
+  
+    
+      <meta name="twitter:image" content="/wip/images/rhinodev-logo-unfurl.png" />
+    
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/primer-101/4-operators-and-functions_BACKUP_1532/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the <strong>wip</strong> version of this page!
+    <a href="/guides/rhinopython/primer-101/4-operators-and-functions_BACKUP_1532/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#what-on-earth-are-they-and-why-should-i-care">4.1 What on earth are the...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#careful">4.2 Careful…</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#functions-and-procedures">4.4 Functions and Procedures</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#a-simple-function-example">4.4.1 A simple function e...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#advanced-function-syntax">4.4.2 Advanced function s...</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#mutability">4.5 Mutability</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
+              
+              <li class="active">Python Primer</li>
+              
+          </ol>
+
+          <h1>4 Operators and functions</h1>
+
+          <p><span class="guide_byline">by  <a href="https://discourse.mcneel.com/users/steve/activity">Skylar Tibbits</a> and  <a href="https://discourse.mcneel.com/users//activity">Arthur van der Harten</a> and  <a href="https://discourse.mcneel.com/users//activity">Steve Baer</a></span>
+</p>
+
+          <p></p>
+
+          <h2 id="what-on-earth-are-they-and-why-should-i-care">4.1 What on earth are they and why should I care?</h2>
+
+<p>When we were discussing numeric variables in paragraph 2.3.1, there was an example about mathematical operations on numbers:</p>
+
+<pre><code class="language-python">x = 15 + 26 * 2.33
+x = math.sin(15 + 26) + math.sqrt(2.33)
+x = math.tan(15 + 26) / math.log(55)
+</code></pre>
+
+<p>The four lines of code above contain four kinds of code:</p>
+
+<ol>
+  <li>Numbers		<code>15, 26, 2.33 and 55</code></li>
+  <li>Variables	<code>x</code></li>
+  <li>Operators	<code>=, +, * and /</code></li>
+  <li>Functions    <code>math.sin(), math.sqrt(), math.tan() and math.log()</code></li>
+</ol>
+
+<p>Numbers and variables are well behind us now. Arithmetic operators should be familiar from everyday life, Python uses them in the same way as you used to during math classes. Python comes with a limited amount of arithmetic operators and they are always positioned between two variables or constants (a constant is a fixed number).  The function first signifies that we have imported math at the top of our code, using “import math”, and then call a function that is within the math module called “sin()”. Thus we write: math.sin(value).</p>
+
+<p><img src="/wip/images/primer-operators.svg" width="95%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<h2 id="careful">4.2 Careful…</h2>
+
+<p>One thing to watch out for is operator precedence. As you will remember from math classes, the addition and the multiplication operator have a different precedence. If you see an equation like this:</p>
+
+<pre><code class="language-python">x = 4 + 5 * 2
+
+x = (4 + 5) * 2		# wrong precedence
+x = 4 + (5 * 2)		# correct precedence
+</code></pre>
+
+<p>x doesn’t equal 18, even though many cheap calculators seem to disagree. The precedence of the multiplication is higher which means you first have to multiply 5 by 2, and then add the result to 4. Thus, x equals 14. Python is not a cheap calculator and it has no problems whatsoever with operator precedence. It is us, human beings, who are the confused ones. The example above is fairly straightforward, but how would you code the following?</p>
+
+<p><img src="/wip/images/primer-formula.svg" width="35%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<p>Without extensive use of parenthesis, this would be very nasty indeed. By using parenthesis in equations we can force precedence, and we can easily group different bits of mathematics. All the individual bits in the mathematical notation have been grouped inside parenthesis and extra spaces have been inserted to accentuate transitions from one top level group to the next:</p>
+
+<pre><code class="language-python">y = ( math.sqrt(x ** 2 + (x - 1)) / (x - 3) )   +   abs( (2 * x) / (x ** (0.5 * x)) )
+</code></pre>
+
+<p>It is still not anywhere near as neat as the original notation, but I guess that is why the original notation was invented in the first place. Usually, one of the best things to do when lines of code are getting out of hand, is to break them up into smaller pieces. The equation becomes far more readable when spread out over multiple lines of code:</p>
+
+<pre><code class="language-python">A = x**2 + (x-1)
+B = x-3
+C = 2*x
+D = x**(0.5* x)
+y = (math.sqrt(A) / B) + abs(C / D)
+</code></pre>
+<p>## 4.3 Logical operators</p>
+
+<p>I realize the last thing you want right now is an in-depth tutorial on logical operators, but it is an absolute must if we want to start making smart code. I’ll try to keep it as painless as possible.</p>
+
+<p>Logical operators mostly work on booleans and they are indeed very logical. As you will remember, booleans can only have two values. Boolean mathematics were developed by George Boole (1815-1864) and today they are at the very core of the entire digital industry. Boolean algebra provides us with tools to analyze, compare and describe sets of data. Although George originally defined six boolean operators we will only discuss three of them:</p>
+
+<ol>
+  <li>Not</li>
+  <li>And</li>
+  <li>Or</li>
+</ol>
+
+<p>The Not operator is a bit of an oddity among operators. It is odd because it doesn’t require two values. Instead, it simply inverts the one on the right. Imagine we have a script which checks for the existence of a bunch of Block definitions in Rhino. If a block definition does not exist, we want to inform the user and abort the script. The English version of this process might look something like:</p>
+
+<pre><code>Ask Rhino if a certain Block definition exists
+If not, abort this sinking ship
+</code></pre>
+
+<p>The more observant among you will already have noticed that English version also requires a “not” in order to make this work. Of course you could circumvent it, but that means you need an extra line of code:</p>
+
+<pre><code>Ask Rhino if a certain Block definition exists
+If it does, continue unimpeded
+Otherwise, abort
+</code></pre>
+
+<p>When we translate this into Python code we get the following:</p>
+
+<pre><code class="language-python">if (not rs.IsBlock("SomeBlockName")):
+	print ("Missing block definition: SomeBlockName")
+</code></pre>
+
+<p>And and Or at least behave like proper operators; they take two arguments on either side. The And operator requires both of them to be True in order for it to evaluate to True. The Or operator is more than happy with a single True value. Let’s take a look at a typical ‘one-beer-too-many’ algorithm:</p>
+
+<pre><code class="language-python">person = GetPersonOverThere()
+colHair = GetHairColour(person)
+
+if((IsGirl(person)) and (colHair == Blond or colHair == Brunette) and (Age(person) &gt;= 18)):
+    neighbour = GetAdjacentPerson(person)
+    if(not IsGuy(neighbour) or not LooksStrong(neighbour)):
+        print("Hey baby, you like Heineken?")
+    else:
+        RotateAngleOfVision 5.0
+</code></pre>
+<p>As you can see the problem with Logical operators is not the theory, it’s what happens when you need a lot of them to evaluate something. Stringing them together, quickly results in convoluted code not to mention operator precedence problems.</p>
+
+<p>A good way to exercise your own boolean logic is to use Venn-diagrams. A Venn diagram is a graphical representation of boolean sets, where every region contains a (sub)set of values that share a common property. The most famous one is the three-circle diagram:</p>
+
+<p><img src="/wip/images/primer-venn-1.svg" width="50%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<p>Every circular region contains all values that belong to a set; the top circle for example marks off set {A}. Every value inside that circle evaluates True for {A} and every value not in that circle evaluates False for {A}. If you’re uncomfortable with “A, B and C”, you can substitute them with <em>“Employed”</em>, <em>“Single”</em> and <em>“HomeOwner”</em>. By coloring the regions we can mimic boolean evaluation in programming code:</p>
+
+<p><img src="/wip/images/primer-venn-2.svg" width="100%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<p>Try to color the four diagrams below so they match the boolean logic:</p>
+
+<p><img src="/wip/images/venn-blank.svg" width="100%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<p>Venn diagrams are useful for simple problems, but once you start dealing with more than three regions it becomes a bit opaque. The following image is an example of a 6-regional Venn diagram. Pretty, but not very practical:</p>
+
+<p><img src="/wip/images/venn-complex.svg" width="35%" float="right" /></p>
+
+<!--TODO: The font in the SVG above is not rendeirng correctly.  What Font to use -->
+
+<h2 id="functions-and-procedures">4.4 Functions and Procedures</h2>
+
+<p>In the end, all that a computer is good at is shifting little bits of memory back and forth. When you are drawing a cube in Rhino, you are not really drawing a cube, you are just setting some bits to zero and others to one. 
+At the level of Python there are so many wrappers around those bits that we can’t even access them anymore. A group of 32 bits over there happens to behave as a number, even though it isn’t really. When we multiply two numbers in Python, a very complicated operation is taking place in the memory of your PC and we may be very thankful that we are never confronted with the inner workings. As you can imagine, a lot of multiplications are taking place during any given second your computer is turned on and they are probably all calling the same low-level function that takes care of the nasty bits. That is what functions are about, they wrap up nasty bits of code so we don’t have to bother with it. This is called encapsulation.</p>
+
+<p>A good example is the <em>math.sin()</em> function, which takes a single numeric value and returns the sine of that value. If we want to know the sine of -say- 4.7, all we need to do is type in <em>x = math.sin(4.7)</em>. Internally the computer might calculate the sine by using a digital implementation of the Taylor series:</p>
+
+<p><img src="/wip/images/taylorseries2.png" width="30%" float="right" /></p>
+
+<p>In other words: you don’t want to know. The good people who develop programming languages predicted you don’t want to know, which is why they implemented a <em>math.sin()</em> function. Python comes with a long list of predefined functions all of which are available to RhinoScripters. Some deal with mathematical 
+computations such as <em>math.sin()</em>, others perform String operations such as <em>abs()</em> which returns the absolute value. Python lists 75 native procedures plus many more in any of the modules that can be imported (i.e. the <em>math</em> module). I won’t discuss them here, except when they are to be used in examples.</p>
+
+<p>Apart from implementing the native Python functions, Rhino adds a number of extra ones for us to use. The current RhinoScript helpfile for Rhino5 claims a total number of about 800 additional functions, and new ones are added frequently. Rhino’s built in functions are referred to as “methods”. They behave exactly the same as Python procedures although you do need to look in a different helpfile to see what they do. <a href="http://www.rhino3d.com/5/ironpython/index.html">http://www.rhino3d.com/5/ironpython/index.html</a></p>
+
+<p>So how do functions/procedures/methods behave? Since the point of having procedures is to encapsulate code for frequent use, we should expect them to blend seamlessly into written code. In order to do this they must be able to both receive and return variables. <em>math.sin()</em> is an example of a function which both requires and returns a single numeric variable. The <em>datetime.now()</em> function on the other hand only returns a single value which contains the current date and time. It does not need any additional information from you, it is more than capable of finding out what time it is all by itself. An even more extreme example is the <em>rs.Exit()</em> method which does not accept any argument and does not return any value. There are two scenarios for calling procedures. We either use them to assign a value or we call them out of the blue:</p>
+
+<pre><code class="language-python">strPointID = rs.AddPoint([0.0, 0.0, 1.0])	# Correct
+rs.AddPoint([0.0, 0.0, 1.0])			    # Correct
+rs.AddPoint [0.0, 0.0, 1.0]			        # Wrong
+</code></pre>
+
+<p>If you look in the RhinoScript helpfile and search for the <em>AddLayer()</em> method, you’ll see the following text:</p>
+
+<pre><code class="language-python">rs.AddLayer (name=None, color=0, visible=True, locked=False, parent=None)
+</code></pre>
+
+<p><em>rs.AddLayer()</em> is capable of taking five arguments, all of which are optional. We can tell they are optional because it says <em>“Optional”</em> next to each item under the <em>“Parameters”</em> section of the helpfile. The <em>“Parameters”</em> signify the Input values for the Function, while the <em>“Returns”</em> section tells us what the Function will return. Optional arguments have a default value which is used when we do not override it. If we omit to specify the <code>lngColor</code> argument for example the new layer will become black.</p>
+
+<h3 id="a-simple-function-example">4.4.1 A simple function example</h3>
+
+<p>This concludes the boring portion of the primer. We now have enough information to actually start making useful scripts. I still haven’t told you about loops or conditionals, so the really awesome stuff will have to wait until Chapter 5, though. We’re going to write a script which uses some Python functions and a few RhinoScript methods. Our objective for today is to write a script that applies a custom name to selected objects. First, I’ll show you the script, then we’ll analyze it line by line:</p>
+
+<table>
+<tr>
+<td width="10%">
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11	
+</td>
+<td>	
+import rhinoscriptsyntax as rs
+import time
+#This script will rename an object using the current system time
+
+strObjectID = rs.GetObject("Select an object to rename",0,False,True)
+
+if strObjectID:
+
+   strNewName = "Time: " + str(time.localtime())
+    
+   rs.ObjectName(strObjectID, strNewName)</td>
+</tr>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><code>import rhinoscriptsyntax as rs</code></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>import time</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>#This script will rename an object using the current system time</p>
+
+<p>strObjectID = rs.GetObject(“Select an object to rename”,0,False,True)</p>
+
+<p>if strObjectID:</p>
+
+<p>strNewName = “Time: “ + str(time.localtime())</p>
+
+<p>rs.ObjectName(strObjectID, strNewName)</p>
+
+<!-- TODO: The table code block with line number goes here. -->
+
+<p>This is a complete script file which can be run directly from the disk. It adheres to the basic script structure according to page 13.</p>
+
+<p>We’ll be using two variables in this script, one to hold the ID of the object we’re going to rename and one containing the new name. On line 5 we declare a new variable. Although the “str” prefix indicates that we’ll be storing Strings in this variable, that is by no means a guarantee. You can still put numbers into something that starts with str.  It is simply the convention to name a variable with strSomething if it is storing a string, similarly you can use intSomething for integers etc.</p>
+
+<p>On line 5, we’re assigning a value to <em>strObjectID</em> by using the RhinoScript method <em>GetObject()</em> to ask the user to select an object. The help topic on <em>GetObject()</em> tells us the following:</p>
+
+<pre><code class="language-python">Rhino.GetObject (message=None,filter=0,preselect=False,Select=False,custom_filter=None,subobjects=False)
+</code></pre>
+
+<pre><code>Returns:
+String		» The identifier of the picked object if successful.
+None		» If not successful, or on error.
+</code></pre>
+
+<p>This method accepts six arguments, all of which happen to be optional. In our script we’re only specifying the first and fourth argument. The <em>strMessage</em> refers to the String which will be visible in the command-line during the picking operation. We’re overriding the default, which is “Select object”, with something a bit more specific. The second argument is an integer which allows us to set the selection filter. The default behavior is to apply no filter; all objects can be selected whether they are points, textdots, polysurfaces, lights or whatever. We want the default behavior. The same applies to the third argument which allows us to override the default behavior of accepting preselected objects. The fourth argument is False by default, meaning that the object we pick will not be actually selected. This is not desired behavior in our case. The fifth argument takes a bit more explaining so we’ll leave it for now.</p>
+
+<p>Note that we can simply omit optional arguments and put a closing bracket after the last argument that we do specify.</p>
+
+<p>When the user is asked to pick an object -any object- on line 5, there exists a possibility they changed their mind and pressed the escape button instead. If this was the case then <em>strObjectID</em> will not contain a valid Object ID, it will be None instead. If we do not check for variable validity (line 7) but simply press on, we will get an error on line 11 where we are trying to pass that None value as an argument into the <em>rs.ObjectName()</em> method. We must always check our return values and act accordingly. In the case of this script the proper reaction to an Escape is to abort the whole thing. The If: structure on Line 7 will abort the current script if <em>strObjectID</em> turns out to be None.</p>
+
+<p>If <em>strObjectID</em> turns out to be an actual valid object identifier, our next job is to fabricate a new name and to assign it to the selected object. The first thing we need is a variable which contains this new name. We declare it and assign it a value on line 9.</p>
+
+<p>The name we are constructing always has the same prefix but the suffix depends on the current system time. In order to get the current system time we use the <em>time.localtime()</em> function which is a function built into the time module (which we have imported at the top of our script). Since a Time and a String are not the same thing, we cannot concatenate them with the ampersand operator. We must first convert the Time into a valid String representation. The <em>str()</em> function is another Python native function which is used to convert non-string variables into Strings. When I tested this script, the value assigned to <em>strNewName</em> at line 11 was:</p>
+
+<pre><code>Time: (2011, 3, 10, 22, 17, 53, 3, 69, 0)
+</code></pre>
+
+<p>Finally, at line 11, we reach the end of our quest. We tell Rhino to assign the new name to the old object:</p>
+
+<p><img src="/wip/images/primer-objectname.jpg" width="40%" float="right" /></p>
+
+<p>Instead of using <em>strNewName</em> to store the name String, we could have gotten away with the following:</p>
+
+<pre><code class="language-python">rs.ObjectName(strObjectID, "Time: " &amp; str(time.localtime()))
+</code></pre>
+
+<p>This one line replaces lines 9 through 11 of the original script. Sometimes brevity is a good thing, sometimes not. Especially in the beginning it might be smart to be explicit and take up multiple lines; it makes debugging a lot easier (until you feel comfortable making your code shorter and possibly harder to decipher).</p>
+
+<h3 id="advanced-function-syntax">4.4.2 Advanced function syntax</h3>
+
+<p>Whenever you call a function it always returns a value, even if you do not specifically set it. By default, every function returns a <em>None</em> value, since this is the default value for all variables and functions in Python. So if you want to write a function which returns you a String containing the alphabet, doing this is not enough:</p>
+
+<pre><code class="language-python">def Alphabet():
+    strSeries = "abcdefghijklmnopqrstuvwxyz"
+</code></pre>
+
+<p>The word “def” signifies the start of a function.  “Alphabet” is a name we have made-up for our function.  Again, the indentation indicates that line 2 is within the function and should only be run after the function is called.</p>
+
+<p>Although the function actually assigns the alphabet to the variable called strSeries, this variable will go out of scope once the function ends on line #2 and its data will be lost. You have to assign the return value to the function 
+name, like so:</p>
+
+<pre><code class="language-python">def Alphabet():
+    strSeries = "abcdefghijklmnopqrstuvwxyz"
+    return strSeries
+
+print Alphabet()
+</code></pre>
+
+<p>The “return value” identifies what will be returned once the method is called and the code within its scope is executed.  When this code is run, it will call the function <em>Alphabet()</em>, the code within the function’s scope will be run and the function will return the value of strSeries.  This returned value will then be printed to the command line.  It should be noted that at first glance, the return and print functions appear to be very similar.  However, they are not! <em>print()</em> will print anything to the command line and console.  return(), on the other hand, will only return a value from a function - basically assigning a value to a variable whenever the function was called. Return is used for the output of a function (in this case the function “Alphabet”), print is used for debugging code or whenever the user wants to see a value printed to the screen.</p>
+
+<p>Imagine you want to lock all curve objects in the document. Doing this by hand requires three steps and it will ruin your current selection set, so it pays to make a script for it. A function which performs this task might fail if there are no curve objects to be found. If the function is designed-not-to-fail you can always call it without thinking and it will sort itself out. If the function is designed-to-fail it will crash if you try to run it without making sure everything is set up correctly. The respective functions are:</p>
+
+<pre><code class="language-python">def lockcurves_fail():
+    rs.LockObjects(rs.ObjectsByType(rs.filter.curve))
+</code></pre>
+
+<pre><code class="language-python">def lockcurves_nofail():
+    curves = rs.ObjectsByType(rs.filter.curve)
+    if not curves: return False
+    rs.LockObjects(curves)
+    return True
+</code></pre>
+
+<p>If you call the first function when there are no curve objects in the document, the <em>rs.ObjectsByType()</em> method will return a None variable. It returns None because it was designed-not-to-fail and the <em>None</em> variable is just its way of telling you; “tough luck”. However, if you pass a None variable as an argument to the <em>rs.LockObjects()</em> method it will keel over and die, generating a fatal error!</p>
+
+<pre><code>Error Message: iteration over non-sequence of type NoneType
+</code></pre>
+
+<p>This means that the <em>rs.LockObjects()</em> method requires a list to iterate through and we have provided None variable - thus the error!</p>
+
+<p>The second function, which is designed-not-to-fail, will detect this problem on line 6 and abort the operation. As you can see, it takes a lot more lines of code to make sure things run smoothly…</p>
+
+<p>A custom defined function can take any amount of arguments between nill and a gazillion. Anyone who calls this function must provide a matching signature or an error will occur. More on the argument list in a bit.</p>
+
+<p>The first line which contains the name and the arguments is called the function declaration. Everything in between  is called the function body, and is noted by the indentation. In the function body you can declare variables, assign values, call other functions and return variables.</p>
+
+<p>The argument list takes a bit more of explaining. Usually, you can simply comma separate a bunch of arguments and they will act as variables from there on end:</p>
+
+<pre><code class="language-python">def MyBogusFunction(intNumber1, intNumber2):
+</code></pre>
+
+<p>This function declaration already provides three variables to be used inside the function body:</p>
+
+<ol>
+  <li>MyBogusFunction - (when a user calls this function - it will provide the return value)</li>
+  <li>intNumber1 - (the first argument)</li>
+  <li>intNumber2 - (the second argument)</li>
+</ol>
+
+<p>Let’s assume this function determines whether <em>intNumber1</em> plus 100 is larger than twice the value of <em>intNumber2</em>. 
+The function could look like this:</p>
+
+<pre><code class="language-python">def MyBogusFunction(intNumber1, intNumber2):
+    intNumber1 = intNumber1 + 100
+    intNumber2 = intNumber2 * 2
+    return (intNumber1 &gt; intNumber2)
+</code></pre>
+
+<p>In this function, we can see that we have used “def” to indicate that we are creating a new function, we have called it “MyBogusFunction” and have given it two input variables (intNumber1, intNumber2). Within the indentation (the guts of the function), we have done a few calculations and we have used the “return” statement to output an evaluation of our calculations. Now, when we call the function somewhere else in our code, the variable will be set to the return value of our function.:</p>
+
+<pre><code class="language-python">print MyBogusFunction(5, 6)
+</code></pre>
+
+<p>The result will be True (105 is indeed greater than 36)!</p>
+
+<p>Previously, we mentioned something called variable scope - this refers to where a variable has been defined and where it can be used.  Functions and Classes are very specific when it comes to variable scope.  Variables that are defined within a function cannot be referenced outside of the function unless they are passed through the input or return statements!! For example:</p>
+
+<pre><code class="language-python">def testFunction():
+    y=20
+    return y
+print y*testFunction()
+</code></pre>
+
+<p>This code will return an error, “‘y’ is not defined” because the variable named “y” has only been defined within a function. That means that we cannot use that variable outside of the function unless we pass it through the input or return statements. The code literally does not understand what “y” means because it was created inside of the function. Otherwise, we could have defined y outside of the function which would make it have global scope and we could use it anywhere within the code.</p>
+
+<pre><code class="language-python">y = 20
+def testFunction():
+    return y
+print testFunction()
+</code></pre>
+
+<h2 id="mutability">4.5 Mutability</h2>
+
+<p>Python includes a fairly confusing, although sometimes useful, quality pertaining to variables, tuples, lists and dictionaries (the last three we will dive into deeper a bit later).  When we create a variable it points to a specific place in memory and if we create a second variable that is equal to the first - Does y point to the same space in memory as x, or does it now have its own referenced space? For example:</p>
+
+<pre><code class="language-python">#VARIABLE EXAMPLE:
+x = 10
+y = x
+x = 5
+print(y)
+</code></pre>
+
+<p>What will be printed? It turns out, the result is 10!  That means that y is referencing the initial value of x, it is NOT referencing the variable (and thus it does not change when x changes). Although we haven’t gone through them, Tuples will act the same as this variable example, while Lists and Dictionaries will be changed based on the referenced variable. For example:</p>
+
+<pre><code class="language-python">#TUPLE EXAMPLE:
+x = (1,2)
+y = x
+x = (3,4)
+print y # The result = (1,2)
+</code></pre>
+
+<p>Tuples act very similar to variables with regard to referencing other items.  In this example, the tuple called “y” is NOT changed once we change the value of “x”.</p>
+
+<pre><code class="language-python">#LIST EXAMPLE - BAD:
+x = [1,2]
+y = x
+x.append(3)
+print y The result = (1,2,3)
+</code></pre>
+
+<p>In this example, the List “y” DOES change once we change the value of “x”. Thus, the result is (1,2,3), not (1,2) as was the case in the previous examples.  This demonstrates that Lists are referencing the variable not the value of “x”.  In order to make “y” act as its own, independent variable and value, we must create a copy of the first variable:</p>
+
+<pre><code class="language-python">#LIST EXAMPLE - GOOD:
+x = [1,2]
+y = x[:] #This creates a copy of the list "x"
+x.append(3)
+print y The result = (1,2)
+</code></pre>
+
+<p>The variable[:] symbol creates a copy of the variable.  This means that “y” will now be an independent list and will not change when “x” changes!  One more example:</p>
+
+<pre><code class="language-python">#DICTIONARY EXAMPLE - BAD:
+x = {1:'a',2:'b'}
+y = x
+x[3] = 'c'
+print y The result = {1:'a',2:'b',3:'c'}
+</code></pre>
+
+<p>In this example the dictionary “y” will be changed with the dictionary “x”, unless we use <em>x.copy()</em>.</p>
+
+<pre><code class="language-python">#DICTIONARY EXAMPLE - GOOD:
+x = {1:'a',2:'b'}
+y = x.copy()
+x[3] = 'c'
+print y The result = {1: 'a', 2: 'b'}
+</code></pre>
+
+<p>This gets into the topic of mutability.  An element is considered mutable if it can be changed/modified once they are created.  Variables and Tuples are considered Immutable, meaning that they cannot be changed unless you create a new variable with the newly desired value (or copy over top of the old variable).  Lists and Dictionaries are considered mutable, because they can be modified once they have been created. This means that we can freely add, remove, slice the values within a List or Dictionary.  This is an exciting and powerful tool, that was previously not available with VBscript Arrays!  More on this later when we get into Tuples, Lists and Dictionaries…</p>
+
+<hr />
+
+<h4 id="related-topics">Related Topics</h4>
+
+<ul>
+  <li><a href="/wip/guides/rhinopython/primer-101/1-2-where-to-find-help/">Where to find help - Next Topic »</a></li>
+  <li><a href="/wip/guides/rhinopython/primer-101/rhinopython101">Rhino.Python Primer 101</a></li>
+  <li><a href="/wip/guides/rhinopython/python-running-scripts">Running Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-canceling-scripts">Canceling Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-editing-scripts">Editing Scripts</a></li>
+  <li><a href="/wip/guides/rhinopython/python-scripting-options">Scripting Options</a></li>
+  <li><a href="/wip/guides/rhinopython/python-scripting-reinitialize">Reinitializing Python</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Authors:
+                <ul>
+                  
+                  
+                    <li><a href="https://discourse.mcneel.com/users/steve/activity">Skylar Tibbits</a></li>
+                  
+                    <li><a href="https://discourse.mcneel.com/users//activity">Arthur van der Harten</a></li>
+                  
+                    <li><a href="https://discourse.mcneel.com/users//activity">Steve Baer</a></li>
+                  
+                </ul>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/primer-101/4-operators-and-functions_BACKUP_1532.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+
+</html>
