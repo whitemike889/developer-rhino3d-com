@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/css/main.css">
@@ -516,7 +518,7 @@ print ([3*x for x in myList if x&gt;3]
 
 <p>The following example should teach you almost all there is to know about lists, except nesting:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 
 def myfavoritethings():
     things = []
@@ -599,7 +601,7 @@ del myDict['b'] # This deletes the Key "b" and its associated value of 2
 
 <p>As was just explained, points are represented by lists containing three values - [x,y,z]. This notation is used for both points and vectors. First, a point example:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 import math
     
 #Call rs.EnableRedraw(False)
@@ -756,7 +758,7 @@ factor. This is the equivalent of *PointDivide()*.</td>
 
 <p>IronPython has no method for displaying vectors, which is a pity since this would be very useful for visual feedback. I shall define a function here called <em>AddVector()</em> which we will use in examples to come. The function must be able to take two arguments; one vector definition and a point definition. If the point array is not defined the vector will be drawn starting at the world origin.</p>
 
-<pre><code class="language-python">def AddVector(vecdir, base_point=[0,0,0]):
+<pre class="line-numbers"><code class="language-python">def AddVector(vecdir, base_point=[0,0,0]):
        tip_point = rs.PointAdd(base_point, vecdir)
        line = rs.AddLine(base_point, tip_point)
        if line: return rs.CurveArrows(line, 2)
@@ -799,7 +801,7 @@ In case of scenario #2, the line variable will be set to None. The last option m
 
 <p><img src="/images/primeraddvectorexample.svg" alt="/images/primeraddvectorexample.svg" class="float-img-right" width="325" /></p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 # This script will compute a bunch of cross-product vector based on a pointcloud
 
 def vectorfield():
@@ -901,7 +903,7 @@ using nested lists. The logic of this script will be the same, but the algorithm
 
 <p>We’re going to put the vector math bit in a separate function. This function will compute the {vM} vector given the control points {pN-1; p; pN+1} and a smoothing factor {s}. Since this function is not designed to fail, we will not be adding any error checking, if the thing crashes we’ll have to fix the bug. Instead of using variable naming conventions, I’ll use the same codes as in the diagram:</p>
 
-<pre><code class="language-python">def smoothingvector(point, prev_point, next_point, s):
+<pre class="line-numbers"><code class="language-python">def smoothingvector(point, prev_point, next_point, s):
     pm = (prev_point+next_point)/2.0
     va = rs.VectorCreate(pm, point)
     vm = rs.VectorScale(va, s)
@@ -934,7 +936,7 @@ When we use this algorithm, we must make sure to set 's' to be something sensibl
 
 <p>We’ll also put the entire curve-smoothing algorithm in a separate function. Since it’s fairly hard to adjust existing objects in Rhino, we’ll be adding a new curve and deleting the existing one:</p>
 
-<pre><code class="language-python">def smoothcurve(curve_id, s):
+<pre class="line-numbers"><code class="language-python">def smoothcurve(curve_id, s):
     curve_points = rs.CurvePoints(curve_id)
     new_curve_points = []
 

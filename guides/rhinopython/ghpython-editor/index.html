@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/css/main.css">
@@ -287,6 +289,47 @@
             
             
             <li>
+              <a href="#code-window">Code Window</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#importing-modules">Importing modules</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#input-variables">Input Variables</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
               <a href="#next-steps">Next Steps</a>
 
               
@@ -349,7 +392,7 @@
 
 <ul>
   <li>Menu - Use this to import and save Python files, also to access Help resources.</li>
-  <li>Code view - Write the Python code here.</li>
+  <li>Code Window - Write the Python code here.</li>
   <li>Output window - Use this to see code status and error messages.</li>
   <li>Test Button - Runs the code without exting the editor</li>
   <li>OK Button - Tests the code, saves it and closes the editor.</li>
@@ -393,9 +436,78 @@
 </tr>
 </table>
 
+<h2 id="code-window">Code Window</h2>
+
+<p>This is where all the typing goes on and the grand dieas you have come to life.</p>
+
+<p>This is very similiar to the Rhino.Ptyhon script editor.  Simply type in the statements.</p>
+
+<h3 id="importing-modules">Importing modules</h3>
+
+<p>Normally a script will start with <code>import</code> statments.  The editor will autocomplete the modules which are available.</p>
+
+<p><img src="/images/ghpython-editor-import.png" alt="/images/ghpython-editor-import.png" class="img-center" width="60%" /></p>
+
+<p>Some common module that may be imported are:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+import math #Various math functions including Degree, Radian and Hypot
+import statistics #Mean and median are here
+</code></pre>
+
+<p>There are hundeds of modules available, for a complete list, go to <a href="https://docs.python.org/2/library/">Python Standard Libaries</a>.  Here is a very short list of other modules that can be used:</p>
+
+<pre><code class="language-python">import rhino #imports the rhinocommon namespace
+import datetime #Basic date and time types
+import string #Common string operations
+import random #Generate pseudo-random numbers
+import pickle #Python object to string for serialization
+import system #System-specific parameters and functions
+import os.path #Common pathname manipulations
+import csv #CSV File Reading and Writing
+import htmllib #A parser for HTML documents
+import JSON #JSON encoder and decoder
+</code></pre>
+<p>Once a module is imported, typing the module name and a dot will show an autocomplete of all the methods within that module.</p>
+
+<h3 id="input-variables">Input Variables</h3>
+
+<p>Each time Grasshopper recalculates the definition, the Python component will imput the inputs of the GHPython component as global variables in the Python script.  The name of those variables will correspond to the name of each input.  As a simple example this example:</p>
+
+<p><img src="/images/ghpython-input.png" alt="/images/ghpython-input.png" class="img-center" width="80%" /></p>
+
+<p>The code to process the <code>x</code> input is as follows:</p>
+
+<pre><code class="language-python">if x:
+    print "x is true."
+else:
+    print "x is false."
+</code></pre>
+
+<p>Understanding the type of deta is being input and how that maps to standard Python components is important. Some examples:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Grasshopper Input</th>
+      <th> </th>
+      <th> </th>
+      <th style="text-align: left">Python Datatype</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">String</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">String</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="next-steps">Next Steps</h2>
 
-<p>That lays out the bascis of the GhPtyon component.  Next is a look into the component Python editor for Grasshopper.</p>
+<p>That lays out the basics of the GhPython component.  Next is a look into the component Python editor for Grasshopper.</p>
 
 <hr />
 
