@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>An Overview of the GhPython Component with Python</title>
-  <meta name="description" content="This guide looks at the details of the GhPython component.  Using Python">
+  <title>An Overview of the GhPython Editor with Python</title>
+  <meta name="description" content="This guide looks at the details of the GhPython Editor.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/ghpython-editor/" />
-  <meta property="og:title" content="An Overview of the GhPython Component" />
-  <meta property="og:description" content="This guide looks at the details of the GhPython component." />
+  <meta property="og:title" content="An Overview of the GhPython Editor" />
+  <meta property="og:description" content="This guide looks at the details of the GhPython Editor." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="An Overview of the GhPython Component" />
-  <meta name="twitter:description" value="This guide looks at the details of the GhPython component." />
+  <meta name="twitter:title" value="An Overview of the GhPython Editor" />
+  <meta name="twitter:description" value="This guide looks at the details of the GhPython Editor." />
   
     
       <meta name="twitter:image" content="/images/rhinodev-logo-unfurl.png" />
@@ -384,18 +384,18 @@
               
           </ol>
 
-          <h1>An Overview of the GhPython Component</h1>
+          <h1>An Overview of the GhPython Editor</h1>
 
           <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide looks at the details of the GhPython component.</p>
+          <p>This guide looks at the details of the GhPython Editor.</p>
 
           <h2 id="inside-the-script-component">Inside the script component</h2>
 
-<p>To show the code editor window for this script component, double click on the middle of the component or select “Edit Source…” from the component menu.</p>
+<p>To show the code editor window for this script component, double click on the middle of the component, or select “Edit Source…” from the component center-icon context menu.</p>
 
-<p>The Python editor runs IronPython 2.7, the GhPython component can also access the easy to use RhinoScritSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon, which also can be imported into the GhPython component. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
+<p>The Python editor runs IronPython 2.7, the GhPython component can also access the easy-to-use RhinoScritSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon, which also can be imported into the GhPython component. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
 
 <h2 id="editor-interface">Editor Interface</h2>
 
@@ -424,16 +424,16 @@
 </tr>
 <tr>
 <td>Close</td>
-<td>This will save the definition and close the edito, returing back to the Grasshopper definition</td><td>Alt+F4</td>
+<td>This will save the definition and close the editor, returning back to the Grasshopper definition</td><td>Alt+F4</td>
 </tr>
 <tr>
 <td>Test</td>
-<td>The script will run within the Grasshopper definition.  The Output window will be update with the results and editor will stay open.  This is a great window for quick debuggin of the script.</td>
+<td>The script will run within the Grasshopper definition.  The Output window will be update with the results and editor will stay open.  This is a great window for quick debugging of the script.</td>
 <td>F5</td>
 </tr>
 <tr>
 <td>OK</td>
-<td>This will run the code, like the Test button.  Then will save the code and close the editor, returing you back to the Grasshopper definition.</td><td>Ctrl + F5</td>
+<td>This will run the code, like the Test button.  Then will save the code and close the editor, returning you back to the Grasshopper definition.</td><td>Ctrl + F5</td>
 </tr>
 <tr>
 <td>Import From...</td>
@@ -455,7 +455,8 @@
 
 <h4 id="importing-modules">Importing modules</h4>
 
-<p>Normally a script will start with <code>import</code> statments.  The editor will autocomplete the modules which are available.</p>
+<p>Normally a script will start with <code>import</code> statments.  The editor will autocomplete the modules which are available.
+Note: some modules may not autocomplete but still be available.</p>
 
 <p><img src="/images/ghpython-editor-import.png" alt="/images/ghpython-editor-import.png" class="img-center" width="60%" /></p>
 
@@ -478,7 +479,7 @@ import system #System-specific parameters and functions
 import os.path #Common pathname manipulations
 import csv #CSV File Reading and Writing
 import htmllib #A parser for HTML documents
-import JSON #JSON encoder and decoder
+import json #JSON encoder and decoder
 </code></pre>
 <p>Once a module is imported, typing the module name and a dot will show an autocomplete of all the methods within that module.</p>
 
@@ -491,12 +492,12 @@ import JSON #JSON encoder and decoder
 <p>The code to process the <code>x</code> input is as follows:</p>
 
 <pre><code class="language-python">if x:
-    print "x is true."
+    print("x is true.")
 else:
-    print "x is false."
+    print("x is false.")
 </code></pre>
 
-<p>Understanding the type of deta is being input and how that maps to standard Python components is important. If the datatype is not what is needed in the Python script by default, then use the <code>Type hint</code> option on the component. This assurese the corect datatype on input.</p>
+<p>Understanding the type of deta is being input and how that maps to standard Python components is important. If the datatype is not what is needed in the Python script by default, then use the <code>Type hint</code> option on the component. This assures the correct datatype on input.</p>
 
 <h4 id="output-variables">Output variables</h4>
 
@@ -507,9 +508,10 @@ else:
 
 <p>The last assignment to the variable in the script will the the value that is output.  If there are multiple assigments to the output variable, only the last one is sent out.</p>
 
-<h4 id="print-method">Print Method</h4>
+<h4 id="print-function">Print function</h4>
 
-<p>The <code>print()</code> method used in the GhPtyhon script will print information out to the Output Window.  This is a good way to debug script in the window also.</p>
+<p>The <code>print()</code> function used in the GhPtyhon script will print information out to the Output Window.  This is a good way to debug script in the window also.
+Because we are using a flavor of Python 2, print is really a statement, that works also without paretheses. However, we prefer to look at is a function, that way it will work the same also in Python 3 flavors.</p>
 
 <h3 id="output-window">Output Window</h3>
 
@@ -530,7 +532,7 @@ SyntaxError: EOL while scanning single-quoted string
 </code></pre>
 
 <ol>
-  <li>The <code>print()</code> method will output to this window.</li>
+  <li>The <code>print()</code> function will output to this window.</li>
   <li>While editing a script, information about the current method will be displayed here. The comments about a method are limited to arguement requirements.  For a fuller explaination of any method, go to the python help file.</li>
 </ol>
 
