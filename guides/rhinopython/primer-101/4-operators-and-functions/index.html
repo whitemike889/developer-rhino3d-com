@@ -392,9 +392,9 @@ x = math.tan(15 + 26) / math.log(55)
 <p>The four lines of code above contain four kinds of code:</p>
 
 <ol>
-  <li>Numbers		<code>15, 26, 2.33 and 55</code></li>
-  <li>Variables	<code>x</code></li>
-  <li>Operators	<code>=, +, * and /</code></li>
+  <li>Numbers        <code>15, 26, 2.33 and 55</code></li>
+  <li>Variables    <code>x</code></li>
+  <li>Operators    <code>=, +, * and /</code></li>
   <li>Functions    <code>math.sin(), math.sqrt(), math.tan() and math.log()</code></li>
 </ol>
 
@@ -408,8 +408,8 @@ x = math.tan(15 + 26) / math.log(55)
 
 <pre><code class="language-python">x = 4 + 5 * 2
 
-x = (4 + 5) * 2		# wrong precedence
-x = 4 + (5 * 2)		# correct precedence
+x = (4 + 5) * 2        # wrong precedence
+x = 4 + (5 * 2)        # correct precedence
 </code></pre>
 
 <p>x doesn’t equal 18, even though many cheap calculators seem to disagree. The precedence of the multiplication is higher which means you first have to multiply 5 by 2, and then add the result to 4. Thus, x equals 14. Python is not a cheap calculator and it has no problems whatsoever with operator precedence. It is us, human beings, who are the confused ones. The example above is fairly straightforward, but how would you code the following?</p>
@@ -458,7 +458,7 @@ Otherwise, abort
 <p>When we translate this into Python code we get the following:</p>
 
 <pre><code class="language-python">if (not rs.IsBlock("SomeBlockName")):
-	print ("Missing block definition: SomeBlockName")
+    print ("Missing block definition: SomeBlockName")
 </code></pre>
 
 <p>And and Or at least behave like proper operators; they take two arguments on either side. The And operator requires both of them to be True in order for it to evaluate to True. The Or operator is more than happy with a single True value. Let’s take a look at a typical ‘one-beer-too-many’ algorithm:</p>
@@ -515,9 +515,9 @@ computations such as <em>math.sin()</em>, others perform String operations such 
 
 <p>So how do functions/procedures/methods behave? Since the point of having procedures is to encapsulate code for frequent use, we should expect them to blend seamlessly into written code. In order to do this they must be able to both receive and return variables. <em>math.sin()</em> is an example of a function which both requires and returns a single numeric variable. The <em>datetime.now()</em> function on the other hand only returns a single value which contains the current date and time. It does not need any additional information from you, it is more than capable of finding out what time it is all by itself. An even more extreme example is the <em>rs.Exit()</em> method which does not accept any argument and does not return any value. There are two scenarios for calling procedures. We either use them to assign a value or we call them out of the blue:</p>
 
-<pre><code class="language-python">strPointID = rs.AddPoint([0.0, 0.0, 1.0])	# Correct
-rs.AddPoint([0.0, 0.0, 1.0])			    # Correct
-rs.AddPoint [0.0, 0.0, 1.0]			        # Wrong
+<pre><code class="language-python">strPointID = rs.AddPoint([0.0, 0.0, 1.0])    # Correct
+rs.AddPoint([0.0, 0.0, 1.0])                # Correct
+rs.AddPoint [0.0, 0.0, 1.0]                    # Wrong
 </code></pre>
 
 <p>If you look in the RhinoScriptSyntax helpfile and search for the <em>AddLayer()</em> method, you’ll see the following text:</p>
@@ -554,8 +554,8 @@ if strObjectID:
 </code></pre>
 
 <pre><code>Returns:
-String		» The identifier of the picked object if successful.
-None		» If not successful, or on error.
+String        » The identifier of the picked object if successful.
+None        » If not successful, or on error.
 </code></pre>
 
 <p>This method accepts six arguments, all of which happen to be optional. In our script we’re only specifying the first and fourth argument. The <em>strMessage</em> refers to the String which will be visible in the command-line during the picking operation. We’re overriding the default, which is “Select object”, with something a bit more specific. The second argument is an integer which allows us to set the selection filter. The default behavior is to apply no filter; all objects can be selected whether they are points, textdots, polysurfaces, lights or whatever. We want the default behavior. The same applies to the third argument which allows us to override the default behavior of accepting preselected objects. The fourth argument is False by default, meaning that the object we pick will not be actually selected. This is not desired behavior in our case. The fifth argument takes a bit more explaining so we’ll leave it for now.</p>
