@@ -381,23 +381,23 @@ $(document).ready(function()
 <p>Problem 1:</p>
 
 <pre><code class="language-python">if (rs.IsCurve(strObjectID)):
-	rs.DeleteObject(strObjectID)
+    rs.DeleteObject(strObjectID)
 </code></pre>
 
 <p>Problem 2:</p>
 
 <pre><code class="language-python">if (rs.IsCurve(strObjectID)):
-	if (rs.CurveLength(strObjectID) &lt; 0.01):
-	    rs.DeleteObject(strObjectID)
+    if (rs.CurveLength(strObjectID) &lt; 0.01):
+        rs.DeleteObject(strObjectID)
 </code></pre>
 
 <p>Problem 3:</p>
 
 <pre><code class="language-python">if (rs.IsCurve(strObjectID)):
-	if (rs.CurveLength(strObjectID) &lt; 0.01):
-	    rs.DeleteObject(strObjectID)
-	else:
-	    rs.ObjectLayer(strObjectID, "Curves")
+    if (rs.CurveLength(strObjectID) &lt; 0.01):
+        rs.DeleteObject(strObjectID)
+    else:
+        rs.ObjectLayer(strObjectID, "Curves")
 </code></pre>
 
 <p>The most common conditional evaluation is the If…Then statement. If…Then allows you to bifurcate the flow of a program. The simplest If…Then structure can be used to shield certain lines of code. It always follows the same format:</p>
@@ -416,7 +416,7 @@ $(document).ready(function()
 
 <p>Whenever you need an If…Then…Else structure, you can use the following syntax:</p>
 
-<pre><code class="language-python">	if (SomethingOrOther):
+<pre><code class="language-python">    if (SomethingOrOther):
     DoSomething()
 else:
     DoSomethingElse()
@@ -427,7 +427,7 @@ else:
 <p>You can nest If…Then structures as deep as you like, though code readability will suffer from too much indenting.
 The following example uses four nested If…Then structures to delete short, closed curves.</p>
 
-<pre><code class="language-python">	if (rs.IsCurve(strObjectID)):
+<pre><code class="language-python">    if (rs.IsCurve(strObjectID)):
     if (rs.CurveLength(strObjectID) &lt; 1.0):
         if (rs.IsCurveClosed(strObjectID)):
             rs.DeleteObject(strObjectID)
@@ -692,7 +692,7 @@ dblStep = 0.25
 
 for x in rs.frange(dblA, dblB, dblStep):
     y = 2*math.sin(x)
-    rs.AddPoint([x, y, 0])	
+    rs.AddPoint([x, y, 0])    
 </code></pre>
 
 <p><img src="/wip/images/primer-sinewave.svg" alt="/wip/images/primer-sinewave.svg" class="float-img-right" width="375" /></p>
