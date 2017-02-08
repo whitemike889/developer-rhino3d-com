@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Your First Python Script in Grasshopper with Python</title>
-  <meta name="description" content="This guide demonstrates how to use a Python script Grasshopper.  Using Python">
+  <meta name="description" content="This manual is for Grasshopper users who would like to create their own custom scripts using Grasshopper for Rhino 5.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/your-first-python-script-in-grasshopper/" />
   <meta property="og:title" content="Your First Python Script in Grasshopper" />
-  <meta property="og:description" content="This guide demonstrates how to use a Python script Grasshopper." />
+  <meta property="og:description" content="This manual is for Grasshopper users who would like to create their own custom scripts using Grasshopper for Rhino 5." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Your First Python Script in Grasshopper" />
-  <meta name="twitter:description" value="This guide demonstrates how to use a Python script Grasshopper." />
+  <meta name="twitter:description" value="This manual is for Grasshopper users who would like to create their own custom scripts using Grasshopper for Rhino 5." />
   
     
       <meta name="twitter:image" content="/wip/images/rhinodev-logo-unfurl.png" />
@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/wip/css/main.css">
@@ -280,7 +282,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#installing-ghpython-into-rhino-5">Installing GHPython into ...</a>
+              <a href="#installing-ghpython-into-rhino-5">Installing GhPython into ...</a>
 
               
 
@@ -351,7 +353,7 @@ $(document).ready(function()
               
               <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">Getting Started</li>
+              <li class="active">GhPython</li>
               
           </ol>
 
@@ -360,15 +362,22 @@ $(document).ready(function()
           <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide demonstrates how to use a Python script Grasshopper.</p>
+          <p>This manual is for Grasshopper users who would like to create their own custom scripts using Grasshopper for Rhino 5.</p>
 
-          <p>This manual is meant for Grasshopper users who would like to take their skills to the next level and create their own custom Python component using Grasshopper for Rhino 5.</p>
+          <h2 id="introduction">Introduction</h2>
 
-<h2 id="introduction">Introduction</h2>
+<p>Scripting components works as an integrated part of GH. They can get input and produce output from and to other standard GH components. They can be used to create specialized functionality that opens up tremendous potential beyond the standard components.</p>
 
-<p>Scripting components works as an integrated part of GH. They can read input and feed output from and to other standard GH components. They can be used to create specialized functionality that opens up tremendous potential beyond the standard compoonents.</p>
+<p>But there is a cool twist… the GhPython component supports rhinoscriptsyntax functions. The rhinoscriptsyntax functions can be set to generate geometry inside of Grasshopper that does not live in the Rhino document. We are using a concept called “duck typing” to swap the document that the rhinoscriptsyntax functions target: from the Rhino document to a Grasshopper document. This means that the following script:</p>
 
-<p>Grasshopper supports multiple .NET scripting languages such as VB and C# to help develop custom code. There is also the Python component. Python is a modern programming language developed for remarkable power with very clear syntax. Python supports multiple programming paradigms, often used as a scripting language, but is also used in a wide range of advanced programming contexts. The <a href="http://developer.rhino3d.com/guides/rhinopython/">Rhino.Python</a> website is a great place to get more information about Python in Rhino and Grasshopper.</p>
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+for x in range(10):
+    rs.AddPoint((x,0,0)
+</code></pre>
+
+<p>will add 10 points to the Rhino document when run from Rhino’s “_RunPythonScript” or “_EditPythonScript” commands. The same script will add 10 points to a Grasshopper document that can be passed on to other components when run inside a GhPython component.</p>
+
+<p>Grasshopper supports multiple .NET scripting languages such as VB and C# to help develop custom code. There is also the Python component. Python supports multiple programming paradigms, often used as a scripting language, but is also used in a wide range of advanced programming contexts. The <a href="http://developer.rhino3d.com/guides/rhinopython/">Rhino.Python</a> website directory is a great place to get more information about Python in Rhino in general.</p>
 
 <p><img src="/wip/images/ghpython-component.png" alt="/wip/images/ghpython-component.png" class="float-img-right" width="275" /></p>
 
@@ -376,23 +385,23 @@ $(document).ready(function()
 
 <ul>
   <li>Rhinoscript syntax to Grasshopper</li>
-  <li>The GhPython component is similar to the ones of C# and Vb.Net components in Grasshopper</li>
-  <li>Control the number of inputs and outputs to the component</li>
-  <li>Include libraries to the .NET SDK and huge number of Python add-on functions</li>
-  <li>Integrates with the new Python editor included in Rhino 5</li>
+  <li>a Python parallel to the C# and Vb.Net scripting components</li>
+  <li>a dynamic UI with control over the number of inputs and outputs</li>
+  <li>ability to reference .NET libraries and a huge number of Python packages</li>
+  <li>integration with the Python editor included in Rhino 5</li>
 </ul>
 
-<p>Rhino allows access to its algorithms through the Rhino SDK (software development kit). Rhino is written in C++ but it also provides a couple SDKs for .NET languages.  The most basic SDK for Python is RhinoScriptSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon SDK. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
+<p>Rhino allows access to its algorithms through the Rhino SDK (software development kit). Rhino is written in C++ but it also provides a couple SDKs for scripting and programming languages.  The most basic SDK for Python is RhinoScriptSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon SDK. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
 
-<h2 id="installing-ghpython-into-rhino-5">Installing GHPython into Rhino 5</h2>
+<h2 id="installing-ghpython-into-rhino-5">Installing GhPython into Rhino 5</h2>
 
-<p>The Python component needs to the installed into Grasshopper on Rhino 5 for Windows.</p>
+<p>Only in Rhino 5 for Windows, the Python component needs to the installed into Grasshopper.</p>
 
 <ol>
-  <li>Download <a href="http://www.food4rhino.com/app/ghpython">GhPthon for Grasshopper from Food4Rhino</a></li>
+  <li>Download <a href="http://www.food4rhino.com/app/ghpython">GhPython for Grasshopper from Food4Rhino</a>.</li>
   <li>In Grasshopper, choose File &gt; Special Folders &gt; Components folder. Save the gha file there.</li>
-  <li>Right-click the file &gt; Properties &gt; make sure there is no “blocked” text</li>
-  <li>Restart Rhino and Grasshopper</li>
+  <li>Right-click the file &gt; Properties &gt; make sure to “unblock” it.</li>
+  <li>Restart Rhino and Grasshopper.</li>
 </ol>
 
 <p>A successful install will result in a Python component in the Math &gt; Script toolbar:</p>
@@ -412,16 +421,16 @@ $(document).ready(function()
 <ul>
   <li>x: first input of a .NET type (object).</li>
   <li>y: second input of a .NET type (object).</li>
-  <li>Out: output string with compiling messages.</li>
+  <li>out: output string with compiling messages and prints.</li>
   <li>A: Returned output of type object.</li>
 </ul>
 
 <h2 id="the-helloworld-script">The HelloWorld Script</h2>
 
-<p>Let’s start witht the classic <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello World!” example</a> for our first script.</p>
+<p>Let’s start with the classic <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello World!” example</a> for our first script.</p>
 
 <ol>
-  <li>Drag a Python component onto the Grasshoppper canvas.</li>
+  <li>Drag a Python component onto the Grasshopper canvas.</li>
   <li>Add a Boolean component (Params toolbar) and connect it to the <em>x</em> input.</li>
   <li>Add a Panel component and connect it to the <em>a</em> output.</li>
 </ol>
@@ -430,7 +439,7 @@ $(document).ready(function()
 
 <p>The “Hello World!” script will check for a <em>TRUE</em> in <code>x</code> to display the Hello World message through the ‘a’ output.</p>
 
-<p>Double-click on the component to bring up the python editor:</p>
+<p>Double-click on the component to bring up the Python editor:</p>
 
 <p><img src="/wip/images/ghpython-blankeditor.png" alt="/wip/images/ghpython-blankeditor.png" class="img-center" width="75%" /></p>
 
@@ -440,9 +449,9 @@ $(document).ready(function()
     a = "Hello World!"
 </code></pre>
 
-<p>Click on the editor OK button to get back to the Grasshopper Canvas.</p>
+<p>Click on the OK button of the editor to get back to the Grasshopper Canvas.</p>
 
-<p>If you toggle the Boolean switch from true to fals, the Panel should display <code>Hello World!</code>.</p>
+<p>If you toggle the Boolean switch from true to false, the Panel should display <code>Hello World!</code>.</p>
 
 <p><img src="/wip/images/ghpython-helloworld.png" alt="/wip/images/ghpython-helloworld.png" class="img-center" width="75%" /></p>
 

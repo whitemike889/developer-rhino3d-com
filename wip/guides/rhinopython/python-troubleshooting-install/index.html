@@ -6,20 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>1.1 Macros with Python</title>
+  <title>Troubleshooting Python Install with Python</title>
   <meta name="description" content="">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/primer-101/1-1-macros/" />
-  <meta property="og:title" content="1.1 Macros" />
+  <meta property="og:url" content="/guides/rhinopython/python-troubleshooting-install/" />
+  <meta property="og:title" content="Troubleshooting Python Install" />
   <meta property="og:description" content="" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/wip/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="1.1 Macros" />
+  <meta name="twitter:title" value="Troubleshooting Python Install" />
   <meta name="twitter:description" value="" />
   
     
@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/wip/css/main.css">
@@ -51,7 +53,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/primer-101/1-1-macros/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/python-troubleshooting-install/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -100,7 +102,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/rhinopython/primer-101/1-1-macros/">View the current version instead.</a>
+    <a href="/guides/rhinopython/python-troubleshooting-install/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -256,6 +258,38 @@ $(document).ready(function()
         
 
         
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#problem">Problem:</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#solution">Solution:</a>
+
+              
+
+            </li>
+          
+
+        
     </ul>
 </nav>
 
@@ -271,69 +305,84 @@ $(document).ready(function()
               
               <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">Python Primer</li>
+              <li class="active">Getting Started</li>
               
           </ol>
 
-          <h1>1.1 Macros</h1>
+          <h1>Troubleshooting Python Install</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/piac/activity">Piac</a></span>
 </p>
 
           <p></p>
 
-          <p>Rhinoceros is based on a command-line interface. This means you can control it by using only the keyboard. You type in the commands and the program will execute them. Ever since the advent of the mouse, a user interface which is purely command-line based is considered to be primitive, and rightly so. Instead of typing:</p>
+          <p>Over the last few months, we received several reports about issues with independent IronPython installations (IIPI) and Rhino.</p>
 
-<pre><code>Line 0,0,0 10,0,0
-</code></pre>
-<p>you can also click on the Line button and then twice in the viewport to define the starting and ending points of a line-curve. Because of this second (graphical) interface some people have done away with the 
-command-line entirely. Emotions run high on the subject; some users are command-line fanatics, others use only toolbars and menus. Programmers have no emotions in this respect, they are all wedded to the command-line. It’s no use programming the mouse to go to a certain coordinate and then simulate a mouse click, that is just plain silly. Programmers pump text into Rhino and they expect to get text in return.</p>
+<h2 id="problem">Problem:</h2>
 
-<p>The lowest form of programming in Rhino is using macros. I do not wish to offend those of you who write macros for a living, but it cannot be denied that it is a very primitive way to automate processes. I shall only briefly pause at the subject of macros, partly so we know which is which and partly because we might at some point simulate macros using RhinoScript.</p>
+<p>Python 2.7.7 can decompress assemblies into the GAC (Global Assembly Cache). IIPI are installations of IronPython made via MSI files, and they appear in the Control Panel like this:</p>
 
-<p>A macro is a prerecorded list of orders for Rhino to execute. The <em>_Line</em> command at the top of this page is an example of a very simple macro. If your job is to open Rhino files, add a line from 0,0,0 to 10,0,0 to each one and save the file again, you would probably get very tired very quickly from typing <code>_Line w0,0,0 w10,0,0</code> six times a minute. Enter macros. Macros allow you to automate tasks you would normally do by hand but not by brain. Macros cannot be made smart, nor do they react to the things they help create. They’re a bit like traffic wardens in that respect. An example of a more sophisticated macro would be:</p>
+<p><img src="/wip/images/iron-features.png" alt="/wip/images/iron-features.png" class="img-center" width="100%" /></p>
 
-<pre><code>_SelNone
-_Polygon _NumSides=6 w0,0,0 w10,0,0
-_SelLast
--_Properties _Object _Name RailPolygon _Enter _Enter
-_SelNone
-_Polygon _NumSides=6 w10,0,0 w12,0,0
-_SelLast
-_Rotate3D w0,0,0 w10,0,0 90
--_Properties _Object _Name ProfilePolygon _Enter _Enter
-_SelNone
--_Sweep1 _SelName RailPolygon _SelName ProfilePolygon _Enter _Enter _Closed=Yes Enter
-</code></pre>
+<p>It is possible to install IronPython via folder decompression, and that has no impact on Rhino.</p>
 
-<table>
-<tr>
-<td>
-The above code will create the same hexagonal torus over and over again. It might be useful, but it's not flexible. You can type the above text into the command-line by hand, or you can put it into a button. You can even copy-paste the text directly into Rhino.
+<p>We installed both IronPython 2.7.5 final and IronPython 2.7.7 final from the IronPython website, and checked for compatibility with running the _EditPythonScript editor, and importing the os module.</p>
 
-Incidentally, the underscores before all the command names are due to Rhino localization. Using underscores will force Rhino to use English command names instead of -say- Italian or Japanese or whatever the custom setting is. You should always force English command names since that is the only guarantee that your code will work on all copies of Rhino worldwide.
-</td>
-<td width="30%"><img src="/wip/images/hexagonaltorus.svg" width="100%" height="300" float="right" /></td>
-</tr>
+<p>Here are the results:</p>
+
+<table rules="groups" width="100%">
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th> </th>
+      <th> </th>
+      <th style="text-align: center">IronPython 2.7.5</th>
+      <th style="text-align: center">IronPython 2.7.7</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Rhinoceros 5 SR12 or SR13</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: center">OK</td>
+      <td style="text-align: center">OK only with no GAC*</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Rhinoceros WIP (31 Jan 2017)</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: center">OK</td>
+      <td style="text-align: center">OK</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tfoot>
 </table>
 
-<p>The hyphen in front of the <em>_Properties</em> and <em>_Sweep1</em> command is used to suppress dialog boxes. If you take the hyphens out you will no longer be able to change the way a command works through the command -line.</p>
+<p>*This is what the GAC options looks like, during installation:</p>
 
-<p>There’s no limit to how complex a macro can become, you can keep adding commands without restrictions, but you’ll never be able to get around the limitations that lie at the heart of macros.</p>
+<p><img src="/wip/images/gac-assembly.png" alt="/wip/images/gac-assembly.png" class="img-center" width="80%" /></p>
+
+<h2 id="solution">Solution:</h2>
+
+<p>If you need version 2.7.7, and need Rhinoceros 5 SR12 and SR13 to run Python on the same system, you have a few options:</p>
+
+<ol>
+  <li>Reinstall with disabled GAC installation.</li>
+  <li>Uninstall and reinstall by decompressing the IronPython folder.</li>
+  <li>Switch to IronPython version 2.7.5, both with or without GAC.</li>
+  <li>Alternatively, uninstall IronPython.</li>
+</ol>
 
 <hr />
-
-<h4 id="related-topics">Related Topics</h4>
-
-<ul>
-  <li><a href="/wip/guides/rhinopython/primer-101/1-2-where-to-find-help/">Where to find help - Next Topic »</a></li>
-  <li><a href="/wip/guides/rhinopython/primer-101/rhinopython101">Rhino.Python Primer 101</a></li>
-  <li><a href="/wip/guides/rhinopython/python-running-scripts">Running Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-canceling-scripts">Canceling Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-editing-scripts">Editing Scripts</a></li>
-  <li><a href="/wip/guides/rhinopython/python-scripting-options">Scripting Options</a></li>
-  <li><a href="/wip/guides/rhinopython/python-scripting-reinitialize">Reinitializing Python</a></li>
-</ul>
 
         </article>
 
@@ -358,7 +407,7 @@ Incidentally, the underscores before all the command names are due to Rhino loca
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+                Author: <a href="https://discourse.mcneel.com/users/piac/activity">Piac</a>
               
             </p>
           </div>
@@ -368,7 +417,7 @@ Incidentally, the underscores before all the command names are due to Rhino loca
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/primer-101/1-1-macros.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinopython/python-troubleshooting-install.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">

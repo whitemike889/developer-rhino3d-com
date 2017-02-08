@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/wip/css/main.css">
@@ -585,15 +587,9 @@ $(document).ready(function()
     
   
     
-  
-    
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/what-is-rhinopython/" title="This guide is an overview of Python in Rhino.">What is Rhino.Python?</a></li>
       
-    
-  
     
   
     
@@ -978,28 +974,15 @@ $(document).ready(function()
   
     
   
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
   </ul>
 </div>
 
 <h3 id="getting-started">Getting Started</h3>
 
 <ul>
-  <li>Your First Python Script in Rhino (<a href="/wip/guides/rhinopython/your-first-python-script-in-rhino-windows">Windows</a>, <a href="/wip/guides/rhinopython/your-first-python-script-in-rhino-mac">Mac</a>)</li>
+  <li>Your First Python Script in Rhino (<a href="/wip/guides/rhinopython/your-first-python-script-in-rhino-windows">Windows</a>, <a href="/wip/guides/rhinopython/your-first-python-script-in-rhino-mac">Mac</a>, <a href="/wip/guides/rhinopython/your-first-python-script-in-grasshopper">Grasshopper</a>)</li>
   <li><a href="/wip/guides/rhinopython/python-where-to-find-help">Where to get help…</a></li>
+  <li><a href="/wip/guides/rhinopython/python-troubleshooting-install">Troubleshooting Installation</a></li>
 </ul>
 
 <h3 id="python-editor-for-windows">Python Editor for Windows</h3>
@@ -1007,12 +990,6 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
-  
-    
-  
-    
-  
-    
   
     
   
@@ -1722,6 +1699,713 @@ $(document).ready(function()
   
     
   
+  </ul>
+</div>
+
+<h3 id="python-in-grasshopper">Python in Grasshopper</h3>
+
+<div class="trigger">
+  
+  <ul>
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        <li><a class="page-link" href="/wip/guides/rhinopython/ghpython-component/" title="The GhPython component is the key to working with Python in Grasshopper.">An Overview of the GhPython Component</a></li>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        <li><a class="page-link" href="/wip/guides/rhinopython/ghpython-editor/" title="This guide looks at the details of the GhPython Editor.">An Overview of the GhPython Editor</a></li>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        <li><a class="page-link" href="/wip/guides/rhinopython/your-first-python-script-in-grasshopper/" title="This manual is for Grasshopper users who would like to create their own custom scripts using Grasshopper for Rhino 5.">Your First Python Script in Grasshopper</a></li>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        <li><a class="page-link" href="/wip/guides/rhinopython/ghpython-question-answer/" title="Here are the most common questions and answers about GhPython.">GhPython Common Questions and Answers</a></li>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
     
   
     
@@ -1753,10 +2437,6 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
-  
-    
-  
-    
   
     
   
@@ -2249,8 +2929,6 @@ $(document).ready(function()
     
   
     
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-procedures/" title="This guide discusses Python procedures.">Python Procedures</a></li>
       
@@ -2431,23 +3109,9 @@ $(document).ready(function()
     
   
     
-  
-    
-  
-    
-  
-    
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-operators/" title="This guide is an overview of Python operators.">Python Operators</a></li>
       
-    
-  
-    
-  
-    
-  
     
   
     
@@ -2514,10 +3178,6 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
-  
-    
-  
-    
   
     
   
@@ -3012,8 +3672,6 @@ $(document).ready(function()
     
   
     
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-rhinoscriptsyntax-points/" title="This guide provides an overview of the RhinoScriptSytntax Point Geometry in Python.">Points in Python</a></li>
       
@@ -3220,20 +3878,6 @@ $(document).ready(function()
     
   
     
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-rhinoscriptsyntax-point-vector-methods/" title="This guide provides an overview of the RhinoScriptSytntax Point and Vector methods.">Point and Vector Methods</a></li>
       
@@ -3305,26 +3949,6 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
-  
-    
   
     
   

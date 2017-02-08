@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
 
   <!-- Overridden theme -->
   <link rel="stylesheet" href="/wip/css/main.css">
@@ -632,7 +634,7 @@ and infinite. R2 parameter space however is bound to a finite surface as shown i
 <p>Let’s start with conversion from R1 to R3 space. The following script will add 500 colored points to the 
 document, all of which are sampled at regular intervals across the R1 parameter space of a curve object:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 
 def main():
     curve_id = rs.GetObject("Select a curve to sample", 4, True, True)
@@ -735,7 +737,7 @@ I.e. we pretend the curve domain is between zero and one. This function will hav
 
 <p>Let’s take a look at an example which uses all parameter spaces we’ve discussed so far:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 
 def main():
     surface_id = rs.GetObject("Select a surface to sample", 8, True)
@@ -850,7 +852,7 @@ space connecting [A] and [B]. We can clearly see that this is definitely not the
 
 <p>We can clearly see this because we’re used to things happening in R3 space, which is why this whole R2/R3 thing is so thoroughly counter intuitive to begin with. The green, dotted curve is the actual shortest path in R3 space which still respects the limitation of the surface (I.e. it can be projected onto the surface without any loss of information). The following function was used to create the red curve; it creates a polyline which represents the shortest path from [A] to [B] in surface parameter space:</p>
 
-<pre><code class="language-python">def getr2pathonsurface(surface_id, segments, prompt1, prompt2):
+<pre class="line-numbers"><code class="language-python">def getr2pathonsurface(surface_id, segments, prompt1, prompt2):
     start_point = rs.GetPointOnSurface(surface_id, prompt1)
     if not start_point: return
 
@@ -946,7 +948,7 @@ space connecting [A] and [B]. We can clearly see that this is definitely not the
 
 <p>We’ll start with the simplest function:</p>
 
-<pre><code class="language-python">def projectpolyline(vertices, surface_id):
+<pre class="line-numbers"><code class="language-python">def projectpolyline(vertices, surface_id):
     polyline = []
     for vertex in vertices:
         pt = rs.BrepClosestPoint(surface_id, vertex)
@@ -977,7 +979,7 @@ space connecting [A] and [B]. We can clearly see that this is definitely not the
 </tr>
 </table>
 
-<pre><code class="language-python">def smoothpolyline(vertices):
+<pre class="line-numbers"><code class="language-python">def smoothpolyline(vertices):
     smooth = []
     smooth.append(vertices[0])
 
@@ -1011,7 +1013,7 @@ We iterate through all the internal vertices and add the Point3d objects togethe
 
 <p>Time for the bit that sounded so difficult on the previous page, the actual geodesic curve fitter routine:</p>
 
-<pre><code class="language-python">def geodesicfit(vertices, surface_id, tolerance):
+<pre class="line-numbers"><code class="language-python">def geodesicfit(vertices, surface_id, tolerance):
     length = polylinelength(vertices)
     while True:
         vertices = smoothpolyline(vertices)
@@ -1060,7 +1062,7 @@ You are of course welcome to add additional escape clauses if you deem that nece
 
 <p>The main subroutine takes some explaining. It performs a lot of different tasks which always makes a block of code harder to read. It would have been better to split it up into more discrete chunks, but we’re already using seven different functions for this script and I feel we are nearing the ceiling. Remember that splitting problems into smaller parts is a good way to organize your thoughts, but it doesn’t actually solve anything. You’ll need to find a good balance between splitting and lumping.</p>
 
-<pre><code class="language-python">def geodesiccurve():
+<pre class="line-numbers"><code class="language-python">def geodesiccurve():
     surface_id = rs.GetObject("Select surface for geodesic curve solution", 8, True, True)
     if not surface_id: return
 
@@ -1148,7 +1150,7 @@ You are of course welcome to add additional escape clauses if you deem that nece
 
 <p>The illustration shows how rules #2 and #3 work in practice.</p>
 
-<pre><code class="language-python">ptOrigin = rs.GetPoint("Plane origin")
+<pre class="line-numbers"><code class="language-python">ptOrigin = rs.GetPoint("Plane origin")
 
 ptX = rs.GetPoint("Plane X-axis", ptOrigin)
 
@@ -1170,7 +1172,7 @@ rs.AddPlaneSurface(arrPlane, dX, dY)
 
 <p>We’ll only pause briefly at plane definitions since planes, like vectors, are usually only constructive elements. In examples to come they will be used extensively so don’t worry about getting the hours in. A more interesting script which uses the <em>rs.AddPlaneSurface()</em> method is the one below which populates a surface with so-called surface frames:</p>
 
-<pre><code class="language-primer">idSurface = rs.GetObject("Surface to frame", 8, True, True)
+<pre class="line-numbers"><code class="language-primer">idSurface = rs.GetObject("Surface to frame", 8, True, True)
 	
 intCount = rs.GetInteger("Number of iterations per direction", 20, 2)
 
@@ -1189,6 +1191,7 @@ for u in range(uDomain[0],uDomain[1], uStep):
 
 rs.EnableRedraw(True)
 </code></pre>
+
 <p>Frames are planes which are used to indicate geometrical directions. Both curves, surfaces and textured meshes have frames which identify tangency and curvature in the case of curves and [u] and [v] directions in the case of surfaces and meshes. The script above simply iterates over the [u] and [v] directions of any given surface and adds surface frame objects at all uv coordinates it passes.</p>
 
 <p><img src="/wip/images/primersurfaceframes.svg" alt="/wip/images/primersurfaceframes.svg" class="float-img-right" width="325" /></p>
@@ -1237,7 +1240,7 @@ rs.EnableRedraw(True)
 
 <p>in case you need to impress anyone…</p>
 
-<pre><code class="language-python">def DistributeCirclesOnSphere():
+<pre class="line-numbers"><code class="language-python">def DistributeCirclesOnSphere():
     sphere_radius = rs.GetReal("Radius of sphere", 10.0, 0.01)
     if not sphere_radius: return
 
@@ -1264,6 +1267,7 @@ rs.EnableRedraw(True)
         phi += phi_step
     rs.EnableRedraw(True)
 </code></pre>
+
 <p><img src="/wip/images/primer-spherepack.svg" class="img-center" width="45%" /></p>
 
 <table class="multiline">
@@ -1331,7 +1335,7 @@ Further information can be found on [MathWorld.com](http://mathworld.wolfram.com
 
 <p>It gives a clear impression of the range of different curvatures in the spline, but it doesn’t communicate the helical twisting of the curvature very well. Parts of the spline that are near-linear tend to have a garbled curvature since they are the transition from one well defined bend to another. The arrows in the left image indicate these areas of twisting but it is hard to deduce this from the curvature graph alone. The upcoming script will use the curvature information to loft a surface through a set of ellipses which have been oriented into the curvature plane of the local spline geometry. The ellipses have a small radius in the bending plane of the curve and a large one perpendicular to the bending plane. Since we will not be using the strength of the curvature but only its orientation, small details will become very apparent.</p>
 
-<pre><code class="language-python">def FlatWorm():
+<pre class="line-numbers"><code class="language-python">def FlatWorm():
     curve_object = rs.GetObject("Pick a backbone curve", 4, True, False)
     if not curve_object: return
 
@@ -1456,7 +1460,7 @@ Before we can get to the cool bit we have to write some of the supporting functi
 <pre><code class="language-python">(0.5 * rs.Distance(A, B)) / rs.VectorDotProduct(D, Bisector)
 </code></pre>
 
-<pre><code class="language-python">def AddArcDir(ptStart, ptEnd, vecDir):
+<pre class="line-numbers"><code class="language-python">def AddArcDir(ptStart, ptEnd, vecDir):
     vecBase = rs.PointSubtract(ptEnd, ptStart)
     if rs.VectorLength(vecBase)==0.0: return
     
@@ -1554,7 +1558,7 @@ flexible nature of the recursive paradigm- it will be very easy to add more beha
 
 <p> </p>
 
-<pre><code class="language-python">def RandomPointInCone( origin, direction, minDistance, maxDistance, maxAngle):
+<pre class="line-numbers"><code class="language-python">def RandomPointInCone( origin, direction, minDistance, maxDistance, maxAngle):
     vecTwig = rs.VectorUnitize(direction)
     vecTwig = rs.VectorScale(vecTwig, minDistance + random.random()*(maxDistance-minDistance))
     MutationPlane = rs.PlaneFromNormal((0,0,0), vecTwig)
@@ -1604,7 +1608,7 @@ flexible nature of the recursive paradigm- it will be very easy to add more beha
 <p>Lo and behold! 
 A mere 21 lines of code to describe the growth of an entire tree.</p>
 
-<pre><code class="language-python">def RecursiveGrowth( ptStart, vecDir, props, generation):
+<pre class="line-numbers"><code class="language-python">def RecursiveGrowth( ptStart, vecDir, props, generation):
     minTwigCount, maxTwigCount, maxGenerations, maxTwigLength, lengthMutation, maxTwigAngle,...      
         angleMutation = props
     if generation&gt;maxGenerations: return
@@ -1760,7 +1764,7 @@ The thing to realize is that the call is now different. We're putting in differe
 
 <p>Finally, the last image shows all the control points that will be added in between the existing control points. Once we have an ordered array of all control points (ordered as they appear along the original polyline) we can create a <script type="math/tex">D^5</script> curve using <em>rs.AddCurve()</em>.</p>
 
-<pre><code class="language-python">def blendcorners():
+<pre class="line-numbers"><code class="language-python">def blendcorners():
     polyline_id = rs.GetObject("Polyline to blend", 4, True, True)
     if not polyline_id: return
     vertices = rs.PolylineVertices(polyline_id)
@@ -1884,7 +1888,7 @@ Calculate the <i>vec_segment</i> vector. Typically this vector has length <i>rad
 
 <p>At any rate, here’s the binary-search script I came up with, I’ll deal with the inner workings afterwards:</p>
 
-<pre><code class="language-python">def BSearchCurve(idCrv, Length, Tolerance):
+<pre class="line-numbers"><code class="language-python">def BSearchCurve(idCrv, Length, Tolerance):
     Lcrv = rs.CurveLength(idCrv)
     if Lcrv&lt;Length: return
 
@@ -2032,7 +2036,7 @@ Notice how much more compact programming code is compared to English?</td>
 
 <p>Our function will need to know the ID of the curve in question, the subdomain {t<sub>0</sub>; t<sub>1</sub>}, the number of samples it is allowed to take in this domain and the scale of the curvature graph. The return value should be a collection of object IDs which were inserted to make the graph. This means all the perpendicular red segments and the  dashed black curve connecting them.</p>
 
-<pre><code class="language-python">def addcurvaturegraphsection(idCrv, t0, t1, samples, scale):
+<pre class="line-numbers"><code class="language-python">def addcurvaturegraphsection(idCrv, t0, t1, samples, scale):
     if (t1-t0)&lt;=0.0: return
     tstep = (t1-t0)/samples
     points = []
@@ -2091,7 +2095,7 @@ Notice how much more compact programming code is compared to English?</td>
 
 <p>Now, we need to write a utility function that applies the previous function to an entire curve. There’s no rocket science here, just an iteration over the knot-vector of a curve object:</p>
 
-<pre><code class="language-primer">def addcurvaturegraph( idCrv, spansamples, scale):
+<pre class="line-numbers"><code class="language-python">def addcurvaturegraph( idCrv, spansamples, scale):
     allGeometry = []
     knots = rs.CurveKnots(idCrv)
     p=5
@@ -2150,7 +2154,7 @@ Notice how much more compact programming code is compared to English?</td>
   <li>Generate new preview geometry using the changed settings.</li>
 </ul>
 
-<pre><code class="language-python">def createcurvaturegraph():
+<pre class="line-numbers"><code class="language-python">def createcurvaturegraph():
     curve_ids = rs.GetObjects("Curves for curvature graph", 4, False, True, True)
     if not curve_ids: return
 
@@ -2282,7 +2286,7 @@ Notice how much more compact programming code is compared to English?</td>
 
 <p>It’s easy enough to generate a grid of points, we’ve done similar looping before where a nested loop was used to generate a grid wrapped around a cylinder. The problem this time is that it’s not enough to generate the points. We also have to generate the face-list, which is highly dependent on the row and column dimensions of the vertex list. It’s going to take a lot of logic insight to get this right (probably easiest to make a schematic first). Let us turn to the problem of generating the vertex coordinates, which is a straightforward one:</p>
 
-<pre><code class="language-python">def createmeshvertices(function, fdomain, resolution):
+<pre class="line-numbers"><code class="language-python">def createmeshvertices(function, fdomain, resolution):
     xstep = (fdomain[1]-fdomain[0])/resolution
     ystep = (fdomain[3]-fdomain[2])/resolution
     v = []
@@ -2343,7 +2347,7 @@ We can access those easily enough, but since the step size in x and y direction 
 <p>Now, every quad face has to link the four vertices in a counter-clockwise fashion. You may have noticed already that the absolute differences between the vertex indices on the corners of every quad are identical. In the case of the lower left quad <em>{A=0; B=3; C=4; D=1}</em>. In the case of the upper right quad <em>{A=7; B=10; C=11; D=8}</em>. We can define these numbers in a simpler way, which reduces the number of variables to just one instead of four: 
 <em>{A=?; B=(A+N<sub>y</sub>); C=(B+1); D=(A+1)}</em>, where <em>N<sub>y</sub></em> is the number of vertices in the y-direction. Now that we know the logic of the face corner numbers, all that is left is to iterate through all the faces we need to define and calculate proper values for the <em>A</em> corner:</p>
 
-<pre><code class="language-python">def createmeshfaces(resolution):
+<pre class="line-numbers"><code class="language-python">def createmeshfaces(resolution):
     nX = resolution
     nY = resolution
     f = []
@@ -2389,7 +2393,7 @@ We can access those easily enough, but since the step size in x and y direction 
 
 <p>We’ll be using a *.txt file to store our data since it involves very little code and it survives a Rhino restart. An *.txt file is a textfile which stores a number of Strings in a one-level hierarchical format.</p>
 
-<pre><code class="language-python">def SaveFunctionData(strFunction, fDomain, Resolution):
+<pre class="line-numbers"><code class="language-python">def SaveFunctionData(strFunction, fDomain, Resolution):
     file = open("MeshSettings_XY.txt", "w")
     file.write(strFunction)
     file.write("\n")
@@ -2427,7 +2431,7 @@ We can access those easily enough, but since the step size in x and y direction 
 
 <p>Reading data from an *.txt file is slightly more involved, because there is no guarantee the file exists yet. Indeed, the first time you run this script there won’t be a settings file yet and we need to make sure we supply sensible defaults:</p>
 
-<pre><code class="language-python">def loadfunctiondata():
+<pre class="line-numbers"><code class="language-python">def loadfunctiondata():
     try:
         file = open("MeshSettings_XY.txt", "r")
         items = file.readlines()
@@ -2596,7 +2600,7 @@ We can access those easily enough, but since the step size in x and y direction 
 
 <p><img src="/wip/images/primer-meshfalsecolours.svg" class="img-center" width="80%" /></p>
 
-<pre><code class="language-python">def randommeshcolors():
+<pre class="line-numbers"><code class="language-python">def randommeshcolors():
     mesh_id = rs.GetObject("Mesh to randomize", 32, True, True)
     if not mesh_id: return
 
@@ -2646,7 +2650,7 @@ We can access those easily enough, but since the step size in x and y direction 
 
 <p>There is just one snag, the logarithm function returns negative numbers for input between zero and one. In fact, the logarithm of zero is minus-infinity, which plays havoc with all mathematics down the road since infinity is way beyond the range of numbers we can represent using doubles. And since the smallest possible distance between two points in space is zero, we cannot just apply a logarithm and expect our script to work. The solution is a simple one, add 1.0 to all distance values prior to calculating the logarithm, and all our results are nice, positive numbers.</p>
 
-<pre><code class="language-python">def VertexValueArray(points, id):
+<pre class="line-numbers"><code class="language-python">def VertexValueArray(points, id):
     return [DistanceTo(point, id) for point in points]
 
 def DistanceTo(pt, id):
@@ -2675,7 +2679,7 @@ def DistanceTo(pt, id):
 
 <p>And the master Sub containing all the front end and color magic:</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre class="line-numbers"><code class="language-python">import rhinoscriptsyntax as rs
 import sys
 import math
 
@@ -2791,7 +2795,7 @@ You may have noticed a problem with the algorithm description so far. If a nurbs
 
 <p>In order to find the coordinates in surface {S} space of a point {P}, we need to find the projection {P’} of {P} onto {S}. Then we need to find the distance between {P} and {P’} so we know the magnitude of the {w} component and then we need to figure out on which side of the surface {P} is in order to figure out the sign of {w} (positive or negative). Since our script will be capable of fitting a surface to multiple points, we might as well make our function list-capable:</p>
 
-<pre><code class="language-python">def ConvertToUVW(idSrf, pXYZ):
+<pre class="line-numbers"><code class="language-python">def ConvertToUVW(idSrf, pXYZ):
     pUVW = []
     for point in pXYZ:
         u, v = rs.SurfaceClosestPoint(idSrf, point)	
@@ -2850,7 +2854,7 @@ You may have noticed a problem with the algorithm description so far. If a nurbs
 
 <p>Our eventual algorithm will keep track of both motion vectors and weight factors for each control point on the surface (for reasons I haven’t explained yet), and we need to instantiate these lists with default values. Even though that is pretty simple stuff, I decided to move the code into a separate procedure anyway in order to keep all the individual procedures small. The return value for this function are two lists: Forces and Factors.</p>
 
-<pre><code class="language-python">def InstantiateForceLists(Bound):
+<pre class="line-numbers"><code class="language-python">def InstantiateForceLists(Bound):
     Forces = []
     Factors = []
     
@@ -2900,7 +2904,7 @@ You may have noticed a problem with the algorithm description so far. If a nurbs
 
 <p>which is a much smoother fit. The sag between {B} and {C} is not due to the shape of the original surface, but because between {B} and {C}, the other samples start to gain more relative influence and dragging the surface down towards them. Let’s have a look at the code:</p>
 
-<pre><code class="language-python">def FitSurface(idSrf, Samples, dTranslation, dProximity):
+<pre class="line-numbers"><code class="language-python">def FitSurface(idSrf, Samples, dTranslation, dProximity):
     P = rs.SurfacePoints(idSrf)
     G = rs.SurfaceEditPoints(idSrf, True, True)
     N = GrevilleNormals(idSrf)
@@ -2998,7 +3002,7 @@ You may have noticed a problem with the algorithm description so far. If a nurbs
 
 <p>The procedure on the previous page has no interface code, thus it is not a top-level procedure. We need something that asks the user for a surface, some points and then runs the FitSurface() function a number of times until the fitting is good enough:</p>
 
-<pre><code class="language-python">def DistributedSurfaceFitter():
+<pre class="line-numbers"><code class="language-python">def DistributedSurfaceFitter():
     idSrf = rs.GetObject("Surface to fit", 8, True, True)
     if idSrf is None: return
     
@@ -3123,7 +3127,7 @@ You may have noticed a problem with the algorithm description so far. If a nurbs
 
 <p>I’m not going to spell the entire script out here, I’ll only highlight the key functions. You can find the complete script (including comments) in the Script folder.</p>
 
-<pre><code class="language-python">def SurfaceTensorField(Nu, Nv):
+<pre class="line-numbers"><code class="language-python">def SurfaceTensorField(Nu, Nv):
     idSrf = rs.GetSurfaceObject()[0]
     uDomain = rs.SurfaceDomain(idSrf, 0)
     vDomain = rs.SurfaceDomain(idSrf, 1)
@@ -3188,7 +3192,7 @@ Line 11 (and line 13) contain an implementation of such a mapping algorithm. I'm
 
 <p>This function takes two lists and it modifies the originals. The return value (the two lists) is merely cosmetic. This function is a typical box-blur algorithm. It averages the values in every tensor with all neighboring tensors using a 3×3 blur matrix.</p>
 
-<pre><code class="language-python">def SmoothTensorField(T, K):
+<pre class="line-numbers"><code class="language-python">def SmoothTensorField(T, K):
     SmoothTensorField = False
     Ub1 = len(T[1])
     Ub2 = len(T[2])
