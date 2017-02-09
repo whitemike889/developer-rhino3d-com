@@ -356,21 +356,34 @@
 
 <h2 id="why-python">Why Python?</h2>
 
-<p>Rhino already has a scripting language called RhinoScript!  Why should you use Python?  Well, both the Windows and Mac versions of Rhino contain support for the Python scripting language.  Since Rhino Python scripting is available on both platforms, the same Python scripts can run on both breeds of Rhino!</p>
+<p>Why should you use Python?  Well, Python is meant to be a simple language to read and write. Python also runs both the Windows and Mac versions of Rhino.  Since Rhino Python scripting is available on both platforms, the same Python scripts can run on both breeds of Rhino! Python also will run within a Grasshopper component.</p>
 
-<p>But more importantly: Python is very popular outside of Rhino!  Much of what you learn about Python can be applied in many other domains.</p>
+<p>But more importantly: Python is very popular outside of Rhino! Much of what you learn about Python can be applied in many other domains.</p>
+
+<p>Rhino already has a scripting language called RhinoScript why do we need another?  RhinoScript is a very easy to use scripting language on Windows. We will continue to support Rhinoscript.  But, RhinoScript is based on an little older technology making it less flexible then the more modern Python language. RhinoScript cannot be supported on the Mac platform.  It also unfortunately is not supported by the commnuityto the same level as Python.</p>
 
 <h3 id="what-version-of-python-does-rhino-use">What version of Python does Rhino use?</h3>
 
-<p>Rhino uses Python version 2.7.</p>
+<p>Rhino uses Python version 2.7. To be more specific Rhino uses <a href="http://ironpython.net/">IronPython</a> which brings together the Python lanugage and <a href="https://en.wikipedia.org/wiki/.NET_Framework">Microsoft’s .NET framework</a>.</p>
 
 <h2 id="where-can-you-use-python-in-rhino">Where can you use Python in Rhino?</h2>
 
-<p>Python can be used all over Rhino in many different ways…</p>
+<p>Python can be used all over Rhino in many different ways. Python can be used to create</p>
 
-<h4 id="rhinoscript-style-functions-windows">RhinoScript Style Functions (Windows)</h4>
+<ol>
+  <li>Interactive scripts.</li>
+  <li>New custom commands.</li>
+  <li>Create new plug-ins.</li>
+  <li>Read and Write customized file formats.</li>
+  <li>Interact with cloud applications.</li>
+  <li>Create realtime links to other applications</li>
+  <li>Create customer Grasshopper components</li>
+  <li>Store and display project specfici information beyond what basic Rhino can store.</li>
+</ol>
 
-<p>One of the key features of RhinoScript that make it easy to write powerful scripts is a large library of Rhino specific functions that can be called from scripts.  Our python implementation includes a set of similar functions that can be imported and used in any python script for Rhino.  This set of functions is known as the <code>rhinoscript</code> package.</p>
+<h4 id="rhinoscript-style-functions">RhinoScript Style Functions</h4>
+
+<p>One of the key features of RhinoScript that make it easy to write powerful scripts is a large library of Rhino specific functions that can be called from scripts.  Our python implementation includes a set of similar functions that can be imported and used in any python script for Rhino.  This set of functions is known as the <code>rhinoscriptsyntax</code> package.</p>
 
 <p>Let’s compare scripts for letting a user pick two points and adding a line to Rhino…</p>
 
@@ -396,22 +409,25 @@ if start:
   if end: rs.AddLine(start,end)
 </code></pre>
 
-<p>Yes, different…but similar enough that you should be able to figure out what is happening in python if you’ve written RhinoScript.</p>
+<p>Yes, different…but similar enough that you should be able to figure out what is happening in python if you’ve written RhinoScript. Rhinoscriptsyntax also contains many helper functions to make it easier to program with in Python.</p>
+
+<p>For more information on how to use Rhinoscriptsyntax and Python, see the <a href="/guides/rhinopython/">Rhino.Python Guide</a></p>
 
 <h4 id="rhinocommon">RhinoCommon</h4>
 
-<p>Using RhinoCommon - Python scripts also have full access to the .NET framework including access to Rhino’s RhinoCommon SDK.  A guide of accessing RhinoCommon from Python scripts is at <a href="/guides/rhinopython/using-rhinocommon-from-python">Using RhinoCommon from Python</a>.</p>
+<p><a href="/guides/rhinopython/what-is-rhinocommon/">Rhinocommon</a> is a low-level powerful SDK for all Rhino platforms used mainly by more experienced developers.  Python scripts can use Rhinocommon, to have full access to the .NET framework including access to Rhino’s RhinoCommon SDK.  A guide of accessing RhinoCommon from Python scripts is at <a href="/guides/rhinopython/using-rhinocommon-from-python">Using RhinoCommon from Python</a>.</p>
 
 <h4 id="grasshopper">Grasshopper</h4>
 
-<p>Via GHPython.  <strong>TODO</strong> More info needed.</p>
+<p>Python can also be used in Grasshopper to create custom components within a larger grasshooper definition. The GhPython component contains a Python script editor and direct access to Python, Rhino and Grasshopper functions.  Use GhPython to create and manipulate customer data within Grasshopper.</p>
+
+<p>For an introduction to GhPython in Grasshopper, see the <a href="/guides/rhinopython/your-first-python-script-in-grasshopper">Your First Python Script in Grasshopper Guide</a></p>
 
 <hr />
 
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
-  <li><a href="/guides/rhinopython/what-are-python-rhinoscript">What are Python and RhinoScriptSyntax?</a></li>
   <li><a href="/guides/rhinopython/python-statements/">Python Basic Syntax</a></li>
   <li><a href="/guides/rhinopython/python-rhinoscriptsyntax-introduction/">Rhinoscript Syntax in Python</a></li>
   <li><a href="/guides/rhinopython/">Rhino.Python Home Page</a></li>

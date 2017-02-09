@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>How to use JSON with Python with Python</title>
-  <meta name="description" content="How to format in JSON or XML.  Using Python">
+  <title>Working with Datatrees in GhPython with Python</title>
+  <meta name="description" content="How can DataTrees be accessed and created in GhPython.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/python-xml-json/" />
-  <meta property="og:title" content="How to use JSON with Python" />
-  <meta property="og:description" content="How to format in JSON or XML." />
+  <meta property="og:url" content="/guides/rhinopython/ghpython-datatree/" />
+  <meta property="og:title" content="Working with Datatrees in GhPython" />
+  <meta property="og:description" content="How can DataTrees be accessed and created in GhPython." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="How to use JSON with Python" />
-  <meta name="twitter:description" value="How to format in JSON or XML." />
+  <meta name="twitter:title" value="Working with Datatrees in GhPython" />
+  <meta name="twitter:description" value="How can DataTrees be accessed and created in GhPython." />
   
     
       <meta name="twitter:image" content="/images/rhinodev-logo-unfurl.png" />
@@ -29,7 +29,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Mac, Windows" />
+  <meta name="twitter:data1" value="Windows, Mac, Grasshopper" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -53,7 +53,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/python-xml-json/">
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/ghpython-datatree/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -241,7 +241,103 @@
             
             
             <li>
-              <a href="#overview">Overview</a>
+              <a href="#converting-datatrees-to-python-lists">Converting DataTrees to P...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#input-parameters">Input parameters</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#output-parameters">Output parameters</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#out-parameter">Out parameter</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#advanced-input-properties">Advanced Input Properties</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
 
               
 
@@ -264,176 +360,136 @@
               
               <li><a href="/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">intermediate</li>
+              <li class="active">ghPython</li>
               
           </ol>
 
-          <h1>How to use JSON with Python</h1>
+          <h1>Working with Datatrees in GhPython</h1>
 
           <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>How to format in JSON or XML.</p>
+          <p>How can DataTrees be accessed and created in GhPython.</p>
 
-          <p>Here are some threads that show what people are asking about:</p>
+          <p>The Grasshopper Datatree structure is not a native Python datatype.  So how can this data be accessed or created from a GhPython script.  The first step is to convert the datatrees into native Python nested lists.</p>
 
-<p>https://discourse.mcneel.com/t/python-scripts-for-adding-pictureframes-and-writing-a-json-file/41103/2</p>
+<h2 id="converting-datatrees-to-python-lists">Converting DataTrees to Python Lists.</h2>
 
-<p>https://discourse.mcneel.com/t/python-methodology-for-saving-data-between-sessions/5013/3</p>
+<p>The GhPython conponent can be found on the Math &gt; Script toolbar:</p>
 
-<p>https://discourse.mcneel.com/t/storing-of-the-data-files-processed-by-plugin/20375</p>
+<p><img src="/images/ghpython-installed.png" alt="/images/ghpython-installed.png" class="img-center" width="95%" /></p>
 
-<h2 id="overview">Overview</h2>
+<p>Drag and drop the component onto the canvas:</p>
 
-<p>https://www.safaribooksonline.com/library/view/python-cookbook-3rd/9781449357337/ch06s02.html</p>
+<p><img src="/images/ghpython-component-detail.png" alt="/images/ghpython-component-detail.png" class="img-center" width="95%" /></p>
 
-<p>http://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file-in-python</p>
+<p>The default script component has two inputs and two outputs. The user can change the names of input and output, the data type and data structure of the input and also add more inputs and outputs parameters or remove them.</p>
 
-<p>https://docs.python.org/2/tutorial/inputoutput.html#saving-structured-data-with-json</p>
+<ul>
+  <li>x: first input of a .NET type (object).</li>
+  <li>y: second input of a .NET type (object).</li>
+  <li>Out: output string with compiling messages.</li>
+  <li>A: Returned output of type object.</li>
+</ul>
 
-<!--
+<p>To edit the Python script in the component, simply double-click the component:</p>
 
-A few things, I typically use this to generate json from classes
+<p><img src="/images/ghpython-blankeditor.png" alt="/images/ghpython-blankeditor.png" class="img-center" width="75%" /></p>
 
-[10:43]  
-http://www.newtonsoft.com/json
-newtonsoft.com
-Json.NET - Newtonsoft
-Json.NET is a popular high-performance JSON framework for .NET
- 
+<p>Simple type int he Python code, clicking on OK will save the code in the component.</p>
 
-scottdavidson [10:43 AM] 
-Or just sudo code is fine
+<h2 id="input-parameters">Input parameters</h2>
 
-[10:43]  
-with explaination.
+<p>By default, there are two input parameters named x and y.  It is possible to edit parameters names, delete or add new ones. By zooming into a component new controls will appear on the component:</p>
 
-luisfraguada [10:43 AM] 
-so does everyone else
+<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
 
-[10:43]  
-using .net
+<p>Use <em>+</em> and <em>-</em> buttons to add and subtract inputs.</p>
 
-[10:44]  
-not sure if it works in IronPythin
+<p><img src="/images/ghpython-removeinput.png" alt="/images/ghpython-removeinput.png" class="img-center" width="35%" /></p>
 
-[10:44]  
-but let me show you an example
+<p>You can also right-click on a parameter to change its name. The name is also the variable name in the Python script.</p>
 
-scottdavidson [10:45 AM] 
-It is interesting, because there is a JSON endcoder and decoder in Python
+<p><img src="/images/ghpython-rename-input.png" alt="/images/ghpython-rename-input.png" class="img-center" width="35%" /></p>
 
-luisfraguada [10:45 AM] 
-great
+<p>Please note that the names of the parameters must follow <a href="https://docs.python.org/2/reference/lexical_analysis.html#identifiers">Python identifier naming</a> . Just make sure that these names are reflective of what the parameter is, and that they also do not contain white spaces or special characters.</p>
 
-[10:45]  
-https://github.com/mcneel/Iris/blob/master/Iris/Objects/IrisObjectPointLight.cs
+<p>The inputs will show up in the GhPython editor as global variables.  For instance, here is a simple definition:</p>
 
-[10:45]  
-here is the Iris Point Light class
+<p><img src="/images/ghpython-input.png" alt="/images/ghpython-input.png" class="img-center" width="80%" /></p>
 
-[10:45]  
-takes a Rhino Point Light
+<p>The code to process the <code>x</code> input is as follows:</p>
 
-[10:46]  
-Notice how there are things like:
-`[JsonProperty("name")]
-public string Name { get; private set; }`` (edited)
+<pre><code class="language-python">if x:
+    print("x is true.")
+else:
+    print("x is false.")
+</code></pre>
 
-scottdavidson [10:46 AM] 
-Yes
+<p>As the Boolean toggle is changed, the <code>x</code> value changes.  The <code>print</code> method will out put a string to the out of the component.</p>
 
-luisfraguada [10:46 AM] 
-each of those c# class properties are 'decorated'
+<h2 id="output-parameters">Output parameters</h2>
 
-[10:47]  
-`JsonProperty("name")`` (edited)
+<p>Like the inputs, you can define as many outputs or returns as you need when you “zoom in” and push the “+” sign.  Unlike input parameters, there are no default datatypes associated with output.  The output datatype will be assigned inside your script.</p>
 
-scottdavidson [10:47 AM] 
-That is interesting.
+<p>To actually send information to the output from the script, simply assign the value(s) to the output variable name.  For instance, in this case the output is <em>a</em>:</p>
 
-[10:47]  
-Without this library, in Python you are stuck using the Dictionary object.
+<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
 
-luisfraguada [10:48 AM] 
-https://github.com/mcneel/Iris/blob/master/Iris/Objects/IrisObjectCurve.cs
+<p>To send the information out to <em>a</em> enter this line in the editor:</p>
 
-[10:48]  
-this is a bit more complex...the curve class
+<pre><code class="language-python">a = "This string will be sent to the output"
+</code></pre>
 
-[10:48]  
-but it should take any user strings on the curve if they have them
+<p><img src="/images/ghpython-output.png" alt="/images/ghpython-output.png" class="img-center" width="80%" /></p>
 
-scottdavidson [10:49 AM] 
-Ok, here is a structural question.
+<p>Each time Grasshopper recalculates the definition, the Python component will run and send out the value(s) to the output.</p>
 
-luisfraguada [10:49 AM] 
-added this C# snippet
-public IrisObjectCurve(Guid geometry, Guid material, string layer) : this()
-        {
-            Geometry = geometry;
-            Material = material;
-​
-Add Comment Click to expand inline 13 lines
+<h2 id="out-parameter">Out parameter</h2>
 
-scottdavidson [10:49 AM] 
-Do you use this only to encode the string to get it out to somewhere else.
+<p>Out parameter is there by default to provide some useful information about your code. I often find myself connecting the out parameter to a panel component to be able to read the information directly without having to hover over the out parameter.</p>
 
-luisfraguada [10:50 AM] 
-notice how in that snippet I create user data to bring layer info along
+<p><img src="/images/ghpython-outerror.png" alt="/images/ghpython-outerror.png" class="img-center" width="80%" /></p>
 
-[10:50]  
-anyways
+<p>There are two types of messages that you can get in the out parameter.</p>
 
-[10:50]  
-then
+<ul>
+  <li>The compile-time messages. Those include errors and warning about your code that prevent your component from running or can potentially give incorrect results. These are very helpful information to help point you to the lines in code that the compiler is having trouble with so that you can make appropriate adjustments.</li>
+  <li>The run-time messages.  You can send bits of text to the out parameter. You can use those to track information generated by your code as it is running.</li>
+</ul>
 
-scottdavidson [10:50 AM] 
-Yes
+<h2 id="advanced-input-properties">Advanced Input Properties</h2>
 
-[10:50]  
-So you are using JSON as a string format to write out.
+<p><img src="/images/ghpython-inputoptions.png" alt="/images/ghpython-inputoptions.png" class="float-img-right" width="300" /></p>
 
-luisfraguada [10:50 AM] 
-https://github.com/mcneel/Iris/blob/master/Iris/IrisMain.cs#L311
+<p>For most basic work, the instructions above are all that are needed.  But, there are a few advanced options that can be set on the GhPython inputs that can be useful in certain situations.</p>
 
-scottdavidson [10:50 AM] 
-Iris has there own format.
+<p>To access the input options, right-click on any of the inputs.</p>
 
-luisfraguada [10:51 AM] 
-yes
+<p>The top entry is the Parameter or variable name: you can click on it and type a new name.</p>
 
-scottdavidson [10:51 AM] 
-OK
+<p>The next section is the general attributes or functions common to most GH components.</p>
 
-luisfraguada [10:51 AM] 
-I go through all of the objects, convert them to all of these objects
+<p>Then is a section to input data directly to the component and to manage that data.</p>
 
-luisfraguada [10:51 AM] 
-added this C# snippet
-var scene = new IrisSceneFile
-            {
-                Metadata = metadata,
-                Geometries = m_geometry,
-                Materials = m_materials,
-Add Comment Click to expand inline 9 lines
+<p>The third section is most powerful to use the <em>Type hint</em>. Input parameters are set by default to the .NET type “object”. Sometimes is best to specify a datatype on input to make the code more readable and efficient. Types can be primitive such as integers or doubles, or geometry specific RhinoCommon types that are used only in Rhino such as “Point3d” or a “Curve”. You need to select the appropriate type for each input.</p>
 
-luisfraguada [10:51 AM] 
-pack it all in there
+<p>The rhinoscriptsyntax Type Hint is special: when it is selected, any geometry will be added to the Grasshopper document, and then its ID (Guid) inside it will be passed in the variable. With the rest of the hints, GhPython will call into Grasshopper and perform the same type of operations that Grasshopper does when it requires a special data type. This conversion is costly. If you want to make things as quick as possible, choose ‘No Type Hint’. However, users of your component will benefit greatly from using a meaningfully-set and appropriate type hint.</p>
 
-scottdavidson [10:52 AM] 
-You grab certain properties off the objects and then use these tools to write out.
+<h2 id="next-steps">Next Steps</h2>
 
-luisfraguada [10:52 AM] 
-https://github.com/mcneel/Iris/blob/master/Iris/IrisMain.cs#L435
+<p>That lays out the bascis of the GhPython component.  Next is a look into the component Python editor for Grasshopper.</p>
 
-scottdavidson [10:52 AM] 
-Perfect.
+<hr />
 
-luisfraguada [10:52 AM] 
-yes
+<h2 id="related-topics">Related Topics</h2>
 
--->
+<ul>
+  <li><a href="/guides/rhinopython/what-are-python-rhinoscript">Your first script with Python in Grasshopper</a></li>
+  <li><a href="/guides/rhinopython/what-are-python-rhinoscript">What is Python and RhinoScript?</a></li>
+  <li><a href="/guides/rhinopython/python-loading-scripts">Editing Python in Grasshopper</a></li>
+  <li><a href="/guides/rhinopython/">Python Guide for Rhino</a></li>
+</ul>
 
         </article>
 
@@ -468,7 +524,7 @@ yes
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/python-xml-json.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/ghpython-datatree.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
