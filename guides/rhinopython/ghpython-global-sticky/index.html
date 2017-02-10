@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>An Overview of the GhPython Editor with Python</title>
-  <meta name="description" content="This guide looks at the details of the GhPython Editor.  Using Python">
+  <title>Creating Global Sticky Variables with Python</title>
+  <meta name="description" content="How can DataTrees be accessed and created in GhPython.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/rhinopython/ghpython-editor/" />
-  <meta property="og:title" content="An Overview of the GhPython Editor" />
-  <meta property="og:description" content="This guide looks at the details of the GhPython Editor." />
+  <meta property="og:url" content="/guides/rhinopython/ghpython-global-sticky/" />
+  <meta property="og:title" content="Creating Global Sticky Variables" />
+  <meta property="og:description" content="How can DataTrees be accessed and created in GhPython." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="An Overview of the GhPython Editor" />
-  <meta name="twitter:description" value="This guide looks at the details of the GhPython Editor." />
+  <meta name="twitter:title" value="Creating Global Sticky Variables" />
+  <meta name="twitter:description" value="How can DataTrees be accessed and created in GhPython." />
   
     
       <meta name="twitter:image" content="/images/rhinodev-logo-unfurl.png" />
@@ -53,7 +53,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/ghpython-editor/">
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/ghpython-global-sticky/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -241,7 +241,7 @@
             
             
             <li>
-              <a href="#inside-the-script-component">Inside the script component</a>
+              <a href="#converting-datatrees-to-python-lists">Converting DataTrees to P...</a>
 
               
 
@@ -257,60 +257,8 @@
             
             
             <li>
-              <a href="#editor-interface">Editor Interface</a>
+              <a href="#input-parameters">Input parameters</a>
 
-              
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#menu">Menu</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#code-window">Code Window</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#output-window">Output Window</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#test-button">Test Button</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#ok-and-close-button">OK and Close Button</a>
-                    </li>
-                  
-
-                </ul>
               
 
             </li>
@@ -325,7 +273,39 @@
             
             
             <li>
-              <a href="#example-script">Example Script</a>
+              <a href="#output-parameters">Output parameters</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#out-parameter">Out parameter</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#advanced-input-properties">Advanced Input Properties</a>
 
               
 
@@ -380,112 +360,65 @@
               
               <li><a href="/guides/rhinopython">RhinoPython</a></li>
               
-              <li class="active">GhPython</li>
+              <li class="active">ghPython</li>
               
           </ol>
 
-          <h1>An Overview of the GhPython Editor</h1>
+          <h1>Creating Global Sticky Variables</h1>
 
           <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
-          <p>This guide looks at the details of the GhPython Editor.</p>
+          <p>How can DataTrees be accessed and created in GhPython.</p>
 
-          <h2 id="inside-the-script-component">Inside the script component</h2>
+          <p>Creatoing a definition wide Global sticky variale can be helpful in Grasshopper. eEach of you components can access it.</p>
 
-<p>To show the code editor window for this script component, double click on the middle of the component, or select “Edit Source…” from the component center-icon context menu.</p>
+<p>http://www.grasshopper3d.com/forum/topics/functions-in-sticky-to-make-them-available-to-other-python
+https://discourse.mcneel.com/t/reference-input-values-between-different-ghpython-components/17425
+http://www.grasshopper3d.com/forum/topics/exchanging-basic-python-types-between-separate-python-components</p>
 
-<p>The Python editor runs IronPython 2.7, the GhPython component can also access the easy-to-use RhinoScritSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon, which also can be imported into the GhPython component. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
+<h2 id="converting-datatrees-to-python-lists">Converting DataTrees to Python Lists.</h2>
 
-<h2 id="editor-interface">Editor Interface</h2>
+<p>The GhPython conponent can be found on the Math &gt; Script toolbar:</p>
 
-<p>The code editor consists of 4 parts:</p>
+<p><img src="/images/ghpython-installed.png" alt="/images/ghpython-installed.png" class="img-center" width="95%" /></p>
+
+<p>Drag and drop the component onto the canvas:</p>
+
+<p><img src="/images/ghpython-component-detail.png" alt="/images/ghpython-component-detail.png" class="img-center" width="95%" /></p>
+
+<p>The default script component has two inputs and two outputs. The user can change the names of input and output, the data type and data structure of the input and also add more inputs and outputs parameters or remove them.</p>
 
 <ul>
-  <li>Menu - Use this to import and save Python files, also to access Help resources.</li>
-  <li>Code Window - Write the Python code here.</li>
-  <li>Output window - Use this to see code status and error messages.</li>
-  <li>Test Button - Runs the code without exiting the editor</li>
-  <li>OK Button - Tests the code, saves it and closes the editor.</li>
-  <li>Close Button - Saves the code and closes the editor.</li>
+  <li>x: first input of a .NET type (object).</li>
+  <li>y: second input of a .NET type (object).</li>
+  <li>Out: output string with compiling messages.</li>
+  <li>A: Returned output of type object.</li>
 </ul>
+
+<p>To edit the Python script in the component, simply double-click the component:</p>
 
 <p><img src="/images/ghpython-blankeditor.png" alt="/images/ghpython-blankeditor.png" class="img-center" width="75%" /></p>
 
-<h3 id="menu">Menu</h3>
+<p>Simple type int he Python code, clicking on OK will save the code in the component.</p>
 
-<p>The Menu contains a File pulldown and a help pulldown.</p>
+<h2 id="input-parameters">Input parameters</h2>
 
-<table class="multiline">
-<tr>
-<th width="15%">File Menu</th>
-<th>Descritption</th>
-<th>Shortcut</th>
-</tr>
-<tr>
-<td>Close</td>
-<td>This will save the definition and close the editor, returning back to the Grasshopper definition</td><td>Alt+F4</td>
-</tr>
-<tr>
-<td>Test</td>
-<td>The script will run within the Grasshopper definition.  The Output window will be update with the results and editor will stay open.  This is a great window for quick debugging of the script.</td>
-<td>F5</td>
-</tr>
-<tr>
-<td>OK</td>
-<td>This will run the code, like the Test button.  Then will save the code and close the editor, returning you back to the Grasshopper definition.</td><td>Ctrl + F5</td>
-</tr>
-<tr>
-<td>Import From...</td>
-<td>Browse for and import a <i>.py</i> file into the editor. </td>
-<td>Ctrl + I</td>
-</tr>
-<tr>
-<td>Export As...</td>
-<td>Save the code in the editor to a <i>.py</i> file on the disk.</td>
-<td>Ctrl + E</td>
-</tr>
-</table>
+<p>By default, there are two input parameters named x and y.  It is possible to edit parameters names, delete or add new ones. By zooming into a component new controls will appear on the component:</p>
 
-<h3 id="code-window">Code Window</h3>
+<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
 
-<p>This is where all the typing goes on and the grand ideas you have come to life.</p>
+<p>Use <em>+</em> and <em>-</em> buttons to add and subtract inputs.</p>
 
-<p>This is very similar to the Rhino.Ptyhon script editor.  Simply type in the statements.</p>
+<p><img src="/images/ghpython-removeinput.png" alt="/images/ghpython-removeinput.png" class="img-center" width="35%" /></p>
 
-<h4 id="importing-modules">Importing modules</h4>
+<p>You can also right-click on a parameter to change its name. The name is also the variable name in the Python script.</p>
 
-<p>Normally a script will start with <code>import</code> statements.  The editor will autocomplete the modules which are available.
-Note: some modules may not autocomplete but still be available.</p>
+<p><img src="/images/ghpython-rename-input.png" alt="/images/ghpython-rename-input.png" class="img-center" width="35%" /></p>
 
-<p><img src="/images/ghpython-editor-import.png" alt="/images/ghpython-editor-import.png" class="img-center" width="60%" /></p>
+<p>Please note that the names of the parameters must follow <a href="https://docs.python.org/2/reference/lexical_analysis.html#identifiers">Python identifier naming</a> . Just make sure that these names are reflective of what the parameter is, and that they also do not contain white spaces or special characters.</p>
 
-<p>Some common module that may be imported are:</p>
-
-<pre><code class="language-python">import rhinoscriptsyntax as rs
-import math #Various math functions including Degree, Radian and Hypot
-import statistics #Mean and median are here
-</code></pre>
-
-<p>There are hundreds of modules available, for a complete list, go to <a href="https://docs.python.org/2/library/">Python Standard Libaries</a>.  Here is a very short list of other modules that can be used:</p>
-
-<pre><code class="language-python">import rhino #imports the rhinocommon namespace
-import cmath #Mathematical functions for complex numbers
-import datetime #Basic date and time types
-import string #Common string operations
-import random #Generate pseudo-random numbers
-import pickle #Python object to string for serialization
-import system #System-specific parameters and functions
-import os.path #Common pathname manipulations
-import csv #CSV File Reading and Writing
-import htmllib #A parser for HTML documents
-import json #JSON encoder and decoder
-</code></pre>
-<p>Once a module is imported, typing the module name and a dot will show an autocomplete of all the methods within that module.</p>
-
-<h4 id="input-variables">Input Variables</h4>
-
-<p>Each time Grasshopper recalculates the definition, the Python component will imput the inputs of the GhPython component as global variables in the Python script.  The name of those variables will correspond to the name of each input.  As a simple example this example:</p>
+<p>The inputs will show up in the GhPython editor as global variables.  For instance, here is a simple definition:</p>
 
 <p><img src="/images/ghpython-input.png" alt="/images/ghpython-input.png" class="img-center" width="80%" /></p>
 
@@ -497,151 +430,59 @@ else:
     print("x is false.")
 </code></pre>
 
-<p>Understanding the type of date is being input and how that maps to standard Python components is important. If the datatype is not what is needed in the Python script by default, then use the <code>Type hint</code> option on the component. This assures the correct datatype on input.</p>
+<p>As the Boolean toggle is changed, the <code>x</code> value changes.  The <code>print</code> method will out put a string to the out of the component.</p>
 
-<h4 id="output-variables">Output variables</h4>
+<h2 id="output-parameters">Output parameters</h2>
 
-<p>To output to the component set the value of the output name to a variable. For instance if the output is named <code>a</code>, then the code to send “Hello World!” to the output would be:</p>
+<p>Like the inputs, you can define as many outputs or returns as you need when you “zoom in” and push the “+” sign.  Unlike input parameters, there are no default datatypes associated with output.  The output datatype will be assigned inside your script.</p>
 
-<pre><code class="language-python">a = "Hello World!"
+<p>To actually send information to the output from the script, simply assign the value(s) to the output variable name.  For instance, in this case the output is <em>a</em>:</p>
+
+<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
+
+<p>To send the information out to <em>a</em> enter this line in the editor:</p>
+
+<pre><code class="language-python">a = "This string will be sent to the output"
 </code></pre>
 
-<p>The last assignment to the variable in the script will the the value that is output.  If there are multiple assignments, as in a list of vlues assigned in a loop to the output variable, only the last one is sent out.  This can be a bit confusing.  The key is to assign the series of outputs to a list variable, then output that variable through the <code>a</code> output.</p>
+<p><img src="/images/ghpython-output.png" alt="/images/ghpython-output.png" class="img-center" width="80%" /></p>
 
-<p>As an example, this does not work:</p>
+<p>Each time Grasshopper recalculates the definition, the Python component will run and send out the value(s) to the output.</p>
 
-<pre><code class="language-python">l = [2,3,4,4,5,4,5,6,7,8,9]
+<h2 id="out-parameter">Out parameter</h2>
 
-a = []
+<p>Out parameter is there by default to provide some useful information about your code. I often find myself connecting the out parameter to a panel component to be able to read the information directly without having to hover over the out parameter.</p>
 
-for item in l:
-    a = item + 5
-</code></pre>
+<p><img src="/images/ghpython-outerror.png" alt="/images/ghpython-outerror.png" class="img-center" width="80%" /></p>
 
-<p>There are two problems with the script above. An output variable in GhPython is created by the GhPython component.  It cannot be set to a specific variable type as in the line <code>a=[]</code>.  Also, the <code>for</code> will loop throught he items in <code>l</code>, only to output the last assigned value to <code>a</code> at the completion of the Grasshopper cycle.</p>
+<p>There are two types of messages that you can get in the out parameter.</p>
 
-<p>The proper way to output a series of values is to create a list variable to populate, then output that variable to <code>a</code> at the end of the script.</p>
+<ul>
+  <li>The compile-time messages. Those include errors and warning about your code that prevent your component from running or can potentially give incorrect results. These are very helpful information to help point you to the lines in code that the compiler is having trouble with so that you can make appropriate adjustments.</li>
+  <li>The run-time messages.  You can send bits of text to the out parameter. You can use those to track information generated by your code as it is running.</li>
+</ul>
 
-<pre><code class="language-python">l = [2,3,4,4,5,4,5,6,7,8,9]
+<h2 id="advanced-input-properties">Advanced Input Properties</h2>
 
-li=[]
+<p><img src="/images/ghpython-inputoptions.png" alt="/images/ghpython-inputoptions.png" class="float-img-right" width="300" /></p>
 
-for item in l:
-    li.append(item + 5)
+<p>For most basic work, the instructions above are all that are needed.  But, there are a few advanced options that can be set on the GhPython inputs that can be useful in certain situations.</p>
 
-a = li
-</code></pre>
+<p>To access the input options, right-click on any of the inputs.</p>
 
-<h4 id="print-function">Print function</h4>
+<p>The top entry is the Parameter or variable name: you can click on it and type a new name.</p>
 
-<p>The <code>print()</code> function used in the GhPtyhon script will print information out to the Output Window.  This is a good way to debug script in the window also.
-Because we are using a flavor of Python 2, print is really a statement, that works also without parentheses. However, we prefer to look at is a function, that way it will work the same also in Python 3 flavors.</p>
+<p>The next section is the general attributes or functions common to most GH components.</p>
 
-<h3 id="output-window">Output Window</h3>
+<p>Then is a section to input data directly to the component and to manage that data.</p>
 
-<p>The Output Window contains help and messages about the staus of the editor.</p>
+<p>The third section is most powerful to use the <em>Type hint</em>. Input parameters are set by default to the .NET type “object”. Sometimes is best to specify a datatype on input to make the code more readable and efficient. Types can be primitive such as integers or doubles, or geometry specific RhinoCommon types that are used only in Rhino such as “Point3d” or a “Curve”. You need to select the appropriate type for each input.</p>
 
-<ol>
-  <li>If the script is run while the editor is open, the success or failure of the script will be displayed here.</li>
-  <li>If there is an error whle testing the script, the error information will display in the Output Window.</li>
-</ol>
-
-<pre><code>Runtime error (SyntaxErrorException): EOL while scanning single-quoted string
-
-File "", line 10
-    import 'rhinoscriptsyntax as rs
-
-           ^
-SyntaxError: EOL while scanning single-quoted string
-</code></pre>
-
-<ol>
-  <li>The <code>print()</code> function will output to this window.</li>
-  <li>While editing a script, information about the current method will be displayed here. The comments about a method are limited to arguement requirements.  For a fuller explaination of any method, go to the python help file.</li>
-</ol>
-
-<h3 id="test-button">Test Button</h3>
-
-<p>Use the <em>Test</em> button to run the script while keeping the Ghpython editor is up on the screen.  The Grasshopper definition will also be updated at the same time.</p>
-
-<h3 id="ok-and-close-button">OK and Close Button</h3>
-
-<p>The <em>OK</em> button will save the scrip tto the GhPython component and will close the editor, retuning to Grasshopper.</p>
-
-<p>The <em>Close</em> button will revert any changes to the script and return to grasshopper, using the previously saved script.</p>
-
-<h2 id="example-script">Example Script</h2>
-
-<p>Here is an example script:</p>
-
-<pre class="line-numbers"><code class="language-python"># sample script to show how to use this component and the rhinoscriptsyntax
-"""Constructs a sinusoidal series of circles.
-  Inputs:
-    x: The number of circles. (integer)
-    y: The radius of each circle. (float)
-  Outputs:
-    a: The list of circles. (list of circle)
-    b: The list of radii. (list of float)
-"""
-import math
-import rhinoscriptsyntax as rs
-
-if x is None:
-    x = 24    # if nothing is connected to x, set x to something (24).
-if y is None:
-    y = 0.3    # if nothing is connected to y, set y to 0.3.
-
-circles = []            # create a list. We will add IDs to it later on.
-radii = []              # ...and create another one.
-
-for i in range(int(x)):
-    pt = (i, math.cos(i), 0)             # a tuple (here for a point).
-    id1 = rs.AddCircle(pt, y)
-    circles.append(id1)
-    endPt = rs.PointAdd(pt, (0, 0.3, 0)) # move the point by the vector.
-    id2 = rs.AddLine(pt, endPt)
-    radii.append(id2)
-
-a = circles
-b = radii
-</code></pre>
-
-<table class="multiline">
-<tr>
-<th>Line</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>2...9</td>
-<td>
-A multiline comment that explains the inputs and outputs of the script.
-</td>
-</tr>
-<tr>
-<td>10...11</td>
-<td>Importing a couple modules that are needed later in the script.</td>
-</tr>
-<tr>
-<td>13...16</td>
-<td>Here we check the the values of the two inputs `x` and `y` have a value.  If not the values are set to default values.</td>
-</tr>
-<tr>
-<td>21...27</td>
-<td>Use a <i>For</i> loop to walk through each circle based on the value of <i>x</i>.</td>
-</tr>
-<tr>
-<td>24</td>
-<td>Each time through the loop, circles are added to the <i>circles</i> variable.</td>
-</tr>
-<tr>
-<td>29</td>
-<td>The circles are output to the <i>a</i> output</td>
-</tr>
-</table>
+<p>The rhinoscriptsyntax Type Hint is special: when it is selected, any geometry will be added to the Grasshopper document, and then its ID (Guid) inside it will be passed in the variable. With the rest of the hints, GhPython will call into Grasshopper and perform the same type of operations that Grasshopper does when it requires a special data type. This conversion is costly. If you want to make things as quick as possible, choose ‘No Type Hint’. However, users of your component will benefit greatly from using a meaningfully-set and appropriate type hint.</p>
 
 <h2 id="next-steps">Next Steps</h2>
 
-<p>That quick look at the GhPython editor.  Next is a try a Python script for yourself.</p>
+<p>That lays out the bascis of the GhPython component.  Next is a look into the component Python editor for Grasshopper.</p>
 
 <hr />
 
@@ -687,7 +528,7 @@ A multiline comment that explains the inputs and outputs of the script.
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/ghpython-editor.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/ghpython-global-sticky.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
