@@ -497,6 +497,40 @@ else:
 
 <p>Then is a section to input data directly to the component and to manage that data.</p>
 
+<p>The three access options ‘Item Access’, ‘List Access’ and ‘Tree Access’ change the way lists and datatrees are imported into the GhPython component. This controls how lists of objects are imported.  For instance a string of characters can be input as each character indiviuudally:</p>
+
+<pre><code class="language-python">"This string"
+[1,3,5,6]
+</code></pre>
+
+<p>If the input is set to ‘Item Access’, then each character is sent in seperately:</p>
+
+<pre class="line-numbers"><code class="language-python">T
+h
+i
+s
+
+s
+t
+r
+i
+n
+g
+
+[
+1
+3
+5
+6
+]
+</code></pre>
+
+<p>Whil this is a good way to maniputlate each character in order, by switching the input to <code>List Input</code>, then the complete string is sent in each Grasshopper iteration:</p>
+
+<pre class="line-numbers"><code class="language-python">This string
+[1,3,5,6]
+</code></pre>
+
 <p>The third section is most powerful to use the <em>Type hint</em>. Input parameters are set by default to the .NET type “object”. Sometimes is best to specify a datatype on input to make the code more readable and efficient. Types can be primitive such as integers or doubles, or geometry specific RhinoCommon types that are used only in Rhino such as “Point3d” or a “Curve”. You need to select the appropriate type for each input.</p>
 
 <p>The rhinoscriptsyntax Type Hint is special: when it is selected, any geometry will be added to the Grasshopper document, and then its ID (Guid) inside it will be passed in the variable. With the rest of the hints, GhPython will call into Grasshopper and perform the same type of operations that Grasshopper does when it requires a special data type. This conversion is costly. If you want to make things as quick as possible, choose ‘No Type Hint’. However, users of your component will benefit greatly from using a meaningfully-set and appropriate type hint.</p>
