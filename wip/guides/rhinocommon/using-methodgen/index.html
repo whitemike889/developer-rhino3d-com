@@ -298,7 +298,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#export-c-functions-to-c">1. Export C functions to C#</a>
+              <a href="#1-export-c-functions-to-c">1. Export C functions to C#</a>
 
               
                 <ul class="nav nav-stacked">
@@ -330,7 +330,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#define-helper-enums-for-marshalling">2. Define helper enums fo...</a>
+              <a href="#2-define-helper-enums-for-marshalling">2. Define helper enums fo...</a>
 
               
 
@@ -346,7 +346,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#share-enum-values-between-the-c-and-c">3. Share enum values betw...</a>
+              <a href="#3-share-enum-values-between-the-c-and-c">3. Share enum values betw...</a>
 
               
                 <ul class="nav nav-stacked">
@@ -387,7 +387,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#rhcpreprocessor-macro">RH_C_PREPROCESSOR macro</a>
+              <a href="#rh_c_preprocessor-macro">RH_C_PREPROCESSOR macro</a>
 
               
 
@@ -466,7 +466,7 @@ $(document).ready(function()
 
 <p>A file called <em>AutoNativeMethods.cs</em>, and another one called <em>AutoNativeEnums.cs</em> if required, will be placed in <em>lib_CS_dir</em> at the end of the process.  This will happen in the following 3 steps…</p>
 
-<h2 id="export-c-functions-to-c">1. Export C functions to C#</h2>
+<h2 id="1-export-c-functions-to-c">1. Export C functions to C#</h2>
 
 <p><em>methodgen.exe</em> looks for every line starting with <code>RH_C_FUNCTION</code> in every <em>.h</em> and <em>.cpp</em> file in <em>cpp_dir</em>.</p>
 
@@ -504,7 +504,7 @@ internal static extern int ON_Brep_SplitEdgeAtParameters(IntPtr pBrep, int edgeI
   <li>Enum types exported with <code>RH_C_SHARED_ENUM</code> will be translated to the defined C# counterpart (see below for details).</li>
 </ul>
 
-<h2 id="define-helper-enums-for-marshalling">2. Define helper enums for Marshalling</h2>
+<h2 id="2-define-helper-enums-for-marshalling">2. Define helper enums for Marshalling</h2>
 
 <p>Enums that are found while scanning every <em>.h</em> and <em>.cpp</em> file in <em>cpp_dir</em> will be exported as nested enums in
 <em>AutoNativeMethods.cs</em>, in the same <code>UnsafeNativeMethods</code> class.  These should be C enums.</p>
@@ -566,7 +566,7 @@ UnsafeNativeMethods.ON_Mesh_GetBool(ptr, UnsafeNativeMethods.MeshBoolConst.IsClo
 
 <p>Notice that every enum field had some prefixed lower-case acronym, which is removed by <em>methodgen</em>.</p>
 
-<h2 id="share-enum-values-between-the-c-and-c">3. Share enum values between the C++ and C#</h2>
+<h2 id="3-share-enum-values-between-the-c-and-c">3. Share enum values between the C++ and C#</h2>
 
 <p>Similar to the <a href="#defining-helper-enums-for-marshalling">Define helper enums for Marshalling</a> step, <em>methodgen</em> also allows to harvest enum values directly from any file (being that <em>.h</em>, <em>.cpp</em>, or anything else) that follows the convention explained here.</p>
 
@@ -651,7 +651,7 @@ enum class SubDType : unsigned char
 
 <hr />
 
-<h2 id="rhcpreprocessor-macro">RH_C_PREPROCESSOR macro</h2>
+<h2 id="rh_c_preprocessor-macro">RH_C_PREPROCESSOR macro</h2>
 
 <p>Inside every <em>.h</em> and <em>.cpp</em> file in <em>lib_C_dir</em>, <em>methogen</em> keeps track of <code>#ifdef</code>, <code>#ifndef</code>, <code>#if defined</code>, <code>#elif defined</code>, <code>#else</code> and <code>#endif</code> lines marked with an <code>RH_C_PREPROCESSOR</code> suffix.  Lines with both preprocessor instructions and the mark will not be removed and will appear in <em>AutoNativeMethods.cs</em>, transformed to the appropriate C# representation.</p>
 
