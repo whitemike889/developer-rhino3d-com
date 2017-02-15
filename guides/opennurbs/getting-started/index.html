@@ -289,7 +289,7 @@
             
             
             <li>
-              <a href="#dm-file-versions">3DM File Versions</a>
+              <a href="#3dm-file-versions">3DM File Versions</a>
 
               
 
@@ -334,7 +334,7 @@
                     
                     
                     <li>
-                        <a href="#onmesh">ON_Mesh</a>
+                        <a href="#on_mesh">ON_Mesh</a>
                     </li>
                   
                     
@@ -343,7 +343,7 @@
                     
                     
                     <li>
-                        <a href="#onbrep">ON_Brep</a>
+                        <a href="#on_brep">ON_Brep</a>
                     </li>
                   
 
@@ -435,7 +435,7 @@
   </li>
 </ol>
 
-<h2 id="dm-file-versions">3DM File Versions</h2>
+<h2 id="3dm-file-versions">3DM File Versions</h2>
 
 <p>The following is brief history of the 3dm file versions…</p>
 
@@ -463,9 +463,9 @@
 
 <h2 id="common-issues">Common Issues</h2>
 
-<h3 id="onmesh">ON_Mesh</h3>
+<h3 id="on_mesh">ON_Mesh</h3>
 
-<h4 id="vertex-ordering-in-onmesh-faces">Vertex ordering in ON_Mesh faces</h4>
+<h4 id="vertex-ordering-in-on_mesh-faces">Vertex ordering in ON_Mesh faces</h4>
 
 <p>All faces in a <code>ON_Mesh</code> are stored with vertices listed in counter-clockwise order.  In particular, for quads the vertices are ordered as:</p>
 
@@ -475,9 +475,9 @@
 
 <p>The definition of <code>void ON_GL( const ON_Mesh&amp; )</code> in <em>opennurbs_gl.cpp</em> demonstrates how to go through an <code>ON_Mesh</code> and render all the quads as two triangles.</p>
 
-<h3 id="onbrep">ON_Brep</h3>
+<h3 id="on_brep">ON_Brep</h3>
 
-<h4 id="orientation-of-onbrep-faces">Orientation of ON_Brep faces</h4>
+<h4 id="orientation-of-on_brep-faces">Orientation of ON_Brep faces</h4>
 
 <p>The UV orientation of surfaces in a Brep is arbitrary.  If the <code>BOOL ON_BrepFace::m_bRev</code> member is <code>FALSE</code>, then the face’s orientation agrees with the surface’s natural <script type="math/tex">Du \times Dv</script> orientation.  When the member is <code>TRUE</code>, the face’s orientation is opposite the surface’s natural <script type="math/tex">Du \times Dv</script> orientation.</p>
 
@@ -487,7 +487,7 @@
 
 <p>The <code>ON_BrepLoop::m_type</code> member records the type of boundary (inner, outer, etc.).  A <code>ON_BrepFace</code> has exactly one outer loop and it is the first loop referenced in the <code>ON_BrepFace::m_li[]</code> array.  The inner loops all define “holes” in the <code>ON_BrepFace</code>.  All the inner holes lie inside of the outer loop.  A <code>ON_BrepFace</code> is always path connected.  In particular, inner loops are not “nested.”</p>
 
-<h4 id="surfaces-in-rhino-are-read-as-onbreps">Surfaces in Rhino are read as ON_Breps</h4>
+<h4 id="surfaces-in-rhino-are-read-as-on_breps">Surfaces in Rhino are read as ON_Breps</h4>
 
 <p>Internally, Rhino stores all surfaces as some type of b-rep and the openNURBS toolkit reads these objects as b-reps. To see if an entire</p>
 
