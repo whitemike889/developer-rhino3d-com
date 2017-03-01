@@ -374,16 +374,22 @@ pnt = rs.CreatePoint(1.0, 2.0, 3.0)
 pnt[0] = 5.0 # Sets the X coordinate to 5.0
 pnt.Y = 45.0 # Sets the Y coordinate to 45.0
 
-print(pnt) #Print the Z coordinate
+print(pnt) #Print the new coordinates
+</code></pre>
+
+<p>Using the Python <code>for</code> function it is quite easy to walk through each coordinate in succession:</p>
+
+<pre><code>for c in pnt:
+    print c # This will loop through each coordinate in the point3d
 </code></pre>
 
 <p>The ‘CreatePoint()’ function is very flexible.  It can take a list or tuple of tow or 3 numbers and return a Point3d.  The function can also extract the coordinates of a Rhino GUID to return a Point3D.</p>
 
 <p>Rhinoscriptsyntax contains a number of methods to manipulate points.  See <a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-point-vector-methods">RhinoScript Points and Vectors Methods</a> for details.</p>
 
-<p>For those familar with RhinoScript which represents points as a pure list, the Python represtnation is a little different and offers a few more options.</p>
+<p>For those familiar with RhinoScript which represents points as a pure list, the Python representation is a little different and offers a few more options.</p>
 
-<p>It is important to understand the difference betweene a Point3d and a Guid of a point in Rhino.  A Guid is an identifier of an object in the Rhino document. The Guid’s object is something that can be drawn, belongs to a layer and is counted as a Rhino object.  A Point3d is simply a structure of 3 numbers that exists in memory.  It can be manipulated in memory, but will not be seen or saved in Rhino unless it is added to the Rhino document through the <code>rs.AddPoint()</code> command.</p>
+<p>It is important to understand the difference between a Point3d and a Guid of a point in Rhino.  A Guid is an identifier of an object in the Rhino document. The Guid’s object is something that can be drawn, belongs to a layer and is counted as a Rhino object.  A Point3d is simply a structure of 3 numbers that exists in memory.  It can be manipulated in memory, but will not be seen or saved in Rhino unless it is added to the Rhino document through the <code>rs.AddPoint()</code> command.</p>
 
 <hr />
 

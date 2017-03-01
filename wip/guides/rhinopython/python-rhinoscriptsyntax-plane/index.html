@@ -323,27 +323,37 @@ $(document).ready(function()
 
           <h1>Planes in Python</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span>
+          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
 </p>
 
           <p>This guide provides an overview of a RhinoScriptSytntax Plane Geometry in Python.</p>
 
           <h2 id="planes">Planes</h2>
 
-<p>Several RhinoscriptSyntax methods either require as an argument or return as a result a plane.  Planes are represented as zero-based,  one-dimensional list containing four elements: the plane’s origin (3-D point), the plane’s X axis direction (3-D vector), the plane’s Y axis direction (3-D vector), and the plane’s Z axis direction (3-D vector).</p>
+<p>Several RhinoscriptSyntax methods either require as an argument or return as a result a plane.  Planes are represented by a <a href="http://developer.rhino3d.com/wip/api/RhinoCommonWin/html/T_Rhino_Geometry_Plane.htm">Plane</a> structure. Plane structures and be thought of as a zero-based,  one-dimensional list containing four elements: the plane’s origin (<a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-points">point3D</a>), the plane’s X axis direction (<a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), the plane’s Y axis direction (<a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), and the plane’s Z axis direction (<a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>).</p>
 
-<p>Planes can be constructed in a number of ways.  For example,</p>
+<p><img src="/wip/images/primer-planedefinition.svg" class="img-center" width="45%" /></p>
 
-<pre><code class="language-python">plane1 = [ ] # create an empty list.
-plane1.append([0.0, 0.0, 0.0]) # origin point
-plane1.append([1.0, 0.0, 0.0]) # x-axis vector
-plane1.append([0.0, 1.0, 0.0]) # y-axis vector
-plane1.append([0.0, 0.0, 1.0]) # z-axis vector
+<pre><code>plane contains [pointOrigin, vectorX, vectorY, vectorZ]
 </code></pre>
 
-<p>Planes can also be created using the <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromFrame">PlaneFromFrame</a>, <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromNormal">PlaneFromNormal</a>, and <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromPoints">PlaneFromPoints</a> methods.</p>
+<p>Planes can be constructed in a number of ways. One common function is <code>PlaneFromPoints</code>:</p>
 
-<p>RhinoScriptSyntax contains a number of methods to manipulate planes.  See <a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-line-plane-methods">Lines and Planes</a> for details.</p>
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+corners = rs.GetRectangle()
+
+if corners:
+    plane = rs.PlaneFromPoints(corners[0], corners[1], corners[3])
+
+print plane[2]
+</code></pre>
+
+<p>Planes can also be created using the CreatePlane(), <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromFrame">PlaneFromFrame</a>,  <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromNormal">PlaneFromNormal</a>, and <a href="/wip/api/RhinoScriptSyntax/win/#collapse-PlaneFromPoints">PlaneFromPoints</a> functions.</p>
+
+<p>RhinoScriptSyntax contains a number of functions to manipulate planes.  See <a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-line-plane-methods">Lines and Planes</a> for details.</p>
+
+<p>Also, read the Python primer <a href="/wip/guides/rhinopython/primer-101/8-geometry/#85-planes">Section 8.5 Planes</a></p>
 
 <hr />
 
@@ -381,7 +391,7 @@ plane1.append([0.0, 0.0, 1.0]) # z-axis vector
 
             <p class="text">
               
-                Author: <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a>
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
               
             </p>
           </div>

@@ -342,7 +342,7 @@ def ImportPoints():
     filter = "Text file (*.txt)|*.txt|All Files (*.*)|*.*||"
     filename = rs.OpenFileName("Open Point File", filter)
     if not filename: return
-    
+
     #read each line from the file
     file = open(filename, "r")
     contents = file.readlines()
@@ -373,7 +373,7 @@ if( __name__ == "__main__" ):
 
 <pre><code class="language-python">def ImportPoints()
 </code></pre>
-<p>section. This allows the code to be re-used and simplifies error checking. 
+<p>section. This allows the code to be re-used and simplifies error checking.
 The first part uses the rs function</p>
 
 <pre><code class="language-python">rs.OpenFileName()
@@ -391,9 +391,9 @@ The first part uses the rs function</p>
 <pre><code class="language-python">if not filename: return
 </code></pre>
 
-<p>ensures that the rest of the code inside this particular function will not be run, since there is nothing that can be done without a file name, and executing the next lines in the script will result in error messages without it. Since there is only the one function in this script, a cancel emans the script will stop.</p>
+<p>ensures that the rest of the code inside this particular function will not be run, since there is nothing that can be done without a file name, and executing the next lines in the script will result in error messages without it. Since there is only the one function in this script, a cancel means the script will stop.</p>
 
-<p>Next a varible is set to the open file for reading:</p>
+<p>Next a variable is set to the open file for reading:</p>
 
 <pre><code class="language-python">file = open(filename, "r")
 </code></pre>
@@ -430,7 +430,7 @@ The first part uses the rs function</p>
 
 <h2 id="writing-a-file">Writing a file</h2>
 
-<p>Writing a file is similiar to reading, but the order in which things are done is different. This time we’ll look at the ExportPoints.py sample file.</p>
+<p>Writing a file is similar to reading, but the order in which things are done is different. This time we’ll look at the ExportPoints.py sample file.</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
@@ -455,7 +455,7 @@ with open(filename, "w") as file:
         elif( rs.IsPoint(id) ):
         point = rs.PointCoordinates(id)
         file.write(str(point) + "\n")
-        
+
 </code></pre>
 <hr />
 
@@ -464,7 +464,7 @@ with open(filename, "w") as file:
 <pre><code class="language-python">objectIds = rs.GetObjects("Select Points", 1+2, True, True)
 </code></pre>
 
-<p>As before we check to make sure that the user has in fact selcted the things we’re looking for.</p>
+<p>As before we check to make sure that the user has in fact selected the things we’re looking for.</p>
 
 <pre><code class="language-python">if( objectIds==None ): return
 </code></pre>
@@ -477,7 +477,7 @@ filename = rs.SaveFileName("Save point coordinates as", filter)
 if( filename==None ): return
 </code></pre>
 
-<p>When writing to a file it must first be <em>opened</em>.  While it is open, the information can be written to the file.  After wrting all the information, the file must be closed. In the first example we explicitly opened, read and then closed the file. This time we’ve used the <em>with</em> statement to open the file - <em>with</em> is convenient becuse it takes care of closing the file and cleaning up when the script leaves the indented <em>with</em> section.</p>
+<p>When writing to a file it must first be <em>opened</em>.  While it is open, the information can be written to the file.  After writing all the information, the file must be closed. In the first example we explicitly opened, read and then closed the file. This time we’ve used the <em>with</em> statement to open the file - <em>with</em> is convenient because it takes care of closing the file and cleaning up when the script leaves the indented <em>with</em> section.</p>
 
 <pre><code class="language-python">with open(filename, "w") as file:
      # treat the objects differently depending on whether they are points or point clouds
