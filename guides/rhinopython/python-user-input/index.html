@@ -353,14 +353,14 @@
 
           <h2 id="overview">Overview</h2>
 
-<p>Prompting the user of a script fo the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts.</p>
+<p>Prompting the user of a script for the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts.</p>
 
 <p>The RhinoscriptSyntax module contains many ways to interactively prompt for several different types of input. There are three main styles of input that are contained in Rhinosciptsyntax:</p>
 
 <ul>
-  <li>Get methods. These are methods that work with the command line, wait for mouse input or prompt for specifc input.</li>
-  <li>Dialog methods.  There are some simple specfic dialogs to prompt for input</li>
-  <li>File sytem dialogs. Browsing, saving and opening files on the system with Python.</li>
+  <li>Get methods. These are methods that work with the command line, wait for mouse input or prompt for specific input.</li>
+  <li>Dialog methods.  There are some simple specific dialogs to prompt for input</li>
+  <li>File system dialogs. Browsing, saving and opening files on the system with Python.</li>
 </ul>
 
 <p>Many input methods will also validate the user input to make sure only the proper input is accepted.</p>
@@ -386,7 +386,7 @@ if pt is not None:# note it is a good idea to check if there is a result you can
 
 <p>Use <code>rs.GetPoints()</code> to ask the user for multiple point locations. As in rs.GetPoint(), all parameters are optional. Note that there is a separate prompt for the first point, and a second one for subsequent points.</p>
 
-<p>You need to set the parameters in order, separated by commas. If you do not want to specify a paramter at all, and accept the default, you can leave it out but you must then specify any following parameters explicitly using the parameter name. For example, this will not work to set a custom first prompt:</p>
+<p>You need to set the parameters in order, separated by commas. If you do not want to specify a parameter at all, and accept the default, you can leave it out but you must then specify any following parameters explicitly using the parameter name. For example, this will not work to set a custom first prompt:</p>
 
 <pre><code class="language-python">
 import rhinoscriptsyntax as rs
@@ -394,7 +394,7 @@ import rhinoscriptsyntax as rs
 pts = rs.GetPoints(  "Set the first point", "Set the next point")
 </code></pre>
 
-<p>Why? because the function has two paramters that come before the first prompt, ‘draw_lines’ and ‘in_plane’. If you leave these out, you must specify what paramters you are setting explicitly in order for it to be recognized:</p>
+<p>Why? because the function has two parameters that come before the first prompt, ‘draw_lines’ and ‘in_plane’. If you leave these out, you must specify what parameters you are setting explicitly in order for it to be recognized:</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 pts = rs.GetPoints(  message1= "Set the first point", message2= "Set the next point")
@@ -447,7 +447,7 @@ button = rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
 
 <h4 id="listbox">ListBox()</h4>
 
-<p>Some of the more advanced dialogs can be polulated with custom selections:</p>
+<p>Some of the more advanced dialogs can be populated with custom selections:</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
@@ -600,7 +600,6 @@ if filename: rs.MessageBox(filename)
   <li><a href="/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
   <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
 </ul>
-
 
         </article>
 
