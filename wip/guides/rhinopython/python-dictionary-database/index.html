@@ -352,7 +352,7 @@ $(document).ready(function()
 
 <h2 id="creating-a-keyvalue-datastore">Creating a Key:Value datastore</h2>
 
-<p>Using Dictionaries, list and a key:values can be used together to create this datastore. Here is an example of a nested dictionary that stores many different items. In this case, we have a series of polylines representing various rooms for a medical office.  Look closely at the bracket and paraens that are used.  The curly braces <code>{}</code> denote the a dictionary.  The square brackets <code>[]</code> represent a list as a value in the <code>medical</code> key. The list in ‘medical’ actually contains a series of dictionaries for each individual office.</p>
+<p>Using Dictionaries, list and a key:values can be used together to create this datastore. Here is an example of a nested dictionary that stores many different items. In this case, we have a series of polylines representing various rooms for a medical office.  Look closely at the bracket and parens that are used.  The curly braces <code>{}</code> denote the a dictionary.  The square brackets <code>[]</code> represent a list as a value in the <code>medical</code> key. The list in ‘medical’ actually contains a series of dictionaries for each individual office.</p>
 
 <pre><code class="language-python">datastore = { "office": {
     "medical": [
@@ -407,7 +407,7 @@ $(document).ready(function()
 
 <p>This returns the dictionary object for room 100, reception.</p>
 
-<p>The objects and values in the datastore can also be accessed with the <code>.get</code> method.  The direct method shown above will return an error if a key does not exist. The <code>.get</code> method is a little safer.  It will return a value or <code>None</code>.  This is much safer if you are not sure the key is always present.  The <code>isbn</code> key is a goot example of this.</p>
+<p>The objects and values in the datastore can also be accessed with the <code>.get</code> method.  The direct method shown above will return an error if a key does not exist. The <code>.get</code> method is a little safer.  It will return a value or <code>None</code>.  This is much safer if you are not sure the key is always present.  The <code>isbn</code> key is a good example of this.</p>
 
 <pre><code class="language-python">print datastore["office"]["law"] # this produces an error.
 print datastore["office"].get("law")  #This will produce the value of None.
@@ -416,7 +416,7 @@ print datastore["office"].get("law")  #This will produce the value of None.
 
 <pre><code class="language-python">spaces = datastore['office']['medical']
 </code></pre>
-<p>The variable is a reference to the object. Any changes made with <code>spaces</code> will also be reflected in the original datastore. Also, because <code>spaces</code> containsonly the list of spaces in the datastore, it is quite easy to step through the spaces with a <code>for</code> statement.  In the example below, the for loop is looking for a specifc space then updates the price:</p>
+<p>The variable is a reference to the object. Any changes made with <code>spaces</code> will also be reflected in the original datastore. Also, because <code>spaces</code> contains only the list of spaces in the datastore, it is quite easy to step through the spaces with a <code>for</code> statement.  In the example below, the for loop is looking for a specific space then updates the price:</p>
 
 <pre><code class="language-python"># Here is a method to find and change a value in the database.
 for item in spaces:
@@ -427,7 +427,6 @@ for item in datastore['office']['medical']: # This loop shows the change is not 
     if item.get('use') == "examination" :
         print 'The {} rooms now cost {}'.format(item.get("use"), item.get("price"))
 </code></pre>
-
 
         </article>
 
