@@ -330,46 +330,21 @@ $(document).ready(function()
 
           <h2 id="lists-of-points">Lists of Points</h2>
 
-<p>Many rhinoscriptsyntax functions require a list of points as an argument or return a list of <a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-points">Point3d</a> structures. For example the ‘DivideCurve()’ function will return a list of points:</p>
+<p>Many rhinoscriptsyntax methods either require as an argument or return as a result an list of 3-D points. Lists of 3-D points are zero-based, one-dimensional lists of 3-D points (which in turn are zero-based, one-dimensional lists of X, Y, and Z coordinate values).  Lists of 3-D points can be constructed in a number of ways.  For example,</p>
 
-<pre><code class="language-python">import rhinoscriptsyntax as rs
+<pre><code class="language-python">pointcloud = []
+pointcloud.append([0,0,0])
+pointcloud.append([1.0, 2.0, 3.0])
+pointcloud.append([5.0, 8.0, 9.0])
+pointcloud.append([4.0, 7.0, 2.0])
+pointcloud.append([8.0, 5.0, 6.0])
 
-obj = rs.GetObject("Select a curve")
-
-if obj:
-    points = rs.DivideCurve(obj, 4)
-    
-print(points[0])
+print pointcloud
 </code></pre>
 
-<p>There are a number of ways to access the information in these lists.</p>
+<p>Also, representing list of 3-D points as a one-dimensional array instead of a multi-dimensional list, makes it easy to repeat a group of statements for each element in the array .  For example along with the example above, use the <code>for</code> loop to walk through each point in the list,</p>
 
-<p>Use an index to access any one of the points as in the line:</p>
-
-<pre><code class="language-python">print(points[0]) # Returns a Point3d structure
-</code></pre>
-
-<p>With Python, it is easy to use the <code>for</code> loop to walk through the list and print out the coordinates for each point,</p>
-
-<pre><code class="language-python">for i in points:
-    print i
-</code></pre>
-
-<p>It is also possible to use nested indexes to access a specific coordinate of a point in the list.  This example will access the Y coordinate of the second point in the list:</p>
-
-<pre><code class="language-python">print(points[1][1])
-</code></pre>
-
-<p>Using the .Y property on the <a href="/wip/guides/rhinopython/python-rhinoscriptsyntax-points">Point3d</a> also would work:</p>
-
-<pre><code class="language-python">print(points[1].Y)
-</code></pre>
-
-<p>To add a point to this list, first create the point3d with <code>CreatePoint()</code>, then <a href="https://docs.python.org/2/tutorial/datastructures.html">append</a> it:</p>
-
-<pre><code class="language-python">points.append(rs.CreatePoint(1.0, 2.0, 3.0))
-
-for i in points:
+<pre><code class="language-python">for i in pointcloud:
     print i
 </code></pre>
 
