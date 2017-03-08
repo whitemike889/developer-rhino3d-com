@@ -355,7 +355,16 @@ $(document).ready(function()
 
           <h1>1 What's it all about?</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a></span>
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
 </p>
 
           <p></p>
@@ -512,6 +521,18 @@ mathematical operations, evaluate variable conditions, respond to their environm
     $('body').scrollspy({
         target: '.bs-docs-sidebar',
         offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!-- 
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $(location.hash + '.collapse').collapse('show');
+        }
     });
     </script>
   </body>

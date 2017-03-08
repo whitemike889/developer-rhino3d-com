@@ -323,7 +323,16 @@ $(document).ready(function()
 
           <h1>What are VBScript and RhinoScript?</h1>
 
-          <p><span class="guide_byline">by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a></span>
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/dale/activity">Dale Fugier</a>
+      
+    
+  </span>
+
 </p>
 
           <p>This guide explains what VBScript and RhinoScript are.</p>
@@ -430,6 +439,18 @@ $(document).ready(function()
     $('body').scrollspy({
         target: '.bs-docs-sidebar',
         offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!-- 
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $(location.hash + '.collapse').collapse('show');
+        }
     });
     </script>
   </body>
