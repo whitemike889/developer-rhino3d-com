@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>5 Conditional execution with VBScript</title>
+  <meta name="description" content="">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinoscript/primer-101/5-conditional-execution/" />
+  <meta property="og:title" content="5 Conditional execution" />
+  <meta property="og:description" content="" />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="5 Conditional execution" />
+  <meta name="twitter:description" value="" />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="VBScript" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinoscript/primer-101/5-conditional-execution/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#51-what-if">5.1 What if?</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#52-select-case">5.2 Select Case</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#54-conditional-loops">5.4 Conditional loops</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#55-alternate-syntax">5.5 Alternate syntax</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#56-incremental-loops">5.6 Incremental loops</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/"></a></li>
+              
+              <li class="active">RhinoScript Primer</li>
+              
+          </ol>
+
+          <h1>5 Conditional execution</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+      
+    
+  </span>
+
+</p>
+
+          <p></p>
+
+          <h2 id="51-what-if">5.1 What if?</h2>
+
+<p>What if I were to fling this rock at that bear? What if I were to alleviate that moose from its skin and wear it myself instead? It’s questions like these that signify abstract thought, perhaps the most stunning of all human traits. It’s no good actually throwing rocks at bears by the way, you’re only going to upset it and severely diminish your chances of getting back to your cave by nightfall in one piece. As a programmer, you need to take abstract though to the next level; the very-very-conscious level.</p>
+
+<p>A major part of programming is recovering from screw-ups. A piece of code does not always behave in a straightforward manner and we need to catch these aberrations before they propagate too far. At other times we design our code to deal with more than one situation. In any case, there’s always a lot of conditional evaluation going on, a lot of ‘what if’ questions. Let’s take a look at three conditionals of varying complexity:</p>
+
+<ol>
+  <li>If the object is a curve, delete it.</li>
+  <li>If the object is a short curve, delete it.</li>
+  <li>If the object is a short curve, delete it, otherwise move it to the “curves” layer.</li>
+</ol>
+
+<p>The first conditional statement evaluates a single boolean value; an object is either is a curve or it is not. There’s no middle ground. The second conditional must also evaluate the constraint ‘short’. Curves don’t become short all of a sudden any more than people grow tall all of a sudden. We need to come up with a boolean way of talking about ‘short’ before we can evaluate it. The third conditional is identical to the second one, except it defines more behavioural patterns depending on the outcome of the evaluation.</p>
+
+<p>The translation from English into VBScript is not very difficult. We just need to learn how conditional syntax works.</p>
+
+<p>Problem 1:</p>
+
+<pre><code class="language-vb">If Rhino.IsCurve(strObjectID) Then
+	Call Rhino.DeleteObject(strObjectID)
+End If
+</code></pre>
+<p>Problem 2:</p>
+
+<pre><code class="language-vb">If Rhino.IsCurve(strObjectID) Then
+	If Rhino.CurveLength(strObjectID) &lt; 0.01 Then
+	    Call Rhino.DeleteObject(strObjectID)
+	End If
+End If
+</code></pre>
+
+<p>Problem 3:</p>
+
+<pre><code class="language-vb">If Rhino.IsCurve(strObjectID) Then
+	If Rhino.CurveLength(strObjectID) &lt; 0.01 Then
+	    Call Rhino.DeleteObject(strObjectID)
+	Else
+	    Call Rhino.ObjectLayer(strObjectID, "Curves")
+	End If
+End If
+</code></pre>
+
+<p>The most common conditional evaluation is the <em>If…Then statement</em>. <em>If…Then</em> allows you to bifurcate the flow of a program. The simplest <em>If…Then</em> structure can be used to shield of certain lines of code. It always follows the same format:</p>
+
+<pre class="line-numbers"><code>If SomethingOrOther Then
+    DoSomething()
+    DoSomethingElseAsWell()
+End If
+</code></pre>
+
+<p>The bit of code between the If and the Then on line 1 is evaluated and when it turns out to be True, the block of code between the first and last line will be executed. If SomethingOrOther turns out to be False, lines 2 and 3 are skipped and the script goes on with whatever comes after line 4. In case of very simple <em>If…Then</em> structures, such as the first example on the previous page, it is possible to use a shorthand notation which only takes up a single line instead of three. The shorthand for <em>If…Then</em> looks like:</p>
+
+<pre><code class="language-vb">If SomethingOrOther Then DoSomething()
+</code></pre>
+
+<p>Whenever you want to put more than one action into an If…Then block, you have to use the regular notation. The  <em>If…Then…Else</em> syntax has a similar shorthand but you will rarely see it used. It’s better to keep the lines of code short since that will improve readability. Whenever you need an <em>If…Then…Else</em> structure, I suggest you use the following syntax:</p>
+
+<pre class="line-numbers"><code class="language-vb">If SomethingOrOther Then
+    DoSomething()
+Else
+    DoSomethingElse()
+End If
+</code></pre>
+
+<p>If SomethingOrOther turns out to be True, then the bit of code between lines 1 and 3 are executed. This block can be as long as you like of course. However, if SomethingOrOther is False, then the code between <em>Else</em> and 
+End If is executed. So in the case of <em>If…Then…Else</em>, one -and only one- of the two blocks of code is put to work.</p>
+
+<p>You can nest <em>If…Then</em> structures as deep as you like, though code readability will suffer from too much indenting.
+The following example uses four nested <em>If…Then</em> structures to delete short, closed curves on Tuesdays.</p>
+
+<pre><code class="language-vb">If Rhino.IsCurve(strObjectID) Then
+    If Rhino.CurveLength(strObjectID) &lt; 1.0 Then
+        If Rhino.IsCurveClosed(strObjectID) Then
+            If WeekDay(Now()) = vbTuesday Then
+                Call Rhino.DeleteObject(strObjectID)
+            End If
+        End If
+    End If
+End If
+</code></pre>
+
+<p>When you feel you need to split up the code stream into more than two flows and you don’t want to use nested structures, you can instead switch to something which goes by the name of the <em>If…Then…ElseIf…Else</em> statement.</p>
+
+<p>As you may or may not know, the * _Make2D* command in Rhino has a habit of creating some very tiny curve segments. We could write a script which deletes these segments automatically, but where would we draw the line between ‘short’ and ‘long’? We could be reasonably sure that anything which is shorter than the document absolute tolerance value can be removed safely, but what about curves which are slightly longer? Rule #1 in programming: When in doubt, make the user decide. That way you can blame them when things go wrong.</p>
+
+<p>A good way of solving this would be to iterate through a predefined set of curves, delete those which are definitely short, and select those which are ambiguous. The user can then decide for himself whether those segments deserve to be deleted or retained. We won’t discuss the iteration part here, for you need to know more about arrays than you do now. The conditional bit of the algorithm looks like this:</p>
+
+<pre><code class="language-vb">Dim dblCurveLength
+dblCurveLength = Rhino.CurveLength(strObjectID)
+
+If Not IsNull(dblCurveLength) Then
+    If dblCurveLength &lt; Rhino.UnitAbsoluteTolerance() Then
+        Call Rhino.DeleteObject(strObjectID)
+    ElseIf dblCurveLength &lt; (10 * Rhino.UnitAbsoluteTolerance()) Then
+        Call Rhino.SelectObject(strObjectID)
+    Else
+        Call Rhino.UnselectObject(strObjectID)
+    End If
+End If
+</code></pre>
+
+<p>Saying “that red dress makes your bottom look big” and “that yellow dress really brings out the colour of your eyes” essentially means the same thing. In VBScript you can also say the same thing in different ways, though in general the “your bottom looks big” approach is preferable in programming. The above snippet could have been written as a nested If…Then structure, but then it would not resemble the way we think about the problem.</p>
+
+<h2 id="52-select-case">5.2 Select Case</h2>
+
+<p>Even though the If…Then…ElseIf…Else statement allows us to split up the code stream into any number of substreams, it is not a very elegant piece of syntax. Even very simple conditional evaluation will look rather complex because of the repeated comparisons. The Select…Case structure was designed to simplify conditional evaluation which potentially results in many different code streams. (For those among you who are/were Java or C programmers, Select…Case in VBScript is the same as switch…case in Java/C). There are a few drawbacks compared to 
+If…Then…ElseIf…Else statements. For one, a Select…Case can only evaluate equality, meaning you can only check to see if some variable is equal to 2, not if it is smaller than 2. The syntax for Select…Case looks like this:</p>
+
+<pre class="line-numbers"><code class="language-vb">Select Case iVariable
+    Case 0
+        DoSomething()
+    Case 1
+        DoSomethingElse()
+    Case 2
+        DoSomethingTotallyDifferent()
+    Case 30, 45, 60, 90, 180
+        SurpriseMe()
+    Case Else
+        DoWhateverItIsYouWouldNormallyDo()
+End Select
+</code></pre>
+
+<p>On line 1, the <em>iVariable</em> represents a value which we will be evaluating for equality. In this case the <em>iVariable</em> has to be a number, but it could equally well be a String. Line 2 lists the first evaluation we’ll perform. Since the <em>Select…Case</em> statement will take care of the comparisons itself, we only have to supply the value we want to compare to. If iVariable happens to the be same as 0, the bit of code directly beneath Case 0 (the function call to DoSomething()) is executed. If <em>iVariable</em> equals 45, then the <em>SurpriseMe()</em> function is called.</p>
+
+<p>You can supply any number of cases and you can add more comparisons to a case by comma separating them (line 8). If none of the cases you have specified is a match, the <em>Case Else</em> bit will be executed. <em>Case Else</em> is optional, you do not have to implement it. Now, how about an example?</p>
+
+<pre><code class="language-vb">Dim intObjectType                        'An Integer to store the Rhino Object-Type code
+intObjectType = Rhino.ObjectType(strObjectID)
+If IsNull(intObjectType) Then Exit Sub   'this probably means the object does not exist; abort
+
+Dim strLayerName                         'A String to store a layer name
+Select Case intObjectType                'Compare the actual type code with the preset ones
+    Case 1, 2                            'Points and PointCloud objects
+        strLayerName = "Points"
+    Case 4                               'Curves
+        strLayerName = "Curves"
+    Case 8, 16                           'Surfaces and PolySurfaces
+        strLayerName = "(Poly)Surfaces"
+    Case 32                              'Meshes
+        strLayerName = "Meshes"
+    Case 256                             'Lights
+        strLayerName = "Lights"
+    Case 512, 8192                       'Annotations and TextDots
+        strLayerName = "Annotations"
+    Case 2048, 4096                      'Instanced and Referenced Block definitions
+        strLayerName = "Blocks"
+    Case Else                            'Icky objects such as Layers, Materials and Grips; abort
+        Exit Sub
+End Select
+
+If Not Rhino.IsLayer(strLayerName) Then  'If the layer we are about to assign does not yet exist…
+    Call Rhino.AddLayer(strLayerName)    'Create it.
+End If
+
+Call Rhino.ObjectLayer(strObjectID, strLayerName)     'Assign the object to the layer
+</code></pre>
+
+<p>This snippet of code will check the type of the object which is referenced by the variable <em>strObjectID</em> and it will assign it to a specific layer. Some object type codes do not belong to ‘real’ objects (such as grips and edges) so we need the Case Else bit to make sure we don’t try to assign them to a layer. I’m going to be very naughty right now and not discuss this in detail. The comments should be enough to help you on your way.</p>
+
+<p>##5.3 Looping</p>
+
+<p>Executing certain lines of code more than once is called looping in programming slang. On page 5 I mentioned that there are two types of loops; conditional and incremental which can be described respectively as:</p>
+
+<pre><code>Keep adding milk until the dough is kneadable
+Add five spoons of cinnamon
+</code></pre>
+
+<p>Conditional loops will keep repeating until some condition is met where as incremental loops will run a predefined number of times. Life isn’t as simple as that though, and there are as many as eight different syntax specifications for loops in VBScript, we’ll only discuss the two most important ones in depth.</p>
+
+<h2 id="54-conditional-loops">5.4 Conditional loops</h2>
+
+<p>Sometimes we do not know how many iterations we will need in advance, so we need a loop which is potentially capable of running an infinite number of times. This type is called a Do…Loop. In the most basic form it looks like this:</p>
+
+<pre><code class="language-vb">Do
+    DoSomething()
+    [If (condition is met) Then Exit Do]
+Loop
+</code></pre>
+
+<p>All the lines between the Do keyword and the Loop keyword will be repeated until we abort the loop ourselves. If we do not abort the loop, I.e. if we omit the <code>Exit Do</code> statement or if our condition just never happens to be met, the loop will continue forever. This sounds like an easy problem to avoid but it is in fact a very common bug.</p>
+
+<p>In VBScript it does not signify the end of the world to have a truly infinite loop. Scripts are always run under the supervision of the RhinoScript plug-in. Jamming the Escape key several times in a row is pretty likely to gut any script which happens to be running. The following example script contains an endless <em>Do…Loop</em> which can only be cancelled by the user pressing (and holding) escape.</p>
+
+<p><img src="/images/primer-viewportclock.svg" alt="/images/primer-viewportclock.svg" class="float-img-right" width="275" /></p>
+
+<pre class="line-numbers"><code class="language-vb">Option Explicit
+'Display an updating digital clock in all viewports
+
+ViewportClock()
+Sub ViewportClock()
+    Dim strTextObjectID
+    strTextObjectID = Rhino.AddText(CStr(Time()), Array(0,0,0), 20)
+    If IsNull(strTextObjectID) Then Exit Sub
+
+    Do
+        Call Rhino.Sleep(1000)
+        Call Rhino.TextObjectText(strTextObjectID, CStr(Time()))
+    Loop
+End Sub
+</code></pre>
+
+<p>Here’s how it works:</p>
+
+<table class="multiline">
+<tr>
+<th>
+Line
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+1 &amp; 2
+</td>
+<td>
+<i>Option Explicit</i> declaration and comments about who's who and what's what
+</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Main Function call</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Main function declaration</td>
+</tr>
+<tr>
+<td>6</td>
+<td>
+We declare a variable which is capable of storing a Rhino object ID.
+</td>
+</tr>
+<tr>
+<td>7</td>
+<td>We create a new Rhino Text object. The RhinoScript helpfile tells us how to approach this particular method:
+
+<code class="language-vb hljs vbnet">
+Rhino.AddText (strText, arrPoint [, dblHeight [, strFont [, intStyle]]])
+</code>
+
+Five arguments, the last three of which are optional. When adding a text object to Rhino we must specify the text string and the location for the object. There are no defaults for this. The height of the text, font name and style do have default values. However, since we're not happy with the default height, we will override it to be much bigger:
+
+<code class="language-vb hljs vbnet">
+strTextObjectID = Rhino.AddText(CStr(Time()), Array(0,0,0), 20)
+</code>
+
+The <i>strText</i> argument must contain a String description of the current system time. We will simply nest two native VBScript functions to get it. Since these functions are not designed to fail we do not have to check for a Null variable and we can put them 'inline'. <i>Time()</i> returns a variable which contains only the system time, not the date. We could also have used the <i>Now()</i> function (as on page 20) in which case we would have gotten both the date and the time. <i>Time()</i> does not return a String type variable, so before we pass it into Rhino we have to convert it to a proper String using the <i>CStr()</i> function. This is analogous with our code on page 20.
+
+The *arrPoint* argument requires an array of doubles. We haven't done arrays yet, but it essentially means we have to supply the x, y and z coordinates of the text insertion point. `Array(0,0,0` means the same as the world origin. 
+
+The default height of text objects is 1.0 units, but we want our clock to look big since big things look expensive. Therefore we're overriding it to be 20 units instead.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>I don't think there's anything here that could possibly go wrong, but it never hurts to be sure. Just in case the text object hasn't been created we need to abort the subroutine in order to prevent an error later on.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>We start an infinite <i>Do…Loop</i>, lines 11 and 12 will be repeated for all eternity.</td>
+</tr>
+<tr>
+<td>11</td>
+<td>There's no need to update our clock if the text remains the same, so we really only need to change the text once every second. The <i>Rhino.Sleep()</i> method will pause Rhino for the specified amount of milliseconds.  We're forcing the loop to take it easy, by telling it to take some time off on every iteration. We could remove this line and the script will simply update the clock many times per second. This kind of reckless behaviour will quickly flood the undo buffer.</td>
+</tr>
+<tr>
+<td>12</td>
+<td>This is the cool bit. Here we replace the text in the object with a new String representing the current system time.</td>
+</tr>
+<tr>
+<td>13</td>
+<td>End of the *Do…Loop*, tells the interpreter to go back to line 10 </td>
+</tr>
+<tr>
+<td>14</td>
+<td>End of the Subroutine. This line will never be called because the script is not capable of actually breaking out of the loop itself. Once the user presses the Escape key the whole script will be cancelled. We still need to add it since every single <i>Sub</i> statement needs to have a matching <i>End Sub</i>. </td>
+</tr>
+</table>
+
+<p><img src="/images/primer-iterativecurvescaler.svg" alt="/images/primer-iterativecurvescaler.svg" class="float-img-right" width="325" /></p>
+
+<p>A simple example of a non-endless loop which will terminate itself would be an iterative scaling script. Imagine we need a tool which makes sure a curve does not exceed a certain length {L}. Whenever a curve does exceed this predefined value it must be  scaled down by a factor {F} until it no longer exceeds {L}.</p>
+
+<p>This approach means that curves that turn out to be longer than {L} will probably end up being shorter than {L}, since we always scale with a fixed amount. There is no mechanism to prevent undershooting. Curves that start out by being shorter than {L} should remain unmolested.</p>
+
+<p>A possible solution to this problem might look like this:</p>
+
+<pre class="line-numbers"><code class="language-vb">Option Explicit
+'Iteratively scale down a curve until it becomes shorter than a certain length
+
+FitCurveToLength()
+Sub FitCurveToLength()
+    Dim strCurveID
+    strCurveID = Rhino.GetObject("Select a curve to fit to length", 4, True, True)
+    If IsNull(strCurveID) Then Exit Sub
+
+    Dim dblLength
+    dblLength = Rhino.CurveLength(strCurveID)
+
+    Dim dblLengthLimit
+    dblLengthLimit = Rhino.GetReal("Length limit", 0.5 * dblLength, 0.01 * dblLength, dblLength)
+    If IsNull(dblLengthLimit) Then Exit Sub
+
+    Do
+        If Rhino.CurveLength(strCurveID) &lt;= dblLengthLimit Then Exit Do
+        
+        strCurveID = Rhino.ScaleObject(strCurveID, Array(0,0,0), Array(0.95, 0.95, 0.95))
+        If IsNull(strCurveID) Then
+            Call Rhino.Print("Something went wrong...")
+            Exit Sub
+        End If
+    Loop
+
+    Call Rhino.Print("New curve length: " &amp; Rhino.CurveLength(strCurveID))
+End Sub
+</code></pre>
+
+<table class="multiline">
+<tr>
+<th>
+Line
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+1...6
+</td>
+<td>
+This should be familiar by now
+</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Prompt the user to pick a single curve object, we're allowing preselection.</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Retrieve the current curve length. This function should not fail, no need to check for Null.</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Prompt the user for a length limit value. The value has be chosen between the current curve length and 1% of the current curve length. We're setting the default to half the current curve length.</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Start a Do…Loop</td>
+</tr>
+<tr>
+<td>18</td>
+<td>This is the break-away conditional. If the curve length no longer exceeds the preset limit, the Exit Do statement will take us directly to line 26.</td>
+</tr>
+<tr>
+<td>20</td>
+<td>If the length of the curve did exceed the preset limit, this line will be executed. The <i>Rhino.ScaleObject()</i> method takes four arguments, the last one of which is optional. We do not override it. We do need to specify which object we want rescaled (<i>strCurveID</i>), what the center of the scaling operation will be (<i>Array(0,0,0);</i> the world origin) and the scaling factors along x, y and z (95% in all directions).</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Instructs the interpreter to go back to line 17</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Eventually all curves will become shorter than the limit length and the <i>Do…Loop</i> will abort. We print out a message to the command line informing the user of the new curve length.</td>
+</tr>
+</table>
+
+<h2 id="55-alternate-syntax">5.5 Alternate syntax</h2>
+
+<p>Do…Loops are almost always conditional. The infinite loop example of the viewport clock is a rare exception. If the condition for the continuation of the loop is fairly complicated we will probably want to do it ourselves. In simple cases we could use one of the alternative loop syntax rules, which has the conditional evaluation baked in:</p>
+
+<pre><code class="language-vb">Do While SomeCondition
+    DoSomething()
+Loop
+</code></pre>
+
+<p>This kind of loop syntax will abort the loop when <code>SomeCondition</code> is no longer True. In light of the curve scaling example, we could have put the curve length condition in the loop definition itself, like so:</p>
+
+<pre><code class="language-vb">Do While Rhino.CurveLength(strCurveID) &gt; dblLengthLimit
+    strCurveID = Rhino.ScaleObject(strCurveID, Array(0,0,0), Array(0.95, 0.95, 0.95))
+    If IsNull(strCurveID) Then
+        Rhino.Print "Something went wrong..."
+        Exit Sub
+    End If
+Loop
+</code></pre>
+
+<p>We can still add any number of additional evaluations inside the body of the loop if we want, but the syntax above will behave exactly the same as the original code on the previous page.</p>
+
+<p>If we want the loop to terminate when a condition becomes True instead of False, we can use the <em>Until</em> keyword instead of the <em>While</em> keyword. This is just a syntactic trick, using <em>Until</em> is exactly the same as using <em>While</em> with an additional <em>Not</em> operator:</p>
+
+<pre><code class="language-vb">Do Until SomeCondition
+    DoSomething()
+Loop
+</code></pre>
+
+<p>The problem you might have with both these options is that the body of the loop might not be executed at all. If the curve which is indicated by <code>strCurveID</code> is already shorter than <code>dblLengthLimit</code> to begin with the entire loop is skipped. If you want your loop to run at least once and evaluate itself at the end rather than at the beginning, you can put the <em>While/Until</em> conditional after the <em>Loop</em> keyword instead:</p>
+
+<pre><code class="language-vb">Do
+    DoSomething()
+Loop While SomeCondition
+</code></pre>
+
+<p>Now, you are guaranteed that <em>DoSomething()</em> will be called at least once.</p>
+
+<h2 id="56-incremental-loops">5.6 Incremental loops</h2>
+
+<p>When the number of iterations is known in advance, we could still use a Do…Loop statement, but we’ll have to do the bookkeeping ourselves. This is rather cumbersome since it involves us declaring, incrementing and evaluating variables. The For…Next statement is a loop which takes care of all this hassle. The underlying idea behind For…Next loops is to have a value incremented by a fixed amount every iteration until it exceeds a preset threshold:</p>
+
+<pre><code class="language-vb">Dim i
+For i = A To B [Step N]
+    AddSpoonOfCinnamon()
+Next
+</code></pre>
+
+<p>The variable i starts out by being equal to <em>A</em> and it is incremented by <em>N</em> until it becomes larger than <em>B</em>. Once <em>i &gt; B</em> the loop will terminate. The Step keyword is optional and if we do not override it the default stepsize of 1.0 will be used. In the example above the variable <em>i</em> is not used in the loop itself, we’re using it for counting purposes only.</p>
+
+<p>If we want to abort a <em>For…Next</em> loop ahead of time, we can place a call to <em>Exit For</em> in order to short-circuit the process.</p>
+
+<p>Creating mathematical graphs is a typical example of the usage of <em>For…Next</em>:</p>
+
+<p><img src="/images/primer-sinewave.svg" alt="/images/primer-sinewave.svg" class="float-img-right" width="350" /></p>
+
+<pre class="line-numbers"><code class="language-vb">Option Explicit
+'Draw a sine wave using points
+
+DrawSineWave()
+Sub DrawSineWave()
+    Dim x, y
+    Dim dblA, dblB, dblStep
+
+    dblA = -8.0
+    dblB = 8.0
+    dblStep = 0.25
+
+    For x = dblA To dblB Step dblStep
+        y = 2*Sin(x)
+
+        Call Rhino.AddPoint(Array(x, y, 0))
+    Next
+End Sub    
+</code></pre>
+
+<p>The above example draws a sine wave graph in a certain numeric domain with a certain accuracy. There is no user input since that is not the focus of this paragraph, but you can change the values in the script. The numeric domain we’re interested in ranges from -8.0 to +8.0 and with the current stepsize of 0.25 that means we’ll be running this loop 65 times. 65 is one more than the expected number 64 (64 = dblStep-1 × (dblB - dblA)) since the loop will start at <code>dblA</code> and it will stop only after <code>dblB</code> has been exceeded.</p>
+
+<p>The <em>For…Next</em> loop will increment the value of x automatically with the specified stepsize, so we don’t have to worry about it when we use x on line 14. We should be careful not to change x inside the loop since that will play havoc with the logic of the iterations.</p>
+
+<p>Loop structures can be nested at will, there are no limitations, but you’ll rarely encounter more than three. The following example shows how nested <em>For…Next</em> structures can be used to compute distributions:</p>
+
+<p><img src="/images/primer-twistandshout.svg" alt="/images/primer-twistandshout.svg" class="float-img-right" width="350" /></p>
+
+<pre><code class="language-vb">Sub TwistAndShout()
+    Dim z, a
+    Dim pi, dblTwistAngle
+    pi = Rhino.Pi()
+    dblTwistAngle = 0.0
+
+    Call Rhino.EnableRedraw(False)
+    For z = 0.0 To 5.0 Step 0.5
+        dblTwistAngle = dblTwistAngle + (pi/30)
+      
+        For a = 0.0 To 2*pi Step (pi/15)
+            Dim x, y
+            x = 5 * Sin(a + dblTwistAngle)
+            y = 5 * Cos(a + dblTwistAngle)
+            Call Rhino.AddSphere(Array(x,y,z), 0.5)
+        Next
+    Next
+    Call Rhino.EnableRedraw(True)
+End Sub
+</code></pre>
+
+<p>The master loop increments the z variable from 0.0 to 5.0 with a default step size of 0.5. The z variable is used directly as the z-coordinate for all the sphere centers. For every iteration of the master loop, we also want to increment the twist angle with a fixed amount. We can only use the For…Loop to automatically increment a single variable, so we have to do this one ourselves on line 8.</p>
+
+<p>The master loop will run a total of ten times and the nested loop is designed to run 30 times. But because the nested loop is started every time the master loop performs another iteration, the code between lines 11 and 14 will be executed 10×30 = 300 times. Whenever you start nesting loops, the total number of operations your script performs will grow exponentially.</p>
+
+<p>The <em>rs.EnableRedraw()</em> calls before and after the master loop are there to prevent the viewport from updating while the spheres are inserted. The script completes much faster if it doesn’t have to redraw 330 times. If you comment out the <em>rs.EnableRedraw()</em> call you can see the order in which spheres are added, it may help you understand how the nested loops work together.</p>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>Now it should be coming together on how Python works.  Just a few more details. Leanr more about Python’s advanced variables in <a href="/guides/rhinoscript/primer-101/6-arrays/">Arrays</a>.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinoscript/primer-101/5-conditional-execution.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
