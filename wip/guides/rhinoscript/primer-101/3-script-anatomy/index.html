@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>3 Script Anatomy with VBScript</title>
+  <meta name="description" content="">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinoscript/primer-101/3-script-anatomy/" />
+  <meta property="og:title" content="3 Script Anatomy" />
+  <meta property="og:description" content="" />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="3 Script Anatomy" />
+  <meta name="twitter:description" value="" />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="VBScript" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinoscript/primer-101/3-script-anatomy/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the <strong>wip</strong> version of this page!
+    <a href="/guides/rhinoscript/primer-101/3-script-anatomy/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#31-programming-in-rhino">3.1 Programming in Rhino</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#32-the-bones">3.2 The bones</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#33-the-guts">3.3 The guts</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#34-the-skin">3.4 The skin</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/"></a></li>
+              
+              <li class="active">RhinoScript Primer</li>
+              
+          </ol>
+
+          <h1>3 Script Anatomy</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+      
+    
+  </span>
+
+</p>
+
+          <p></p>
+
+          <h2 id="31-programming-in-rhino">3.1 Programming in Rhino</h2>
+
+<p>Rhinoceros offers various ways of programmatic access. We’ve already met macros and scripts, but the plot thickens. Please invest a few moments of your life into looking at the diagram below, which you will never be asked to reproduce:</p>
+
+<p><img src="/wip/images/primer-script-anatomy.svg" class="img-center" width="75%" /></p>
+
+<p>The above is a complete breakdown of all developer tools that Rhino has to offer. I’ll give you a brief introduction as to what this diagram actually represents and although that is not vital information for our primary goal here (“learning how to script” in case you were wondering), you might as well familiarize yourself with it so you have something to talk about on a first date.</p>
+
+<p>At the very core of Rhino are the code libraries. These are essentially collections of procedures and objects which are used to make life easier for the programs that link to them. The most famous one is the openNURBS library which was developed by Robert McNeel &amp; Associates but is competely open source and has been ported by 3rd party programmers to other operating systems such as Unix and Linux. OpenNURBS provides all the required file writing and reading methods as well the basic geometry library. Practically all the 3D applications that support the 3dm file format use the openNURBS library. These code libraries have no knowledge of Rhino at all, they are ‘upstream’ so to speak.</p>
+
+<p>Rhino itself (the red blob) is tightly wrapped around these core libraries, it both implements and extends them. Apart from this obvious behaviour, Rhino also adds the possibility of plugins. Whereas most companies provide plugin support for 3rd party developers, McNeel has taken a rather exotic approach which elimates several big problems. The technical term for this approach is “eating your own dogfood” and it essentially boils down to McNeel programmers using the same tools as 3rd party programmers. Rather than adding code to Rhino itself, McNeel programmers prefer writing a plugin instead. For one, if they screw up the collateral damage is usually fairly minor. It also means that the SDK (Software Development Kit, that which is used to build plugins) is rigorously tested internally and there is no need to maintain and support a separate product. Unfortunately the result of this policy has made plugins so powerful that it is very easy for ill-informed programmers to crash Rhino. This is slightly less true for those developers that use the dotNET SDK to write plugins and it doesn’t apply at all to us, scripters. A common proverb in the software industry states that you can easily shoot yourself in the foot with programming, but you can take your whole leg off with C++. Scripters rarely have to deal with anymore more severe than a paper-cut.</p>
+
+<p>The orange pimples on Rhino’s smooth surface are plugins. These days plugins can be written in C++ and all languages that support the DotNET framework (VB.NET, CSharp, Delphi, J#, IronPython etc. etc.). One of these plugins is the RhinoScript plugin and it implements and extends the basic Microsoft Visual Basic Scripting 
+language at the front end, while tapping into all the core Rhino resources at the back end. Scripts thus gain access to Rhino, the core libraries and even other plugins through the RhinoScript plugin.</p>
+
+<p>Right, enough fore-play, time to get back to hard core programming.</p>
+
+<h2 id="32-the-bones">3.2 The bones</h2>
+
+<p>Once you run a certain script, either through the in-build editor or as an external file, the VBScript interpreter will thumb through your script and superficially parse the syntax. It will not actually execute any of the code at this point, before it starts doing that it first want to get a feel for the script. The interpreter is capable of finding certain syntax errors during this prepass. If you see a dialog box like this:</p>
+
+<p><img src="/wip/images/CompilerErrorDialog.png" class="img-center" width="50%" /></p>
+
+<p>before anything has actually taken place, it means the compiler ran into a problem with the syntax and decided it wasn’t worth trying to run the script. If the script crashes while it is running, the Source of the error message will not be the Microsoft VBScript Compiler. However, even scripts without syntax errors might not function as expected. In order for a script to run successfully, it must adhere to a few rules. Apart from syntax errors -which must be avoided- every script must implement a certain structure which tells the interpreter what’s what:</p>
+
+<p><img src="/wip/images/primer-ScriptStructure.png" class="img-center" width="50%" /></p>
+
+<p>Note that the example script on page 11 did not adhere to these rules. It ran just the same, but it was a bad example in this respect.</p>
+
+<p>The Option Explicit area is named after the Option Explicit statement which it contains. The Option Explicit statement is optional, but I highly recommend adding it to every single script you ever write. If you are running a script in Option Explicit mode, you have to define all your variables before you can use them (see paragraph 2.3.5). If you omit Option Explicit, your variables will be declared for you by the compiler. Although this may sound as a good thing at first, it is much harder to find problems which are caused by typos in variable names. Option Explicit will save you from yourself.</p>
+
+<p>In addition to the Option Explicit statement, the Option Explicit area may also contains a set of comments. Comments are blocks of text in the script which are ignored by the compiler and the interpreter. You can use comments to add explanations or information to a file, or to temporarily disable certain lines of code. It is considered good practise to always include information about the current script at the top of the file such as author, version and date. Comments are always preceded by an apostrophe. Global variables are also optional. Typically you do not need global variables and you’re usually better off without them.</p>
+
+<p>The area of the script which is outside the function declarations is referred to as ‘script level’. All script level code will be executed by the interpreter whenever it feels like it so you’re usually better off by putting all the code into functions and having them execute at your command.</p>
+
+<h2 id="33-the-guts">3.3 The guts</h2>
+
+<p>Every script requires at least one function (or subroutine) which contains the main code of the script. It doesn’t have to be a big function, and it can place calls to any number of other functions but it is special because it delineates the extents of the script. The script starts running as soon as this function is called and it stops when the function completes. Without a main function, there is nothing to run.</p>
+
+<p>Functions are not run automatically by the interpreter. They have to be called specifically from other bits of code. The only way to start the cascade of functions calling functions, is to place a call to the main subroutine somewhere outside all function declarations. You could put it anywhere, including at the very bottom of the script file, but I prefer to keep it near the top, just after the Option Explicit statement and just before the main subroutine begins. Without a main function call your script will be parsed and compiled, but it will not be executed. Do not get confused by terms such as ‘function’, ‘subroutine’, ‘procedure’ or ‘method’, at this time they all pretty much mean the same thing.</p>
+
+<p>A script file may contain any number of additional functions/subroutines/procedures. But since I haven’t told you yet what they are (apart from the fact that they are very similar), we’ll skip this bit. For now.
+Don’t get too comfortable.</p>
+
+<pre><code>Option Explicit						         &lt; Option Explicit statement
+`Script written by David Rutten on 28-08-2006  &lt; Default comments
+
+Public intCount						         &lt; A Global variable
+
+Call Main()						             &lt; Main function call
+Sub Main()						             &lt; Main function declaration
+	Dim strInfo						         &lt; Main function start
+	strInfo = "This is just a test"	  
+	Rhino.Print strInfo				
+	Rhino.Print "I repeat: " \&amp; strInfo  
+End Sub							             &lt; Main function end
+</code></pre>
+
+<h2 id="34-the-skin">3.4 The skin</h2>
+
+<p><img src="/wip/images/buttonscript.jpg" alt="/wip/images/buttonscript.jpg" class="float-img-right" width="325" /></p>
+
+<p>After a script has been written and tested, you might want to put it in a place which has easy 
+access such as a Rhino toolbar button. If you want to run scripts from within buttons, there’s two things you can do:</p>
+
+<ol>
+  <li>Link the script</li>
+  <li>Implement the script</li>
+</ol>
+
+<p>If you link the script you’ll only have to hardcode the <em>_LoadScript</em> command to point to the script file on the hard disk. If you want to implement the script, you’ll have to wrap it up into a <em>_RunScript</em> command. Imagine the script on the previous page has been saved on the hard disk as an <em>*.rvb file</em>. The following button editor screenshot shows how to use the two options:</p>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>That was a basic overview of Python running in Rhino.  Now learn to use <a href="/wip/guides/rhinoscript/primer-101/4-operators-and-functions/">operators and functions</a> to get something done.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinoscript/primer-101/3-script-anatomy.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
