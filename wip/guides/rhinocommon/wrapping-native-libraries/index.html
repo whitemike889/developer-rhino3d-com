@@ -513,7 +513,7 @@ $(document).ready(function()
 <img src="/wip/images/wrapping-native-libraries-03.png" alt="SampleLibrary on macOS" /></li>
   <li>Instead of building a .dll, on macOS we are building <em>libSampleLibrary.dylib</em> which - despite the extension - amounts to exactly the same thing as a dll.  For all intents and purposes, SampleLibrary does exactly the same thing on macOS that it does on Windows and the source is the same.</li>
   <li><em>Build</em> SampleLibrary using Xcode to make sure that it builds successfully.</li>
-  <li><em>Quit</em> Xcode.  On macOS, we are actually going to use command line <code>xcodebuild</code> from Xamarin Studio to build our native library, but we’ll talk about that below.</li>
+  <li><em>Quit</em> Xcode.  On macOS, we are actually going to use command line <code>xcodebuild</code> from Visual Studio for Mac to build our native library, but we’ll talk about that below.</li>
 </ol>
 
 <p>Now that we have examined the simple native SampleLibrary, let’s turn our attention to the .NET portion of our wrapping code…</p>
@@ -593,8 +593,8 @@ $(document).ready(function()
 <h3 id="mac-1">Mac</h3>
 
 <ol>
-  <li>If you have not done so already, open the <em>SampleNativeLibrary.sln</em> in <em>Xamarin Studio</em>.</li>
-  <li>The native <em>SampleLibrary</em> project cannot be built from Xamarin Studio.  As mentioned above, Xamarin Studio is a .NET only IDE; it cannot build C/C++ projects like Visual Studio.  (We will work around this limitation in a moment).</li>
+  <li>If you have not done so already, open the <em>SampleNativeLibrary.sln</em> in <em>Visual Studio for Mac</em>.</li>
+  <li>The native <em>SampleLibrary</em> project cannot be built from Visual Studio for Mac.  As mentioned above, Visual Studio for Mac is a .NET only IDE; it cannot build C/C++ projects like Visual Studio.  (We will work around this limitation in a moment).</li>
   <li>First, let’s turn our attention to the <em>SampleRhino.Mac</em> project.  Make sure that <em>SampleRhino.Mac</em> is set as the Startup Project and expand it so you can see the source files…
 <img src="/wip/images/wrapping-native-libraries-06.png" alt="SampleRhino on Mac" /></li>
   <li>Just as with <em>SampleLibrary</em>, <em>SampleRhino</em> is exactly the same source on both platform: the platform-specific <em>.csproj</em> files are referencing exactly the same <em>.cs</em> files.</li>
@@ -610,7 +610,7 @@ $(document).ready(function()
 
     <p>…which declares a <code>lib</code> string member.  On Windows, it was necessary to explicitly state the name of the native dll being called.  On macOS, this works a little differently.  In order to understand what is different, let’s look at how <em>SampleLibrary.dll</em> gets built on macOS…</p>
   </li>
-  <li>In the <a href="#mac">SampleLibrary (Mac) section above</a>, we built SampleLibrary using Xcode.  We mentioned in passing that we could build this using <code>xcodebuild</code> command line from Xamarin Studio.  Let’s take a look.</li>
+  <li>In the <a href="#mac">SampleLibrary (Mac) section above</a>, we built SampleLibrary using Xcode.  We mentioned in passing that we could build this using <code>xcodebuild</code> command line from Visual Studio for Mac.  Let’s take a look.</li>
   <li>In the <em>Solution Explorer</em>, <em>double-click</em> the name of the <em>SampleRhino.Mac</em> project to bring up the <em>Project Options</em> dialog.  Navigate to the <em>Build</em> &gt; <em>Custom Commands</em> section…
 <img src="/wip/images/wrapping-native-libraries-07.png" alt="SampleRhino.Mac Project Options" /></li>
   <li>There are 5 <em>Custom Commands</em>:
