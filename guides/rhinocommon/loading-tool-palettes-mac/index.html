@@ -475,7 +475,7 @@
 <p>Now that you have Tool Palette Collection <em>plist</em>, you need to add it to your plugin as a resource.  The best practice is to create a folder within your project called <em>Resources</em> (or similar) and move your Tool Palette Collection <em>plist</em> into to that folder.  <em>NOTE</em>: You are free to place your <em>plist</em> anywhere you think appropriate.</p>
 
 <ol>
-  <li>Open <em>Xamarin Studio</em> if you have not done so already and open your plugin project.</li>
+  <li>Open <em>Visual Studio for Mac</em> if you have not done so already and open your plugin project.</li>
   <li>Right-click your plugin project in the <em>Solution Explorer</em> and select <em>Add</em> &gt; <em>New Folder</em>…</li>
   <li>Name this folder <em>Resources</em> (or similar).</li>
   <li>Right-click the new <em>Resources</em> folder in the <em>Solution Explorer</em> and select <em>Add</em> &gt; <em>Add Files…</em>.</li>
@@ -487,7 +487,7 @@
 <h2 id="load-the-tool-palette">Load the Tool Palette</h2>
 
 <ol>
-  <li>In order to load the tool palette, you must reference <em>RhinoMac.dll</em> and <em>Rhino.UI.dll</em>.  In <em>Xamarin Studio</em>, right-click on the project entry in the <em>Solution Explorer</em> and select <em>Tools</em> &gt; <em>Edit File</em>.  This opens up the <em>csproj</em> file for your project as xml text in the code editor.</li>
+  <li>In order to load the tool palette, you must reference <em>RhinoMac.dll</em> and <em>Rhino.UI.dll</em>.  In <em>Visual Studio for Mac</em>, right-click on the project entry in the <em>Solution Explorer</em> and select <em>Tools</em> &gt; <em>Edit File</em>.  This opens up the <em>csproj</em> file for your project as xml text in the code editor.</li>
   <li>
     <p>Find the area of the xml near where <em>RhinoCommon</em> is being referenced and add the following entries:</p>
 
@@ -501,7 +501,7 @@
  &lt;/Reference&gt;
 </code></pre>
   </li>
-  <li>Close the <em>csproj</em> that is open in the code editor.  Xamarin Studio reloads the project.  If you check in the <em>References</em> section of your project in the <em>Solution Explorer</em>, you should see references to <em>RhinoMac</em> and <em>Rhino.UI</em>.</li>
+  <li>Close the <em>csproj</em> that is open in the code editor.  Visual Studio for Mac reloads the project.  If you check in the <em>References</em> section of your project in the <em>Solution Explorer</em>, you should see references to <em>RhinoMac</em> and <em>Rhino.UI</em>.</li>
   <li>In your <code>Plugin</code> class, if you have not done so already, override the <code>OnLoad</code> method.</li>
   <li>
     <p>Load your tool palette plist from your desired location by calling the <code>RhinoMac.Runtime.MacPlatformService.LoadToolPaletteCollection</code> and passing in the full path to your <em>plist</em>.  For example, if your <em>plist</em> is in the <em>Resources</em> folder of your <em>rhp</em>, use the following example:</p>

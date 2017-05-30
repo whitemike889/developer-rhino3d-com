@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Your First Plugin (Mac) with C#</title>
-  <meta name="description" content="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Xamarin Studio.  Using C#">
+  <meta name="description" content="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Visual Studio for Mac.  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/your-first-plugin-mac/" />
   <meta property="og:title" content="Your First Plugin (Mac)" />
-  <meta property="og:description" content="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Xamarin Studio." />
+  <meta property="og:description" content="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Visual Studio for Mac." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Your First Plugin (Mac)" />
-  <meta name="twitter:description" value="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Xamarin Studio." />
+  <meta name="twitter:description" value="This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Visual Studio for Mac." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -398,22 +398,22 @@
 
 </p>
 
-          <p>This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Xamarin Studio.</p>
+          <p>This guide walks you through your first plugin for Rhino for Mac using RhinoCommon and Visual Studio for Mac.</p>
 
           <p>It is presumed you already have the necessary tools installed and are ready to go.  If you are not there yet, see <a href="/guides/rhinocommon/installing-tools-mac">Installing Tools (Mac)</a>.</p>
 
 <h2 id="hellorhinocommon">HelloRhinoCommon</h2>
 
-<p>We will use the Rhino Xamarin Addin to create a new, basic, command plugin called HelloRhinoCommon.</p>
+<p>We will use the Rhino Xamarin Addin/Extension to create a new, basic, command plugin called HelloRhinoCommon.</p>
 
-<p>If you are familiar with Visual Studio or Xamarin Studio, these step-by-step instructions may be overly detailed for you.  The executive summary: create a new Solution using the RhinoCommon Plugin template, build and run, and then make a change.</p>
+<p>If you are familiar with Visual Studio for Windows or Visual Studio for Mac, these step-by-step instructions may be overly detailed for you.  The executive summary: create a new Solution using the RhinoCommon Plugin template, build and run, and then make a change.</p>
 
-<p>We are presuming you have never used Xamarin Studio before, so we’ll go through this one step at a time.</p>
+<p>We are presuming you have never used Visual Studio for Mac before, so we’ll go through this one step at a time.</p>
 
 <h3 id="file-new">File New</h3>
 
 <ol>
-  <li>If you have not done so already, <em>launch Xamarin Studio</em>.</li>
+  <li>If you have not done so already, <em>launch Visual Studio for Mac</em>.</li>
   <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Solution</em>…
 <img src="/images/your-first-plugin-mac-01.png" alt="File New Solution" /></li>
   <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Other</em> &gt; <em>Miscellaneous</em> section.  Under General, select the RhinoCommon Plug-In template…
@@ -431,7 +431,7 @@
 <h3 id="boilerplate-build">Boilerplate Build</h3>
 
 <ol>
-  <li>Before we do anything, let’s <em>build</em> and <em>run</em> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click the large <em>Build</em> &gt; <em>Run</em> (play) button in the upper-left corner of Xamarin Studio…
+  <li>Before we do anything, let’s <em>build</em> and <em>run</em> HelloRhinoCommon to make sure everything is working as expected.  We’ll just build the boilerplate Plugin template.  Click the large <em>Build</em> &gt; <em>Run</em> (play) button in the upper-left corner of Visual Studio for Mac…
 <img src="/images/your-first-plugin-mac-05.png" alt="Play Button" /></li>
   <li><em>Rhinoceros</em> launches.  Create a <em>New Model</em>…
 <img src="/images/your-first-plugin-mac-06.png" alt="New Model Button" /></li>
@@ -443,7 +443,7 @@
 <img src="/images/your-first-plugin-mac-09.png" alt="Command Starts" /></li>
   <li>Also note there is <em>a command status</em> in Rhino’s command history area when the command ends…
 <img src="/images/your-first-plugin-mac-10.png" alt="Command Ends" /></li>
-  <li><em>Quit</em> Rhinoceros.  This stops the session.  Go back to <em>Xamarin Studio</em>.  Let’s take a look at the…</li>
+  <li><em>Quit</em> Rhinoceros.  This stops the session.  Go back to <em>Visual Studio for Mac</em>.  Let’s take a look at the…</li>
 </ol>
 
 <h3 id="plugin-anatomy">Plugin Anatomy</h3>
@@ -457,7 +457,7 @@
   <li><em>Rhino.UI</em> is the Rhino-specific User Interface (UI) library associated with…</li>
   <li><em>RhinoCommon</em> is <em>the</em> critical reference for our purposes here.</li>
   <li><em>System</em>, <em>System.Core</em>, and <em>System.Drawing</em> are .NET foundational libraries…in this case, we are referencing the Mono versions of these libraries (on Windows, these references will point to the canonical, Microsoft-provided, versions).</li>
-  <li><em>Packages</em> is used the the <a href="https://www.nuget.org/">NuGet</a> package-manager.  There are no referenced packages in this boilerplate project, but note that Xamarin Studio supports NuGet, just like Visual Studio does.</li>
+  <li><em>Packages</em> is used the the <a href="https://www.nuget.org/">NuGet</a> package-manager.  There are no referenced packages in this boilerplate project, but note that Visual Studio for Mac supports NuGet, just like Visual Studio for Windows does.</li>
   <li><em>Properties</em> contains the <em>AssemblyInfo.cs</em> source file.  This file contains the meta-data (author, version, etc), including the very-important <code>Guid</code>, which identifies the plugin.</li>
   <li><em>HelloRhinoCommonPlugin.cs</em> is where this template plugin derives from <em>Rhino.Plugins.Plugin</em> and returns a static Instance of itself.</li>
   <li><em>HelloRhinoCommonCommand.cs</em> is where the action is.  Let’s take a look at this file…</li>
@@ -466,7 +466,7 @@
 <h3 id="make-changes">Make Changes</h3>
 
 <ol>
-  <li>Open <em>HelloRhinoCommonCommand.cs</em> in Xamarin Studio’s Source Editor (if it isn’t already).</li>
+  <li>Open <em>HelloRhinoCommonCommand.cs</em> in Visual Studio for Mac’s Source Editor (if it isn’t already).</li>
   <li>
     <p>Notice that <code>HelloRhinoCommonCommand</code> inherits from <code>Rhino.Commands.Command</code> …</p>
 
@@ -502,7 +502,7 @@
 </code></pre>
   </li>
   <li>
-    <p>Notice that - as you type - Xamarin Studio uses IntelliSense, just like Visual Studio (and many other editors).  Now, feed <code>line1</code> as an argument to the <code>doc.Objects.AddLine</code> method…</p>
+    <p>Notice that - as you type - Visual Studio for Mac uses IntelliSense, just like Visual Studio for Windows (and many other editors).  Now, feed <code>line1</code> as an argument to the <code>doc.Objects.AddLine</code> method…</p>
 
     <pre><code> doc.Objects.AddLine (line1);
 </code></pre>
@@ -513,13 +513,13 @@
 <h3 id="debugging">Debugging</h3>
 
 <ol>
-  <li>Set a breakpoint on line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 55 of <em>HelloRhinoCommonCommand.cs</em>.  You set breakpoints in Xamarin Studio by clicking in the gutter…
+  <li>Set a breakpoint on line<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> 55 of <em>HelloRhinoCommonCommand.cs</em>.  You set breakpoints in Visual Studio for Mac by clicking in the gutter…
 <img src="/images/your-first-plugin-mac-12.png" alt="Set a breakpoint" /></li>
   <li><em>Build</em> and <em>Run</em>.  Run <em>HelloDrawLine</em> in Rhino.  Create the two points…as soon as you do, you should hit your breakpoint and pause…
 <img src="/images/your-first-plugin-mac-13.png" alt="Hit a breakpoint" /></li>
-  <li>With Rhino paused, in <em>Xamarin Studio</em> switch to the <em>Locals</em> tab.  In the list, find the <code>line1</code> object we authored.  Click the dropdown <em>arrow</em> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
+  <li>With Rhino paused, in <em>Visual Studio for Mac</em> switch to the <em>Locals</em> tab.  In the list, find the <code>line1</code> object we authored.  Click the dropdown <em>arrow</em> to expand the list of members on <code>line1</code>.  Our <code>line1</code> is a <code>Rhino.Geometry.Line</code> this class has a <code>Length</code> property…<br />
 <img src="/images/your-first-plugin-mac-14.png" alt="Locals panel" /></li>
-  <li><em>Continue Executing</em> in Rhino by pressing the <em>Play</em> button in the upper navigation menu of <em>Xamarin Studio</em>…
+  <li><em>Continue Executing</em> in Rhino by pressing the <em>Play</em> button in the upper navigation menu of <em>Visual Studio for Mac</em>…
 <img src="/images/your-first-plugin-mac-15.png" alt="Continue Executing" /></li>
   <li>Control is passed back to <em>Rhino</em> and your command finishes.  <em>Quit</em> Rhino or <em>Stop</em> the debugging session.</li>
   <li><em>Remove</em> the breakpoint you created above by clicking on it in the gutter.</li>
@@ -569,7 +569,7 @@
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p><em>Line numbers</em> in Xamarin Studio can be enabled and disabled in <em>Xamarin Studio</em> &gt; <em>Preferences…</em> &gt; <em>Text Editor</em> section &gt; <em>Markers and Rulers</em> entry &gt; check <em>Show line numbers</em>.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p><em>Line numbers</em> in Visual Studio for Mac can be enabled and disabled in <em>Visual Studio</em> &gt; <em>Preferences…</em> &gt; <em>Text Editor</em> section &gt; <em>Markers and Rulers</em> entry &gt; check <em>Show line numbers</em>.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
