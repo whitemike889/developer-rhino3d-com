@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>2 Matrices and Transformations</title>
+  <meta name="description" content="">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/general/essential_math/matrices-transformations/" />
+  <meta property="og:title" content="2 Matrices and Transformations" />
+  <meta property="og:description" content="" />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="2 Matrices and Transformations" />
+  <meta name="twitter:description" value="" />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/languages/vbnet.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/general/essential_math/matrices-transformations/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the <strong>wip</strong> version of this page!
+    <a href="/guides/general/essential_math/matrices-transformations/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#21-matrix-operations">2.1 Matrix operations</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#matrix-multiplication">Matrix multiplication</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#identity-matrix">Identity matrix</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#22-transformation-operations">2.2 Transformation operat...</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#translation-move-transformation">Translation (move) transf...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#rotation-transformation">Rotation transformation</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#scale-transformation">Scale transformation</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#shear-transformation">Shear transformation</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#mirror-or-reflection-transformation">Mirror or reflection tran...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#planar-projection-transformation">Planar Projection transfo...</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/"></a></li>
+              
+              <li class="active">Essential Mathematics</li>
+              
+          </ol>
+
+          <h1>2 Matrices and Transformations</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/rajaaissa/activity">Rajaa Issa</a>
+      
+    
+  </span>
+
+</p>
+
+          <p></p>
+
+          <p><em>Transformations</em> refer to operations such as moving (also called <em>translating</em>), rotating, and scaling objects. They are stored in 3 D programming using matrices, which are nothing but rectangular arrays of numbers. Multiple transformations can be performed very quickly using matrices. It turns out that a [4x4] matrix can represent all transformations. Having a unified matrix dimension for all transformations saves calculation time.</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{array}{rcc} \mbox{matrix}&\begin{array}{cccc} c1& c2&c3&c4\end{array}\\\begin{array}{c}row(1)\\row(2)\\row(3)\\row(4)\end{array}& \left[\begin{array}{cr} +&+&+&+\\  +&+&+&+\\ +&+&+&+\\ +&+&+&+\end{array}\right] \end{array} %]]></script></p>
+
+<h2 id="21-matrix-operations">2.1 Matrix operations</h2>
+
+<p>The one operation that is most relevant in computer graphics is matrix multiplication. We will explain it with some detail.</p>
+
+<h3 id="matrix-multiplication">Matrix multiplication</h3>
+
+<p>Matrix multiplication is used to apply transformations to geometry. For example if we have a point and would like to rotate it around some axis, we use a rotation matrix and multiply it by the point to get the new rotated location.</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{array}{ccc} \text{rotate matrix} & \text{input point}  & \text{rotate point}\\\begin{bmatrix}a & b & c & d \\e & f & g & h \\i & j & k & l \\0 & 0 & 0 & 1 \\\end{bmatrix}& \times\begin{bmatrix}x \\y\\z\\1 \\\end{bmatrix}&= \begin{bmatrix}x' \\y'\\z'\\1 \\\end{bmatrix}\end{array} %]]></script></p>
+
+<p>Most of the time, we need to perform multiple transformations on the same geometry. For example, if we need to move and rotate a thousand points, we can use either of the following methods.</p>
+
+<p><strong>Method 1</strong></p>
+
+<ol>
+  <li>Multiply the move matrix by 1000 points to move the points.</li>
+  <li>Multiply the rotate matrix by the resulting 1000 points to rotate the moved points.</li>
+</ol>
+
+<p>Number of operations = <strong>2000</strong>.</p>
+
+<p><strong>Method 2</strong></p>
+
+<ol>
+  <li>Multiply the rotate and move matrices to create a combined transformation matrix.</li>
+  <li>Multiply the combined matrix by 1000 points to move and rotate in one step.</li>
+</ol>
+
+<p>Number of operations = <strong>1001</strong>.</p>
+
+<p>Notice that method 1 takes almost twice the number of operations to achieve the same result. While method 2 is very efficient, it is only possible if both the move and rotate matrices are <script type="math/tex">[4 \times 4]</script>. This is why in computer graphics a <script type="math/tex">[4 \time 4]</script> matrix is used to represent all transformations, and a <script type="math/tex">[4 \times 1]</script> matrix is used to represent points.</p>
+
+<p>Three-dimensional modeling applications provide tools to apply transformations and multiply matrices, but if you are curious about how to mathematically multiply matrices, we will explain a simple example. In order to multiply two matrices, they have to have matching dimensions. That means the number of columns in the first matrix must equal the number of rows of the second matrix. The resulting matrix has a size equal to the number of rows from the first matrix and the number of columns from the second matrix. For example, if we have two matrices, <script type="math/tex">M</script> and <script type="math/tex">P</script>, with dimensions equal to <script type="math/tex">[4\times 4]</script> and <script type="math/tex">[4 \times 1]</script> respectively, then there resulting multiplication matrix <script type="math/tex">M · P</script> has a dimension equal to <script type="math/tex">[4 \times 1]</script> as shown in the following illustration:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{array}{ccc} M & P  & P' \\\begin{bmatrix}\color{red}{a} & \color{red}{b}  & \color{red}{c} & \color{red}{d}  \\e & f & g & h \\i & j & k & l \\0 & 0 & 0 & 1 \\\end{bmatrix}& \times\begin{bmatrix}\color{red}{x} \\\color{red}{y} \\\color{red}{z} \\\color{red}{1}  \\\end{bmatrix}&= \begin{bmatrix}x'=a*x+b*y+c*z+d*1\\y'=e*x+f*y+g*z+h*1\\z'=i*x+j*y+k*z+l*1 \\1=0*x+0*y+0*z+1*1\\\end{bmatrix}\end{array} %]]></script></p>
+
+<h3 id="identity-matrix">Identity matrix</h3>
+
+<p>The identity matrix is a special matrix where all diagonal components equal 1 and the rest equal 0.</p>
+
+<p><img src="/wip/images/math-image68.png" /></p>
+
+<p>The main property of the identity matrix is that if it is multiplied by any other matrix, the values multiplied by zero do not change.</p>
+
+<p><img src="/wip/images/math-image52.png" /></p>
+
+<h2 id="22-transformation-operations">2.2 Transformation operations</h2>
+
+<p>Most transformations preserve the parallel relationship among the parts of the geometry. For example collinear points remain collinear after the transformation. Also points on one plane stay coplanar after transformation. This type of transformation is called an <em>affine</em> transformation.</p>
+
+<h3 id="translation-move-transformation">Translation (move) transformation</h3>
+
+<p>Moving a point from a starting position by certain a vector can be calculated as follows:</p>
+
+<p><script type="math/tex">P' = P + \vec V</script></p>
+
+<p><img src="/wip/images/math-image35.png" alt="/wip/images/math-image35.png" class="float-img-right" width="275" /></p>
+
+<p>Suppose:<br />
+  <script type="math/tex">P(x,y,z)</script> is a given point<br />
+  <script type="math/tex">% <![CDATA[
+\bf{\vec v}=<a,b,c> %]]></script> is a translation vector<br />
+Then:<br />
+  <script type="math/tex">\bf{P'(x) = x + a}</script><br />
+  <script type="math/tex">\bf{P'(y) = y + b}</script><br />
+  <script type="math/tex">P'(z) = z + c</script></p>
+
+<p> </p>
+
+<p>Points are represented in a matrix format using a [4x1] matrix with a 1 inserted in the last row. For example the point P(x,y,z) is represented as follows:</p>
+
+<p><script type="math/tex">\begin{bmatrix}x\\y\\z\\1\\\end{bmatrix}</script></p>
+
+<p>Using a <script type="math/tex">[4 \times 4]</script> matrix for transformations (what is called a homogenous coordinate system), instead of a <script type="math/tex">[3 \times 3]</script> matrices, allows representing all transformations including translation. The general format for a translation matrix is:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1 & 0 & 0 &  \color{red}{a1} \\0 & 1 & 0 & \color{red}{a2} \\0 & 0 & 1 &  \color{red}{a3} \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<p>For example, to move point <script type="math/tex">P(2,3,1)</script> by vector <script type="math/tex">% <![CDATA[
+\vec v <2,2,2> %]]></script>, the new point location is:</p>
+
+<p><script type="math/tex">P’ = P + \vec v = (2+2, 3+2, 1+2) = (4, 5, 3)</script></p>
+
+<p>If we use the matrix form and multiply the translation matrix by the input point, we get the new point location as in the following:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1 & 0 & 0 & 2 \\0 & 1 & 0 & 2 \\0 & 0 & 1 & 2 \\0 & 0 & 0 & 1 \\\end{bmatrix}*\begin{bmatrix}2 \\3\\1\\1 \\\end{bmatrix}= \begin{bmatrix}(1*2 + 0*3 + 0*1 + 2*1) \\(0*2 + 1*3 + 0*1 + 2*1)\\(0*2 + 0*3 + 1*1 + 2*1)\\(0*2 + 0*3 + 0*1 + 1*1)\\\end{bmatrix}=\begin{bmatrix}4 \\5\\3\\1 \\\end{bmatrix} %]]></script></p>
+
+<p>Similarly, any geometry is translated by multiplying its construction points by the translation matrix. For example, if we have a box that is defined by eight corner points, and we want to move it 4 units in the x-direction, 5 units in the y-direction and 3 units in the z- direction, we must multiply each of the eight box corner points by the following translation matrix to get the new box.</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1 & 0 & 0 & 4 0 & 1 & 0 & 5 \\0 & 0 & 1 & 3 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<figure>
+   <img src="/wip/images/math-image37.png" />
+   <figcaption>Figure (19): Translate all box corner points.</figcaption>
+</figure>
+
+<h3 id="rotation-transformation">Rotation transformation</h3>
+
+<p>This section shows how to calculate rotation around the z-axis and the origin point using trigonometry, and then to deduce the general matrix format for the rotation.</p>
+
+<p><img src="/wip/images/math-image39.png" alt="/wip/images/math-image39.png" class="float-img-right" width="275" /></p>
+
+<p>Take a point on <script type="math/tex">x,y</script> plane <script type="math/tex">P(x,y)</script> and rotate it by angle(<script type="math/tex">b</script>).  From the figure, we can say the following:</p>
+
+<p>  <script type="math/tex">x = d cos(a)</script>  —(1)<br />
+  <script type="math/tex">y = d sin(a)</script>   —(2)<br />
+  <script type="math/tex">x' = d cos(b+a)</script> —(3)<br />
+  <script type="math/tex">y' = d sin(b+a)</script>  — (4)<br />
+Expanding <script type="math/tex">x</script>’ and <script type="math/tex">y'</script> using trigonometric identities for the sine and cosine of the sum of angles:<br />
+  <script type="math/tex">x' = d cos(a)cos(b) - d sin(a)sin(b)</script> —(5)<br />
+  <script type="math/tex">y' = d cos(a)sin(b) + d sin(a)cos(b)</script> —(6)<br />
+Using Eq 1 and 2:<br />
+  <script type="math/tex">x' = x cos(b) - y sin(b)</script><br />
+  y’ = x sin(b) + y cos(b)</p>
+
+<p>The rotation matrix around the <strong>z-axis</strong> looks like:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}\color{red}{\cos{b}} & \color{red}{-\sin{b}} & 0 & 0 \\\color{red}{\sin{b}} & \color{red}{\cos{b}} & 0 & 0 \\0 & 0 & 1 & 0 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<p>The rotation matrix around the <strong>x-axis</strong> by angle <script type="math/tex">b</script> looks like:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1 & 0 & 0 & 0 \\0 & \color{red}{\cos{b}} & \color{red}{-\sin{b}} & 0 \\0 & \color{red}{\sin{b}} & \color{red}{\cos{b}} & 0 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<p>The rotation matrix around the <strong>y-axis</strong> by angle <script type="math/tex">b</script> looks like:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}\color{red}{\cos{b}} &0 & \color{red}{\sin{b}} & 0 \\0 & 1 & 0 & 0 \\\color{red}{-\sin{b}} & 0 &\color{red}{\cos{b}} & 0 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<p>For example, if we have a box and would like to rotate it 30 degrees, we need the following:</p>
+
+<pre><code>1. Construct the 30-degree rotation matrix. Using the generic form and the cos and sin values of 30-degree angle, the rotation matrix will look like the following:  
+</code></pre>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}0.87 & -0.5 & 0 & 0 \\0.5 & 0.87 & 0 & 0 \\0 & 0 & 1 & 0 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<pre><code>2. Multiply the rotation matrix by the input geometry, or in the case of a box, multiply by each of the corner points to find the box's new location.  
+</code></pre>
+
+<figure>
+   <img src="/wip/images/math-image41.png" />
+   <figcaption>Figure (20): Rotate geometry.</figcaption>
+</figure>
+
+<h3 id="scale-transformation">Scale transformation</h3>
+
+<p>In order to scale geometry, we need a scale factor and a center of scale. The scale factor can be uniform scaling equally in x-, y-, and z-directions, or can be unique for each dimension.</p>
+
+<p>Scaling a point can use the following equation:</p>
+
+<p>  <script type="math/tex">P' = ScaleFactor(S) * P</script></p>
+
+<p>Or:</p>
+
+<p>  <script type="math/tex">P'.x = Sx * P.x</script><br />
+  <script type="math/tex">P'.y = Sy * P.y</script><br />
+  <script type="math/tex">P'.z = Sz * P.z</script></p>
+
+<p>This is the matrix format for scale transformation, assuming that the center of scale is the World origin point (0,0,0).</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}\color{red}{Scale-x} & 0 & 0 & 0 \\0 & \color{red}{Scale-y} & 0 & 0 \\0 & 0 & \color{red}{Scale-z} & 0 \\0 & 0 & 0 & 1 \\\end{bmatrix} %]]></script></p>
+
+<p>For example, if we would like to scale a box by 0.25 relative to the World origin, the scale matrix will look like the following:</p>
+
+<figure>
+   <img src="/wip/images/math-image43.png" />
+   <figcaption>Figure (21): Scale geometry</figcaption>
+</figure>
+
+<h3 id="shear-transformation">Shear transformation</h3>
+
+<p>Shear in 3‑D is measured along a pair of axes relative to a third axis. For example, a shear along a z‑axis will not change geometry along that axis, but will alter it along x and y. Here are few examples of shear matrices:</p>
+
+<ol>
+  <li>Shear in x and z, keeping the y-coordinate fixed:</li>
+</ol>
+
+<p><img src="/wip/images/math-image45.png" alt="/wip/images/math-image45.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 &\color{red}{0.5} & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<p><img src="/wip/images/math-image47.png" alt="/wip/images/math-image47.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 &\color{red}{0.5} & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<ol>
+  <li>Shear in y and z, keeping the x-coordinate fixed:</li>
+</ol>
+
+<p><img src="/wip/images/math-image49.png" alt="/wip/images/math-image49.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & \color{red}{0.5} & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<p><img src="/wip/images/math-image50.png" alt="/wip/images/math-image50.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & \color{red}{0.5} & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<ol>
+  <li>Shear in x and y, keeping the z-coordinate fixed:</li>
+</ol>
+
+<p><img src="/wip/images/math-image32.png" alt="/wip/images/math-image32.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & \color{red}{0.5} & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<p><img src="/wip/images/math-image33.png" alt="/wip/images/math-image33.png" class="float-img-left" width="100" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & 0.0 & 0.0 \\ 0.0 & 1.0 & \color{red}{0.5} & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p> </p>
+
+<h3 id="mirror-or-reflection-transformation">Mirror or reflection transformation</h3>
+
+<p>The mirror transformation creates a reflection of an object across a line or a plane. 2-D objects are mirrored across a line, while 3-D objects are mirrored across a plane. Keep in mind that the mirror transformation flips the normal direction of the geometry faces.</p>
+
+<figure>
+   <img src="/wip/images/math-image98.png" />
+   <figcaption>Figure (23): Mirror matrix across World xy-plane. Face directions are flipped.</figcaption>
+</figure>
+
+<h3 id="planar-projection-transformation">Planar Projection transformation</h3>
+
+<p>Intuitively, the projection point of a given 3-D point <script type="math/tex">P(x,y,z)</script> on the world xy-plane equals <script type="math/tex">Pxy(x,y,0)</script> setting the z value to zero. Similarly, a projection to xz-plane of point P is <script type="math/tex">Pxz(x,0,z)</script>. When projecting to yz-plane, <script type="math/tex">Pxz = (0,y,z)</script>. Those are called orthogonal projectionsi.</p>
+
+<p>If we have a curve as an input, and we apply the planar projection transformation, we get a curve projected to that plane. The following shows an example of a curve projected to xy‑plane with the matrix format.</p>
+
+<p>Note: NURBS curves (explained in the next chapter) use control points to define curves. Projecting a curve amounts to projecting its control points.</p>
+
+<p><img src="/wip/images/math-image100.png" alt="/wip/images/math-image100.png" class="float-img-left" width="175" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & 0.0 & \color{red}{0.0} & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p><img src="/wip/images/math-image102.png" alt="/wip/images/math-image102.png" class="float-img-left" width="175" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix}1.0 & 0.0 & 0.0 & 0.0 \\ 0.0 & \color{red}{0.0} & 0.0 & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<p><img src="/wip/images/math-image104.png" alt="/wip/images/math-image104.png" class="float-img-left" width="175" /></p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{bmatrix} \color{red}{0.0} & 0.0 & 0.0 & 0.0 \\ 0.0 & 1.0 & 0.0 & 0.0 \\ 0.0 & 0.0 & 1.0 & 0.0 \\ 0.0 &  0.0 & 0.0 & 1.0 \\\end{bmatrix} %]]></script></p>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>Now that you know more about matrices and trasnformasion, check out the <a href="/wip/guides/general/essential_math/parametric-curves-surfaces/">Parametric Curves and Surfaces</a> guide to learn more about the detailed structure of NURBS curves and surfaces.</p>
+
+<p>–</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/rajaaissa/activity">Rajaa Issa</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/general/essential_math/matrices-transformations.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
