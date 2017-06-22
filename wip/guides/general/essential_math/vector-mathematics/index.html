@@ -624,7 +624,7 @@ Let us define an anchor point (A) so that:</p>
 The position vector <script type="math/tex">% <![CDATA[
 v = <a1,a2,a3> %]]></script> is represented with a line segment between two points, the origin and B, so that:</p>
 
-<p><script type="math/tex">Origin point = (0,0,0)</script><br />
+<p><script type="math/tex">\text{Origin point} = (0,0,0)​</script><br />
 <script type="math/tex">B = (a1,a2,a3)</script></p>
 
 <figure>
@@ -691,7 +691,7 @@ If we have a vector and a point that have the same components, such as:</p>
 <p><script type="math/tex">% <![CDATA[
 \vec a = <4, 3, 0> %]]></script><br />
        <script type="math/tex">|a| = √(42 + 32 + 02)</script><br />
-       <script type="math/tex">|a| = 5 unit length</script></p>
+       <script type="math/tex">|a| = 5 \text{unit length}</script></p>
 
 <p>If <script type="math/tex">\vec b = unit vector</script> of <script type="math/tex">a</script>, then:<br />
        <script type="math/tex">% <![CDATA[
@@ -700,7 +700,7 @@ If we have a vector and a point that have the same components, such as:</p>
 \vec b = <0.8, 0.6, 0> %]]></script><br />
        <script type="math/tex">|b| = √(0.82 + 0.62 + 02)</script><br />
        <script type="math/tex">|b| = √(0.64 + 0.36 + 0)</script><br />
-       <script type="math/tex">|b| = √(1) = 1 unit length</script></p>
+       <script type="math/tex">|b| = √(1) = 1 \text{unit length)</script></p>
 
 <p>In general:</p>
 
@@ -1062,12 +1062,12 @@ unit(\vec b) = <1, 0, 0> %]]></script><br />
 
 <p>We know that:</p>
 
-<p><script type="math/tex">\vec a = t * v</script>  — (2)<br />
-<script type="math/tex">\vec p = \vec q + \vec a</script> — (1)</p>
+<p><script type="math/tex">\vec a = t * \vec v</script>   (2)<br />
+<script type="math/tex">\vec p = \vec q + \vec a</script>   (1)</p>
 
 <p>From 1 and 2:</p>
 
-<p><script type="math/tex">\vec p = \vec q + t * \vec v</script> — (3)</p>
+<p><script type="math/tex">\vec p = \vec q + t * \vec v</script>  (3)</p>
 
 <p>However, we can write (3) as follows:</p>
 
@@ -1086,7 +1086,9 @@ unit(\vec b) = <1, 0, 0> %]]></script><br />
 
 <p><script type="math/tex">P = Q + t * v</script></p>
 
-<pre><code>Given a point Q and a direction v on a line, any point P on that line can be calculated using the vector equation of a line P = Q + t * v where t is a number.
+<pre><code>Given a point Q and a direction v on a line, any point P    
+on that line can  be calculated using the vector equation of a  
+line P = Q + t * v where t is a number.  
 </code></pre>
 
 <p>Another common example is to find the midpoint between two points. The following shows how to find the midpoint using the vector equation of a line:</p>
@@ -1120,7 +1122,7 @@ unit(\vec b) = <1, 0, 0> %]]></script><br />
 
 <p><script type="math/tex">\overline{M} = Q + t * (P - Q)</script></p>
 
-<pre><code>Given two points Q and P, any point M between the two points is
+<pre><code>Given two points Q and P, any point M between the two points is  
 calculated using the equation M = Q + t * (P - Q) where 
 t is a number between 0 and 1.
 </code></pre>
@@ -1198,18 +1200,15 @@ t is a number between 0 and 1.
 
 <p><strong>Solution:</strong></p>
 
-<pre><code>1. Find the closest point location on the surface relative to the input point using the Pull component. This will give us the uv location of the closest point, which we can then use to evaluate the surface and find its normal direction.  
-</code></pre>
+<p>1. Find the closest point location on the surface relative to the input point using the Pull component. This will give us the uv location of the closest point, which we can then use to evaluate the surface and find its normal direction.</p>
 
 <p><img src="/wip/images/math-image162.png" /></p>
 
-<pre><code>2. We can now use the closest point to draw a vector going towards the input point. We can also draw:  
-</code></pre>
+<p>2. We can now use the closest point to draw a vector going towards the input point. We can also draw:</p>
 
 <p><img src="/wip/images/math-image163.png" /></p>
 
-<pre><code>3. We can compare the two vectors using the dot product. If the result is positive, the point is in front of the surface. If the result is negative, the point is behind the surface.  
-</code></pre>
+<p>3. We can compare the two vectors using the dot product. If the result is positive, the point is in front of the surface. If the result is negative, the point is behind the surface.</p>
 
 <p><img src="/wip/images/math-image164.png" /></p>
 
@@ -1338,23 +1337,19 @@ if found:
 
 <p><strong>Solution:</strong></p>
 
-<pre><code>1. Find the center of the box using the **Box Properties** component in GH:
-</code></pre>
+<p>1. Find the center of the box using the <strong>Box Properties</strong> component in GH:</p>
 
 <p><img src="/wip/images/math-image21.png" /></p>
 
-<pre><code>2. Extract the box faces with the **Deconstruct Brep** component:
-</code></pre>
+<p>2. Extract the box faces with the <strong>Deconstruct Brep</strong> component:</p>
 
 <p><img src="/wip/images/math-image23.png" /></p>
 
-<pre><code>3. The direction we move the faces is the tricky part. We need to first find the center of each face, and then define the direction from the center of the box towards the center of each face as follows:
-</code></pre>
+<p>3. The direction we move the faces is the tricky part. We need to first find the center of each face, and then define the direction from the center of the box towards the center of each face as follows:</p>
 
 <p><img src="/wip/images/math-image25.png" /></p>
 
-<pre><code>4. Once we have all the parameters scripted, we can use the **Move** component to move the faces in the appropriate direction. Just make sure to set the vectors to the desired amplitude, and you will be good to go.
-</code></pre>
+<p>4. Once we have all the parameters scripted, we can use the <strong>Move</strong> component to move the faces in the appropriate direction. Just make sure to set the vectors to the desired amplitude, and you will be good to go.</p>
 
 <p><img src="/wip/images/math-image27.png" /></p>
 
@@ -1500,9 +1495,7 @@ The following is a diagram of the parameters that we will need in order to solve
 
 <p><strong>Solution:</strong></p>
 
-<ol>
-  <li>Use the <strong>Expression</strong> component to definepoint <script type="math/tex">D</script> between <script type="math/tex">A</script> and <script type="math/tex">B</script> atsome parameter <script type="math/tex">t</script>. The expression we will use is based onthe vector equation of a line:</li>
-</ol>
+<p>1. Use the <strong>Expression</strong> component to definepoint <script type="math/tex">D</script> between <script type="math/tex">A</script> and <script type="math/tex">B</script> atsome parameter <script type="math/tex">t</script>. The expression we will use is based onthe vector equation of a line:</p>
 
 <p><script type="math/tex">D = A + t*(B-A)</script></p>
 
@@ -1514,21 +1507,15 @@ The following is a diagram of the parameters that we will need in order to solve
 
 <p><img src="/wip/images/math-image8.png" /></p>
 
-<ol>
-  <li>Use the Expression component to also define the mid points <script type="math/tex">C1</script> and <script type="math/tex">C2</script>.</li>
-</ol>
+<p>2. Use the Expression component to also define the mid points <script type="math/tex">C1</script> and <script type="math/tex">C2</script>.</p>
 
 <p><img src="/wip/images/math-image9.png" /></p>
 
-<ol>
-  <li>The first sphere radius <script type="math/tex">(r1)</script> and the second sphere radius <script type="math/tex">(r2)</script> can be calculated using the <strong>Distance</strong> component.</li>
-</ol>
+<p>3. The first sphere radius <script type="math/tex">(r1)</script> and the second sphere radius <script type="math/tex">(r2)</script> can be calculated using the <strong>Distance</strong> component.</p>
 
 <p><img src="/wip/images/math-image10.png" /></p>
 
-<ol>
-  <li>The final step involves creating the sphere from a base plane and radius. We need to make sure the origins are hooked to <script type="math/tex">C1</script> and <script type="math/tex">C2</script> and the radius from <script type="math/tex">r1</script> and <script type="math/tex">r2</script>.</li>
-</ol>
+<p>4. The final step involves creating the sphere from a base plane and radius. We need to make sure the origins are hooked to <script type="math/tex">C1</script> and <script type="math/tex">C2</script> and the radius from <script type="math/tex">r1</script> and <script type="math/tex">r2</script>.</p>
 
 <p><img src="/wip/images/math-image54.png" /></p>
 
