@@ -477,7 +477,7 @@ $(document).ready(function()
 <p>Three-dimensional modeling applications provide tools to apply transformations and multiply matrices, but if you are curious about how to mathematically multiply matrices, we will explain a simple example. In order to multiply two matrices, they have to have matching dimensions. That means the number of columns in the first matrix must equal the number of rows of the second matrix. The resulting matrix has a size equal to the number of rows from the first matrix and the number of columns from the second matrix. For example, if we have two matrices, <script type="math/tex">M</script> and <script type="math/tex">P</script>, with dimensions equal to <script type="math/tex">[4\times 4]</script> and <script type="math/tex">[4 \times 1]</script> respectively, then there resulting multiplication matrix <script type="math/tex">M · P</script> has a dimension equal to <script type="math/tex">[4 \times 1]</script> as shown in the following illustration:</p>
 
 <p><script type="math/tex">% <![CDATA[
-\begin{array}{ccc} M & P  & P' \\\begin{bmatrix}\color{red}{a} & \color{red}{b}  & \color{red}{c} & \color{red}{d}  \\e & f & g & h \\i & j & k & l \\0 & 0 & 0 & 1 \\\end{bmatrix}& \cdot\begin{bmatrix}\color{red}{x} \\\color{red}{y} \\\color{red}{z} \\\color{red}{1}  \\\end{bmatrix}&= \begin{bmatrix}x'=a*x+b*y+c*z+d*1\\y'=e*x+f*y+g*z+h*1\\z'=i*x+j*y+k*z+l*1 \\1=0*x+0*y+0*z+1*1\\\end{bmatrix}\end{array} %]]></script></p>
+\begin{array}{ccc} M & P  & P' \\\begin{bmatrix}\color{red}{a} & \color{red}{b}  & \color{red}{c} & \color{red}{d}  \\e & f & g & h \\i & j & k & l \\0 & 0 & 0 & 1 \\\end{bmatrix}& \cdot\begin{bmatrix}\color{red}{x} \\\color{red}{y} \\\color{red}{z} \\\color{red}{1}  \\\end{bmatrix}&= \begin{bmatrix}\color{red}{x'=a*x+b*y+c*z+d*1}\\y'=e*x+f*y+g*z+h*1\\z'=i*x+j*y+k*z+l*1 \\1=0*x+0*y+0*z+1*1\\\end{bmatrix}\end{array} %]]></script></p>
 
 <h3 id="identity-matrix">Identity matrix</h3>
 
@@ -497,17 +497,17 @@ $(document).ready(function()
 
 <p>Moving a point from a starting position by certain a vector can be calculated as follows:</p>
 
-<p><script type="math/tex">P' = P + \vec V</script></p>
+<p><script type="math/tex">P' = P + \mathbf{\vec v}</script></p>
 
 <p><img src="/wip/images/math-image35.png" alt="/wip/images/math-image35.png" class="float-img-right" width="275" /></p>
 
 <p>Suppose:<br />
   <script type="math/tex">P(x,y,z)</script> is a given point<br />
   <script type="math/tex">% <![CDATA[
-\bf{\vec v}=<a,b,c> %]]></script> is a translation vector<br />
+\mathbf{\vec v}=<a,b,c> %]]></script> is a translation vector<br />
 Then:<br />
-  <script type="math/tex">\bf{P'(x) = x + a}</script><br />
-  <script type="math/tex">\bf{P'(y) = y + b}</script><br />
+  <script type="math/tex">P'(x) = x + a</script><br />
+  <script type="math/tex">P'(y) = y + b</script><br />
   <script type="math/tex">P'(z) = z + c</script></p>
 
 <p> </p>
@@ -524,7 +524,7 @@ Then:<br />
 <p>For example, to move point <script type="math/tex">P(2,3,1)</script> by vector <script type="math/tex">% <![CDATA[
 \vec v <2,2,2> %]]></script>, the new point location is:</p>
 
-<p><script type="math/tex">P’ = P + \vec v = (2+2, 3+2, 1+2) = (4, 5, 3)</script></p>
+<p><script type="math/tex">P’ = P + \mathbf{\vec v} = (2+2, 3+2, 1+2) = (4, 5, 3)</script></p>
 
 <p>If we use the matrix form and multiply the translation matrix by the input point, we get the new point location as in the following:</p>
 
