@@ -7,27 +7,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>3 Parametric Curves and Surfaces</title>
-  <meta name="description" content="">
+  <meta name="description" content="This guide is an in-depth review of parametric curves with special focus on NURBS curves and the concepts of continuity and curvature.">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/general/essential_math/parametric-curves-surfaces/" />
   <meta property="og:title" content="3 Parametric Curves and Surfaces" />
-  <meta property="og:description" content="" />
+  <meta property="og:description" content="This guide is an in-depth review of parametric curves with special focus on NURBS curves and the concepts of continuity and curvature." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="3 Parametric Curves and Surfaces" />
-  <meta name="twitter:description" value="" />
+  <meta name="twitter:description" value="This guide is an in-depth review of parametric curves with special focus on NURBS curves and the concepts of continuity and curvature." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
 
@@ -822,7 +822,7 @@ $(document).ready(function()
 
 </p>
 
-          <p></p>
+          <p>This guide is an in-depth review of parametric curves with special focus on NURBS curves and the concepts of continuity and curvature.</p>
 
           <p>Suppose you travel every weekday from your house to your work. You leave at 8:00 in the morning and arrive at 9:00. At each point in time between 8:00 and 9:00, you would be at some location along the way. If you plot your location every minute during your trip, you can define the path between home and work by connecting the 60 points you plotted. Assuming you travel the exact same speed every day, at 8:00 you would be at home (start location), at 9:00 you would be at work (end location) and at 8:40 you would at the exact same location on the path as the 40th plot point. Congratulations, you have just defined your first parametric curve! You have used <em>time</em> as a <em>parameter</em> to define your path, and hence you can call your path curve a <em>parametric curve</em>. The time interval you spend from start to end (8 to 9) is called the curve <em>domain</em> or <em>interval</em>.</p>
 
@@ -1068,8 +1068,8 @@ Where:<br />
 
 <figure>
    <img src="/wip/images/math-image135.png" width="500px" />
-   <figcaption>Figure (37): The effect of varying weights of control points on the result curve. 
-The left curve is non-rational with uniform control point weights. 
+   <figcaption>Figure (37): The effect of varying weights of control points on the result curve.
+The left curve is non-rational with uniform control point weights.
 The circle on the right is a rational curve with corner control points having weights less than 1.</figcaption>
 </figure>
 
@@ -1561,7 +1561,7 @@ C: Zero curvature when surface is flat in at least one direction (plane, cylinde
 
 <table width="100%">  
 <tr style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc;">  
-<td>Degree-1 surface in both u- and v-directions. 
+<td>Degree-1 surface in both u- and v-directions.
 All control points lie on the surface.</td>  
 <td width="50%"><img src="/wip/images/math-image73.png" /></td>  
 </tr>  
@@ -1722,7 +1722,7 @@ The surface control points do not coincide with the surface seam.</td>
 
 <p><img src="/wip/images/math-image31.png" alt="/wip/images/math-image31.png" /></p>
 
-<pre><code class="language-vb">Private Sub RunScript(ByVal c1 As Curve, ByVal c2 As Curve, ByRef A As Object) 
+<pre><code class="language-vb">Private Sub RunScript(ByVal c1 As Curve, ByVal c2 As Curve, ByRef A As Object)
 
   'declare variables
   Dim continuity As New String("")
@@ -1772,7 +1772,7 @@ The surface control points do not coincide with the surface seam.</td>
   'Assign output
   A = continuity
 
-End Sub 
+End Sub
 </code></pre>
 <p>Using the Grasshopper Python component:</p>
 
@@ -1804,10 +1804,10 @@ if continuity == "G0":
     else:
         print("Failed G1")
         print(dot)
-        
+
 #check G2 continuity
 if continuity == "G1":
-    
+
     #extract the parameter at start and end of the curves domain
     t1 = c1.Domain.Max
     t2 = c2.Domain.Min
@@ -1824,7 +1824,7 @@ if continuity == "G1":
     else:
         print("Failed G2")
         print(dot)
-        
+
 #assign output
 A = continuity
 </code></pre>
@@ -1833,7 +1833,7 @@ A = continuity
 
 <p><img src="/wip/images/math-image70.png" alt="/wip/images/math-image70.png" /></p>
 
-<pre><code class="language-c#">Private Sub RunScript(ByVal c1 As Curve, ByVal c2 As Curve, ByRef A As Object) 
+<pre><code class="language-cs">Private Sub RunScript(ByVal c1 As Curve, ByVal c2 As Curve, ByRef A As Object)
 
   'declare variables
   Dim continuity As New String("")
@@ -1882,7 +1882,7 @@ A = continuity
   'Assign output
   A = continuity
 
-End Sub 
+End Sub
 </code></pre>
 
 <h3 id="3102-surfaces-with-singularity">3.10.2 Surfaces with singularity</h3>
@@ -1911,7 +1911,7 @@ End Sub
 
 <p><img src="/wip/images/math-image59.png" alt="/wip/images/math-image59.png" /></p>
 
-<pre><code class="language-vb">Private Sub RunScript(ByVal srf As Brep, ByRef A As Object) 
+<pre><code class="language-vb">Private Sub RunScript(ByVal srf As Brep, ByRef A As Object)
 
   'Decalre a new list of points
   Dim singular_points As New List( Of Point3d)
@@ -1937,7 +1937,7 @@ End Sub
   'Asign output
   A = singular_points
 
-End Sub 
+End Sub
 </code></pre>
 
 <p>Using the Grasshopper Python component:</p>
@@ -1954,13 +1954,13 @@ for trim in srf.Trims:
 	if trim.Edge == None:
 		#Find the 2D parameter space point at trim start or end
 		pt2d = trim.PointAtStart
-		
+
 		#Evaluate trim end point on the object surface
 		pt3d = trim.Face.PointAt(pt2d.X, pt2d.Y)
-		
+
 		#Add 3D point to the list of singular points
 		singular_points.append(pt3d)
-		
+
 #Asign output
 A = singular_points
 </code></pre>
@@ -1969,7 +1969,7 @@ A = singular_points
 
 <p><img src="/wip/images/math-image63.png" alt="/wip/images/math-image63.png" /></p>
 
-<pre><code class="language-c#">private void RunScript(Brep srf, ref object A)
+<pre><code class="language-cs">private void RunScript(Brep srf, ref object A)
 {
   //Decalre a new list of points
   List &lt; Point3d &gt; singular_points = new List&lt;Point3d&gt;();
@@ -1995,17 +1995,18 @@ A = singular_points
   A = singular_points
 }
 </code></pre>
+
 <hr />
 
 <h2 id="download-sample-files">Download Sample Files</h2>
 
 <p>Download the <a href="/wip/files/math-samplesandtutorials.zip.zip"><span class="glyphicon glyphicon-download"></span></a> <a href="/wip/files/math-samplesandtutorials.zip">math-samplesandtutorials.zip</a> archive, containing all the example Grasshopper and code files in this guide.</p>
 
+<hr />
+
 <h2 id="next-steps">Next Steps</h2>
 
 <p>If you would like to research more, check out the <a href="/wip/guides/general/essential_math/references/">References</a> guide to learn more about the detailed structure of NURBS curves and surfaces.</p>
-
-<p>–</p>
 
         </article>
 

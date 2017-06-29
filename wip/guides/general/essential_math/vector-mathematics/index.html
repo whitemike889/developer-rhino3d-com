@@ -7,27 +7,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>1 Vector Mathematics</title>
-  <meta name="description" content="">
+  <meta name="description" content="This guide discusses vector math including vector representation, vector operation, and line and plane equations.">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/general/essential_math/vector-mathematics/" />
   <meta property="og:title" content="1 Vector Mathematics" />
-  <meta property="og:description" content="" />
+  <meta property="og:description" content="This guide discusses vector math including vector representation, vector operation, and line and plane equations." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="1 Vector Mathematics" />
-  <meta name="twitter:description" value="" />
+  <meta name="twitter:description" value="This guide discusses vector math including vector representation, vector operation, and line and plane equations." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
 
@@ -586,7 +586,7 @@ $(document).ready(function()
 
 </p>
 
-          <p></p>
+          <p>This guide discusses vector math including vector representation, vector operation, and line and plane equations.</p>
 
           <p>A vector indicates a quantity, such as velocity or force, that has direction and length. Vectors in 3D coordinate systems are represented with an ordered set of three real numbers and look like:</p>
 
@@ -639,7 +639,7 @@ Let us define an anchor point (A) so that:</p>
 
 <h3 id="position-vector">Position vector</h3>
 
-<p>One special vector representation uses the <script type="math/tex">\text{origin point} (0,0,0)</script> as the vector anchor point. 
+<p>One special vector representation uses the <script type="math/tex">\text{origin point} (0,0,0)</script> as the vector anchor point.
 The position vector <script type="math/tex">% <![CDATA[
 \mathbf{\vec v} = <a_1,a_2,a_3> %]]></script> is represented with a line segment between two points, the origin and the tip point B, so that:</p>
 
@@ -852,7 +852,7 @@ t*\mathbf{\vec a} = < t* a_1, t* a_2, t* a_3 > %]]></script></p>
 
 <h3 id="vector-dot-product">Vector dot product</h3>
 
-<p>The dot product takes two vectors and produces a number. 
+<p>The dot product takes two vectors and produces a number.
 For example, if we have the two vectors a and b so that:</p>
 
 <p><script type="math/tex">% <![CDATA[
@@ -1238,7 +1238,7 @@ unit(\mathbf{\vec b}) = <1, 0, 0> %]]></script><br />
 
 <p><img src="/wip/images/math-image165.png" /></p>
 
-<pre><code class="language-vb">Private Sub RunScript(ByVal pt As Point3d, ByVal srf As Surface, ByRef A As Object) 
+<pre><code class="language-vb">Private Sub RunScript(ByVal pt As Point3d, ByVal srf As Surface, ByRef A As Object)
 
   'Declare variables
   Dim u, v As Double
@@ -1258,7 +1258,7 @@ unit(\mathbf{\vec b}) = <1, 0, 0> %]]></script><br />
 
   'compare the two directions using the dot product
   A = dir * normal
-End Sub 
+End Sub
 </code></pre>
 
 <p>Using the Grasshopper Python component with RhinoScriptSyntax:</p>
@@ -1294,13 +1294,13 @@ if found:
 
     #get closest point
     closest_pt = srf.PointAt(u, v)
-    
+
     #calculate direction from closest point to test point
     dir = pt - closest_pt
-    
+
     #calculate surface normal
     normal = srf.NormalAt(u, v)
-    
+
     #compare the two directions using the dot product
     A = dir * normal
 </code></pre>
@@ -1309,7 +1309,7 @@ if found:
 
 <p><img src="/wip/images/math-image165.png" /></p>
 
-<pre><code class="language-c#">private void RunScript(Point3d pt, Surface srf, ref object A)
+<pre><code class="language-cs">private void RunScript(Point3d pt, Surface srf, ref object A)
 {
   //Declare variables
   double u, v;
@@ -1381,7 +1381,7 @@ if found:
 
 <p><img src="/wip/images/math-image29.png" /></p>
 
-<pre><code class="language-vb">Private Sub RunScript(ByVal box As Brep, ByVal dis As Double, ByRef A As Object) 
+<pre><code class="language-vb">Private Sub RunScript(ByVal box As Brep, ByVal dis As Double, ByRef A As Object)
 
     'get the brep center
     Dim area As Rhino.Geometry.AreaMassProperties
@@ -1422,7 +1422,7 @@ if found:
 
     'assign exploded list of faces to output
     A = exploded_faces
-  End Sub 
+  End Sub
 </code></pre>
 <p>Using the Grasshopper Python component with RhinoCommon:</p>
 
@@ -1452,7 +1452,7 @@ S2 = Rhino.Geometry.Sphere(C2, r2)
 
 <p><img src="/wip/images/math-image2.png" /></p>
 
-<pre><code class="language-c#">private void RunScript(Brep box, double dis, ref object A)
+<pre><code class="language-cs">private void RunScript(Brep box, double dis, ref object A)
 {
 
     //get the brep center
@@ -1494,7 +1494,7 @@ S2 = Rhino.Geometry.Sphere(C2, r2)
 
 <h3 id="153-tangent-spheres">1.5.3 Tangent spheres</h3>
 
-<p>This tutorial will show how to create two tangent spheres between two input points. 
+<p>This tutorial will show how to create two tangent spheres between two input points.
 This is what the result looks like:</p>
 
 <p><img src="/wip/images/math-image5.png" /></p>
@@ -1545,7 +1545,7 @@ The following is a diagram of the parameters that we will need in order to solve
 
 <p><img src="/wip/images/math-image56.png" /></p>
 
-<pre><code class="language-vb">Private Sub RunScript(ByVal A As Point3d, ByVal B As Point3d, ByVal t As Double, ByRef S1 As Object, ByRef S2 As Object) 
+<pre><code class="language-vb">Private Sub RunScript(ByVal A As Point3d, ByVal B As Point3d, ByVal t As Double, ByRef S1 As Object, ByRef S2 As Object)
 
   'declare variables
   Dim D, C1, C2 As Rhino.Geometry.Point3d
@@ -1567,7 +1567,7 @@ The following is a diagram of the parameters that we will need in order to solve
   S1 = New Rhino.Geometry.Sphere(C1, r1)
   S2 = New Rhino.Geometry.Sphere(C2, r2)
 
-End Sub 
+End Sub
 </code></pre>
 
 <p>Using Python component:</p>
@@ -1598,7 +1598,7 @@ S2 = Rhino.Geometry.Sphere(C2, r2)
 
 <p><img src="/wip/images/math-image58.png" /></p>
 
-<pre><code class="language-c#">private void RunScript(Point3d A, Point3d B, double t, ref object S1, ref object S2)
+<pre><code class="language-cs">private void RunScript(Point3d A, Point3d B, double t, ref object S1, ref object S2)
 {
   //declare variables
   Rhino.Geometry.Point3d D, C1, C2;
@@ -1628,6 +1628,8 @@ S2 = Rhino.Geometry.Sphere(C2, r2)
 <h2 id="download-sample-files">Download Sample Files</h2>
 
 <p>Download the <a href="/wip/files/math-samplesandtutorials.zip.zip"><span class="glyphicon glyphicon-download"></span></a> <a href="/wip/files/math-samplesandtutorials.zip">math-samplesandtutorials.zip</a> archive, containing all the example Grasshopper and code files in this guide.</p>
+
+<hr />
 
 <h2 id="next-steps">Next Steps</h2>
 
