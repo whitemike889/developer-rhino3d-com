@@ -365,11 +365,7 @@ $(document).ready(function()
               <li><a href="/wip/guides/rhinoscript">RhinoScript</a></li>
 
               
-                <li class="active">RhinoScript Primer</li>
-              
-
-              
-                <li class="active"><a href="/wip//guides/rhinoscript/primer-101/">RhinoScript Primer</a></li>
+                <li class="active"><a href="/wip/guides/rhinoscript/primer-101/">RhinoScript 101</a></li>
               
           </ol>
 
@@ -431,7 +427,7 @@ arrNumbers = Array(8, -5, 47)
     Dim arrThings()
     Dim intCount
     intCount = 0
-    
+
     Do
         Select Case intCount
             Case 0
@@ -571,14 +567,14 @@ Next
     Dim arrPoint(2)
     Dim t, pi
     pi = Rhino.Pi()
-    
+
     'Call Rhino.EnableRedraw(False)
     For t = -5 To 5 Step 0.025
-    
+
       arrPoint(0) = t * Sin(5*t)
       arrPoint(1) = t * Cos(5*t)
       arrPoint(2) = t
-      
+
       Call Rhino.Print(Rhino.Pt2Str(arrPoint, 3))
       Call Rhino.AddPoint(arrPoint)
     Next
@@ -737,7 +733,7 @@ factor. This is the equivalent of *PointDivide()*.</td>
     If IsNull(ptBase) Or Not IsArray(ptBase) Then
         ptBase = Array(0,0,0)
     End If
-    
+
     Dim ptTip
     ptTip = Rhino.PointAdd(ptBase, vecDir)
     If Not (Err.Number = 0) Then Exit Function
@@ -784,7 +780,7 @@ Using the On Error Resume Next statement will reset the error object to default 
 </tr>
 <tr>
 <td>13</td>
-<td>Here we are calling the RhinoScript method Rhino.AddLine() and we're storing the return value 
+<td>Here we are calling the RhinoScript method Rhino.AddLine() and we're storing the return value
 directly into the AddVector variable. There are three possible scenarios at this point:
 
 <ol>
@@ -815,7 +811,7 @@ In case of scenario #2, the AddVector will be set to Null. Of course it already 
 <p><img src="/wip/images/primeraddvectorexample.svg" alt="/wip/images/primeraddvectorexample.svg" class="float-img-right" width="275" /></p>
 
 <pre class="line-numbers"><code class="language-vb">Option Explicit
-'This script will compute a bunch of cross-product 
+'This script will compute a bunch of cross-product
 vector based on a pointcloud
 
 VectorField()
@@ -832,7 +828,7 @@ Sub VectorField()
     For i = 0 To UBound(arrPoints)
         Dim vecBase
         vecBase = Rhino.VectorCreate(arrPoints(i), ptBase)
-        
+
         Dim vecDir : vecDir = Rhino.VectorCrossProduct(vecBase, Array(0,0,1))
 
         If Not IsNull(vecDir) Then
@@ -841,7 +837,7 @@ Sub VectorField()
 
             Call AddVector(vecDir, arrPoints(i))
         End If
-    Next 
+    Next
 End Sub
 </code></pre>
 
@@ -922,7 +918,7 @@ dblSeventhPointHeight = arrPoints(6)(2)
 <pre><code class="language-vb">Dim i, j
 For i = 0 To UBound(arrPoints)
     For j = 0 To 2
-        Call Rhino.Print("Coordinate(" &amp; i &amp; ", " &amp; j &amp; ") = " &amp; arrPoints(i)(j)) 
+        Call Rhino.Print("Coordinate(" &amp; i &amp; ", " &amp; j &amp; ") = " &amp; arrPoints(i)(j))
     Next
 Next
 </code></pre>
@@ -963,7 +959,7 @@ End Function
 </tr>
 <tr>
 <td>5</td>
-<td>Compute the average value of the two components. 
+<td>Compute the average value of the two components.
 {pm} is the halfway point between {pprev} and {pnext}.</td>
 </tr>
 <tr>
