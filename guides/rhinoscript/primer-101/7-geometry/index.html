@@ -544,11 +544,7 @@
               <li><a href="/guides/rhinoscript">RhinoScript</a></li>
 
               
-                <li class="active">RhinoScript Primer</li>
-              
-
-              
-                <li class="active"><a href="//guides/rhinoscript/primer-101/">RhinoScript Primer</a></li>
+                <li class="active"><a href="/guides/rhinoscript/primer-101/">RhinoScript 101</a></li>
               
           </ol>
 
@@ -572,7 +568,7 @@
 
 <p>Now that you are familiar with the basics of scripting, it is time to start with the actual geometry part of RhinoScript. To keep things interesting we’ve used plenty of Rhino methods in examples before now, but that was all peanuts. Now you will embark upon that great journey which, if you survive, will turn you into a real 3D geek.</p>
 
-<p>As already mentioned in Chapter 3, Rhinoceros is build upon the openNURBS™ kernel which supplies the bulk of the geometry and file I/O functions. All plugins that deal with geometry tap into this rich resource and the RhinoScript plugin is no exception. Although Rhino is marketed as a “NURBS modeler for Windows”, it does have a basic understanding of other types of geometry as well. Some of these are available to the general Rhino user, others are only available to programmers. As a RhinoScripter you will not be dealing directly with any 
+<p>As already mentioned in Chapter 3, Rhinoceros is build upon the openNURBS™ kernel which supplies the bulk of the geometry and file I/O functions. All plugins that deal with geometry tap into this rich resource and the RhinoScript plugin is no exception. Although Rhino is marketed as a “NURBS modeler for Windows”, it does have a basic understanding of other types of geometry as well. Some of these are available to the general Rhino user, others are only available to programmers. As a RhinoScripter you will not be dealing directly with any
 openNURBS™ code since RhinoScript wraps it all up into an easy-to-swallow package. However, programmers need to have a much higher level of comprehension than users which is why we’ll dig fairly deep.</p>
 
 <h2 id="72-objects-in-rhino">7.2 Objects in Rhino</h2>
@@ -589,14 +585,14 @@ openNURBS™ code since RhinoScript wraps it all up into an easy-to-swallow pack
     Dim arrSource : arrSource = Array("By Layer", "By Object", "By Parent")
 
     Dim strData : strData = "Object attributes for :" &amp; strObjectID &amp; vbCrLf
-    
+
     strData = strData &amp; "Description: " &amp; Rhino.ObjectDescription(strObjectID) &amp; vbCrLf
     strData = strData &amp; "Layer: " &amp; Rhino.ObjectLayer(strObjectID) &amp; vbCrLf
     strData = strData &amp; "LineType: " &amp; Rhino.ObjectLineType(strObjectID) &amp; vbCrLf
-    
+
     strData = strData &amp; "LineTypeSource: " &amp; _
         arrSource(Rhino.ObjectLineTypeSource(strObjectID)) &amp; vbCrLf
-    
+
     strData = strData &amp; "MaterialSource: " &amp; _
         arrSource(Rhino.ObjectMaterialSource(strObjectID)) &amp; vbCrLf
 
@@ -648,7 +644,7 @@ and infinite. R2 parameter space however is bound to a finite surface as shown i
     Dim strCurveID
     strCurveID = Rhino.GetObject("Select a curve to sample", 4, True, True)
     If IsNull(strCurveID) Then Exit Sub
-    
+
     Dim t
     Call Rhino.EnableRedraw(False)
     For t = 0.0 To 1.0 Step 0.002
@@ -659,15 +655,15 @@ End Sub
 
 Function AddPointAtR1Parameter(strCurveID, dblUnitParameter)
     AddPointAtR1Parameter = Null
-    
+
     Dim crvDomain : crvDomain = Rhino.CurveDomain(strCurveID)
     If IsNull(crvDomain) Then Exit Function
-    
-    Dim dblR1Param 
+
+    Dim dblR1Param
     dblR1Param = crvDomain(0) + dblUnitParameter * (crvDomain(1) - crvDomain(0))
     Dim arrR3Point : arrR3Point = Rhino.EvaluateCurve(strCurveID, dblR1Param)
     If Not IsArray(arrR3Point) Then Exit Function
-    
+
     Dim strPointID : strPointID = Rhino.AddPoint(arrR3Point)
     Call Rhino.ObjectColor(strPointID, ParameterColour(dblUnitParameter))
     AddPointAtR1Parameter = strPointID
@@ -758,10 +754,10 @@ End Function
     Dim strCurveID
     strCurveID = Rhino.GetObject("Select a curve to measure", 4, True, True)
     If IsNull(strCurveID) Then Exit Sub
-    
+
     Dim arrPts : arrPts = Rhino.DivideCurve(strCurveID, 500)
-    Dim i 
-    
+    Dim i
+
     Call Rhino.EnableRedraw(False)
     For i = 0 To UBound(arrPts)
         Call EvaluateDeviation(strSurfaceID, 1.0, arrPts(i))
@@ -778,13 +774,13 @@ Function EvaluateDeviation(strSurfaceID, dblThreshold, arrSample)
 
     Dim arrR3Point : arrR3Point = Rhino.EvaluateSurface(strSurfaceID, arrR2Point)
     If IsNull(arrR3Point) Then Exit Function
-    
+
     Dim dblDeviation : dblDeviation = Rhino.Distance(arrR3Point, arrSample)
     If dblDeviation &lt;= dblThreshold Then
         EvaluateDeviation = True
         Exit Function
     End If
-    
+
     Call Rhino.AddPoint(arrSample)
     Call Rhino.AddLine(arrSample, arrR3Point)
     EvaluateDeviation = False
@@ -795,7 +791,7 @@ End Function
 
 <p>This script will compare a bunch of points on a curve to their projection on a surface. If the distance exceeds one unit, a line and a point will be added.</p>
 
-<p>First, the R1 points are translated into R3 coordinates so we can 
+<p>First, the R1 points are translated into R3 coordinates so we can
 project them onto the surface, getting the R2 coordinate {u,v} in return. This R2 point has to be translated into R3 space as well, since we need to know the distance between the R1 point on the curve and the R2 point on the surface. Distances can only be measured if both points reside in the same number of dimensions, so we need to translate them into R3 as well.</p>
 
 <p>Told you it was a piece of cake…</p>
@@ -833,7 +829,7 @@ project them onto the surface, getting the R2 coordinate {u,v} in return. This R
 
 <p>You’ll be glad to learn that (poly)lines are essentially the same as point-arrays. The only difference is that we treat the points as a series rather than an anonymous collection, which enables us to draw lines between them. There is some nasty stuff going on which might cause problems down the road so perhaps it’s best to get it over with quick.</p>
 
-<p>There are several ways in which polylines can be manifested in openNURBS™ and thus in Rhino. There is a special polyline class which simply lists an array of ordered points. It has no overhead data so this is the simplest case. It’s also possible for regular nurbs curves to behave as polylines when they have their degree set to 1. In 
+<p>There are several ways in which polylines can be manifested in openNURBS™ and thus in Rhino. There is a special polyline class which simply lists an array of ordered points. It has no overhead data so this is the simplest case. It’s also possible for regular nurbs curves to behave as polylines when they have their degree set to 1. In
 addition, a polyline could also be a polycurve made up of line segments, polyline segments, degree=1 nurbs curves or a combination of the above. If you create a polyline using the _Polyline command, you will get a proper polyline objects as the Object Properties Details dialog on the left shows:</p>
 
 <p><img src="/images/PolyLineToNurbsDragChange.png" class="img-center" width="80%" /></p>
@@ -886,7 +882,7 @@ End Function
 
 <pre class="line-numbers"><code class="language-vb">Function GetR2PathOnSurface(strSurfaceID, intSegments, strPrompt1, strPrompt2)
     GetR2PathOnSurface = Null
-	
+
     Dim ptStart, ptEnd
     ptStart = Rhino.GetPointOnSurface(strSurfaceID, strPrompt1)
     If IsNull(ptStart) Then Exit Function
@@ -897,17 +893,17 @@ End Function
 
     Dim uvA : uvA = Rhino.SurfaceClosestPoint(strSurfaceID, ptStart)
     Dim uvB : uvB = Rhino.SurfaceClosestPoint(strSurfaceID, ptEnd)
-	
+
     Dim arrV() : ReDim arrV(intSegments)
     Dim i, t, u, v
     For i = 0 To intSegments
         t = i / intSegments
         u = uvA(0) + t*(uvB(0) - uvA(0))
         v = uvA(1) + t*(uvB(1) - uvA(1))
-		
+
         arrV(i) = Rhino.EvaluateSurface(strSurfaceID, Array(u, v))
     Next
-	
+
     GetR2PathOnSurface = arrV
 End Function
 </code></pre>
@@ -1027,7 +1023,7 @@ End Sub
 
 <pre class="line-numbers"><code class="language-vb">Sub SmoothPolyline(ByRef arrVertices)
     Dim arrCopy : arrCopy = arrVertices    
-    
+
     Dim i, j
     For i = 1 To UBound(arrVertices)-1
         For j = 0 To 2
@@ -1063,10 +1059,10 @@ What we do here is average the x, y and z coordinates of the current vertex ('cu
     Do
         Call SmoothPolyline(arrVertices)
         Call ProjectPolyline(arrVertices, strSurfaceID)
-	
+
         dblNewLength = PolylineLength(arrVertices)
         If (Abs(dblNewLength - dblLength) &lt; dblTolerance) Then Exit Do
-	
+
         dblLength = dblNewLength
     Loop
 End Sub
@@ -1081,7 +1077,7 @@ End Sub
 <td>1</td>
 <td>Hah... that doesn't look so bad after all, does it? You'll notice that it's often the stuff which is easy to explain that ends up taking a lot of lines of code. Rigid mathematical and logical structures can typically be coded very efficiently.
 <br /><br />
-Again, ByRef for the actual coordinate array since we're mucking about with the thing directly. No use copying lists of points all over the place and back again. 
+Again, ByRef for the actual coordinate array since we're mucking about with the thing directly. No use copying lists of points all over the place and back again.
 <br /><br />
 You'll notice this is a subroutine and thus lacks a return value which is perhaps a little odd. It certainly looks complex enough to deserve a return value. Still, since we're writing this script in one go we know that the function which uses this particular sub does not rely on return values. It simply evaluates the length of the polyline prior to and after calling this sub and decides where to go from there. If this subroutine completely and utterly fails, the polyline will not be changed which results in zero-
 difference lengths. That is the cue for the caller to abort anyway.
@@ -1127,11 +1123,11 @@ Sub GeodesicCurve()
     Dim strSurfaceID
     strSurfaceID = Rhino.GetObject("Select surface for geodesic curve solution", 8, True, True)
     If IsNull(strSurfaceID) Then Exit Sub
-   
-    Dim arrV 
+
+    Dim arrV
     arrV = GetPolylineOnSurface(strSurfaceID, 10, _
            "Start of geodesic curve", "End of geodesic curve")
-    
+
     If IsNull(arrV) Then Exit Sub
 
     Dim dblTolerance : dblTolerance = Rhino.UnitAbsoluteTolerance() / 10
@@ -1140,7 +1136,7 @@ Sub GeodesicCurve()
 
     Do
         Call Rhino.Prompt("Solving geodesic fit for " &amp; UBound(arrV) &amp; " samples")
-	
+
         Call GeodesicFit(arrV, strSurfaceID, dblTolerance)
         dblNewLength = PolylineLength(arrV)
         If (Abs(dblNewLength - dblLength) &lt; dblTolerance) Then Exit Do
@@ -1250,7 +1246,7 @@ End Sub
 Sub WhoFramedTheSurface()
     Dim idSurface : idSurface = Rhino.GetObject("Surface to frame", 8, True, True)
     If IsNull(idSurface) Then Exit Sub
-	
+
     Dim intCount : intCount = Rhino.GetInteger("Number of iterations per direction", 20, 2)
     If IsNull(intCount) Then Exit Sub
 
@@ -1258,18 +1254,18 @@ Sub WhoFramedTheSurface()
     Dim vDomain : vDomain = Rhino.SurfaceDomain(idSurface, 1)
     Dim uStep : uStep = (uDomain(1) - uDomain(0)) / intCount
     Dim vStep : vStep = (vDomain(1) - vDomain(0)) / intCount
-	
+
     Dim u, v
     Dim pt
     Dim srfFrame
-	
+
     Call Rhino.EnableRedraw(False)
     For u = uDomain(0) To uDomain(1) Step uStep
         For v = vdomain(0) To vDomain(1) Step vStep
-            pt = Rhino.EvaluateSurface(idSurface, Array(u, v)) 
+            pt = Rhino.EvaluateSurface(idSurface, Array(u, v))
             If Rhino.Distance(pt, Rhino.BrepClosestPoint(idSurface, pt)(0)) &lt; 0.1 Then
                 srfFrame = Rhino.SurfaceFrame(idSurface, Array(u, v))
-                Call Rhino.AddPlaneSurface(srfFrame, 1.0, 1.0) 
+                Call Rhino.AddPlaneSurface(srfFrame, 1.0, 1.0)
             End If
         Next
     Next
@@ -1400,7 +1396,7 @@ End Sub
 </tr>
 <tr>
 <td>25</td>
-<td>This is mathematically the most demanding line, and I'm not going to provide a full proof of why and how it works. This is the standard way of translating the spherical coordinates Φ and Θ into Cartesian coordinates x, y and z. 
+<td>This is mathematically the most demanding line, and I'm not going to provide a full proof of why and how it works. This is the standard way of translating the spherical coordinates Φ and Θ into Cartesian coordinates x, y and z.
 <br /><br />
 Further information can be found on [MathWorld.com](http://mathworld.wolfram.com/)</td>
 </tr>
@@ -1582,8 +1578,8 @@ You'll notice I'm violating a lot of naming conventions from paragraph [2.3.5 Us
     Dim vecBisector : vecBisector = Rhino.VectorAdd(vecDir, vecBase)
     vecBisector = Rhino.VectorUnitize(vecBisector)
 
-    Dim dotProd : dotProd = Rhino.VectorDotProduct(vecBisector, vecDir) 
-    Dim midLength : midLength = (0.5 * Rhino.Distance(ptStart, ptEnd)) / dotProd 
+    Dim dotProd : dotProd = Rhino.VectorDotProduct(vecBisector, vecDir)
+    Dim midLength : midLength = (0.5 * Rhino.Distance(ptStart, ptEnd)) / dotProd
     vecBisector = Rhino.VectorScale(vecBisector, midLength)
 
     AddArcDir = Rhino.AddArc3Pt(ptStart, ptEnd, Rhino.PointAdd(ptStart, vecBisector))
@@ -1643,7 +1639,7 @@ End Function
 
 <p><img src="/images/primer-arctree.svg" alt="/images/primer-arctree.svg" class="float-img-right" width="375" /></p>
 
-<p>We need this function in order to build a recursive tree-generator which outputs trees made of arcs. Our trees will be governed by a set of five variables but -due to the 
+<p>We need this function in order to build a recursive tree-generator which outputs trees made of arcs. Our trees will be governed by a set of five variables but -due to the
 flexible nature of the recursive paradigm- it will be very easy to add more behavioural patterns. The growing algorithm as implemented in this example is very simple and doesn’t allow a great deal of variation.</p>
 
 <p>The five base parameters are:</p>
@@ -1684,7 +1680,7 @@ flexible nature of the recursive paradigm- it will be very easy to add more beha
 
     vecTwig = Rhino.VectorRotate(vecTwig, Rnd() * maxAngle, MutationPlane(1))
     vecTwig = Rhino.VectorRotate(vecTwig, Rnd() * 360, Direction)
-    RandomPointInCone = Rhino.PointAdd(Origin, vecTwig)	
+    RandomPointInCone = Rhino.PointAdd(Origin, vecTwig)
 End Function
 </code></pre>
 
@@ -1726,7 +1722,7 @@ End Function
 
 <p>There is a set of rules to which any working recursive function must adhere. It must place at least one call to itself somewhere before the end and must have a way of exiting without placing any calls to itself. If the first condition is not met the function cannot be called recursive and if the second condition is not met it will call itself until time stops (or rather until the call-stack memory in your computer runs dry).</p>
 
-<p>Lo and behold! 
+<p>Lo and behold!
 A mere 21 lines of code to describe the growth of an entire tree.</p>
 
 <pre class="line-numbers"><code class="language-vb">Sub RecursiveGrowth(ByVal ptStart, ByVal vecDir, ByVal Props(), ByVal Generation)
@@ -1746,7 +1742,7 @@ A mere 21 lines of code to describe the growth of an entire tree.</p>
         newTwig = AddArcDir(ptStart, ptGrow, vecDir)
         If Not IsNull(newTwig) Then
             vecGrow = Rhino.CurveTangent(newTwig, Rhino.CurveDomain(newTwig)(1))
-            Call RecursiveGrowth(ptGrow, vecGrow, newProps, Generation+1)	
+            Call RecursiveGrowth(ptGrow, vecGrow, newProps, Generation+1)
         End If
     Next
 End Sub
@@ -1903,7 +1899,7 @@ The thing to realize is that the call is now different. We're putting in differe
         vecSegment = Rhino.VectorUnitize(vecSegment)
 
         If dblRadius &lt; (0.5*Rhino.Distance(A, B)) Then
-            vecSegment = Rhino.VectorScale(vecSegment, dblRadius)	
+            vecSegment = Rhino.VectorScale(vecSegment, dblRadius)
         Else
             vecSegment = Rhino.VectorScale(vecSegment, 0.5 * Rhino.Distance(A, B))
         End If
@@ -2039,7 +2035,7 @@ End Function
 
     Dim tmin : tmin = Rhino.CurveDomain(idCrv)(0)
     Dim tmax : tmax = Rhino.CurveDomain(idCrv)(1)
-	
+
     Dim t0, t1, t
     t0 = tmin
     t1 = tmax
@@ -2057,7 +2053,7 @@ End Function
             t1 = t
         End If
     Loop
-	
+
     BSearchCurve = t
 End Function
 </code></pre>
@@ -2114,8 +2110,8 @@ End Function
 </tr>
 <tr>
 <td>21...25</td>
-<td>This is the magic bit. Looks harmless enough doesn't it? 
-What we do here is adjust the subdomain based on the result of the length comparison. If the length of the subcurve {<i>tmin</i>, <i>t</i>} is shorter than <i>Length</i>, then we want to restrict ourself to the lower half of the old subdomain. If, on the other hand, the subcurve length is shorter than <i>Length</i>, then we want the upper half of the old domain. 
+<td>This is the magic bit. Looks harmless enough doesn't it?
+What we do here is adjust the subdomain based on the result of the length comparison. If the length of the subcurve {<i>tmin</i>, <i>t</i>} is shorter than <i>Length</i>, then we want to restrict ourself to the lower half of the old subdomain. If, on the other hand, the subcurve length is shorter than <i>Length</i>, then we want the upper half of the old domain.
 Notice how much more compact programming code is compared to English?</td>
 </tr>
 <tr>
@@ -2135,47 +2131,47 @@ Notice how much more compact programming code is compared to English?</td>
 <pre><code class="language-vb">Sub EquiDistanceOffset()
     Dim idSrf : idSrf = Rhino.GetObject("Pick surface to offset", 8, True, True)
     If IsNull(idSrf) Then Exit Sub
-    
+
     Dim dblOffset : dblOffset = Rhino.GetReal("Offset distance", 1.0, 0.0)
     If IsNull(dblOffset) Then Exit Sub
-    
-    Dim uDomain 
+
+    Dim uDomain
     uDomain = Rhino.SurfaceDomain(idSrf, 0)
 
     Dim uStep, u, t
     uStep = (uDomain(1) - uDomain(0)) / 50 'This means we'll create 50 isocurves
-    
-    Dim arrOffsetVertices() 
+
+    Dim arrOffsetVertices()
     Dim VertexCount
     VertexCount = -1
 
     Dim idIsoCurves, idIsoCurve
 
     Call Rhino.EnableRedraw(False)
-    
+
     For u = uDomain(0) To uDomain(1) + (0.5*uStep) Step uStep
         'Rhino.ExtractIsoCurves() returns an array, but in our case it is always just one item
         idIsoCurves = Rhino.ExtractIsoCurve(idSrf, Array(u, 0), 1)
-        
+
         If Not IsNull(idIsoCurves) Then
             idIsoCurve = idIsoCurves(0) 'Use only the first curve in the set
             t = BSearchCurve(idIsoCurve, dblOffset, 0.001) 'Call our binary searcher
-            
+
             If Not IsNull(t) Then 'If we have a solution, append it to the vertex-array
                 VertexCount = VertexCount+1
                 ReDim Preserve arrOffsetVertices(VertexCount)
                 arrOffsetVertices(VertexCount) = Rhino.EvaluateCurve(idIsoCurve, t)     
             End If
-            
+
             'Clean up the isocurves
             Call Rhino.DeleteObjects(idIsoCurves)    
         End If
     Next
-    
+
     If VertexCount &gt; 0 Then 'If we have more than one point, we can add a curve
         Call Rhino.AddInterpCrvOnSrf(idSrf, arrOffsetVertices)    
     End If
-    
+
     Call Rhino.EnableRedraw(True)
 End Sub
 </code></pre>
@@ -2229,7 +2225,7 @@ End Sub
 
     Dim arrA() : ReDim arrA(Samples)
     Dim arrB() : ReDim arrB(Samples)
-    Dim arrObjects : ReDim arrObjects(Samples+1)	
+    Dim arrObjects : ReDim arrObjects(Samples+1)
 
     Dim cData, cVector
     Dim t, tStep, N
@@ -2248,7 +2244,7 @@ End Sub
         Else
             cData(4) = Rhino.VectorScale(cData(4), Scale)
             arrA(N) = cData(0)
-            arrB(N) = Rhino.VectorSubtract(cData(0), cData(4)) 
+            arrB(N) = Rhino.VectorSubtract(cData(0), cData(4))
             arrObjects(N) = Rhino.AddLine(arrA(N), arrB(N))
         End If
     Next
@@ -2304,7 +2300,7 @@ End Function
 
     allGeometry = Array()
 
-    K = Rhino.CurveKnots(idCrv)	
+    K = Rhino.CurveKnots(idCrv)
     For i = 0 To UBound(K)-1
         tmpGeometry = AddCurvatureGraphSection(idCrv, K(i), K(i+1), SpanSamples, Scale)
 
@@ -2377,7 +2373,7 @@ End Function
     Dim bResult, i
     Dim intSamples : intSamples = 10
     Dim dblScale : dblScale = 1.0
- 
+
     Dim arrPreview() : ReDim arrPreview(UBound(idCurves))
 
     Do 	
@@ -2399,7 +2395,7 @@ End Function
             Next
             Exit Sub
         End If
-		
+
         Select Case UCase(bResult)
             Case "ACCEPT"
                 Exit Do
@@ -2490,7 +2486,7 @@ End Sub
 
 <p><img src="/images/primer-topology.svg" class="img-center" width="80%" /></p>
 
-<p>If you look at the images above, you’ll see a number of surfaces that are topologically identical (except {E}) but geometrically different. You can bend shape {A} and end up with shape {B}; all you have to do is reposition some of the vertices. Then if you bend it even further you get {C} and eventually {D} where the right edge has been bend so far it touches the edge on the opposite side of the surface. It is not until you merge the edges 
+<p>If you look at the images above, you’ll see a number of surfaces that are topologically identical (except {E}) but geometrically different. You can bend shape {A} and end up with shape {B}; all you have to do is reposition some of the vertices. Then if you bend it even further you get {C} and eventually {D} where the right edge has been bend so far it touches the edge on the opposite side of the surface. It is not until you merge the edges
 (shape {E}) that this shape suddenly changes its platonic essence, i.e. it goes from a shape with four edges to a shape with only two edges (and these two remaining edges are now closed loops as well). Do note that shapes {D} and {E} are geometrically identical, which is perhaps a little surprising.</p>
 
 <p>The vertices of a mesh object are an array of 3D point coordinates. They can be located anywhere in space and they control the size and form of the mesh. The faces on the other hand do not contain any coordinate data, they merely indicate how the vertices are to be connected:</p>
@@ -2578,7 +2574,7 @@ We can access those easily enough, but since the step size in x and y direction 
 
 <p>Once we have our vertices, we can create the face array that connects them. Since the face-array is topology, it doesn’t matter where our vertices are in space, all that matters is how they are organized. The image on the right is the mesh schematic that I always draw whenever confronted with mesh face array logic. The image shows a mesh with twelve vertices and six quad faces, which has the same vertex sequence logic as the vertex array created by the function on the previous page. The vertex counts in x and y direction are four and three respectively (<em>Nx=4</em>, <em>Ny=3</em>).</p>
 
-<p>Now, every quad face has to link the four vertices in a counter-clockwise fashion. You may have noticed already that the absolute differences between the vertex indices on the corners of every quad are identical. In the case of the lower left quad {<em>A=0</em>; <em>B=3</em>; <em>C=4</em>; <em>D=1</em>}. In the case of the upper right quad {<em>A=7</em>; <em>B=10</em>; <em>C=11</em>; <em>D=8</em>}. We can define these numbers in a simpler way, which reduces the number of variables to just one instead of four: 
+<p>Now, every quad face has to link the four vertices in a counter-clockwise fashion. You may have noticed already that the absolute differences between the vertex indices on the corners of every quad are identical. In the case of the lower left quad {<em>A=0</em>; <em>B=3</em>; <em>C=4</em>; <em>D=1</em>}. In the case of the upper right quad {<em>A=7</em>; <em>B=10</em>; <em>C=11</em>; <em>D=8</em>}. We can define these numbers in a simpler way, which reduces the number of variables to just one instead of four:
 {<em>A=?</em>; <em>B=(A+Ny</em>); <em>C=(B+1)</em>; <em>D=(A+1)</em>}, where N<sub>y</sub> is the number of vertices in the y-direction. Now that we know the logic of the face corner numbers, all that is left is to iterate through all the faces we need to define and calculate proper values for the A corner:</p>
 
 <pre class="line-numbers"><code class="language-vb">Function CreateMeshFaces(ByVal iResolution)
@@ -2643,7 +2639,7 @@ End Function
     Call Rhino.SaveSettings(iSettingFile, "Domain", "xMin", fDomain(0))
     Call Rhino.SaveSettings(iSettingFile, "Domain", "xMax", fDomain(1))
     Call Rhino.SaveSettings(iSettingFile, "Domain", "yMin", fDomain(2))
-    Call Rhino.SaveSettings(iSettingFile, "Domain", "yMax", fDomain(3))	
+    Call Rhino.SaveSettings(iSettingFile, "Domain", "yMax", fDomain(3))
     Call Rhino.SaveSettings(iSettingFile, "Domain", "Resolution", Resolution)
 End Sub
 </code></pre>
@@ -2678,8 +2674,8 @@ End Sub
 <pre class="line-numbers"><code class="language-vb">Sub LoadFunctionData(ByRef strFunction, ByRef fDomain(), ByRef Resolution)
     Dim iSettingFile : iSettingFile = Rhino.InstallFolder() &amp; "MeshFunction_XY.ini"
 
-    strFunction = Rhino.GetSettings(iSettingFile, "Function", "format") 
-    If IsNull(strFunction) Then 
+    strFunction = Rhino.GetSettings(iSettingFile, "Function", "format")
+    If IsNull(strFunction) Then
         strFunction = "Cos( Sqr(x^2 + y^2) )"
         fDomain(0) = -10.0
         fDomain(1) = +10.0
@@ -2751,7 +2747,7 @@ End Sub
 <pre><code class="language-vb">Function SolveEquation(ByVal strFunction, ByVal x, ByVal y)
     Dim z
     Dim D, A, AngleData
-    
+
     D = Rhino.Hypot(x, y)
     AngleData = Rhino.Angle(Array(0,0,0), Array(x,y,0))
     If IsNull(AngleData) Then
@@ -2775,20 +2771,20 @@ End Function
 <pre><code class="language-vb">Sub MeshFunction_XY()
     Dim zFunc, fDomain(3), iResolution
     Call LoadFunctionData(zFunc, fDomain, iResolution)
-    
+
     zFunc = Rhino.StringBox("Specify a function f(x,y[,D,A])", zFunc, "Mesh function")
     If IsNull(zFunc) Then Exit Sub
-    
+
     Dim strPrompt, bResult   
     Do
         strPrompt = "Function domain   " &amp; _
                     "x{" &amp; fDomain(0) &amp; ", " &amp; fDomain(1) &amp; "}   " &amp; _
                     "y{" &amp; fDomain(2) &amp; ", " &amp; fDomain(3) &amp; "}   " &amp; _
                     "@ " &amp; iResolution
-        
+
         bResult = Rhino.GetString(strPrompt, "Insert", Split("xMin;xMax;yMin;yMax;Res;Insert", ";"))
         If IsNull(bResult) Then Exit Sub
-        
+
         Select Case UCase(bResult)
             Case "XMIN"
                 bResult = Rhino.GetReal("X-Domain start", fDomain(0))
@@ -2806,13 +2802,13 @@ End Function
                 bResult = Rhino.GetInteger("Resolution of the graph", iResolution)
                 If Not IsNull(bResult) Then iResolution = bResult
             Case "INSERT"
-                Exit Do 
+                Exit Do
         End Select
     Loop
-    
+
     Dim V : V = CreateMeshVertices(zFunc, fDomain, iResolution)
     Dim F : F = CreateMeshFaces(iResolution)
-    
+
     Call Rhino.AddMesh(V, F)
     Call SaveFunctionData(zFunc, fDomain, iResolution)
 End Sub
@@ -2931,7 +2927,7 @@ End Sub
 <pre class="line-numbers"><code class="language-vb">Function VertexValueArray(ByVal pts, ByVal id)
     Dim arrD() : ReDim arrD(UBound(pts))
     Dim i
-        
+
     For i = 0 To UBound(pts)
         arrD(i) = DistanceTo(pts(i), id)
     Next
@@ -2942,11 +2938,11 @@ End Function
 Function DistanceTo(ByVal pt, ByVal id)
     DistanceTo = Null
     Dim ptCP : ptCP = Rhino.BrepClosestPoint(id, pt)
-    
+
     If IsNull(ptCP) Then Exit Function
     Dim D : D = Rhino.Distance(pt, ptCP(0))
     D = Log(D + 1.0)
-    
+
     DistanceTo = D
 End Function
 </code></pre>
@@ -2958,13 +2954,13 @@ End Function
 </tr>
 <tr>
 <td>1...8</td>
-<td>The <i>VertexValueArray()</i> function is the one that creates a list of numbers for each vertex. We're giving it the mesh vertices (an array of 3D points) and the object ID of the (poly)surface for the proximity analysis. This function doesn't do much, it simply instantiates a new array and then fills it up using the 
+<td>The <i>VertexValueArray()</i> function is the one that creates a list of numbers for each vertex. We're giving it the mesh vertices (an array of 3D points) and the object ID of the (poly)surface for the proximity analysis. This function doesn't do much, it simply instantiates a new array and then fills it up using the
 <i>DistanceTo()</i> function.
 </td>
 </tr>
 <tr>
 <td>4...8</td>
-<td><i>DistanceTo()</i> calculates the distance from <i>pt</i> to the projection of <i>pt</i> onto id. Where pt is a single 3D coordinate and id if the identifier of a (poly)surface object. It also perform the logarithmic conversion, so the return value is not the actual distance. 
+<td><i>DistanceTo()</i> calculates the distance from <i>pt</i> to the projection of <i>pt</i> onto id. Where pt is a single 3D coordinate and id if the identifier of a (poly)surface object. It also perform the logarithmic conversion, so the return value is not the actual distance.
 </td>
 </tr>
 </table>
@@ -2982,7 +2978,7 @@ End Function
 
     Dim arrV, arrF, arrD
     arrV = Rhino.MeshVertices(idMesh)
-    arrF = Rhino.MeshFaceVertices(idMesh) 
+    arrF = Rhino.MeshFaceVertices(idMesh)
     arrD = VertexValueArray(arrV, idBRep)
 
     Dim minD : minD = Rhino.Min(arrD)
@@ -3090,7 +3086,7 @@ Apart from a few primitive surface types such as spheres, cones, planes and cyli
   Dim i
 
   For i = 0 To UBound(pXYZ)
-    Suv = Rhino.SurfaceClosestPoint(idSrf, pXYZ(i))	
+    Suv = Rhino.SurfaceClosestPoint(idSrf, pXYZ(i))
     Sxyz = Rhino.EvaluateSurface(idSrf, Suv)
     Snormal = Rhino.SurfaceNormal(idSrf, Suv)
 
@@ -3105,7 +3101,7 @@ Apart from a few primitive surface types such as spheres, cones, planes and cyli
 
     pUVW(i) = Array(Suv(0), Suv(1), Sdist)
   Next
-	
+
   ConvertToUVW = pUVW
 End Function
 </code></pre>
@@ -3142,7 +3138,7 @@ End Function
   Dim srfNormals() : ReDim srfNormals(UBound(uvGreville))
 
   Dim i
-  For i = 0 To UBound(uvGreville)	
+  For i = 0 To UBound(uvGreville)
     srfNormals(i) = Rhino.SurfaceNormal(idSrf, uvGreville(i))
   Next
 
@@ -3213,7 +3209,7 @@ End Sub
 <p>which is a much smoother fit. The sag between {B} and {C} is not due to the shape of the original surface, but because between {B} and {C}, the other samples start to gain more relative influence and dragging the surface down towards them. Let’s have a look at the code:</p>
 
 <pre class="line-numbers"><code class="language-vb">Function FitSurface(ByVal idSrf, ByRef Samples(), ByRef dTranslation, ByRef dProximity)
-  Dim P : P = Rhino.SurfacePoints(idSrf) 
+  Dim P : P = Rhino.SurfacePoints(idSrf)
   Dim G : G = Rhino.SurfaceEditPoints(idSrf, True, True)
   Dim N : N = GrevilleNormals(idSrf)
   Dim S : S = ConvertToUVW(idSrf, Samples)
@@ -3234,28 +3230,28 @@ End Sub
       LocalDist = (S(i)(0) - G(j)(0))^2 + (S(i)(1) - G(j)(1))^2
       If (LocalDist &lt; 0.01) Then LocalDist = 0.01
       LocalFactor = 1 / LocalDist
-		
+
       LocalForce = Rhino.VectorScale(N(j), LocalFactor * S(i)(2))
 
       Forces(j) = Rhino.VectorAdd(Forces(j), LocalForce)
       Factors(j) = Factors(j) + LocalFactor
     Next
   Next
-	
+
   Call DivideVectorArray(Forces, Factors)
-	
+
   For i = 0 To UBound(P)
     P(i) = Rhino.PointAdd(P(i), Forces(i))
     dTranslation = dTranslation + Rhino.VectorLength(Forces(i))
   Next
-	
+
   Dim srf_N : srf_N = Rhino.SurfacePointCount(idSrf)
   Dim srf_K : srf_K = Rhino.SurfaceKnots(idSrf)
   Dim srf_W : srf_W = Rhino.SurfaceWeights(idSrf)
   Dim srf_D(1)
   srf_D(0) = Rhino.SurfaceDegree(idSrf, 0)
   srf_D(1) = Rhino.SurfaceDegree(idSrf, 1)
-	
+
   FitSurface = Rhino.AddNurbsSurface(srf_N, P, srf_K(0), srf_K(1), srf_D, srf_W)
 End Function
 </code></pre>
@@ -3451,11 +3447,11 @@ End Sub
   ReDim T(Nu, Nv)
   ReDim K(Nu, Nv)
   Dim localCurvature
-  
+
   Dim i, j, u, v
   For i = 0 To Nu
     u = uDomain(0) + (i/Nu)*(uDomain(1) - uDomain(0))
-    
+
     For j = 0 To Nv
       v = vDomain(0) + (j/Nv)*(vDomain(1) - vDomain(0))
       T(i,j) = Rhino.SurfaceFrame(idSrf, Array(u,v))
@@ -3516,7 +3512,7 @@ Line 11 (and line 14) contain an implementation of such a mapping algorithm. I'm
 <pre class="line-numbers"><code class="language-vb">Function SmoothTensorField(ByRef T, ByRef K)
   SmoothTensorField = False
   Dim K_copy : K_copy = K
-  
+
   Dim Ub1 : Ub1 = UBound(T, 1)
   Dim Ub2 : Ub2 = UBound(T, 2)
   Dim i, j, x, y, xm, ym
@@ -3525,7 +3521,7 @@ Line 11 (and line 14) contain an implementation of such a mapping algorithm. I'm
     k_tot = Array(0,0,0)
     For x = i-1 To i+1
         xm = (x+Ub1) Mod Ub1
-        
+
         For y = j-1 To j+1
           ym = (y+Ub2) Mod Ub2
           k_tot = Rhino.VectorAdd(k_tot, K_copy(xm,ym))
@@ -3570,7 +3566,7 @@ The green area is a corner of the entire two-dimensional tensor space, the dark 
 <br /><br />
 We need to make 2 more nested loops which iterate over the 9 coordinates in this 3×3 matrix. We also need to make sure that all these 9 coordinates are in fact on the 2D tensor space and not teetering over the edge. We can use the Mod operator to make sure a number is "remapped" to belong to a certain numeric domain.
 </td>
-<td width="40%"> 
+<td width="40%">
 <img src="/images/primer-boxblurmatrix3x3.svg" width="100%" height="300" float="right" /></td>
 </tr>
 </table>

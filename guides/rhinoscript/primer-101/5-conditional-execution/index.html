@@ -362,11 +362,7 @@
               <li><a href="/guides/rhinoscript">RhinoScript</a></li>
 
               
-                <li class="active">RhinoScript Primer</li>
-              
-
-              
-                <li class="active"><a href="//guides/rhinoscript/primer-101/">RhinoScript Primer</a></li>
+                <li class="active"><a href="/guides/rhinoscript/primer-101/">RhinoScript 101</a></li>
               
           </ol>
 
@@ -450,7 +446,7 @@ Else
 End If
 </code></pre>
 
-<p>If SomethingOrOther turns out to be True, then the bit of code between lines 1 and 3 are executed. This block can be as long as you like of course. However, if SomethingOrOther is False, then the code between <em>Else</em> and 
+<p>If SomethingOrOther turns out to be True, then the bit of code between lines 1 and 3 are executed. This block can be as long as you like of course. However, if SomethingOrOther is False, then the code between <em>Else</em> and
 End If is executed. So in the case of <em>If…Then…Else</em>, one -and only one- of the two blocks of code is put to work.</p>
 
 <p>You can nest <em>If…Then</em> structures as deep as you like, though code readability will suffer from too much indenting.
@@ -491,7 +487,7 @@ End If
 
 <h2 id="52-select-case">5.2 Select Case</h2>
 
-<p>Even though the If…Then…ElseIf…Else statement allows us to split up the code stream into any number of substreams, it is not a very elegant piece of syntax. Even very simple conditional evaluation will look rather complex because of the repeated comparisons. The Select…Case structure was designed to simplify conditional evaluation which potentially results in many different code streams. (For those among you who are/were Java or C programmers, Select…Case in VBScript is the same as switch…case in Java/C). There are a few drawbacks compared to 
+<p>Even though the If…Then…ElseIf…Else statement allows us to split up the code stream into any number of substreams, it is not a very elegant piece of syntax. Even very simple conditional evaluation will look rather complex because of the repeated comparisons. The Select…Case structure was designed to simplify conditional evaluation which potentially results in many different code streams. (For those among you who are/were Java or C programmers, Select…Case in VBScript is the same as switch…case in Java/C). There are a few drawbacks compared to
 If…Then…ElseIf…Else statements. For one, a Select…Case can only evaluate equality, meaning you can only check to see if some variable is equal to 2, not if it is smaller than 2. The syntax for Select…Case looks like this:</p>
 
 <pre class="line-numbers"><code class="language-vb">Select Case iVariable
@@ -636,7 +632,7 @@ strTextObjectID = Rhino.AddText(CStr(Time()), Array(0,0,0), 20)
 
 The <i>strText</i> argument must contain a String description of the current system time. We will simply nest two native VBScript functions to get it. Since these functions are not designed to fail we do not have to check for a Null variable and we can put them 'inline'. <i>Time()</i> returns a variable which contains only the system time, not the date. We could also have used the <i>Now()</i> function (as on page 20) in which case we would have gotten both the date and the time. <i>Time()</i> does not return a String type variable, so before we pass it into Rhino we have to convert it to a proper String using the <i>CStr()</i> function. This is analogous with our code on page 20.
 
-The *arrPoint* argument requires an array of doubles. We haven't done arrays yet, but it essentially means we have to supply the x, y and z coordinates of the text insertion point. `Array(0,0,0` means the same as the world origin. 
+The *arrPoint* argument requires an array of doubles. We haven't done arrays yet, but it essentially means we have to supply the x, y and z coordinates of the text insertion point. `Array(0,0,0` means the same as the world origin.
 
 The default height of text objects is 1.0 units, but we want our clock to look big since big things look expensive. Therefore we're overriding it to be 20 units instead.</td>
 </tr>
@@ -692,7 +688,7 @@ Sub FitCurveToLength()
 
     Do
         If Rhino.CurveLength(strCurveID) &lt;= dblLengthLimit Then Exit Do
-        
+
         strCurveID = Rhino.ScaleObject(strCurveID, Array(0,0,0), Array(0.95, 0.95, 0.95))
         If IsNull(strCurveID) Then
             Call Rhino.Print("Something went wrong...")
@@ -848,7 +844,7 @@ End Sub
     Call Rhino.EnableRedraw(False)
     For z = 0.0 To 5.0 Step 0.5
         dblTwistAngle = dblTwistAngle + (pi/30)
-      
+
         For a = 0.0 To 2*pi Step (pi/15)
             Dim x, y
             x = 5 * Sin(a + dblTwistAngle)
