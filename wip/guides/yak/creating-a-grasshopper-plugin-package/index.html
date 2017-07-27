@@ -6,28 +6,30 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Yak Guides</title>
-  <meta name="description" content="Guides to using the Yak package manager.">
+  <title>Creating a Grasshopper Plug-In Package</title>
+  <meta name="description" content="This is a step by step guide to creating a package for a Grasshopper plug-in.">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/yak/" />
-  <meta property="og:title" content="Yak Guides" />
-  <meta property="og:description" content="Guides to using the Yak package manager." />
+  <meta property="og:url" content="/guides/yak/creating-a-grasshopper-plugin-package/" />
+  <meta property="og:title" content="Creating a Grasshopper Plug-In Package" />
+  <meta property="og:description" content="This is a step by step guide to creating a package for a Grasshopper plug-in.
+" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Yak Guides" />
-  <meta name="twitter:description" value="Guides to using the Yak package manager." />
+  <meta name="twitter:title" value="Creating a Grasshopper Plug-In Package" />
+  <meta name="twitter:description" value="This is a step by step guide to creating a package for a Grasshopper plug-in.
+" />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows, Mac" />
+  <meta name="twitter:data1" value="Windows" />
   
   
 
@@ -49,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/yak/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/yak/creating-a-grasshopper-plugin-package/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -98,7 +100,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/yak/">View the current version instead.</a>
+    <a href="/guides/yak/creating-a-grasshopper-plugin-package/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -258,65 +260,125 @@ $(document).ready(function()
         <!--div class="wrapper"-->
           <div class="container-fluid">
 
-  <h1>Yak Guides
-  
-    <img src="/wip/images/win-logo-small.png" alt="Windows" class="guide_icon">
-  
-  
-    <img src="/wip/images/mac-logo-small.png" alt="macOS" class="guide_icon">
-  
-  
-  
-  </h1>
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
 
-  <p>Guides to using the Yak package manager.</p>
-  
+        
+    </ul>
+</nav>
 
-  <div class="row-fluid">
-    <div class="col-md-4">
-      <h3 id="overview">Overview</h3>
 
-<ul>
-  <li><a href="/wip/guides/yak/what-is-yak">What is Yak?</a></li>
-</ul>
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
 
-<h3 id="fundamentals">Fundamentals</h3>
+        <article class="post-content">
 
-<ul>
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/yak">Yak</a></li>
 
-  <li><a href="/wip/guides/yak/the-anatomy-of-a-package/">The Anatomy of a Package</a></li>
+              
+                
+                  <li class="active">Step By Step</li>
+                
+              
+          </ol>
 
-  <li><a href="/wip/guides/yak/the-package-manifest/">The Package Manifest</a></li>
+          <h1>Creating a Grasshopper Plug-In Package</h1>
 
-  <li><a href="/wip/guides/yak/yak-cli-reference/">Yak CLI Reference</a></li>
-
-</ul>
-
-<h3 id="step-by-step">Step By Step</h3>
-
-<ul>
-
-  <li><a href="/wip/guides/yak/creating-a-grasshopper-plugin-package/">Creating a Grasshopper Plug-In Package</a></li>
-
-</ul>
-
-<h3 id="features">Features</h3>
-
-<ul>
-  <li><a href="/wip/guides/yak/package-restore-in-grasshopper">Package Restore in Grasshopper</a></li>
-</ul>
-
-    </div>
-
-    <div class="col-md-4">
+          <p>
+  <span class="guide_byline">
+    
       
-    </div>
-
-    <div class="col-md-4">
       
-    </div>
+        by <a href="https://discourse.mcneel.com/users/will/activity">Will Pearson</a>
+      
+    
+  </span>
 
-  </div>
+</p>
+
+          <p>This is a step by step guide to creating a package for a Grasshopper plug-in.
+</p>
+
+          <div class="bs-callout">
+
+<strong>Note</strong>: Yak is cross-platform. Not everything is hooked up on the Mac side
+yet, however. So, for now, this guide is aimed at <strong>Windows users only</strong>.
+
+</div>
+
+<!-- The Yak CLI tool is located at `C:\Program Files\Rhino WIP\System\Yak.exe`. -->
+
+<p>First, let’s assume you have a folder on your computer which contains all the
+files that you would like to distribute in your package. Some like this…</p>
+
+<pre><code class="language-commandline">C:\Users\Bozo\dist
+├── Marmoset.gha
+├── Marmoset.dll
+└── misc/
+    ├── README.md
+    └── LICENSE.txt
+</code></pre>
+
+<p>We’re going to use the Yak CLI tool to create the package, so open up a Command
+Prompt and navigate to the directory above.</p>
+
+<pre><code class="language-commandline">&gt; cd C:\Users\Bozo\dist
+</code></pre>
+
+<p>Now, we need a <code>manifest.yml</code> file! You can easily create your own by studying
+the <a href="../the-package-manifest">reference</a>. Alternatively, you can use the <code>spec</code>
+command to generate a skeleton file. We’ll do the latter here.</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" spec
+
+Found a Grasshopper plug-in: Plankton.gha
+
+---
+name: marmoset
+version: 1.0.0
+authors:
+- &lt;author&gt;
+description: &lt;description&gt;
+url: &lt;url&gt;
+secret:
+  id: 8dd38fd1-c572-dc53-ab35-c82d14e1ed08
+
+
+Saved to C:\Users\Bozo\dist\manifest.yml
+</code></pre>
+
+<p>The <code>spec</code> command takes a look at the current directory and, if present, will
+glean useful information from the <code>.gha</code> assembly and use it generate a
+<code>manifest.yml</code> with name, version, authors, etc. pre-populated. If you haven’t
+added this information, then placeholders will be used.</p>
+
+<div class="bs-callout">
+
+<strong>Note</strong>: You might notice your plug-in's GUID lurking in the
+<code>secret/id</code> key. More information on how this is used can be found in
+the <a href="../package-restore-in-grasshopper">"Package Restore in Grasshopper"
+</a> guide.
+
+</div>
+
+<p>Open the manifest file with your <a href="http://atom.io">favourite editor</a> and fill in
+the gaps.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
 </div>
 
         <!--/div-->
@@ -329,27 +391,32 @@ $(document).ready(function()
     <div class="footer-col-wrapper">
 
       
-
         <div class="row">
-          <div class="col-md-3">
-              <span class="icon  icon--github">
-                <svg viewBox="0 0 16 16">
-                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
-                </svg>
-              </span>
-              <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/yak.md" target="_blank">Edit on GitHub</a>
-          </div>
+          <div class="col-md-4">
 
-          <div class="col-md-6 text-center">
-            © 1997 - 2017 Robert McNeel &amp; Associates
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/will/activity">Will Pearson</a>
+              
+            </p>
           </div>
-
-          <div class="col-md-3">
-            <span class="pull-right">
-              <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
             </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/yak/creating-a-grasshopper-plugin-package.md" target="_blank">Edit page on GitHub</a>
           </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
 
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
         </div>
 
       
