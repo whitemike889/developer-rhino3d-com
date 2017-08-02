@@ -300,6 +300,22 @@ $(document).ready(function()
           
 
         
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#troubleshooting">Troubleshooting</a>
+
+              
+
+            </li>
+          
+
+        
     </ul>
 </nav>
 
@@ -342,8 +358,9 @@ $(document).ready(function()
 
           <div class="bs-callout">
 
-<strong>Note</strong>: Yak is cross-platform. Not everything is hooked up on the Mac side
-yet, however. So, for now, this guide is aimed at <strong>Windows users only</strong>.
+<strong>Note</strong>: Yak is cross-platform. Not everything is hooked up on the
+Mac side yet, however. So, for now, this guide is aimed at <strong>Windows users
+only</strong>.
 
 </div>
 
@@ -367,7 +384,68 @@ the package database has a graphical interface.</li>
 ownership.</li>
 </ul>
 
+<p>Once you’ve accepted, the browser window will close itself. Yak has retrieved an
+OAuth token from Rhino Accounts and has stored this on your computer.</p>
+
+<ul>
+  <li>Mac - <code>~/.mcneel/yak.yml</code></li>
+  <li>Windows - <code>%APPDATA%\McNeel\yak.yml</code></li>
+</ul>
+
+<div class="bs-callout">
+<strong>Note</strong>: For security, the OAuth token is valid for a limited time
+only. Don't be surprised if the Yak CLI tool requires you to log in again after
+30 days or so.
+</div>
+
 <h2 id="push">Push!</h2>
+
+<p>Now that you’re logged in, it’s possible to push a package to the server. I’ll
+use the package created in the
+<a href="../creating-a-grasshopper-plugin-package">previous guide</a> as an example.</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" push marmoset-1.0.0.yak
+</code></pre>
+
+<p>Currently (v0.2), this command doesn’t produce any output on success.</p>
+
+<p>You can check that your package has been successfully pushed by searching for
+it. You should see the name and version number of the package that you just
+pushed. 🤞</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" search marmoset
+
+marmoset (1.0.0)
+</code></pre>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<p>There are a few reasons why pushing a package might not work.</p>
+
+<ul>
+  <li>
+    <p>Invalid <code>manifest.yml</code></p>
+
+    <p><em>The error message should be self explanatory. Fix it up and try again! You
+can also try validating the YAML syntax itself with a
+<a href="http://www.yamllint.com">linter</a>.</em></p>
+  </li>
+  <li>
+    <p>The package name already exists, but you’re not an <strong>owner</strong>.</p>
+
+    <p><em>Only package <strong>owners</strong> are permitted to push new versions of their packages.
+When a user pushes the first version of a package, they become its <strong>owner</strong>.
+In the future it will be possible to grant <strong>ownership</strong> to other users.
+Package names are case-insensitive.</em></p>
+  </li>
+  <li>
+    <p>The package version already exists.</p>
+
+    <p><em>In order to prevent disruption to others who are using one of your packages,
+it’s not possible to delete or overwrite versions. Roll the version number and
+let your users know that there’s something new for them to try!</em></p>
+  </li>
+</ul>
 
         </article>
 
