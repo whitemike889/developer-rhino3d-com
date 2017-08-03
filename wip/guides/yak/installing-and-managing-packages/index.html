@@ -6,21 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Package Restore in Grasshopper</title>
-  <meta name="description" content="How can Grasshopper use Yak to make your life easier?">
+  <title>Installing and Managing Packages</title>
+  <meta name="description" content="This is a step by step guide to installing a Yak package.">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/yak/package-restore-in-grasshopper/" />
-  <meta property="og:title" content="Package Restore in Grasshopper" />
-  <meta property="og:description" content="How can Grasshopper use Yak to make your life easier?" />
+  <meta property="og:url" content="/guides/yak/installing-and-managing-packages/" />
+  <meta property="og:title" content="Installing and Managing Packages" />
+  <meta property="og:description" content="This is a step by step guide to installing a Yak package.
+" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Package Restore in Grasshopper" />
-  <meta name="twitter:description" value="How can Grasshopper use Yak to make your life easier?" />
+  <meta name="twitter:title" value="Installing and Managing Packages" />
+  <meta name="twitter:description" value="This is a step by step guide to installing a Yak package.
+" />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -49,7 +51,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/yak/package-restore-in-grasshopper/">
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/yak/installing-and-managing-packages/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
 
   <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
@@ -98,7 +100,7 @@
     
 <div class="version-banner">
     Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/yak/package-restore-in-grasshopper/">View the current version instead.</a>
+    <a href="/guides/yak/installing-and-managing-packages/">View the current version instead.</a>
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -274,7 +276,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#overview">Overview</a>
+              <a href="#install">Install</a>
 
               
 
@@ -290,33 +292,24 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#constraints">Constraints</a>
+              <a href="#uninstall">Uninstall</a>
 
               
-                <ul class="nav nav-stacked">
-                  
 
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#naming-and-guid-fallback">Naming (and GUID fallback)</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#version-numbers">Version numbers</a>
-                    </li>
-                  
+            </li>
+          
 
-                </ul>
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#list">List</a>
+
               
 
             </li>
@@ -341,12 +334,12 @@ $(document).ready(function()
 
               
                 
-                  <li class="active">Features</li>
+                  <li class="active">Step By Step</li>
                 
               
           </ol>
 
-          <h1>Package Restore in Grasshopper</h1>
+          <h1>Installing and Managing Packages</h1>
 
           <p>
   <span class="guide_byline">
@@ -360,73 +353,68 @@ $(document).ready(function()
 
 </p>
 
-          <p>How can Grasshopper use Yak to make your life easier?</p>
+          <p>This is a step by step guide to installing a Yak package.
+</p>
 
-          <h2 id="overview">Overview</h2>
+          <div class="bs-callout">
 
-<p>For starters, this is less of a developer guide and more of a description of how
-this feature works, so that you, the developer, can better understand how your
-package and plug-in needs to be set up in order to leverage it.</p>
+<strong>Note</strong>: Yak is cross-platform. Not everything is hooked up on the Mac side
+yet, however. So, for now, this guide is aimed at <strong>Windows users only</strong>.
 
-<p>It can be frustrating to open a Grasshopper definition only to find that the
-required plug-ins aren’t installed on the system. Yak can help by streamlining
-the process of satisfying those dependencies.</p>
+</div>
 
-<p>Yak hooks into the “Unrecognized Objects” dialog and presents the user with a
-new “Install” option.</p>
+<h2 id="install">Install</h2>
 
-<p><img src="/wip/images/yak-gh-restore.gif" alt="Grasshopper package restore" /></p>
+<p>Installing a yak package with the CLI tool is simple.</p>
 
-<p>Yak uses the name and version of the “libraries” (plug-ins) to which the missing
-components belong to search the server. If any packages match the search query
-then they will be installed and made available the next time Grasshopper loads.</p>
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" install marmoset
 
-<h2 id="constraints">Constraints</h2>
-
-<h3 id="naming-and-guid-fallback">Naming (and GUID fallback)</h3>
-
-<p>In case the package name doesn’t match<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> the plug-in name (as defined in the
-<code>GH_AssemblyInfo</code> derived class), Yak will fall back to searching by plug-in ID.</p>
-
-<p><img src="/wip/images/yak-gh-restore-guid.gif" alt="Package restore can still operate when the plug-in name doesn't match the package" /></p>
-
-<p>Here’s a closer look.</p>
-
-<p><img src="/wip/images/yak-gh-restore-guid.png" alt="Package restore can still operate when the plug-in name doesn't match the package" /></p>
-
-<p>The plug-in ID (GUID) is extracted from the <code>.gha</code> assembly when you run
-<code>yak build</code> and added to <code>manifest.yml</code>. When the package is pushed, the server
-extracts the ID (along with the name, version, etc.) and makes it searchable.
-This is to say, if you don’t want to change the name of your Grasshopper plug-in
-to conform with the constraints<sup id="fnref:1:1"><a href="#fn:1" class="footnote">1</a></sup>, <em>please</em> make sure you build the package
-using <code>yak build</code> so this can all work happily!</p>
-
-<h3 id="version-numbers">Version numbers</h3>
-
-<p>Similar to the naming, the Yak server is strict in its use of Semantic
-Versioning<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> for packages. The server will however attempt to coerce version
-strings that don’t exactly match the specification, for example: <code>1 -&gt; 1.0.0</code>.
-If the “Unrecognized Objects” dialog kicks up a plug-in that doesn’t match
-Semantic Versioning (and can’t be coerced), then it won’t find any matches.</p>
-
-<pre><code class="language-commandline">404: No package found by the name of 'plankton' with version number 'semwhat'.
+Downloading marmoset (1.0.0)...
+Downloaded marmoset (1.0.0)
+Installing marmoset (1.0.0)...
+Successfully installed marmoset (1.0.0)
 </code></pre>
 
-<p>That said, you won’t be able to upload a package without adopting Semantic
-Versioning, so…</p>
+<div class="bs-callout">
 
-<hr />
+<strong>Note</strong>: Rhino will load new packages the next time it starts.
 
-<div class="footnotes">
-  <ol>
-    <li id="fn:1">
-      <p>Package names are pretty strict. They only allow letters, numbers, hyphens and underscores.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a>&nbsp;<a href="#fnref:1:1" class="reversefootnote">&#8617;<sup>2</sup></a></p>
-    </li>
-    <li id="fn:2">
-      <p><a href="http://semver.org/spec/v2.0.0.html">http://semver.org/spec/v2.0.0.html</a>&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
-    </li>
-  </ol>
 </div>
+
+<p>You can also ask Yak to install a specific version.</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" install marmoset 1.0.0
+
+...
+</code></pre>
+
+<p>The package is installed to a special folder, similar to the Grasshopper
+Libraries folder but with a folder/file structure that Yak controls.</p>
+
+<h2 id="uninstall">Uninstall</h2>
+
+<p>Packages can also be easily uninstalled using the Yak CLI tool.</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" uninstall marmoset
+
+marmoset successfully uninstalled
+</code></pre>
+
+<div class="bs-callout">
+
+<strong>Note</strong>: Rhino will register that the package has been uninstalled
+the next time it starts.
+
+</div>
+
+<h2 id="list">List</h2>
+
+<p>At any point you can check which packages are currently installed.</p>
+
+<pre><code class="language-commandline">&gt; "C:\Program Files\Rhino WIP\System\Yak.exe" list
+
+marmoset (1.0.0)
+</code></pre>
 
         </article>
 
@@ -461,7 +449,7 @@ Versioning, so…</p>
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/yak/package-restore-in-grasshopper.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/yak/installing-and-managing-packages.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
