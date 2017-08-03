@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>What is Yak?</title>
-  <meta name="description" content="This guide gives an overview of the Yak package manager.">
+  <meta name="description" content="This guide introduces the Yak package manager.">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/yak/what-is-yak/" />
   <meta property="og:title" content="What is Yak?" />
-  <meta property="og:description" content="This guide gives an overview of the Yak package manager." />
+  <meta property="og:description" content="This guide introduces the Yak package manager." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="What is Yak?" />
-  <meta name="twitter:description" value="This guide gives an overview of the Yak package manager." />
+  <meta name="twitter:description" value="This guide introduces the Yak package manager." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -274,7 +274,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#the-server">The Server</a>
+              <a href="#overview">Overview</a>
 
               
 
@@ -290,7 +290,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#the-command-line-tool">The Command Line Tool</a>
+              <a href="#server">Server</a>
 
               
 
@@ -306,7 +306,23 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#grasshopper-integration">Grasshopper Integration</a>
+              <a href="#command-line-tool">Command Line Tool</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#integrations">Integrations</a>
 
               
 
@@ -351,17 +367,50 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide gives an overview of the Yak package manager.</p>
+          <p>This guide introduces the Yak package manager.</p>
 
-          <p>Yak is a package manager for the Rhino ecosystem.</p>
+          <h2 id="overview">Overview</h2>
 
-<h2 id="the-server">The Server</h2>
+<p>Yak is a package manager for the Rhino ecosystem. Not wanting to reinvent the
+wheel we’ve taken inspiration from Linux and the software development world in
+general. The package manager has several goals.</p>
 
-<h2 id="the-command-line-tool">The Command Line Tool</h2>
+<ul>
+  <li>Make it easier for users to discover and manage plug-ins and more</li>
+  <li>Help developers to share their work</li>
+  <li>Provide simple tools that can be used for system administration</li>
+</ul>
 
-<h2 id="grasshopper-integration">Grasshopper Integration</h2>
+<p>The package management system can be broken down into three main areas.</p>
 
-<p>Thus far Yak has been integrated into Grasshopper’s “Unrecognized Objects” dialog.</p>
+<ol>
+  <li><a href="#server">Server</a></li>
+  <li><a href="#command-line-tool">Command line tool</a></li>
+  <li><a href="#integrations">Integrations</a></li>
+</ol>
+
+<h2 id="server">Server</h2>
+
+<p>The package server is the heart of the system. It can be hosted almost anywhere
+and keeps the packages organised for its clients – the command line tool and
+Rhino (via integrations).</p>
+
+<h2 id="command-line-tool">Command Line Tool</h2>
+
+<p>The command line tool provides a basic interface but with full functionality.
+It is modelled on well known domain-specific package managers such as Ruby’s
+<code>gem</code> and Python’s <code>pip</code>. It communicates with the server as well as hooking
+into Rhino Accounts for authentication.</p>
+
+<h2 id="integrations">Integrations</h2>
+
+<p>Built on top of the same code that is used by the command line tool,
+integrations provide direct access to the package ecosystem from inside of
+Rhino.</p>
+
+<p>Thus far Yak has been integrated into Grasshopper’s “Unrecognized Objects”
+dialog, providing <a href="../package-restore-in-grasshopper">package restore</a>
+functionality.</p>
 
         </article>
 

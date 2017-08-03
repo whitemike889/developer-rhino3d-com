@@ -274,7 +274,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#commands">Commands</a>
+              <a href="#build">Build</a>
 
               
 
@@ -290,7 +290,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#build"></a>
+              <a href="#install">Install</a>
 
               
 
@@ -306,7 +306,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#install"></a>
+              <a href="#list">List</a>
 
               
 
@@ -322,7 +322,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#list"></a>
+              <a href="#login">Login</a>
 
               
 
@@ -338,7 +338,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#login"></a>
+              <a href="#push">Push</a>
 
               
 
@@ -354,7 +354,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#push"></a>
+              <a href="#search">Search</a>
 
               
 
@@ -370,7 +370,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#search"></a>
+              <a href="#spec">Spec</a>
 
               
 
@@ -386,23 +386,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#spec"></a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#uninstall"></a>
+              <a href="#uninstall">Uninstall</a>
 
               
 
@@ -449,20 +433,7 @@ $(document).ready(function()
 
           <p>A reference for the Yak command line tool.</p>
 
-          <h2 id="commands">Commands</h2>
-
-<ul>
-  <li><a href="#build"><code>build</code></a></li>
-  <li><a href="#install"><code>install</code></a></li>
-  <li><a href="#list"><code>list</code></a></li>
-  <li><a href="#login"><code>login</code></a></li>
-  <li><a href="#push"><code>push</code></a></li>
-  <li><a href="#search"><code>search</code></a></li>
-  <li><a href="#spec"><code>spec</code></a></li>
-  <li><a href="#uninstall"><code>uninstall</code></a></li>
-</ul>
-
-<h2 id="build"><code>build</code></h2>
+          <h2 id="build">Build</h2>
 
 <p><em>Since 0.2</em></p>
 
@@ -471,10 +442,12 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak build
 </code></pre>
 
-<p><strong>Note</strong>: Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.
-<!-- During the build, the component GUID is extracted to help with searching for the package later. --></p>
+<div class="bs-callout">
+  <strong>Note</strong>: Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.
+</div>
+<!-- During the build, the component GUID is extracted to help with searching for the package later. -->
 
-<h2 id="install"><code>install</code></h2>
+<h2 id="install">Install</h2>
 
 <p><em>Since 0.1</em></p>
 
@@ -483,7 +456,7 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak install [--source=URL] &lt;package&gt; [&lt;version&gt;]
 </code></pre>
 
-<h2 id="list"><code>list</code></h2>
+<h2 id="list">List</h2>
 
 <p><em>Since 0.2</em></p>
 
@@ -492,7 +465,7 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak list
 </code></pre>
 
-<h2 id="login"><code>login</code></h2>
+<h2 id="login">Login</h2>
 
 <p><em>Since 0.2</em></p>
 
@@ -503,7 +476,7 @@ $(document).ready(function()
 
 <p>On macOS, credentials are stored in <code>~/.mcneel/yak.yml</code>. On Windows, they are stored in <code>%appdata%\McNeel\yak.yml</code>.</p>
 
-<h2 id="push"><code>push</code></h2>
+<h2 id="push">Push</h2>
 
 <p><em>Since 0.1</em></p>
 
@@ -512,9 +485,11 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak push [--source=URL] &lt;filename&gt;
 </code></pre>
 
-<p><strong>Note</strong>: Requires <a href="#login">authentication</a>.</p>
+<div class="bs-callout">
+  <strong>Note</strong>: Requires <a href="#login">authentication</a>.
+</div>
 
-<h2 id="search"><code>search</code></h2>
+<h2 id="search">Search</h2>
 
 <p><em>Since 0.1</em></p>
 
@@ -523,7 +498,7 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak search [--source=URL] &lt;query&gt;
 </code></pre>
 
-<h2 id="spec"><code>spec</code></h2>
+<h2 id="spec">Spec</h2>
 
 <p><em>Since 0.2</em></p>
 
@@ -532,20 +507,25 @@ $(document).ready(function()
 <pre><code class="language-commandline">yak spec
 </code></pre>
 
-<p><strong>Note</strong>: Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.</p>
+<div class="bs-callout">
+  <strong>Note</strong>: Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.
+</div>
 
-<p><strong>Note 2</strong>: This command is only useful if you’ve implemented <code>GH_AssemblyInfo</code> in the Grasshopper plug-in.</p>
+<div class="bs-callout">
+  <strong>Note</strong>: This command is only useful if you've implemented <code>GH_AssemblyInfo</code> in the Grasshopper plug-in.
+</div>
 
-<h2 id="uninstall"><code>uninstall</code></h2>
+<h2 id="uninstall">Uninstall</h2>
 
 <p><em>Since 0.1</em></p>
 
 <p>Uninstalls a package.</p>
 
-<p><strong>Note</strong>: This doesn’t actually remove the package from the machine, it just removes the <code>manifest.txt</code> file that tells Rhino which version to load.</p>
-
 <pre><code class="language-commandline">yak uninstall &lt;package&gt;
 </code></pre>
+<div class="bs-callout">
+  <strong>Note</strong>: This doesn't actually remove the package from the machine, it just removes the <code>manifest.txt</code> file that tells Rhino which version to load.
+</div>
 
         </article>
 
