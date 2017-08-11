@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>An Overview of the GhPython Editor with Python</title>
+  <meta name="description" content="This guide looks at the details of the GhPython Editor.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/ghpython-editor/" />
+  <meta property="og:title" content="An Overview of the GhPython Editor" />
+  <meta property="og:description" content="This guide looks at the details of the GhPython Editor." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="An Overview of the GhPython Editor" />
+  <meta name="twitter:description" value="This guide looks at the details of the GhPython Editor." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac, Grasshopper" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/5/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/5/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/5/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/5/guides/rhinopython/ghpython-editor/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/5/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/5/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/5/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/5/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/5/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/5/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/5/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/5/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/5/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the Rhino <strong>5</strong> version of this page!
+    <a href="/guides/rhinopython/ghpython-editor/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/5/"><img src="/5/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/5/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/5/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/5/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/5/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/5/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#inside-the-script-component">Inside the script component</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#editor-interface">Editor Interface</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#menu">Menu</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#code-window">Code Window</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#output-window">Output Window</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#test-button">Test Button</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#ok-and-close-button">OK and Close Button</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#example-script">Example Script</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/5/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">GhPython</li>
+                
+              
+          </ol>
+
+          <h1>An Overview of the GhPython Editor</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>This guide looks at the details of the GhPython Editor.</p>
+
+          <h2 id="inside-the-script-component">Inside the script component</h2>
+
+<p>To show the code editor window for this script component, double click on the middle of the component, or select “Edit Source…” from the component center-icon context menu.</p>
+
+<p>The Python editor runs IronPython 2.7, the GhPython component can also access the easy-to-use RhinoScritSyntax. For more direct access to Rhino functions, more experienced programmers may choose to use the RhinoCommon, which also can be imported into the GhPython component. There is extensive documentation about <a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python</a> on the Developer site. For more details about RhinoCommon, please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</p>
+
+<h2 id="editor-interface">Editor Interface</h2>
+
+<p>The code editor consists of 4 parts:</p>
+
+<ul>
+  <li>Menu - Use this to import and save Python files, also to access Help resources.</li>
+  <li>Code Window - Write the Python code here.</li>
+  <li>Output window - Use this to see code status and error messages.</li>
+  <li>Test Button - Runs the code without exiting the editor</li>
+  <li>OK Button - Tests the code, saves it and closes the editor.</li>
+  <li>Close Button - Saves the code and closes the editor.</li>
+</ul>
+
+<p><img src="/5/images/ghpython-blankeditor.png" alt="/5/images/ghpython-blankeditor.png" class="img-center" width="75%" /></p>
+
+<h3 id="menu">Menu</h3>
+
+<p>The Menu contains a File pulldown and a help pulldown.</p>
+
+<table class="multiline">
+<tr>
+<th width="15%">File Menu</th>
+<th>Descritption</th>
+<th>Shortcut</th>
+</tr>
+<tr>
+<td>Close</td>
+<td>This will save the definition and close the editor, returning back to the Grasshopper definition</td><td>Alt+F4</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>The script will run within the Grasshopper definition.  The Output window will be update with the results and editor will stay open.  This is a great window for quick debugging of the script.</td>
+<td>F5</td>
+</tr>
+<tr>
+<td>OK</td>
+<td>This will run the code, like the Test button.  Then will save the code and close the editor, returning you back to the Grasshopper definition.</td><td>Ctrl + F5</td>
+</tr>
+<tr>
+<td>Import From...</td>
+<td>Browse for and import a <i>.py</i> file into the editor. </td>
+<td>Ctrl + I</td>
+</tr>
+<tr>
+<td>Export As...</td>
+<td>Save the code in the editor to a <i>.py</i> file on the disk.</td>
+<td>Ctrl + E</td>
+</tr>
+</table>
+
+<h3 id="code-window">Code Window</h3>
+
+<p>This is where all the typing goes on and the grand ideas you have come to life.</p>
+
+<p>This is very similar to the Rhino.Ptyhon script editor.  Simply type in the statements.</p>
+
+<h4 id="importing-modules">Importing modules</h4>
+
+<p>Normally a script will start with <code>import</code> statements.  The editor will autocomplete the modules which are available.
+Note: some modules may not autocomplete but still be available.</p>
+
+<p><img src="/5/images/ghpython-editor-import.png" alt="/5/images/ghpython-editor-import.png" class="img-center" width="60%" /></p>
+
+<p>Some common module that may be imported are:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+import math #Various math functions including Degree, Radian and Hypot
+import statistics #Mean and median are here
+</code></pre>
+
+<p>There are hundreds of modules available, for a complete list, go to <a href="https://docs.python.org/2/library/">Python Standard Libaries</a>.  Here is a very short list of other modules that can be used:</p>
+
+<pre><code class="language-python">import rhino #imports the rhinocommon namespace
+import cmath #Mathematical functions for complex numbers
+import datetime #Basic date and time types
+import string #Common string operations
+import random #Generate pseudo-random numbers
+import pickle #Python object to string for serialization
+import system #System-specific parameters and functions
+import os.path #Common pathname manipulations
+import csv #CSV File Reading and Writing
+import htmllib #A parser for HTML documents
+import json #JSON encoder and decoder
+</code></pre>
+<p>Once a module is imported, typing the module name and a dot will show an autocomplete of all the methods within that module.</p>
+
+<h4 id="input-variables">Input Variables</h4>
+
+<p>Each time Grasshopper recalculates the definition, the Python component will imput the inputs of the GhPython component as global variables in the Python script.  The name of those variables will correspond to the name of each input.  As a simple example this example:</p>
+
+<p><img src="/5/images/ghpython-input.png" alt="/5/images/ghpython-input.png" class="img-center" width="80%" /></p>
+
+<p>The code to process the <code>x</code> input is as follows:</p>
+
+<pre><code class="language-python">if x:
+    print("x is true.")
+else:
+    print("x is false.")
+</code></pre>
+
+<p>Understanding the type of date is being input and how that maps to standard Python components is important. If the datatype is not what is needed in the Python script by default, then use the <code>Type hint</code> option on the component. This assures the correct datatype on input.</p>
+
+<h4 id="output-variables">Output variables</h4>
+
+<p>To output to the component set the value of the output name to a variable. For instance if the output is named <code>a</code>, then the code to send “Hello World!” to the output would be:</p>
+
+<pre><code class="language-python">a = "Hello World!"
+</code></pre>
+
+<p>The last assignment to the variable in the script will the the value that is output.  If there are multiple assignments, as in a list of values assigned in a loop to the output variable, only the last one is sent out.  This can be a bit confusing.  The key is to assign the series of outputs to a list variable, then output that variable through the <code>a</code> output.</p>
+
+<p>As an example, this does not work:</p>
+
+<pre><code class="language-python">l = [2,3,4,4,5,4,5,6,7,8,9]
+
+a = []
+
+for item in l:
+    a = item + 5
+</code></pre>
+
+<p>There are two problems with the script above. An output variable in GhPython is created by the GhPython component.  It cannot be set to a specific variable type as in the line <code>a=[]</code>.  Also, the <code>for</code> will loop throught he items in <code>l</code>, only to output the last assigned value to <code>a</code> at the completion of the Grasshopper cycle.</p>
+
+<p>The proper way to output a series of values is to create a list variable to populate, then output that variable to <code>a</code> at the end of the script.</p>
+
+<pre><code class="language-python">l = [2,3,4,4,5,4,5,6,7,8,9]
+
+li=[]
+
+for item in l:
+    li.append(item + 5)
+
+a = li
+</code></pre>
+
+<h4 id="print-function">Print function</h4>
+
+<p>The <code>print()</code> function used in the GhPtyhon script will print information out to the Output Window.  This is a good way to debug script in the window also.
+Because we are using a flavor of Python 2, print is really a statement, that works also without parentheses. However, we prefer to look at is a function, that way it will work the same also in Python 3 flavors.</p>
+
+<h3 id="output-window">Output Window</h3>
+
+<p>The Output Window contains help and messages about the staus of the editor.</p>
+
+<ol>
+  <li>If the script is run while the editor is open, the success or failure of the script will be displayed here.</li>
+  <li>If there is an error whle testing the script, the error information will display in the Output Window.</li>
+</ol>
+
+<pre><code>Runtime error (SyntaxErrorException): EOL while scanning single-quoted string
+
+File "", line 10
+    import 'rhinoscriptsyntax as rs
+
+           ^
+SyntaxError: EOL while scanning single-quoted string
+</code></pre>
+
+<ol>
+  <li>The <code>print()</code> function will output to this window.</li>
+  <li>While editing a script, information about the current method will be displayed here. The comments about a method are limited to arguement requirements.  For a fuller explaination of any method, go to the python help file.</li>
+</ol>
+
+<h3 id="test-button">Test Button</h3>
+
+<p>Use the <em>Test</em> button to run the script while keeping the Ghpython editor is up on the screen.  The Grasshopper definition will also be updated at the same time.</p>
+
+<h3 id="ok-and-close-button">OK and Close Button</h3>
+
+<p>The <em>OK</em> button will save the scrip tto the GhPython component and will close the editor, retuning to Grasshopper.</p>
+
+<p>The <em>Close</em> button will revert any changes to the script and return to grasshopper, using the previously saved script.</p>
+
+<h2 id="example-script">Example Script</h2>
+
+<p>Here is an example script:</p>
+
+<pre class="line-numbers"><code class="language-python"># sample script to show how to use this component and the rhinoscriptsyntax
+"""Constructs a sinusoidal series of circles.
+  Inputs:
+    x: The number of circles. (integer)
+    y: The radius of each circle. (float)
+  Outputs:
+    a: The list of circles. (list of circle)
+    b: The list of radii. (list of float)
+"""
+import math
+import rhinoscriptsyntax as rs
+
+if x is None:
+    x = 24    # if nothing is connected to x, set x to something (24).
+if y is None:
+    y = 0.3    # if nothing is connected to y, set y to 0.3.
+
+circles = []            # create a list. We will add IDs to it later on.
+radii = []              # ...and create another one.
+
+for i in range(int(x)):
+    pt = (i, math.cos(i), 0)             # a tuple (here for a point).
+    id1 = rs.AddCircle(pt, y)
+    circles.append(id1)
+    endPt = rs.PointAdd(pt, (0, 0.3, 0)) # move the point by the vector.
+    id2 = rs.AddLine(pt, endPt)
+    radii.append(id2)
+
+a = circles
+b = radii
+</code></pre>
+
+<table class="multiline">
+<tr>
+<th>Line</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>2...9</td>
+<td>
+A multiline comment that explains the inputs and outputs of the script.
+</td>
+</tr>
+<tr>
+<td>10...11</td>
+<td>Importing a couple modules that are needed later in the script.</td>
+</tr>
+<tr>
+<td>13...16</td>
+<td>Here we check the the values of the two inputs `x` and `y` have a value.  If not the values are set to default values.</td>
+</tr>
+<tr>
+<td>21...27</td>
+<td>Use a <i>For</i> loop to walk through each circle based on the value of <i>x</i>.</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Each time through the loop, circles are added to the <i>circles</i> variable.</td>
+</tr>
+<tr>
+<td>29</td>
+<td>The circles are output to the <i>a</i> output</td>
+</tr>
+</table>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>That quick look at the GhPython editor.  Next is a try a Python script for yourself.</p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/5/guides/rhinopython/what-are-python-rhinoscript">Your first script with Python in Grasshopper</a></li>
+  <li><a href="/5/guides/rhinopython/what-are-python-rhinoscript">What is Python and RhinoScript?</a></li>
+  <li><a href="/5/guides/rhinopython/python-loading-scripts">Editing Python in Grasshopper</a></li>
+  <li><a href="/5/guides/rhinopython/">Python Guide for Rhino</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/5/_guide_topics/rhinopython/ghpython-editor.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/5/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>

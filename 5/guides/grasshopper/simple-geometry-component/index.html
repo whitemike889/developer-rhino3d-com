@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple Geometry Component with C#, VB</title>
+  <meta name="description" content="This guide demonstrates how to use some of the simpler geometry types and classes in RhinoCommon & Grasshopper.  Using C#, VB">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/grasshopper/simple-geometry-component/" />
+  <meta property="og:title" content="Simple Geometry Component" />
+  <meta property="og:description" content="This guide demonstrates how to use some of the simpler geometry types and classes in RhinoCommon & Grasshopper." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Simple Geometry Component" />
+  <meta name="twitter:description" value="This guide demonstrates how to use some of the simpler geometry types and classes in RhinoCommon & Grasshopper." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#, VB" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/5/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/5/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/5/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/5/guides/grasshopper/simple-geometry-component/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/5/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/5/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/5/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/5/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/5/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/5/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/5/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/5/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/5/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+<div class="version-banner">
+    Hey, you're viewing the Rhino <strong>5</strong> version of this page!
+    <a href="/guides/grasshopper/simple-geometry-component/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/5/"><img src="/5/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/5/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/5/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/5/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/5/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/5/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/5/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#overview">Overview</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#prerequisites">Prerequisites</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#input-parameters">Input Parameters</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#output-parameters">Output Parameters</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#solve-instance">Solve Instance</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/5/guides/grasshopper">Grasshopper</a></li>
+
+              
+                
+                  <li class="active">Fundamentals</li>
+                
+              
+          </ol>
+
+          <h1>Simple Geometry Component</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>This guide demonstrates how to use some of the simpler geometry types and classes in RhinoCommon & Grasshopper.</p>
+
+          <p>We’ll discuss how to deal with different access levels of input data and invalid Structs vs. invalid and null Classes.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>This component will perform a simple Circle-Line Split operation.  We’ll retrieve a single Circle and a single Line input, make sure the data is valid, project the line onto the circle plane, determine whether or not the Split operation is valid and then output the two arcs on either side of the slicing line.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>We will not be dealing with any of the basics of component development.  Please make sure you have read the <a href="/5/guides/grasshopper/your-first-component-windows">Your First Component</a>, <a href="/5/guides/grasshopper/simple-component">Simple Component</a>, and <a href="/5/guides/grasshopper/simple-mathematics-component">Simple Mathematics Component</a> guides before starting this one.</p>
+
+<p>Before you start, create a new class that derives from <code>Grasshopper.Kernel.GH_Component</code>, as outlined in the <a href="/5/guides/grasshopper/simple-component">Simple Component</a> guide.</p>
+
+<h2 id="input-parameters">Input Parameters</h2>
+
+<p>This part of the component is very similar to the <a href="/5/guides/grasshopper/simple-mathematics-component">Simple Mathematics Component</a>, except this time there will be no default values.</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs" data-toggle="pill">C#</a></li>
+  <li><a href="#vb" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs"><code class="language-cs">...
+protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+{
+  pManager.AddCircleParameter("Circle", "C", "The circle to slice", GH_ParamAccess.item);
+  pManager.AddLineParameter("Line", "L", "Slicing line", GH_ParamAccess.item);
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb"><code class="language-vbnet">...
+Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
+  pManager.AddCircleParameter("Circle", "C", "The circle to slice", GH_ParamAccess.item)
+  pManager.AddLineParameter("Line", "L", "Slicing line", GH_ParamAccess.item)
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>The first parameter is of type <code>Param_Circle</code> and the data it contains will consist solely of <code>GH_Circle</code>.  <code>GH_Circle</code> is a class that wraps the <code>Rhino.Geometry.Circle</code> structure.  It provides methods that allow Grasshopper to incorporate RhinoCommon circles into the default GUI.  These methods include Archiving, Previewing, Baking and Casting (Converting) functions.  However, when accessing data inside a <code>Param_Circle</code> parameter, you are not limited to the <code>GH_Circle</code> type, as we shall see.</p>
+
+<p>The second parameter is of type <code>Param_Line</code> and it works very similar to the <code>Param_Circle</code> type discussed above.</p>
+
+<h2 id="output-parameters">Output Parameters</h2>
+
+<p>Our component will output two arcs on success, or nulls on failure.</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs1" data-toggle="pill">C#</a></li>
+  <li><a href="#vb1" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs1"><code class="language-cs">...
+protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+{
+  pManager.AddArcParameter("Arc A", "A", "First Split result.", GH_ParamAccess.item);
+  pManager.AddArcParameter("Arc B", "B", "Second Split result.", GH_ParamAccess.item);
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb1"><code class="language-vbnet">...
+Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+  pManager.AddArcParameter("Arc A", "A", "First Split result.", GH_ParamAccess.item)
+  pManager.AddArcParameter("Arc B", "B", "Second Split result.", GH_ParamAccess.item)
+End Sub
+...
+</code></pre>
+
+</div>
+
+<h2 id="solve-instance">Solve Instance</h2>
+
+<p>The <code>SolveInstance()</code> implementation for this component is responsible for the following steps:</p>
+
+<ol>
+  <li>Declare placeholder variables for the input data.</li>
+  <li>Retrieve input data.</li>
+  <li>Test input data for validity.</li>
+  <li>Project line segment onto circle plane.</li>
+  <li>Test projected segment for validity.</li>
+  <li>Solve intersections for circle and projected segment.</li>
+  <li>Abort on insufficient intersections.</li>
+  <li>Create the slice arcs.</li>
+  <li>Assign arcs to the output parameters.</li>
+</ol>
+
+<p>Steps 2 and 9 however can be approached from different directions.  First I’ll show you the recommended approach and then we’ll have a look at the alternatives:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs2" data-toggle="pill">C#</a></li>
+  <li><a href="#vb2" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs2"><code class="language-cs">...
+protected override void SolveInstance(IGH_DataAccess DA)
+{
+  // 1. Declare placeholder variables and assign initial invalid data.
+  //    This way, if the input parameters fail to supply valid data, we know when to abort.
+  Rhino.Geometry.Circle circle = Rhino.Geometry.Circle.Unset;
+  Rhino.Geometry.Line line = Rhino.Geometry.Line.Unset;
+
+  // 2. Retrieve input data.
+  if (!DA.GetData(0, ref circle)) { return; }
+  if (!DA.GetData(1, ref line)) { return; }
+
+  // 3. Abort on invalid inputs.
+  if (!circle.IsValid) { return; }
+  if (!line.IsValid) { return; }
+
+  // 4. Project line segment onto circle plane.
+  line.Transform(Rhino.Geometry.Transform.PlanarProjection(circle.Plane));
+
+  // 5. Test projected segment for validity.
+  if (line.Length &lt; Rhino.RhinoMath.ZeroTolerance)
+  {
+    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Line could not be projected onto the Circle plane");
+    return;
+  }
+
+  // 6. Solve intersections and 7. Abort if there are less than two intersections.
+  double t1;
+  double t2;
+  Rhino.Geometry.Point3d p1;
+  Rhino.Geometry.Point3d p2;
+
+  switch (Rhino.Geometry.Intersect.Intersection.LineCircle(line, circle, out t1, out p1, out t2, out p2))
+  {
+    case Rhino.Geometry.Intersect.LineCircleIntersection.None:
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No intersections were found");
+      return;
+
+    case Rhino.Geometry.Intersect.LineCircleIntersection.Single:
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only a single intersection was found");
+      return;
+  }
+
+  // 8. Create slicing arcs.
+  double ct;
+  circle.ClosestParameterTo(p1, out ct);
+
+  Rhino.Geometry.Vector3d tan = circle.TangentAt(ct);
+
+  // 9. Assign output arcs.
+  DA.SetData(0, new Rhino.Geometry.Arc(p1, tan, p2));
+  DA.SetData(1, new Rhino.Geometry.Arc(p1, -tan, p2));
+}
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb2"><code class="language-vbnet">...
+Protected Overrides Sub SolveInstance(ByVal DA As Grasshopper.Kernel.IGH_DataAccess)
+  '1. Declare placeholder variables and assign initial invalid data.
+  '   This way, if the input parameters fail to supply valid data, we know when to abort.
+  Dim circle As Rhino.Geometry.Circle = Rhino.Geometry.Circle.Unset
+  Dim line As Rhino.Geometry.Line = Rhino.Geometry.Line.Unset
+
+  '2. Retrieve input data.
+  If (Not DA.GetData(0, circle)) Then Return
+  If (Not DA.GetData(1, line)) Then Return
+
+  '3. Abort on invalid inputs.
+  If (Not circle.IsValid) Then Return
+  If (Not line.IsValid) Then Return
+
+  '4. Project line segment onto circle plane.
+  line.Transform(Rhino.Geometry.Transform.PlanarProjection(circle.Plane))
+
+  '5. Test projected segment for validity.
+  If (line.Length &lt; Rhino.RhinoMath.ZeroTolerance) Then
+    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Line could not be projected onto the Circle plane")
+    Return
+  End If
+
+  '6. Solve intersections and 7. Abort if there are less than two intersections.
+  Dim t1 As Double
+  Dim p1 As Rhino.Geometry.Point3d
+  Dim t2 As Double
+  Dim p2 As Rhino.Geometry.Point3d
+
+  Select Case Rhino.Geometry.Intersect.Intersection.LineCircle(line, circle, t1, p1, t2, p2)
+    Case Rhino.Geometry.Intersect.LineCircleIntersection.None
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No intersections were found")
+      Return
+    Case Rhino.Geometry.Intersect.LineCircleIntersection.Single
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only a single intersection was found")
+      Return
+  End Select
+
+  '8. Create slicing arcs.
+  Dim ct As Double
+  circle.ClosestParameterTo(p1, ct)
+
+  Dim tan As Rhino.Geometry.Vector3d = circle.TangentAt(ct)
+
+  '9. Assign output arcs.
+  DA.SetData(0, New Rhino.Geometry.Arc(p1, tan, p2))
+  DA.SetData(1, New Rhino.Geometry.Arc(p1, -tan, p2))
+End Sub
+...
+</code></pre>
+
+</div>
+
+<p>As I mentioned before, the first input parameter is of type <code>Param_Circle</code> and it contains data of type <code>GH_Circle</code>.  But when we’re accessing the parameter via the <code>DA.GetData(0, circle)</code> method, we’re using <code>Rhino.Geometry.Circle</code> instead of <code>GH_Circle</code>.  The <code>DA.GetData()</code> method is capable of converting data from the intrinsic parameter type into requested types, provided the conversion makes sense.  <code>GH_Circle</code> to <code>Rhino.Geometry.Circle</code> is a perfectly valid conversion, <code>GH_Circle</code> to <code>Rhino.Geometry.Transform</code> would not be.</p>
+
+<p>The Grasshopper Component SDK has been designed on the premise that the bulk of all components that operate on data only care about the data itself, not how it is wrapped up inside the Grasshopper data structures.  The conversion routines that translate <code>GH_Circle</code> data into <code>Rhino.Geometry.Circle</code> data (and obviously also <code>GH_Number</code> into <code>System.Double</code>, and <code>GH_Colour</code> into <code>System.Drawing.Color</code> etc.), have been highly optimised and should be used in almost all circumstances.</p>
+
+<p>If however you feel the need to get access to the <code>GH_Circle</code> data directly, you can retrieve that instance in the same fashion:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs3" data-toggle="pill">C#</a></li>
+  <li><a href="#vb3" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs3"><code class="language-cs">...
+Grasshopper.Kernel.Data.GH_Circle circle = null;
+if (!DA.GetData(0, circle)) { return; }
+...
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb3"><code class="language-vbnet">...
+Dim circle As Grasshopper.Kernel.Data.GH_Circle = Nothing
+If (Not DA.GetData(0, circle)) Then Return
+...
+</code></pre>
+
+</div>
+
+<p>Note that a single instance of <code>GH_Circle</code> may be shared among any number of parameters in Grasshopper, and thus changing one will change data everywhere.  If you request <code>Rhino.Geometry.Circle</code>, <code>System.Double</code> or <code>System.Drawing.Color</code> instead of <code>GH_Circle</code>, <code>GH_Number</code> or <code>GH_Colour</code> you won’t have to worry about this pitfall since you will always be given an object that has been disassociated from the (potentially shared) wrapper type.</p>
+
+<p>Similarly, you are allowed to store output data in different formats as well.  Instead of…</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs4" data-toggle="pill">C#</a></li>
+  <li><a href="#vb4" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs4"><code class="language-cs">DA.SetData(0, new Rhino.Geometry.Arc(p1, tan, p2));
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb4"><code class="language-vbnet">DA.SetData(0, New Rhino.Geometry.Arc(p1, tan, p2))
+</code></pre>
+
+</div>
+
+<p>…you could also provide an instance of <code>Grasshopper.Kernel.Types.GH_Arc</code>:</p>
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#cs5" data-toggle="pill">C#</a></li>
+  <li><a href="#vb5" data-toggle="pill">VB.NET</a></li>
+</ul>
+
+<div class="tab-content">
+
+  <pre class="tab-pane fade in active" id="cs5"><code class="language-cs">Grasshopper.Kernel.Types.GH_Arc gh_arc = new Grasshopper.Kernel.Types.GH_Arc(new Rhino.Geometry.Arc(p1, tan, p2));
+DA.SetData(0, gh_arc);
+</code></pre>
+
+  <pre class="tab-pane fade in" id="vb5"><code class="language-vbnet">Dim gh_arc As New Grasshopper.Kernel.Types.GH_Arc(New Rhino.Geometry.Arc(p1, tan, p2))
+DA.SetData(0, gh_arc)
+</code></pre>
+
+</div>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/5/guides/grasshopper/your-first-component-windows">Your First Component</a></li>
+  <li><a href="/5/guides/grasshopper/simple-component">Simple Component</a></li>
+  <li><a href="/5/guides/grasshopper/simple-mathematics-component">Simple Mathematics Component</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/DavidRutten/activity">David Rutten</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/5/_guide_topics/grasshopper/simple-geometry-component.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/5/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
