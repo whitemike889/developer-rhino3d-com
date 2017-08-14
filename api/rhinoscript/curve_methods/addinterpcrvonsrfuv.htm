@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +78,7 @@ else
 //-->
 //]]></script>
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
@@ -86,63 +86,66 @@ if (window.writeIntopicBar)
 //-->
 //]]></script>
 <h1>AddInterpCrvOnSrfUV</h1>
-<p>Adds an interpolated curve object. based on surface parameters, that lies on a specified surface. Note, this function will not create periodic curves, but it will create closed curves.</p>
+<p>Adds an interpolated curve object. based on surface parameters, that 
+ lies on a specified surface. Note, this function will not create periodic 
+ curves, but it will create closed curves.</p>
 <h3>Syntax</h3>
-<p class="Code" style="font-style: normal;">Rhino.AddInterpCrvOnSrfUV (strObject, arrPoints)</p>
+<p class="Code">Rhino.AddInterpCrvOnSrfUV (strObject, arrPoints)</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 8.991%;" />
-<col style="width: 91.009%;" />
-<tr valign="top">
-<td style="width: 8.991%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: normal;">strObject</p>
-</td>
-<td style="width: 91.009%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. &#160;String. &#160;The surface object's identifier.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 8.991%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: normal;">arrPoints</p>
-</td>
-<td style="width: 91.009%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. &#160;Array. &#160;An array of 2-D surface parameters. The array must contain at least two sets of surface parameters.</p>
-</td>
-</tr>
+	<col style="width: 8.991%;" />
+	<col style="width: 91.009%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 8.991%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: normal;">strObject</p></td>
+		<td style="width: 91.009%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. &#160;String. &#160;The surface 
+		 object's identifier.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 8.991%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: normal;">arrPoints</p></td>
+		<td style="width: 91.009%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. &#160;Array. &#160;An array of 
+		 2-D surface parameters. The array must contain at least two sets 
+		 of surface parameters.</p></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.834%;" />
-<col style="width: 90.166%;" />
-<tr valign="top">
-<td style="width: 9.834%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">String</p>
-</td>
-<td style="width: 90.166%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">The identifier of the new object if successful.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 9.834%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Null</p>
-</td>
-<td style="width: 90.166%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">If not successful, or on error.</p>
-</td>
-</tr>
+	<col style="width: 9.834%;" />
+	<col style="width: 90.166%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 9.834%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">String</p></td>
+		<td style="width: 90.166%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">The identifier of the new object if successful.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.834%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Null</p></td>
+		<td style="width: 90.166%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">If not successful, or on error.</p></td>
+	</tr>
 </table>
 <h3>Example</h3>
 <p class="Code" style="margin-left: 12px;">Const rhObjectSurface = 8</p>
-<p class="Code" style="margin-left: 12px;">Dim strObject, arrDomU, arrDomV, u0, u1, v0, v1</p>
-<p class="Code" style="margin-left: 12px;">strObject = Rhino.GetObject("Select surface to draw curve on", rhObjectSurface)</p>
-<p class="Code" style="margin-left: 12px;">If VarType(strObject) = vbString Then</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;arrDomU = Rhino.SurfaceDomain(strObject, 0)</p>
+<p class="Code" style="margin-left: 12px;">Dim strObject, arrDomU, arrDomV, 
+ u0, u1, v0, v1</p>
+<p class="Code" style="margin-left: 12px;">strObject = Rhino.GetObject(&quot;Select 
+ surface to draw curve on&quot;, rhObjectSurface)</p>
+<p class="Code" style="margin-left: 12px;">If VarType(strObject) = vbString 
+ Then</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;arrDomU = Rhino.SurfaceDomain(strObject, 
+ 0)</p>
 <p class="Code" style="margin-left: 12px;">&#160;&#160;u0 = arrDomU(0)/2</p>
 <p class="Code" style="margin-left: 12px;">&#160;&#160;u1 = arrDomU(1)/2</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;arrDomV = Rhino.SurfaceDomain(strObject, 1)</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;arrDomV = Rhino.SurfaceDomain(strObject, 
+ 1)</p>
 <p class="Code" style="margin-left: 12px;">&#160;&#160;v0 = arrDomV(0)/2</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;V1 = arrDomV(1)/2</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;Rhino.AddInterpCrvOnSrfUV strObject, Array(Array(u0,v0), Array(u1,v1))</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;v1 = arrDomV(1)/2</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;Rhino.AddInterpCrvOnSrfUV 
+ strObject, Array(Array(u0,v0), Array(u1,v1))</p>
 <p class="Code" style="margin-left: 12px;">End If</p>
 <h3>Also See</h3>
 <p><a href="addcurve.htm">AddCurve</a></p>

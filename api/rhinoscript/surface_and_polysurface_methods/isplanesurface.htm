@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +78,7 @@ else
 //-->
 //]]></script>
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
@@ -86,55 +86,62 @@ if (window.writeIntopicBar)
 //-->
 //]]></script>
 <h1>IsPlaneSurface</h1>
-<p>Verifies an object is a plane surface. Plane surfaces can be created by the <span style="font-weight: bold;"><b>Plane</b></span> command. Note, a plane surface is not a planar NURBS surface.</p>
+<p>Verifies an object is a plane surface. Plane surfaces can be created 
+ by the <span style="font-weight: bold;"><b>Plane</b></span> command. Note, a 
+ plane surface is not a planar NURBS surface.</p>
 <h3>Syntax</h3>
-<p class="Code">Rhino.IsPlaneSurface (<span style="font-style: italic;"><i>strObject</i></span>)</p>
+<p class="Code">Rhino.IsPlaneSurface (strObject)</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.632%;" />
-<col style="width: 90.368%;" />
-<tr valign="top">
-<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">strObject</p>
-</td>
-<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. &#160;String. &#160;The identifier of the object to verify.</p>
-</td>
-</tr>
+	<col style="width: 9.632%;" />
+	<col style="width: 90.368%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">strObject</p></td>
+		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. &#160;String. &#160;The identifier 
+		 of the object to verify.</p></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.618%;" />
-<col style="width: 90.382%;" />
-<tr valign="top">
-<td style="width: 9.618%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Boolean</p>
-</td>
-<td style="width: 90.382%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">True or False indicating success or failure.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 9.618%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Null</p>
-</td>
-<td style="width: 90.382%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">On error.</p>
-</td>
-</tr>
+	<col style="width: 9.618%;" />
+	<col style="width: 90.382%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 9.618%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Boolean</p></td>
+		<td style="width: 90.382%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">True or False indicating success or failure.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.618%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Null</p></td>
+		<td style="width: 90.382%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">On error.</p></td>
+	</tr>
 </table>
 <h3>Example</h3>
-<p class="Code" style="margin-left: 12px;">Dim <span style="font-style: italic;"><i>strSurface</i></span>, strCutter</p>
-<p class="Code" style="margin-left: 12px;"><span style="font-style: italic;"><i>strSurface</i></span> = Rhino.GetObject("Select surface to trim", 8)</p>
-<p class="Code" style="margin-left: 12px;">If Not IsNull(strSurface) And Rhino.IsPlaneSurface(strSurface) Then</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;strCutter = Rhino.GetObject("Select cutting curve", 4)</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;If Not IsNull(strCutter) Then</p>
-<p class="Code" style="margin-left: 12px;">&#160;&#160;&#160;&#160;Rhino.TrimPlaneSurface strSurface, strCutter</p>
+<p class="Code" style="margin-left: 12px;">Dim <span style="font-style: italic;"><i>strSurface</i></span>, 
+ strCutter</p>
+<p class="Code" style="margin-left: 12px;"><span style="font-style: italic;"><i>strSurface</i></span> 
+ = Rhino.GetObject(&quot;Select surface to trim&quot;, 8)</p>
+<p class="Code" style="margin-left: 12px;">If Not IsNull(strSurface) And 
+ Rhino.IsPlaneSurface(strSurface) Then</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;strCutter = Rhino.GetObject(&quot;Select 
+ cutting curve&quot;, 4)</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;If Not IsNull(strCutter) 
+ Then</p>
+<p class="Code" style="margin-left: 12px;">&#160;&#160;&#160;&#160;Rhino.TrimPlaneSurface 
+ strSurface, strCutter</p>
 <p class="Code" style="margin-left: 12px;">&#160;&#160;End If</p>
 <p class="Code" style="margin-left: 12px;">End If</p>
 <h3 class="Code">Also See</h3>
 <p><a href="isbrep.htm">IsBrep</a></p>
+<p><a href="isextrusion.htm">IsExtrusion</a></p>
+<p><a href="isnurbssurface.htm">IsNurbsSurface</a></p>
 <p><a href="ispolysurface.htm">IsPolysurface</a></p>
+<p><a href="isrevsurface.htm">IsRevSurface</a></p>
+<p><a href="issumsurface.htm">IsSumSurface</a></p>
 <p><a href="issurface.htm">IsSurface</a></p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

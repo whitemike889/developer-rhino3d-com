@@ -88,7 +88,8 @@ if (window.writeIntopicBar)
 <h1>PointPick</h1>
 <p>Picks objects using a point selection.</p>
 <h3>Syntax</h3>
-<p class="Code">Rhino.PointPick (arrPoint [, strView [, blnSelect]])</p>
+<p class="Code">Rhino.PointPick (arrPoint [, strView [, blnSelect [, arrAperture 
+ [, blnGroup [, arrObjects [, blnUseOsnaps]]]]]])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
 	<col style="width: 12.297%;" />
@@ -113,8 +114,40 @@ if (window.writeIntopicBar)
 		 &#160;Boolean. &#160;Select picked objects. &#160;If omitted, 
 		 picked objects are not selected (False).</p></td>
 	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">arrAperture</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Array. &#160;An array of 2 numbers that identify the x and 
+		 y values, in pixels, used to inflate the picking aperture. </p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">blnGroup </p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Boolean. &#160;Honor object grouping. &#160;If omitted and 
+		 the user picks a group, the entire group will be picked (True).</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">arrObjects</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Array. &#160;An array of strings identifying the objects 
+		 that are allowed to be selected.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">blnUseOsnaps</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Boolean. &#160;If True, then the function will attempt to 
+		 snap to objects using the current object snap settings. If an 
+		 object snap is successful, then <span style="font-style: italic;"><i>arrPoint</i></span> 
+		 is modified to reflect the snap location before attempting to 
+		 pick objects. If False (Default), then <span style="font-style: italic;"><i>arrPoint</i></span> 
+		 is used to pick objects.</p></td>
+	</tr>
 </table>
-<h3 class="Code">Returns</h3>
+<h3>Returns</h3>
 <table cellspacing="0" width="100%">
 	<col style="width: 12.213%;" />
 	<col style="width: 87.787%;" />

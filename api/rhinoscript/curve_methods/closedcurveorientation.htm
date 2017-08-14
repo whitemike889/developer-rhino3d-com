@@ -90,49 +90,63 @@ if (window.writeIntopicBar)
  planar curve.</p>
 <h3>Syntax</h3>
 <p class="Code">Rhino.ClosedCurveOrientation (strObject [, arrDirection])</p>
+<p class="Code">Rhino.ClosedCurveOrientation (strObject [, arrXform])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
 	<col style="width: 9.632%;" />
 	<col style="width: 90.368%;" />
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body" style="font-style: italic;">strObject</p></td>
 		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
-			 class="Table-Body">Required. &#160;String. &#160;The object's 
-		 identifier.</p></td>
+			 class="Table-Body">Required. &#160;String. &#160;The identifier 
+		 of a simple (no self-intersections) closed planar curve object.</p></td>
 	</tr>
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body" style="font-style: italic;">arrDirection</p></td>
 		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">Optional. &#160;Array. &#160;A 3-D vector 
 		 that identifies the up, or Z axis, direction of the plane to test 
-		 against. &#160;If omitted, the world Z axis (0,0,1) is used.</p></td>
+		 against. &#160;This plane will be used to map (orient) the curve 
+		 to the world x-y plane. &#160;If omitted, the curve is assumed 
+		 to be parallel with the world x-y plane.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrXform</p></td>
+		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Optional. &#160;Array. &#160;A transformation 
+		 matrix (4x4 array of numbers) used to map (orient) the curve to 
+		 the world x-y plane. &#160;If omitted, the curve is assumed to 
+		 be parallel with the world x-y plane.</p></td>
 	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
 	<col style="width: 9.904%;" />
 	<col style="width: 90.096%;" />
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.904%; padding-right: 10px; padding-left: 10px;"><p 
-			 class="Table-Body">1</p></td>
+			 class="Table-Body">+1</p></td>
 		<td style="width: 90.096%; padding-right: 10px; padding-left: 10px;"><p 
-			 class="Table-Body">The curve's orientation is counter-clockwise.</p></td>
+			 class="Table-Body">The curve's orientation is counter-clockwise 
+		 in the world x-y plane.</p></td>
 	</tr>
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.904%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">-1</p></td>
 		<td style="width: 90.096%; padding-right: 10px; padding-left: 10px;"><p 
-			 class="Table-Body">The curve's orientation is clockwise.</p></td>
+			 class="Table-Body">The curve's orientation is clockwise in 
+		 the&#160;world x-y plane.</p></td>
 	</tr>
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.904%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">0</p></td>
 		<td style="width: 90.096%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">Unable to compute the curve's orientation.</p></td>
 	</tr>
-	<tr valign="top">
+	<tr style="vertical-align: top;">
 		<td style="width: 9.904%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">Null</p></td>
 		<td style="width: 90.096%; padding-right: 10px; padding-left: 10px;"><p 

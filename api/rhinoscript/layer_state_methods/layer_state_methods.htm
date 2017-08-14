@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +78,7 @@ else
 //-->
 //]]></script>
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
@@ -86,14 +86,21 @@ if (window.writeIntopicBar)
 //-->
 //]]></script>
 <h1>Layer State Methods</h1>
-<p>Rhino's <span style="font-weight: bold;"><b>
-LayerStateManager</b></span> command allows you to save the states of layers and restore them at a later time. &#160;The layer state command is implemented in the Rhino Bonus Tools plug-in, or <span style="font-style: italic;"><i>RhinoBonusTools.rhp</i></span>. Because the <span style="font-weight: bold;"><b>LayerStateManager</b></span> command resides in a plug-in, you will first need to get the plug-in's scriptable object, using <a href="../application_methods/getpluginobject.htm">GetPlugInObject</a>, before you can call any of these methods.</p>
+<p>Rhino's <span style="font-weight: bold;"><b>LayerStateManager</b></span> 
+ command allows you to save the states of layers and restore them at a 
+ later time. &#160;The command is implemented in the Rhino Bonus Tools 
+ plug-in, or <span style="font-style: italic;"><i>RhinoBonusTools.rhp</i></span>. 
+ Because the <span style="font-weight: bold;"><b>LayerStateManager</b></span> 
+ command resides in a plug-in, you will first need to get the plug-in's 
+ scriptable object, using <a href="../application_methods/getpluginobject.htm">GetPlugInObject</a>, 
+ before you can call any of these methods.</p>
 <p>For example:</p>
 <p>&#160;</p>
 <p class="Code">Sub TestLayerStates</p>
 <p class="Code">&#160;&#160;Dim objPlugIn</p>
 <p class="Code">&#160;&#160;On Error Resume Next</p>
-<p class="Code">&#160;&#160;Set objPlugIn = Rhino.GetPluginObject("Rhino Bonus Tools")</p>
+<p class="Code">&#160;&#160;Set objPlugIn = Rhino.GetPluginObject(&quot;Rhino 
+ Bonus Tools&quot;)</p>
 <p class="Code">&#160;&#160;If Err Then</p>
 <p class="Code">&#160;&#160;&#160;&#160;MsgBox Err.Description</p>
 <p class="Code">&#160;&#160;&#160;&#160;Exit Sub</p>
@@ -102,88 +109,68 @@ LayerStateManager</b></span> command allows you to save the states of layers and
 <p class="Code">End Sub</p>
 <p>&#160;</p>
 <table cellspacing="0" width="100%">
-<col style="width: 15.247%;" />
-<col style="width: 84.753%;" />
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Head">Method</p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Head">Description</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="deletelayerstate.htm">DeleteLayerState</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Deletes a layer state.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="exportlayerstates.htm">ExportLayerStates</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Exports layer states to a file.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="importlayerstates.htm">ImportLayerStates</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Import layer states from a file.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="islayerstate.htm">IsLayerState</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Verifies that a layer state exists.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="layerstatecount.htm">LayerStateCount</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Returns the number of layer states.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="layerstatenames.htm">LayerStateNames</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Returns layer state names.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="renamelayerstate.htm">RenameLayerStates</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Renames a layer state.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="restorelayerstate.htm">RestoreLayerStates</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Restores a saved layer state.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body"><a href="savelayerstate.htm">SaveLayerState</a></p>
-</td>
-<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Saves a layer state.</p>
-</td>
-</tr>
+	<col style="width: 15.247%;" />
+	<col style="width: 84.753%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Head">Method</p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Head">Description</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="deletelayerstate.htm">DeleteLayerState</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Deletes a layer state.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="exportlayerstates.htm">ExportLayerStates</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Exports layer states to a file.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="importlayerstates.htm">ImportLayerStates</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Import layer states from a file.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="islayerstate.htm">IsLayerState</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Verifies that a layer state exists.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="layerstatecount.htm">LayerStateCount</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Returns the number of layer states.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="layerstatenames.htm">LayerStateNames</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Returns layer state names.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="renamelayerstate.htm">RenameLayerStates</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Renames a layer state.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="restorelayerstate.htm">RestoreLayerStates</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Restores a saved layer state.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 15.247%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body"><a href="savelayerstate.htm">SaveLayerState</a></p></td>
+		<td style="width: 84.753%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Saves a layer state.</p></td>
+	</tr>
 </table>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

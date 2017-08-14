@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +78,7 @@ else
 //-->
 //]]></script>
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
@@ -88,54 +88,53 @@ if (window.writeIntopicBar)
 <h1>IsVectorPerpendicularTo</h1>
 <p>Compares two vectors to see if they are perpendicular.</p>
 <h3>Syntax</h3>
-<p class="Code">Rhino.IsVectorPerpendicularTo (arrVector1, arrVector2)</p>
+<p class="Code">Rhino.IsVectorPerpendicularTo (arrVector1, arrVector2 [, 
+ dlbAngleTolerance])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.679%;" />
-<col style="width: 90.321%;" />
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">arrVector1</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. &#160;Array. &#160;The 3-D vector.</p>
-</td>
-</tr>
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">arrVector2</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. &#160;Array. &#160;The 3-D vector to compare to.</p>
-</td>
-</tr>
+	<col style="width: 11.773%;" />
+	<col style="width: 88.227%;" />
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">arrVector1</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Required. 
+		 &#160;Array. &#160;The 3-D vector.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">arrVector2</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Required. 
+		 &#160;Array. &#160;The 3-D vector to compare to.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">dlbAngleTolerance</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Number. &#160;The angle tolerance in radians. Of omitted, 
+		 Rhino's default angle tolerance, PI/180.0, is used.</p></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.756%;" />
-<col style="width: 90.244%;" />
-<tr valign="top">
-<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Boolean</p>
-</td>
-<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">True if the vectors are perpendicular, otherwise False.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Null</p>
-</td>
-<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">On error.</p>
-</td>
-</tr>
+	<col style="width: 11.905%;" />
+	<col style="width: 88.095%;" />
+	<tr style="vertical-align: top;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Boolean</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">True 
+		 if the vectors are perpendicular, otherwise False.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Null</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">On 
+		 error.</p></td>
+	</tr>
 </table>
 <h3>Example</h3>
 <p class="Code" style="margin-left: 12px;">Dim arrVector1, arrVector2</p>
 <p class="Code" style="margin-left: 12px;">arrVector1 = Array(1,0,0)</p>
 <p class="Code" style="margin-left: 12px;">arrVector2 = Array(0,1,0)</p>
-<p class="Code" style="margin-left: 12px;">MsgBox Rhino.IsVectorPerpendicularTo arrVector1, arrVector2</p>
+<p class="Code" style="margin-left: 12px;">MsgBox Rhino.IsVectorPerpendicularTo 
+ arrVector1, arrVector2</p>
 <h3 class="Code">Also See</h3>
 <p><a href="isvectorparallelto.htm">IsVectorParallelTo</a></p>
 <p><a href="isvectortiny.htm">IsVectorTiny</a></p>

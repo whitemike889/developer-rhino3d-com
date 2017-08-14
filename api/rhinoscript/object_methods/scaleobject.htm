@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -79,6 +78,7 @@ else
 //-->
 //]]></script>
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
@@ -86,74 +86,83 @@ if (window.writeIntopicBar)
 //-->
 //]]></script>
 <h1>ScaleObject</h1>
-<p>Scales a single object. This function can be used to perform uniform or non-uniform scale transformations. Scaling is based on the active construction plane.</p>
+<p>Scales a single object. This function can be used to perform uniform 
+ or non-uniform scale transformations. Scaling is based on the active construction 
+ plane.</p>
 <h3>Syntax</h3>
 <p class="Code">Rhino.ScaleObject (strObject, arrOrigin, arrScale [, blnCopy])</p>
+<p class="Code">Rhino.ScaleObject (strObject, arrPlane, arrScale [, blnCopy])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.679%;" />
-<col style="width: 90.321%;" />
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">strObject</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. String. The identifier of the object to scale.</p>
-</td>
-</tr>
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">arrOrigin</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. Array. The origin of the scale transformation.</p>
-</td>
-</tr>
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">arrScale</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Required. Array. An array of three numbers that identify the X axis, Y axis, and Z axis scale factors to apply. Scaling is based on the active construction plane.</p>
-</td>
-</tr>
-<tr style="height: 24px;" valign="top">
-<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body" style="font-style: italic;">blnCopy</p>
-</td>
-<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Optional. Boolean. Copy the object. If omitted, the object will not be copied (False).</p>
-</td>
-</tr>
+	<col style="width: 9.679%;" />
+	<col style="width: 90.321%;" />
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">strObject</p></td>
+		<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. String. The identifier of the 
+		 object to scale.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrOrigin</p></td>
+		<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. Array. The origin of the scale 
+		 transformation. &#160;Scaling is based on a plane that is parallel 
+		 with the active construction plane, and that runs through <span 
+		 style="font-style: italic;"><i>arrPoint</i></span>.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrPlane</p></td>
+		<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. Array. The plane of the scale 
+		 transformation.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrScale</p></td>
+		<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Required. Array. An array of three numbers 
+		 that identify the X axis, Y axis, and Z axis scale factors to 
+		 apply.</p></td>
+	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="width: 9.679%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">blnCopy</p></td>
+		<td style="width: 90.321%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Optional. Boolean. Copy the object. If 
+		 omitted, the object will not be copied (False).</p></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
-<col style="width: 9.756%;" />
-<col style="width: 90.244%;" />
-<tr valign="top">
-<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">String</p>
-</td>
-<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">The identifier of the scaled object if successful.</p>
-</td>
-</tr>
-<tr valign="top">
-<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">Null</p>
-</td>
-<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;">
-<p class="Table-Body">If not successful, or on error.</p>
-</td>
-</tr>
+	<col style="width: 9.756%;" />
+	<col style="width: 90.244%;" />
+	<tr style="vertical-align: top;">
+		<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">String</p></td>
+		<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">The identifier of the scaled object if 
+		 successful.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.756%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Null</p></td>
+		<td style="width: 90.244%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">If not successful, or on error.</p></td>
+	</tr>
 </table>
 <h3>Example</h3>
 <p class="Code" style="margin-left: 12px;">Dim strObject, arrOrigin</p>
-<p class="Code" style="margin-left: 12px;">strObject = Rhino.GetObject("Select object to scale")</p>
+<p class="Code" style="margin-left: 12px;">strObject = Rhino.GetObject(&quot;Select 
+ object to scale&quot;)</p>
 <p class="Code" style="margin-left: 12px;">If Not IsNull(strObject) Then</p>
-<p class="Code" style="margin-left: 24px;">arrOrigin = Rhino.GetPoint("Origin point")</p>
+<p class="Code" style="margin-left: 24px;">arrOrigin = Rhino.GetPoint(&quot;Origin 
+ point&quot;)</p>
 <p class="Code" style="margin-left: 24px;">If IsArray(arrOrigin) Then</p>
-<p class="Code" style="margin-left: 36px;">Rhino.ScaleObject strObject, arrOrigin, array(1,2,3), True</p>
+<p class="Code" style="margin-left: 36px;">Rhino.ScaleObject strObject, 
+ arrOrigin, array(1,2,3), True</p>
 <p class="Code" style="margin-left: 24px;">End If</p>
 <p class="Code" style="margin-left: 12px;">End If</p>
 <h3>Also See</h3>

@@ -76,6 +76,8 @@
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
 
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
 </head>
 
 
@@ -117,12 +119,6 @@
         
         
         
-        
-          
-            
-              
-            
-          
         
           
             
@@ -262,6 +258,22 @@
               <a href="#overview">Overview</a>
 
               
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-get-methods">The GET methods</a>
+
+              
                 <ul class="nav nav-stacked">
                   
 
@@ -272,7 +284,25 @@
                     
                     
                     <li>
-                        <a href="#the-get-methods">The GET methods</a>
+                        <a href="#command-line-gets">Command Line gets</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#interactive-gets">Interactive gets</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#geometry-gets">Geometry Gets</a>
                     </li>
                   
 
@@ -291,7 +321,7 @@
             
             
             <li>
-              <a href="#dialog-methods">Dialog Methods</a>
+              <a href="#special-dialogs">Special Dialogs</a>
 
               
 
@@ -308,6 +338,24 @@
             
             <li>
               <a href="#file-system-dialogs">File System dialogs</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            
+            
+            <li>
+              <a href="#rhinopython/eto-forms-python/">Eto Custom Dialog Framework</a>
 
               
 
@@ -372,23 +420,50 @@
 
           <h2 id="overview">Overview</h2>
 
-<p>Prompting the user of a script for the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts.</p>
+<p>Prompting the user of a script for the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts. Many input methods will also validate the user input to make sure only the proper input is accepted.</p>
 
 <p>The RhinoscriptSyntax module contains many ways to interactively prompt for several different types of input. There are three main styles of input that are contained in Rhinosciptsyntax:</p>
 
 <ul>
-  <li>Get methods. These are methods that work with the command line, wait for mouse input or prompt for specific input.</li>
-  <li>Dialog methods.  There are some simple specific dialogs to prompt for input</li>
-  <li>File system dialogs. Browsing, saving and opening files on the system with Python.</li>
+  <li><a href="#the-get-methods"><strong>Get methods</strong></a>. These are methods that work with the command line, wait for mouse input or prompt for specific input.</li>
+  <li><a href="#special-dialogs"><strong>Special Dialogs</strong></a>.  There are some simple specific dialogs to prompt for input</li>
+  <li><a href="#file-system-dialogs"><strong>File system dialogs</strong></a>. Browsing, saving and opening files on the system with Python.</li>
+  <li><a href="#eto-custom-dialog-framework"><strong>Eto Custom Dialog Framework</strong></a>.  A cross-platform dialog framework to create more custom modal and non-modal dialog box classes that can be used in scripts.</li>
 </ul>
 
-<p>Many input methods will also validate the user input to make sure only the proper input is accepted.</p>
+<h2 id="the-get-methods">The GET methods</h2>
 
-<h3 id="the-get-methods">The GET methods</h3>
+<p>Get are basic ways to prompt for specifc user feedback on the commandline and mouse input.  Good examples of a Get might be get a point, a string, or a distance.  There are 25 get methods that can</p>
+
+<ol>
+  <li><strong>Commandline Gets</strong> - <a href="/api/RhinoScriptSyntax/#collapse-GetReal">GetReal</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetString">GetString</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetInteger">GetInteger</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetBoolean">GetBoolean</a></li>
+  <li><strong>Interactive Gets</strong> - <a href="/api/RhinoScriptSyntax/#collapse-GetPoint">GetPoint</a>(<a href="/api/RhinoScriptSyntax/#collapse-GetPoints">s</a>), <a href="/api/RhinoScriptSyntax/#collapse-GetPointCoordinates">GetPointCoordinates</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetLine">GetLine</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetDistance">GetDistance</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetAngle">GetAngle</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPolyline">GetPolyline</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetRectangle">GetRectangle</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetBox">GetBox</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetCursorPos">GetCursorPos</a>.</li>
+  <li><strong>Geometry Gets</strong> - <a href="/api/RhinoScriptSyntax/#collapse-GetObject">GetObject</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetCurveObject">GetCurveObject</a>,  <a href="/api/RhinoScriptSyntax/#collapse-GetSurfaceObject">GetSurfaceObject</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetEdgeCurves">GetEdgeCurves</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetMeshFaces">GetMeshFaces</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetMeshVertices">GetMeshVertices</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnCurve">GetPointOnCurve</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnMesh">GetPointOnMesh</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnSurface">GetPointOnSurface</a>.</li>
+</ol>
+
+<h3 id="command-line-gets">Command Line gets</h3>
+
+<p>The simplest Get function is to ask for a specific value on the command line.   For instance a Get method may prompting for a <em>number</em> on the command line with <code>rs.GetReal()</code>.</p>
+
+<h4 id="getreal">Getreal()</h4>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+# GetReal prompts on the command line with optional defaults and a minimum allowable value
+radius = rs.GetReal("Radius of new circle", 3.14, 1.0)
+if radius: rs.AddCircle( (0,0,0), radius )
+</code></pre>
+<p><img src="/images/getreal.png" alt="/images/getreal.png" class="img-center" /></p>
+
+<p>rs.GetReal() accepts any number, including decimals. In some cases your code may need only whole numbers- in this case use <code>rs.GetInteger()</code></p>
+
+<p>The other command line gets are <a href="/api/RhinoScriptSyntax/#collapse-GetString">GetString</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetInteger">GetInteger</a>, and <a href="/api/RhinoScriptSyntax/#collapse-GetBoolean">GetBoolean</a>. They all work essentially the same as <a href="/api/RhinoScriptSyntax/#collapse-GetReal">GetReal</a>.</p>
+
+<h3 id="interactive-gets">Interactive gets</h3>
 
 <h4 id="getpoint">GetPoint()</h4>
 
-<p>Use <code>rs.GetPoint()</code> to ask the user for a single point location, say for the center of a circle. Like most if not all of the Get methods, rs.GetPoint() allows you to specify some parameters- in this case they are all optional, the function will run without any of them specified in the code you type. For example, the default prompt is “Pick point”, but you can specify a different prompt, for example, “Set center point” depending on what you wish to convey to the user.</p>
+<p>Some Get functions will prompt on the commandline and also allow for input from the mouse.  A typical interactive get is rs.GetPoint()` to ask the user for a single point location. AS an example, let’s say you would like to prompt for the center of a circle. The default prompt of GetPoint is “Pick point”, but you can specify a different prompt, for example, “Set center point” depending on what you wish to convey to the user.</p>
 
 <pre><code class="language-python">pt = rs.GetPoint("Set center point")
 </code></pre>
@@ -424,22 +499,40 @@ pts = rs.GetPoints(  message1= "Set the first point", message2= "Set the next po
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 pts = rs.GetPoints( None, None, "Set the first point", "Set the next point")
 </code></pre>
-
-<h4 id="getreal">Getreal()</h4>
-
-<p>Another common Get method is prompting for a <em>number</em> on the commandline with <code>rs.GetReal()</code>.</p>
+<p>Many of the interactive get functions also allow a first point to be placed.  This way a rubber band line is drawn from the point to the cusor, emulating a drawn line.</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
-# GetReal prompts on the command line with optional defaults and a minimum allowable value
-radius = rs.GetReal("Radius of new circle", 3.14, 1.0)
-if radius: rs.AddCircle( (0,0,0), radius )
+point1 = rs.GetPoint("Pick first point")
+
+#By adding the first point to this prompt, a line is interactively drawn.
+point2 = rs.GetPoint("Pick second point", point1)
 </code></pre>
-<p>rs.GetReal() accepts any number, including decimals. In some cases your code may need only whole numbers- in this case use <code>rs.GetInteger()</code></p>
 
-<p>There are 22 different Get methods. For details on all the Get functions in RhinoScriptSyntax for Python go to the <a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></p>
+<p>The interactive gets have more options on how the input is filtered from the mouse.  For details on all the Get functions in RhinoScriptSyntax for Python go to the <a href="/api/RhinoScriptSyntax/#userinterface">RhinoScriptSyntax User interface methods</a>.  Additional interactive gets include: <a href="/api/RhinoScriptSyntax/#collapse-GetLine">GetLine</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetDistance">GetDistance</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetAngle">GetAngle</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPolyline">GetPolyline</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetRectangle">GetRectangle</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetBox">GetBox</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetCursorPos">GetCursorPos</a>.</p>
 
-<h2 id="dialog-methods">Dialog Methods</h2>
+<h3 id="geometry-gets">Geometry Gets</h3>
+
+<p>Geometry gets are used to pick geometry off the screen or related geometry off an existing objects.  Be aware the Gemetry gets can pass very different values back from the functions.  So, take special note on what is being returned by these functions. In addition to object identifiers there may be additional information on what was selected and how it was selected.</p>
+
+<h4 id="getobject">GetObject()</h4>
+
+<p>The basic get for an Object in the scene is the <code>GetObject()</code> function.  GetObject will return the <em>Guid</em> of the object selected.  Guids are identifiers of existing geometry items that can be used in other RhinoScriptSyntax functions to identify the objects.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+objectId = rs.GetObject("Pick any object")
+if objectId: print objectID
+</code></pre>
+
+<p>Like other Geometry gets, there are optional arguments to filter out unwanted selection by type.  The example below will only allow curves and surfaces to be selected.</p>
+
+<pre><code class="language-python">objectId = rs.GetObject("Pick a curve or surface", rs.filter.curve | rs.filter.surface)
+if objectId: print objectID
+</code></pre>
+
+<p>Additional geometry gets are: <a href="/api/RhinoScriptSyntax/#collapse-GetCurveObject">GetCurveObject</a>,  <a href="/api/RhinoScriptSyntax/#collapse-GetSurfaceObject">GetSurfaceObject</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetEdgeCurves">GetEdgeCurves</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetMeshFaces">GetMeshFaces</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetMeshVertices">GetMeshVertices</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnCurve">GetPointOnCurve</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnMesh">GetPointOnMesh</a>, <a href="/api/RhinoScriptSyntax/#collapse-GetPointOnSurface">GetPointOnSurface</a>.</p>
+
+<h2 id="special-dialogs">Special Dialogs</h2>
 
 <p>The Dialog methods in RhinoScript syntax are used to prompt of with generic custom information. Dialogs can be used to draw more attention to a required interaction with the user.  Dialogs generally interrupt the workflow - the script cannot continue until the dialog is dealt with by the user.</p>
 
@@ -454,7 +547,7 @@ rs.MessageBox("Hello Rhino!", 4 | 32) # A Yes, No dialog
 rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
 </code></pre>
 
-<p><img src="/images/yes_no-dialog.png" alt="RunPythonScript" width="35%" /></p>
+<p><img src="/images/yes_no-dialog.png" alt="/images/yes_no-dialog.png" class="img-center" width="35%" /></p>
 
 <p>Note that rs.MessageBox() returns a value - you can set a variable to record the result from a message box so that you can tell which button the user has clicked.</p>
 
@@ -471,86 +564,48 @@ button = rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
 options = ('First Pick', 'Second Pick', 'Third Pick')
+
 if options:
     result = rs.ListBox(options, "Pick an option")
     if result: rs.MessageBox( result + " was selected" )
 </code></pre>
-<p>Here is a list of dialog box methods:</p>
 
-<table rules="groups">
-  <thead>
-    <tr>
-      <th style="text-align: left">Method</th>
-      <th> </th>
-      <th> </th>
-      <th style="text-align: left">Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">CheckListBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a list of strings in a checkable list. The user can pick multiple items.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">ComboListBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a list of strings in a combo list.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">EditBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a dialog box with a multi-line edit control.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">ListBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a list of strings in a simple list box. The user can pick one item.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">MessageBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a Windows message box.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">PopupMenu</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a context-like popup menu.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">PropertyListBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a list of items and values in a property list.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">RealBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a dialog box prompting the user to enter a number.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">StringBox</td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left">Displays a dialog box prompting the user to enter a string.</td>
-    </tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td style="text-align: left"> </td>
-      <td> </td>
-      <td> </td>
-      <td style="text-align: left"> </td>
-    </tr>
-  </tfoot>
-</table>
+<p>Will result in:</p>
+
+<p><img src="/images/dialog-listbox.png" alt="/images/dialog-listbox.png" class="img-center" width="35%" /></p>
+
+<h4 id="pre-defined-dialog-box-methods">Pre-defined dialog box methods:</h4>
+
+<p><strong>CheckListBox</strong> - Displays a list of strings in a checkable list. The user can pick multiple items. <br />
+<img src="/images/dialog-checklistbox.png" alt="/images/dialog-checklistbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>ComboListBox</strong> -  Displays a list of strings in a combo list.</p>
+
+<p><img src="/images/dialog-combolistbox.png" alt="/images/dialog-combolistbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>EditBox</strong>  - Displays a dialog box with a multi-line edit control.</p>
+
+<p><img src="/images/dialog-editbox.png" alt="/images/dialog-editbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>PopupMenu</strong>  - Displays a context-like popup menu.</p>
+
+<p><img src="/images/dialog-popupbox.png" alt="/images/dialog-popupbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>PropertyListBox</strong> - Displays a list of items and values in a property list.</p>
+
+<p><img src="/images/dialog-propertybox.png" alt="/images/dialog-propertybox.png" class="img-center" width="35%" /></p>
+
+<p><strong>RealBox</strong>  -  Displays a dialog box prompting the user to enter a number. &lt;/td&gt;</p>
+
+<p><img src="/images/dialog-realbox.png" alt="/images/dialog-realbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>StringBox</strong> - Displays a dialog box prompting the user to enter a string.</p>
+
+<p><img src="/images/dialog-stringbox.png" alt="/images/dialog-stringbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>GetLayer</strong> - Displays dialog box prompting the user to select a layer</p>
+
+<p><img src="/images/getlayer.png" alt="/images/getlayer.png" class="img-center" width="35%" /></p>
 
 <p>For details on all the dialog box functions in RhinoScriptSyntax for Python go to the <a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></p>
 
@@ -564,7 +619,9 @@ filename = rs.OpenFileName()
 if filename: rs.MessageBox(filename)
 </code></pre>
 
-<p><img src="/images/openfile_dialog.png" alt="RunPythonScript" width="55%" /></p>
+<p><img src="/images/openfile_dialog.png" alt="RunPythonScript" width="80%" /></p>
+
+<h4 id="additional-file-system-dialogs">Additional File System Dialogs</h4>
 
 <table rules="groups">
   <thead>
@@ -611,6 +668,20 @@ if filename: rs.MessageBox(filename)
   </tfoot>
 </table>
 
+<p>For a complete detailed sample see the <a href="/guides/rhinopython/python-reading-writing/">How to read and write a simple file guide</a>.</p>
+
+<h2 id="eto-custom-dialog-framework"><a href="/guides/rhinopython/eto-forms-python/">Eto Custom Dialog Framework</a></h2>
+
+<p>Eto is an open source cross-platform dialog box framework available in Rhino 6.  Eto can be used to create advanced dialog boxes from within C#, C++ and Rhino.Python.</p>
+
+<p>If the pre-defined dialogs above are not enough for your purposes, a Eto dialog might be the right solution.</p>
+
+<p>As an example, here is a custom collapsing dialog that uses many controls:</p>
+
+<p><img src="/images/dialog-collapse.png" alt="/images/dialog-collapse.png" class="img-center" width="50%" /></p>
+
+<p>Eto is very powerful, but that power comes with more sophisticated Python syntax. Understanding how best to write, organize and use Eto dialogs will take some work.  To start learning about the Eto framework in Python, go to the <a href="/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide.</p>
+
 <hr />
 
 <h2 id="related-topics">Related Topics</h2>
@@ -618,6 +689,7 @@ if filename: rs.MessageBox(filename)
 <ul>
   <li><a href="/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
   <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide</li>
 </ul>
 
         </article>

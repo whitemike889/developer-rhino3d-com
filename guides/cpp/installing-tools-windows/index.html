@@ -76,6 +76,8 @@
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
 
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
 </head>
 
 
@@ -117,12 +119,6 @@
         
         
         
-        
-          
-            
-              
-            
-          
         
           
             
@@ -259,7 +255,7 @@
             
             
             <li>
-              <a href="#necessary-tools">Necessary Tools</a>
+              <a href="#prerequisites">Prerequisites</a>
 
               
 
@@ -275,7 +271,23 @@
             
             
             <li>
-              <a href="#downloads">Downloads</a>
+              <a href="#install-visual-studio">Install Visual Studio</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#install-the-rhino-cc-sdk">Install the Rhino C/C++ SDK</a>
 
               
 
@@ -292,22 +304,6 @@
             
             <li>
               <a href="#next-steps">Next Steps</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#related-topics">Related Topics</a>
 
               
 
@@ -354,33 +350,59 @@
 
           <p>This guide covers all the necessary tools required to author Rhino plugins in C/C++ on Windows.</p>
 
-          <div class="bs-callout bs-callout-danger">
-  <h4>UNDER CONSTRUCTION</h4>
-  <p>This guide has yet to be ported to this site.  Please check back soon for updates.  
-  In the meantime, you can view the original documentation here:
-  <a href="https://wiki.mcneel.com/developer/cplusplusplugins">https://wiki.mcneel.com/developer/cplusplusplugins</a></p>
-</div>
+          <p>By the end of this guide, you should have all the tools installed necessary for authoring, building, and debugging C/C++ plugins using the Rhino C/C++ SDK on Windows.</p>
 
-<h2 id="necessary-tools">Necessary Tools</h2>
+<h2 id="prerequisites">Prerequisites</h2>
 
-<p>Microsoft Visual C++ 2010 for Rhino 5 for Windows 64-bit.
-Microsoft Visual C++ 2005 for Rhino 5 for Windows 32-bit and Rhino 4 for Windows.</p>
-
-<p><em>Visual C++ 2008, 2012, 2013, and the Express Editions of Visual C++ will <strong>not</strong> work.</em></p>
-
-<h2 id="downloads">Downloads</h2>
+<p>This guide presumes you have:</p>
 
 <ul>
-  <li><a href="http://download.rhino3d.com/rhino/5.0/sdk">Rhino 5 for Windows C++ SDK</a></li>
-  <li><a href="http://download.rhino3d.com/rhino/5.0/evaluation/download">Rhino 5 for Windows (Evaluation)</a></li>
-  <li><a href="http://www.rhino3d.com/download/rhino/5.0/sr">Rhino 5 for Windows Service Release</a></li>
+  <li>A PC running Microsoft Windows 7 or later.</li>
+  <li><a href="https://www.rhino3d.com/download/rhino/wip">The Rhino Work-In-Progress (WIP)</a>.</li>
 </ul>
-
-<h2 id="next-steps">Next Steps</h2>
 
 <hr />
 
-<h2 id="related-topics">Related Topics</h2>
+<h2 id="install-visual-studio">Install Visual Studio</h2>
+<p>In order to author, build, and debug C/C++ plugins for Rhino, you will need Microsoft <a href="https://www.visualstudio.com/en-us/visual-studio-homepage-vs.aspx">Visual Studio 2017</a>.</p>
+
+<p>Visual Studio 2017 comes in <a href="https://www.visualstudio.com/downloads">three editions</a>: Community, Professional, and Enterprise. All of these editions will work with the Rhino C/C++ SDK.</p>
+
+<p><em>Note</em>: Rhino C/C++ SDK plugins <strong>cannot</strong> be authored in versions of Visual Studio other than 2017. The native classes and libraries that are made available via the Rhino C/C++ SDK are also used internally by Rhino. As a result of this tight linkage with Rhino itself, the libraries are very compiler specific, and work only with the same compiler that was used to build Rhino.</p>
+
+<h4 id="step-by-step">Step-by-Step</h4>
+
+<ol>
+  <li><strong><a href="https://www.visualstudio.com/vs/community/">Visual Studio 2017 Community Edition</a></strong> is free from Microsoft for students, open-source contributors, and small teams. <a href="https://www.visualstudio.com/license-terms/mlt553321/">Details here</a>.  Click the <strong>Community</strong> button to download the installer.</li>
+  <li>Run the <strong>Visual Studio installer</strong> you downloaded from Microsoft, in this case <strong><em>vs_community.exe</em></strong>.</li>
+  <li>Follow the onscreen prompts to install Visual Studio. Make sure to select all of the <strong>Visual C++</strong> features.
+<img src="/images/installing-tools-windows-cpp-01.png" alt="Visual Studio Install" /></li>
+  <li>Depending on your internet connection, this can take minutes or hours.  When successfully installed, click the <strong>Launch</strong> button.</li>
+</ol>
+
+<h2 id="install-the-rhino-cc-sdk">Install the Rhino C/C++ SDK</h2>
+
+<div class="bs-callout bs-callout-danger">
+  <h4>NOTE</h4>
+  <p>Rhino 6 is in WIP, or Work-in-Progress, form. The Rhino WIP C/C++ SDK Version number changes with every Rhino WIP release, which tends to be weekly. Plug-ins built with this SDK will only load in a Rhino with exactly the same version number. Thus, it will be almost impossible for you to release plug-ins for customers to use. When Rhino 6 enters the Beta testing phase, the SDK will be frozen, thus preventing breaking changes, which will allow you to distribute your plug-ins for testing.</p>
+</div>
+
+<p>The <a href="https://discourse.mcneel.com/t/rhino-wip-developers/30197">Rhino C/C++ SDK</a> is a set of tools for creating plug-in using the C++ language. The SDK includes headers, libraries and Visual Studio project wizards to get you started creating plugins quickly.</p>
+
+<ol>
+  <li>Exit <strong>Visual Studio</strong>.</li>
+  <li>Download the <strong><a href="http://www.rhino3d.com/download/rhino-sdk/wip">Rhino C/C++ SDK</a></strong>.</li>
+  <li>Run the <strong>SDK installer</strong> you downloaded, in this case <strong><em>rh60sdk_[version].msi</em></strong>.</li>
+  <li>If the installation is successful, run Visual Studio.</li>
+</ol>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p><strong>Congratulations!</strong> You have the tools to build a C/C++ plugin for Rhino for Windows. <strong>Now what?</strong></p>
+
+<p>Check out the <a href="/guides/cpp/your-first-plugin-windows/">Creating your first C/C++ plugin for Rhino</a> guide for instructions building - your guessed it - your first plugin.</p>
 
         </article>
 

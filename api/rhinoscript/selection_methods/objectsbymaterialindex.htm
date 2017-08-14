@@ -86,20 +86,19 @@ if (window.writeIntopicBar)
 //-->
 //]]></script>
 <h1>ObjectsByMaterialIndex</h1>
-<p>Returns the identifiers of all objects based on the objects' material 
- index. An object's material index can be obtained using <a href="../object_methods/objectmaterialindex.htm">ObjectMaterialIndex</a>.</p>
+<p>Returns the identifiers of objects based on the objects' material index. 
+ An object's material index can be obtained using <a href="../object_methods/objectmaterialindex.htm">ObjectMaterialIndex</a>.</p>
 <h3>Syntax</h3>
-<p class="Code">Rhino.ObjectsByMaterialIndex (intMaterialIndex [, blnSelect])</p>
+<p class="Code">Rhino.ObjectsByMaterialIndex (intMaterialIndex [, blnSelect [, intType]])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
-	<col style="width: 14.986%;" />
-	<col style="width: 85.014%;" />
+	<col style="width: 10.053%;" />
+	<col style="width: 89.947%;" />
 	<tr style="vertical-align: top; height: 24px;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
 			 style="font-style: italic;">intMaterialIndex</p></td>
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Required. 
-		 &#160;Number. &#160;The zero-based material index to query.</p>
-		<p class="Table-Body">&#160;</p></td>
+		 &#160;Number. &#160;The zero-based material index to query.</p></td>
 	</tr>
 	<tr style="vertical-align: top; height: 24px;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
@@ -108,11 +107,185 @@ if (window.writeIntopicBar)
 		 &#160;Boolean. &#160;Select the objects. &#160;If omitted, the 
 		 objects are not selected (False).</p></td>
 	</tr>
+	<tr style="vertical-align: top; height: 24px;">
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body" 
+			 style="font-style: italic;">intType</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Optional. 
+		 &#160;Number. &#160;The type(s) of geometry objects (points, curves, 
+		 surfaces, meshes, etc.) that can be returned. &#160;Object types 
+		 can be added together to filter several different kinds of geometry.</p>
+		<table cellspacing="0" width="100%">
+			<col style="width: 8.445%;" />
+			<col style="width: 8.799%;" />
+			<col style="width: 82.756%;" />
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" style="font-weight: bold;" align="center">Value</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" style="font-weight: bold;" align="center">Hex</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" style="font-weight: bold;">Description</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&#160;(Default) 0</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h0</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">All objects (Default)</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">1</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h1</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Point</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">2</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h2</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Point cloud</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">4</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h4</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Curve</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">8</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h8</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Surface (single-face Brep or Extrusion)</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">16</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h10</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Polysurface (multiple-face Brep 
+				 or Extrusion)</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">32</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h20</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Mesh</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">256</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h100</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Light</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">512</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h200</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Annotation</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">4096</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h1000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Instance (Block) reference</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">8192</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h2000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Text dot</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">16384</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h4000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Grip</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">32768</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h8000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Detail</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">65536</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h10000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Hatch</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">131072</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h20000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Morph control</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">134217728</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h8000000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Cage</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">268435456</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h10000000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Phantom</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">536870912</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h20000000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Clipping plane</p></td>
+			</tr>
+			<tr style="vertical-align: top;">
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">1073741824</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body" align="right">&amp;h40000000</p></td>
+				<td style="padding-right: 10px; padding-left: 10px;"><p 
+					 class="Table-Body">Extrusion</p></td>
+			</tr>
+		</table></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
-	<col style="width: 15.048%;" />
-	<col style="width: 84.952%;" />
+	<col style="width: 9.967%;" />
+	<col style="width: 90.033%;" />
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Array</p></td>
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">An 

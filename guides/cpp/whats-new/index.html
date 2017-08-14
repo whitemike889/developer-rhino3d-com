@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>What's New? with C/C++</title>
-  <meta name="description" content="This brief guide outlines the new object types and features in the Rhino C/C++ SDK.  Using C/C++">
+  <meta name="description" content="This brief guide outlines the new and changed features in the Rhino C/C++ SDK.  Using C/C++">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/cpp/whats-new/" />
   <meta property="og:title" content="What's New?" />
-  <meta property="og:description" content="This brief guide outlines the new object types and features in the Rhino C/C++ SDK." />
+  <meta property="og:description" content="This brief guide outlines the new and changed features in the Rhino C/C++ SDK." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="What's New?" />
-  <meta name="twitter:description" value="This brief guide outlines the new object types and features in the Rhino C/C++ SDK." />
+  <meta name="twitter:description" value="This brief guide outlines the new and changed features in the Rhino C/C++ SDK." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -76,6 +76,8 @@
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
 
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
 </head>
 
 
@@ -117,12 +119,6 @@
         
         
         
-        
-          
-            
-              
-            
-          
         
           
             
@@ -275,7 +271,7 @@
             
             
             <li>
-              <a href="#new-object-types">New Object Types</a>
+              <a href="#breaking-changes">Breaking Changes</a>
 
               
                 <ul class="nav nav-stacked">
@@ -288,7 +284,7 @@
                     
                     
                     <li>
-                        <a href="#extrusion-objects">Extrusion Objects</a>
+                        <a href="#visual-studio-2017">Visual Studio 2017</a>
                     </li>
                   
                     
@@ -297,7 +293,61 @@
                     
                     
                     <li>
-                        <a href="#double-precision-meshes">Double Precision Meshes</a>
+                        <a href="#multi-document-support">Multi-Document Support</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#model-components">Model Components</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#annotations">Annotations</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#scoped-and-strongly-typed-enums">Scoped and Strongly Typed...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#on_bool32-is-obsolete">ON_BOOL32 is obsolete</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#deprecation">Deprecation</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#other">Other</a>
                     </li>
                   
 
@@ -316,7 +366,7 @@
             
             
             <li>
-              <a href="#new-annotation-features">New Annotation Features</a>
+              <a href="#related-topics">Related Topics</a>
 
               
 
@@ -372,31 +422,145 @@
 
 </p>
 
-          <p>This brief guide outlines the new object types and features in the Rhino C/C++ SDK.</p>
+          <p>This brief guide outlines the new and changed features in the Rhino C/C++ SDK.</p>
 
           <h2 id="overview">Overview</h2>
 
-<p>Rhino 5.0 has several new object types and C/C++ SDK features.  Be sure your plugin supports them appropriately.</p>
+<p>The Rhino C/C++ SDK is <em>not</em> an abstract SDK. That is, the native classes and functions that are made available in the SDK are also used internally by Rhino. Thus, when the signatures of classes or functions change, all developers, both internal and external, are required to modify their source code to accommodate for the change. For this reason, the Rhino C/C++ SDK was not broken between Rhino 4 and 5. In doing this, plug-ins that worked in Rhino 4 also worked in Rhino 5.</p>
 
-<h2 id="new-object-types">New Object Types</h2>
+<p>A lot of time has passed since the Rhino 4 C/C++ SDK was made available. And although there was quite a bit of new functionality added to Rhino 5, some of it required some <em>creative</em> programming in order not to break backwards compatibility with Rhino 4.</p>
 
-<h3 id="extrusion-objects">Extrusion Objects</h3>
+<p>In order to continue to move Rhino forward, breaking changes needed to be made to the SDK. The following document attempts to describe what has been added, what has changed, and how to deal with these changes.</p>
 
-<p>Extrusion objects allow creation of simple extruded shapes using a much more lightweight representation than BRep (polysurface) objects.</p>
+<h2 id="breaking-changes">Breaking Changes</h2>
 
-<p>Be sure your plugin can handle these extrusion objects.  Download our sample models with extrusion objects in them.</p>
+<p>Although the breaking changes may seem numerous, most fall within the following categories.</p>
 
-<h3 id="double-precision-meshes">Double Precision Meshes</h3>
+<h3 id="visual-studio-2017">Visual Studio 2017</h3>
 
-<p>Rhino supports double precision meshes.  This allows mesh computations to be more accurate, and also enables display of objects that are very far from the origin (for example, architectural or civil engineering models using state-plane coordinate systems).</p>
+<p>To write C++ plug-ins for Rhino 6, you will need <a href="/guides/cpp/installing-tools-windows">Visual Studio 2017</a>.</p>
 
-<p>Rhino handles conversion between single-precision and double-precision automatically as needed.</p>
+<p>What’s really exciting is that the free Community edition of Visual Studio will work to build plug-ins for Rhino 6. Of course, you can also use either the Professional or Enterprise edition.</p>
 
-<h2 id="new-annotation-features">New Annotation Features</h2>
+<h3 id="multi-document-support">Multi-Document Support</h3>
 
-<p>Dimension styles, text, and hatches support scale factors.  Rhino also supports scaling for the model-space viewports and in each layout.</p>
+<p>One of the primary goals for Rhino 6 was to consolidate the Rhino for Windows and Rhino for Mac source code into a single codebase. In order to do this, the source code had to become more multiple-document aware, as Rhino for Mac handle multiple documents. Note, Rhino 6 for Windows is still a single document application.</p>
 
-<p>If your plugin needs to support these new features, please contact our developer support group for more details.</p>
+<p>Thus, many SDK functions now require the developer to pass either a pointer or a reference to the active document or the active document’s runtime serial number.</p>
+
+<p>An example of this is the <code>CRhinoDisplayConduit</code> class, which now requires the document serial number in which it will operate. In Rhino 5, you could enable a display conduit in a plug-in command as follows:</p>
+
+<pre><code>    CMyDisplayConduit conduit;
+    conduit.Enable();
+    context.m_doc.Redraw();
+</code></pre>
+
+<p>In Rhino 6, you need to do the following:</p>
+
+<pre><code>    CMyDisplayConduit conduit;
+    conduit.Enable(context.m_doc.RuntimeSerialNumber());
+    context.m_doc.Redraw();
+</code></pre>
+
+<p>A number of SDK functions have been modified to require some data from the active document. This is because SDK functions can no longer assume there is a single document.</p>
+
+<p>An example of this is the <code>RhinoPointInPlanarClosedCurve</code> function, which now requires the absolute tolerance from the active document. In Rhino 5, you could use this function in a command as follows:</p>
+
+<pre><code>    int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane);
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    double tolerance = context.m_doc.AbsoluteTolerance();
+    int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane, tolerance);
+</code></pre>
+
+<h3 id="model-components">Model Components</h3>
+<p>Rhino has a number of model components, such as layers, group, render materials, dimensions style, and more. Over the years, common properties, such as name, index, and id, have been added to these components, but done so in an inconsistent manner. For example, the method for obtaining the id of a layer was different that of a render material.</p>
+
+<p>The Rhino 6 C/C++ SDK contains a new <code>ON_ModelComponent</code> class that remedies this. Model component classes now inherit from this class.</p>
+
+<p>Providing a consistent interface to common properties, however, means that the names of functions used to access these properties have change.</p>
+
+<p>For example, in Rhino 5, you could access the name of the current Layer as follows:</p>
+
+<pre><code>    const CRhinoLayer&amp; current_layer = context.m_doc.m_layer_table.CurrentLayer();
+    ON_wString current_name = current_layer.LayerName();
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    const CRhinoLayer&amp; current_layer = context.m_doc.m_layer_table.CurrentLayer();
+    ON_wString current_name = current_layer.Name();
+</code></pre>
+
+<p>As another example, in Rhino 5, you could access the id of a Group as follows:</p>
+
+<pre><code>    const CRhinoGroup* group = context.m_doc.m_group_table[0];
+    if (group)
+      ON_UUID group_id = group-&gt;m_group_id;
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    const CRhinoGroup* group = context.m_doc.m_group_table[0];
+    if (group)
+      ON_UUID group_id = group-&gt;Id();
+</code></pre>
+
+<h3 id="annotations">Annotations</h3>
+
+<p>For Rhino 6, there will be new implementations for all annotation objects, such as Text, Leaders, and Dimensions. The new implementations are much better organized the the prior versions, plus provide new features such as <a href="https://en.wikipedia.org/wiki/Rich_Text_Format">Rich Text</a>.</p>
+
+<p>For more details, see <a href="/guides/cpp/(/guides/cpp/migrate-your-plugin-manual-windows)">Annotation Objects</a>.</p>
+
+<h3 id="scoped-and-strongly-typed-enums">Scoped and Strongly Typed Enums</h3>
+<p>C++11 provides some great new features for C++ programmers. One such feature is scoped and strongly typed enumerations, which ensures some measure of compatibility across compilers. They also make up for some shortcomings of old-style enums:</p>
+
+<ul>
+  <li>Old-style enums do not have their own scope</li>
+  <li>Old-style enums convert to integral types, which can lead to strange behavior</li>
+  <li>You cannot specify the underlying integral type of an old-style enums</li>
+</ul>
+
+<p>There are a number of places in the Rhino 6 C/C++ SDK were old-style enums have been converted to scoped and strongly typed enums by convert <code>enum</code> declarations to <code>enum class</code>. Enumerators of these types of enums require a qualified name such as <em>enumname::enumerator</em> when you refer to them.</p>
+
+<p>For example, in Rhino 5, you could specify a unit system in millimeters as follows:</p>
+
+<pre><code>    ON_UnitSystem units(ON::millimeters);
+</code></pre>
+
+<p>In Rhino 6, you will need to do the following:</p>
+
+<pre><code>    ON_UnitSystem units(ON::LengthUnitSystem::Millimeters);
+</code></pre>
+
+<h3 id="on_bool32-is-obsolete">ON_BOOL32 is obsolete</h3>
+
+<p><code>ON_BOOL32</code> was a 32-bit Boolean <code>typedef</code> that no longer exists.  In general you should change occurrences of <code>ON_BOOL32</code> to <code>bool</code>. However, in cases where you have used <code>ON_BOOL32</code> in place of <code>int</code>, you must change <code>ON_BOOL32</code> to <code>int</code>. Converting <code>ON_BOOL32</code> to <code>bool</code> will be common and is what you should try if you are unable to determine which type you should use..</p>
+
+<h3 id="deprecation">Deprecation</h3>
+
+<p>Obsolete functions from Rhino 5 are marked as deprecated with a message to help accomplish the same goal through alternate functions in the Rhino 6 SDK. These deprecations will generate compiler warnings when plug-in code attempts to call these functions.</p>
+
+<p>Functions marked as deprecated may or may not continue to work in Rhino 6. Thus, you should replace all calls to deprecated functions with calls to their replacements before distributing any plug-in.</p>
+
+<p>In Rhino 7, all functions marked as deprecated in Rhino 6 will be removed.</p>
+
+<h3 id="other">Other</h3>
+<p>Not all changes in the Rhino 6 C/C++ SDK could be tagged as deprecated. For example, if a member variable from a class were removed, or a feature was dramatically changed, then deprecation could not be used. These types of breakages will require more time to fix.</p>
+
+<p>To help with this, we are working on updating all of the <a href="https://github.com/mcneel/Rhino6Samples_CPP">C++ SDK samples</a>.</p>
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/guides/cpp/installing-tools-windows">Installing Tools (Windows)</a></li>
+  <li><a href="/guides/cpp/migrate-your-plugin-windows">Migrate your plugin project to Rhino 6</a></li>
+  <li><a href="/guides/cpp/migrate-your-plugin-manual-windows">Migrate your plugin project to Rhino 6 manually</a></li>
+  <li><a href="/guides/cpp/(/guides/cpp/migrate-your-plugin-manual-windows)">Annotation Objects</a></li>
+</ul>
+
 
         </article>
 

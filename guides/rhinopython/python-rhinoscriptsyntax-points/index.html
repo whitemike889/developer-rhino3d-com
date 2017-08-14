@@ -76,6 +76,8 @@
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
 
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
 </head>
 
 
@@ -117,12 +119,6 @@
         
         
         
-        
-          
-            
-              
-            
-          
         
           
             
@@ -262,6 +258,49 @@
               <a href="#points">Points</a>
 
               
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#creating-points">Creating Points</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#accessing-point-coordinates">Accessing Point Coordinates</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#editing-points">Editing Points</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#adding-a-point-to-display-in-rhino">Adding a point to display...</a>
+                    </li>
+                  
+
+                </ul>
+              
 
             </li>
           
@@ -324,22 +363,95 @@
 
           <h2 id="points">Points</h2>
 
-<p>In Python, 3-D points are represented as zero-based lists that contain three numbers.  These three number represent to the X, Y and Z coordinate values of the point.</p>
+<p>In Python, a Rhino 3D point is represented as a <a href="http://developer.rhino3d.com/api/RhinoCommonWin/html/T_Rhino_Geometry_Point3d.htm">Point3d</a> structure. Conceptually, Point3d exist in memory as a zero-based list containing three numbers.  These three numbers represent the X, Y and Z coordinate values of the point.</p>
 
-<p>A 3-D point can be constructed in a number of different ways.  For example:</p>
+<pre><code>point3D contains [1.0, 2.0, 3.0]  
+</code></pre>
 
-<pre><code class="language-python">point1 = [1.0, 2.0, 3.0]
+<h3 id="creating-points">Creating Points</h3>
+
+<p>A Point3D structure can be constructed in a number of different ways.  Two common ways are:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+pnt = rs.CreatePoint(1.0, 2.0, 3.0)
+pnt = rs.CreatePoint(1.0, 2.0) # This creates a point with the Z coordinate set to 0
 </code></pre>
 <p>A point list can also be constructed one element at a time:</p>
+
+<p>The ‘CreatePoint()’ function is very flexible.  It can take a list or tuple of two or 3 numbers and return a Point3d.  The function can also extract the coordinates of a Rhino GUID to return a Point3D.</p>
+
+<p>It is not always necessary to construct a point before passing it to a function that requires a point. It is possible to construct points directly as an argument to a function.  A Point is a list like structure. Wrap coordinates in brackets<code>[]</code> when passing them directly to a function. For instance the <code>rs.addline(point, point)</code> function requires two points.  Use the following syntax to construct the points on the fly:</p>
 
 <pre><code class="language-python">point2 = []
 point2.append(1.0)
 point2.append(2.0)
-point2.append(5.0)
+rs.AddLine([45,56,32],[56,47,89])
 </code></pre>
 <p>Like 3-D points, Python represents a single 2-D point as a zero-based list of numbers.  The difference being that 2-D points contain only X and Y coordinate values.</p>
 
-<p>Rhinoscriptsyntax contains a number of methods to manipulate points.  See Points and Vectors for details.</p>
+<p>Passing coordinates in <code>[]</code>  to a function is very common with RhinoScriptSyntax.</p>
+
+<h3 id="accessing-point-coordinates">Accessing Point Coordinates</h3>
+
+<p>A Point3D list can be accessed like a simple python list, one element at a time:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+pnt = rs.CreatePoint(1.0, 2.0, 3.0)
+
+print(pnt[0]) #Prints the X coordinate of the Point3D
+print(pnt[1]) #Print the Y coordinate of the Point3D
+print(pnt[2]) #Print the Z coordinate of the Point3D
+</code></pre>
+
+<p>The coordinates of a Point3d may also be accessed through its .X, .Y and .Z property.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+pnt = rs.CreatePoint(1.0, 2.0, 3.0)
+
+print(pnt.X) # Prints the X coordinate of the Point3D
+print(pnt.Y) # Print the Y coordinate of the Point3D
+print(pnt.Z) # Print the Z coordinate of the Point3D
+</code></pre>
+
+<p>Using the Python’ ability to assign values to multiple variables at one, here are is a way to create x, y, and z variables all at once:</p>
+
+<pre><code class="language-python">x, y, z = rs.CreatePoint(1.0, 2.0, 3.0)
+
+# or #
+
+x, y, z = rs.PointCoodinate(point)
+</code></pre>
+
+<h3 id="editing-points">Editing Points</h3>
+
+<p>To change an individual coordinate of a Point3d simply assign a new value to the correct coordinate through the index location or coordinate property:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+pnt = rs.CreatePoint(1.0, 2.0, 3.0)
+
+pnt[0] = 5.0 # Sets the X coordinate to 5.0
+pnt.Y = 45.0 # Sets the Y coordinate to 45.0
+
+print(pnt) #Print the new coordinates
+</code></pre>
+
+<p>Using the Python <code>for</code> function it is quite easy to walk through each coordinate in succession:</p>
+
+<pre><code>for c in pnt:
+    print c # This will loop through each coordinate in the point3d
+</code></pre>
+
+<p>Rhinoscriptsyntax contains a number of methods to manipulate points.  See <a href="/guides/rhinopython/python-rhinoscriptsyntax-point-vector-methods">RhinoScript Points and Vectors Methods</a> for details.</p>
+
+<p>For those familiar with RhinoScript, which represents points as a pure list, the Python representation is a little different and offers a few more options.</p>
+
+<h3 id="adding-a-point-to-display-in-rhino">Adding a point to display in Rhino</h3>
+
+<p>It is important to understand the difference between a Point3d and a point object added to Rhino’s document.  Any geometry object that exists in Rhino’s database is assigned an object identifier.  This is represented as a <a href="/guides/rhinopython/python-rhinoscriptsyntax-objects">Guid</a>. The <a href="/guides/rhinopython/python-rhinoscriptsyntax-objects">Guid’s object</a> is something that can be drawn, belongs to a layer, is saved to a Rhino file and is counted as a Rhino object.  A Point3d is simply a structure of 3 numbers that exists in memory.  It can be manipulated in memory, but will not be seen in Rhino or saved.  A Point3d is added to the Rhino document through the <code>rs.AddPoint()</code> command.  To create a Point3d from a Guid, use the <code>rs.PointCoordinates(guid)</code> or the <code>rs.CreatePoint(Guid)</code> function.</p>
 
 <hr />
 
@@ -353,6 +465,7 @@ point2.append(5.0)
   <li><a href="/guides/rhinopython/python-rhinoscriptsyntax-plane">Python Planes</a></li>
   <li><a href="/guides/rhinopython/python-rhinoscriptsyntax-objects">Python Objects</a></li>
   <li><a href="/guides/rhinopython/python-rhinoscriptsyntax-point-vector-methods">RhinoScript Points and Vectors Methods</a></li>
+  <li><a href="http://developer.rhino3d.com/api/RhinoCommonWin/html/T_Rhino_Geometry_Point3d.htm">Point3d RhinoCommon Documentation</a></li>
 </ul>
 
         </article>

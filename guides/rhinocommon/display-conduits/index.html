@@ -76,6 +76,8 @@
   <!-- For Chrome for Android: -->
   <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
 
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
 </head>
 
 
@@ -117,12 +119,6 @@
         
         
         
-        
-          
-            
-              
-            
-          
         
           
             
@@ -379,7 +375,7 @@
 
   protected override void PostDrawObjects(DrawEventArgs e)
   {
-    base.PostDrawObjects(e);
+    base.PreDrawObjects(e);
     // ..
   }
 }
@@ -401,9 +397,9 @@ conduit.Enabled = true;
     e.IncludeBoundingBox(new Point3d(0,0,0));
   }
 
-  protected override void PostDrawObjects(DrawEventArgs e)
+  protected override void PreDrawObjects(DrawEventArgs e)
   {
-    base.PostDrawObjects(e);
+    base.PreDrawObjects(e);
     e.Display.DrawPoint(new Point3d(0,0,0));
   }
 }
@@ -419,9 +415,9 @@ conduit.Enabled = true;
    e.IncludeBoundingBox(e.Display.Viewport.ConstructionPlane().Origin);
 }
 
-protected override void PostDrawObjects(DrawEventArgs e)
+protected override void PreDrawObjects(DrawEventArgs e)
 {
-  base.PostDrawObjects(e);
+  base.PreDrawObjects(e);
 
   var cPlane = e.Display.Viewport.ConstructionPlane();
   var xColor = Rhino.ApplicationSettings.AppearanceSettings.GridXAxisLineColor;

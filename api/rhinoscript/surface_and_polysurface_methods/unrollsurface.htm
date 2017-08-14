@@ -89,7 +89,8 @@ if (window.writeIntopicBar)
 <p>Flattens (develops) a surface or polysurface to a planar surface. For 
  more information on developable surfaces, see the Rhino help file.</p>
 <h3>Syntax</h3>
-<p class="Code">Rhino.UnrollSurface (strSurface [, blnExplode])</p>
+<p class="Code">Rhino.UnrollSurface (strSurface [, blnExplode [, arrCurves 
+ [, arrPoints [, arrDots]]]])</p>
 <h3>Parameters</h3>
 <table cellspacing="0" width="100%">
 	<col style="width: 9.632%;" />
@@ -110,6 +111,31 @@ if (window.writeIntopicBar)
 		 resulting surfaces are joined along the same edges that were joined 
 		 in the original polysurface.</p></td>
 	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrCurves </p></td>
+		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Optional. &#160;Array. &#160;The identifiers 
+		 of curve objects whose geometry you want to follow unrolled surface. 
+		 &#160;Note, the attributes of these objects will be migrated to 
+		 the newly created curves.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrPoints </p></td>
+		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Optional. &#160;Array. &#160;The identifiers 
+		 of point objects whose geometry you want to follow unrolled surface.</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="width: 9.632%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body" style="font-style: italic;">arrDots</p></td>
+		<td style="width: 90.368%; padding-right: 10px; padding-left: 10px;"><p 
+			 class="Table-Body">Optional. &#160;Array. &#160;The identifiers 
+		 of text dot objects whose geometry you want to follow unrolled 
+		 surface.&#160;&#160;Note, the attributes of these objects will 
+		 be migrated to the newly created text dots.</p></td>
+	</tr>
 </table>
 <h3>Returns</h3>
 <table cellspacing="0" width="100%">
@@ -120,7 +146,8 @@ if (window.writeIntopicBar)
 			 class="Table-Body">Array</p></td>
 		<td style="width: 90.382%; padding-right: 10px; padding-left: 10px;"><p 
 			 class="Table-Body">The identifiers of the flatten surfaces 
-		 or polysurfaces if successful.</p></td>
+		 or polysurfaces, followed by the identifiers of extra curves, 
+		 points, and text dots, if successful.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="width: 9.618%; padding-right: 10px; padding-left: 10px;"><p 
