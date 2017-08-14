@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>How to get user input in a script with Python</title>
+  <meta name="description" content="How to prompt the user for input into a script.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/python-user-input/" />
+  <meta property="og:title" content="How to get user input in a script" />
+  <meta property="og:description" content="How to prompt the user for input into a script." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="How to get user input in a script" />
+  <meta name="twitter:description" value="How to prompt the user for input into a script." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Mac, Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/6/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/6/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/6/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/6/guides/rhinopython/python-user-input/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/6/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/6/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/6/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/6/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/6/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/6/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/6/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/6/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/6/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<div class="version-banner">
+    Hey, you're viewing the Rhino <strong>6</strong> version of this page!
+    <a href="/guides/rhinopython/python-user-input/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/6/"><img src="/6/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/6/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/6/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/6/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/6/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/6/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#overview">Overview</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-get-methods">The GET methods</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#command-line-gets">Command Line gets</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#interactive-gets">Interactive gets</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#geometry-gets">Geometry Gets</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#special-dialogs">Special Dialogs</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#file-system-dialogs">File System dialogs</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            
+            
+            <li>
+              <a href="#rhinopython/eto-forms-python/">Eto Custom Dialog Framework</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/6/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">Intermediate</li>
+                
+              
+          </ol>
+
+          <h1>How to get user input in a script</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>How to prompt the user for input into a script.</p>
+
+          <h2 id="overview">Overview</h2>
+
+<p>Prompting the user of a script for the input of a value, selecting a layer, picking a point or selecting a Rhino object is important to many interactive scripts. Many input methods will also validate the user input to make sure only the proper input is accepted.</p>
+
+<p>The RhinoscriptSyntax module contains many ways to interactively prompt for several different types of input. There are three main styles of input that are contained in Rhinosciptsyntax:</p>
+
+<ul>
+  <li><a href="#the-get-methods"><strong>Get methods</strong></a>. These are methods that work with the command line, wait for mouse input or prompt for specific input.</li>
+  <li><a href="#special-dialogs"><strong>Special Dialogs</strong></a>.  There are some simple specific dialogs to prompt for input</li>
+  <li><a href="#file-system-dialogs"><strong>File system dialogs</strong></a>. Browsing, saving and opening files on the system with Python.</li>
+  <li><a href="#eto-custom-dialog-framework"><strong>Eto Custom Dialog Framework</strong></a>.  A cross-platform dialog framework to create more custom modal and non-modal dialog box classes that can be used in scripts.</li>
+</ul>
+
+<h2 id="the-get-methods">The GET methods</h2>
+
+<p>Get are basic ways to prompt for specifc user feedback on the commandline and mouse input.  Good examples of a Get might be get a point, a string, or a distance.  There are 25 get methods that can</p>
+
+<ol>
+  <li><strong>Commandline Gets</strong> - <a href="/6/api/RhinoScriptSyntax/#collapse-GetReal">GetReal</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetString">GetString</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetInteger">GetInteger</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetBoolean">GetBoolean</a></li>
+  <li><strong>Interactive Gets</strong> - <a href="/6/api/RhinoScriptSyntax/#collapse-GetPoint">GetPoint</a>(<a href="/6/api/RhinoScriptSyntax/#collapse-GetPoints">s</a>), <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointCoordinates">GetPointCoordinates</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetLine">GetLine</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetDistance">GetDistance</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetAngle">GetAngle</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPolyline">GetPolyline</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetRectangle">GetRectangle</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetBox">GetBox</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetCursorPos">GetCursorPos</a>.</li>
+  <li><strong>Geometry Gets</strong> - <a href="/6/api/RhinoScriptSyntax/#collapse-GetObject">GetObject</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetCurveObject">GetCurveObject</a>,  <a href="/6/api/RhinoScriptSyntax/#collapse-GetSurfaceObject">GetSurfaceObject</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetEdgeCurves">GetEdgeCurves</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetMeshFaces">GetMeshFaces</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetMeshVertices">GetMeshVertices</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnCurve">GetPointOnCurve</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnMesh">GetPointOnMesh</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnSurface">GetPointOnSurface</a>.</li>
+</ol>
+
+<h3 id="command-line-gets">Command Line gets</h3>
+
+<p>The simplest Get function is to ask for a specific value on the command line.   For instance a Get method may prompting for a <em>number</em> on the command line with <code>rs.GetReal()</code>.</p>
+
+<h4 id="getreal">Getreal()</h4>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+# GetReal prompts on the command line with optional defaults and a minimum allowable value
+radius = rs.GetReal("Radius of new circle", 3.14, 1.0)
+if radius: rs.AddCircle( (0,0,0), radius )
+</code></pre>
+<p><img src="/6/images/getreal.png" alt="/6/images/getreal.png" class="img-center" /></p>
+
+<p>rs.GetReal() accepts any number, including decimals. In some cases your code may need only whole numbers- in this case use <code>rs.GetInteger()</code></p>
+
+<p>The other command line gets are <a href="/6/api/RhinoScriptSyntax/#collapse-GetString">GetString</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetInteger">GetInteger</a>, and <a href="/6/api/RhinoScriptSyntax/#collapse-GetBoolean">GetBoolean</a>. They all work essentially the same as <a href="/6/api/RhinoScriptSyntax/#collapse-GetReal">GetReal</a>.</p>
+
+<h3 id="interactive-gets">Interactive gets</h3>
+
+<h4 id="getpoint">GetPoint()</h4>
+
+<p>Some Get functions will prompt on the commandline and also allow for input from the mouse.  A typical interactive get is rs.GetPoint()` to ask the user for a single point location. AS an example, let’s say you would like to prompt for the center of a circle. The default prompt of GetPoint is “Pick point”, but you can specify a different prompt, for example, “Set center point” depending on what you wish to convey to the user.</p>
+
+<pre><code class="language-python">pt = rs.GetPoint("Set center point")
+</code></pre>
+
+<p>If the function succeeds, a Rhino point is returned, which can be treated as a list of three numbers representing the world x, y and z coordinates of the point.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pt = rs.GetPoint("Click to get information about a point location")
+if pt is not None:# note it is a good idea to check if there is a result you can use
+    print "That point has an x coordinate of " + str(pt[0]) # when you build a string that includes elements that are not text, convert to a string with str()
+</code></pre>
+
+<h4 id="getpoints">GetPoints()</h4>
+
+<p>Use <code>rs.GetPoints()</code> to ask the user for multiple point locations. As in rs.GetPoint(), all parameters are optional. Note that there is a separate prompt for the first point, and a second one for subsequent points.</p>
+
+<p>You need to set the parameters in order, separated by commas. If you do not want to specify a parameter at all, and accept the default, you can leave it out but you must then specify any following parameters explicitly using the parameter name. For example, this will not work to set a custom first prompt:</p>
+
+<pre><code class="language-python">
+import rhinoscriptsyntax as rs
+
+pts = rs.GetPoints(  "Set the first point", "Set the next point")
+</code></pre>
+
+<p>Why? because the function has two parameters that come before the first prompt, ‘draw_lines’ and ‘in_plane’. If you leave these out, you must specify what parameters you are setting explicitly in order for it to be recognized:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pts = rs.GetPoints(  message1= "Set the first point", message2= "Set the next point")
+</code></pre>
+
+<p>You could also make sure to set the other parameters even if you don’t care what they are i.e. defaults are OK:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+pts = rs.GetPoints( None, None, "Set the first point", "Set the next point")
+</code></pre>
+<p>Many of the interactive get functions also allow a first point to be placed.  This way a rubber band line is drawn from the point to the cusor, emulating a drawn line.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+point1 = rs.GetPoint("Pick first point")
+
+#By adding the first point to this prompt, a line is interactively drawn.
+point2 = rs.GetPoint("Pick second point", point1)
+</code></pre>
+
+<p>The interactive gets have more options on how the input is filtered from the mouse.  For details on all the Get functions in RhinoScriptSyntax for Python go to the <a href="/6/api/RhinoScriptSyntax/#userinterface">RhinoScriptSyntax User interface methods</a>.  Additional interactive gets include: <a href="/6/api/RhinoScriptSyntax/#collapse-GetLine">GetLine</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetDistance">GetDistance</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetAngle">GetAngle</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPolyline">GetPolyline</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetRectangle">GetRectangle</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetBox">GetBox</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetCursorPos">GetCursorPos</a>.</p>
+
+<h3 id="geometry-gets">Geometry Gets</h3>
+
+<p>Geometry gets are used to pick geometry off the screen or related geometry off an existing objects.  Be aware the Gemetry gets can pass very different values back from the functions.  So, take special note on what is being returned by these functions. In addition to object identifiers there may be additional information on what was selected and how it was selected.</p>
+
+<h4 id="getobject">GetObject()</h4>
+
+<p>The basic get for an Object in the scene is the <code>GetObject()</code> function.  GetObject will return the <em>Guid</em> of the object selected.  Guids are identifiers of existing geometry items that can be used in other RhinoScriptSyntax functions to identify the objects.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+objectId = rs.GetObject("Pick any object")
+if objectId: print objectID
+</code></pre>
+
+<p>Like other Geometry gets, there are optional arguments to filter out unwanted selection by type.  The example below will only allow curves and surfaces to be selected.</p>
+
+<pre><code class="language-python">objectId = rs.GetObject("Pick a curve or surface", rs.filter.curve | rs.filter.surface)
+if objectId: print objectID
+</code></pre>
+
+<p>Additional geometry gets are: <a href="/6/api/RhinoScriptSyntax/#collapse-GetCurveObject">GetCurveObject</a>,  <a href="/6/api/RhinoScriptSyntax/#collapse-GetSurfaceObject">GetSurfaceObject</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetEdgeCurves">GetEdgeCurves</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetMeshFaces">GetMeshFaces</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetMeshVertices">GetMeshVertices</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnCurve">GetPointOnCurve</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnMesh">GetPointOnMesh</a>, <a href="/6/api/RhinoScriptSyntax/#collapse-GetPointOnSurface">GetPointOnSurface</a>.</p>
+
+<h2 id="special-dialogs">Special Dialogs</h2>
+
+<p>The Dialog methods in RhinoScript syntax are used to prompt of with generic custom information. Dialogs can be used to draw more attention to a required interaction with the user.  Dialogs generally interrupt the workflow - the script cannot continue until the dialog is dealt with by the user.</p>
+
+<h4 id="messagebox">MessageBox()</h4>
+
+<p>The simplest dialog box is the <code>rs.MessageBox()</code> function.  The rs.MessageBox() comes with many options to customize the buttons based on your needs:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+rs.MessageBox("Hello Rhino!") # Simple message dialog
+rs.MessageBox("Hello Rhino!", 4 | 32) # A Yes, No dialog
+rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
+</code></pre>
+
+<p><img src="/6/images/yes_no-dialog.png" alt="/6/images/yes_no-dialog.png" class="img-center" width="35%" /></p>
+
+<p>Note that rs.MessageBox() returns a value - you can set a variable to record the result from a message box so that you can tell which button the user has clicked.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+button = rs.MessageBox("Hello Rhino!", 2 | 48) # An Abort, Retry dialog
+</code></pre>
+<p>The value of ‘button’ in the code above will tell the script which button was clicked and it can proceed appropriately. See the Rhino IronPython Help for details on the available buttons and the return codes from rs.MessageBox()</p>
+
+<h4 id="listbox">ListBox()</h4>
+
+<p>Some of the more advanced dialogs can be populated with custom selections:</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+options = ('First Pick', 'Second Pick', 'Third Pick')
+
+if options:
+    result = rs.ListBox(options, "Pick an option")
+    if result: rs.MessageBox( result + " was selected" )
+</code></pre>
+
+<p>Will result in:</p>
+
+<p><img src="/6/images/dialog-listbox.png" alt="/6/images/dialog-listbox.png" class="img-center" width="35%" /></p>
+
+<h4 id="pre-defined-dialog-box-methods">Pre-defined dialog box methods:</h4>
+
+<p><strong>CheckListBox</strong> - Displays a list of strings in a checkable list. The user can pick multiple items. <br />
+<img src="/6/images/dialog-checklistbox.png" alt="/6/images/dialog-checklistbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>ComboListBox</strong> -  Displays a list of strings in a combo list.</p>
+
+<p><img src="/6/images/dialog-combolistbox.png" alt="/6/images/dialog-combolistbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>EditBox</strong>  - Displays a dialog box with a multi-line edit control.</p>
+
+<p><img src="/6/images/dialog-editbox.png" alt="/6/images/dialog-editbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>PopupMenu</strong>  - Displays a context-like popup menu.</p>
+
+<p><img src="/6/images/dialog-popupbox.png" alt="/6/images/dialog-popupbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>PropertyListBox</strong> - Displays a list of items and values in a property list.</p>
+
+<p><img src="/6/images/dialog-propertybox.png" alt="/6/images/dialog-propertybox.png" class="img-center" width="35%" /></p>
+
+<p><strong>RealBox</strong>  -  Displays a dialog box prompting the user to enter a number. &lt;/td&gt;</p>
+
+<p><img src="/6/images/dialog-realbox.png" alt="/6/images/dialog-realbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>StringBox</strong> - Displays a dialog box prompting the user to enter a string.</p>
+
+<p><img src="/6/images/dialog-stringbox.png" alt="/6/images/dialog-stringbox.png" class="img-center" width="35%" /></p>
+
+<p><strong>GetLayer</strong> - Displays dialog box prompting the user to select a layer</p>
+
+<p><img src="/6/images/getlayer.png" alt="/6/images/getlayer.png" class="img-center" width="35%" /></p>
+
+<p>For details on all the dialog box functions in RhinoScriptSyntax for Python go to the <a href="/6/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></p>
+
+<h2 id="file-system-dialogs">File System dialogs</h2>
+
+<p>Working with files and folders on the computer take a special class of dialogs.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+
+filename = rs.OpenFileName()
+if filename: rs.MessageBox(filename)
+</code></pre>
+
+<p><img src="/6/images/openfile_dialog.png" alt="RunPythonScript" width="80%" /></p>
+
+<h4 id="additional-file-system-dialogs">Additional File System Dialogs</h4>
+
+<table rules="groups">
+  <thead>
+    <tr>
+      <th style="text-align: left">Method</th>
+      <th> </th>
+      <th> </th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">BrowseForFolder</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows browse-for-folder dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">OpenFileName</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file open dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">OpenFileNames</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file open dialog box.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">SaveFileName</td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left">Displays a Windows file save dialog box.</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td> </td>
+      <td> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tfoot>
+</table>
+
+<p>For a complete detailed sample see the <a href="/6/guides/rhinopython/python-reading-writing/">How to read and write a simple file guide</a>.</p>
+
+<h2 id="eto-custom-dialog-framework"><a href="/6/guides/rhinopython/eto-forms-python/">Eto Custom Dialog Framework</a></h2>
+
+<p>Eto is an open source cross-platform dialog box framework available in Rhino 6.  Eto can be used to create advanced dialog boxes from within C#, C++ and Rhino.Python.</p>
+
+<p>If the pre-defined dialogs above are not enough for your purposes, a Eto dialog might be the right solution.</p>
+
+<p>As an example, here is a custom collapsing dialog that uses many controls:</p>
+
+<p><img src="/6/images/dialog-collapse.png" alt="/6/images/dialog-collapse.png" class="img-center" width="50%" /></p>
+
+<p>Eto is very powerful, but that power comes with more sophisticated Python syntax. Understanding how best to write, organize and use Eto dialogs will take some work.  To start learning about the Eto framework in Python, go to the <a href="/6/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide.</p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/6/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
+  <li><a href="/6/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/6/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide</li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/rhinopython/python-user-input.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/6/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>

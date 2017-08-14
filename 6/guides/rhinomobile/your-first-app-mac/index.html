@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Your First App (Mac) with C#</title>
+  <meta name="description" content="This guide walks you through your first mobile app using RhinoMobile and Xamarin Studio on Mac.  Using C#">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinomobile/your-first-app-mac/" />
+  <meta property="og:title" content="Your First App (Mac)" />
+  <meta property="og:description" content="This guide walks you through your first mobile app using RhinoMobile and Xamarin Studio on Mac." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Your First App (Mac)" />
+  <meta name="twitter:description" value="This guide walks you through your first mobile app using RhinoMobile and Xamarin Studio on Mac." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="iOS, Android" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C#" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/6/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/6/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/6/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/6/guides/rhinomobile/your-first-app-mac/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/6/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/6/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/6/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/6/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/6/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/6/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/6/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/6/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/6/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<div class="version-banner">
+    Hey, you're viewing the Rhino <strong>6</strong> version of this page!
+    <a href="/guides/rhinomobile/your-first-app-mac/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/6/"><img src="/6/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/6/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/6/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/6/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/6/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/6/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#hellorhinomobile">HelloRhinoMobile</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#ios-boilerplate-build">iOS Boilerplate Build</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#android-boilerplate-build">Android Boilerplate Build</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/6/guides/rhinomobile">RhinoMobile</a></li>
+
+              
+                
+                  <li class="active">Getting Started</li>
+                
+              
+          </ol>
+
+          <h1>Your First App (Mac)</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>This guide walks you through your first mobile app using RhinoMobile and Xamarin Studio on Mac.</p>
+
+          <p>This guide presumes you have gone through the <a href="/6/guides/rhinomobile/installing-tools-mac">Installing Tools (Mac)</a> guide and have successfully installed Xamarin Studio, Xcode, and all the requisite libraries.</p>
+
+<h2 id="hellorhinomobile">HelloRhinoMobile</h2>
+
+<p>We are presuming you have never used Xamarin Studio before, so we’ll go through this one step at a time.  At the time of this writing we are using Xamarin Studio 5.9.7.</p>
+
+<h3 id="ios-boilerplate-build">iOS Boilerplate Build</h3>
+
+<ol>
+  <li><em>Launch Xamarin Studio</em> and open the <em>HelloRhinoMobile</em> solution.</li>
+  <li><em>Right-click</em> the <em>HelloRhino.iOS</em> project and select <em>Set As Startup Project</em> from the drop-down menu. This makes <em>HelloRhino.iOS</em> the active project for the build. (HelloRhino.Touch is the iOS target project.  (The HelloRhino.Touch projects use monotouch.dll - the older version of Xamarin.iOS).
+<img src="/6/images/your-first-app-mac-01.png" alt="hellorhinomobile solution" /></li>
+  <li>Verify that the build is set to <em>Debug</em> and the device to <em>iPhone Simulator</em> &gt; <em>iPhone iOS 5 iOS 9</em>. Click the <em>Play/Run</em> button.</li>
+  <li><a href="http://docs.xamarin.com/guides/cross-platform/getting-started/beginning_a_xamarin_trial">Start a Xamarin Trial</a>. The Xamarin Business Edition allows you to unlock a 30-day trial, which will be necessary for building and using RhinoMobile. You will need to <a href="https://auth.xamarin.com/account/register">create a Xamarin Login</a>. If you are unable to start a trial after creating a login, don’t worry, Xamarin Studio will prompt you to when you try to build RhinoMobile projects. You may need to clean the project, and build again if you still get errors concerning the evaluation.</li>
+  <li><em>Quit</em> and <em>restart</em> Xamarin Studio.</li>
+  <li>From the Xamarin Studio Home Screen, open the <em>HelloRhinoMobile</em> solution again.</li>
+  <li>Verify that Xamarin Studio’s full edition has been activated. Navigate to <em>Xamarin Studio</em> &gt; <em>About Xamarin Studio</em> &gt; <em>Show Details</em>. Scroll down and make sure the <em>Xamarin.iOS</em> and <em>Xamarin.Android</em> are set to <em>Trial Edition</em>.</li>
+  <li>Close the <em>About Xamarin Studio</em> window.</li>
+  <li>Click the <em>Play/Run</em> button again. This time the Build should succeed without errors. (NOTE: The first time you build RhinoMobile.iOS, the libopennurbs library must be compiled. Subsequent builds will be much, much faster). After uploading the app bundle to the Simulator, you should see the following:
+<img src="/6/images/your-first-app-mac-02.png" alt="hellorhinomobile on ios" /></li>
+  <li>When you done playing around with the HelloRhino example on the iOS Simulator, click the <em>Stop</em> button in Xamarin Studio to stop the Debug session.  Now let’s do an…</li>
+</ol>
+
+<h3 id="android-boilerplate-build">Android Boilerplate Build</h3>
+
+<ol>
+  <li>Right-click the <em>HelloRhino.Droid</em> project and select <em>Set As Startup Project</em> from the drop-down menu. As expected, this makes the Android project the default project for the build…
+<img src="/6/images/your-first-app-mac-03.png" alt="hellorhinomobile solution with android" /></li>
+  <li><em>Verify that the build is set to Debug.</em>  The time, the device selection drop-down should be disabled. This is because you don’t have an Emulator setup, so let’s do that now.</li>
+  <li>Click the <em>Play/Run</em> button to start the <em>HelloRhino.Droid</em> debug build. (NOTE: The first time you build RhinoMobile.Droid, the libopennurbs library must be compiled…this can take up to 20 minutes. Subsequent builds will be much, much faster).</li>
+  <li>The *Select Device** window should appear. This is the window where you tell the Android SDK which emulator or device you would like to use for testing. None of the defaults will do, so let’s create a faster emulator…</li>
+  <li>Click the <em>Create Emulator</em> button.</li>
+  <li>The <em>Android Virtual Device Manager</em> should launch. T his is part of the Android SDK and will be familiar to you if you have done any Android development before. This is where you define your Android Virtual Devices (AVDs) that run in the Emulator.</li>
+  <li><em>Highlight each of the existing AVDs</em> and click the <em>Delete</em> button. These AVDs are much too slow for development.</li>
+  <li>To create a new AVD, click the <em>Create</em> button. The Create new Android Virtual Device (AVD) window appears. Create a new AVD with the following parameters. <em>AVD Name</em>: Nexus7-API17-IntelHAXM; <em>Device</em>: Nexus 7; <em>Target</em>: Android 4.2.2 - API Level 17; <em>CPU/ABI</em>: Intel Atom (x86); <em>Front Camera</em>: Webcam0; <em>VM Heap</em>: 64 <em>Emulation Options</em>: Use Host GPU enabled…
+<img src="/6/images/your-first-app-mac-04.png" alt="create new android virtual device" /></li>
+  <li>You should see your new AVD in the list. You have just created your first AVD.  More information on creating Emulators can be found in the <a href="http://developer.android.com/tools/devices/index.html">Android documentation on Managing Devices</a>. You can create as many as you need. Tips on using the Emulator can be found in the [Using Simulators](/6/guides/rhinomobile/using-simulators/] guide.  For the moment, <em>quit the Android Virtual Device Manager</em> and return to Xamarin Studio.</li>
+  <li>You should see the <em>Select Device</em> window again, this time with your new AVD in the list. Highlight the AVD and click the <em>Start Emulator</em> button. If all went well, after a brief startup period (take our word for it, it’s much quicker than the standard emulators) you should see Android boot. It may take extra time to launch the first time and it is highly recommended that you leave this window open during your development session. Once Android boots, you are ready to go…you just need to unlock the device by sliding the lock to the right.</li>
+  <li>Do not close the Android Emulator. <em>Switch back to Xamarin Studio</em>. In the <em>Select Device</em> window, if the <em>not started</em> label has not already disappeared, click the <em>Refresh</em> button. Once you see the AVD in black, selectable type-face, you know that Xamarin Studio is ready to launch the app on the Emulator.  Highlight the AVD and click <em>OK</em>.</li>
+  <li>If all goes well, much like on iOS, you should see the following:
+<img src="/6/images/your-first-app-mac-05.png" alt="hellorhino android" /></li>
+  <li>When you are done playing around with the HelloRhino.Droid build, click the <em>Stop</em> button back in Xamarin Studio to stop the debug session.</li>
+</ol>
+
+<p><em>Congratulations!</em>  You’ve built a RhinoMobile app for two platforms with shared code.</p>
+
+<hr />
+
+<h2 id="related-topics">Related topics</h2>
+
+<ul>
+  <li><a href="/6/guides/rhinomobile/installing-tools-mac">Installing Tools (Mac)</a></li>
+  <li><a href="/6/guides/rhinomobile/your-first-app-windows">Your First App (Windows)</a></li>
+  <li><a href="/6/guides/rhinomobile/using-simulators">Using Simulators</a></li>
+  <li><a href="/6/guides/rhinomobile/testing-on-devices">Testing on Devices</a></li>
+  <li><a href="http://developer.android.com/tools/devices/index.html">Managing Devices (Android Documentation</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/rhinomobile/your-first-app-mac.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/6/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>

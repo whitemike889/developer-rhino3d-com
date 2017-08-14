@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Creating Macros with Macro</title>
+  <meta name="description" content="A basic tutorial on creating macros (scripting together Rhino commands)  Using Macro">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/general/creating-command-macros/" />
+  <meta property="og:title" content="Creating Macros" />
+  <meta property="og:description" content="A basic tutorial on creating macros (scripting together Rhino commands)" />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Creating Macros" />
+  <meta name="twitter:description" value="A basic tutorial on creating macros (scripting together Rhino commands)" />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Macro" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/6/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/6/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/6/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/6/guides/general/creating-command-macros/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/6/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/6/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/6/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/6/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/6/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/6/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/6/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/6/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/6/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<div class="version-banner">
+    Hey, you're viewing the Rhino <strong>6</strong> version of this page!
+    <a href="/guides/general/creating-command-macros/">View the current version instead.</a>
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(nonWipURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/6/"><img src="/6/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/6/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/6/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/6/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/6/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/6/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/6/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#youve-already-used-a-macro-or-two">You’ve already used a mac...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#getting-started">Getting started</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#ok-lets-get-a-bit-more-complicated">OK, let’s get a bit more ...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#using-macros-to-set-your-interface-options-quickly">Using macros to set your ...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#other-useful-macro-writing-tools-and-commands">Other useful macro writin...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#examples-using-the-above-tools">Examples using the above ...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/6/guides/macro">Macro</a></li>
+
+              
+                
+                  <li class="active">Overview</li>
+                
+              
+          </ol>
+
+          <h1>Creating Macros</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>A basic tutorial on creating macros (scripting together Rhino commands)</p>
+
+          <p>You can create macros in Rhino to automate many tasks, customize your commands, and improve your workflow.</p>
+
+<p>There may be some confusion about the use of the term “scripting” here.  Classically, it describes both the process of writing macros (what this section is about), as well as writing more sophisticated scripts in either <a href="/6/guides/rhinoscript/">RhinoScript</a>, <a href="/6/guides/rhinopython/">Rhino.Python</a> or other programming languages.</p>
+
+<p>The two things are actually very different. Writing functions in RhinoScript or other programming languages is a lot more complex than creating macros, and requires some programming knowledge and skills.  We don’t cover that here.</p>
+
+<p>I use the term “Macro” here exclusively to describe the putting together of strings of ordinary Rhino commands and their options to create an automated function.  This is scripting on its simplest of levels, and is easily accessible to any ordinary Rhino user, even if they have no knowledge of programming.  All You need is a reasonable understanding of Rhino commands and their structure, as well as a logical mind and a taste for a little experimentation and debugging.</p>
+
+<h4 id="the-tools-you-need">The tools you need</h4>
+<ol>
+  <li>
+    <p>Your brain.</p>
+  </li>
+  <li>
+    <p>The Rhino Help file -  lists all Rhino commands and their sub-options. This is your most important reference.</p>
+  </li>
+  <li>
+    <p>The Rhino <strong>MacroEditor</strong>, to easily run and debug your macros.</p>
+  </li>
+</ol>
+
+<h2 id="youve-already-used-a-macro-or-two">You’ve already used a macro or two…</h2>
+<p>First, if you are a user of Rhino, you are already a macro user even though you may not know it.  Many of the commands in Rhino are already “macroed” for you. When you click a toolbar button or call a command from the menu, it is often a preset macro.  To see, Shift+right-click on the button <strong>Extrude Straight</strong>:</p>
+
+<p><img src="/6/images/extrudecrvbuttoneditor.gif" alt="Extrude" /></p>
+
+<p>This is an example of the simplest macro, which sets a series of options within a single command so that you don’t have to specify each one every time you use it.  <strong>ExtrudeCrv</strong> has several buttons with preset options, <strong>Tapered, AlongCurve, ToPoint, Cap=Yes</strong> (solid) etc.  Check out the macros under all the <strong>ExtrudeCrv</strong> buttons to see how they are laid out.</p>
+
+<p>In a sense, you’re doing the same thing as if you clicked or typed the options one at a time at the command line.  In fact, that’s all macros really are – just a set of instructions to repeat a sequence of commands that you would otherwise input manually one at a time.</p>
+
+<p>This scripting of options for a single command can also be combined with data entry (i.e. coordinates or other numerical data). It is also possible to string together several commands in a row, for an automated sequence of events to manipulate or create objects.</p>
+
+<p><strong>Note:</strong> Why the _Underscores ?  These tell Rhino that the command which follows is in English (no matter what the language you are running Rhino in), which will make your macro universal.  If you are running in English and don’t care, you can eliminate the underscores in your macros if you wish. It will not affect anything else.  Also, why the exclamation point (!)?  This cancels any previous command that might be running, for safety’s sake.</p>
+
+<h2 id="getting-started">Getting started</h2>
+
+<p>Say you have to place a series of 10x10x10 boxes with the center of the bottom face landing at the desired point, with that point to be specified by either by a mouse click at the desired location or by entering the coordinates by the keyboard.</p>
+
+<p>You could use the standard Box (<strong>Corner to Corner + Height</strong>) command, but by default this will place the insertion point at the first corner of the box.  To have the insertion point where we want, it is easier to use the Box, Center command.   This is in reality just the Box command with the center option, so you will have to activate it in your macro.</p>
+
+<p>Open the <strong>MacroEditor</strong> and  type this in:</p>
+
+<pre><code> ! _Box _Center
+</code></pre>
+
+<p>(This is actually the macro under the Box, Center button if you check.) 
+All entries (command words and numerical inputs) need to be separated by a single space.</p>
+
+<p>Now, we need to specify the center point.  To do this, you need to tell Rhino to stop processing the command temporarily and wait for an input in the form of a click or a keyboard entry.  Do this by inserting the command Pause.</p>
+
+<pre><code> ! _Box _Center _Pause
+</code></pre>
+
+<p>Once the data has been entered, you can specify the box size directly in the command.  Since the Center option in Box wants a corner of the box as a second input, you can specify its X,Y coordinates:</p>
+
+<pre><code> ! _Box _Center _Pause r5,5
+</code></pre>
+
+<p>(Why the <code>r</code>?  We want this coordinate to be relative to the last picked point, that is to say, the box bottom center.  Otherwise the corner will always land at X5, Y5.)</p>
+
+<p>At this point you can put in the height, which in this case is relative to the original starting point.</p>
+
+<pre><code> ! _Box _Center _Pause r5,5 10
+</code></pre>
+
+<p>Since there is no further input necessary nor options possible, the macro completes and our box is there.  Note that since we wanted a height equal to the width, another possibility  would just to have been to use Enter instead of 10 for the last entry.</p>
+
+<pre><code> ! _Box _Center _Pause r5,5 _Enter
+</code></pre>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Now that the macro is running, [[rhino:macroscriptsetup</td>
+      <td>make a new toolbar button]] and paste the macro in. Give it a recognizable name, like “10x10x10 bottom centered box”.  Note, once the macro is executed, right-clicking repeats the whole sequence of this macro, so you can use it many times in a row without clicking the button every time.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ok-lets-get-a-bit-more-complicated">OK, let’s get a bit more complicated…</h2>
+
+<p>Some commands invoke dialog boxes with many options.  Normally, this stops your macro and waits for you to click the desired options, then continue.  Since you want to automate, you can bypass the dialog by putting a –hyphen (also known as a dash) before the command.  Then you can script in all your options and the macro will run to completion without needing your intervention.  Some commands have several levels of sub-options.  If you want to see what’s available, type the command at the command line with the hyphen and look at what’s proposed for options.  Click on the options and see if they have sub-options.</p>
+
+<h4 id="loft-two-open-curves">Loft two open curves</h4>
+
+<p>Let’s say you would like to repetitively <code>Loft</code> two <em>OPEN</em> curves together to form a surface.  If you use the standard <code>Loft</code> command, you always have to go through the dialog.  If you use the <code>–Loft</code> version, you can avoid this and things go much faster.  Look at the following:</p>
+
+<pre><code>_-Loft
+_Pause
+_Type=_Normal
+_Simplify=_None
+_Closed=_No
+_Enter
+</code></pre>
+
+<p>Note that when you invoke the command, immediately a pause lets you pick your curves.  If you remove the pause, the macro won’t work if you have not selected your curves before calling it.  If you have already preselected your curves the pause is intelligently ignored.  The command then sets all your specified options. Once that is done, it creates the surface and finishes. Try it with two open curves, either pre or post selecting them.  Try modifying one or more of the options, like substituting Closed=Yes or Simplify=Rebuild. (For this you also have to add a line with Rebuild=20 or some other value.)</p>
+
+<h4 id="modifying-it-to-use-with-closed-curves">Modifying it to use with closed curves</h4>
+
+<p>Now, try it with two closed curves.  You have a problem.  Why? For closed curves, Loft needs another input from you -– the seam location.  This is something that needs to be in the macro in the right sequence.  So, you can either choose from various automatic seam options (which are on a sub-option level) or you can adjust it on screen.  Either way, you need to modify the macro.</p>
+
+<p>Adding a pause in the right place lets you check and adjust the seam on screen:</p>
+
+<pre><code>_-Loft
+_Pause
+_Pause  &lt;--
+_Type=_Normal
+_Simplify=_None
+_Closed=_No
+_Enter
+</code></pre>
+
+<p>Adding an <code>Enter</code> instead of the <code>Pause</code> tells Rhino you don’t care. Just leave the seam the way it is by default.</p>
+
+<pre><code>_-Loft
+_Pause
+_Enter  &lt;--
+_Type=_Normal
+_Simplify=_None
+_Closed=_No
+_Enter
+</code></pre>
+
+<p>Or, you can specify another Loft seam option by stepping down into the seam sub-option level:</p>
+
+<pre><code>_-Loft
+_Pause
+_Natural  &lt;--
+_Enter    &lt;--
+_Type=_Normal
+_Simplify=_None
+_Closed=_No
+_Enter
+</code></pre>
+
+<p>(The <code>Enter</code> after Natural is necessary to exit the “seam” option level and get back up to the Loft options level.)</p>
+
+<p>Unfortunately, the same macro will not work correctly for both open and closed curves because of the extra seam option required.  This is one of the limitations of the macro system and the way some Rhino commands have been written.</p>
+
+<h2 id="using-macros-to-set-your-interface-options-quickly">Using macros to set your interface options quickly</h2>
+
+<p>Macros can also be used to set various GUI and Document Properties options automatically without having to go wading into the Options dialog.  I use the following to set the render mesh the way I want it. (Note the dash before -_DocumentProperties.)</p>
+
+<pre><code>-_DocumentProperties
+_Mesh _Custom
+_MaxAngle=0 _AspectRatio=0
+_MinEdgeLength=0 _MaxEdgeLength=0
+_MaxEdgeSrf=0.01 _GridQuads=16
+_Refine=Yes _JaggedSeams=No
+_SimplePlanes=No
+_Enter
+_Enter
+</code></pre>
+
+<p>Why are there two Enters at the end?</p>
+
+<p>You went down two levels in -_DocumentProperties, first to the Mesh level, then to the Custom sublevel inside Mesh.  You need one Enter to exit the sublevel and go back to the main level, and one more to exit the command.  Some scripts might even need three enters.</p>
+
+<p>The following is from Jeff LaSor, for turning on or off the crosshair cursor:</p>
+
+<p>To script Crosshairs  ON or OFF put the following on a button:</p>
+
+<pre><code>  -_Options _Appearance _Visibility
+  _Crosshairs _Enter _Enter _Enter
+</code></pre>
+<p>Notice the reference to each individual command option name.  Specifying them inside the script is like clicking on them with the mouse.  Also note the three Enter entries.  Since each command option takes you down into a new set of sub-level command options, an Enter is required to take you back up.  Since this script went down three levels, it needs to specify three Enters to get all the way out of the command.</p>
+
+<p>Or, if you just use an exclamation point <code>!</code> at the end (which in a script means “end now!”), it takes you all the way out regardless of how many sub-levels you’re in. Note, if you want to continue your macro with something else, do not use <code>!</code>, use the Enters instead, otherwise your macro will always stop at the <code>!</code> and terminate.</p>
+
+<p>The script simply toggles the crosshairs ON and OFF. But if you wanted a script that always turned them ON and another that always turned them OFF, here’s what they would look like:</p>
+
+<p>Always ON version:</p>
+
+<pre><code>  -_Options _Appearance _Visibility
+  _Crosshairs=_Show !
+&lt;/code&gt;
+Always OFF version:
+&lt;code&gt;
+  -_Options _Appearance _Visibility
+  _Crosshairs=_Hide !
+</code></pre>
+
+<p>Note the use of the<code>!</code> here. Also, note you can assign directly the values options can take on to that option using the ‘=’ operator.  The Crosshairs option has two possible values, “Show” and “Hide”, and thus, that’s what is used in the assignment.</p>
+
+<p>(Thanks, Jeff)</p>
+
+<h2 id="other-useful-macro-writing-tools-and-commands">Other useful macro writing tools and commands</h2>
+
+<p>There are some handy tricks for doing more complex macros.  One is the discriminating use of various selection filters, particularly <code>SelLast</code>, which selects the last object created/transformed, <code>SelPrev</code>,  which selects the previous input object, and <code>SelNone</code>, which deselects everything.  There are also possibilities to name objects, group them (and name the group) and then recall them later by that object name or group name.</p>
+
+<pre><code>Select
+SelLast
+SelPrev
+SelNone
+SetObjectName
+SetGroupName
+SelGroup
+SelName
+Group
+Ungroup
+</code></pre>
+
+<p>To set a single object name (this in itself is a macro!):</p>
+
+<pre><code>  _Properties _Pause _Object _Name
+  [put your object name here] _Enter _Enter
+</code></pre>
+
+<p>To cancel a single object name (without deleting the object)</p>
+
+<pre><code>  _Properties _Pause _Object _Name
+  “ “ _Enter _Enter (quote space quote for the name)
+</code></pre>
+
+<h2 id="examples-using-the-above-tools">Examples using the above tools</h2>
+
+<p>Look at the following macro:</p>
+
+<pre><code>_Select _Pause _Setredrawoff
+_BoundingBox _World _Enter
+_Selnone _Sellast
+_OffsetSrf _Solid _Pause
+_Delete _Sellast
+_BoundingBox _World _Enter
+_Delete _Setredrawon
+</code></pre>
+
+<p>It creates an offset bounding box around an object. The offset is input by the user.  See if you can follow the logical sequence.  The Setredrawoff/on stop/restart the screen refresh, eliminates the display flickering as all is executed and speeds up the process.  Beware, if you terminate the command before Setredrawon, you will think Rhino is dead, as the screen no longer updates.  If this happens, don’t panic, typing the command <code>Setredrawon</code> will restore the display refresh.</p>
+
+<p><strong>As a final example,</strong> the following macro creates a point centered on a 2D planar or text object and grouped with it. It assumes that you’re in the same view the text was created in, and that the object is really 2D and planar. (Otherwise it will likely fail.)</p>
+
+<p>Note the use of a named group and various selection commands.  The <code>NoEcho</code> command temporarily stops the reporting of information to the command line, which, combined with Setredrawoff/on makes the macro run without flashing and without too much info reported to command history.  It will run without those as well, though.</p>
+
+<pre><code>_Select _Pause _Noecho _Setredrawoff
+_Group _Enter _SetGroupName TexTemp
+_BoundingBox _CPlane _Enter
+_SelNone _SelLast _PlanarSrf
+_SelPrev _Delete _SelLast
+_AreaCentroid _Delete
+_Sellast _SelGroup TexTemp
+_Ungroup _Group _Setredrawon
+</code></pre>
+
+<p><strong>Please feel free to add to or edit this tutorial!</strong>
+This is a work in progress…</p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/6/guides/rhinopython/">Python Basic Syntax</a></li>
+  <li><a href="/6/guides/rhinoscript/">Rhinoscript</a></li>
+  <li><a href="http://docs.mcneel.com/rhino/5/help/en-us/information/rhinoscripting.htm">Macro Syntax Help Topic</a></li>
+  <li><a href="/6/guides/rhinoscript/running-scripts-from-macros/">Running a Macro</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/general/creating-command-macros.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/6/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
