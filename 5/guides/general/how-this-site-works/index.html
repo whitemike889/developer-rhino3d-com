@@ -514,21 +514,25 @@ $(document).ready(function()
 
 <p><a href="http://developer.rhino3d.com/wip/guides/general/how-this-site-works/">http://developer.rhino3d.com/wip/guides/general/how-this-site-works/</a></p>
 
-<p>Notice the banner along the top of the “wip” version of the site.  This tells the reader that they are on the version of the site that corresponds to information found in the Rhino Work-In-Progress (WIP) version of the software.  The “undecorated” (<a href="http://developer.rhino3d.com">http://developer.rhino3d.com</a>) version of the site represents the current, stable, shipping version of Rhino.  (Legacy versions of documentation for legacy Rhino will be versioned accordingly.)</p>
+<p>Notice the banner along the top of the “WIP” version of the site.  This tells the reader that they are on the version of the site that corresponds to information found in the Rhino Work-In-Progress (WIP) version of the software.  The “undecorated” (<a href="http://developer.rhino3d.com">http://developer.rhino3d.com</a>) version of the site represents the current, stable, shipping version of Rhino.  (Legacy versions of documentation for legacy Rhino will be versioned accordingly.)</p>
 
-<p>How does this work for the author, developer, or contributor?  The <code>master</code> branch represents the current (<em>stable</em>) version of the site.  Changes to the <code>master</code> branch will be built by Travis and deployed to <a href="http://developer.rhino3d.com">http://developer.rhino3d.com</a>.  Other branches can be defined in <code>_config.yml</code> (under <code>version_branches</code>) and will be built and deployed into a subpath with the same name.  For example, if you push to the <code>wip</code> branch (representing RhinoWIP) then this site will be deployed to <a href="http://developer.rhino3d.com/wip">http://developer.rhino3d.com/wip</a>.</p>
+<p>How does this work for the author, developer, or contributor?  The current (<em>stable</em>) version Rhino is defined in the <code>stable:</code> field in the <code>_config.yml</code> file.  The <code>n</code> branch that corresponds to the stable release is built and deployed to http://developer.rhino3d.com.</p>
 
-<p>So, if you want to author a guide that applies to the current (<em>stable</em>) version of Rhino, you should work on the <code>master</code> branch.  If you would like to author a guide that applies to the RhinoWIP, then you should work in the <code>wip</code> branch.</p>
+<p>The <code>master</code> branch represents the WIP version of the site.  Changes to the <code>master</code> branch will be built by Travis and deployed to http://developer.rhino3d.com/wip.</p>
+
+<p>Branches are defined in <code>_config.yml</code> (under <code>version_branches</code>) and will be built and deployed into a subpath with the same name; for example: the <code>5</code> branch is built and deployed to http://developer.rhino3d.com/5.</p>
+
+<p>So, if you want to author a guide that applies to the current (<em>stable</em>) version of Rhino, you should work on the branch marked <code>stable</code> branch in the <code>_config.yml</code> file.  If you would like to author a guide that applies to the RhinoWIP, then you should work in the <code>master</code> branch.</p>
 
 <h4 id="change-multiple-versions">Change multiple versions</h4>
 
 <p>What if you want to write a guide that applies to both the current stable version of Rhino <em>and</em> the RhinoWIP?</p>
 
-<p>The easiest way is to work in the stable <code>master</code> branch and then you can <a href="https://git-scm.com/docs/git-cherry-pick">cherry-pick</a> your commit from the <code>master</code> branch into the <code>wip</code> branch as well.</p>
+<p>The easiest way is to work in the <code>master</code> branch and then you can <a href="https://git-scm.com/docs/git-cherry-pick">cherry-pick</a> your commit from the <code>master</code> branch into the stable <code>n</code> branch as well.</p>
 
 <h4 id="typos">Typos</h4>
 
-<p>What if you want to just correct a typo in both the <code>master</code> and the <code>wip</code> versions of the site?</p>
+<p>What if you want to just correct a typo in both the <code>master</code> and the stable <code>n</code> versions of the site?</p>
 
 <p>In this case, the fastest and easiest way is to simply correct the typo in both branches on the GitHub site itself.  For example, if you wanted to correct a typo on <a href="https://github.com/mcneel/developer-rhino3d-com/blob/5/_guide_topics/general/how-this-site-works.md" target="_blank">this very guide</a>, just click the “Edit this file” - the little pencil icon in the upper right-hand corner.  Make your correction, then switch to the <code>wip</code> branch and do the same thing.  For small fixes, this works just as well as a <a href="https://git-scm.com/docs/git-cherry-pick">cherry-picked</a> commit.</p>
 
