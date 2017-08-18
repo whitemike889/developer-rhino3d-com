@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>How to read and write a CSV files with Python</title>
-  <meta name="description" content="Use Python to read and write comma delimited files.  Using Python">
+  <meta name="description" content="Use Python to read and write comma-delimited files.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/python-csv-file/" />
   <meta property="og:title" content="How to read and write a CSV files" />
-  <meta property="og:description" content="Use Python to read and write comma delimited files." />
+  <meta property="og:description" content="Use Python to read and write comma-delimited files." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="How to read and write a CSV files" />
-  <meta name="twitter:description" value="Use Python to read and write comma delimited files." />
+  <meta name="twitter:description" value="Use Python to read and write comma-delimited files." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -408,9 +408,10 @@ $(document).ready(function()
 
 </p>
 
-          <p>Use Python to read and write comma delimited files.</p>
+          <p>Use Python to read and write comma-delimited files.</p>
 
-          <p>CSV (comma separated values ) files are commonly used to store and retrieve many different types of data. The CSV format is one of the most flexible and easiest format to read.</p>
+          <p>CSV (comma separated values ) files are commonly used to store and retrieve many different types of data. 
+The CSV format is one of the most flexible and easiest format to read.</p>
 
 <p>As an example, a CSV file might be used to store point locations in their X, Y, Z coordinate values:</p>
 
@@ -482,7 +483,7 @@ if( __name__ == "__main__" ):
 <pre><code class="language-python">with open(filename) as csvfile:
 </code></pre>
 
-<p>Then the key line in the script, that reads each row into a list of values into the variable <code>reader</code>:</p>
+<p>Then the key function in the script <code>.reader</code> reads each row into a list of values into the variable <code>reader</code>:</p>
 
 <pre><code class="language-python">        reader = csv.reader(csvfile)
 </code></pre>
@@ -500,7 +501,7 @@ if( __name__ == "__main__" ):
 ['6', '1', '0']
 </code></pre>
 
-<p>Manipulsting each line of the list becomes easy:</p>
+<p>Manipulating each line of the list becomes easy:</p>
 
 <pre><code class="language-python">        for row in reader:
             x = float(row[0])
@@ -512,7 +513,8 @@ if( __name__ == "__main__" ):
 
 <p>In this case the values are split into 3 variables (x, y, z) and then printed to the console and additionally used to add a new point object to Rhino.</p>
 
-<p>Reading a CSV file into list is great for data that has the same number of values in each line and the postion of the values are the same.  But sometimes it is easier to read csv values into a dictionary where the values have names.</p>
+<p>Reading a CSV file into a list is great for data that has the same number of values in each line and the position of the values are the same.<br />
+However sometimes it is easier to read csv values into a dictionary where the values have names.</p>
 
 <h2 id="reading-into-a-dictionary">Reading into a dictionary</h2>
 
@@ -542,7 +544,7 @@ if( __name__ == "__main__" ):
     CSVbuilding()
 </code></pre>
 
-<p>But this script uses the dictionary reader in the csv module on line 12::</p>
+<p>This script uses the dictionary reader in the csv module on line 12:</p>
 
 <pre><code>        reader = csv.DictReader(csvfile)
 </code></pre>
@@ -567,7 +569,7 @@ if( __name__ == "__main__" ):
 {'Floor':'2', 'Use':'Quad', 'Square Footage':'1205', 'Price':'1650', 'RoomID':'211', 'Capacity':'8'}
 </code></pre>
 
-<p>Now since each value is proceded by a key, values may be found by searching for the key names.  For instance in this case the script prints the <code>Use</code> and <code>Square Footage</code> from each line:</p>
+<p>Now since each value is preceeded by a key, values may be found by searching for the key names.  For instance in this case the script prints the <code>Use</code> and <code>Square Footage</code> from each line:</p>
 
 <pre><code>        for row in reader:
             print(row['Use'], row['Square Footage'])
@@ -584,7 +586,7 @@ if( __name__ == "__main__" ):
         print "Retail space = {} sq. ft".format(total)
 </code></pre>
 
-<p>Here the loop loops for each row that contains ‘Retail’  and then will add the square footage for each into the <code>total</code> variable.  In the end it prints the total in the console.</p>
+<p>Here the <code>For</code> statement loops through each row that contains ‘Retail’  and then will add the square footage for each into the <code>total</code> variable.  In the end it prints the total in the console.</p>
 
 <p>By using the <code>csv.DictReader()</code> method, the simple CSV data can become a more sophisticated dictionary of information.  This is a very powerful tool.</p>
 
@@ -622,14 +624,14 @@ if( __name__ == "__main__" ):
 
 <p>Lines 1 thru 8 are standard lines from the Rhino.Python <a href="/guides/rhinopython/python-reading-writing">How to read and write a simple file</a> guide.</p>
 
-<p>There are a couple of things to notice, compared to the previous example. We need some points to export, 
+<p>There are a couple of things to notice compared to the previous example. We need some points to export, 
 so we’ll let the user select some point objects.  Then check that some points were picked:</p>
 
 <pre><code class="language-python">    points = rs.GetPoints(draw_lines=False, message1="Pick points to save to CSV:")
     if( points==None): return
 </code></pre>
 
-<p>Lines 14 thru 18 opens the file for write. Then the script runs through all the points in the list using the <code>.writerow</code> method.
+<p>Lines 14 thru 18 open the file for write. The script then runs through all the points in the list using the <code>.writerow</code> method.
 The write row method takes a list of values and adds the list as a line in the CSV file.</p>
 
 <pre><code class="language-python">    with open(filename, "wb") as csvfile:
@@ -639,7 +641,7 @@ The write row method takes a list of values and adds the list as a line in the C
         print "Points written sucessfully to file"
 </code></pre>
 
-<p>The <code>.writerow</code> method is great for writing out various values that in the simplest CSV form.</p>
+<p>The <code>.writerow</code> method is great for writing out various values in the simplest CSV form.</p>
 
 <h2 id="writing-out-a-dictionary-object">Writing out a dictionary object</h2>
 
@@ -681,8 +683,8 @@ if( __name__ == "__main__" ):
 
 </code></pre>
 
-<p>In lines 10-16 we set a list of dictionaries.  The header names corespond with the key names in the dictionary.
-The <code>.DictWriter</code> class can write a header in the CSV and will use the values in the keys to write the CSV.</p>
+<p>In lines 10-16 we set a list of dictionaries.  The header names correspond with the key names in the dictionary.
+The <code>.DictWriter</code> class can write a header in the CSV using the same values in the keys to write the CSV.</p>
 
 <p>The resulting CSV file will be formatted as follows:</p>
 
@@ -694,7 +696,7 @@ The <code>.DictWriter</code> class can write a header in the CSV and will use th
 1,Maintenance,150,104
 </code></pre>
 
-<p>For more information on CSV maniputlation, see the <a href="https://docs.python.org/2/library/csv.html">Python.org csv module</a>.</p>
+<p>For more information on CSV manipulation, see the <a href="https://docs.python.org/2/library/csv.html">Python.org csv module</a>.</p>
 
 <hr />
 
