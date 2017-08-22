@@ -525,7 +525,7 @@ $(document).ready(function()
     <p><img src="/images/using-nuget-02.png" alt="Choose NuGet Packages" /></p>
   </li>
   <li>
-    <p>After the install is complete, ensure that the new references are not copied to the output directory. Select any of the following references if they exist in your project: RhinoCommon, Eto, Rhino.UI, Grasshopper, GH_IO. In the <em>Properties</em> window, set <em>Copy Local</em> to <em>False</em><sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup>.</p>
+    <p><em>(Optional)</em> The references created by these packages have <code>CopyLocal</code> set to <code>true</code>.  Normally, it is a best practice to make sure that the references are not copied to the output directory, which you can do by selecting any of the following references if they exist in your project - <em>RhinoCommon</em>, <em>Eto</em>, <em>Rhino.UI</em>, <em>Grasshopper</em>, <em>GH_IO</em> - and, in the <em>Properties</em> window, set <code>CopyLocal</code> to <code>false</code>.  The reason this step is <em>optional</em> is that we’ve included some MSBuild witchcraft that will ensure that <code>CopyLocal</code> is set to <code>false</code> when compiling your project, regardless of what it says in the <em>Properties</em> window.</p>
 
     <p><img src="/images/using-nuget-03.png" alt="Copy Local" /></p>
   </li>
@@ -551,9 +551,6 @@ $(document).ready(function()
     </li>
     <li id="fn:2">
       <p>If your project already references one of the above assemblies, don’t worry! NuGet will handle it.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a>&nbsp;<a href="#fnref:2:1" class="reversefootnote">&#8617;<sup>2</sup></a></p>
-    </li>
-    <li id="fn:3">
-      <p>You might have noticed that the references created by these packages have <code>CopyLocal</code> set to <code>true</code>. Again, don’t worry. We’ve included some MSBuild witchcraft that will ensure that <code>CopyLocal</code> is set to <code>false</code> when compiling your project, regardless of what it says in the Properties pane.&nbsp;<a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
