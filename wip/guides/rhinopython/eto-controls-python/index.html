@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Eto control syntax in Python with Python</title>
+  <meta name="description" content="Using the Eto dialog framework to create dialog controls.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/eto-controls-python/" />
+  <meta property="og:title" content="Eto control syntax in Python" />
+  <meta property="og:description" content="Using the Eto dialog framework to create dialog controls." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Eto control syntax in Python" />
+  <meta name="twitter:description" value="Using the Eto dialog framework to create dialog controls." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Mac, Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/eto-controls-python/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/rhinopython/eto-controls-python/">View the current version instead.</a>
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-eto-controls">The Eto Controls</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#button-controls">Button Controls</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#calendar">Calendar</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#checkbox">CheckBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#colorpicker">ColorPicker</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#combobox">ComboBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#datetimepicker">DateTimePicker</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#drawable">Drawable</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#dropdown">DropDown</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#gridview">GridView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#groupbox">GroupBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#imageview">ImageView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#label-control">Label Control</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#linkbutton">LinkButton</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#listbox">ListBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#listcontrol">ListControl</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#maskedtextbox">MaskedTextBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#numericupdown">NumericUpDown</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#panel">Panel</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#passwordbox">PasswordBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#progressbar">ProgressBar</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#radiobutton">RadioButton</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#radiobuttonlist">RadioButtonList</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#richtextarea">RichTextArea</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#multi-line">Multi-line</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#scrollable">Scrollable</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#searchbox">SearchBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#slider">Slider</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#spinner">Spinner</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#splitter">Splitter</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#tabcontrol">TabControl</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#tabpage">TabPage</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#textarea">TextArea</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#textbox-control">TextBox Control</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#sample-dialogs">Sample dialogs</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">Intermediate</li>
+                
+              
+          </ol>
+
+          <h1>Eto control syntax in Python</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>Using the Eto dialog framework to create dialog controls.</p>
+
+          <h2 id="the-eto-controls">The Eto Controls</h2>
+
+<p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide shows the syntax required to create the most common Eto controls in Rhino.Python.  Controls include Labels, Buttons, Edit boxes and Sliders. In Eto there are <a href="https://github.com/picoe/Eto/wiki/Controls">more then 35 different controls</a> that can be created.</p>
+
+<p>For details on creating the rest of an Eto Dialog in Rhino.Python go to the <a href="/wip/guides/rhinopython/eto-forms-python/">Getting Started with Eto article</a></p>
+
+<h2 id="button-controls">Button Controls</h2>
+
+<p>Buttons are placed on almost every dialog.</p>
+
+<p><img src="/wip/images/dialog-sample-eto-buttons.png" alt="/wip/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
+
+<p>Creating a new button is simple completed by specifying the <code>Text</code> shown on the button face. In addition to creating the new button, commonly the <code>.Click</code> event is bound to a method usein the <code>+=</code> syntax as shown below.</p>
+
+<pre><code class="language-python">        self.m_button = forms.Button(Text = 'OK')
+        self.m_button.Click += self.OnButtonClick
+</code></pre>
+
+<p>The bound method is run if the button is clicked on.  The bound method is declared in the methods section later in the class:</p>
+
+<pre><code class="language-python">    # Close button click handler
+    def OnOKButtonClick(self, sender, e):
+        if self.m_textbox.Text == "":
+            self.Close(False)
+        else:
+            self.Close(True)
+</code></pre>
+
+<p>In this case the button is clicked and the bound method <code>OnOKButtonClick</code> checks the Text of the <code>m_textbox</code> to to determine if anything has been entered. Then the method closes the dialog, returning either <code>True</code> or <code>False</code>.</p>
+
+<p>The <em>Eto.Dialog class</em> has two special reserved names for buttons, the <code>DefaultButton</code> and the <code>AbortButton</code>.  The <code>DefaultButton</code> name will create a button that is a standard button and also will receive a click event if the <code>Enter Key</code> is used. The <code>AbortButton</code> is a button that recieves a <code>.Click</code> event if the <code>ESC</code> key is used.  These buttons are simple assigned through the name of the control, using <code>self</code>  syntax.</p>
+
+<p>The syntax for the <code>DefaultButton</code> is:</p>
+
+<pre><code class="language-python">self.DefaultButton = forms.Button(Text = 'OK')
+</code></pre>
+
+<p>And for the <code>AbortButton</code> is:</p>
+
+<pre><code class="language-python">self.AbortButton = forms.Button(Text = 'Cancel')
+</code></pre>
+
+<h2 id="calendar">Calendar</h2>
+
+<p>Calendar control to pick a date or range of dates</p>
+
+<p><img src="/wip/images/eto-controls-calendar.png" alt="/wip/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
+
+<pre><code class="language-python">    #Create a Calender
+    self.m_calender = forms.Calendar()
+</code></pre>
+
+<p>There are a number of properties of a calender control that can be used to modify how the ccontrol works.</p>
+
+<pre><code class="language-python">    #Create a Calendar
+    self.m_calendar = forms.Calendar()
+    self.m_calendar.Mode = forms.CalendarMode.Single
+    self.m_calendar.MaxDate = System.DateTime(2017,7,31)
+    self.m_calendar.MinDate = System.DateTime(2017,7,1)
+</code></pre>
+
+<h2 id="checkbox">CheckBox</h2>
+
+<p>Check box with text label.</p>
+
+<pre><code class="language-python">    #Create a Checkbox
+    self.m_checkbox = forms.CheckBox(Text = 'My Checkbox')
+</code></pre>
+
+<p>By default the CheckBox is unchesked and carries a value of <em>None</em>.  Once checked it contains a booloean value of True.</p>
+
+<p>The intial state of the checkbox can be set.  The checkbox will be checked by default by adding the line:</p>
+
+<pre><code class="language-python">    self.m_checkbox.Checked = True
+</code></pre>
+
+<h2 id="colorpicker">ColorPicker</h2>
+
+<p>Pick a single color drop down color picker. Also supports a right-click on the dropdown arrow to support eye dropper and the stanrd system color picker dialog.</p>
+
+<pre><code class="language-python">        #Create a ColorPicker Control
+        self.m_colorpicker = forms.ColorPicker()
+</code></pre>
+
+<p>This will create a color picker with a blank default color.  A default color may be set in the control by adding:</p>
+
+<pre><code class="language-python">        defaultcolor = Eto.Drawing.Color.FromArgb(255, 0,0)
+        self.m_colorpicker.Value = defaultcolor
+</code></pre>
+
+<h2 id="combobox">ComboBox</h2>
+
+<p>Text entry with a drop down list of items</p>
+
+<h2 id="datetimepicker">DateTimePicker</h2>
+
+<p>Control to enter a date and/or time</p>
+
+<h2 id="drawable">Drawable</h2>
+
+<p>Owner-drawn control using Graphics object</p>
+
+<h2 id="dropdown">DropDown</h2>
+
+<p>Drop down with a list of items.</p>
+
+<pre><code class="language-python">        #Create Dropdown List
+        self.m_dropdownlist = forms.DropDown()
+        self.m_dropdownlist.DataStore = ['first', 'second', 'third']
+</code></pre>
+
+<p>The default selection can be set in the list by using the DataStore property:</p>
+
+<pre><code class="language-python">        self.m_dropdownlist.SelectedIndex = 1
+</code></pre>
+
+<h2 id="gridview">GridView</h2>
+
+<p>A virtualized grid of data with editable cells</p>
+
+<h2 id="groupbox">GroupBox</h2>
+
+<p>A panel with a border and optional title</p>
+
+<h2 id="imageview">ImageView</h2>
+
+<p>A view to display a single image</p>
+
+<h2 id="label-control">Label Control</h2>
+
+<p>The simplest control is the Label control.  It is simply a piece of text that normally is used to create a prompt, or label for another control.</p>
+
+<p><img src="/wip/images/eto-label.svg" alt="/wip/images/eto-label.svg" class="img-center" width="65%" /></p>
+
+<pre><code class="language-python">        self.m_label = forms.Label(Text = 'Enter the Room Number:')
+</code></pre>
+
+<p>As with many controls, the line above create a name for the control <code>m_label</code>.  Then the main property of a Label is the text it shows by setting the Text Property of the label.</p>
+
+<p>Normally this is as complex as a label needs to be, but a label also has many more properties in addition to <code>Text</code>.  Additonal properties include <code>VerticalAlignment</code>, <code>Horizontal Alignment</code>, <code>TextAlignment</code>, <code>Wrap</code>, <code>TextColor</code>, and <code>Font</code>. Properties can be added to the Text Property by using a comma(<code>,</code>):</p>
+
+<pre><code class="language-python">        self.m_label = forms.Label(Text = 'Enter the Room Number:', VerticalAlignment = VerticalAlignment.Center)
+</code></pre>
+
+<p>For a complete list of properties and events of the Label class, see the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Label.htm">Eto Label Class</a> documentation.</p>
+
+<h2 id="linkbutton">LinkButton</h2>
+
+<p>A simple label that acts like a button, similar to a hyperlink</p>
+
+<h2 id="listbox">ListBox</h2>
+
+<p>A scrollable list of items</p>
+
+<h2 id="listcontrol">ListControl</h2>
+
+<p>Base for ListBox, DropDown, ComboBox, and other list-type controls</p>
+
+<h2 id="maskedtextbox">MaskedTextBox</h2>
+
+<p>TextBox for variable or fixed length masks</p>
+
+<h2 id="numericupdown">NumericUpDown</h2>
+
+<p>Numeric control that allows the user to adjust the value with the mouse</p>
+
+<h2 id="panel">Panel</h2>
+
+<p>A blank panel container to add other controls</p>
+
+<h2 id="passwordbox">PasswordBox</h2>
+
+<p>Enter passwords or sensitive data</p>
+
+<h2 id="progressbar">ProgressBar</h2>
+
+<p>Show progress of long running tasks</p>
+
+<h2 id="radiobutton">RadioButton</h2>
+
+<p>Used in a group of radio buttons to allow user to select from values</p>
+
+<h2 id="radiobuttonlist">RadioButtonList</h2>
+
+<p>Manages a list of radio buttons</p>
+
+<h2 id="richtextarea">RichTextArea</h2>
+
+<h2 id="multi-line">Multi-line</h2>
+
+<p>text area with rich text formatting</p>
+
+<h2 id="scrollable">Scrollable</h2>
+
+<p>A scrollable container</p>
+
+<h2 id="searchbox">SearchBox</h2>
+
+<p>A text box with search-box functionality</p>
+
+<h2 id="slider">Slider</h2>
+
+<p>A horizontal or vertical slider to select a value from a range</p>
+
+<h2 id="spinner">Spinner</h2>
+
+<p>A spinner to show indeterminate progress in compact space</p>
+
+<h2 id="splitter">Splitter</h2>
+
+<p>Splits two panes horizontally or vertically</p>
+
+<h2 id="tabcontrol">TabControl</h2>
+
+<p>Presents multiple TabPage containers which the user can select</p>
+
+<h2 id="tabpage">TabPage</h2>
+
+<p>A single page of a TabControl</p>
+
+<h2 id="textarea">TextArea</h2>
+
+<p>Multi-line text control with scrollbars</p>
+
+<h2 id="textbox-control">TextBox Control</h2>
+
+<p>A TextBox is used to enter a string into the dialog.</p>
+
+<p><img src="/wip/images/eto-textbox.svg" alt="/wip/images/eto-textbox.svg" class="img-center" width="65%" /></p>
+
+<p>To check the contents of the textbox in the script, the textbox control must have a name to reference it.</p>
+
+<pre><code class="language-python">        self.m_textbox = forms.TextBox() 
+</code></pre>
+
+<p>In this case the name <code>m_textbox</code> can be used to reference the control later in the class method starting on line 44:</p>
+
+<pre><code>    # Get the value of the textbox
+    def GetText(self):
+        return self.m_textbox.Text
+</code></pre>
+
+<p>Just creating a new <code>Eto.Forms.TextBox()</code> is common.  There are a number of additional properties of a TextBox which can be used to control the input. These properties include <code>MaxLength</code>, <code>PlaceholderText</code>, <code>InsertMode</code> and many more that can be seen in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TextBox.htm">Eto TextBox Class</a>.</p>
+
+<p>TextControl - Base for any control that contains text
+TreeView - A control to present nodes in a tree
+TreeGridView - A TreeView with columns
+WebView - Control to present a web page through a url or static HTML</p>
+
+<h2 id="sample-dialogs">Sample dialogs</h2>
+
+<p>Now with some understanding of Eto Dialogs in Python, take a look at some of the Sample dialogs in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython">Python Developer Samples Repo</a>:</p>
+
+<ol>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
+</ol>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/wip/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
+  <li><a href="/wip/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/wip/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide</li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/eto-controls-python.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
