@@ -472,7 +472,7 @@ $(document).ready(function()
 
 <ul>
   <li>NuGet packages will need to be updated separately to Rhino</li>
-  <li>You will have trouble debugging your plug-in if it was built against a version of RhinoCommon that is newer than the one included with Rhino</li>
+  <li>You <em>may</em> have trouble debugging your plug-in if it was built against a version of RhinoCommon that is newer than the one included with Rhino<sup id="fnref:a"><a href="#fn:a" class="footnote">1</a></sup></li>
 </ul>
 
 <h2 id="getting-started">Getting Started</h2>
@@ -493,7 +493,7 @@ $(document).ready(function()
   <li><em>Rhino.UI.dll</em></li>
 </ul>
 
-<p>The <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package depends<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> on the RhinoCommon package <em>with the same version</em> and includes</p>
+<p>The <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package depends<sup id="fnref:1"><a href="#fn:1" class="footnote">2</a></sup> on the RhinoCommon package <em>with the same version</em> and includes</p>
 
 <ul>
   <li><em>Grasshopper.dll</em></li>
@@ -513,9 +513,9 @@ $(document).ready(function()
   <li>
     <p>In the NuGet tab which appears, click on <em>Browse</em>. In the search box, type in <em>RhinoCommon</em>. You should see an entry for RhinoCommon and one for Grasshopper. If you are writing a Rhino Plugin or Grasshopper Add-on for Rhino WIP, ensure you check <em>Include prerelease</em>.</p>
 
-    <p>If your project is a <strong>RhinoCommon Plug-in</strong>, select the <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> package, choose the Version, and click <em>Install</em>. Chose the <em>Latest prerelease</em>. NuGet will install<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> <em>RhinoCommon.dll</em>, <em>Rhino.UI</em>, and <em>Eto.dll</em>.</p>
+    <p>If your project is a <strong>RhinoCommon Plug-in</strong>, select the <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> package. For Rhino WIP choose the <em>Latest prerelease</em> and click <em>Install</em>. NuGet will install<sup id="fnref:2"><a href="#fn:2" class="footnote">3</a></sup> <em>RhinoCommon.dll</em>, <em>Rhino.UI</em> and <em>Eto.dll</em>.</p>
 
-    <p>If your project is a <strong>Grasshopper Add-on</strong>, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package, choose the Version, and click <em>Install</em>. For Grasshopper Add-ons in Rhino WIP, chose the <em>Latest prerelease</em>. NuGet will install<sup id="fnref:2:1"><a href="#fn:2" class="footnote">2</a></sup> <em>Grasshopper.dll</em> and <em>GH_IO.dll</em> as well as the corresponding version of the RhinoCommon assemblies.</p>
+    <p>If your project is a <strong>Grasshopper Add-on</strong>, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package. For Grasshopper Add-ons in Rhino WIP choose the <em>Latest prerelease</em> and click <em>Install</em>. NuGet will install<sup id="fnref:2:1"><a href="#fn:2" class="footnote">3</a></sup> <em>Grasshopper.dll</em> and <em>GH_IO.dll</em> as well as the corresponding version of the RhinoCommon assemblies.</p>
 
     <p><img src="/images/using-nuget-02.png" alt="Choose NuGet Packages" /></p>
   </li>
@@ -544,6 +544,9 @@ $(document).ready(function()
 
 <div class="footnotes">
   <ol>
+    <li id="fn:a">
+      <p>Your plug-in will not load if it uses parts of the API which don’t exist in the running version of Rhino.&nbsp;<a href="#fnref:a" class="reversefootnote">&#8617;</a></p>
+    </li>
     <li id="fn:1">
       <p>This means that if you install the Grasshopper NuGet package, the matching RhinoCommon package will be installed automatically.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
