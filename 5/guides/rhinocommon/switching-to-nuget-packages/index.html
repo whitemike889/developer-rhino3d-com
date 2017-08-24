@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Switching to NuGet Packages (Windows) with C#</title>
-  <meta name="description" content="This guide goes over how to do switch the RhinoCommon and Grasshopper SDK assembly references from those which are shipped with Rhino and Grasshopper (and installed on your computer), to those published on NuGet.  Using C#">
+  <meta name="description" content="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper.  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/switching-to-nuget-packages/" />
   <meta property="og:title" content="Switching to NuGet Packages (Windows)" />
-  <meta property="og:description" content="This guide goes over how to do switch the RhinoCommon and Grasshopper SDK assembly references from those which are shipped with Rhino and Grasshopper (and installed on your computer), to those published on NuGet." />
+  <meta property="og:description" content="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Switching to NuGet Packages (Windows)" />
-  <meta name="twitter:description" value="This guide goes over how to do switch the RhinoCommon and Grasshopper SDK assembly references from those which are shipped with Rhino and Grasshopper (and installed on your computer), to those published on NuGet." />
+  <meta name="twitter:description" value="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -305,8 +305,33 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#overview">Overview</a>
+              <a href="#why-nuget">Why NuGet?</a>
 
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#advantages">Advantages</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#potential-pitfalls">Potential Pitfalls</a>
+                    </li>
+                  
+
+                </ul>
               
 
             </li>
@@ -321,8 +346,24 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#making-the-switch">Making the Switch</a>
+              <a href="#getting-started">Getting Started</a>
 
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#step-by-step">Step-by-Step</a>
+                    </li>
+                  
+
+                </ul>
               
 
             </li>
@@ -409,30 +450,62 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide goes over how to do switch the RhinoCommon and Grasshopper SDK assembly references from those which are shipped with Rhino and Grasshopper (and installed on your computer), to those published on NuGet.</p>
+          <p>This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper.</p>
 
-          <h2 id="overview">Overview</h2>
+          <div class="bs-callout bs-callout-danger">
 
-<p>In <a href="http://developer.rhino3d.com/guides/rhinocommon/your-first-plugin-windows/">previous guides</a> you’ve seen how to set up a project to develop a RhinoCommon Plugin or Grasshopper Add-On. These guides relied on the Visual Studio Project Wizards that we publish to quickly get you going on plugin development. The wizards automatically reference the necessary assemblies to make RhinoCommon and Grasshopper SDKs available in your Visual Studio project. While this project setup should be fine for a number of cases, there might be some reasons to switch the RhinoCommon and Grasshopper assembly references to those which are published by <a href="https://www.nuget.org/profiles/McNeel">McNeel on NuGet</a>:</p>
-<ul>
-  <li>Are you using continuous integration (CI)? Your build servers can automatically download the correct version of the SDK before compiling and publishing your shiny new release.</li>
-  <li>Projects where several developers are collaborating and may have Rhino installed in varying locations (see also <a href="https://stackoverflow.com/questions/1786917/is-there-a-way-to-specify-assembly-references-based-on-build-configuration-in-vi">this  question</a>), or not installed at all<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.</li>
-  <li>NuGet runs on Windows and Mac and is baked into Visual Studio and Xamarin Studio. You’re probably already using it to install packages like <a href="https://www.nuget.org/packages/newtonsoft.json">Json.NET</a>.</li>
-</ul>
-
-<p>Some negative consequences of using these NuGet packages for development:</p>
-<ul>
-  <li>Using NuGet packages creates a disparity between what is used for building Rhino and what is used for debugging your plugin. For example, this disparity will lead to problems where a method that is available at compile time is not (yet) available at runtime (user did not update Rhino).</li>
-  <li>After switching to NuGet packages, especially when targeting Rhino WIP versions or when there is a Rhino service release published, you should keep the package up-to-date with the current Rhino release. This adds additional burden when developing and debugging.</li>
-</ul>
-
-<h2 id="making-the-switch">Making the Switch</h2>
-
-<div class="bs-callout bs-callout-danger">
-
-<strong>Note</strong>: This short guide assumes you already know how to <a href="https://docs.microsoft.com/en-gb/nuget/quickstart/use-a-package">install a NuGet package</a>.
+<strong>Warning</strong>: Here be dragons! This is work-in-progress. We have some ideas as to how NuGet packages for <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> and <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> might be useful, but we need developers like yourself to use them and figure out if and how they can improve your development workflows. Currently we're publishing NuGet packages for each Rhino for Windows release.  Rhino for Mac NuGet packages are coming soon.
 
 </div>
+
+<h2 id="why-nuget">Why NuGet?</h2>
+
+<p>In <a href="http://developer.rhino3d.com/guides/rhinocommon/your-first-plugin-windows/">previous guides</a> you’ve seen how to set up a project to develop a RhinoCommon Plugin or Grasshopper Add-On. These guides relied on the Visual Studio Project Wizards that we publish to quickly get you going on plugin development. The wizards automatically reference the necessary assemblies to make RhinoCommon and Grasshopper SDKs available in your Visual Studio project. While this project setup should be fine for a number of cases, there might be some reasons to switch the RhinoCommon and Grasshopper assembly references to those which are published by <a href="https://www.nuget.org/profiles/McNeel">McNeel on NuGet</a>…</p>
+
+<h3 id="advantages">Advantages</h3>
+
+<p>There are several potential advantages to using NuGet packages for RhinoCommon SDKs:</p>
+
+<ul>
+  <li>It’s great for projects with multiple developers (or developers with multiple computers). No more references to <code>Grasshopper.dll</code> that include <code>C:\Users\&lt;username&gt;\AppData\...</code>.</li>
+  <li>NuGet runs on Windows and Mac and is baked into Visual Studio (for both Window and Mac).</li>
+  <li>Are you using Continuous Integration (CI)?  Your build servers can automatically download the correct version of the SDK before compiling and publishing your shiny new release.</li>
+  <li>You’re probably already using it to install packages like <a href="https://www.nuget.org/packages/newtonsoft.json">Json.NET</a>.</li>
+</ul>
+
+<h3 id="potential-pitfalls">Potential Pitfalls</h3>
+
+<p>NuGet makes it easy to compile plug-ins against versions of Rhino other than those installed on your computer. This is handy for backwards-compatible and/or cross-platform development. However, the fact that your Rhino installation and your RhinoCommon/Grasshopper references are “out of sync” can cause problems.</p>
+
+<ul>
+  <li>NuGet packages will need to be updated separately to Rhino</li>
+  <li>You <em>may</em> have trouble debugging your plug-in if it was built against a version of RhinoCommon that is newer than the one included with Rhino<sup id="fnref:a"><a href="#fn:a" class="footnote">1</a></sup></li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<div class="bs-callout">
+
+<strong>Note</strong>: You may wish to read Microsoft's own guide to <a href="https://docs.microsoft.com/en-gb/nuget/quickstart/use-a-package">installing NuGet packages</a> in addition to this one.
+
+</div>
+
+<p>You can install the RhinoCommon package like you would any other.</p>
+
+<p>The <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> (for Rhino 5) package includes</p>
+
+<ul>
+  <li><em>RhinoCommon.dll</em></li>
+</ul>
+
+<p>The <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package depends<sup id="fnref:1"><a href="#fn:1" class="footnote">2</a></sup> on the RhinoCommon package <em>with the same version</em> and includes</p>
+
+<ul>
+  <li><em>Grasshopper.dll</em></li>
+  <li><em>GH_IO.dll</em></li>
+</ul>
+
+<h3 id="step-by-step">Step-by-Step</h3>
 
 <p>To switch to NuGet packages, follow these steps:</p>
 
@@ -445,22 +518,19 @@ $(document).ready(function()
   <li>
     <p>In the NuGet tab which appears, click on <em>Browse</em>. In the search box, type in <em>RhinoCommon</em>. You should see an entry for RhinoCommon and one for Grasshopper. If you are writing a Rhino Plugin or Grasshopper Add-on for Rhino WIP, ensure you check <em>Include prerelease</em>.</p>
 
-    <ul>
-      <li>If your project is a RhinoCommon Plugin, select the <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> entry, choose the Version, and click <em>Install</em><sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup>.
-        <ul>
-          <li>For Rhino 5 plugins the Version should be <em>Latest stable 5.12</em>. NuGet will install <code>RhinoCommon.dll</code>.</li>
-          <li>For Rhino WIP, chose the <em>Latest prerelease</em>. NuGet will install <code>RhinoCommon.dll</code>, <code>Rhino.UI</code>, and <code>Eto.dll</code>.</li>
-        </ul>
-      </li>
-      <li>If your project is a Grasshopper Add-on, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> entry, choose the Version, and click <em>Install</em><sup id="fnref:2:1"><a href="#fn:2" class="footnote">2</a></sup>. For Grasshopper Add-ons on Rhino 5 the Version should be <em>Latest stable 0.9.76</em>. For Grasshopper Add-ons in Rhino WIP, chose the <em>Latest prerelease</em>. NuGet will install <code>Grasshopper.dll</code> and <code>GH_IO.dll</code> as well as the corresponding version of the RhinoCommon assemblies.</li>
-    </ul>
+    <p>If your project is a <strong>RhinoCommon Plugin</strong>, select the <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> entry. For Rhino 5 plugins choose the <em>latest stable 5.12.*</em> version and click <em>Install</em>. NuGet will install<sup id="fnref:2"><a href="#fn:2" class="footnote">3</a></sup> <code>RhinoCommon.dll</code>.</p>
+
+    <p>If your project is a <strong>Grasshopper Add-on</strong>, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> entry. For Grasshopper Add-ons on Rhino 5 choose the <em>latest stable 0.9.76</em> version and click <em>Install</em>. NuGet will install<sup id="fnref:2:1"><a href="#fn:2" class="footnote">3</a></sup> <code>Grasshopper.dll</code> and <code>GH_IO.dll</code> as well as the corresponding version of the RhinoCommon assemblies.</p>
 
     <p><img src="/5/images/switching-to-nuget-packages-02.png" alt="Choose NuGet Packages" /></p>
   </li>
   <li>
-    <p>After the install is complete, ensure that the new references are not copied to the output directory. Select any of the following references if they exist in your project: RhinoCommon, Eto, Rhino.UI, Grasshopper, GH_IO. In the <em>Properties</em> window, set <em>Copy Local</em> to <em>False</em><sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup>.</p>
+    <p><em>(Optional)</em> The references created by these packages have <code>CopyLocal</code> set to <code>true</code>.  Normally, it is a best practice to make sure that the references are not copied to the output directory, since they are included with Rhino. You can do this by selecting any of the following references if they exist in your project - <em>RhinoCommon</em>, <em>Eto</em>, <em>Rhino.UI</em>, <em>Grasshopper</em>, <em>GH_IO</em> - and, in the <em>Properties</em> window, set <code>CopyLocal</code> to <code>false</code>.  The reason this step is <em>optional</em> is that we’ve included some MSBuild witchcraft that will ensure that <code>CopyLocal</code> is set to <code>false</code> when compiling your project, regardless of what it says in the <em>Properties</em> window.</p>
 
     <p><img src="/5/images/switching-to-nuget-packages-03.png" alt="Copy Local" /></p>
+  </li>
+  <li>
+    <p><em>(Optional)</em> If you’re using version control, don’t forget to commit the new <em>packages.config</em> file!</p>
   </li>
 </ol>
 
@@ -480,14 +550,14 @@ $(document).ready(function()
 
 <div class="footnotes">
   <ol>
+    <li id="fn:a">
+      <p>Your plug-in will not load if it uses parts of the API which don’t exist in the running version of Rhino.&nbsp;<a href="#fnref:a" class="reversefootnote">&#8617;</a></p>
+    </li>
     <li id="fn:1">
-      <p>We do not recommend developing plugins without Rhino, as debugging is essential.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>This means that if you install the Grasshopper NuGet package, the matching RhinoCommon package will be installed automatically.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:2">
       <p>If your project already references one of the above assemblies, don’t worry! NuGet will handle it.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a>&nbsp;<a href="#fnref:2:1" class="reversefootnote">&#8617;<sup>2</sup></a></p>
-    </li>
-    <li id="fn:3">
-      <p>You might have noticed that the references created by these packages have <code>CopyLocal</code> set to <code>true</code>. Again, don’t worry. We’ve included some MSBuild witchcraft that will ensure that <code>CopyLocal</code> is set to <code>false</code> when compiling your project, regardless of what it says in the Properties pane.&nbsp;<a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>
