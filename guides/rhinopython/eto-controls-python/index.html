@@ -538,55 +538,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#listcontrol">ListControl</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#maskedtextbox">MaskedTextBox</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#numericupdown">NumericUpDown</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#panel">Panel</a>
 
               
 
@@ -634,22 +586,6 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#radiobutton">RadioButton</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#radiobuttonlist">RadioButtonList</a>
 
               
@@ -667,38 +603,6 @@ $(document).ready(function()
             
             <li>
               <a href="#richtextarea">RichTextArea</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#multi-line">Multi-line</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#scrollable">Scrollable</a>
 
               
 
@@ -747,54 +651,6 @@ $(document).ready(function()
             
             <li>
               <a href="#spinner">Spinner</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#splitter">Splitter</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#tabcontrol">TabControl</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#tabpage">TabPage</a>
 
               
 
@@ -957,14 +813,20 @@ $(document).ready(function()
     self.m_calender = forms.Calendar()
 </code></pre>
 
-<p>There are a number of properties of a calender control that can be used to modify how the ccontrol works.</p>
+<p>There are a number of properties of a calender control that can be used to modify how the control works.</p>
 
 <pre><code class="language-python">    #Create a Calendar
     self.m_calendar = forms.Calendar()
     self.m_calendar.Mode = forms.CalendarMode.Single
     self.m_calendar.MaxDate = System.DateTime(2017,7,31)
     self.m_calendar.MinDate = System.DateTime(2017,7,1)
+    self.m_calendar.SelectedDate = System.DateTime(2017,7,15)
 </code></pre>
+<p>The <code>.Mode</code> property sets if only a single date can be setting <code>forms.CalendarMode.Single</code> or date range can be selected by setting <code>.mode</code> to <code>forms.CalendarMode.Range</code>.</p>
+
+<p>The <code>MaxDate</code> and <code>.MinDate</code> property limits the range of dates that can be selected from.</p>
+
+<p>The <code>.SelectedDate</code> will result in that date being initially selected.</p>
 
 <h2 id="checkbox">CheckBox</h2>
 
@@ -997,11 +859,36 @@ $(document).ready(function()
 
 <h2 id="combobox">ComboBox</h2>
 
-<p>Text entry with a drop down list of items</p>
+<p>A Combo box is a drop down list of items that also allows input of text directly:</p>
+
+<pre><code class="language-python">        #Create Combobox
+        self.m_combobox = forms.ComboBox()
+        self.m_combobox.DataStore = ['first pick', 'second pick', 'third pick']
+</code></pre>
+
+<p>The default value can be set to display by adding the index postition to the DataStore property:</p>
+
+<pre><code class="language-python">        self.m_combobox.SelectedIndex = 1
+</code></pre>
 
 <h2 id="datetimepicker">DateTimePicker</h2>
 
 <p>Control to enter a date and/or time</p>
+
+<pre><code class="language-python">        #Create DateTime Picker in Date mode
+        self.m_datetimedate = forms.DateTimePicker()
+        self.m_datetimedate.Mode = forms.DateTimePickerMode.Date
+        self.m_datetimedate.MaxDate = System.DateTime(2017,7,30)
+        self.m_datetimedate.MinDate = System.DateTime(2017,7,1)
+        self.m_datetimedate.Value = System.DateTime(2017,7,15)
+</code></pre>
+
+<pre><code class="language-python">        #Create DateTime Picker in Date mode
+        self.m_datetimetime = forms.DateTimePicker()
+        self.m_datetimetime.Mode = forms.DateTimePickerMode.Time
+        self.m_datetimetime.Value = System.DateTime.Now
+        self.m_datetimetime.Value = System.DateTime(2017, 1, 1, 23, 43, 49, 500)
+</code></pre>
 
 <h2 id="drawable">Drawable</h2>
 
@@ -1023,15 +910,65 @@ $(document).ready(function()
 
 <h2 id="gridview">GridView</h2>
 
-<p>A virtualized grid of data with editable cells</p>
+<p>A virtualized grid of data with editable cells:</p>
+
+<pre><code class="language-python">        #Create Gridview sometimes called a ListView
+        self.m_gridview = forms.GridView()
+#        self.m_gridview.Size = drawing.Size(400, 400)
+        self.m_gridview.ShowHeader = True
+        self.m_gridview.DataStore = (['first pick', 'second pick', 'third pick', True],['second','fourth','last', False])
+
+        column1 = forms.GridColumn()
+        column1.HeaderText = 'Column 1'
+        column1.Editable = True
+        column1.DataCell = forms.TextBoxCell(0)
+        self.m_gridview.Columns.Add(column1)
+
+        column2 = forms.GridColumn()
+        column2.HeaderText = 'Column 2'
+        column2.Editable = True
+        column2.DataCell = forms.TextBoxCell(1)
+        self.m_gridview.Columns.Add(column2)
+
+        column3 = forms.GridColumn()
+        column3.HeaderText = 'Column 3'
+        column3.Editable = True
+        column3.DataCell = forms.TextBoxCell(2)
+        self.m_gridview.Columns.Add(column3)
+        
+        column4 = forms.GridColumn()
+        column4.HeaderText = 'Column 4'
+        column4.Editable = True
+        column4.DataCell = forms.CheckBoxCell(3)
+        self.m_gridview.Columns.Add(column4)
+</code></pre>
 
 <h2 id="groupbox">GroupBox</h2>
 
-<p>A panel with a border and optional title</p>
+<p>A panel with a border and optional title.  TBD http://api.etoforms.picoe.ca/html/T_Eto_Forms_GroupBox.htm</p>
 
 <h2 id="imageview">ImageView</h2>
 
-<p>A view to display a single image</p>
+<p>A view to display a single image:</p>
+
+<pre><code class="language-python"># Create an image view
+        self.m_image_view = forms.ImageView()
+        self.m_image_view.Size = drawing.Size(300, 200)
+        self.m_image_view.Image = None
+        
+        # Capture the active view to a System.Drawing.Bitmap
+        view = scriptcontext.doc.Views.ActiveView
+        bitmap = view.CaptureToBitmap()
+        
+        # Convert the System.Drawing.Bitmap to an Eto.Drawing.Bitmap
+        # which is required for an Eto image view control
+        stream = System.IO.MemoryStream()
+        format = System.Drawing.Imaging.ImageFormat.Png
+        System.Drawing.Bitmap.Save(bitmap, stream, format)
+        if stream.Length != 0:
+          self.m_image_view.Image = drawing.Bitmap(stream)
+        stream.Dispose()
+</code></pre>
 
 <h2 id="label-control">Label Control</h2>
 
@@ -1053,81 +990,136 @@ $(document).ready(function()
 
 <h2 id="linkbutton">LinkButton</h2>
 
-<p>A simple label that acts like a button, similar to a hyperlink</p>
+<p>A simple label that acts like a button, similar to a hyperlink.</p>
+
+<pre><code class="language-python"># Create LinkButton
+        self.m_linkbutton = forms.LinkButton(Text = 'For more details...')
+        self.m_linkbutton.Click += self.OnLinkButtonClick
+        
+    # Linkbutton click handler
+    def OnLinkButtonClick(self, sender, e):
+        webbrowser.open("http://rhino3d.com")
+</code></pre>
 
 <h2 id="listbox">ListBox</h2>
 
-<p>A scrollable list of items</p>
+<p>A scrollable list of items:</p>
 
-<h2 id="listcontrol">ListControl</h2>
-
-<p>Base for ListBox, DropDown, ComboBox, and other list-type controls</p>
-
-<h2 id="maskedtextbox">MaskedTextBox</h2>
-
-<p>TextBox for variable or fixed length masks</p>
+<pre><code class="language-python">        #Create ListBox
+        self.m_listbox = forms.ListBox()
+        self.m_listbox.DataStore = ['first pick', 'second pick', 'third pick']
+        self.m_listbox.SelectedIndex = 1
+</code></pre>
 
 <h2 id="numericupdown">NumericUpDown</h2>
 
 <p>Numeric control that allows the user to adjust the value with the mouse</p>
 
-<h2 id="panel">Panel</h2>
-
-<p>A blank panel container to add other controls</p>
+<pre><code class="language-python"># Create Numeric Up Down
+        self.m_numeric_updown = forms.NumericUpDown()
+        self.m_numeric_updown.DecimalPlaces = 2
+        self.m_numeric_updown.Increment = 0.01
+        self.m_numeric_updown.MaxValue = 10.0
+        self.m_numeric_updown.MinValue = 1.0
+        self.m_numeric_updown.Value = 5.0
+</code></pre>
 
 <h2 id="passwordbox">PasswordBox</h2>
 
-<p>Enter passwords or sensitive data</p>
+<p>Enter passwords or sensitive data:</p>
+
+<pre><code class="language-python"># Create Password Box
+        self.m_password = forms.PasswordBox()
+        self.m_password.MaxLength = 7
+</code></pre>
 
 <h2 id="progressbar">ProgressBar</h2>
 
-<p>Show progress of long running tasks</p>
+<p>Show progress of long running tasks:</p>
 
-<h2 id="radiobutton">RadioButton</h2>
+<p><img src="/images/python-eto-progressbar.png" alt="/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
 
-<p>Used in a group of radio buttons to allow user to select from values</p>
+<pre><code class="language-python"># Create Progress Bar
+        self.m_progressbar = forms.ProgressBar()
+        self.m_progressbar.MinValue = 0
+        self.m_progressbar.MaxValue = 10
+</code></pre>
+
+<pre><code class="language-python">self.m_progress = 1
+
+    # GoButton button click handler
+    def OnGoButtonClick(self, sender, e):
+        self.m_progress = self.m_progress + 1
+        if self.m_progress &gt; 10:
+            self.m_progress = 10
+        self.m_progressbar.Value = self.m_progress
+</code></pre>
 
 <h2 id="radiobuttonlist">RadioButtonList</h2>
 
-<p>Manages a list of radio buttons</p>
+<p>Manages a list of radio buttons:</p>
+
+<pre><code class="language-python"># Create Radio Button List Control
+        self.m_radiobuttonlist = forms.RadioButtonList()
+        self.m_radiobuttonlist.DataStore = ['first pick', 'second pick', 'third pick']
+        self.m_radiobuttonlist.Orientation = forms.Orientation.Vertical
+        self.m_radiobuttonlist.SelectedIndex = 1
+</code></pre>
 
 <h2 id="richtextarea">RichTextArea</h2>
 
-<h2 id="multi-line">Multi-line</h2>
+<p>Multi-line text area with rich text formatting. This differs from the TextBox in that it is used for multi-line text entry and can accept Tab and Enter input.</p>
 
-<p>text area with rich text formatting</p>
+<pre><code class="language-python"># Create Rich Text Edit Box
+        self.m_richtextarea = forms.RichTextArea()
+        self.m_richtextarea.Size = drawing.Size(400, 400)
+</code></pre>
 
-<h2 id="scrollable">Scrollable</h2>
+<p>The text also can be formatted by using</p>
 
-<p>A scrollable container</p>
+<ol>
+  <li><code>ctrl B</code> for Bold text.</li>
+  <li><code>crtl I</code> for Italic.</li>
+  <li><code>ctrl U</code> for Underline.</li>
+  <li>…….</li>
+</ol>
 
 <h2 id="searchbox">SearchBox</h2>
 
-<p>A text box with search-box functionality</p>
+<p>A text box with search-box functionality. The search box control is similar to a plain text box, but provides platform-specific styling.</p>
+
+<pre><code class="language-python"># Create Search Box
+        self.m_searchbox = forms.SearchBox()
+</code></pre>
 
 <h2 id="slider">Slider</h2>
 
-<p>A horizontal or vertical slider to select a value from a range</p>
+<p>A horizontal or vertical slider to select a value from a range:</p>
+
+<pre><code class="language-python"># Create a slider
+        self.m_slider = forms.Slider()
+        self.m_slider.MaxValue = 10
+        self.m_slider.MinValue = 0
+        self.m_slider.Value = 3
+</code></pre>
 
 <h2 id="spinner">Spinner</h2>
 
-<p>A spinner to show indeterminate progress in compact space</p>
+<p>A spinner to show indeterminate progress in compact space:</p>
 
-<h2 id="splitter">Splitter</h2>
-
-<p>Splits two panes horizontally or vertically</p>
-
-<h2 id="tabcontrol">TabControl</h2>
-
-<p>Presents multiple TabPage containers which the user can select</p>
-
-<h2 id="tabpage">TabPage</h2>
-
-<p>A single page of a TabControl</p>
+<pre><code class="language-python"># Create Spinner
+        self.m_spinner = forms.Spinner()
+        self.m_spinner.Enabled = True
+</code></pre>
 
 <h2 id="textarea">TextArea</h2>
 
-<p>Multi-line text control with scrollbars</p>
+<p>Multi-line text control with scrollbars:</p>
+
+<pre><code># Create Text Area Box
+        self.m_textarea = forms.TextArea()
+        self.m_textarea.Size = drawing.Size(400, 400)
+</code></pre>
 
 <h2 id="textbox-control">TextBox Control</h2>
 
@@ -1137,7 +1129,7 @@ $(document).ready(function()
 
 <p>To check the contents of the textbox in the script, the textbox control must have a name to reference it.</p>
 
-<pre><code class="language-python">        self.m_textbox = forms.TextBox()
+<pre><code class="language-python">        self.m_textbox = forms.TextBox() 
 </code></pre>
 
 <p>In this case the name <code>m_textbox</code> can be used to reference the control later in the class method starting on line 44:</p>
@@ -1156,13 +1148,13 @@ WebView - Control to present a web page through a url or static HTML</p>
 
 <h2 id="sample-dialogs">Sample dialogs</h2>
 
-<p>Now with some understanding of Eto Dialogs in Python, take a look at some of the Sample dialogs in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython">Python Developer Samples Repo</a>:</p>
+<p>Now with some understanding of Eto Dialogs in Python, take a look at some of the Sample dialogs in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython">Python Developer Samples Repo</a>:</p>
 
 <ol>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/wip/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
 </ol>
 
 <hr />
