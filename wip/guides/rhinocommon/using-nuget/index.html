@@ -6,20 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Using NuGet (Windows) with C#</title>
+  <title>Using NuGet with C#</title>
   <meta name="description" content="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper.  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/using-nuget/" />
-  <meta property="og:title" content="Using NuGet (Windows)" />
+  <meta property="og:title" content="Using NuGet" />
   <meta property="og:description" content="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Using NuGet (Windows)" />
+  <meta name="twitter:title" value="Using NuGet" />
   <meta name="twitter:description" value="This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
@@ -27,7 +27,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -346,7 +346,16 @@ $(document).ready(function()
                     
                     
                     <li>
-                        <a href="#step-by-step">Step-by-Step</a>
+                        <a href="#step-by-step-windows">Step-by-Step (Windows)</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#step-by-step-mac">Step-by-Step (Mac)</a>
                     </li>
                   
 
@@ -412,7 +421,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Using NuGet (Windows)</h1>
+          <h1>Using NuGet</h1>
 
           <p>
   <span class="guide_byline">
@@ -441,13 +450,13 @@ $(document).ready(function()
 
           <div class="bs-callout bs-callout-danger">
 
-<strong>Warning</strong>: Here be dragons! This is work-in-progress. We have some ideas as to how NuGet packages for <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> and <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> might be useful, but we need developers like yourself to use them and figure out if and how they can improve your development workflows. Currently we're publishing NuGet packages for each Rhino for Windows release.  Rhino for Mac NuGet packages are coming soon.
+<strong>Warning</strong>: Here be dragons! This is work-in-progress. We have some ideas as to how NuGet packages for <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> and <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> might be useful, but we need developers like yourself to use them and figure out if and how they can improve your development workflows. Currently we're publishing NuGet packages for each Rhino release.
 
 </div>
 
 <h2 id="why-nuget">Why NuGet?</h2>
 
-<p>In <a href="http://developer.rhino3d.com/guides/rhinocommon/your-first-plugin-windows/">previous guides</a> you’ve seen how to set up a project to develop a RhinoCommon Plugin or Grasshopper component.  These guides relied on the Visual Studio Project Wizards that we publish to quickly get you going on plugin development.  The wizards automatically reference the necessary assemblies to make RhinoCommon and Grasshopper SDKs available in your Visual Studio project.  While this project setup should be fine for a number of cases, there might be some reasons to switch the RhinoCommon and Grasshopper assembly references to those which are published by <a href="https://www.nuget.org/profiles/McNeel">McNeel on NuGet</a>…</p>
+<p>In <a href="/wip/guides/rhinocommon/your-first-plugin-windows/">previous</a> <a href="/wip/guides/rhinocommon/your-first-plugin-mac/">guides</a> you’ve seen how to set up a project to develop a RhinoCommon Plugin or Grasshopper component.  These guides relied on the Visual Studio Project Wizards that we publish to quickly get you going on plugin development.  The wizards automatically reference the necessary assemblies to make RhinoCommon and Grasshopper SDKs available in your Visual Studio project.  While this project setup should be fine for a number of cases, there might be some reasons to switch the RhinoCommon and Grasshopper assembly references to those which are published by <a href="https://www.nuget.org/profiles/McNeel">McNeel on NuGet</a>…</p>
 
 <h3 id="advantages">Advantages</h3>
 
@@ -473,7 +482,7 @@ $(document).ready(function()
 
 <div class="bs-callout">
 
-<strong>Note</strong>: You may wish to read Microsoft's own guide to <a href="https://docs.microsoft.com/en-gb/nuget/quickstart/use-a-package">installing NuGet packages</a> in addition to this one.
+<strong>Note</strong>: You may wish to read Microsoft's guide to <a href="https://docs.microsoft.com/en-gb/nuget/quickstart/use-a-package">installing NuGet packages</a> in addition to this one.
 
 </div>
 
@@ -494,15 +503,15 @@ $(document).ready(function()
   <li><em>GH_IO.dll</em></li>
 </ul>
 
-<h3 id="step-by-step">Step-by-Step</h3>
+<h3 id="step-by-step-windows">Step-by-Step (Windows)</h3>
 
 <p>To switch to NuGet packages, follow these steps:</p>
 
 <ol>
   <li>
-    <p>In Visual Studio, find the <em>Solution Explorer</em> and right-click on the <em>References</em> section of your project. Select <em>Manage NuGet Packages…</em> Alternatively, the same can be done through the Visual Studio Project menu, and choosing <em>Manage NuGet Packages…</em></p>
+    <p>In Visual Studio, find the <em>Solution Explorer</em> and right-click on the <em>References</em> section of your project. Select <em>Manage NuGet Packages…</em> Alternatively, the same can be done through the Visual Studio <em>Project</em> menu, and choosing <em>Manage NuGet Packages…</em></p>
 
-    <p><img src="/wip/images/using-nuget-01.png" alt="Manage NuGet Packages" /></p>
+    <p><img src="/wip/images/using-nuget-01.png" alt="Manage NuGet Packages - Windows" /></p>
   </li>
   <li>
     <p>In the NuGet tab which appears, click on <em>Browse</em>. In the search box, type in <em>RhinoCommon</em>. You should see an entry for RhinoCommon and one for Grasshopper. If you are writing a Rhino Plugin or Grasshopper Add-on for Rhino WIP, ensure you check <em>Include prerelease</em>.</p>
@@ -511,12 +520,39 @@ $(document).ready(function()
 
     <p>If your project is a <strong>Grasshopper Add-on</strong>, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package. For Grasshopper Add-ons in Rhino WIP choose the <em>Latest prerelease</em> and click <em>Install</em>. NuGet will install<sup id="fnref:2:1"><a href="#fn:2" class="footnote">3</a></sup> <em>Grasshopper.dll</em> and <em>GH_IO.dll</em> as well as the corresponding version of the RhinoCommon assemblies.</p>
 
-    <p><img src="/wip/images/using-nuget-02.png" alt="Choose NuGet Packages" /></p>
+    <p><img src="/wip/images/using-nuget-02.png" alt="Choose NuGet Packages - Windows" /></p>
   </li>
   <li>
     <p><em>(Optional)</em> The references created by these packages have <code>CopyLocal</code> set to <code>true</code>.  Normally, it is a best practice to make sure that the references are not copied to the output directory, since they are included with Rhino. You can do this by selecting any of the following references if they exist in your project - <em>RhinoCommon</em>, <em>Eto</em>, <em>Rhino.UI</em>, <em>Grasshopper</em>, <em>GH_IO</em> - and, in the <em>Properties</em> window, set <code>CopyLocal</code> to <code>false</code>.  The reason this step is <em>optional</em> is that we’ve included some MSBuild witchcraft that will ensure that <code>CopyLocal</code> is set to <code>false</code> when compiling your project, regardless of what it says in the <em>Properties</em> window.</p>
 
     <p><img src="/wip/images/using-nuget-03.png" alt="Copy Local" /></p>
+  </li>
+  <li>
+    <p><em>(Optional)</em> If you’re using version control, don’t forget to commit the new <em>packages.config</em> file!</p>
+  </li>
+</ol>
+
+<h3 id="step-by-step-mac">Step-by-Step (Mac)</h3>
+
+<ol>
+  <li>
+    <p>In Visual Studio for Mac, find the <em>Solution Explorer</em> and double-click on the <em>Packages</em> section of your project.  Alternatively, the same can be done through the Visual Studio <em>Project</em> menu, and choosing <em>Add NuGet Packages…</em></p>
+
+    <p><img src="/wip/images/using-nuget-04.png" alt="Manage NuGet Packages - Mac" /></p>
+  </li>
+  <li>
+    <p>The <em>Add Packages</em> dialog which appears. In the search box, type in <em>RhinoCommon</em>. You should see an entry for RhinoCommon and one for Grasshopper. If you are writing a Rhino Plugin or Grasshopper Add-on for Rhino WIP, ensure you check <em>Show pre-release packages</em>.</p>
+
+    <p>If your project is a <strong>RhinoCommon Plug-in</strong>, select the <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> package. For Rhino WIP choose the <em>Latest version</em> and click <em>Add Package</em>. NuGet will install<sup id="fnref:2:2"><a href="#fn:2" class="footnote">3</a></sup> <em>RhinoCommon.dll</em>, <em>Rhino.UI</em> and <em>Eto.dll</em>.</p>
+
+    <p>If your project is a <strong>Grasshopper Add-on</strong>, select the <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> package. For Grasshopper Add-ons in Rhino WIP choose the <em>Latest version</em> and click <em>Add Package</em>. NuGet will install<sup id="fnref:2:3"><a href="#fn:2" class="footnote">3</a></sup> <em>Grasshopper.dll</em> and <em>GH_IO.dll</em> as well as the corresponding version of the RhinoCommon assemblies.</p>
+
+    <p><img src="/wip/images/using-nuget-05.png" alt="Choose NuGet Packages - Mac" /></p>
+  </li>
+  <li>
+    <p><em>(Optional)</em> The references created by these packages have <em>Local Copy</em> set to <code>true</code>.  Normally, it is a best practice to make sure that the references are not copied to the output directory, since they are included with Rhino. You can do this by selecting any of the following references if they exist in your project - <em>RhinoCommon</em>, <em>Eto</em>, <em>Rhino.UI</em>, <em>Grasshopper</em>, <em>GH_IO</em> - and, in the <em>Properties</em> window, set <em>Local Copy</em> to <code>false</code> (or unchecked).  The reason this step is <em>optional</em> is that we’ve included some MSBuild witchcraft that will ensure that <em>Local Copy</em> is set to <code>false</code> when compiling your project, regardless of what it says in the <em>Properties</em> window.</p>
+
+    <p style="text-align:center;"><img src="/wip/images/using-nuget-06.png" alt="Copy Local - Mac" style="width: 450px;" /></p>
   </li>
   <li>
     <p><em>(Optional)</em> If you’re using version control, don’t forget to commit the new <em>packages.config</em> file!</p>
@@ -545,7 +581,7 @@ $(document).ready(function()
       <p>This means that if you install the Grasshopper NuGet package, the matching RhinoCommon package will be installed automatically.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:2">
-      <p>If your project already references one of the above assemblies, don’t worry! NuGet will handle it.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a>&nbsp;<a href="#fnref:2:1" class="reversefootnote">&#8617;<sup>2</sup></a></p>
+      <p>If your project already references one of the above assemblies, don’t worry! NuGet will handle it.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a>&nbsp;<a href="#fnref:2:1" class="reversefootnote">&#8617;<sup>2</sup></a>&nbsp;<a href="#fnref:2:2" class="reversefootnote">&#8617;<sup>3</sup></a>&nbsp;<a href="#fnref:2:3" class="reversefootnote">&#8617;<sup>4</sup></a></p>
     </li>
   </ol>
 </div>
