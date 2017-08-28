@@ -410,22 +410,6 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#drawable">Drawable</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#dropdown">DropDown</a>
 
               
@@ -618,22 +602,6 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#searchbox">SearchBox</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#slider">Slider</a>
 
               
@@ -763,7 +731,7 @@ $(document).ready(function()
 
           <h2 id="the-eto-controls">The Eto Controls</h2>
 
-<p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide shows the syntax required to create the most common Eto controls in Rhino.Python.  Controls include Labels, Buttons, Edit boxes and Sliders. In Eto there are <a href="https://github.com/picoe/Eto/wiki/Controls">more then 35 different controls</a> that can be created.</p>
+<p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide shows the syntax required to create the most common Eto controls in Rhino.Python.  Controls include Labels, Buttons, Edit boxes and Sliders. In Eto there are <a href="https://github.com/picoe/Eto/wiki/Controls">more than 35 different controls</a> that can be created.</p>
 
 <p>For details on creating the rest of an Eto Dialog in Rhino.Python go to the <a href="/guides/rhinopython/eto-forms-python/">Getting Started with Eto article</a></p>
 
@@ -771,7 +739,7 @@ $(document).ready(function()
 
 <p>Buttons are placed on almost every dialog.</p>
 
-<p><img src="/images/dialog-sample-eto-buttons.png" alt="/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
+<p><img src="/images/eto-buttons.svg" alt="/images/eto-buttons.svg" class="img-center" width="65%" /></p>
 
 <p>Creating a new button is simple completed by specifying the <code>Text</code> shown on the button face. In addition to creating the new button, commonly the <code>.Click</code> event is bound to a method usein the <code>+=</code> syntax as shown below.</p>
 
@@ -807,7 +775,7 @@ $(document).ready(function()
 
 <p>Calendar control to pick a date or range of dates</p>
 
-<p><img src="/images/eto-controls-calendar.png" alt="/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
+<p><img src="/images/eto-controls-calendar.png" alt="/images/eto-controls-calendar.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python">    #Create a Calender
     self.m_calender = forms.Calendar()
@@ -832,6 +800,10 @@ $(document).ready(function()
 
 <p>Check box with text label.</p>
 
+<p><img src="/images/eto-dialog-checkbox.png" alt="/images/eto-dialog-checkbox.png" class="img-center" width="45%" /></p>
+
+<p>The simpliest syntax for a CheckBox is:</p>
+
 <pre><code class="language-python">    #Create a Checkbox
     self.m_checkbox = forms.CheckBox(Text = 'My Checkbox')
 </code></pre>
@@ -845,7 +817,9 @@ $(document).ready(function()
 
 <h2 id="colorpicker">ColorPicker</h2>
 
-<p>Pick a single color drop down color picker. Also supports a right-click on the dropdown arrow to support eye dropper and the stanrd system color picker dialog.</p>
+<p>Pick a single color drop down color picker. Also supports a right-click on the dropdown arrow to support eye dropper and the standard system color picker dialog.</p>
+
+<p><img src="/images/eto-dialog-colorpicker.png" alt="/images/eto-dialog-colorpicker.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python">        #Create a ColorPicker Control
         self.m_colorpicker = forms.ColorPicker()
@@ -861,6 +835,8 @@ $(document).ready(function()
 
 <p>A Combo box is a drop down list of items that also allows input of text directly:</p>
 
+<p><img src="/images/eto-controls-combobox.png" alt="/images/eto-controls-combobox.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python">        #Create Combobox
         self.m_combobox = forms.ComboBox()
         self.m_combobox.DataStore = ['first pick', 'second pick', 'third pick']
@@ -874,6 +850,8 @@ $(document).ready(function()
 <h2 id="datetimepicker">DateTimePicker</h2>
 
 <p>Control to enter a date and/or time</p>
+
+<p><img src="/images/eto-controls-datetimepicker.png" alt="/images/eto-controls-datetimepicker.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python">        #Create DateTime Picker in Date mode
         self.m_datetimedate = forms.DateTimePicker()
@@ -890,13 +868,11 @@ $(document).ready(function()
         self.m_datetimetime.Value = System.DateTime(2017, 1, 1, 23, 43, 49, 500)
 </code></pre>
 
-<h2 id="drawable">Drawable</h2>
-
-<p>Owner-drawn control using Graphics object</p>
-
 <h2 id="dropdown">DropDown</h2>
 
 <p>Drop down with a list of items.</p>
+
+<p><img src="/images/eto-controls-dropdown.png" alt="/images/eto-controls-dropdown.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python">        #Create Dropdown List
         self.m_dropdownlist = forms.DropDown()
@@ -911,6 +887,8 @@ $(document).ready(function()
 <h2 id="gridview">GridView</h2>
 
 <p>A virtualized grid of data with editable cells:</p>
+
+<p><img src="/images/eto-controls-gridview.png" alt="/images/eto-controls-gridview.png" class="img-center" width="65%" /></p>
 
 <pre><code class="language-python">        #Create Gridview sometimes called a ListView
         self.m_gridview = forms.GridView()
@@ -945,11 +923,19 @@ $(document).ready(function()
 
 <h2 id="groupbox">GroupBox</h2>
 
-<p>A panel with a border and optional title.  TBD http://api.etoforms.picoe.ca/html/T_Eto_Forms_GroupBox.htm</p>
+<p>A panel with a border and optional title.</p>
+
+<p><img src="/images/eto-controls-groupbox.png" alt="/images/eto-controls-groupbox.png" class="img-center" width="45%" /></p>
+
+<p>Like the larger dialog, the GroupBox requires a Layout to hep postiion controls.  Within the layout, controls are placed:</p>
+
+<p>TBD http://api.etoforms.picoe.ca/html/T_Eto_Forms_GroupBox.htm</p>
 
 <h2 id="imageview">ImageView</h2>
 
 <p>A view to display a single image:</p>
+
+<p><img src="/images/eto-controls-imageview.png" alt="/images/eto-controls-imageview.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python"># Create an image view
         self.m_image_view = forms.ImageView()
@@ -992,6 +978,8 @@ $(document).ready(function()
 
 <p>A simple label that acts like a button, similar to a hyperlink.</p>
 
+<p><img src="/images/eto-controls-linkbutton.png" alt="/images/eto-controls-linkbutton.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python"># Create LinkButton
         self.m_linkbutton = forms.LinkButton(Text = 'For more details...')
         self.m_linkbutton.Click += self.OnLinkButtonClick
@@ -1005,6 +993,8 @@ $(document).ready(function()
 
 <p>A scrollable list of items:</p>
 
+<p><img src="/images/eto-controls-listbox.png" alt="/images/eto-controls-listbox.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python">        #Create ListBox
         self.m_listbox = forms.ListBox()
         self.m_listbox.DataStore = ['first pick', 'second pick', 'third pick']
@@ -1013,7 +1003,9 @@ $(document).ready(function()
 
 <h2 id="numericupdown">NumericUpDown</h2>
 
-<p>Numeric control that allows the user to adjust the value with the mouse</p>
+<p>Numeric control that allows the user to adjust the value with the mouse:</p>
+
+<p><img src="/images/eto-controls-numericupdown.png" alt="/images/eto-controls-numericupdown.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python"># Create Numeric Up Down
         self.m_numeric_updown = forms.NumericUpDown()
@@ -1028,6 +1020,8 @@ $(document).ready(function()
 
 <p>Enter passwords or sensitive data:</p>
 
+<p><img src="/images/eto-controls-password.png" alt="/images/eto-controls-password.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python"># Create Password Box
         self.m_password = forms.PasswordBox()
         self.m_password.MaxLength = 7
@@ -1037,7 +1031,7 @@ $(document).ready(function()
 
 <p>Show progress of long running tasks:</p>
 
-<p><img src="/images/python-eto-progressbar.png" alt="/images/dialog-sample-eto-buttons.png" class="img-center" /></p>
+<p><img src="/images/eto-controls-progressbar.png" alt="/images/eto-controls-progressbar.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python"># Create Progress Bar
         self.m_progressbar = forms.ProgressBar()
@@ -1059,6 +1053,8 @@ $(document).ready(function()
 
 <p>Manages a list of radio buttons:</p>
 
+<p><img src="/images/eto-controls-radiobuttonlist.png" alt="/images/eto-controls-radiobuttonlist.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python"># Create Radio Button List Control
         self.m_radiobuttonlist = forms.RadioButtonList()
         self.m_radiobuttonlist.DataStore = ['first pick', 'second pick', 'third pick']
@@ -1068,7 +1064,11 @@ $(document).ready(function()
 
 <h2 id="richtextarea">RichTextArea</h2>
 
-<p>Multi-line text area with rich text formatting. This differs from the TextBox in that it is used for multi-line text entry and can accept Tab and Enter input.</p>
+<p>Multi-line text area with rich text formatting:</p>
+
+<p><img src="/images/eto-controls-richtextarea.png" alt="/images/eto-controls-richtextarea.png" class="img-center" width="45%" /></p>
+
+<p>This differs from the TextBox in that it is used for multi-line text entry and can accept Tab and Enter input.</p>
 
 <pre><code class="language-python"># Create Rich Text Edit Box
         self.m_richtextarea = forms.RichTextArea()
@@ -1084,17 +1084,11 @@ $(document).ready(function()
   <li>…….</li>
 </ol>
 
-<h2 id="searchbox">SearchBox</h2>
-
-<p>A text box with search-box functionality. The search box control is similar to a plain text box, but provides platform-specific styling.</p>
-
-<pre><code class="language-python"># Create Search Box
-        self.m_searchbox = forms.SearchBox()
-</code></pre>
-
 <h2 id="slider">Slider</h2>
 
 <p>A horizontal or vertical slider to select a value from a range:</p>
+
+<p><img src="/images/eto-controls-slider.png" alt="/images/eto-controls-slider.png" class="img-center" width="45%" /></p>
 
 <pre><code class="language-python"># Create a slider
         self.m_slider = forms.Slider()
@@ -1107,6 +1101,8 @@ $(document).ready(function()
 
 <p>A spinner to show indeterminate progress in compact space:</p>
 
+<p><img src="/images/eto-controls-spinner.png" alt="/images/eto-controls-spinner.png" class="img-center" width="45%" /></p>
+
 <pre><code class="language-python"># Create Spinner
         self.m_spinner = forms.Spinner()
         self.m_spinner.Enabled = True
@@ -1115,6 +1111,8 @@ $(document).ready(function()
 <h2 id="textarea">TextArea</h2>
 
 <p>Multi-line text control with scrollbars:</p>
+
+<p><img src="/images/eto-controls-richtextarea.png" alt="/images/eto-controls-richtextarea.png" class="img-center" width="45%" /></p>
 
 <pre><code># Create Text Area Box
         self.m_textarea = forms.TextArea()
