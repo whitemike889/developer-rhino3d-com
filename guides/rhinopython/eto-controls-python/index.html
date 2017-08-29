@@ -1267,6 +1267,24 @@ $(document).ready(function()
 
 <p>A control to present nodes in a tree</p>
 
+<p><img src="/images/eto-controls-treeview.png" alt="/images/eto-controls-treeview.png" class="img-center" width="65%" /></p>
+
+<pre><code class="language-python"># Create TreeView
+        self.m_treeview = forms.TreeView()
+        self.m_treeview.Size = drawing.Size(200, 200)
+        self.m_treeview.LabelEdit = True
+        
+        treecollection = forms.TreeItemCollection()
+        self.m_treeview.DataStore = treecollection
+
+        item1 = forms.TreeItem(Text = 'node A1', Expanded = True)
+        item1.Children.Add(forms.TreeItem(Text = 'node B1'))
+        item1.Children.Add(forms.TreeItem(Text = 'node B2'))
+        item2 = forms.TreeItem(Text = 'node A2', Expanded = True)
+        treecollection.Add(item1)
+        treecollection.Add(item2)
+</code></pre>
+
 <h2 id="treegridview">TreeGridView</h2>
 
 <p>A TreeView with columns</p>
@@ -1274,6 +1292,14 @@ $(document).ready(function()
 <h2 id="webview">WebView</h2>
 
 <p>Control to present a web page through a url or static HTML</p>
+
+<p><img src="/images/eto-controls-webview.png" alt="/images/eto-controls-webview.png" class="img-center" width="65%" /></p>
+
+<pre><code class="language-python"># Create a WebView
+        self.m_webview = forms.WebView()
+        self.m_webview.Size = drawing.Size(300, 400)
+        self.m_webview.Url = System.Uri('http://developer.rhino3d.com/guides/rhinopython/')
+</code></pre>
 
 <h2 id="sample-dialogs">Sample dialogs</h2>
 
