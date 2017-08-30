@@ -650,22 +650,6 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#treeview">TreeView</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#treegridview">TreeGridView</a>
 
               
@@ -1263,31 +1247,55 @@ $(document).ready(function()
 
 <p>Just creating a new <code>Eto.Forms.TextBox()</code> is common.  There are a number of additional properties of a TextBox which can be used to control the input. These properties include <code>MaxLength</code>, <code>PlaceholderText</code>, <code>InsertMode</code> and many more that can be seen in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TextBox.htm">Eto TextBox Class</a>.</p>
 
-<h2 id="treeview">TreeView</h2>
-
-<p>A control to present nodes in a tree</p>
-
-<p><img src="/images/eto-controls-treeview.png" alt="/images/eto-controls-treeview.png" class="img-center" width="45%" /></p>
-
-<pre><code class="language-python"># Create TreeView
-        self.m_treeview = forms.TreeView()
-        self.m_treeview.Size = drawing.Size(200, 200)
-        self.m_treeview.LabelEdit = True
-        
-        treecollection = forms.TreeItemCollection()
-        self.m_treeview.DataStore = treecollection
-
-        item1 = forms.TreeItem(Text = 'node A1', Expanded = True)
-        item1.Children.Add(forms.TreeItem(Text = 'node B1'))
-        item1.Children.Add(forms.TreeItem(Text = 'node B2'))
-        item2 = forms.TreeItem(Text = 'node A2', Expanded = True)
-        treecollection.Add(item1)
-        treecollection.Add(item2)
-</code></pre>
-
 <h2 id="treegridview">TreeGridView</h2>
 
-<p>A TreeView with columns</p>
+<p>A TreeView with additional property columns:</p>
+
+<p><img src="/images/eto-controls-treegridview.png" alt="/images/eto-controls-treegridview.png" class="img-center" width="45%" /></p>
+
+<p>The TreeGridView takes the two most sophisticated controls in Eto, TreeView and GridView to combine them into one control. This make the control powerful, but also requires very specific syntax to work.  The first two lines are standard, create the <code>forms.TreeGridView()</code> and set its size:</p>
+
+<pre><code class="language-python"># Create TreeGridView
+        self.m_treegridview = forms.TreeGridView()
+        self.m_treegridview.Size = drawing.Size(200, 200)
+
+        column1 = forms.GridColumn()
+        column1.HeaderText = 'Tree'
+        column1.Editable = True
+        column1.DataCell = forms.TextBoxCell(0)
+        self.m_treegridview.Columns.Add(column1)
+        
+        column2 = forms.GridColumn()
+        column2.HeaderText = 'Prop 2'
+        column2.Editable = True
+        column2.DataCell = forms.TextBoxCell(1)
+        self.m_treegridview.Columns.Add(column2)
+
+        column3 = forms.GridColumn()
+        column3.HeaderText = 'Prop 3'
+        column3.Editable = True
+        column3.DataCell = forms.TextBoxCell(2)
+        self.m_treegridview.Columns.Add(column3)
+        
+        treecollection = forms.TreeGridItemCollection()
+        item1 = forms.TreeGridItem(Values=('node1', 'node1b', 'node1c'))
+        item1.Expanded = True
+        item1.Children.Add(forms.TreeGridItem(Values=('node2', 'node2b', 'node2c')))
+        item1.Children.Add(forms.TreeGridItem(Values=('node3', 'node3b', 'node3c')))
+        treecollection.Add(item1)
+        item2 = forms.TreeGridItem(Values=('node11', 'node11b', 'node11c'))
+        treecollection.Add(item2)
+        self.m_treegridview.DataStore = treecollection
+
+</code></pre>
+
+<p>After setting up the <code>forms.TreeGridView()</code> the columns to display in the control need to be created as <code>form.GridColumn()</code>.  The <code>.DataCell</code> property points to the <code>forms.TextBoxCell(index)</code> that exists in the <code>.DataStore</code>  assigned at the last line of this script.</p>
+
+<p>The information for for a tree is stored into a <code>forms.TreeGridCollection()</code>.  Items within the tree are a <code>forms.TreeGridItems</code> that have <code>.Values</code> of tuples.  Each tuple will populate a row in the <code>forms.TreeGridView()</code>.</p>
+
+<p>The <code>forms.TreeGridView</code> does not automatically update it contents.  After all the control is setup, the <code>DataStore</code> is set to the <code>treecollection</code>.  Doing this is a different order may end up in a control that does not display the data.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TreeGridView.htm">Eto TreeGridView API Documentation</a>.</p>
 
 <h2 id="webview">WebView</h2>
 
@@ -1317,9 +1325,8 @@ $(document).ready(function()
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
-  <li><a href="/guides/rhinopython/python-reading-writing">Reading and Writing files with Python</a></li>
   <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
-  <li><a href="/guides/rhinopython/eto-forms-python/">Eto Forms in Python</a> guide</li>
+  <li><a href="/guides/rhinopython/eto-forms-python/">Custom Eto Forms in Python guide</a></li>
 </ul>
 
         </article>
