@@ -1004,19 +1004,10 @@ $(document).ready(function()
         
         # Capture the active view to a System.Drawing.Bitmap
         view = scriptcontext.doc.Views.ActiveView
-        bitmap = view.CaptureToBitmap()
-        
-        # Convert the System.Drawing.Bitmap to an Eto.Drawing.Bitmap
-        # which is required for an Eto image view control
-        stream = System.IO.MemoryStream()
-        format = System.Drawing.Imaging.ImageFormat.Png
-        System.Drawing.Bitmap.Save(bitmap, stream, format)
-        if stream.Length != 0:
-          self.m_image_view.Image = drawing.Bitmap(stream)
-        stream.Dispose()
+        self.m_image_view.Image = Rhino.UI.EtoExtensions.ToEto(view.CaptureToBitmap())
 </code></pre>
 
-<p>Bitmaps may be formatted from a number of different forms using the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Drawing_Bitmap.htm"><code>drawing.Bitmap()</code> constructor</a>.</p>
+<p>Bitmaps may be formatted from a number of different forms. In this case the <code>view.CaptureToBitmap()</code> image is translated to an Eto bitmap using the <code>Rhino.UI.EtoExtensions.ToEto()</code> method.</p>
 
 <p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_ImageView.htm">Eto ImageView API Documentation</a>.</p>
 
