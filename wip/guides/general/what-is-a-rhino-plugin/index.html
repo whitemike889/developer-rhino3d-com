@@ -373,7 +373,7 @@ $(document).ready(function()
 
           <p>A Rhino plugin is a software module that extends the functionality of Rhino or Grasshopper by adding commands, features, or capabilities.  A Rhino plugin is a Dynamic Link Library, or DLL.</p>
 
-<p>On Windows, a Rhino plugin built with the <a href="/wip/guides/cpp/what-is-the-cpp-sdk/">C/C++ SDK</a> is regular DLL using shared MFC DLL.</p>
+<p>On Windows, a Rhino plugin built with the <a href="/wip/guides/cpp/what-is-the-cpp-sdk/">C/C++ SDK</a> is a regular DLL using shared MFC DLL.</p>
 
 <p>On Windows and Mac, a Rhino plugin built with the <a href="/wip/guides/rhinocommon/what-is-rhinocommon/">RhinoCommon SDK</a> is a .NET assembly.</p>
 
@@ -399,12 +399,14 @@ $(document).ready(function()
 
 <ol>
   <li>The “RhinoSdkVersion” number of your plugin must match the “RhinoSdkVersion” of Rhino.</li>
-  <li>The “RhinoSdkServiceRelease” number of your plugin must be less than or equal to the “RhinoSdkServiceRelease” of Rhino.</li>
+  <li>The “RhinoSdkServiceRelease” number of Rhino must be greater than or equal to the “RhinoSdkServiceRelease” of your plugin.</li>
 </ol>
 
-<p>We occasionally make changes to our SDKs.  When we do this, we change the “RhinoSdkVersion” number.  This will cause any existing 64-bit plugins on customer computers to not load.  Your customer will get an error message.</p>
+<p>We occasionally make changes to our SDKs.  When we do, we change the “RhinoSdkServiceRelease” number.</p>
 
-<p>If your customer gets this message, you need to get the latest Rhino SDK, recompile your plugin, and release it to your customers.</p>
+<p>As a plugin developer you are unlikely to encounter a problem with the first condition.  This would occur, for instance, if a user tried to load a plugin built for Rhino 6 in Rhino 4.</p>
+
+<p>You may however, occassionally encounter problems with the second condition.  If you compiled your plugin using the 6.2 (RhinoSdkVersion.RhinoSdkServiceRelease) SDK and a user running a 6.1 Rhino tries to run it, they will get an error message and the plugin will refuse to load.  If your customer gets this message, they need to get the latest Rhino (could be 6.2 or greater in this example) and that should resolve the problem.</p>
 
 <hr />
 
