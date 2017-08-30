@@ -1255,6 +1255,8 @@ $(document).ready(function()
 
 <p>The TreeGridView takes the two most sophisticated controls in Eto, TreeView and GridView to combine them into one control. This make the control powerful, but also requires very specific syntax to work.  The first two lines are standard, create the <code>forms.TreeGridView()</code> and set its size:</p>
 
+<p>The <code>forms.TreeView()</code> control requires some very specific syntax.  The general <code>TreeView</code> container is easy enough.  Set the object up and then its size.  If editing of the items in the tree, then the <code>.LabelEdit</code> property can be set to <code>True</code>.</p>
+
 <pre><code class="language-python"># Create TreeGridView
         self.m_treegridview = forms.TreeGridView()
         self.m_treegridview.Size = drawing.Size(200, 200)
@@ -1299,15 +1301,19 @@ $(document).ready(function()
 
 <h2 id="webview">WebView</h2>
 
-<p>Control to present a web page through a url or static HTML</p>
+<p>Display a live web page in a panel:</p>
 
 <p><img src="/images/eto-controls-webview.png" alt="/images/eto-controls-webview.png" class="img-center" width="55%" /></p>
+
+<p>Creating the <code>forms.WebView()</code> is simple by creating the webview, then to set its size.  The starting web URL can be set through the use of a <code>System.Uri</code> set to the <code>.Url</code> property:</p>
 
 <pre><code class="language-python"># Create a WebView
         self.m_webview = forms.WebView()
         self.m_webview.Size = drawing.Size(300, 400)
         self.m_webview.Url = System.Uri('http://developer.rhino3d.com/guides/rhinopython/')
 </code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_WebView.htm">Eto WebView API Documentation</a>.</p>
 
 <h2 id="sample-dialogs">Sample dialogs</h2>
 
