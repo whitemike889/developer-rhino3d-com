@@ -1027,6 +1027,18 @@ $(document).ready(function()
 <pre><code class="language-python">self.m_label = forms.Label(Text = 'Enter the Room Number:', VerticalAlignment = VerticalAlignment.Center)
 </code></pre>
 
+<p>Labels also can be created directly in layouts directly.  There is a shorthand syntax when adding controls to a layout that will automatically create a <code>forms.Label</code></p>
+
+<pre><code class="language-python">  #Adds a new Label diplaying "Camera:"      
+  layout.AddRow('Camera:', None) 
+  
+  #Adds a new label displaying "Name :" inline with the Textbox control.
+  layout.AddRow('Name:', forms.TextBox(Text = 'Persp1')) 
+  
+</code></pre>
+
+<p>When adding Rows or Columns, a simple string can be inserted.  Eto will automatically create a Label out of the string.  This is a very fast way yo make <code>forms.Label</code>.</p>
+
 <p>For a complete list of properties and events of the Label class, see the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Label.htm">Eto Label Class</a> documentation.</p>
 
 <h2 id="linkbutton">LinkButton</h2>
