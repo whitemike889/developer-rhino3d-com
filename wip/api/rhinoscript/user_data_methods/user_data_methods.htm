@@ -96,7 +96,7 @@ if (window.writeIntopicBar)
 	<li class="p"><p>Object user data - custom data that is attached to 
 	 either an object's geometry or an object's attributes.</p></li>
 </ol>
-<p><span style="font-weight: bold;"><b>Important</b></span>. When storing custom 
+<p><span style="font-weight: bold;"><b>Important:</b></span> When storing custom 
  data on an object, the data can be stored on either the object's geometry 
  (e.g. curve, surfaces, etc), or on the object's attributes. An object's 
  attributes maintain it's layer, color and other non-geometric properties. 
@@ -105,41 +105,37 @@ if (window.writeIntopicBar)
  place a copy of the object on the Undo stack. Thus, if you are working 
  with large geometric object or lots of user data, it is more efficient 
  to store object user data on an object's attributes.</p>
-<p>RhinoScript supports both document user data and object user data. &#160;The 
- RhinoScript user data object organizes custom information similar to that 
- of a Windows-style initialization (INI) file. &#160;For example:</p>
-<p>&#160;</p>
-<p class="Code">[Section1]</p>
-<p class="Code">Entry1 = String1</p>
-<p class="Code">Entry2 = String2</p>
-<p class="Code">...</p>
-<p class="Code">[Section2]</p>
-<p class="Code">Entry1 = String1</p>
-<p class="Code">Entry2 = String2</p>
-<p class="Code">...</p>
-<p>&#160;</p>
-<p>If you find this data structure is too limiting, you might consider 
- creating a plug-in, using the Rhino SDK. &#160;Also, RhinoScript's user 
- data object only stores string values for VBScript string can be easily 
- converted from one data type to another.</p>
-<h1>User Text Methods</h1>
+<h1>User Text</h1>
 <p>Rhino provides a standardized mechanism for users, script writers, and 
  plug-in developers to store and retrieve simple text information on an 
  object and in the document. This mechanism called <span style="font-style: italic;"><i>User 
- Text</i></span>.</p>
-<p>Unlike RhinoScript's User Data methods, which stores data as Section/Entry/String, 
- Rhino stores User Text key/value pairs.</p>
-<p>Rhino supports this method of storing object data with its <span style="font-weight: bold;"><b>GetUserText, 
- SetUserText, GetDocumentUserText and SetDocumentUserText</b></span> commands. 
- RhinoScript supports this mechanism with the <a href="getusertext.htm">GetUserText</a>, 
+ Text</i></span>. &#160;Rhino stores User Text key/value pairs. </p>
+<p>User text can be set and retrieved on both objects, and their attributes, 
+ and the document using:</p>
+<ul type="disc">
+	<li><p>Rhino commands (<span style="font-weight: bold;"><b>GetUserText</b></span>, 
+	 <span style="font-weight: bold;"><b>SetUserText</b></span>, <span style="font-weight: bold;"><b>GetDocumentUserText</b></span>, 
+	 <span style="font-weight: bold;"><b>SetDocumentUserText</b></span>).</p></li>
+	<li><p>Rhino object and document user text panels.</p></li>
+	<li><p>A plug-in written in C++.</p></li>
+	<li><p>A plug-in written in .NET using RhinoCommon.</p></li>
+	<li><p>A Rhino.Python script.</p></li>
+	<li><p>A RhinoScript script.</p></li>
+</ul>
+<p>Note, user text works on both Rhino for Windows and Rhino for Mac. So 
+ it is ideal for cross platform development.</p>
+<h1>User Text Methods</h1>
+<p>RhinoScript supports this mechanism with the <a href="getusertext.htm">GetUserText</a>, 
  <a href="setusertext.htm">SetUserText</a>, <a href="getdocumentusertext.htm">GetDocumentUserText</a>, 
  and <a href="setdocumentusertext.htm">SetDocumentUserText</a> methods. 
- User text can be stored on layers by using the <a href="../layer_methods/getlayerusertext.htm">GetLayerUserText</a> 
+ </p>
+<p>User text can be stored on layers by using the <a href="../layer_methods/getlayerusertext.htm">GetLayerUserText</a> 
  and <a href="../layer_methods/setlayerusertext.htm">SetLayerUserText</a> 
- methods. User text can be stored on groups using the <a href="../group_methods/getgroupusertext.htm">GetGroupUserText</a> 
+ methods.</p>
+<p>&#160;User text can be stored on groups using the <a href="../group_methods/getgroupusertext.htm">GetGroupUserText</a> 
  and <a href="../group_methods/setgroupusertext.htm">SetGroupUserText</a> 
  methods.</p>
-<h1>Runtime Data</h1>
+<h1>Runtime User Data</h1>
 <p>When you declare a variable within a procedure, the variable can only 
  be accessed within that procedure. When the procedure exits, the variable 
  is destroyed. These variables are called <span style="font-style: italic;"><i>local 
@@ -153,10 +149,16 @@ if (window.writeIntopicBar)
 <p>RhinoScript maintains a runtime data dictionary that you can use to 
  store data. Runtime data is similar to global variables in that it can 
  be accessed from all procedures. But unlike global variables, the runtime 
- data will not be destroyed if the script engine is reinitialized. Runtime 
- data persists until Rhino is closed. Runtime data can be stored and retrieved 
- using the <a href="getruntimedata.htm">GetRuntimeData</a> and <a href="setruntimedata.htm">SetRuntimeData</a> 
- methods.</p>
+ data will not be destroyed if the script engine is re-initialized. Runtime 
+ data persists until Rhino is closed. </p>
+<p>Runtime data can be stored and retrieved using the <a href="getruntimedata.htm">GetRuntimeData</a> 
+ and <a href="setruntimedata.htm">SetRuntimeData</a> methods.</p>
+<h1>Legacy User Data</h1>
+<p>RhinoScript has it's own, legacy, user data format. <span style="font-weight: bold; 
+															 color: #800000;"><font color="maroon" ><b>This 
+ feature is considered obsolete because the only technology that can read 
+ and write this type of data is RhinoScript</b></font></span><span style="color: #800000;"><font color="maroon" >.</font></span> 
+ It is provided only for backwards compatibility with older scripts.</p>
 <h1>User Data Methods</h1>
 <table cellspacing="0" width="100%">
 	<col style="width: 19.879%;" />
@@ -167,40 +169,40 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="attributedatacount.htm">AttributeDataCount</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 the number of RhinoScript user data items stored on an object's 
-		 attributes.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns the number of RhinoScript user data items stored on an 
+		 object's attributes.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="deleteattributedata.htm">DeleteAttributeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Removes 
-		 RhinoScript user data stored on an object's attributes.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Removes RhinoScript user data stored on an object's attributes.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="deletedocumentdata.htm">DeleteDocumentData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Removes 
-		 RhinoScript user data stored in the current document.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Removes RhinoScript user data stored in the current document.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="deleteobjectdata.htm">DeleteObjectData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Removes 
-		 RhinoScript user data stored on an object's geometry.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Removes RhinoScript user data stored on an object's geometry.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="documentdatacount.htm">DocumentDataCount</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 the number of RhinoScript user data items stored in the current 
-		 document.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns the number of RhinoScript user data items stored in the 
+		 current document.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="getattributedata.htm">GetAttributeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 a RhinoScript user data item stored on an object's attributes.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns a RhinoScript user data item stored on an object's attributes.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="getdocumentdata.htm">GetDocumentData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 a RhinoScript user data item stored in the current document.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns a RhinoScript user data item stored in the current document.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="getdocumentusertext.htm">GetDocumentUserText</a></p></td>
@@ -221,12 +223,12 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="getobjectdata.htm">GetObjectData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 a RhinoScript user data item stored on an object's geometry.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns a RhinoScript user data item stored on an object's geometry.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="getruntimedata.htm">GetRuntimeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Retrieves 
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
 		 data from RhinoScript's runtime data dictionary.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
@@ -236,13 +238,14 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="isattributedata.htm">IsAttributeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Verifies 
-		 that an object's attributes contains RhinoScript user data.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Verifies that an object's attributes contains RhinoScript user 
+		 data.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="isdocumentdata.htm">IsDocumentData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Verifies 
-		 that the current document contains RhinoScript user data.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Verifies that the current document contains RhinoScript user data.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="isdocumentusertext.htm">IsDocumentUserText</a></p></td>
@@ -251,8 +254,8 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="isobjectdata.htm">IsObjectData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Verifies 
-		 that an object's geometry contains RhinoScript user data.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Verifies that an object's geometry contains RhinoScript user data.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="isusertext.htm">IsUserText</a></p></td>
@@ -261,9 +264,9 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="objectdatacount.htm">ObjectDataCount</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Returns 
-		 the number of RhinoScript user data items stored on an object's 
-		 geometry.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Returns the number of RhinoScript user data items stored on an 
+		 object's geometry.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="runtimedatacount.htm">RuntimeDataCount</a></p></td>
@@ -272,13 +275,15 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setattributedata.htm">SetAttributeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Adds 
-		 or sets a RhinoScript user data item stored on an object's attributes.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Sets or removes a RhinoScript user data item stored on an object's 
+		 attributes.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setdocumentdata.htm">SetDocumentData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Adds 
-		 or sets a RhinoScript user data item stored in the current document.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Sets or removes a RhinoScript user data item stored in the current 
+		 document.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setdocumentusertext.htm">SetDocumentUserText</a></p></td>
@@ -297,13 +302,14 @@ if (window.writeIntopicBar)
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setobjectdata.htm">SetObjectData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Adds 
-		 or sets a RhinoScript user data item stored on an object's geometry.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">(Obsolete) 
+		 Sets or removes a RhinoScript user data item stored on an object's 
+		 geometry.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setruntimedata.htm">SetRuntimeData</a></p></td>
-		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Adds, 
-		 modifies, or removes data from RhinoScript's runtime data dictionary.</p></td>
+		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body">Sets 
+		 or removes data from RhinoScript's runtime data dictionary.</p></td>
 	</tr>
 	<tr style="vertical-align: top;">
 		<td style="padding-right: 10px; padding-left: 10px;"><p class="Table-Body"><a href="setusertext.htm">SetUserText</a></p></td>
