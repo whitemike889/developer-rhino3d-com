@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Eto Layouts in Rhino.Python with Python</title>
+  <meta name="description" content="Using the Eto DynamicLayout to organize controls.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/eto-layouts-python/" />
+  <meta property="og:title" content="Eto Layouts in Rhino.Python" />
+  <meta property="og:description" content="Using the Eto DynamicLayout to organize controls." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Eto Layouts in Rhino.Python" />
+  <meta name="twitter:description" value="Using the Eto DynamicLayout to organize controls." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Mac, Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/eto-layouts-python/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner">
+
+    
+      
+        
+        
+          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/rhinopython/eto-layouts-python/">Looking for the older Rhino 5 version?</a>
+        
+        
+      
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/5/" + splitPath.splice(1,splitPath.length-1).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("Looking for the older Rhino 5 site?");
+    $aTag.attr("href", "/5/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#addrow-method">AddRow Method</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#vertical-break">Vertical Break</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#none-spacer">None spacer</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#add-separate-row">Add Separate Row</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#additional-samples">Additional Samples</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">Intermediate</li>
+                
+              
+          </ol>
+
+          <h1>Eto Layouts in Rhino.Python</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>Using the Eto DynamicLayout to organize controls.</p>
+
+          <p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide demonstrates the syntax required to create Layouts.  Layouts are containers in which controls are placed.  The layout will position the controls in a dialog or another Layout. It is possible to nest Layouts within eachother to handle more complex layouts.</p>
+
+<p>For details on creating a complete Eto Dialog in Rhino.Python go to the <a href="/guides/rhinopython/eto-forms-python/">Getting Started with Eto Guide</a>. The samples in this guide can be added to the controls section of the Basic dialog framework covered in the <a href="/guides/rhinopython/eto-forms-python/">Getting Started Guide</a>.</p>
+
+<p>There are <a href="https://github.com/picoe/Eto/wiki/Containers">5 different layout style in Eto</a>.</p>
+
+<ul>
+  <li><a href="https://github.com/picoe/Eto/blob/develop/Source/Eto/Forms/Controls/Panel.cs">Panel</a> - Controls that subclass <code>Panel</code>, such as <code>Window</code>, <code>GroupBox</code>, <code>Scrollable</code>, etc allow you to specify a single child Content control</li>
+  <li><a href="https://github.com/picoe/Eto/wiki/TableLayout">TableLayout</a> - Similar to how an HTML table works, with a single control per cell</li>
+  <li><a href="https://github.com/picoe/Eto/wiki/PixelLayout">PixelLayout</a> - Specify X,Y co-ordinates for the position of each control (from Upper-Left)</li>
+  <li><a href="https://github.com/picoe/Eto/wiki/DynamicLayout">DynamicLayout</a> - Dynamic hierarchical horizontal and vertical layout</li>
+  <li><a href="https://github.com/picoe/Eto/wiki/StackLayout">StackLayout</a> - Horizontal or Vertical list of controls</li>
+</ul>
+
+<p>This guide will focus on using the <a href="https://github.com/picoe/Eto/blob/develop/Source/Eto/Forms/Layout/DynamicLayout.cs.">DynamicLayout</a> style only.  The <code>forms.DynamicLayout()</code> has a clear simple syntax in Python and is quite flexible.</p>
+
+<h1 id="dynamic-layout">Dynamic Layout</h1>
+
+<p>A layout in Eto is a virtual grid in which controls are placed. The layout arranges its child controls in a table structure of rows and columns. It is similar to the HTML table layout. Undwerstanding how layout rows and columns interact with eachother is the key to using layouts effectively.</p>
+
+<h2 id="addrow-method">AddRow Method</h2>
+
+<p>In it simplest form a layout is built row by row using the <code>.AddRow</code> method.  Each <code>.AddRow</code> may contain one or more controls. If one control is added for each row a simple stack of rows are created and the controls will stretch to the width of the layout:</p>
+
+<p><img src="/images/eto-layouts-simple-stack.png" alt="/images/eto-layouts-simple-stack.png" class="img-center" width="90%" /></p>
+
+<pre><code class="language-python">layout = forms.DynamicLayout()
+layout.Spacing = drawing.Size(5, 5)
+
+layout.AddRow(label)
+layout.AddRow(image)
+layout.AddRow(button-capture)
+layout.AddRow(button-cancel)
+</code></pre>
+
+<p>Each succesive <code>.AddRow</code> will add a new row to the table.</p>
+
+<p>Of course dialogs are not often made up of only one control per row.  <code>.AddRow</code> will create a new column cell for each control added with a single <code>.AddRow</code> statement:</p>
+
+<p><img src="/images/eto-layouts-twocell-stack.png" alt="/images/eto-layouts-twocell-stack.png" class="img-center" width="90%" /></p>
+
+<pre><code class="language-python">layout = forms.DynamicLayout()
+layout.Spacing = drawing.Size(5, 5)
+
+layout.AddRow(label, textbox)
+layout.AddRow(button-OK, button-Cancel)
+</code></pre>
+
+<p>Because there are two controls added to each row, the layout creates a table with two cells per row. Not only the cells created, but the controls are lined up vertically based on the number of cells in each row. In this case the first column is sized to fit the larger text label.  The <em>OK</em> button then must stretch to fill that column.  Then textbox and <em>Cancel</em> button will also be sized the same.</p>
+
+<blockquote>
+  <p>Understanding that successive <code>.AddRow</code> statements will create cells that are vertically aligned is an important concept. The row with the most controls dictates the number of colums in the table.</p>
+</blockquote>
+
+<p>A single strong vertical alignment throughout the dialog may not work, especially is there is a different number of controls controls on each row.  There is a need to be able to control how controls are aligned and sized.  Use breaks and spacers to create more sophisticated layouts.</p>
+
+<h2 id="vertical-break">Vertical Break</h2>
+
+<p>Tables in a <code>.DynamicLayout()</code> can be seperated using the <code>.BeginVertical()</code> and <code>.EndVertical</code>. The dynamic layout intrinsically starts with a vertical section. Additional breaks between tables can be created by placing a vertical break.  The next <code>.AddRow()</code> will start a new table and the strong vertical alignment with previous rows is broken.</p>
+
+<p>The example below shows how rows the justification of the rows does not have to lie within a single grid:</p>
+
+<p><img src="/images/eto-layouts-vertical-break.png" alt="/images/eto-layouts-vertical-break.png" class="img-center" width="90%" /></p>
+
+<pre><code class="language-python">layout = forms.DynamicLayout()
+layout.Spacing = drawing.Size(5, 5)
+
+layout.AddRow('Camera:')
+
+layout.BeginVertical()
+layout.AddRow(label-name, textbox1)
+layout.AddRow(label-lens, textbox2)
+layout.AddRow(label-projection, textbox3)
+layout.EndVertical()
+
+layout.BeginVertical()
+layout.AddRow(None, button-OK, button-cancel, None)
+layout.EndVertical()
+</code></pre>
+
+<p>In addition to the  <code>.BeginVertical()</code> there is also <code>.BeginHorizontal()</code> and<code>.BeginCentered()</code> to start new sections. For detail on these, look in the comments in the <a href="https://github.com/picoe/Eto/blob/cf4c31951a28de8d0bf17270719526a96fc689fe/Source/Eto/Forms/Layout/DynamicLayout.cs">Eto DynamicLayout.cs file</a></p>
+
+<h2 id="none-spacer">None spacer</h2>
+
+<p>Using the <em>None</em> value in Python, spacers can be added in cells or as rows. <em>None</em> spacers will dynamically resize  to fit the space needed.  For instance use<em>None</em> to fill cells on rows to correctly layout a dialog:</p>
+
+<p><img src="/images/eto-layouts-vertical-None.png" alt="/images/eto-layouts-vertical-None.png" class="img-center" width="60%" /></p>
+
+<pre><code class="language-python">layout = forms.DynamicLayout()
+layout.Spacing = drawing.Size(5, 5)
+
+layout.BeginVertical()
+layout.AddRow(label-resolution, None)
+layout.AddRow(label-height, textbox2)
+layout.AddRow(label-width, textbox3)
+layout.AddRow(None, checkbox)
+layout.EndVertical()
+
+layout.BeginVertical()
+layout.AddRow(None, button-OK, button-cancel, None)
+layout.EndVertical()
+</code></pre>
+
+<h2 id="add-separate-row">Add Separate Row</h2>
+
+<p>The <code>AddSeparateRow()</code> method creates a single row of controls seperated both horizontally and vertically from ajacent tables all in one single statement.  The code below creates the same dialog as above, but uses the <code>.AddSeparateRow()</code> method:</p>
+
+<p><img src="/images/eto-layouts-separaterow.png" alt="/images/eto-layouts-separaterow.png" class="img-center" width="60%" /></p>
+
+<pre><code class="language-python">layout = forms.DynamicLayout()
+layout.Spacing = drawing.Size(5, 5)
+
+layout.AddRow('Camera:')
+
+layout.BeginVertical()
+layout.AddRow(label-name, textbox1)
+layout.AddRow(label-lens, textbox2)
+layout.AddRow(label-projection, textbox3)
+layout.EndVertical()
+
+layout.AddSeparateRow(None, button-OK, button-cancel, None)
+
+</code></pre>
+
+<p>The <code>layout.AddSeparateRow(None, button-OK, button-cancel, None)</code> row is functionally equvilent to:</p>
+
+<pre><code class="language-python">layout.BeginVertical()
+layout.BeginHorizontal()
+layout.AddRow(None, button-OK, button-cancel, None)
+layout.EndHorizontal()
+layout.EndVertical()
+</code></pre>
+
+<p>This makes <code>AddSeparateRow()</code> very convenient to create a set of OK and Cancel button row at the bottom of a dialog box.</p>
+
+<h2 id="additional-samples">Additional Samples</h2>
+
+<p>Now with some understanding of Eto Layouts, take a look at some of the Sample dialogs in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython">Python Developer Samples Repo</a>:</p>
+
+<ol>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
+</ol>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/guides/rhinopython/eto-forms-python/">Custom Eto Forms in Python guide</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/rhinopython/eto-layouts-python.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>
