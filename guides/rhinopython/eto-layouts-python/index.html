@@ -443,16 +443,16 @@ $(document).ready(function()
 
           <p>Using the Eto DynamicLayout to organize controls.</p>
 
-          <p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide demonstrates the syntax required to create Layouts.  Layouts are containers in which controls are placed.  The layout will position the controls in a dialog or another Layout. It is possible to nest Layouts within eachother to handle more complex layouts.</p>
+          <p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide demonstrates the syntax required to create Layouts.  Layouts are containers in which controls are placed.  The Layout will position the controls in a dialog or another Layout. It is possible to nest Layouts within each other to handle more complex Layouts.</p>
 
 <p>For details on creating a complete Eto Dialog in Rhino.Python go to the <a href="/guides/rhinopython/eto-forms-python/">Getting Started with Eto Guide</a>. The samples in this guide can be added to the controls section of the Basic dialog framework covered in the <a href="/guides/rhinopython/eto-forms-python/">Getting Started Guide</a>.</p>
 
-<p>There are <a href="https://github.com/picoe/Eto/wiki/Containers">5 different layout style in Eto</a>.</p>
+<p>There are <a href="https://github.com/picoe/Eto/wiki/Containers">5 different layout styles in Eto</a>.</p>
 
 <ul>
   <li><a href="https://github.com/picoe/Eto/blob/develop/Source/Eto/Forms/Controls/Panel.cs">Panel</a> - Controls that subclass <code>Panel</code>, such as <code>Window</code>, <code>GroupBox</code>, <code>Scrollable</code>, etc allow you to specify a single child Content control</li>
   <li><a href="https://github.com/picoe/Eto/wiki/TableLayout">TableLayout</a> - Similar to how an HTML table works, with a single control per cell</li>
-  <li><a href="https://github.com/picoe/Eto/wiki/PixelLayout">PixelLayout</a> - Specify X,Y co-ordinates for the position of each control (from Upper-Left)</li>
+  <li><a href="https://github.com/picoe/Eto/wiki/PixelLayout">PixelLayout</a> - Specify X,Y coordinates for the position of each control (from Upper-Left)</li>
   <li><a href="https://github.com/picoe/Eto/wiki/DynamicLayout">DynamicLayout</a> - Dynamic hierarchical horizontal and vertical layout</li>
   <li><a href="https://github.com/picoe/Eto/wiki/StackLayout">StackLayout</a> - Horizontal or Vertical list of controls</li>
 </ul>
@@ -465,7 +465,7 @@ $(document).ready(function()
 
 <h2 id="addrow-method">AddRow Method</h2>
 
-<p>In it simplest form a layout is built row by row using the <code>.AddRow</code> method.  Each <code>.AddRow</code> may contain one or more controls. If one control is added for each row a simple stack of rows are created and the controls will stretch to the width of the layout:</p>
+<p>In its simplest form a layout is built row by row using the <code>.AddRow</code> method.  Each <code>.AddRow</code> may contain one or more controls. If one control is added for each row a simple stack of rows are created and the controls will stretch to the width of the Layout:</p>
 
 <p><img src="/images/eto-layouts-simple-stack.png" alt="/images/eto-layouts-simple-stack.png" class="img-center" width="90%" /></p>
 
@@ -478,7 +478,7 @@ layout.AddRow(button-capture)
 layout.AddRow(button-cancel)
 </code></pre>
 
-<p>Each succesive <code>.AddRow</code> will add a new row to the table.</p>
+<p>Each successive <code>.AddRow</code> will add a new row to the table.</p>
 
 <p>Of course dialogs are not often made up of only one control per row.  <code>.AddRow</code> will create a new column cell for each control added with a single <code>.AddRow</code> statement:</p>
 
@@ -497,13 +497,13 @@ layout.AddRow(button-OK, button-Cancel)
   <p>Understanding that successive <code>.AddRow</code> statements will create cells that are vertically aligned is an important concept. The row with the most controls dictates the number of colums in the table.</p>
 </blockquote>
 
-<p>A single strong vertical alignment throughout the dialog may not work, especially is there is a different number of controls controls on each row.  There is a need to be able to control how controls are aligned and sized.  Use breaks and spacers to create more sophisticated layouts.</p>
+<p>A single strong vertical alignment throughout the dialog may not work, especially is there is a different number of controls on each row.  There is a need to be able to control how controls are aligned and sized.  Use breaks and spacers to create more sophisticated layouts.</p>
 
 <h2 id="vertical-break">Vertical Break</h2>
 
-<p>Tables in a <code>.DynamicLayout()</code> can be seperated using the <code>.BeginVertical()</code> and <code>.EndVertical</code>. The dynamic layout intrinsically starts with a vertical section. Additional breaks between tables can be created by placing a vertical break.  The next <code>.AddRow()</code> will start a new table and the strong vertical alignment with previous rows is broken.</p>
+<p>Tables in a <code>.DynamicLayout()</code> can be separated using the <code>.BeginVertical()</code> and <code>.EndVertical</code>. The dynamic layout intrinsically starts with a vertical section. Additional breaks between tables can be created by placing a vertical break.  The next <code>.AddRow()</code> will start a new table and the strong vertical alignment with previous rows is broken.</p>
 
-<p>The example below shows how rows the justification of the rows does not have to lie within a single grid:</p>
+<p>The example below shows how the justification of the rows does not have to lie within a single grid:</p>
 
 <p><img src="/images/eto-layouts-vertical-break.png" alt="/images/eto-layouts-vertical-break.png" class="img-center" width="90%" /></p>
 
@@ -527,7 +527,7 @@ layout.EndVertical()
 
 <h2 id="none-spacer">None spacer</h2>
 
-<p>Using the <em>None</em> value in Python, spacers can be added in cells or as rows. <em>None</em> spacers will dynamically resize  to fit the space needed.  For instance use<em>None</em> to fill cells on rows to correctly layout a dialog:</p>
+<p>Using the <em>None</em> value in Python, spacers can be added in cells or as rows. <em>None</em> spacers will dynamically resize  to fit the space needed.  For instance use <em>None</em> to fill cells on rows to correctly layout a dialog:</p>
 
 <p><img src="/images/eto-layouts-vertical-None.png" alt="/images/eto-layouts-vertical-None.png" class="img-center" width="50%" /></p>
 
@@ -548,7 +548,7 @@ layout.EndVertical()
 
 <h2 id="add-separate-row">Add Separate Row</h2>
 
-<p>The <code>AddSeparateRow()</code> method creates a single row of controls seperated both horizontally and vertically from ajacent tables all in one single statement.  The code below creates the same dialog as above, but uses the <code>.AddSeparateRow()</code> method:</p>
+<p>The <code>AddSeparateRow()</code> method creates a single row of controls separated both horizontally and vertically from adjacent tables all in one single statement.  The code below creates the same dialog as above, but uses the <code>.AddSeparateRow()</code> method:</p>
 
 <p><img src="/images/eto-layouts-separaterow.png" alt="/images/eto-layouts-separaterow.png" class="img-center" width="50%" /></p>
 
@@ -567,7 +567,7 @@ layout.AddSeparateRow(None, button-OK, button-cancel, None)
 
 </code></pre>
 
-<p>The <code>layout.AddSeparateRow(None, button-OK, button-cancel, None)</code> row is functionally equvilent to:</p>
+<p>The <code>layout.AddSeparateRow(None, button-OK, button-cancel, None)</code> row is functionally equivalent to:</p>
 
 <pre><code class="language-python">layout.BeginVertical()
 layout.BeginHorizontal()
@@ -576,7 +576,7 @@ layout.EndHorizontal()
 layout.EndVertical()
 </code></pre>
 
-<p>This makes <code>AddSeparateRow()</code> very convenient to create a set of OK and Cancel button row at the bottom of a dialog box.</p>
+<p>This makes <code>AddSeparateRow()</code> very convenient to create a set of OK and Cancel buttons row at the bottom of a dialog box.</p>
 
 <h2 id="additional-samples">Additional Samples</h2>
 
@@ -586,7 +586,7 @@ layout.EndVertical()
   <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
   <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
   <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinopython/SampleEtoCollapsibleDialog.py">Collapsible controls on a Dialog</a></li>
 </ol>
 
 <hr />
@@ -594,7 +594,7 @@ layout.EndVertical()
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
-  <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User Interface methods</a></li>
   <li><a href="/guides/rhinopython/eto-forms-python/">Custom Eto Forms in Python guide</a></li>
   <li><a href="/guides/rhinopython/eto-layouts-python/">Eto Layouts in Python</a> guide</li>
   <li><a href="/guides/rhinopython/eto-controls-python/">Eto Controls in Python</a> guide</li>
