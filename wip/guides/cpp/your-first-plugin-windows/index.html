@@ -99,9 +99,26 @@
 
 
     
-<div class="version-banner">
-    Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/cpp/your-first-plugin-windows/">View the current version instead.</a>
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/cpp/your-first-plugin-windows/">View the current version instead.</a>
+    
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -110,9 +127,9 @@
 $(document).ready(function()
 {
   var splitPath = window.location.pathname.split("/");
-  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
 
-  $.get(nonWipURL).fail(function ()
+  $.get(linkURL).fail(function ()
   {
     var $aTag = $("div.version-banner > a");
     $aTag.text("View the current site instead.");
@@ -120,8 +137,6 @@ $(document).ready(function()
   });
 });
 </script>
-
-
 
 
     <div class="container">
@@ -141,6 +156,18 @@ $(document).ready(function()
         
         
         
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
         
           
             
@@ -466,19 +493,19 @@ $(document).ready(function()
 <h3 id="plugin-wizard">Plugin Wizard</h3>
 
 <ol>
-  <li>Launch <em>Visual Studio 2015</em> and navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project…</em>.</li>
+  <li>Launch <em>Visual Studio 2017</em> and navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project…</em>.</li>
   <li>From the <em>New Project</em> dialog, select the <em>Rhinoceros 6 Plug-in</em> template from the list of installed templates…
-<img src="/wip/images/your-first-plugin-windows-cpp-01.png" alt="New Project Template" /></li>
+  <img src="/wip/images/your-first-plugin-windows-cpp-01.png" alt="New Project Template" /></li>
   <li>Type the project name as shown above.  You can enter a different name if you want.  The wizard uses the project name when it creates files and classes.  If you enter a different name, your files and classes will have a name different from that of the files and classes mentioned in this tutorial.  Don’t forget to choose a location to store the project.  When finished, click the <em>OK</em> button.</li>
   <li>Upon clicking <em>OK</em>, the <em>Overview</em> page of the <em>Rhinoceros 6 Plug-In Wizard</em> dialog will appear.  This page gives you an overview of the type of project that the wizard is going to create.<br />
-<img src="/wip/images/your-first-plugin-windows-cpp-02.png" alt="New Project Overview" /></li>
+  <img src="/wip/images/your-first-plugin-windows-cpp-02.png" alt="New Project Overview" /></li>
   <li>Not that, by default, the wizard will do the following:
     <ol>
       <li>Create a general utility plugin.</li>
     </ol>
   </li>
   <li>If you are satisfied with the default settings, just click the <em>Finish</em> button.  If you want to change any of these settings, click the <em>Next</em> button…
-<img src="/wip/images/your-first-plugin-windows-cpp-03.png" alt="Plugin Settings" /></li>
+  <img src="/wip/images/your-first-plugin-windows-cpp-03.png" alt="Plugin Settings" /></li>
   <li>The <em>Plug-in Settings</em> page allows you to modify a number of settings used by the wizard when generating the plugin source code:
     <ol>
       <li><em>Plug-in name</em>: Modify this field if you want to change the name of the plugin.  <em>NOTE</em>: modifying this field does not modify the project name but rather the name of the plugin as listed in Rhino’s <em>PlugInManager</em> dialog box.</li>
@@ -507,14 +534,15 @@ $(document).ready(function()
   <li><em>TestPlugIn.cpp</em> is the plugin class implementation that contains the <code>CTestPlugIn</code> member functions.</li>
   <li><em>cmdTest.cpp</em> is the sample <code>Test</code> Rhino command.</li>
   <li><em>Resource.h</em> is the <code>#define</code> constant definitions for resources.</li>
-  <li><em>Test.rc</em> is the resource script.</li>
+  <li><em>Test.rc</em> and <em>Test.rc2</em> are the resource script.</li>
   <li><em>Test.def</em> is the module definition.</li>
+  <li><em>Test.ico</em> is the plug-in icon.</li>
   <li><em>targetver.h</em> is used to define the supported Windows platform.</li>
 </ol>
 
 <h3 id="project-settings">Project Settings</h3>
 
-<p>With <em>Visual Studio 2015</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</p>
+<p>With <em>Visual Studio 2017</em>, you can view a project’s setting by clicking <em>Project</em> &gt; <em>[ProjectName] Properties…</em>.</p>
 
 <p><img src="/wip/images/your-first-plugin-windows-cpp-04.png" alt="Test Property Pages" /></p>
 
@@ -565,12 +593,11 @@ $(document).ready(function()
     <ul>
       <li><em>Debug</em>: The <em>Debug</em> project is a <em>Release</em> project that disables optimizations and generates debugging information using the compiler’s <em>Program Database</em> (<code>/Zi</code>) option and the linker’s <em>Generate Debug Information</em> (<code>/DEBUG</code>) option.  These option settings let you use the debugger while you are developing your custom plugin. The <em>Debug</em> configuration also links with release runtime libraries.  Plugins built with the <em>Debug</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
       <li><em>Release</em>: The <em>Release</em> configuration of your program contains no symbolic debug information and is fully optimized.  <em>Debug</em> information can be generated in PDB Files (C++) depending on the compiler options used.  Creating PDB files can be very useful if you later need to debug your release version.  The <em>Release</em> configuration also links with release runtime libraries.  Plugins built with the <em>Release</em> configuration will only load in the release version of Rhino that was installed with Rhino.</li>
-      <li><em>DebugRhino</em>: The DebugRhino configuration of your program is compiled with full symbolic debug information and no optimization.  Optimization complicates debugging, because the relationship between source code and generated instructions is more complex.  The <em>DebugRhino</em> configuration also links with debug runtime libraries.  Plugins built with the <em>DebugRhino</em> configuration will only load in the debug version of Rhino included with the Rhino C/C++ SDK.</li>
     </ul>
   </li>
   <li>For this guide, build the <em>Debug</em> configuration.</li>
   <li>From within Rhino, navigate to <em>Tools</em> &gt; <em>Options</em>.  Navigate to the <em>Plugins</em> page under <em>Rhino Options</em> and install your plugin.
-<img src="/wip/images/your-first-plugin-windows-cpp-05.png" alt="Rhino Options" /></li>
+  <img src="/wip/images/your-first-plugin-windows-cpp-05.png" alt="Rhino Options" /></li>
   <li>Once your plugin is loaded, close the options dialog and run your <code>Test</code> command.  You have finished creating your first plugin!</li>
 </ol>
 
@@ -673,10 +700,10 @@ CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; c
 
 <p>The <em>Rhino Command Generator</em> wizard is a standalone application that will generate new skeleton <code>CRhinoCommand</code>-derived class.  The generated source code is copied to the Windows clipboard so you can easily paste it into your source files.</p>
 
-<p>To use this tool in Visual Studio 2015:</p>
+<p>To use this tool in Visual Studio 2017:</p>
 
 <ol>
-  <li>Launch Visual Studio 2015.</li>
+  <li>Launch Visual Studio 2017.</li>
   <li>Navigate to <em>Tools</em> &gt; <em>External Tools…</em>.</li>
   <li>Use the <em>Add</em> button to add the <em>RhinoCommandGenerator.exe</em> file to the list.  The file can be found in the following location: <em>C:\Program Files\Rhino 6.0 SDK\Wizards\Command</em></li>
 </ol>
@@ -725,7 +752,7 @@ CRhinoCommand::result CCommandTest::RunCommand(const CRhinoCommandContext&amp; c
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/cpp/your-first-plugin-windows.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/cpp/your-first-plugin-windows.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">

@@ -99,9 +99,26 @@
 
 
     
-<div class="version-banner">
-    Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/rhinoscript/">View the current version instead.</a>
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/rhinoscript/">View the current version instead.</a>
+    
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -110,9 +127,9 @@
 $(document).ready(function()
 {
   var splitPath = window.location.pathname.split("/");
-  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
 
-  $.get(nonWipURL).fail(function ()
+  $.get(linkURL).fail(function ()
   {
     var $aTag = $("div.version-banner > a");
     $aTag.text("View the current site instead.");
@@ -120,8 +137,6 @@ $(document).ready(function()
   });
 });
 </script>
-
-
 
 
     <div class="container">
@@ -141,6 +156,18 @@ $(document).ready(function()
         
         
         
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
         
           
             
@@ -766,15 +793,9 @@ $(document).ready(function()
     
   
     
-  
-    
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/vbscript-statements/" title="This guide presents an overview of VBScript statements.">VBScript Statements</a></li>
       
-    
-  
     
   
     
@@ -888,6 +909,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/vbscript-variable-hoisting/" title="This guides discusses variable scoping and hoisting in VBScript.">VBScript Variable Hoisting</a></li>
       
@@ -897,8 +920,6 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/vbscript-variables/" title="This guide provides an overview of VBScript variables.">VBScript Variables</a></li>
       
-    
-  
     
   
     
@@ -1006,6 +1027,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-logic/" title="This guide discusses the logic, or lack of, in VBScript.">VBScript Logic</a></li>
       
@@ -1017,6 +1040,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/vbscript-logic/" title="This guide discusses the logic, or lack of, in VBScript.">VBScript Logic</a></li>
       
+    
+  
     
   
     
@@ -1043,6 +1068,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/vbscript-passing-parameters/" title="This guide discusses parameter passing in VBScript.">VBScript Passing Parameters</a></li>
       
+    
+  
     
   
     
@@ -1104,11 +1131,15 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-err-objects/" title="This guide discusses the VBScript Err object.">VBScript Err Objects</a></li>
       
-    
-  
     
   
     
@@ -1145,6 +1176,10 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
+  
+    
+  
+    
   
     
   
@@ -2228,6 +2263,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/finding-duplicate-strings/" title="This guide demonstrates finding duplicate string using RhinoScript.">Finding Duplicate Strings</a></li>
       
@@ -2253,6 +2290,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/generating-random-numbers/" title="This guide demonstrates how to generate random numbers that fall within a specified range using RhinoScript.">Generating Random Numbers</a></li>
       
+    
+  
     
   
     
@@ -2331,6 +2370,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/lengths-of-curves/" title="This guide demonstrates how to calculate the lengths of curve objects using RhinoScript.">Lengths of Curves</a></li>
       
+    
+  
     
   
     
@@ -2569,8 +2610,6 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/selecting-curves-by-type/" title="This brief guide demonstrates how to select linear and non-linear curves using RhinoScript.">Selecting Curves by Type</a></li>
       
-    
-  
     
   
     
@@ -3116,6 +3155,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/fibonacci-numbers/" title="This guide is a survey of Fibonacci number algorithms in RhinoScript.">Fibonacci Numbers</a></li>
       
@@ -3188,6 +3229,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/importing-points-from-txt-files/" title="This guide demonstration of how to open a text file and import data from it into Rhino using RhinoScript.">Importing Points from Text Files</a></li>
       
@@ -3231,6 +3274,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/rhinoscript/linear-regression/" title="This guide demonstrates how to calculate linear regression using RhinoScript.">Linear Regression</a></li>
       
+    
+  
     
   
     
@@ -3608,8 +3653,6 @@ $(document).ready(function()
     
   
     
-  
-    
       
         <li><a class="page-link" href="/wip/guides/rhinopython/python-regexp-objects/" title="This guide discusses the VBScript RegExp object.">VBScript RegExp Objects</a></li>
       
@@ -3737,7 +3780,7 @@ $(document).ready(function()
                   <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
                 </svg>
               </span>
-              <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/rhinoscript.md" target="_blank">Edit on GitHub</a>
+              <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinoscript.md" target="_blank">Edit on GitHub</a>
           </div>
 
           <div class="col-md-6 text-center">

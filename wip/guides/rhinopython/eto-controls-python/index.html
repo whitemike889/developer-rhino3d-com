@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Eto Controls in Python with Python</title>
+  <meta name="description" content="Using the Eto dialog framework to create interface controls.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/eto-controls-python/" />
+  <meta property="og:title" content="Eto Controls in Python" />
+  <meta property="og:description" content="Using the Eto dialog framework to create interface controls." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Eto Controls in Python" />
+  <meta name="twitter:description" value="Using the Eto dialog framework to create interface controls." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Mac, Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinopython/eto-controls-python/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="http://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/rhinopython/eto-controls-python/">View the current version instead.</a>
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
+        
+          
+        
+          
+            
+              
+                
+                  <a class="page-link active" href="/wip/guides/">Guides</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/api/">API</a>
+                
+              
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/samples/">Samples</a>
+                
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  <a class="page-link" href="/wip/videos/">Videos</a>
+                
+              
+            
+          
+        
+        <a class="page-link" href="http://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- Google CSE Search Box Begins  -->
+            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
+            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
+            <form id="cref" action="/wip/search-results.html">
+                <input type="hidden" name="cref" value="007988927381198593803:mcq6pshqsn8" />
+                <input id="searchtext" type="text" name="q" size="24" value="" placeholder="search" />
+                <input class="searchBox" type="submit" name="sa" size="2" value=" " />
+            </form>
+        <!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#buttons">Buttons</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#calendar">Calendar</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#checkbox">CheckBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#colorpicker">ColorPicker</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#combobox">ComboBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#datetimepicker">DateTimePicker</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#dropdown">DropDown</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#gridview">GridView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#groupbox">GroupBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#imageview">ImageView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#label">Label</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#linkbutton">LinkButton</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#listbox">ListBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#numericupdown">NumericUpDown</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#passwordbox">PasswordBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#progressbar">ProgressBar</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#radiobuttonlist">RadioButtonList</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#richtextarea">RichTextArea</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#slider">Slider</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#spinner">Spinner</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#textarea">TextArea</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#textbox">TextBox</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#treegridview">TreeGridView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#webview">WebView</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#sample-dialogs">Sample dialogs</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">Eto</li>
+                
+              
+          </ol>
+
+          <h1>Eto Controls in Python</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      
+        by <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+      
+    
+  </span>
+
+</p>
+
+          <p>Using the Eto dialog framework to create interface controls.</p>
+
+          <p><a href="https://github.com/picoe/Eto/wiki">Eto is an open source cross-platform dialog box framework</a> available in Rhino 6.  This guide demonstrates the syntax required to create the most common Eto controls in Rhino.Python.  Eto controls include labels, buttons, edit boxes and sliders. In Eto there are <a href="https://github.com/picoe/Eto/wiki/Controls">more than 35 different controls</a> that can be created.</p>
+
+<p>For details on creating a complete Eto Dialog in Rhino.Python go to the <a href="/wip/guides/rhinopython/eto-forms-python/">Getting Started with Eto Guide</a>. The samples in this guide can be added to the controls section of the Basic dialog framework covered in the <a href="/wip/guides/rhinopython/eto-forms-python/">Getting Started Guide</a>.</p>
+
+<h2 id="buttons">Buttons</h2>
+
+<p>Buttons are placed on almost every dialog.</p>
+
+<p><img src="/wip/images/eto-buttons.svg" alt="/wip/images/eto-buttons.svg" class="img-center" width="65%" /></p>
+
+<p>Creating a new button is simple. Use the <code>forms.Button</code> and specify the <code>Text</code> that is shown on the button face. In addition to creating the new button, an action is commonly attached through the <code>.Click</code> event.  Use the  <code>+=</code> syntax as shown below to bind the action to button.</p>
+
+<pre><code class="language-python">        self.m_button = forms.Button(Text = 'OK')
+        self.m_button.Click += self.OnButtonClick
+</code></pre>
+
+<p>The bound method, listed later in the calss definition is run if the button is clicked.</p>
+
+<pre><code class="language-python">    # Close button click handler
+    def OnOKButtonClick(self, sender, e):
+        if self.m_textbox.Text == "":
+            self.Close(False)
+        else:
+            self.Close(True)
+</code></pre>
+
+<p>In this specific case the button is clicked and the bound method <code>OnOKButtonClick</code> checks the Text of the <code>m_textbox</code> to to determine if anything has been entered. Then the method closes the dialog, returning either <code>True</code> or <code>False</code>.</p>
+
+<p>The <em>Eto.Dialog class</em> has two special reserved names for buttons, the <code>DefaultButton</code> and the <code>AbortButton</code>.  The <code>DefaultButton</code> name will create a button that is a standard button and also will receive a click event if the <code>Enter Key</code> is used. The <code>AbortButton</code> is a button that recieves a <code>.Click</code> event if the <code>ESC</code> key is used.  These buttons are simple assigned through the name of the control, using <code>self</code>  syntax.</p>
+
+<p>The syntax for the <code>DefaultButton</code> is:</p>
+
+<pre><code class="language-python">self.DefaultButton = forms.Button(Text = 'OK')
+</code></pre>
+
+<p>And for the <code>AbortButton</code> is:</p>
+
+<pre><code class="language-python">self.AbortButton = forms.Button(Text = 'Cancel')
+</code></pre>
+
+<p>The <code>DefaultButton</code> and <code>AbortButton</code> normally close the dialog by using the <code>self.close()</code> method of the dialog.  Please note that even though the dialog is closed, that values of the controls are still accesable to the rest of the script.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Button.htm">Eto Button API Documentation</a>.</p>
+
+<h2 id="calendar">Calendar</h2>
+
+<p>A Calendar control is used to pick a date or range of dates.</p>
+
+<p><img src="/wip/images/eto-controls-calendar.png" alt="/wip/images/eto-controls-calendar.png" class="img-center" width="45%" /></p>
+
+<p>Creating a Calender is very simple:</p>
+
+<pre><code class="language-python">    #Create a Calender
+    self.m_calender = forms.Calendar()
+</code></pre>
+
+<p>Often other properties are set on the calendar control.  There are a number of properties of a calender control that can be used to modify how the control works.</p>
+
+<pre><code class="language-python">    #Create a Calendar
+    self.m_calendar = forms.Calendar()
+    self.m_calendar.Mode = forms.CalendarMode.Single
+    self.m_calendar.MaxDate = System.DateTime(2017,7,31)
+    self.m_calendar.MinDate = System.DateTime(2017,7,1)
+    self.m_calendar.SelectedDate = System.DateTime(2017,7,15)
+</code></pre>
+<p>The <code>.Mode</code> property sets if only a single date can be setting <code>forms.CalendarMode.Single</code> or date range can be selected by setting <code>.mode</code> to <code>forms.CalendarMode.Range</code>.</p>
+
+<p>The <code>MaxDate</code> and <code>.MinDate</code> property limits the range of dates that can be selected from.</p>
+
+<p>The <code>.SelectedDate</code> will result in that date being initially selected.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Calendar.htm">Eto Calendar API Documentation</a>.</p>
+
+<h2 id="checkbox">CheckBox</h2>
+
+<p>A Checkbox control can be used to specify <code>True</code> and <code>False</code>:</p>
+
+<p><img src="/wip/images/eto-dialog-checkbox.png" alt="/wip/images/eto-dialog-checkbox.png" class="img-center" width="45%" /></p>
+
+<p>The simpliest syntax for a CheckBox is:</p>
+
+<pre><code class="language-python">    #Create a Checkbox
+    self.m_checkbox = forms.CheckBox(Text = 'My Checkbox')
+</code></pre>
+
+<p>The <code>Text</code> property set the text visibel next to the control. By default the CheckBox is unchecked and carries a value of <em>None</em>.  Once checked it contains a booloean value of True. Once unchecked, the value is <code>False</code>.</p>
+
+<p>The intial state of the checkbox can be set in the class. The checkbox will be checked by default by adding the line:</p>
+
+<pre><code class="language-python">    self.m_checkbox.Checked = True
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_CheckBox.htm">Eto Checkbox API Documentation</a>.</p>
+
+<h2 id="colorpicker">ColorPicker</h2>
+
+<p>To select a single color from a drop down use the ColorPicker. This control also supports a right-click menu on the dropdown arrow. The right-click menu gives access to the eye dropper and the standard system color picker dialog.</p>
+
+<p><img src="/wip/images/eto-dialog-colorpicker.png" alt="/wip/images/eto-dialog-colorpicker.png" class="img-center" width="45%" /></p>
+
+<p>This simple code below will create a color picker with a blank default color:</p>
+
+<pre><code class="language-python">        #Create a ColorPicker Control
+        self.m_colorpicker = forms.ColorPicker()
+</code></pre>
+
+<p>The initial default color may be set in the control by adding the code:</p>
+
+<pre><code class="language-python">        defaultcolor = Eto.Drawing.Color.FromArgb(255, 0,0)
+        self.m_colorpicker.Value = defaultcolor
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_ColorPicker.htm">Eto ColorPicker API Documentation</a> and  <a href="http://api.etoforms.picoe.ca/html/T_Eto_Drawing_Color.htm">Eto.Drawing.Color Documentation</a></p>
+
+<h2 id="combobox">ComboBox</h2>
+
+<p>A Combo box is a drop down list of items that also allows input of text directly:</p>
+
+<p><img src="/wip/images/eto-controls-combobox.png" alt="/wip/images/eto-controls-combobox.png" class="img-center" width="45%" /></p>
+
+<pre><code class="language-python">        #Create Combobox
+        self.m_combobox = forms.ComboBox()
+        self.m_combobox.DataStore = ['first pick', 'second pick', 'third pick']
+</code></pre>
+
+<p>The default value can be set to display by adding the index postition to the DataStore property:</p>
+
+<pre><code class="language-python">        self.m_combobox.SelectedIndex = 1
+</code></pre>
+
+<h2 id="datetimepicker">DateTimePicker</h2>
+
+<p>Use the DateTimePicker to select a date and/or a time:</p>
+
+<p><img src="/wip/images/eto-controls-datetimepicker.png" alt="/wip/images/eto-controls-datetimepicker.png" class="img-center" width="45%" /></p>
+
+<p>Similiar to the Calendar control, there is also a DateTimePicker. The <code>.Mode</code> can be set on the control to display the <code>.Date</code> or <code>.Time</code>.  The <code>.Date</code> version differs from the <code>.Calendar</code> control by accessing the date through a dropdown menu:</p>
+
+<pre><code class="language-python">        #Create DateTime Picker in Date mode
+        self.m_datetimedate = forms.DateTimePicker()
+        self.m_datetimedate.Mode = forms.DateTimePickerMode.Date
+        self.m_datetimedate.MaxDate = System.DateTime(2017,7,30)
+        self.m_datetimedate.MinDate = System.DateTime(2017,7,1)
+        self.m_datetimedate.Value = System.DateTime(2017,7,15)
+</code></pre>
+
+<p>The <code>.Time</code> mode creates a spinner where the time of day can be selected:</p>
+
+<pre><code class="language-python">        #Create DateTime Picker in Date mode
+        self.m_datetimetime = forms.DateTimePicker()
+        self.m_datetimetime.Mode = forms.DateTimePickerMode.Time
+        self.m_datetimetime.Value = System.DateTime.Now
+        self.m_datetimetime.Value = System.DateTime(2017, 1, 1, 23, 43, 49, 500)
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_DateTimePicker.htm">Eto DateTimePicker API Documentation</a>.</p>
+
+<h2 id="dropdown">DropDown</h2>
+
+<p>Drop down menu with a list of items.</p>
+
+<p><img src="/wip/images/eto-controls-combobox.png" alt="/wip/images/eto-controls-combobox.png" class="img-center" width="45%" /></p>
+
+<pre><code class="language-python">        #Create Dropdown List
+        self.m_dropdownlist = forms.DropDown()
+        self.m_dropdownlist.DataStore = ['first', 'second', 'third']
+</code></pre>
+
+<p>The default selection can be set by using the index location in the DataStore:</p>
+
+<pre><code class="language-python">        self.m_dropdownlist.SelectedIndex = 1
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_DropDown.htm">Eto DropDown API Documentation</a>.</p>
+
+<h2 id="gridview">GridView</h2>
+
+<p>A virtualized grid of data with editable cells.  The <code>GridView</code> is used to emulate a ListView control:</p>
+
+<p><img src="/wip/images/eto-controls-gridview.png" alt="/wip/images/eto-controls-gridview.png" class="img-center" width="65%" /></p>
+
+<p>Creating a <code>.GridView()</code> is more involved then othe ETo controls.  Start by creating the <code>.GridView</code> then populate the control with <code>forms.GridColumn()</code>. Each <code>.GridColumn</code> has a <code>.HeaderText</code>, <code>.Editable</code> property and contains a <code>.DataCell</code>.  The <code>.DataCell</code> can display a <code>TextBoxCell</code> or a <code>CheckBoxCell</code>. After each <code>.GridColumn</code> is created, then add it to the <code>.GridView</code> through the <code>self.m_gridview.Columns.Add(column1)</code> method. The sample below populates 4 columns in the <code>.GridView</code>:</p>
+
+<pre><code class="language-python">        #Create Gridview
+        self.m_gridview = forms.GridView()
+        self.m_gridview.ShowHeader = True
+        self.m_gridview.DataStore = (['first pick', 'second pick', 'third pick', True],['second','fourth','last', False])
+
+        column1 = forms.GridColumn()
+        column1.HeaderText = 'Column 1'
+        column1.Editable = True
+        column1.DataCell = forms.TextBoxCell(0)
+        self.m_gridview.Columns.Add(column1)
+
+        column2 = forms.GridColumn()
+        column2.HeaderText = 'Column 2'
+        column2.Editable = True
+        column2.DataCell = forms.TextBoxCell(1)
+        self.m_gridview.Columns.Add(column2)
+
+        column3 = forms.GridColumn()
+        column3.HeaderText = 'Column 3'
+        column3.Editable = True
+        column3.DataCell = forms.TextBoxCell(2)
+        self.m_gridview.Columns.Add(column3)
+
+        column4 = forms.GridColumn()
+        column4.HeaderText = 'Column 4'
+        column4.Editable = True
+        column4.DataCell = forms.CheckBoxCell(3)
+        self.m_gridview.Columns.Add(column4)
+</code></pre>
+
+<p>Accessing the values in each cell of the <code>forms.GridView</code> can be done by using the index position of the value in the <code>.DataStore</code> property.</p>
+
+<pre><code class="language-python">dialog.m_gridview.DataStore[1][2]
+</code></pre>
+
+<p>This will result in a value of  ‘third pick’ in the above example.</p>
+
+<p>More details can be found in the <a href="https://github.com/picoe/Eto/wiki/GridView">Eto GridView API Documentation</a>.</p>
+
+<h2 id="groupbox">GroupBox</h2>
+
+<p>A GroupBox displays a collection of controls surrounded by a border and optional title to identify the group:</p>
+
+<p><img src="/wip/images/eto-controls-groupbox.png" alt="/wip/images/eto-controls-groupbox.png" class="img-center" width="45%" /></p>
+
+<p>Like the larger dialog, the <code>forms.GroupBox()</code> requires a <em>Layout</em> to help position controls.  Within the layout, controls are placed. Once the controls are created, the controls are added to rows in the layout, which is then added to the contents of the <code>forms.GroupBox</code> with the line <code>self.m_groupbox.Content = grouplayout</code>:</p>
+
+<pre><code class="language-python"># Create a group box
+        self.m_groupbox = forms.GroupBox(Text = 'Groupbox')
+        self.m_groupbox.Padding = drawing.Padding(5)
+
+        grouplayout = forms.DynamicLayout()
+        grouplayout.Spacing = Size(3, 3)
+
+        label1 = forms.Label(Text = 'Enter Text:')
+        textbox1 = forms.TextBox()
+
+        checkbox1 = forms.CheckBox(Text = 'Start a new row')
+
+        grouplayout.AddRow(label1, textbox1)
+        grouplayout.AddRow(checkbox1)
+
+        self.m_groupbox.Content = grouplayout
+
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_GroupBox.htm">Eto GroupBox API Documentation</a>.</p>
+
+<h2 id="imageview">ImageView</h2>
+
+<p>A control to display a single bitmap image:</p>
+
+<p><img src="/wip/images/eto-controls-imageview.png" alt="/wip/images/eto-controls-imageview.png" class="img-center" width="45%" /></p>
+
+<p>Creating a space for a ImageView is easy. The first 3 lines below create the <code>forms.ImageView()</code> and set its size.  Populating formatting a bitmap to show in the <code>forms.ImageView()</code> is more difficult.  In this sample a RHino view Capture is converted into a <code>drawing.Bitmap()</code> and set to the <code>.Image</code> property to show in the <code>forms.ImageView()</code>.</p>
+
+<pre><code class="language-python"># Create an image view
+        self.m_image_view = forms.ImageView()
+        self.m_image_view.Size = drawing.Size(300, 200)
+        self.m_image_view.Image = None
+
+        # Capture the active view to a System.Drawing.Bitmap
+        view = scriptcontext.doc.Views.ActiveView
+        self.m_image_view.Image = Rhino.UI.EtoExtensions.ToEto(view.CaptureToBitmap())
+</code></pre>
+
+<p>Bitmaps may be formatted from a number of different forms. In this case the <code>view.CaptureToBitmap()</code> image is translated to an Eto bitmap using the <code>Rhino.UI.EtoExtensions.ToEto()</code> method.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_ImageView.htm">Eto ImageView API Documentation</a>.</p>
+
+<h2 id="label">Label</h2>
+
+<p>The simplest Eto Control is the <code>forms.Label()</code>.  It is text that normally is used to create a prompt, label, message or description for another control.</p>
+
+<p><img src="/wip/images/eto-label.svg" alt="/wip/images/eto-label.svg" class="img-center" width="65%" /></p>
+
+<pre><code class="language-python">self.m_label = forms.Label(Text = 'Enter the Room Number:')
+</code></pre>
+
+<p>As with many controls, the line above create a name for the control <code>m_label</code>.  Then the main property of a Label is the text it shows by setting the Text Property of the label.</p>
+
+<p>Normally this is as complex as a label needs to get, but a label also has many more properties.  Additonal properties include <code>VerticalAlignment</code>, <code>Horizontal Alignment</code>, <code>TextAlignment</code>, <code>Wrap</code>, <code>TextColor</code>, and <code>Font</code>. Properties can be added to the <code>Label()</code> by including each keyword separated by a comma(<code>,</code>) as follows:</p>
+
+<pre><code class="language-python">self.m_label = forms.Label(Text = 'Enter the Room Number:', VerticalAlignment = VerticalAlignment.Center)
+</code></pre>
+
+<p>Labels also can be created directly in layouts directly.  There is a shorthand syntax when adding controls to a layout that will automatically create a <code>forms.Label</code></p>
+
+<pre><code class="language-python">  #Adds a new Label diplaying "Camera:"      
+  layout.AddRow('Camera:', None)
+
+  #Adds a new label displaying "Name :" inline with the Textbox control.
+  layout.AddRow('Name:', forms.TextBox(Text = 'Persp1'))
+
+</code></pre>
+
+<p>When adding Rows or Columns, a simple string can be inserted.  Eto will automatically create a Label out of the string.  This is a very fast way yo make <code>forms.Label</code>.</p>
+
+<p>For a complete list of properties and events of the Label class, see the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Label.htm">Eto Label Class</a> documentation.</p>
+
+<h2 id="linkbutton">LinkButton</h2>
+
+<p>A LinkButton is a simple label that acts like a button, similar to a hyperlink:</p>
+
+<p><img src="/wip/images/eto-controls-linkbutton.png" alt="/wip/images/eto-controls-linkbutton.png" class="img-center" width="45%" /></p>
+
+<p>Like a standard button the <code>forms.LinkButton()</code> needs to be bound to an action through the <code>+=</code> syntax:</p>
+
+<pre><code class="language-python"># Create LinkButton
+        self.m_linkbutton = forms.LinkButton(Text = 'For more details...')
+        self.m_linkbutton.Click += self.OnLinkButtonClick
+
+    # Linkbutton click handler
+    def OnLinkButtonClick(self, sender, e):
+        webbrowser.open("http://rhino3d.com")
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_LinkButton.htm">Eto LinkButton API Documentation</a>.</p>
+
+<h2 id="listbox">ListBox</h2>
+
+<p>Create a scrollable list of items to select:</p>
+
+<p><img src="/wip/images/eto-controls-listbox.png" alt="/wip/images/eto-controls-listbox.png" class="img-center" width="45%" /></p>
+
+<p>The <code>forms.ListBox()</code> and the <code>.DataStore</code> is required to create a <code>forms.ListBox</code>:</p>
+
+<pre><code class="language-python">        #Create ListBox
+        self.m_listbox = forms.ListBox()
+        self.m_listbox.DataStore = ['first pick', 'second pick', 'third pick']
+        self.m_listbox.SelectedIndex = 1
+</code></pre>
+
+<p>The <code>self.m_listbox.SelectedIndex = 1</code> is optional and sets the default selected object withing the DataStore.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_ListBox.htm">Eto ListBox API Documentation</a>.</p>
+
+<h2 id="numericupdown">NumericUpDown</h2>
+
+<p>Numeric control that allows the user to adjust the value with the mouse using a spinner:</p>
+
+<p><img src="/wip/images/eto-controls-numericupdown.png" alt="/wip/images/eto-controls-numericupdown.png" class="img-center" width="45%" /></p>
+
+<p>Controlling the behavior of the spinner when clicking on the up or down arrows is key to the <code>forms.NumericUpDown()</code> control:</p>
+
+<pre><code class="language-python"># Create Numeric Up Down
+        self.m_numeric_updown = forms.NumericUpDown()
+        self.m_numeric_updown.DecimalPlaces = 2
+        self.m_numeric_updown.Increment = 0.01
+        self.m_numeric_updown.MaxValue = 10.0
+        self.m_numeric_updown.MinValue = 1.0
+        self.m_numeric_updown.Value = 5.0
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_NumericUpDown.htm">Eto NumericUpDown API Documentation</a>.</p>
+
+<h2 id="passwordbox">PasswordBox</h2>
+
+<p>Use the <code>forms.PasswordBox()</code> to enter passwords or sensitive data with the text masked out:</p>
+
+<p><img src="/wip/images/eto-controls-password.png" alt="/wip/images/eto-controls-password.png" class="img-center" width="45%" /></p>
+
+<p>The <code>.MaxLength</code> property is optional:</p>
+
+<pre><code class="language-python"># Create Password Box
+        self.m_password = forms.PasswordBox()
+        self.m_password.MaxLength = 7
+</code></pre>
+
+<p>More details can be found at the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_PasswordBox.htm">Eto PasswordBox API Documentation</a>.</p>
+
+<h2 id="progressbar">ProgressBar</h2>
+
+<p>Use the <code>forms.ProgressBar</code> to display the progress of long running tasks:</p>
+
+<p><img src="/wip/images/eto-controls-progressbar.png" alt="/wip/images/eto-controls-progressbar.png" class="img-center" width="45%" /></p>
+
+<p>The first step is to create the <code>forms.ProgressBar</code> with its minmimu and maxmum values:</p>
+
+<pre><code class="language-python"># Create Progress Bar
+        self.m_progressbar = forms.ProgressBar()
+        self.m_progressbar.MinValue = 0
+        self.m_progressbar.MaxValue = 10
+</code></pre>
+
+<p>The control can be set through the <code>.Value</code> property on the control as in the last line in the example below:</p>
+
+<pre><code class="language-python">self.m_progress = 1
+
+    # GoButton button click handler
+    def OnGoButtonClick(self, sender, e):
+        self.m_progress = self.m_progress + 1
+        if self.m_progress &gt; 10:
+            self.m_progress = 10
+        self.m_progressbar.Value = self.m_progress
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_ProgressBar.htm">Eto ProgressBar API Documentation</a>.</p>
+
+<h2 id="radiobuttonlist">RadioButtonList</h2>
+
+<p>Create a series of Radio buttons that allow a single selection out of the list:</p>
+
+<p><img src="/wip/images/eto-controls-radiobuttonlist.png" alt="/wip/images/eto-controls-radiobuttonlist.png" class="img-center" width="45%" /></p>
+
+<p>Creating the <code>forms.RadioButtonList()</code> control is simple.  Then populate the list with a <code>.DataStore</code>:</p>
+
+<pre><code class="language-python"># Create Radio Button List Control
+        self.m_radiobuttonlist = forms.RadioButtonList()
+        self.m_radiobuttonlist.DataStore = ['first pick', 'second pick', 'third pick']
+        self.m_radiobuttonlist.Orientation = forms.Orientation.Vertical
+        self.m_radiobuttonlist.SelectedIndex = 1
+</code></pre>
+
+<p>The <code>.Orientation</code> of the list can be set to <code>forms.Orientation.Vertical</code> or <code>forms.Orientation.Horizontal</code>.  This is an optional property.</p>
+
+<p>The <code>.SelectedIndex</code> sets the initial default selected object in the list.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_RadioButtonList.htm">Eto RadioButtonList API Documentation</a>.</p>
+
+<h2 id="richtextarea">RichTextArea</h2>
+
+<p>Multi-line text area with rich text formatting:</p>
+
+<p><img src="/wip/images/eto-controls-richtextarea.png" alt="/wip/images/eto-controls-richtextarea.png" class="img-center" width="45%" /></p>
+
+<p>This differs from the TextBox in that it is used for multi-line text entry and can accept Tab and Enter input.</p>
+
+<pre><code class="language-python"># Create Rich Text Edit Box
+        self.m_richtextarea = forms.RichTextArea()
+        self.m_richtextarea.Size = drawing.Size(400, 400)
+</code></pre>
+
+<p>The text can be formatted by using keystrokes.  While these keystrokes may vary on different platforms, a good list of modifier keystrokes for this control can be found on the <a href="https://msdn.microsoft.com/en-us/library/system.windows.documents.editingcommands.aspx#Anchor_3">Microsoft MSDN Editing Commands documentation</a>.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_RichTextArea.htm">Eto RichTextArea API Documentation</a>.</p>
+
+<h2 id="slider">Slider</h2>
+
+<p>A horizontal or vertical slider to select a value from a range:</p>
+
+<p><img src="/wip/images/eto-controls-slider.png" alt="/wip/images/eto-controls-slider.png" class="img-center" width="45%" /></p>
+
+<p>A slider consists of the control, the maximum and minimum values.  The initial <code>.Value</code> can also be set at the time the dialog is created:</p>
+
+<pre><code class="language-python"># Create a slider
+        self.m_slider = forms.Slider()
+        self.m_slider.MaxValue = 10
+        self.m_slider.MinValue = 0
+        self.m_slider.Value = 3
+</code></pre>
+
+<p>To set the sldier into a vertical orientation, add the line:</p>
+
+<pre><code class="language-python">        self.m_slider.Orientation = forms.Orientation.Vertical
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Slider.htm">Eto Slider API Documentation</a>.</p>
+
+<h2 id="spinner">Spinner</h2>
+
+<p>A spinner to show indeterminate progress in compact space:</p>
+
+<p><img src="/wip/images/eto-controls-spinner.png" alt="/wip/images/eto-controls-spinner.png" class="img-center" width="45%" /></p>
+
+<p>When creating the <code>forms.Spinner()</code>, setting the <code>.Enabled</code> to <code>True</code> willl activate the spinning motion:</p>
+
+<pre><code class="language-python"># Create Spinner
+        self.m_spinner = forms.Spinner()
+        self.m_spinner.Enabled = True
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_Spinner.htm">Eto Spinner API Documentation</a>.</p>
+
+<h2 id="textarea">TextArea</h2>
+
+<p>Multi-line text control with scrollbars:</p>
+
+<p><img src="/wip/images/eto-controls-richtextarea.png" alt="/wip/images/eto-controls-richtextarea.png" class="img-center" width="45%" /></p>
+
+<p>A simplified version of the <code>forms.RichTextArea()</code>.  The <code>forms.TextArea()</code> controls needs only a couple lines:</p>
+
+<pre><code># Create Text Area Box
+        self.m_textarea = forms.TextArea()
+        self.m_textarea.Size = drawing.Size(400, 400)
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TextArea.htm">Eto TextArea API Documentation</a>.</p>
+
+<h2 id="textbox">TextBox</h2>
+
+<p>A TextBox is used to enter a string into the dialog.</p>
+
+<p><img src="/wip/images/eto-textbox.svg" alt="/wip/images/eto-textbox.svg" class="img-center" width="65%" /></p>
+
+<p>To check the contents of the textbox in the script, the textbox control must have a name to reference it.</p>
+
+<pre><code class="language-python">        self.m_textbox = forms.TextBox()
+</code></pre>
+
+<p>In this case the name <code>m_textbox</code> can be used to reference the control later in the class method starting on line 44:</p>
+
+<pre><code>    # Get the value of the textbox
+    def GetText(self):
+        return self.m_textbox.Text
+</code></pre>
+
+<p>Just creating a new <code>Eto.Forms.TextBox()</code> is common.  There are a number of additional properties of a TextBox which can be used to control the input. These properties include <code>MaxLength</code>, <code>PlaceholderText</code>, <code>InsertMode</code> and many more that can be seen in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TextBox.htm">Eto TextBox Class</a>.</p>
+
+<h2 id="treegridview">TreeGridView</h2>
+
+<p>A TreeView with additional property columns:</p>
+
+<p><img src="/wip/images/eto-dialog-treegridview.png" alt="/wip/images/eto-dialog-treegridview.png" class="img-center" width="45%" /></p>
+
+<p>The TreeGridView takes the two most sophisticated controls in Eto, TreeView and GridView to combine them into one control. This make the control powerful, but also requires very specific syntax to work.  The first two lines are standard, create the <code>forms.TreeGridView()</code> and set its size:</p>
+
+<p>The <code>forms.TreeView()</code> control requires some very specific syntax.  The general <code>TreeView</code> container is easy enough.  Set the object up and then its size.  If editing of the items in the tree, then the <code>.LabelEdit</code> property can be set to <code>True</code>.</p>
+
+<pre><code class="language-python"># Create TreeGridView
+        self.m_treegridview = forms.TreeGridView()
+        self.m_treegridview.Size = drawing.Size(200, 200)
+
+        column1 = forms.GridColumn()
+        column1.HeaderText = 'Tree'
+        column1.Editable = True
+        column1.DataCell = forms.TextBoxCell(0)
+        self.m_treegridview.Columns.Add(column1)
+
+        column2 = forms.GridColumn()
+        column2.HeaderText = 'Prop 2'
+        column2.Editable = True
+        column2.DataCell = forms.TextBoxCell(1)
+        self.m_treegridview.Columns.Add(column2)
+
+        column3 = forms.GridColumn()
+        column3.HeaderText = 'Prop 3'
+        column3.Editable = True
+        column3.DataCell = forms.TextBoxCell(2)
+        self.m_treegridview.Columns.Add(column3)
+
+        treecollection = forms.TreeGridItemCollection()
+        item1 = forms.TreeGridItem(Values=('node1', 'node1b', 'node1c'))
+        item1.Expanded = True
+        item1.Children.Add(forms.TreeGridItem(Values=('node2', 'node2b', 'node2c')))
+        item1.Children.Add(forms.TreeGridItem(Values=('node3', 'node3b', 'node3c')))
+        treecollection.Add(item1)
+        item2 = forms.TreeGridItem(Values=('node11', 'node11b', 'node11c'))
+        treecollection.Add(item2)
+        self.m_treegridview.DataStore = treecollection
+
+</code></pre>
+
+<p>After setting up the <code>forms.TreeGridView()</code> the columns to display in the control need to be created as <code>form.GridColumn()</code>.  The <code>.DataCell</code> property points to the <code>forms.TextBoxCell(index)</code> that exists in the <code>.DataStore</code>  assigned at the last line of this script.</p>
+
+<p>The information for for a tree is stored into a <code>forms.TreeGridCollection()</code>.  Items within the tree are a <code>forms.TreeGridItems</code> that have <code>.Values</code> of tuples.  Each tuple will populate a row in the <code>forms.TreeGridView()</code>.</p>
+
+<p>The <code>forms.TreeGridView</code> does not automatically update it contents.  After all the control is setup, the <code>DataStore</code> is set to the <code>treecollection</code>.  Doing this is a different order may end up in a control that does not display the data.</p>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_TreeGridView.htm">Eto TreeGridView API Documentation</a>.</p>
+
+<h2 id="webview">WebView</h2>
+
+<p>Display a live web page in a panel:</p>
+
+<p><img src="/wip/images/eto-controls-webview.png" alt="/wip/images/eto-controls-webview.png" class="img-center" width="55%" /></p>
+
+<p>Creating the <code>forms.WebView()</code> is simple by creating the webview, then to set its size.  The starting web URL can be set through the use of a <code>System.Uri</code> set to the <code>.Url</code> property:</p>
+
+<pre><code class="language-python"># Create a WebView
+        self.m_webview = forms.WebView()
+        self.m_webview.Size = drawing.Size(300, 400)
+        self.m_webview.Url = System.Uri('http://developer.rhino3d.com/guides/rhinopython/')
+</code></pre>
+
+<p>More details can be found in the <a href="http://api.etoforms.picoe.ca/html/T_Eto_Forms_WebView.htm">Eto WebView API Documentation</a>.</p>
+
+<h2 id="sample-dialogs">Sample dialogs</h2>
+
+<p>Now with some understanding of Eto Dialogs in Python, take a look at some of the Sample dialogs in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/master/rhinopython">Python Developer Samples Repo</a>:</p>
+
+<ol>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/master/rhinopython/SampleEtoDialog.py">A very simple dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/master/rhinopython/SampleEtoRebuildCurve.py">Rebuild curve Dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/master/rhinopython/SampleEtoViewCaptureDialog.py">Capture a view dialog</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/blob/master/rhinopython/SampleEtoCollapsibleDialog.py">Collapsable controls on a Dialog</a></li>
+</ol>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/wip/api/RhinoScriptSyntax/win/#userinterface">RhinoScriptSyntax User interface methods</a></li>
+  <li><a href="/wip/guides/rhinopython/eto-forms-python/">Custom Eto Forms in Python guide</a></li>
+  <li><a href="/wip/guides/rhinopython/eto-layouts-python/">Eto Layouts in Python</a> guide</li>
+  <li><a href="/wip/guides/rhinopython/eto-controls-python/">Eto Controls in Python</a> guide</li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                Author: <a href="https://discourse.mcneel.com/users/scottd/activity">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinopython/eto-controls-python.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2017 Robert McNeel &amp; Associates
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+    <!--
+    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
+    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
+    -->
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
+            $('.collapse').removeClass('in');
+            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
+        }
+    });
+    </script>
+  </body>
+
+</html>

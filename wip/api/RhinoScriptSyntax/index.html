@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>rhinoscriptsyntax</title>
-  <meta name="description" content="The developer.rhino3d.com website contents">
+  <meta name="description" content="">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
@@ -93,9 +93,26 @@
 
 
     
-<div class="version-banner">
-    Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/api/RhinoScriptSyntax/">View the current version instead.</a>
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/api/RhinoScriptSyntax/">View the current version instead.</a>
+    
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -104,9 +121,9 @@
 $(document).ready(function()
 {
   var splitPath = window.location.pathname.split("/");
-  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
 
-  $.get(nonWipURL).fail(function ()
+  $.get(linkURL).fail(function ()
   {
     var $aTag = $("div.version-banner > a");
     $aTag.text("View the current site instead.");
@@ -114,8 +131,6 @@ $(document).ready(function()
   });
 });
 </script>
-
-
 
 
     <div class="container">
@@ -135,6 +150,18 @@ $(document).ready(function()
         
         
         
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
         
           
             
@@ -6027,14 +6054,14 @@ param0, param1 (number): first and second parameters on the source curve</pre>
                         <pre><code class="python">import rhinoscriptsyntax as rs
 getresult = rs.GetCurveObject()
 if getresult:
-curve_id = getresult[0]
-point0 = rs.GetPointOnCurve( curve_id )
-if point0:
-point1 = rs.GetPointOnCurve( curve_id )
-if point1:
-t0 = rs.CurveClosestPoint( curve_id, point0)
-t1 = rs.CurveClosestPoint( curve_id, point1)
-rs.AddSubCrv( curve_id, t0, t1 )</code></pre>
+    curve_id = getresult[0]
+    point0 = rs.GetPointOnCurve( curve_id )
+    if point0:
+        point1 = rs.GetPointOnCurve( curve_id )
+        if point1:
+            t0 = rs.CurveClosestPoint( curve_id, point0)
+            t1 = rs.CurveClosestPoint( curve_id, point1)
+            rs.AddSubCrv( curve_id, t0, t1 )</code></pre>
                       </div>
                     </div>
 
@@ -6887,7 +6914,7 @@ number: if arrow_style is specified, the previous arrow style</pre>
                 </div>
                 <div id="collapse-CurveBooleanDifference" class="panel-collapse collapse" role="tabpanel" aria-labelledby="curve-CurveBooleanDifference">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">CurveBooleanDifference(curve_id_0, curve_id_1)</code></pre>
+                    <pre><code class="python">CurveBooleanDifference(curve_id_0, curve_id_1, tolerance=None)</code></pre>
 
                     <pre class="functionDescription">Calculates the difference between two closed, planar curves and
     adds the results to the document. Note, curves must be coplanar.</pre>
@@ -6896,7 +6923,8 @@ number: if arrow_style is specified, the previous arrow style</pre>
                     <h5>Parameters:</h5>
                     <div>
                       <pre class="functionDescription">curve_id_0 (guid): identifier of the first curve object.
-curve_id_1 (guid): identifier of the second curve object.</pre>
+curve_id_1 (guid): identifier of the second curve object.
+tolerance (float, optional): a positive tolerance value, or None for the doc default.</pre>
                     </div>
                     
 
@@ -6944,7 +6972,7 @@ rs.DeleteObject( curveB )</code></pre>
                 </div>
                 <div id="collapse-CurveBooleanIntersection" class="panel-collapse collapse" role="tabpanel" aria-labelledby="curve-CurveBooleanIntersection">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">CurveBooleanIntersection(curve_id_0, curve_id_1)</code></pre>
+                    <pre><code class="python">CurveBooleanIntersection(curve_id_0, curve_id_1, tolerance=None)</code></pre>
 
                     <pre class="functionDescription">Calculates the intersection of two closed, planar curves and adds
     the results to the document. Note, curves must be coplanar.</pre>
@@ -6953,7 +6981,8 @@ rs.DeleteObject( curveB )</code></pre>
                     <h5>Parameters:</h5>
                     <div>
                       <pre class="functionDescription">curve_id_0 (guid): identifier of the first curve object.
-curve_id_1 (guid): identifier of the second curve object.</pre>
+curve_id_1 (guid): identifier of the second curve object.
+tolerance (float, optional): a positive tolerance value, or None for the doc default.</pre>
                     </div>
                     
 
@@ -7001,7 +7030,7 @@ rs.DeleteObject( curveB )</code></pre>
                 </div>
                 <div id="collapse-CurveBooleanUnion" class="panel-collapse collapse" role="tabpanel" aria-labelledby="curve-CurveBooleanUnion">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">CurveBooleanUnion(curve_id)</code></pre>
+                    <pre><code class="python">CurveBooleanUnion(curve_id, tolerance=None)</code></pre>
 
                     <pre class="functionDescription">Calculate the union of two or more closed, planar curves and
     add the results to the document. Note, curves must be coplanar.</pre>
@@ -7009,7 +7038,8 @@ rs.DeleteObject( curveB )</code></pre>
                     
                     <h5>Parameters:</h5>
                     <div>
-                      <pre class="functionDescription">curve_id ([guid, guid, ...])list of two or more close planar curves identifiers</pre>
+                      <pre class="functionDescription">curve_id ([guid, guid, ...])list of two or more close planar curves identifiers
+tolerance (float, optional): a positive tolerance value, or None for the doc default.</pre>
                     </div>
                     
 
@@ -11558,6 +11588,62 @@ if curve: rs.RebuildCurve(curve, 3, 10)</code></pre>
               </div>
             
               <div class="panel panel-simple panel-moduleFunction">
+                <div class="panel-heading" role="tab" id="curve-RemoveCurveKnot">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#curve-RemoveCurveKnot';" href="#collapse-RemoveCurveKnot" aria-expanded="true" aria-controls="curve-RemoveCurveKnot">
+                    RemoveCurveKnot
+                  </a>
+                  <span class="label label-warning hide">!</span>
+                  <span class="label label-default hide">ex</span>
+                  <span class="label label-default hide">lnk</span>
+                </div>
+                <div id="collapse-RemoveCurveKnot" class="panel-collapse collapse" role="tabpanel" aria-labelledby="curve-RemoveCurveKnot">
+                  <div class="panel-body docstring-panel">
+                    <pre><code class="python">RemoveCurveKnot(curve, parameter)</code></pre>
+
+                    <pre class="functionDescription">Deletes a knot from a curve object.</pre>
+
+                    
+                    <h5>Parameters:</h5>
+                    <div>
+                      <pre class="functionDescription">curve (guid): The reference of the source object
+parameter (number): The parameter on the curve. Note, if the parameter is not equal to one
+                of the existing knots, then the knot closest to the specified parameter
+                will be removed.</pre>
+                    </div>
+                    
+
+                    <h5>Returns:</h5>
+                    <div>
+                      <pre class="functionDescription">bool: True of False indicating success or failure</pre>
+                    </div>
+
+                    <div class="example docstring-field rss-show">
+                      <h5>Example:</h5>
+                      <div>
+                        <pre><code class="python">import rhinoscriptsyntax as rs
+
+crv_info = rs.GetCurveObject("Select curve near knot to be removed")
+if crv_info:
+    crv_id = crv_info[0]
+    crv_param = crv_info[4]
+    rs.RemoveCurveKnot(crv_id, crv_param)</code></pre>
+                      </div>
+                    </div>
+
+                    <div class="seealso docstring-field rss-show">
+                      <h5>See Also:</h5>
+                      <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-RemoveSurfaceKnot' + '.collapse').collapse('show'); location.hash = '#surface-RemoveSurfaceKnot';">RemoveSurfaceKnot</a></li>
+                        
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            
+              <div class="panel panel-simple panel-moduleFunction">
                 <div class="panel-heading" role="tab" id="curve-ReverseCurve">
                   <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#curve-ReverseCurve';" href="#collapse-ReverseCurve" aria-expanded="true" aria-controls="curve-ReverseCurve">
                     ReverseCurve
@@ -11864,8 +11950,8 @@ number_of_curves (number): The number of curves to create. The default is 1.
 method (number): The method for refining the output curves, where:
   0: (Default) Uses the control points of the curves for matching. So the first control point of first curve is matched to first control point of the second curve.
   1: Refits the output curves like using the FitCurve method.  Both the input curve and the output curve will have the same structure. The resulting curves are usually more complex than input unless input curves are compatible.
-  2: Input curves are divided to the specified number of points on the curve, corresponding points define new points that output curves go through. If you are making one tween curve, the method essentially does the following: divides the two curves into an equal number of points, finds the midpoint between the corresponding points on the curves. and interpolates the tween curve through those points.
-sample_number (number): The number of samples points to is intMethod = 2. The default is 10.</pre>
+  2: Input curves are divided to the specified number of points on the curve, corresponding points define new points that output curves go through. If you are making one tween curve, the method essentially does the following: divides the two curves into an equal number of points, finds the midpoint between the corresponding points on the curves, and interpolates the tween curve through those points.
+sample_number (number): The number of samples points to use if method is 2. The default is 10.</pre>
                     </div>
                     
 
@@ -19077,7 +19163,7 @@ rs.AddHatch( circle, rs.CurrentHatchPattern() )</code></pre>
                 </div>
                 <div id="collapse-AddHatches" class="panel-collapse collapse" role="tabpanel" aria-labelledby="hatch-AddHatches">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">AddHatches(curve_ids, hatch_pattern=None, scale=1.0, rotation=0.0)</code></pre>
+                    <pre><code class="python">AddHatches(curve_ids, hatch_pattern=None, scale=1.0, rotation=0.0, tolerance=None)</code></pre>
 
                     <pre class="functionDescription">Creates one or more new hatch objects a list of closed planar curves</pre>
 
@@ -19089,7 +19175,8 @@ rs.AddHatch( circle, rs.CurrentHatchPattern() )</code></pre>
 hatch_pattern (str, optional):  name of the hatch pattern to be used by the hatch
     object. If omitted, the current hatch pattern will be used
 scale (number, optional): hatch pattern scale factor
-rotation (number, optional): hatch pattern rotation angle in degrees.</pre>
+rotation (number, optional): hatch pattern rotation angle in degrees.
+tolerance (number, optional): tolerance for hatch fills.</pre>
                     </div>
                     
 
@@ -21315,7 +21402,7 @@ print "The default layer has a material assigned."</code></pre>
 
                     <h5>Returns:</h5>
                     <div>
-                      <pre class="functionDescription">guid: The layer's identifier if successful.
+                      <pre class="functionDescription">guid (str): The layer's identifier if successful.
 None: If not successful, or on error.</pre>
                     </div>
 
@@ -25710,7 +25797,7 @@ rs.AddPoint( rs.MeshAreaCentroid(obj) )</code></pre>
                 </div>
                 <div id="collapse-MeshBooleanDifference" class="panel-collapse collapse" role="tabpanel" aria-labelledby="mesh-MeshBooleanDifference">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">MeshBooleanDifference(input0, input1, delete_input=True)</code></pre>
+                    <pre><code class="python">MeshBooleanDifference(input0, input1, delete_input=True, tolerance=None)</code></pre>
 
                     <pre class="functionDescription">Performs boolean difference operation on two sets of input meshes</pre>
 
@@ -25718,7 +25805,8 @@ rs.AddPoint( rs.MeshAreaCentroid(obj) )</code></pre>
                     <h5>Parameters:</h5>
                     <div>
                       <pre class="functionDescription">input0, input1 (guid): identifiers of meshes
-delete_input (bool, optional): delete the input meshes</pre>
+delete_input (bool, optional): delete the input meshes
+tolerance (float, optional): a positive tolerance value, or None to use the default of the document.</pre>
                     </div>
                     
 
@@ -28477,7 +28565,7 @@ rs.SelectObject( object )</code></pre>
                   <div class="panel-body docstring-panel">
                     <pre><code class="python">IsObjectSelected(object_id)</code></pre>
 
-                    <pre class="functionDescription">Verifies that an object is currently selected</pre>
+                    <pre class="functionDescription">Verifies that an object is currently selected.</pre>
 
                     
                     <h5>Parameters:</h5>
@@ -28488,19 +28576,21 @@ rs.SelectObject( object )</code></pre>
 
                     <h5>Returns:</h5>
                     <div>
-                      <pre class="functionDescription">bool: True if the object is selected
-bool: False if the object is not selected</pre>
+                      <pre class="functionDescription">int: 0, the object is not selected
+int: 1, the object is selected
+int: 2, the object is entirely persistently selected
+int: 3, one or more proper sub-objects are selected</pre>
                     </div>
 
                     <div class="example docstring-field rss-show">
                       <h5>Example:</h5>
                       <div>
                         <pre><code class="python">import rhinocsriptsyntax as rs
-# Do something here...
+object = rs.GetObject()
 if rs.IsObjectSelected(object):
-print "The object is selected."
+  print "The object is selected."
 else:
-print "The object is not selected."</code></pre>
+  print "The object is not selected."</code></pre>
                       </div>
                     </div>
 
@@ -34429,7 +34519,7 @@ print "Active view = ", obj[4]</code></pre>
                 </div>
                 <div id="collapse-GetPointCoordinates" class="panel-collapse collapse" role="tabpanel" aria-labelledby="selection-GetPointCoordinates">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">GetPointCoordinates(message="select points", preselect=False)</code></pre>
+                    <pre><code class="python">GetPointCoordinates(message="Select points", preselect=False)</code></pre>
 
                     <pre class="functionDescription">Prompts the user to select one or more point objects.</pre>
 
@@ -34487,7 +34577,7 @@ for point in points: print point</code></pre>
                 </div>
                 <div id="collapse-GetSurfaceObject" class="panel-collapse collapse" role="tabpanel" aria-labelledby="selection-GetSurfaceObject">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">GetSurfaceObject(message="select surface", preselect=False, select=False)</code></pre>
+                    <pre><code class="python">GetSurfaceObject(message="Select surface", preselect=False, select=False)</code></pre>
 
                     <pre class="functionDescription">Prompts the user to select a single surface</pre>
 
@@ -36571,6 +36661,67 @@ None: if not successful, or on error</pre>
 rails = rs.GetObjects("Select two rail curve", rs.filter.curve)
 if rails and len(rails)==2:
 shapes = rs.GetObjects("Select cross-section curves", rs.filter.curve)</code></pre>
+                      </div>
+                    </div>
+
+                    <div class="seealso docstring-field rss-show">
+                      <h5>See Also:</h5>
+                      <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-AddSweep1' + '.collapse').collapse('show'); location.hash = '#surface-AddSweep1';">AddSweep1</a></li>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-CurveDirectionsMatch' + '.collapse').collapse('show'); location.hash = '#curve-CurveDirectionsMatch';">CurveDirectionsMatch</a></li>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-ReverseCurve' + '.collapse').collapse('show'); location.hash = '#curve-ReverseCurve';">ReverseCurve</a></li>
+                        
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            
+              <div class="panel panel-simple panel-moduleFunction">
+                <div class="panel-heading" role="tab" id="surface-AddRailRevSrf">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#surface-AddRailRevSrf';" href="#collapse-AddRailRevSrf" aria-expanded="true" aria-controls="surface-AddRailRevSrf">
+                    AddRailRevSrf
+                  </a>
+                  <span class="label label-warning hide">!</span>
+                  <span class="label label-default hide">ex</span>
+                  <span class="label label-default hide">lnk</span>
+                </div>
+                <div id="collapse-AddRailRevSrf" class="panel-collapse collapse" role="tabpanel" aria-labelledby="surface-AddRailRevSrf">
+                  <div class="panel-body docstring-panel">
+                    <pre><code class="python">AddRailRevSrf(profile, rail, axis, scale_height=False)</code></pre>
+
+                    <pre class="functionDescription">Adds a surface created through profile curves that define the surface
+    shape and two curves that defines a surface edge.</pre>
+
+                    
+                    <h5>Parameters:</h5>
+                    <div>
+                      <pre class="functionDescription">profile (guid): identifier of the profile curve
+rail (guid): identifier of the rail curve
+axis ([point, point]): A list of two 3-D points identifying the start point and end point of the rail revolve axis, or a Line
+scale_height (bool, optional): If True, surface will be locally scaled. Defaults to False</pre>
+                    </div>
+                    
+
+                    <h5>Returns:</h5>
+                    <div>
+                      <pre class="functionDescription">guid: identifier of the new object if successful
+None: if not successful, or on error</pre>
+                    </div>
+
+                    <div class="example docstring-field rss-show">
+                      <h5>Example:</h5>
+                      <div>
+                        <pre><code class="python">import rhinoscriptsyntax as rs
+profile = rs.GetObject("Select a profile", rs.filter.curve)
+if profile:
+  rail = rs.GetObject("Select a rail", rs.filter.curve)
+  if rail:
+    rs.AddRailRevSrf(profile, rail, ((0,0,0),(0,0,1)))</code></pre>
                       </div>
                     </div>
 
@@ -38800,6 +38951,59 @@ print "The surface is not a portion of a torus."</code></pre>
               </div>
             
               <div class="panel panel-simple panel-moduleFunction">
+                <div class="panel-heading" role="tab" id="surface-SurfaceSphere">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#surface-SurfaceSphere';" href="#collapse-SurfaceSphere" aria-expanded="true" aria-controls="surface-SurfaceSphere">
+                    SurfaceSphere
+                  </a>
+                  <span class="label label-warning hide">!</span>
+                  <span class="label label-default hide">ex</span>
+                  <span class="label label-default hide">lnk</span>
+                </div>
+                <div id="collapse-SurfaceSphere" class="panel-collapse collapse" role="tabpanel" aria-labelledby="surface-SurfaceSphere">
+                  <div class="panel-body docstring-panel">
+                    <pre><code class="python">SurfaceSphere(surface_id)</code></pre>
+
+                    <pre class="functionDescription">Gets the sphere definition from a surface, if possible.</pre>
+
+                    
+                    <h5>Parameters:</h5>
+                    <div>
+                      <pre class="functionDescription">surface_id (guid): the identifier of the surface object</pre>
+                    </div>
+                    
+
+                    <h5>Returns:</h5>
+                    <div>
+                      <pre class="functionDescription">(plane, number): The equatorial plane of the sphere, and its radius.
+None: on error</pre>
+                    </div>
+
+                    <div class="example docstring-field rss-show">
+                      <h5>Example:</h5>
+                      <div>
+                        <pre><code class="python">import rhinoscriptsyntax as rs
+surface = rs.GetObject("Select a surface", rs.filter.surface)
+if surface:
+  result = rs.SurfaceSphere(surface)
+  if result:
+    print("The sphere radius is: " + str(result[1]))</code></pre>
+                      </div>
+                    </div>
+
+                    <div class="seealso docstring-field rss-show">
+                      <h5>See Also:</h5>
+                      <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-SurfaceCylinder' + '.collapse').collapse('show'); location.hash = '#surface-SurfaceCylinder';">SurfaceCylinder</a></li>
+                        
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            
+              <div class="panel panel-simple panel-moduleFunction">
                 <div class="panel-heading" role="tab" id="surface-JoinSurfaces">
                   <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#surface-JoinSurfaces';" href="#collapse-JoinSurfaces" aria-expanded="true" aria-controls="surface-JoinSurfaces">
                     JoinSurfaces
@@ -39063,6 +39267,62 @@ pointcount ([number, number], optional): two numbers that identify the surface p
                     <div class="seealso docstring-field hide">
                       <h5>See Also:</h5>
                       <ul>
+                        
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            
+              <div class="panel panel-simple panel-moduleFunction">
+                <div class="panel-heading" role="tab" id="surface-RemoveSurfaceKnot">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#surface-RemoveSurfaceKnot';" href="#collapse-RemoveSurfaceKnot" aria-expanded="true" aria-controls="surface-RemoveSurfaceKnot">
+                    RemoveSurfaceKnot
+                  </a>
+                  <span class="label label-warning hide">!</span>
+                  <span class="label label-default hide">ex</span>
+                  <span class="label label-default hide">lnk</span>
+                </div>
+                <div id="collapse-RemoveSurfaceKnot" class="panel-collapse collapse" role="tabpanel" aria-labelledby="surface-RemoveSurfaceKnot">
+                  <div class="panel-body docstring-panel">
+                    <pre><code class="python">RemoveSurfaceKnot(surface, uv_parameter, v_direction)</code></pre>
+
+                    <pre class="functionDescription">Deletes a knot from a surface object.</pre>
+
+                    
+                    <h5>Parameters:</h5>
+                    <div>
+                      <pre class="functionDescription">surface (guid): The reference of the surface object
+uv_parameter (list(number, number)): An indexable item containing a U,V parameter on the surface. List, tuples and UVIntervals will work.
+  Note, if the parameter is not equal to one of the existing knots, then the knot closest to the specified parameter will be removed.
+v_direction (bool): if True, or 1, the V direction will be addressed. If False, or 0, the U direction.</pre>
+                    </div>
+                    
+
+                    <h5>Returns:</h5>
+                    <div>
+                      <pre class="functionDescription">bool: True of False indicating success or failure</pre>
+                    </div>
+
+                    <div class="example docstring-field rss-show">
+                      <h5>Example:</h5>
+                      <div>
+                        <pre><code class="python">import rhinoscriptsyntax as rs
+
+srf_info = rs.GetSurfaceObject()
+if srf_info:
+    srf_id = srf_info[0]
+    srf_param = srf_info[4]
+    rs.RemoveSurfaceKnot(srf_id, srf_param, 1)</code></pre>
+                      </div>
+                    </div>
+
+                    <div class="seealso docstring-field rss-show">
+                      <h5>See Also:</h5>
+                      <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-RemoveSurfaceKnot' + '.collapse').collapse('show'); location.hash = '#surface-RemoveSurfaceKnot';">RemoveSurfaceKnot</a></li>
                         
                       </ul>
                     </div>
@@ -39770,9 +40030,11 @@ rs.AddCylinder(plane, height, radius, False)</code></pre>
                       </div>
                     </div>
 
-                    <div class="seealso docstring-field hide">
+                    <div class="seealso docstring-field rss-show">
                       <h5>See Also:</h5>
                       <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-SurfaceSphere' + '.collapse').collapse('show'); location.hash = '#surface-SurfaceSphere';">SurfaceSphere</a></li>
                         
                       </ul>
                     </div>
@@ -44834,6 +45096,56 @@ if line: rs.AddLine( line[0],  line[1] )</code></pre>
               </div>
             
               <div class="panel panel-simple panel-moduleFunction">
+                <div class="panel-heading" role="tab" id="userinterface-GetLinetype">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#userinterface-GetLinetype';" href="#collapse-GetLinetype" aria-expanded="true" aria-controls="userinterface-GetLinetype">
+                    GetLinetype
+                  </a>
+                  <span class="label label-warning hide">!</span>
+                  <span class="label label-default hide">ex</span>
+                  <span class="label label-default hide">lnk</span>
+                </div>
+                <div id="collapse-GetLinetype" class="panel-collapse collapse" role="tabpanel" aria-labelledby="userinterface-GetLinetype">
+                  <div class="panel-body docstring-panel">
+                    <pre><code class="python">GetLinetype(default_linetype=None, show_by_layer=False)</code></pre>
+
+                    <pre class="functionDescription">Displays a dialog box prompting the user to select one linetype</pre>
+
+                    
+                    <h5>Parameters:</h5>
+                    <div>
+                      <pre class="functionDescription">default_linetype (str, optional):  Optional. The name of the linetype to select. If omitted, the current linetype will be selected.
+show_by_layer (bool, optional): If True, the "by Layer" linetype will show. Defaults to False.</pre>
+                    </div>
+                    
+
+                    <h5>Returns:</h5>
+                    <div>
+                      <pre class="functionDescription">str: The names of selected linetype if successful</pre>
+                    </div>
+
+                    <div class="example docstring-field rss-show">
+                      <h5>Example:</h5>
+                      <div>
+                        <pre><code class="python">import rhinoscriptsyntax as rs
+linetype = rs.GetLinetype()
+if linetype: print(linetype)</code></pre>
+                      </div>
+                    </div>
+
+                    <div class="seealso docstring-field rss-show">
+                      <h5>See Also:</h5>
+                      <ul>
+                        
+                          <li><a role="button" onclick="$('.collapse').removeClass('in'); $('#collapse-GetLayer' + '.collapse').collapse('show'); location.hash = '#userinterface-GetLayer';">GetLayer</a></li>
+                        
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            
+              <div class="panel panel-simple panel-moduleFunction">
                 <div class="panel-heading" role="tab" id="userinterface-GetMeshFaces">
                   <a role="button" data-toggle="collapse" data-parent="#accordion" onclick="window.location.hash = '#userinterface-GetMeshFaces';" href="#collapse-GetMeshFaces" aria-expanded="true" aria-controls="userinterface-GetMeshFaces">
                     GetMeshFaces
@@ -47383,17 +47695,18 @@ result[0]: X component, result[1]: Y component, and result[2] Z component.</pre>
                 </div>
                 <div id="collapse-CreatePlane" class="panel-collapse collapse" role="tabpanel" aria-labelledby="utility-CreatePlane">
                   <div class="panel-body docstring-panel">
-                    <pre><code class="python">CreatePlane(plane)</code></pre>
+                    <pre><code class="python">CreatePlane(plane_or_origin, x_axis=None, y_axis=None, ignored=None)</code></pre>
 
                     <pre class="functionDescription">Converts input into a Rhino.Geometry.Plane object if possible.
     If the provided object is already a plane, its value is copied.
-    The returned data is accessible by indexing[row, column], and that is the suggested method to interact with the type.
+    The returned data is accessible by indexing[origin, X axis, Y axis, Z axis], and that is the suggested method to interact with the type.
+    The Z axis is in any case computed from the X and Y axes, so providing it is possible but not required.
     If the conversion fails, an error is raised.</pre>
 
                     
                     <h5>Parameters:</h5>
                     <div>
-                      <pre class="functionDescription">plane (plane|[point, point, point, point])</pre>
+                      <pre class="functionDescription">plane (plane|point|point, vector, vector|[point, vector, vector])</pre>
                     </div>
                     
 
@@ -50709,7 +51022,7 @@ if obj: rs.ZoomSelected()</code></pre>
                   <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
                 </svg>
               </span>
-              <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/api/RhinoScriptSyntax/index.html" target="_blank">Edit on GitHub</a>
+              <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/api/RhinoScriptSyntax/index.html" target="_blank">Edit on GitHub</a>
           </div>
 
           <div class="col-md-6 text-center">

@@ -99,9 +99,26 @@
 
 
     
-<div class="version-banner">
-    Hey, you're viewing the <strong>wip</strong> version of this page!
-    <a href="/guides/cpp/whats-new/">View the current version instead.</a>
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/cpp/whats-new/">View the current version instead.</a>
+    
 </div>
 
 <!-- Check the version banner for broken links and remove the link if found -->
@@ -110,9 +127,9 @@
 $(document).ready(function()
 {
   var splitPath = window.location.pathname.split("/");
-  var nonWipURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
 
-  $.get(nonWipURL).fail(function ()
+  $.get(linkURL).fail(function ()
   {
     var $aTag = $("div.version-banner > a");
     $aTag.text("View the current site instead.");
@@ -120,8 +137,6 @@ $(document).ready(function()
   });
 });
 </script>
-
-
 
 
     <div class="container">
@@ -141,6 +156,18 @@ $(document).ready(function()
         
         
         
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+            
+          
         
           
             
@@ -330,6 +357,15 @@ $(document).ready(function()
                     
                     
                     <li>
+                        <a href="#mfc-free">MFC Free</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
                         <a href="#model-components">Model Components</a>
                     </li>
                   
@@ -503,12 +539,55 @@ $(document).ready(function()
     int rc = RhinoPointInPlanarClosedCurve(point, closed_curve, plane, tolerance);
 </code></pre>
 
+<h3 id="mfc-free">MFC Free</h3>
+
+<p>The Rhino 6 C/C++ SDK is now MFC free. That is, there are no longer any MFC classes or types used by Rhino class. By removing MFC from the Rhino SDK, plug-in that use MFC are no longer required to use the same version of MFC and Rhino.</p>
+
+<p>Note, the core of Rhino continues to use MFC as before, including using the Doc/View framework. However, this implementation is no longer exposed to the SDK.</p>
+
+<p>In general, there are three types of changes that you will need to know about:</p>
+
+<h4 id="replacement-of-mfc-classes-with-opennurbs-equivalents">Replacement of MFC classes with openNURBS equivalents</h4>
+
+<ul>
+  <li><code>ON_4iRect</code> replaces <code>CRect</code>.</li>
+  <li><code>ON_2iSize</code> replaces <code>CSize</code>.</li>
+  <li><code>ON_2iPoint</code> replaces <code>CPoint</code>.</li>
+</ul>
+
+<h4 id="replacement-of-mfc-classes-with-win32-equivalents">Replacement of MFC classes with Win32 equivalents</h4>
+
+<ul>
+  <li><code>HWND</code> replaces <code>CWnd</code>.</li>
+  <li><code>HDC</code> replaces <code>CDC</code>.</li>
+  <li><code>HFONT</code> replaces <code>CFont</code>.</li>
+</ul>
+
+<h4 id="classes-no-longer-derived-from-mfc-base-classes">Classes no longer derived from MFC base classes</h4>
+
+<p><code>CRhinoDoc</code> is no longer derived from <code>CDocument</code>.</p>
+
+<p><code>CRhinoView</code> is no longer derived from <code>CView</code>.</p>
+
+<p><code>CRhinoApp</code> is no longer derived from <code>CWinApp</code>.</p>
+
+<p>Note, the Rhino Rhino 6 C/C++ SDK does include MFC user interface classes, such as <code>CRhinoDialog</code>, <code>CRhinoDockBar</code>, and more. To use these classes, define <code>RHINO_SDK_MFC</code> in your project’s <em>stdafx.h</em> file.</p>
+
+<pre><code>    // If you want to use Rhino's MFC UI classes, then
+    // uncomment the #define RHINO_SDK_MFC statement below.
+    // Note, doing so will requires that your plug-in is
+    // built with the same version of Visual Studio as was
+    // used to build Rhino.
+    #define RHINO_SDK_MFC
+</code></pre>
+
 <h3 id="model-components">Model Components</h3>
-<p>Rhino has a number of model components, such as layers, group, render materials, dimensions style, and more. Over the years, common properties, such as name, index, and id, have been added to these components, but done so in an inconsistent manner. For example, the method for obtaining the id of a layer was different that of a render material.</p>
+
+<p>Rhino has a number of model components, such as layers, groups, render materials, dimensions styles, and more. Over the years, common properties, such as name, index, and id, have been added to these components, but done so in an inconsistent manner. For example, the method for obtaining the id of a layer was different than that of a render material.</p>
 
 <p>The Rhino 6 C/C++ SDK contains a new <code>ON_ModelComponent</code> class that remedies this. Model component classes now inherit from this class.</p>
 
-<p>Providing a consistent interface to common properties, however, means that the names of functions used to access these properties have change.</p>
+<p>Providing a consistent interface to common properties, however, means that the names of functions used to access these properties have changed.</p>
 
 <p>For example, in Rhino 5, you could access the name of the current Layer as follows:</p>
 
@@ -538,9 +617,9 @@ $(document).ready(function()
 
 <h3 id="annotations">Annotations</h3>
 
-<p>For Rhino 6, there will be new implementations for all annotation objects, such as Text, Leaders, and Dimensions. The new implementations are much better organized the the prior versions, plus provide new features such as <a href="https://en.wikipedia.org/wiki/Rich_Text_Format">Rich Text</a>.</p>
+<p>For Rhino 6, there will be new implementations for all annotation objects, such as Text, Leaders, and Dimensions. The new implementations are much better organized than prior versions, plus provide new features such as <a href="https://en.wikipedia.org/wiki/Rich_Text_Format">Rich Text</a>.</p>
 
-<p>For more details, see <a href="/wip/guides/cpp/(/wip/guides/cpp/migrate-your-plugin-manual-windows)">Annotation Objects</a>.</p>
+<p>For more details, see <a href="/wip/guides/cpp/annotation-objects">Annotation Objects</a>.</p>
 
 <h3 id="scoped-and-strongly-typed-enums">Scoped and Strongly Typed Enums</h3>
 <p>C++11 provides some great new features for C++ programmers. One such feature is scoped and strongly typed enumerations, which ensures some measure of compatibility across compilers. They also make up for some shortcomings of old-style enums:</p>
@@ -551,7 +630,7 @@ $(document).ready(function()
   <li>You cannot specify the underlying integral type of an old-style enums</li>
 </ul>
 
-<p>There are a number of places in the Rhino 6 C/C++ SDK were old-style enums have been converted to scoped and strongly typed enums by convert <code>enum</code> declarations to <code>enum class</code>. Enumerators of these types of enums require a qualified name such as <em>enumname::enumerator</em> when you refer to them.</p>
+<p>There are a number of places in the Rhino 6 C/C++ SDK were old-style enums have been converted to scoped and strongly typed enums by converting <code>enum</code> declarations to <code>enum class</code>. Enumerators of these types of enums require a qualified name such as <em>enumname::enumerator</em> when you refer to them.</p>
 
 <p>For example, in Rhino 5, you could specify a unit system in millimeters as follows:</p>
 
@@ -578,17 +657,15 @@ $(document).ready(function()
 <h3 id="other">Other</h3>
 <p>Not all changes in the Rhino 6 C/C++ SDK could be tagged as deprecated. For example, if a member variable from a class were removed, or a feature was dramatically changed, then deprecation could not be used. These types of breakages will require more time to fix.</p>
 
-<p>To help with this, we are working on updating all of the <a href="https://github.com/mcneel/Rhino6Samples_CPP">C++ SDK samples</a>.</p>
-
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
   <li><a href="/wip/guides/cpp/installing-tools-windows">Installing Tools (Windows)</a></li>
   <li><a href="/wip/guides/cpp/migrate-your-plugin-windows">Migrate your plugin project to Rhino 6</a></li>
   <li><a href="/wip/guides/cpp/migrate-your-plugin-manual-windows">Migrate your plugin project to Rhino 6 manually</a></li>
-  <li><a href="/wip/guides/cpp/(/wip/guides/cpp/migrate-your-plugin-manual-windows)">Annotation Objects</a></li>
+  <li><a href="/wip/guides/cpp/annotation-objects">Annotation Objects</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/master/cpp">C++ SDK samples on GitHub</a></li>
 </ul>
-
 
         </article>
 
@@ -631,7 +708,7 @@ $(document).ready(function()
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/wip/_guide_topics/cpp/whats-new.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/cpp/whats-new.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
