@@ -329,6 +329,15 @@ $(document).ready(function()
                     
                     
                     <li>
+                        <a href="#virtual-method-changes">Virtual method changes</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
                         <a href="#header-file-changes">Header file changes</a>
                     </li>
                   
@@ -357,8 +366,24 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#migrating-crhinoobjectpropertiesdialogpage-derived-pages">Migrating CRhinoObjectPro...</a>
+              <a href="#migrating-crhinoobjectpropertiesdialogpageex-derived-pages">Migrating </a>
 
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#header-file-changes-1">Header file changes</a>
+                    </li>
+                  
+
+                </ul>
               
 
             </li>
@@ -404,9 +429,56 @@ $(document).ready(function()
 
           <p>This guide walks you through manually migrating your Rhino 5 plugin project to Rhino 6.</p>
 
-          <p>It is presumed you already have the necessary tools installed and are ready to go.  If you are not there yet, see <a href="/guides/cpp/installing-tools-windows">Installing Tools (Windows)</a>.</p>
+          <h1 id="migrate-your-options-document-properties-and-object-properties-pages">Migrate your Options, Document Properties and Object Properties Pages</h1>
+
+<p>This guide walks you through migrating existing Rhino 5, plug-in provided, Rhino Options, Document Properties and Object Properties pages to Rhino 6.</p>
+
+<p>You can find instructions regarding migrating your Rhino 5 plugin project to Rhino 6  <a href="/guides/cpp/migrate-your-plugin-manual-windows">here</a>.</p>
 
 <h2 id="migrating-crhinooptionsdialogpage-derived-pages">Migrating <code>CRhinoOptionsDialogPage</code> derived pages</h2>
+
+<p>The <code>CRhinoOptionsDialogPage</code>  class is used to add pages to both the Options and Document Properties dialog sections.   The following is a description of what has changed in the Rhino 6 SDK and some simple examples of how to migrate your existing Rhino 5 code.</p>
+
+<h3 id="virtual-method-changes">Virtual method changes</h3>
+
+<p>Several virtual methods in the <code>CRhinoOptionsDialogPage</code>  and the <code>CRhinoStackedDialogPage</code>  base class have changed in Rhino 6.   The following is a list of commonly accessed Rhino 5 virtual methods and there Rhino 6 equivalents.</p>
+
+<pre><code>// V5 Method
+virtual const wchar_t* EnglishPageTitle() = 0;
+// V6 equivalent
+virtual const wchar_t* EnglishTitle() const = 0;
+
+// V5 Method
+virtual const wchar_t* LocalPageTitle() = 0;
+// V6 equivalent, returns EnglishTitle() by default
+virtual const wchar_t* LocalTitle() const;
+
+// V5 Method
+virtual CRhinoCommand::result RunScript( CRhinoDoc&amp; rhino_doc) = 0;
+// V6 equivalent
+virtual CRhinoCommand::result RunScript(CRhinoOptionsPageEventArgs&amp; e) = 0;
+
+// V5 Method
+virtual int OnActivate( BOOL bActive);
+// V6 equivalent, required in V6, called each time the page is displayed
+virtual void UpdatePage(CRhinoOptionsPageEventArgs&amp; e) = 0;
+
+// V5 Method
+virtual int OnApply();
+// V6 equivalent, called when ever the page is hidden
+virtual bool Apply(CRhinoOptionsPageEventArgs&amp; e);
+
+// V5 Method
+virtual bool ShowDefaultsButton(void);
+// V6 equivalent, can be used to add a Apply and/or Restore Defaults buttons to the
+// main dialog.  Returns RhinoOptionPageButtons::None by default.
+virtual RhinoOptionPageButtons ButtonsToDisplay() const;
+
+// V5 Method
+virtual void OnDefaults(void);
+// V6 equivalent
+virtual void OnRestoreDefaultsClick(CRhinoOptionsPageEventArgs&amp; e);
+</code></pre>
 
 <h3 id="header-file-changes">Header file changes</h3>
 
@@ -437,10 +509,296 @@ $(document).ready(function()
 };
 </code></pre>
 
-    <p>Your class will now use a Rhino provided template class which implements the <code>IRhinoOptionsPage</code> and <code>IRhinoWindow</code> interfaces.  The <code>IRhinoWindow</code> interface will wrap the <code>CDialog</code> class and provide direct access to window methods for creating, sizing, painting and destruction.  You can use any class that is derived from <code>CDialog</code> as long as the class constructor takes a resource Id and parent window.  The <code>TRhinoDialogWindow</code> template always pass <code>nullptr</code> as the parent window.</p>
+    <p>Your class will now use a Rhino provided template class which implements the <code>IRhinoOptionsPage</code> and <code>IRhinoWindow</code> interfaces.  The <code>IRhinoWindow</code> interface will wrap the <code>CDialog</code> class and provide direct access to window methods for creating, sizing, painting and destruction.  You can use any class that is derived from <code>CDialog</code> as long as the class constructor takes a resource Id and parent window.  The <code>TRhinoDialogWindow</code> template always passes a  <code>nullptr</code> as the parent window.</p>
   </li>
   <li>
-    <p>This is a list of Rhino 5 <code>CRhinoOptionsDialogPage</code> and <code>CRhinoStackedDialogPage</code> and there Rhino 6 equivalents.  You will need to modify these function declarations in your H file as well as there implementations.</p>
+    <p>Modify the <code>CRhinoOptionsDialogPage</code>  required virtual methods as follows:</p>
+
+    <h4 id="rhino-5-class">Rhino 5 class</h4>
+
+    <pre><code>class CDocumentPropertiesPage : public CRhinoOptionsDialogPage
+{
+  DECLARE_DYNAMIC(CDocumentPropertiesPage)
+
+public:
+  CDocumentPropertiesPage();   // standard constructor
+  virtual ~CDocumentPropertiesPage();
+
+  /////////////////////////////////////////////////////////////////////////////
+  // CRhinoOptionsDialogPage required overrides
+  const wchar_t* EnglishPageTitle();
+  const wchar_t* LocalPageTitle();
+  CRhinoCommand::result RunScript( CRhinoDoc&amp; rhino_doc);
+//... the rest of your class
+};
+</code></pre>
+
+    <h4 id="rhino-6-class">Rhino 6 class</h4>
+
+    <pre><code>class CDocumentPropertiesPage : public TRhinoOptionsPage&lt;CDialog&gt;
+{
+  DECLARE_DYNAMIC(CDocumentPropertiesPage)
+
+public:
+  CDocumentPropertiesPage();   // standard constructor
+  virtual ~CDocumentPropertiesPage();
+
+  /////////////////////////////////////////////////////////////////////////////
+  // CRhinoOptionsDialogPage required overrides
+  const wchar_t* EnglishTitle() const override;
+  const wchar_t* LocalTitle() const override;
+  CRhinoCommand::result RunScript(CRhinoOptionsPageEventArgs&amp; e) override;
+  //... the rest of your class
+};
+</code></pre>
+  </li>
+  <li>
+    <p>See the “<em>Virtual method changes</em>” section above for a list of virtual methods that will need to be modified for Rhino 6.</p>
+  </li>
+</ol>
+
+<h3 id="cpp-implementation-file-changes">CPP Implementation file changes</h3>
+
+<ol>
+  <li>
+    <p>Open the CPP file containing your derived class implementation.</p>
+  </li>
+  <li>
+    <p>Replace all references to <code>CRhinoOptionsDialogPage</code> with <code>__base_clas</code>  which dereferences to <code>CDialog</code> in our case because we are deriving from <code>TRhinoOptionsPage&lt;CDialog&gt;.</code></p>
+
+    <h4 id="rhino-5-class-1">Rhino 5 class</h4>
+
+    <pre><code>IMPLEMENT_DYNAMIC(CDocumentPropertiesPage, CRhinoOptionsDialogPage)
+
+BEGIN_MESSAGE_MAP(CDocumentPropertiesPage, CRhinoOptionsDialogPage)
+END_MESSAGE_MAP()
+</code></pre>
+
+    <h4 id="rhino-6-class-1">Rhino 6 class</h4>
+
+    <pre><code>IMPLEMENT_DYNAMIC(CDocumentPropertiesPage, __base_class)
+
+BEGIN_MESSAGE_MAP(CDocumentPropertiesPage, __base_class)
+END_MESSAGE_MAP()
+</code></pre>
+  </li>
+  <li>
+    <p>Modify your class constructor.</p>
+
+    <h4 id="rhino-5-class-2">Rhino 5 class</h4>
+
+    <pre><code>CDocumentPropertiesPage::CDocumentPropertiesPage()
+: CRhinoOptionsDialogPage(CDocumentPropertiesPage::IDD)
+{
+}
+</code></pre>
+
+    <h4 id="rhino-6-class-2">Rhino 6 class</h4>
+
+    <p>The <code>TRhinoOptionsPage&lt;CDialog&gt;</code> constructor takes three arguments:</p>
+
+    <ol>
+      <li>Contains the ID number of a dialog-box template resource.</li>
+      <li>Contains the ID number of a icon resource which is not currently used on Windows and may be zero.</li>
+      <li>If true the host will delete this page when the parent dialog window closes.</li>
+    </ol>
+
+    <pre><code>COptionsPage::COptionsPage()
+: TRhinoOptionsPage&lt;CDialog&gt;(COptionsPage::IDD, 0, true)
+{  
+}
+</code></pre>
+  </li>
+  <li>
+    <p>Rename your <code>EnglishPageTitle</code> and <code>LocalPageTitle</code> methods to <code>EnglishTitle</code> and <code>LocalTitle</code>respectively and add a <code>const</code> decoration to the functions.</p>
+
+    <h4 id="rhino-5-code">Rhino 5 code</h4>
+
+    <pre><code>const wchar_t* CDocumentPropertiesPage::EnglishPageTitle() { return L"Test Page"; }
+const wchar_t* CDocumentPropertiesPage::LocalPageTitle() { return EnglishPageTitle(); }
+</code></pre>
+
+    <h4 id="rhino-6-code">Rhino 6 code</h4>
+
+    <pre><code>const wchar_t* CDocumentPropertiesPage::EnglishTitle() const { return L"Test Page"; }
+const wchar_t* CDocumentPropertiesPage::LocalTitle() const { return EnglishTitle(); }
+</code></pre>
+
+    <p>​</p>
+  </li>
+  <li>
+    <p>Change the  <code>RunScript</code></p>
+  </li>
+</ol>
+
+<p>#### Rhino 5 code</p>
+
+<pre><code>  CRhinoCommand::result CDocumentPropertiesPage::RunScript(CRhinoDoc&amp; rhino_doc)
+  {
+    return CRhinoCommand::success;
+  }
+</code></pre>
+
+<p>#### Rhino 6 code</p>
+
+<p>Replace the <code>CRhinoDoc&amp;</code> argument with a <code>CRhinoOptionsPageEventArgs&amp;</code>.</p>
+
+<pre><code>  CRhinoCommand::result CDocumentPropertiesPage::RunScript(CRhinoOptionsPageEventArgs&amp; e)
+  {
+    // Access to the document assoicated with this options page if the page
+    CRhinoDoc* doc = e.Document();
+    return CRhinoCommand::success;
+  }
+</code></pre>
+
+<p>​</p>
+
+<ol>
+  <li>Change your<code>OnActivate</code>  method to <code>UpdatePage</code>and modify as appropriate.</li>
+</ol>
+
+<p>#### Rhino 5 code</p>
+
+<p>This Rhino 5  <code>OnActivate</code> method initializes the page when it is activated and shown and applies the page changes when the page is deactivated and hidden.</p>
+
+<pre><code>  int CDocumentPropertiesPage::OnActivate( BOOL bActive)
+  {
+    // Applychanges when the page is deactivated/hidden and 
+    // initialize page values when the page is activated/shown.
+    // This allows multiple pages to share settings values
+
+    // Apply changes when the page is no longer active
+    if (!bActive)
+      return OnApply();
+
+    // Initialize the page when activated
+    m_color_button.SetColor(CApp::App().ObjectColor(RhinoApp().ActiveDoc()));
+    return true;
+  }
+</code></pre>
+
+<p>#### Rhino 6 code</p>
+
+<p>This Rhino 6 method gets called each time the page is made activated and shown.  The Rhino 6 <code>Apply</code> method now gets called whenever the page is deactivated and hidden.</p>
+
+<pre><code>  void CDocumentPropertiesPage::UpdatePage(CRhinoOptionsPageEventArgs&amp; e)
+  {
+    // Initialize the page when activated
+    m_color_button.SetColor(CApp::App().ObjectColor(e.Document()));
+  }
+</code></pre>
+<p>​</p>
+
+<ol>
+  <li>Change your <code>OnApply</code> method to <code>Apply</code> and add the new <code>CRhinoOptionsPageEventArgs</code> parameter.  Rhino 5 only called <code>OnApply</code> when the dialog was closed, Rhino 6 calls <code>Apply</code>  when the page is hidden.
+  This is an example of a simple Rhino 5 <code>OnApply</code> method.</li>
+</ol>
+
+<p>#### Rhino 5 code</p>
+
+<pre><code>  int CDocumentPropertiesPage::OnApply()
+  {
+    // Set the document specific object color
+    CApp::App().SetObjectColor(Document(), m_color_button.Color());
+    return true;
+  }
+</code></pre>
+
+<p>#### Rhino 6 code</p>
+
+<p>Renamed to <code>Apply</code> and now takes a <code>CRhinoOptionsPageEventArgs&amp;</code> parameter.</p>
+
+<pre><code>  bool CDocumentPropertiesPage::Apply(CRhinoOptionsPageEventArgs&amp; e)
+  {
+    // The CRhinoOptionsPageEventArgs provides access the the CRhinoDoc
+    // associated with this page
+    // CRhinoDoc* doc = e.Document();
+    // Set the document specific object color
+    CApp::App().SetObjectColor(e.Document(), m_color_button.Color());
+    return true;
+  }
+</code></pre>
+
+<ol>
+  <li>If your options page supports the “Restore Defaults” button you will need to do the following:</li>
+</ol>
+
+<p>#### Rhino 5 code</p>
+
+<pre><code>  bool CDocumentPropertiesPage::ShowDefaultsButton(void)
+  {
+    // Override and return true to display the "Restore Defaults" button
+    return true;
+  }
+  // Called when the "Restore Defaults" button is clicked
+  void CDocumentPropertiesPage::OnDefaults(void)
+  {
+    // Set the color button to the default application object color
+    m_color_button.SetColor(CApp::DEFULLT_OBJECT_COLOR);
+  }
+</code></pre>
+
+<p>####  Rhino 6 code</p>
+
+<p>Rhino 6 supports optionally adding “Restore Defaults” and “Apply” buttons by overriding the <code>ButtonsToDisplay</code>  method and returning the buttons to display or <code>RhinoOptionPageButtons::None</code> to hide all optional buttons.  The base class implementation returns <code>RhinoOptionPageButtons::None</code> by default.</p>
+
+<pre><code>  RhinoOptionPageButtons ButtonsToDisplay() const override
+  {
+    // You may use the following to display both the "Restore Defaults" and "Apply" buttons:
+    // return RhinoOptionPageButtons::DefaultButton | RhinoOptionPageButtons::ApplyButton
+    // Just add the "Restore Defaults" button
+    return RhinoOptionPageButtons::DefaultButton;
+  }
+</code></pre>
+
+<p>The <code>OnDefaults</code> method was replace by the <code>OnRestoreDefaultsClick</code> method and the Apply button simply calls the <code>Apply</code> method.</p>
+
+<pre><code>  void CDocumentPropertiesPage::OnRestoreDefaultsClick(CRhinoOptionsPageEventArgs&amp; e)
+  {
+    // Get access to the CRhinoDoc associated with this page instance
+    // CRhinoDoc* doc = e.Document();
+    // Set the color button to the default application object color
+    m_color_button.SetColor(CApp::DEFULLT_OBJECT_COLOR);
+  }
+</code></pre>
+
+<h2 id="migrating-crhinoobjectpropertiesdialogpageex-derived-pages">Migrating <code>CRhinoObjectPropertiesDialogPageEx</code> derived pages</h2>
+
+<p>The <code>CRhinoObjectPropertiesDialogPageEx</code>  is used to add pages to the Rhino object properties panel.  The class provides the navigation control image, text and actual content page to be added.  The following is a description of what has changed in the Rhino 6 SDK and some simple examples of how to migrate your existing version 5 code.</p>
+
+<h3 id="header-file-changes-1">Header file changes</h3>
+
+<ol>
+  <li>
+    <p>Open the H file containing your derived class.</p>
+  </li>
+  <li>
+    <p>Add the following include to your H file:</p>
+
+    <pre><code>#include "rhinoSdkTMfcPages.h"
+</code></pre>
+  </li>
+  <li>
+    <p>Find your class declaration, for this example we will use the following:</p>
+
+    <pre><code>class CPropertiesPage : public CRhinoObjectPropertiesDialogPageEx
+{
+....
+};
+</code></pre>
+
+    <p>Replace it with this:</p>
+
+    <pre><code>class CDocumentPropertiesPage : public TRhinoPropertiesPanelPage&lt;CDialog&gt;
+{
+...
+};
+</code></pre>
+
+    <p>Your class will now use a Rhino provided template class which implements the <code>IRhinoPropertiesPanelPage</code> and <code>IRhinoWindow</code> interfaces.  The <code>IRhinoWindow</code> interface will wrap the <code>CDialog</code> class and provide direct access to window methods for creating, sizing, painting and destruction.  You can use any class that is derived from <code>CDialog</code> as long as the class constructor takes a resource Id and parent window.  The <code>TRhinoDialogWindow</code> template always pass <code>nullptr</code> as the parent window.</p>
+  </li>
+  <li>
+    <p>This is a list of Rhino 5 <code>CRhinoObjectPropertiesDialogPage</code> and <code>CRhinoStackedDialogPage</code> and there Rhino 6 equivalents.  You will need to modify these function declarations in your H file as well as there implementations.</p>
 
     <pre><code>// V5 Method
 virtual const wchar_t* EnglishPageTitle() = 0;
@@ -481,144 +839,7 @@ virtual void OnRestoreDefaultsClick(CRhinoOptionsPageEventArgs&amp; e);
   </li>
 </ol>
 
-<h3 id="cpp-implementation-file-changes">CPP Implementation file changes</h3>
-
-<ol>
-  <li>
-    <p>Open the CPP file containing your derived class implementation.</p>
-  </li>
-  <li>
-    <p>Replace all references to <code>CRhinoOptionsDialogPage</code> with <code>__base_clas</code>  which dereferences to <code>CDialog</code> in our case because we derive from <code>TRhinoOptionsPage&lt;CDialog&gt;.</code></p>
-  </li>
-  <li>
-    <p>Modify your class constructor to look something like this:</p>
-
-    <pre><code>COptionsPage::COptionsPage()
-: TRhinoOptionsPage&lt;CDialog&gt;(COptionsPage::IDD, 0, true)
-{
-     
-}
-</code></pre>
-
-    <p>The arguments passed to the <code>TRhinoOptionsPage</code> constructor are the dialog resource Id, the icon resource Id and a Boolean telling the template to delete the page instance when the dialog closes.  The icon resource Id is currently not used by Windows and may be set to zero.</p>
-  </li>
-  <li>
-    <p>Rename your <code>EnglishPageTitle</code> and <code>LocalPageTitle</code> methods to <code>EnglishTitle</code> and <code>LocalTitle</code>respectively and add a <code>const</code> decoration to the functions.</p>
-  </li>
-  <li>
-    <p>Change your <code>RunScript</code> method to:</p>
-  </li>
-</ol>
-
-<pre><code>  CRhinoCommand::result CDocumentPropertiesPage::RunScript(CRhinoOptionsPageEventArgs&amp; e)
-  {
-    // Access to the document assoicated with this options page if the page
-    CRhinoDoc* doc = e.Document();
-  }
-</code></pre>
-
-<p>​</p>
-
-<ol>
-  <li>Change your<code>OnActivate</code>  method to <code>UpdatePage</code>and modify as appropriate.  This is an example of a Rhino 5  <code>OnActivate</code> method that initializes the page when it is activated and show and applies the page changes when the page is deactivated and hidden.</li>
-</ol>
-
-<pre><code>  int CDocumentPropertiesPage::OnActivate( BOOL bActive)
-  {
-    // Applychanges when the page is deactivated/hidden and 
-    // initialize page values when the page is activated/shown.
-    // This allows multiple pages to share settings values
-
-    // Apply changes when the page is no longer active
-    if (!bActive)
-      return OnApply();
-
-    // Initialize the page when activated
-    m_color_button.SetColor(CApp::App().ObjectColor(RhinoApp().ActiveDoc()));
-    return true;
-  }
-</code></pre>
-
-<p>This is the Rhino 6 version that simply initializes the page, this method gets called each time the page is made visible.</p>
-
-<pre><code>  void CDocumentPropertiesPage::UpdatePage(CRhinoOptionsPageEventArgs&amp; e)
-  {
-    // Initialize the page when activated
-    m_color_button.SetColor(CApp::App().ObjectColor(e.Document()));
-  }
-</code></pre>
-
-<ol>
-  <li>Change your <code>OnApply</code> method to <code>Apply</code> and add the new <code>CRhinoOptionsPageEventArgs</code> parameter.  Rhino 5 only called <code>OnApply</code> when the dialog was closed, Rhino 6 calls <code>Apply</code>  when the page is hidden.
-  This is an example of a simple Rhino 5 <code>OnApply</code> method.</li>
-</ol>
-
-<pre><code>
-  int CDocumentPropertiesPage::OnApply()
-  {
-    // Set the document specific object color
-    CApp::App().SetObjectColor(RhinoApp().ActiveDoc(), m_color_button.Color());
-    return true;
-  }
-</code></pre>
-
-<p>This is the Rhino 6 version which uses the document passed to the <code>Apply</code> method.</p>
-
-<pre><code>  bool CDocumentPropertiesPage::Apply(CRhinoOptionsPageEventArgs&amp; e)
-  {
-    // Set the document specific object color
-    CApp::App().SetObjectColor(e.Document(), m_color_button.Color());
-    return true;
-  }
-</code></pre>
-
-<ol>
-  <li>If <code>ShowDefaultsButton</code> was overridden and returns true to display the “Restore Defaults” button when your page is activated then you will need to replace it with <code>ButtonsToDisplay</code> and or the buttons to display together or return None.  Rhino 5 only allows a page to specify displaying of the “Restore Defaults” button.  Rhino 6 allows a page to specify a “Apply” button as well.  This is a simple Rhino 5 example.</li>
-</ol>
-
-<pre><code>  bool ShowDefaultsButton(void) override { return true; }
-</code></pre>
-
-<p>This is how you would accomplish this in Rhino 6.</p>
-
-<pre><code>  RhinoOptionPageButtons ButtonsToDisplay() const override
-  {
-    // You may use the following to display both the "Restore Defaults" and "Apply" buttons:
-    // RhinoOptionPageButtons::DefaultButton | RhinoOptionPageButtons::ApplyButton
-    return RhinoOptionPageButtons::DefaultButton;
-  }
-</code></pre>
-
-<p>In addition you will need to change your <code>OnDefaults</code> override to <code>OnRestoreDefaultsClick</code>.  This is an example of a simple Rhino 5  <code>OnDefaults</code>  override.</p>
-
-<pre><code>  void CDocumentPropertiesPage::OnDefaults(void)
-  {
-    // Set the color button to the default application object color
-    m_color_button.SetColor(CApp::DEFULLT_OBJECT_COLOR);
-  }
-
-</code></pre>
-
-<p>This is the Rhino 6 version.</p>
-
-<pre><code>  void CDocumentPropertiesPage::OnRestoreDefaultsClick(CRhinoOptionsPageEventArgs&amp; e)
-  {
-    // Get access to the CRhinoDoc associated with this page instance
-    CRhinoDoc* doc = e.Document();
-    // Set the color button to the default application object color
-    m_color_button.SetColor(CApp::DEFULLT_OBJECT_COLOR);
-  }
-
-</code></pre>
-
-<p>​</p>
-
-<ol>
-  <li>​</li>
-</ol>
-
-<h2 id="migrating-crhinoobjectpropertiesdialogpage-derived-pages">Migrating CRhinoObjectPropertiesDialogPage derived pages</h2>
-
+<p>###</p>
 
         </article>
 
