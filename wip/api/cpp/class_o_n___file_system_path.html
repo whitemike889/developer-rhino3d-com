@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.0</span>
+   &#160;<span id="projectnumber">6.0 BETA</span>
    </div>
   </td>
  </tr>
@@ -86,6 +86,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a8ad8a4a324313bc01318d4adbb1c8326"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae93a38aa63e9dcc0bcd2b0ae75db855f"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_o_n__w_string.html">ON_wString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#ae93a38aa63e9dcc0bcd2b0ae75db855f">FileNameFromPath</a> (const wchar_t *path, bool bIncludeExtension)</td></tr>
 <tr class="separator:ae93a38aa63e9dcc0bcd2b0ae75db855f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56800da7050ed5f540136e4988d50ecb"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#a56800da7050ed5f540136e4988d50ecb">FilePathHas3dmExtension</a> (const wchar_t *file_path, bool bAllow3dmbakExtension)</td></tr>
+<tr class="separator:a56800da7050ed5f540136e4988d50ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0a16cebe01d806a9710b5fac1c99467"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#aa0a16cebe01d806a9710b5fac1c99467">FilePathHas3dmExtension</a> (const char *file_path, bool bAllow3dmbakExtension)</td></tr>
+<tr class="separator:aa0a16cebe01d806a9710b5fac1c99467"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b4349881117d108adefe337565c9281"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_o_n__w_string.html">ON_wString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#a6b4349881117d108adefe337565c9281">FullPathFromRelativePath</a> (const wchar_t *base_path, bool bBasePathIncludesFileName, const wchar_t *relative_path)</td></tr>
 <tr class="separator:a6b4349881117d108adefe337565c9281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed84407a71bad97021051c233932e7fe"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#aed84407a71bad97021051c233932e7fe">IsDirectory</a> (const char *path)</td></tr>
@@ -124,6 +128,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a42cf836992c6065461529427ef039ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a188c633784c9155768f95ce850315c85"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#a188c633784c9155768f95ce850315c85">SplitPath</a> (const wchar_t *path, <a class="el" href="class_o_n__w_string.html">ON_wString</a> *volume, <a class="el" href="class_o_n__w_string.html">ON_wString</a> *dir, <a class="el" href="class_o_n__w_string.html">ON_wString</a> *file_name_stem_and_extension)</td></tr>
 <tr class="separator:a188c633784c9155768f95ce850315c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fd28cbbdbc67d9ecb34282dfff71297"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_o_n__w_string.html">ON_wString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#a9fd28cbbdbc67d9ecb34282dfff71297">VolumeAndDirectoryFromPath</a> (const wchar_t *path)</td></tr>
+<tr class="separator:a9fd28cbbdbc67d9ecb34282dfff71297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45222bfc55d37169c54b0ac13cc29e37"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="class_o_n__w_string.html">ON_wString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___file_system_path.html#a45222bfc55d37169c54b0ac13cc29e37">VolumeFromPath</a> (const wchar_t *path)</td></tr>
 <tr class="separator:a45222bfc55d37169c54b0ac13cc29e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -140,8 +146,6 @@ Static Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>/ / Copyright (c) 1993-2015 Robert McNeel &amp; Associates. All rights reserved. / OpenNURBS, Rhinoceros, and Rhino3D are registered trademarks of Robert / McNeel &amp; Associates. / / THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY. / ALL IMPLIED WARRANTIES OF FITNESS FOR ANY PARTICULAR PURPOSE AND OF / MERCHANTABILITY ARE HEREBY DISCLAIMED. / / For complete openNURBS copyright information see <a href="http://www.opennurbs.org">http://www.opennurbs.org</a>. / ////////////////////////////////////////////////////////////// </p>
-
-<p class="definition">Definition at line <a class="el" href="opennurbs__file__utilities_8h_source.html#l00022">22</a> of file <a class="el" href="opennurbs__file__utilities_8h_source.html">opennurbs_file_utilities.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af8fee8aee148bbcf87ea9cefe46eeba5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8fee8aee148bbcf87ea9cefe46eeba5">&#9670;&nbsp;</a></span>CleanPath() <span class="overload">[1/2]</span></h2>
@@ -401,6 +405,78 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Parameters: path - [in] path to split bIncludeExtension - [in] Returns: The file name portion of the path. </p>
+
+</div>
+</div>
+<a id="a56800da7050ed5f540136e4988d50ecb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56800da7050ed5f540136e4988d50ecb">&#9670;&nbsp;</a></span>FilePathHas3dmExtension() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ON_FileSystemPath::FilePathHas3dmExtension </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>file_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bAllow3dmbakExtension</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0a16cebe01d806a9710b5fac1c99467"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0a16cebe01d806a9710b5fac1c99467">&#9670;&nbsp;</a></span>FilePathHas3dmExtension() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool ON_FileSystemPath::FilePathHas3dmExtension </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>file_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bAllow3dmbakExtension</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1101,6 +1177,33 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9fd28cbbdbc67d9ecb34282dfff71297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fd28cbbdbc67d9ecb34282dfff71297">&#9670;&nbsp;</a></span>VolumeAndDirectoryFromPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const <a class="el" href="class_o_n__w_string.html">ON_wString</a> ON_FileSystemPath::VolumeAndDirectoryFromPath </td>
+          <td>(</td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Parameters: path - [in] path to split Returns: The volume and directory portion of the path. </p>
+
+</div>
+</div>
 <a id="a45222bfc55d37169c54b0ac13cc29e37"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a45222bfc55d37169c54b0ac13cc29e37">&#9670;&nbsp;</a></span>VolumeFromPath()</h2>
 
@@ -1149,8 +1252,6 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="opennurbs__file__utilities_8h_source.html#l00042">42</a> of file <a class="el" href="opennurbs__file__utilities_8h_source.html">opennurbs_file_utilities.h</a>.</p>
-
 </div>
 </div>
 <a id="a63a93220ec63160b28218856f0456433"></a>
@@ -1173,8 +1274,6 @@ Static Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="opennurbs__file__utilities_8h_source.html#l00041">41</a> of file <a class="el" href="opennurbs__file__utilities_8h_source.html">opennurbs_file_utilities.h</a>.</p>
-
 </div>
 </div>
 <a id="aae9819121b9ebd432e557564cbf544a6"></a>
@@ -1196,8 +1295,6 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="opennurbs__file__utilities_8h_source.html#l00039">39</a> of file <a class="el" href="opennurbs__file__utilities_8h_source.html">opennurbs_file_utilities.h</a>.</p>
 
 </div>
 </div>
@@ -1222,14 +1319,12 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Platform dependent character used to separate directory names. On Windows platforms: <a class="el" href="class_o_n___file_system_path.html#aae9819121b9ebd432e557564cbf544a6">ON_FileSystemPath::DirectorySeparator</a> = <a class="el" href="class_o_n__w_string.html#a718636bfb9d4177a18761b8ed6562824" title="Unicode REVERSE SOLIDUS U+005C. ">ON_wString::Backslash</a>. On UNIX (including modern Apple) platforms: <a class="el" href="class_o_n___file_system_path.html#aae9819121b9ebd432e557564cbf544a6">ON_FileSystemPath::DirectorySeparator</a> = <a class="el" href="class_o_n__w_string.html#a4aa245420f53c181b354801b8ad80042" title="Unicode SOLIDUS U+002F. ">ON_wString::Slash</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="opennurbs__file__utilities_8h_source.html#l00038">38</a> of file <a class="el" href="opennurbs__file__utilities_8h_source.html">opennurbs_file_utilities.h</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 26 2017 16:18:55 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 28 2017 08:20:05 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

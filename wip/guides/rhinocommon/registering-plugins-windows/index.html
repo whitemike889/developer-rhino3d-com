@@ -231,6 +231,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -336,31 +342,6 @@ $(document).ready(function()
               <a href="#finding-the-rhino-registry-key">Finding the Rhino Registr...</a>
 
               
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-32-bit-windows">On 32-bit Windows</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-64-bit-windows">On 64-bit Windows</a>
-                    </li>
-                  
-
-                </ul>
-              
 
             </li>
           
@@ -376,49 +357,6 @@ $(document).ready(function()
             <li>
               <a href="#registering-your-plugin">Registering Your Plugin</a>
 
-              
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-32-bit-windows-1">On 32-bit Windows</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-64-bit-windows-1">On 64-bit Windows</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-32-bit-windows-2">On 32-bit Windows</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#on-64-bit-windows-2">On 64-bit Windows</a>
-                    </li>
-                  
-
-                </ul>
               
 
             </li>
@@ -514,98 +452,38 @@ $(document).ready(function()
 
           <h2 id="overview">Overview</h2>
 
-<p>While a Rhino plugin can simply be distributed as an <em>rhp</em> file, and loaded using Rhino’s <em>PlugInManager</em> command, it is often necessary to install the plugin as part of a product installation process.  To install plugin from an installer, your installer will be required to access a number of entries in the Windows Registry.</p>
+<p>While a Rhino plugin can simply be distributed as a <em>.rhp</em> file, and loaded using Rhino’s <em>PlugInManager</em> command, it is often necessary to install the plugin as part of a product installation process.  To install plugin from an installer, your installer will be required to access a number of entries in the Windows Registry.</p>
 
 <p>While reading this article, it is helpful to use the standard Windows Registry editing tool, <em>REGEDIT.EXE</em>, to follow along and see how Rhino’s Registry entries are structured.</p>
 
 <h2 id="finding-the-rhino-registry-key">Finding the Rhino Registry Key</h2>
 
-<p>Rhino plugins are registered in the following locations in the Windows Registry:</p>
+<p>Rhino plugins are registered at the following location in the Windows Registry:</p>
 
-<h3 id="on-32-bit-windows">On 32-bit Windows</h3>
-
-<p>Rhino 5 32-bit:</p>
-
-<p><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\5.0\Plug-ins</code></p>
-
-<h3 id="on-64-bit-windows">On 64-bit Windows</h3>
-
-<p>Rhino 5 64-bit:</p>
-
-<p><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\5.0x64\Plug-ins</code></p>
-
-<p>Rhino 5 32-bit:</p>
-
-<p><code>HKEY_LOCAL_MACHINE\Software\Wow6432Node\McNeel\Rhinoceros\5.0\Plug-ins</code></p>
+<p><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\6.0\Plug-ins</code></p>
 
 <h2 id="registering-your-plugin">Registering Your Plugin</h2>
 
-<p>To register your plugin with Rhino, you will need to create a new Registry key in the following locations depending on the Rhino version.  The name of the Registry key will be your plugin’s GUID, formatted as a string.  For example:</p>
+<p>To register your plugin with Rhino, you will need to create a new Registry key at the above location.  The name of the Registry key will be your plugin’s GUID, formatted as a string.  For example:</p>
 
-<h3 id="on-32-bit-windows-1">On 32-bit Windows</h3>
+<p><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\6.0\Plug-ins\&lt;your_plugin_guid&gt;</code></p>
 
-<p>Rhino 5 32-bit:</p>
+<p>Under this new Registry key, create two new value names, <code>Name</code> and <code>FileName</code> that contain strings that identify your plugin’s name and the full path to the <em>.rhp</em> file, respectively.  For example, if you had created a new plugin named <em>“MySamplePlugIn”</em>, the registry might look something like the following:</p>
 
-<p><code>HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\5.0\Plug-ins\&lt;your_plugin_guid&gt;</code></p>
-
-<h3 id="on-64-bit-windows-1">On 64-bit Windows</h3>
-
-<p>Rhino 5 64-bit:</p>
-
-<p><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\5.0x64\Plug-ins\&lt;your_plugin_guid&gt;</code></p>
-
-<p>Rhino 5 32-bit:</p>
-
-<p><code>HKEY_LOCAL_MACHINE\Software\Wow6432Node\McNeel\Rhinoceros\5.0\Plug-ins\&lt;your_plugin_guid&gt;</code></p>
-
-<p>Under this new Registry key, create two new value names, <em>Name</em> and <em>FileName</em> that contain strings that identify your plugin’s name and the full path to the <em>.rhp</em> file, respectively.  For example, if I had created a new plugin named <em>“FooBar”</em> that I has installed in Rhino’s plugins folder, the registry would look like the following:</p>
-
-<h3 id="on-32-bit-windows-2">On 32-bit Windows</h3>
-
-<p>Rhino 5 32-bit:</p>
-
-<pre><code>HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\5.0\Plug-Ins\F3CF4A28-EA9E-4E08-BABA-5FC6645A5D72
+<pre><code>HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\6.0\Plug-Ins\F3CF4A28-EA9E-4E08-BABA-5FC6645A5D72
 
 Value:  Name
 Type:   REG_SZ
-Data:   FooBar
+Data:   MySamplePlugIn
 
 Value:  FileName
 Type:   REG_SZ
-Data:   C:\Program Files\Rhinoceros 5\Plug-Ins\FooBar.rhp
-</code></pre>
-
-<h3 id="on-64-bit-windows-2">On 64-bit Windows</h3>
-
-<p>Rhino 5 64-bit:</p>
-
-<pre><code>HKEY_LOCAL_MACHINE\Software\McNeel\Rhinoceros\5.0x64\Plug-ins\F3CF4A28-EA9E-4E08-BABA-5FC6645A5D72
-
-Value:  Name
-Type:   REG_SZ
-Data:   FooBar
-
-Value:  FileName
-Type:   REG_SZ
-Data:   C:\Program Files\Rhinoceros 5 (64-Bit)\Plug-Ins\FooBar.rhp
-</code></pre>
-
-<p>Rhino 5 32-bit:</p>
-
-<pre><code>HKEY_LOCAL_MACHINE\Software\Wow6432Node\McNeel\Rhinoceros\5.0\Plug-ins\F3CF4A28-EA9E-4E08-BABA-5FC6645A5D72
-
-Value:  Name
-Type:   REG_SZ
-Data:   FooBar
-
-Value:  FileName
-Type:   REG_SZ
-Data:   C:\Program Files (x86)\Rhinoceros 5\Plug-Ins\FooBar.rhp
+Data:   C:\Program Files\My Company\My Sample PlugIn\MySamplePlugIn.rhp
 </code></pre>
 
 <h2 id="automatic-loading">Automatic Loading</h2>
 
-<p>Rhino will attempt to load your plugin the next time Rhino launches if the <em>Name</em> and <em>FileName</em> Registry values and data are present in your plugin’s Registry key.  Rhino will briefly display a <em>Preparing plugins for first use</em> dialog if the plugin loads correctly.</p>
+<p>Rhino will attempt to load your plugin the next time Rhino launches if the <code>Name</code> and <code>FileName</code> Registry values and data are present in your plugin’s Registry key.  Rhino will briefly display a <em>“Preparing plugins for first use”</em> dialog if the plugin loads correctly.</p>
 
 <p>When your plugin loads for the first time, the rest of the normal Registry keys/value pairs in your plugin’s Registry key will be filled in.</p>
 
@@ -613,13 +491,13 @@ Data:   C:\Program Files (x86)\Rhinoceros 5\Plug-Ins\FooBar.rhp
 
 <p>There are other useful key values that are found in the following locations depending on the Rhino version:</p>
 
-<p><code>HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\5.0\Install</code></p>
+<p><code>HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\6.0\Install</code></p>
 
 <p>where…</p>
 
 <ul>
-  <li><em>InstallPath</em> contains the full path to the Rhino installation folder.</li>
-  <li><em>Path</em> contains the full path to the System folder under the Rhino folder.</li>
+  <li><code>InstallPath</code> contains the full path to the Rhino installation folder.</li>
+  <li><code>Path</code> contains the full path to the System folder under the Rhino folder.</li>
 </ul>
 
 <h2 id="hints">Hints</h2>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.0</span>
+   &#160;<span id="projectnumber">6.0 BETA</span>
    </div>
   </td>
  </tr>
@@ -674,8 +674,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Each display pipeline contains a display engine. The engine performs the actual API specific calls to draw (GDI, OpenGL, DirectX). This is the generic base class that performs common engine operations. Subclasses will draw using specific display technologies (<a class="el" href="class_c_rhino_display_engine___o_g_l.html">CRhinoDisplayEngine_OGL</a>, <a class="el" href="class_c_rhino_display_engine___g_d_i.html">CRhinoDisplayEngine_GDI</a>) </p>
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l00131">131</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a607a1f88d9dd6ba28f8f839f9068309e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a607a1f88d9dd6ba28f8f839f9068309e">&#9670;&nbsp;</a></span>CRhinoDisplayEngine()</h2>
@@ -3533,6 +3531,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="class_c_rhino_display_engine___g_d_i.html#a92ecd529d409b755dd13855661f8545c">CRhinoDisplayEngine_GDI</a>.</p>
 
 </div>
 </div>
@@ -6758,8 +6758,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01109">1109</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="ac85a869af1272b244caefebfc755af42"></a>
@@ -6781,8 +6779,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01110">1110</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -6809,8 +6805,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>(near+far) </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01139">1139</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="afc0bf9d594eb6f9572b9b1e7ea5dc7be"></a>
@@ -6834,8 +6828,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>(far-near) </p>
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01140">1140</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -6861,8 +6853,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>m__zbias_d*/(4*near*far) </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01141">1141</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="ab53779e19ab67801e588a7caa5b6e94a"></a>
@@ -6886,8 +6876,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>parallel proj bias or 0 for no zbias </p>
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01138">1138</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -6913,8 +6901,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>true to return constance bias </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01137">1137</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a8dee183398336693033678144744d3f6"></a>
@@ -6937,8 +6923,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>If m_bInfiniteDepth = true, then wireframe drawing does not clip at the near/far clipping planes. This is useful when code like curvature hair display or control polygon editing is drawing curves and points that are often outside the view frustum and changing the near/far clipping planes to include the wireframe is either computationally expensive or leads to numerically unstable view frustums. The default setting of m_bInfiniteDepth is false. The setting is controlled by CRhinoDisplayPipeline::SetInfinteDepth() and reported by <a class="el" href="class_c_rhino_display_pipeline.html#adab157a39133186aa6f54feee3e89d43">CRhinoDisplayPipeline::InfiniteDepth()</a>. It is a "state" setting and any code that changes m_bInfiniteDepth is responsible for restoring its value to the previous setting. </p>
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01172">1172</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -6964,8 +6948,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Stereo viewing opertaions... </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01124">1124</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="ad3d9ad251828af634668430ba3c96ec7"></a>
@@ -6987,8 +6969,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01152">1152</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7012,8 +6992,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01133">1133</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a04c41d2701ab2fe33cf6cb71a7f8f0de"></a>
@@ -7035,8 +7013,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01155">1155</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7060,8 +7036,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01180">1180</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a7a94a3f7d736d7a2525c54c260250def"></a>
@@ -7083,8 +7057,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01181">1181</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7110,8 +7082,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>tolerance in clipping coordinates </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01182">1182</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a34d153115eed2ea9add83a49aaed94fb"></a>
@@ -7133,8 +7103,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01174">1174</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7158,8 +7126,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01150">1150</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a174bc236ad146f2b34bc8543795be229"></a>
@@ -7182,8 +7148,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01149">1149</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a532fdb07e0ff45847e14b299fe0cc68b"></a>
@@ -7205,8 +7169,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01144">1144</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7232,8 +7194,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>scaling for high resolution displays </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01146">1146</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a9ae5fbfe46389297a2c1b86c6fa69329"></a>
@@ -7258,8 +7218,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>0 = accurate, 1 = fast, 2 = really </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01184">1184</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a7905b82f7e3615b9756d4be077a1fa42"></a>
@@ -7282,8 +7240,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01126">1126</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="aabda7566578944ca4ad6e9579b11af59"></a>
@@ -7305,8 +7261,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01125">1125</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7331,8 +7285,6 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Device Context handle render target. </p>
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01131">1131</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7359,8 +7311,6 @@ Additional Inherited Members</h2></td></tr>
 <p>Engine display and drawing attributes... </p>
 <p>Window handle for window based render targets </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01130">1130</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a82f376fb95f6624f7390e8bbfd0cb6dd"></a>
@@ -7382,8 +7332,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01148">1148</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7407,8 +7355,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01154">1154</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a0af9929bd2efbcac3465ac4aacb18b30"></a>
@@ -7430,8 +7376,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01121">1121</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7458,8 +7402,6 @@ Additional Inherited Members</h2></td></tr>
 <p>Viewport size attributes... </p>
 <p>Common attributes "probably" used by most engine implementations. Note: These get set appropriately by the framework when necessary so there's no guess-work and no duplication needed by other engines. see description for "NotifyProjectionChanged" </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01120">1120</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="ab85a3657a38572f52acac5844e9716f8"></a>
@@ -7481,8 +7423,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01186">1186</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7506,8 +7446,6 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01176">1176</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a97c90fe4f609e0b170e46622c99bcf7c"></a>
@@ -7529,8 +7467,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01177">1177</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
 
 </div>
 </div>
@@ -7556,8 +7492,6 @@ Additional Inherited Members</h2></td></tr>
 
 <p>screen buffer drawing tolerances </p>
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01178">1178</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 <a id="a1d0cb2ea2ba23fa28ad6c6aeb3117678"></a>
@@ -7580,14 +7514,12 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_rhino_sdk_display_engine_8h_source.html#l01135">1135</a> of file <a class="el" href="_rhino_sdk_display_engine_8h_source.html">RhinoSdkDisplayEngine.h</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 26 2017 16:18:32 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 28 2017 08:19:49 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

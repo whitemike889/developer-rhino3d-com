@@ -27,6 +27,7 @@ var searchData=
   ['irhinopropertiespanelpageeventargs',['IRhinoPropertiesPanelPageEventArgs',['../class_i_rhino_properties_panel_page_event_args.html',1,'']]],
   ['irhinopropertiespanelpageeventwatcher',['IRhinoPropertiesPanelPageEventWatcher',['../class_i_rhino_properties_panel_page_event_watcher.html',1,'']]],
   ['irhinopropertiespanelpagehost',['IRhinoPropertiesPanelPageHost',['../class_i_rhino_properties_panel_page_host.html',1,'']]],
+  ['irhinosnapshotsclient',['IRhinoSnapshotsClient',['../class_i_rhino_snapshots_client.html',1,'']]],
   ['irhinouicontroller',['IRhinoUiController',['../class_i_rhino_ui_controller.html',1,'']]],
   ['irhinouicontrollereventwatcher',['IRhinoUiControllerEventWatcher',['../class_i_rhino_ui_controller_event_watcher.html',1,'']]],
   ['irhinouidatasource',['IRhinoUiDataSource',['../class_i_rhino_ui_data_source.html',1,'']]],
@@ -144,5 +145,5 @@ var searchData=
   ['irhwidgetdrawcache',['IRhWidgetDrawCache',['../class_i_rh_widget_draw_cache.html',1,'']]],
   ['isignalupdate',['ISignalUpdate',['../class_rh_rdk_1_1_realtime_1_1_i_signal_update.html',1,'RhRdk::Realtime']]],
   ['itabbeddockbareventwatcher',['ITabbedDockBarEventWatcher',['../class_i_tabbed_dock_bar_event_watcher.html',1,'']]],
-  ['iterator',['Iterator',['../class_i_rh_rdk___x_m_l_section_1_1_iterator.html',1,'IRhRdk_XMLSection::Iterator'],['../class_i_rh_rdk_content_list_1_1_iterator.html',1,'IRhRdkContentList::Iterator']]]
+  ['iterator',['Iterator',['../class_i_rh_rdk_content_list_1_1_iterator.html',1,'IRhRdkContentList::Iterator'],['../class_i_rh_rdk___x_m_l_section_1_1_iterator.html',1,'IRhRdk_XMLSection::Iterator']]]
 ];
