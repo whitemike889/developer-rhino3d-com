@@ -23,6 +23,7 @@ var searchData=
   ['channormalz',['chanNormalZ',['../class_i_rh_rdk_render_window.html#a824bd4b27911ef7e0055f230112ecad3',1,'IRhRdkRenderWindow']]],
   ['chanobjectids',['chanObjectIds',['../class_i_rh_rdk_render_window.html#a84b277248c6e3653e0becaed1dcb37c9',1,'IRhRdkRenderWindow']]],
   ['chanred',['chanRed',['../class_i_rh_rdk_render_window.html#a447bbd061c141c335a29fbe027bc1265',1,'IRhRdkRenderWindow']]],
+  ['chanrgb',['chanRGB',['../class_i_rh_rdk_render_window.html#a0cc481f5be855457a24a85c3a13221e3',1,'IRhRdkRenderWindow']]],
   ['chanrgba',['chanRGBA',['../class_i_rh_rdk_render_window.html#a908e341323f0018dfa58d414ccc9975b',1,'IRhRdkRenderWindow']]],
   ['chanwireframe',['chanWireframe',['../class_i_rh_rdk_render_window.html#a5124b33b7d08d4ec8a5cf85f8357f111',1,'IRhRdkRenderWindow']]],
   ['chanwireframeannotationsrgba',['chanWireframeAnnotationsRGBA',['../class_i_rh_rdk_render_window.html#a5966f585a727f57b40ee99b1c8581bfb',1,'IRhRdkRenderWindow']]],
@@ -53,6 +54,6 @@ var searchData=
   ['current_5fv_5fcolor',['current_v_color',['../class_c_rhino_widget_color_settings.html#a4a998ef45a0ca9a03281946c403c47ab',1,'CRhinoWidgetColorSettings']]],
   ['current_5fw_5fcolor',['current_w_color',['../class_c_rhino_widget_color_settings.html#ab87829e182dd5eb1e05865d47cd66582',1,'CRhinoWidgetColorSettings']]],
   ['currentculture',['CurrentCulture',['../class_o_n___locale.html#aa08f2914ddad52ab4f608072c6f8320e',1,'ON_Locale']]],
-  ['cx',['cx',['../class_o_n__2i_size.html#aa8fe8baca78816a2ff836219eff75e5c',1,'ON_2iSize']]],
-  ['cy',['cy',['../class_o_n__2i_size.html#a40c7eb93ad042f3849d5821841c95734',1,'ON_2iSize']]]
+  ['cx',['cx',['../class_o_n__2i_size.html#aa8fe8baca78816a2ff836219eff75e5c',1,'ON_2iSize::cx()'],['../class_o_n__2d_size.html#ae0197628b652f2ad7f3dcedb03aff625',1,'ON_2dSize::cx()']]],
+  ['cy',['cy',['../class_o_n__2i_size.html#a40c7eb93ad042f3849d5821841c95734',1,'ON_2iSize::cy()'],['../class_o_n__2d_size.html#abf45e89049f7cd5a88f66f9f2873a3d7',1,'ON_2dSize::cy()']]]
 ];

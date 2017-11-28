@@ -3,6 +3,7 @@ var searchData=
   ['realtimedisplaymode',['RealtimeDisplayMode',['../struct_realtime_display_mode.html',1,'']]],
   ['registeredpipeline',['RegisteredPipeline',['../struct_registered_pipeline.html',1,'']]],
   ['render_5farctic_5foptions',['RENDER_ARCTIC_OPTIONS',['../class_c_rh_rdk_render_plug_in_1_1_r_e_n_d_e_r___a_r_c_t_i_c___o_p_t_i_o_n_s.html',1,'CRhRdkRenderPlugIn']]],
+  ['rhdevelopablesurface',['RhDevelopableSurface',['../class_rh_developable_surface.html',1,'']]],
   ['rhdisplacement',['RhDisplacement',['../class_rh_displacement.html',1,'']]],
   ['rhdisplacementargs',['RhDisplacementArgs',['../class_rh_displacement_args.html',1,'']]],
   ['rhdocdimension',['RhDocDimension',['../class_c_rhino_get_dim_linear_1_1_rh_doc_dimension.html',1,'CRhinoGetDimLinear']]],

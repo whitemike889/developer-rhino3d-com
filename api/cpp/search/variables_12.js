@@ -88,12 +88,13 @@ var searchData=
   ['rhino_5fzebra_5fstripe_5fanalysis_5fmode_5fid',['RHINO_ZEBRA_STRIPE_ANALYSIS_MODE_ID',['../group___rhino.html#gaa6cb419931d9ab2c0a5a1150f66e9ed6',1,'rhinoSdkAnalysisModes.h']]],
   ['rhinolegacymesherid',['RhinoLegacyMesherId',['../class_o_n___mesh_parameters.html#a3bc79686ef49bf8f74fb5fdc589126e8',1,'ON_MeshParameters']]],
   ['rhrdkchangecontext',['RhRdkChangeContext',['../group___r_d_k.html#ga6fe9da5a5e15a35de78ba87d08456d8c',1,'RhRdkDefinitions.h']]],
+  ['rhrdkfiltercontentbyusage',['RhRdkFilterContentByUsage',['../group___r_d_k.html#ga02c42fa29d986cdfe35de7d117e3af8f',1,'RhRdkDefinitions.h']]],
   ['rhrdkimagedropchoice',['RhRdkImageDropChoice',['../group___r_d_k.html#gac4edf976feae0d634e93b8320d5cf450',1,'RhRdkDefinitions.h']]],
   ['rhrdkmaterialsource',['RhRdkMaterialSource',['../group___r_d_k.html#gaf565c1907adabb3706ab8751090f2644',1,'RhRdkDefinitions.h']]],
   ['rhrdkmiioption',['RhRdkMiiOption',['../group___r_d_k.html#gabc3e397f4e27b54d094c45c107614ff6',1,'RhRdkDefinitions.h']]],
   ['rhrdkuiframeworks',['RhRdkUiFrameworks',['../group___r_d_k.html#ga436bac319d22caeb62c0e1e102a7c92e',1,'RhRdkDefinitions.h']]],
   ['rhrdkuimodalities',['RhRdkUiModalities',['../group___r_d_k.html#gacc6354b5a3aefbb4f48f2f6d8dd322ec',1,'RhRdkDefinitions.h']]],
   ['rhrdkusercontrol',['RhRdkUserControl',['../group___r_d_k.html#ga78e1b6af4fb37c301ef8306f02577341',1,'RhRdkDefinitions.h']]],
-  ['right',['right',['../class_o_n__4i_rect.html#a8ae4ed0c7d14918ae647409e0e5caa41',1,'ON_4iRect']]],
+  ['right',['right',['../class_o_n__4i_rect.html#a8ae4ed0c7d14918ae647409e0e5caa41',1,'ON_4iRect::right()'],['../class_o_n__4d_rect.html#a239cfaf00791c2cf5fcbc8a616bd6b0d',1,'ON_4dRect::right()']]],
   ['rtf_5ffont_5findex',['rtf_font_index',['../structtag_font_key.html#a8648c8c85bee4d113aecf407dd96c659',1,'tagFontKey']]]
 ];

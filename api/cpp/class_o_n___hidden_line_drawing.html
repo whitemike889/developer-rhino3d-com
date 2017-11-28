@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.0</span>
+   &#160;<span id="projectnumber">6.0 BETA</span>
    </div>
   </td>
  </tr>
@@ -166,8 +166,6 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><dl class="section rcs"><dt>NoKeywords</dt><dd></dd></dl>
 <p>/ / Copyright (c) 1993-2013 Robert McNeel &amp; Associates. All rights reserved. / OpenNURBS, Rhinoceros, and Rhino3D are registered trademarks of Robert / McNeel &amp; Associates. / / THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY. / ALL IMPLIED WARRANTIES OF FITNESS FOR ANY PARTICULAR PURPOSE AND OF / MERCHANTABILITY ARE HEREBY DISCLAIMED. / / For complete openNURBS copyright information see <a href="http://www.opennurbs.org">http://www.opennurbs.org</a>. / ////////////////////////////////////////////////////////////// </p>
-
-<p class="definition">Definition at line <a class="el" href="opennurbs__plus__hiddenline_8h_source.html#l00036">36</a> of file <a class="el" href="opennurbs__plus__hiddenline_8h_source.html">opennurbs_plus_hiddenline.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a62c3a4e0c57d2cec405d455444b41a9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a62c3a4e0c57d2cec405d455444b41a9d">&#9670;&nbsp;</a></span>ON_HiddenLineDrawing() <span class="overload">[1/3]</span></h2>
@@ -903,6 +901,7 @@ Public Attributes</h2></td></tr>
 <p>Step II. Specify viewport. </p>
 <p>Description: Set the viewport for the hidden line drawing. The viewport supplies the projection that determines the visibility of curves, and the HiddenLineDrawing coordinate system in which the resulting <a class="el" href="class_o_n___h_l_d_curve.html">ON_HLDCurve</a>'s are represented. The HLD-coordinate system is a right handed system for 3-d model space, in which the 3rd coordinate direction is the projection direction. In particular the z-coordinate direction points from the scene toward the camera. Parameters: v -[in] viewport. A copy of the viewport is made inside of <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a>. Returns: true if viewport has been set Details: Only allowed before calling Draw(..).</p>
 <p>For perspective views the "target depth" is used to determine the scale of the results. The target_depth, v.TargetDistance(false), defines the target plane that is the plane perpendicular to the camera axis at this distance from the camera location. The HLD-Coordinate system is scaled 1:1 to world coordinates on the target plane. The HLD_coordinate system is translated in the z-direction so that the target plane has z=0 in HLD-coordinates. If you have a viewport and don't want to think about the choice of target_depth you might want to try: double near = v.FrustumNear(); double far = v.FrustumFar(); double target_distance = .5*(near + far); bool rc = v.SetFrustumNearFar( near, far, 0.0, 0.0, target_distance); if( rc) HLD.SetViewport(v);</p>
+<p>Another option is to leave the target_depth unset, or more explicity call v.SetTargetPoint( ON_UNSET_POINT) When the taget point is unset, a target_depth will be computed from the geometry and used to define the HLD coordintate system.</p>
 <p>Perspective distortion ( on perspective views only) will scale objects in front (back) of the target plane to be larger (smaller) in HLD-coordinates than in world coordinates. The absolute tolerance is applied in HLD-coordinates so its effect depends on the target_depth setting.</p>
 <p>If v is a parallel projection viewport the HLD-coordinate system is the camera coordinate system of v.</p>
 <p>For perspective views the transformation from world coordinates to HLD-coordinates is a diagonal scaling of the view transformation from world to clip coordinates. Specifically [ W/2 ] World_to_HLD-coordinates = [ H/2 ] x World_to_clip_coordinates [ (f - n)/2 d ] [ 1.0 ]</p>
@@ -960,8 +959,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="opennurbs__plus__hiddenline_8h_source.html#l00277">277</a> of file <a class="el" href="opennurbs__plus__hiddenline_8h_source.html">opennurbs_plus_hiddenline.h</a>.</p>
-
 </div>
 </div>
 <a id="a4f3a551ea5b21f851c373d23933c9b40"></a>
@@ -976,8 +973,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Step VI. After Draw the results are available as arrays of <a class="el" href="class_o_n___h_l_d_full_curve.html">ON_HLDFullCurve</a> and <a class="el" href="class_o_n___h_l_d_curve.html">ON_HLDCurve</a>. m_curve and m_full_curve are the results of the draw operation. </p>
-
-<p class="definition">Definition at line <a class="el" href="opennurbs__plus__hiddenline_8h_source.html#l00276">276</a> of file <a class="el" href="opennurbs__plus__hiddenline_8h_source.html">opennurbs_plus_hiddenline.h</a>.</p>
 
 </div>
 </div>
@@ -995,14 +990,12 @@ Public Attributes</h2></td></tr>
 
 <p>m_object is the array of objects that that have been added and will be used in the <a class="el" href="class_o_n___hidden_line_drawing.html#a3b34c5e344124631f210f90fdfcf37a1" title="Step V. Draw objects hidden line drawings. ">Draw()</a> operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="opennurbs__plus__hiddenline_8h_source.html#l00235">235</a> of file <a class="el" href="opennurbs__plus__hiddenline_8h_source.html">opennurbs_plus_hiddenline.h</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 26 2017 16:18:55 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 28 2017 08:20:05 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.0</span>
+   &#160;<span id="projectnumber">6.0 BETA</span>
    </div>
   </td>
  </tr>
@@ -145,9 +145,8 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>class <a class="el" href="class_c_rhino_license_validator.html">CRhinoLicenseValidator</a></p>
-<p>Description: Class for validating licenses for the Rhino license manager. For each plug-in, there can only be a single <a class="el" href="class_c_rhino_license_validator.html">CRhinoLicenseValidator</a> derived class and a single static instance that exists in the .CPP file where the class is defined. No other declarations or instances of a class derived from <a class="el" href="class_c_rhino_license_validator.html">CRhinoLicenseValidator</a> should ever be defined or created. </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01459">1459</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
+<p>Description: Class for validating licenses for the Rhino license manager. For each plug-in, there can only be a single <a class="el" href="class_c_rhino_license_validator.html">CRhinoLicenseValidator</a> derived class and a single static instance that exists in the .CPP file where the class is defined. No other declarations or instances of a class derived from <a class="el" href="class_c_rhino_license_validator.html">CRhinoLicenseValidator</a> should ever be defined or created.</p>
+<p>For details on how the licensing system in Rhino works, see <a href="http://developer.rhino3d.com/guides/cpp/creating-zoo-plugins/">http://developer.rhino3d.com/guides/cpp/creating-zoo-plugins/</a> </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a71d6a979797e93cce3de61b5a09807b4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a71d6a979797e93cce3de61b5a09807b4">&#9670;&nbsp;</a></span>product_build_type</h2>
@@ -173,8 +172,6 @@ Friends</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01465">1465</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="ac47de9c581a8307b49107a1510d78161"></a>
@@ -198,8 +195,6 @@ Friends</h2></td></tr>
 <tr><td class="fieldname"><a id="ac47de9c581a8307b49107a1510d78161ac33572cfdae78075ba84ff1671dec834"></a>result_force_32bit&#160;</td><td class="fielddoc"><p>For internal use only. </p>
 </td></tr>
 </table>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01482">1482</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -270,7 +265,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description: When the cloud zoo voids a lease, this function is called. </p>
+<p>Description: When Rhino Accounts gets a new lease, this function is called. If the Rhino Accounts server determines that this lease is no longer valid, it will signal Rhino, and OnLeaseChanged will be called with a null CRhinoLeaseChangedEventArgs.Lease </p>
 
 </div>
 </div>
@@ -359,7 +354,8 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Description: This member is called by Rhino, from <a class="el" href="class_c_rhino_plug_in.html#a59427a6718017d40179c29a10af0ba8a">CRhinoPlugIn::GetLicense()</a>, when it needs your plug-in to validate your product key or license. If your plug-in determines that product_key represents a valid product key or license, then the function should fill out the class members (see below), which describe the license, before returning success. Parameters: product_key - [in] The product key or license as saved in a license file or returned by a Zoo server. Returns: success error_hide_message error_show_message </p>
+<p>Description: Oops. This pure virtual should have been removed from the Rhino SDK. It won't ever be called because VerifyLicenseKey will be called instead.</p>
+<p>Please override this function in your class and return CRhinoLicenseValidator::result::error_show_message. </p>
 
 </div>
 </div>
@@ -408,6 +404,8 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Description: This member is called by Rhino, from <a class="el" href="class_c_rhino_plug_in.html#a59427a6718017d40179c29a10af0ba8a">CRhinoPlugIn::GetLicense()</a>, when it needs your plug-in to validate your product key or license. If your plug-in determines that product_key represents a valid product key or license, then the function should fill out the class members (see below), which describe the license, before returning success.</p>
+<p>See <a href="http://developer.rhino3d.com/guides/cpp/creating-zoo-plugins/">http://developer.rhino3d.com/guides/cpp/creating-zoo-plugins/</a> for details Parameters: licenseKey - [in] The product key or license as saved in a license file or returned by a Zoo server. validationCode - [in] A validation code returned by your validation server validationCodeInstalledDate - [in] The date your validation code was associated with this license key. gracePeriodExpired - [in] True if the license validation grace period is expired Returns: success error_hide_message error_show_message </p>
 
 </div>
 </div>
@@ -444,6 +442,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Description: Called by Rhino, from <a class="el" href="class_c_rhino_plug_in.html#a59427a6718017d40179c29a10af0ba8a">CRhinoPlugIn::GetLicense()</a>, after a call to VerifyLicenseKey that sets m_requires_previous_version_license_verification to true. Parameters: license - [in] your license key previousVersionLicenseKey - [in] a license key from a previous version of your product. This is used for upgrade eligibility. Returns: true when previousVersionLicense is a valid previous version license for license. false otherwise </p>
 
 </div>
 </div>
@@ -468,8 +467,6 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01602">1602</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -486,8 +483,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>The build of the product that this license work with. When your product requests a license from Rhino, it will specify one of these build types. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01556">1556</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="a11a0e7dac705381a8c0a51f7066f5392"></a>
@@ -502,8 +497,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Licenses can be made to expire. If your licensing scheme is sophisticated enough to support this, then specify the expiration date here. Note, this value must be specified in Coordinated Universal Time (UTC). If your license does not expire, then just this value to null. </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01570">1570</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -520,8 +513,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>If VerifyLicenseKey returns error_show_message and m_error_message is set, Rhino will show this error message. Otherwise, it will show a generic error message. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01593">1593</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="ad61a62a5ce572211a8fa818fb1830496"></a>
@@ -536,8 +527,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The lease set by the Cloud Zoo. Data on this lease may change at any time from a different thread. <a class="el" href="class_c_rhino_license_validator.html#ad26f1f26af274b14cc97dc049220f23b">OnLeaseChanged()</a> will be called when this data changes. If <a class="el" href="class_c_rhino_license_validator.html#ad26f1f26af274b14cc97dc049220f23b">OnLeaseChanged()</a> is called and m_lease == nullptr, then your product no longer has a valid lease from the CloudZoo. Disable your product's functionality in a reasonable way. </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01581">1581</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -554,8 +543,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Licenses can be used by more than one instance of any application. For example, a single Rhino Education Lab license can be used by up to 30 systems simultaneously. If your license supports multiple instance, then specify the number of supported instances here. Otherwise just specify a value of 1 for single instance use. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01563">1563</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="a363877955a1347f179623d62993b60df"></a>
@@ -570,8 +557,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>This value will display in user interface items, such as in the Zoo console and in About dialog boxes. (e.g. "Rhinoceros 5.0", "Rhinoceros 5.0 Commercial", etc.) </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01551">1551</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -588,8 +573,6 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>This icon will displayed in the "Licenses" page in the Options dialog. Note, Rhino will make a copy of this icon.. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01574">1574</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="aeaae95ccf39e70c27589c06d9d62bb19"></a>
@@ -604,8 +587,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>This value will never be display in any user interface. When your plugin's ValidateProductKey member is called, it is passed a a product, or CD, key that was entered into the Zoo administrator console. Your ValidateProductKey will validate the product key and decode it into a product license. This is where you can store this license. This value will be passed to your application at runtime when it requests a license. </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01538">1538</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -623,8 +604,6 @@ Friends</h2></td></tr>
 
 <p>Set to true if the licenseKey passed to VerifyLicenseKey requires online validation. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01584">1584</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 <a id="a2424112e87f7fda4c842a0f9d0bf8644"></a>
@@ -639,8 +618,6 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Set to true if the licenseKey passed to VerifyLicenseKey requires verification. A separate call will be made, if necessary, to VerifyPreviousVersionLicense will be made with the previous version license. </p>
-
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01589">1589</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
 
 </div>
 </div>
@@ -657,14 +634,12 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>This value will display in user interface items, such as in the Zoo console and in About dialog boxes. Also, this value is used to uniquely identify this license. Thus, it is critical that this value be unique per product key, entered by the administrator. No other license of this product, as validated by this plugin, should return this value. </p>
 
-<p class="definition">Definition at line <a class="el" href="rhino_sdk_plug_in_8h_source.html#l01546">1546</a> of file <a class="el" href="rhino_sdk_plug_in_8h_source.html">rhinoSdkPlugIn.h</a>.</p>
-
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 26 2017 16:18:36 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 28 2017 08:19:51 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
