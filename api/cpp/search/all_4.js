@@ -612,6 +612,7 @@ var searchData=
   ['doublenumbersettings',['DoubleNumberSettings',['../class_o_n___parse_settings.html#a72a4001a86949d634f451a8df14b1813',1,'ON_ParseSettings']]],
   ['doubleprecision',['DoublePrecision',['../class_o_n___mesh_parameters.html#affeea018c444231c4a56420c38b8acf3',1,'ON_MeshParameters::DoublePrecision()'],['../class_o_n__3d_point_list_ref.html#ab3acfe672346dde674605ba30659b3be',1,'ON_3dPointListRef::DoublePrecision()']]],
   ['doubleprecisionvertices',['DoublePrecisionVertices',['../class_o_n___mesh.html#a1b101813d31f261ef0a6ca950cfcf14a',1,'ON_Mesh::DoublePrecisionVertices()'],['../class_o_n___mesh.html#afce02d0446f6a17f2c4eddbd15b4d636',1,'ON_Mesh::DoublePrecisionVertices() const']]],
+  ['downgradelevel',['DowngradeLevel',['../class_c_rhino_display_pipeline___o_g_l.html#af50b038812ff44b94d2c56e822fd736e',1,'CRhinoDisplayPipeline_OGL']]],
   ['downupdolly',['DownUpDolly',['../class_c_rhino_viewport.html#a9b83fa7671ce496bcc71a3bd9877ea82',1,'CRhinoViewport']]],
   ['downuprotate',['DownUpRotate',['../class_c_rhino_viewport.html#a9c09b1fc54e185f4c0e56a1464cfba8b',1,'CRhinoViewport']]],
   ['dpi',['DPI',['../class_c_rhino_dib.html#abcb3885b274a8ed048d2c6eb014e9ec7',1,'CRhinoDib']]],
