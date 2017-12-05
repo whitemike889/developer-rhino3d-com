@@ -448,11 +448,11 @@ $(document).ready(function()
 
 <h2 id="prerequisites">Prerequisites</h2>
 
-<p>Zoo plugins are .NET Framework 4.0 assemblies.  To create a plugins for Zoo, you need one of the following development tools:</p>
+<p>Zoo plugins are .NET Framework 4.5 assemblies.  To create a plugins for Zoo, you need one of the following development tools:</p>
 
 <ol>
-  <li>Microsoft Visual C# 2010.</li>
-  <li>Microsoft Visual Basic .NET 2010.</li>
+  <li>Microsoft Visual C# 2017.</li>
+  <li>Microsoft Visual Basic .NET 2017.</li>
 </ol>
 
 <p>Also, all plugins that use the Zoo license system must be signed with an <em>Authenticode</em> certificate issued by <em>McNeel Plugin Security</em>.  These certificates are free, but must be requested by each developer.  Developers must agree to the <em>Terms of Use</em> before a certificate is issued.  For more information on plugin signing, see <a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a>.</p>
@@ -463,10 +463,10 @@ $(document).ready(function()
 
 <ol>
   <li>Make sure you have Zoo installed.</li>
-  <li>Launch Microsoft Visual Studio 2010.</li>
+  <li>Launch Microsoft Visual Studio.</li>
   <li>Create a new <em>Class Library</em> project using either Visual C# or Visual Basic .NET.</li>
   <li>Add a reference to <em>ZooPlugin.dll</em>, which is found in the Zoo installation folder.  Make sure to set the reference’s <em>Copy Local</em> property to <code>False</code>.</li>
-  <li>Create a new public class that inherits from the <code>IZooPlugin</code> interface.</li>
+  <li>Create a new public class that inherits from the <code>IZooPlugin3</code> interface.</li>
   <li>Implement the interface members.  (For detailed information about the interface members, see the sample Zoo plugin listed below.)</li>
   <li>Build your plugin.</li>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally sign your plugin</a>.</li>
@@ -478,7 +478,7 @@ $(document).ready(function()
 
 <ol>
   <li>Run <em>ZooAdmin.exe</em> and make sure the Zoo licensing service has stopped.</li>
-  <li>Copy your plugin assembly (<em>.dll</em>) and any dependent support libraries to the Zoo’s plugin folder (i.e. <em>C:\Program Files\Zoo 5.0\Plugins</em>).</li>
+  <li>Copy your plugin assembly (<em>.dll</em>) and any dependent support libraries to the Zoo’s plugin folder (i.e. <em>C:\Program Files\Zoo 6\Plugins</em>).</li>
   <li>Restart the Zoo license service.</li>
   <li>When the service has restarted, click the <em>Add License</em> button. Y our product should be one of the available products for which to add a license.</li>
 </ol>
@@ -487,7 +487,7 @@ $(document).ready(function()
 
 <ul>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a></li>
-  <li><a href="https://github.com/mcneel/Zoo5">Sample Zoo Plugin Projects (on GitHub)</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/zoo">Sample Zoo Plugin Projects (on GitHub)</a></li>
 </ul>
 
         </article>
