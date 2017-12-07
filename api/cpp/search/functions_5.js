@@ -282,7 +282,7 @@ var searchData=
   ['enumkey',['EnumKey',['../class_c_rhino_ui_registry.html#aae451a8437b73417eae350bf3a9eb0b8',1,'CRhinoUiRegistry']]],
   ['enummultisamplemodes',['EnumMultiSampleModes',['../class_c_rhino_display_engine___o_g_l.html#ae3db1c1a79c216a961f704afcca622d4',1,'CRhinoDisplayEngine_OGL']]],
   ['enumvalue',['EnumValue',['../class_c_rhino_ui_registry.html#a4739d66cefc0c96d1037d1addba70546',1,'CRhinoUiRegistry']]],
-  ['environment',['Environment',['../class_i_rh_rdk_preview_scene_server.html#aa228328d121b083f51328555e49d07a4',1,'IRhRdkPreviewSceneServer']]],
+  ['environment',['Environment',['../class_i_rh_rdk_preview_scene_server.html#aa228328d121b083f51328555e49d07a4',1,'IRhRdkPreviewSceneServer::Environment()'],['../class_c_rh_rdk_environment_u_i_section___m_f_c.html#af84501e4058fe41deae41bc9708e21e9',1,'CRhRdkEnvironmentUISection_MFC::Environment()']]],
   ['environmentfromid',['EnvironmentFromId',['../class_rh_rdk_1_1_realtime_1_1_change_queue.html#acf98d8d7295f78e69c45d4b80f2aaad9',1,'RhRdk::Realtime::ChangeQueue']]],
   ['environmentidforusage',['EnvironmentIdForUsage',['../class_rh_rdk_1_1_realtime_1_1_change_queue.html#a9882d1a25bd88702f38ee385f08bed08',1,'RhRdk::Realtime::ChangeQueue']]],
   ['environmentinstance',['EnvironmentInstance',['../class_i_rh_rdk_preview_appearance_defaults.html#a8899bb2db7d0a82de6f72bf816358178',1,'IRhRdkPreviewAppearanceDefaults::EnvironmentInstance()'],['../class_c_rh_rdk_preview_appearance_defaults.html#a31f2298c6ebebcdf939d4dcd55c858e6',1,'CRhRdkPreviewAppearanceDefaults::EnvironmentInstance()']]],
