@@ -290,6 +290,7 @@ var searchData=
   ['buildextensionlist',['BuildExtensionList',['../class_c_rhino_get_file_dialog.html#a006eadcb469c60616012871157f6f88a',1,'CRhinoGetFileDialog']]],
   ['buildmenu',['BuildMenu',['../class_c_rh_rdk_i_o_r_manager.html#a47d0326b80d69773625c30d47c0d7f18',1,'CRhRdkIORManager']]],
   ['builtinmappingchannelfromunsigned',['BuiltInMappingChannelFromUnsigned',['../class_o_n___texture.html#a5c46a894c60ff2055fb1cdadfe755e2b',1,'ON_Texture']]],
+  ['bullet',['Bullet',['../class_o_n___text_builder.html#af31cf2459e036db672518cf06a91f756',1,'ON_TextBuilder']]],
   ['bump',['Bump',['../class_c_rh_rdk_material.html#abc3c61e542ca683bc2aed5cdf7ab6840ac44447baeeae4f8eaa468d6abdacd98f',1,'CRhRdkMaterial']]],
   ['bump_5ftexture',['bump_texture',['../class_o_n___texture.html#a1e73ed16dda764adcb0618dbf8097558adf9b255a46a5ac80324c3df588fa8c1d',1,'ON_Texture']]],
   ['bumpbitmap',['BumpBitmap',['../class_c_rhino_material.html#ae0a6c4e45ff8f869f84590645ad71af7',1,'CRhinoMaterial']]],

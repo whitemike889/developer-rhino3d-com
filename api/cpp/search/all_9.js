@@ -1132,6 +1132,7 @@ var searchData=
   ['isvalidoptionname',['IsValidOptionName',['../class_c_rhino_get.html#aae5d5d266fc9127a8c9977fbc25d2ab0',1,'CRhinoGet']]],
   ['isvalidoptionvaluename',['IsValidOptionValueName',['../class_c_rhino_get.html#a9f94857b809c283b6abc7bf300b0feea',1,'CRhinoGet']]],
   ['isvalidpathname',['IsValidPathName',['../class_c_rhino_file_utilities.html#a9b06fd4305b278027a9fbc4f1669b919',1,'CRhinoFileUtilities::IsValidPathName(const char *sUTF8_PathName)'],['../class_c_rhino_file_utilities.html#aa16206e17b3ffee55c6c9e3e8ece401b',1,'CRhinoFileUtilities::IsValidPathName(const wchar_t *sPathName)']]],
+  ['isvalidpipelinepointer',['IsValidPipelinePointer',['../class_c_rhino_display_pipeline.html#aa07ae8df82374c58f7611c5e5ebc7a04',1,'CRhinoDisplayPipeline']]],
   ['isvalidpolycurveprofile',['IsValidPolyCurveProfile',['../class_o_n___extrusion.html#aa3d7b08baace06cd8ba1d37edc16d659',1,'ON_Extrusion']]],
   ['isvalidradialdimensiontype',['IsValidRadialDimensionType',['../class_o_n___dim_radial.html#a34c61b451222be11c624f9064384be81',1,'ON_DimRadial']]],
   ['isvalidstretchfactor',['IsValidStretchFactor',['../class_c_rhino_stretch_space_morph.html#a2078a9da972acaae780b0cee46949928',1,'CRhinoStretchSpaceMorph']]],

@@ -95,6 +95,7 @@ var searchData=
   ['margin',['Margin',['../class_c_rhino_ui_dock_bar_caption_button.html#a8efa33bec205c9ebed85bc109e243f79',1,'CRhinoUiDockBarCaptionButton::Margin()'],['../class_i_rhino_ui_holder.html#a04905716abf06f783a89a00de7cd1ed0',1,'IRhinoUiHolder::Margin()']]],
   ['mark',['Mark',['../class_o_n___class_id.html#af522a7bce6100fca29e9161ffbcd8dc3',1,'ON_ClassId::Mark()'],['../class_c_rhino_object.html#a3d888fa05d1b6f3a8fa4ff90f9959b83',1,'CRhinoObject::Mark()']]],
   ['markaggregatecomponentstatusasnotcurrent',['MarkAggregateComponentStatusAsNotCurrent',['../class_o_n___brep.html#afc3a33c65952431528528e00b741ade5',1,'ON_Brep::MarkAggregateComponentStatusAsNotCurrent()'],['../class_o_n___object.html#a609192fbafecbe4be3136d8cb4dce882',1,'ON_Object::MarkAggregateComponentStatusAsNotCurrent()']]],
+  ['markasnotaleak',['MarkAsNotALeak',['../class_o_n___string.html#aba87acc7214ade4802599de7a37c4d81',1,'ON_String::MarkAsNotALeak()'],['../class_o_n__w_string.html#ae9a17368a270e1bb339d450e2172788c',1,'ON_wString::MarkAsNotALeak()']]],
   ['markasnotcurrent',['MarkAsNotCurrent',['../class_o_n___aggregate_component_status.html#ac86a23fba2097cc80248fe292f057473',1,'ON_AggregateComponentStatus']]],
   ['markcomponents',['MarkComponents',['../class_o_n___mesh_marker.html#a3c869e97e9f38cb29e6efce8c015042f',1,'ON_MeshMarker']]],
   ['markface',['MarkFace',['../class_o_n___mesh_marker.html#a2e152a4ef5b814ad62b0f2f20882efd9',1,'ON_MeshMarker']]],
