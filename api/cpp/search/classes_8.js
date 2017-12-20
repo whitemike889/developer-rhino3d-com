@@ -150,7 +150,7 @@ var searchData=
   ['on_5fclassarray_3c_20on_5fpluginref_20_3e',['ON_ClassArray&lt; ON_PlugInRef &gt;',['../class_o_n___class_array.html',1,'']]],
   ['on_5fclassarray_3c_20on_5frtffirstchar_3a_3atextrun_20_3e',['ON_ClassArray&lt; ON_RtfFirstChar::TextRun &gt;',['../class_o_n___class_array.html',1,'']]],
   ['on_5fclassarray_3c_20on_5frtfstringbuilder_3a_3atextrun_20_3e',['ON_ClassArray&lt; ON_RtfStringBuilder::TextRun &gt;',['../class_o_n___class_array.html',1,'']]],
-  ['on_5fclassarray_3c_20on_5ftextrunbuilder_3a_3atextprops_20_3e',['ON_ClassArray&lt; ON_TextRunBuilder::TextProps &gt;',['../class_o_n___class_array.html',1,'']]],
+  ['on_5fclassarray_3c_20on_5ftextbuilder_3a_3atextprops_20_3e',['ON_ClassArray&lt; ON_TextBuilder::TextProps &gt;',['../class_o_n___class_array.html',1,'']]],
   ['on_5fclassarray_3c_20on_5ftexture_20_3e',['ON_ClassArray&lt; ON_Texture &gt;',['../class_o_n___class_array.html',1,'']]],
   ['on_5fclassarray_3c_20on_5ftexturecoordinates_20_3e',['ON_ClassArray&lt; ON_TextureCoordinates &gt;',['../class_o_n___class_array.html',1,'']]],
   ['on_5fclassarray_3c_20on_5fuserstring_20_3e',['ON_ClassArray&lt; ON_UserString &gt;',['../class_o_n___class_array.html',1,'']]],

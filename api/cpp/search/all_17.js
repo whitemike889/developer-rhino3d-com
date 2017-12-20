@@ -12,7 +12,7 @@ var searchData=
   ['warnondeletekey',['WarnOnDeleteKey',['../class_c_rhino_ui_options_list_ctrl_file_name_edit_box.html#a09bacac0c8040fcce5f89391fc280ed5',1,'CRhinoUiOptionsListCtrlFileNameEditBox']]],
   ['wascanceled',['WasCanceled',['../class_i_rh_rdk_render_session.html#a516cdded5094f8fd0a685bc04397dfe4',1,'IRhRdkRenderSession']]],
   ['wchar_5ft',['wchar_t',['../class_o_n___model_component.html#a63a60bd152dda8879588b15d7f394b47',1,'ON_ModelComponent']]],
-  ['wcs',['wcs',['../class_c_rh_rdk_texture.html#acd3a1c9f6a8b7213af4b88adb3835a7fabe5f4374ac6c02fd12f1bae419f93e26',1,'CRhRdkTexture::wcs()'],['../class_c_rh_rdk_texture.html#a9cd5928ecebd5b17e9210884c3e5ed86afa6bdb8deee0c8dc32008c69d8cbc8ce',1,'CRhRdkTexture::Wcs()']]],
+  ['wcs',['Wcs',['../class_c_rh_rdk_texture.html#a9cd5928ecebd5b17e9210884c3e5ed86afa6bdb8deee0c8dc32008c69d8cbc8ce',1,'CRhRdkTexture::Wcs()'],['../class_c_rh_rdk_texture.html#acd3a1c9f6a8b7213af4b88adb3835a7fabe5f4374ac6c02fd12f1bae419f93e26',1,'CRhRdkTexture::wcs()']]],
   ['wcs_5fbox',['wcs_box',['../class_c_rh_rdk_texture.html#acd3a1c9f6a8b7213af4b88adb3835a7fa4b1b37d3c37be7407ebcd8c562e19b34',1,'CRhRdkTexture']]],
   ['wcs_5fbox_5fchannel',['wcs_box_channel',['../class_o_n___texture.html#ace23a9753e5d454bf3ce4935c3dd82c6ac337cdc3fbb9fa809dfcb72f099b4a2c',1,'ON_Texture']]],
   ['wcs_5fchannel',['wcs_channel',['../class_o_n___texture.html#ace23a9753e5d454bf3ce4935c3dd82c6ada4b193e9bd919290d27ab09b572069a',1,'ON_Texture']]],
