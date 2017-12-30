@@ -63,6 +63,7 @@ var searchData=
   ['readbuffer',['ReadBuffer',['../class_o_n___binary_archive.html#a70daebb13661adec7f1a4f19a89e1573',1,'ON_BinaryArchive']]],
   ['readbyte',['ReadByte',['../class_o_n___binary_archive.html#a3bafbe1ee0329f5e73401d08e9639b49',1,'ON_BinaryArchive']]],
   ['readchar',['ReadChar',['../class_o_n___binary_archive.html#aec54773525b0c6a56d8456dcb858392c',1,'ON_BinaryArchive::ReadChar(size_t, char *)'],['../class_o_n___binary_archive.html#ad185cd287239985ed379b87b652f2fd0',1,'ON_BinaryArchive::ReadChar(size_t, unsigned char *)'],['../class_o_n___binary_archive.html#a99c79434c380787e794d831d9bae71f3',1,'ON_BinaryArchive::ReadChar(char *)'],['../class_o_n___binary_archive.html#ac74bf4f81cbff235925d9624bced5e31',1,'ON_BinaryArchive::ReadChar(unsigned char *)']]],
+  ['readcharvalue',['ReadCharValue',['../class_o_n___text_iterator.html#a1beb199a0221343ca63f0977f72a58f6',1,'ON_TextIterator']]],
   ['readcircle',['ReadCircle',['../class_o_n___binary_archive.html#aac1bb9ad90f18e1e911d39504004502f',1,'ON_BinaryArchive']]],
   ['readcodepoint',['ReadCodePoint',['../class_o_n___text_iterator.html#a0ad6ccb5fde15d34388385c913a668fb',1,'ON_TextIterator']]],
   ['readcolor',['ReadColor',['../class_o_n___binary_archive.html#a892a917d2fdb414120149350a572cf2f',1,'ON_BinaryArchive']]],

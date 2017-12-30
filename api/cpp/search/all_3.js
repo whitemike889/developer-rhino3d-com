@@ -558,7 +558,6 @@ var searchData=
   ['coarsemeshid',['CoarseMeshId',['../class_o_n___mesh_cache.html#aa37169af7239929de7680fd12c452bd4',1,'ON_MeshCache']]],
   ['cocoa',['Cocoa',['../group___r_d_k.html#ga51da1bbaf590e191ce562e314a39baf8',1,'RhRdkDefinitions.h']]],
   ['codepage',['CodePage',['../class_o_n___text_builder_1_1_text_props.html#acb8ac55f04afacc3263f25a2816909ee',1,'ON_TextBuilder::TextProps::CodePage()'],['../class_o_n___text_builder.html#afe2ee6eb063339130e3519996c68f817',1,'ON_TextBuilder::CodePage()']]],
-  ['codepagefromcharset',['CodePageFromCharSet',['../class_o_n___text_builder.html#ab89e1f3f1d46be730f16e04c3c1ae2f0',1,'ON_TextBuilder']]],
   ['codepagefrommap',['CodePageFromMap',['../class_o_n___text_builder.html#a91cd508ed9dddb9a9fdb7fb760763fbc',1,'ON_TextBuilder']]],
   ['codepoint',['CodePoint',['../class_o_n___font_glyph.html#a470b44e899c81c69268ddccb541f8553',1,'ON_FontGlyph']]],
   ['codepointcount',['CodepointCount',['../class_o_n___text_run.html#a1c3e8c230f3967763a2617a8cf8773de',1,'ON_TextRun']]],

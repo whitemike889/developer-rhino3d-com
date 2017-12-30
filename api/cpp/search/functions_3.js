@@ -376,7 +376,6 @@ var searchData=
   ['closetrimgap',['CloseTrimGap',['../class_o_n___brep.html#af981e669c792c0106f342ea6f0d2baef',1,'ON_Brep']]],
   ['closewindow',['CloseWindow',['../class_c_rh_rdk_sdk_render.html#a40df5e0df1af7dd7aae1db457b01d9a4',1,'CRhRdkSdkRender']]],
   ['codepage',['CodePage',['../class_o_n___text_builder_1_1_text_props.html#acb8ac55f04afacc3263f25a2816909ee',1,'ON_TextBuilder::TextProps::CodePage()'],['../class_o_n___text_builder.html#afe2ee6eb063339130e3519996c68f817',1,'ON_TextBuilder::CodePage()']]],
-  ['codepagefromcharset',['CodePageFromCharSet',['../class_o_n___text_builder.html#ab89e1f3f1d46be730f16e04c3c1ae2f0',1,'ON_TextBuilder']]],
   ['codepagefrommap',['CodePageFromMap',['../class_o_n___text_builder.html#a91cd508ed9dddb9a9fdb7fb760763fbc',1,'ON_TextBuilder']]],
   ['codepoint',['CodePoint',['../class_o_n___font_glyph.html#a470b44e899c81c69268ddccb541f8553',1,'ON_FontGlyph']]],
   ['codepointcount',['CodepointCount',['../class_o_n___text_run.html#a1c3e8c230f3967763a2617a8cf8773de',1,'ON_TextRun']]],
