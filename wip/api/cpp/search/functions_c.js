@@ -57,6 +57,7 @@ var searchData=
   ['layertableevent',['LayerTableEvent',['../class_c_rhino_event_watcher.html#a15fddc2edfe16ef854045df17f19bb96',1,'CRhinoEventWatcher::LayerTableEvent()'],['../class_c_rhino_object_properties_modeless_docking_dialog.html#a97946b5eab1166fb52a39fdff21fbd73',1,'CRhinoObjectPropertiesModelessDockingDialog::LayerTableEvent()'],['../class_i_rhino_properties_panel_page_event_watcher.html#a4f119610d402e22078d06e6ee43418af',1,'IRhinoPropertiesPanelPageEventWatcher::LayerTableEvent()']]],
   ['layeruuidfromlistindex',['LayerUUIDFromListIndex',['../class_c_rhino_ui_combo_box.html#ae4c662e5568c8715c38555b143971256',1,'CRhinoUiComboBox']]],
   ['layout',['Layout',['../class_i_rh_rdk_content_editor_settings.html#abb2d00ec3b6f18b53b1c1e7df4a5936d',1,'IRhRdkContentEditorSettings']]],
+  ['ldblquote',['LDblQuote',['../class_o_n___text_builder.html#aa4d2f6e92c85780a3986aceca6f273f3',1,'ON_TextBuilder']]],
   ['leaderarrowblockid',['LeaderArrowBlockId',['../class_o_n___annotation.html#a86d5d53c9751139b5a4d63ec9e80c581',1,'ON_Annotation::LeaderArrowBlockId()'],['../class_o_n___dim_style.html#acc6a64caf4093e42eb2ed64b6aaf0632',1,'ON_DimStyle::LeaderArrowBlockId()']]],
   ['leaderarrowsize',['LeaderArrowSize',['../class_o_n___annotation.html#a3650cf63dc2ac9488c591d664598b2c9',1,'ON_Annotation::LeaderArrowSize()'],['../class_o_n___dim_style.html#a304960fe2c611136ef367b94c98b9e92',1,'ON_DimStyle::LeaderArrowSize()']]],
   ['leaderarrowtype',['LeaderArrowType',['../class_o_n___annotation.html#a83845cf53d811d6b5093b9cd634314e2',1,'ON_Annotation::LeaderArrowType()'],['../class_o_n___dim_style.html#a173a69bc8bb03dbc1077d12f1be2e6d4',1,'ON_DimStyle::LeaderArrowType()']]],
@@ -280,5 +281,6 @@ var searchData=
   ['loopcurve3d',['LoopCurve3d',['../class_o_n___hatch.html#afad66e1e8240856003790331893b67ac',1,'ON_Hatch']]],
   ['loopdirection',['LoopDirection',['../class_o_n___brep.html#af9053adc75275f2784a559120891093e',1,'ON_Brep']]],
   ['loopissurfaceboundary',['LoopIsSurfaceBoundary',['../class_o_n___brep.html#af79f428e7004245ca7111fb865e37d99',1,'ON_Brep']]],
+  ['lquote',['LQuote',['../class_o_n___text_builder.html#a752ee5ef901c3a7d70d5a71d67ab4b83',1,'ON_TextBuilder']]],
   ['luminance',['Luminance',['../class_c_rh_rdk_color.html#ab3324dd9679ccdcc7792de976187bd36',1,'CRhRdkColor']]]
 ];
