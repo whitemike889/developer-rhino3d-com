@@ -6,20 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Rendering Integration - Interactive Viewport with C#</title>
+  <title>Render Engine Integration - Interactive Viewport (4/5) with C#</title>
   <meta name="description" content="A guide to integrating a render engine using RhinoCommon SDK - Interactive Viewport  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/mockingbird-interactive/" />
-  <meta property="og:title" content="Rendering Integration - Interactive Viewport" />
+  <meta property="og:title" content="Render Engine Integration - Interactive Viewport (4/5)" />
   <meta property="og:description" content="A guide to integrating a render engine using RhinoCommon SDK - Interactive Viewport" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Rendering Integration - Interactive Viewport" />
+  <meta name="twitter:title" value="Render Engine Integration - Interactive Viewport (4/5)" />
   <meta name="twitter:description" value="A guide to integrating a render engine using RhinoCommon SDK - Interactive Viewport" />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
@@ -343,7 +343,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Rendering Integration - Interactive Viewport</h1>
+          <h1>Render Engine Integration - Interactive Viewport (4/5)</h1>
 
           <p>
   <span class="guide_byline">
@@ -421,7 +421,7 @@ $(document).ready(function()
 
 <h3 id="the-viewport-implementation">The viewport implementation</h3>
 
-<p>The actual viewport integration is done with a class deriving from <code class="language-cs">RealtimeDisplayMode</code> . When deriving from that class, which we do with <code class="language-cs">MockingRealtimeDisplayMode</code> , Visual Studio will tell that several abstract methods need to be implemented. These methods are the minimum required functions to ensure proper functioning of the integration. The entire class can be found in the <a href="https://github.com/jesterKing/MockingBird/blob/master/MockingBirdViewport/MockingRealtimeDisplayMode.cs">Git repository here</a>. Lets step through the process what happens when the user selects the display mode for the viewport.</p>
+<p>The actual viewport integration is done with a class deriving from <code class="language-cs">RealtimeDisplayMode</code> . When deriving from that class, which we do with <code class="language-cs">MockingRealtimeDisplayMode</code> , Visual Studio will tell that several abstract methods need to be implemented. These methods are the minimum required functions to ensure proper functioning of the integration. The entire class can be found in the <a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinocommon/cs/SampleCsRendererIntegration/MockingBird/MockingBirdViewport/MockingRealtimeDisplayMode.cs">Git repository here</a>. Lets step through the process what happens when the user selects the display mode for the viewport.</p>
 
 <p>First of all an instance of our class will be created. If there is the need for initialisation a public default constructor can be implemented where such initialisation can be done. For <code class="language-cs">MockingRealtimeDisplayMode</code>  we don’t need that. During the start up phase of the mode switch the underlying system will be querying whether our engine is started, and whether there are results available. Because this can happen already before we’ve actually managed to start our engine and get some results we’ll be using a boolean flag <code class="language-cs">_started</code>  to communicate our state through the functions <code class="language-cs">IsRendererStarted()</code>  and <code class="language-cs">IsFrameBufferAvailable()</code> . Our real entry into the rendering process happens with <code class="language-cs">StartRenderer()</code> .</p>
 
@@ -468,7 +468,7 @@ $(document).ready(function()
 
 <p>The actual rendering</p>
 
-<p>The <a href="https://github.com/jesterKing/MockingBird/blob/master/MockingBirdViewport/MockingRender.cs"><code class="language-cs">MockingRender</code>  class</a> is responsible for generating the pixel data for the viewport. Its entry function is ColorPixels().</p>
+<p>The <a href="https://github.com/mcneel/rhino-developer-samples/blob/6/rhinocommon/cs/SampleCsRendererIntegration/MockingBird/MockingBirdViewport/MockingRender.cs"><code class="language-cs">MockingRender</code>  class</a> is responsible for generating the pixel data for the viewport. Its entry function is ColorPixels().</p>
 
 <pre><code class="language-cs">public void ColorPixels()
 {
