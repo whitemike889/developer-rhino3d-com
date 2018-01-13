@@ -91,7 +91,7 @@ var searchData=
   ['parseerror',['ParseError',['../class_o_n___parse_settings.html#aa57a3a9cd1bf2a965d2ca52e8dc307f3',1,'ON_ParseSettings']]],
   ['parseexplicitformulaexpression',['ParseExplicitFormulaExpression',['../class_o_n___parse_settings.html#a8f7636af2d4de5ded942e6874ddbce37',1,'ON_ParseSettings']]],
   ['parsefeetinches',['ParseFeetInches',['../class_o_n___parse_settings.html#aab9b7ef244a771823719822ad0e97796',1,'ON_ParseSettings']]],
-  ['parsefields',['ParseFields',['../class_c_rhino_annotation.html#ae03e9705178edf36531b9dd2515e3969',1,'CRhinoAnnotation']]],
+  ['parsefields',['ParseFields',['../class_c_rhino_annotation.html#ae03e9705178edf36531b9dd2515e3969',1,'CRhinoAnnotation::ParseFields(const ON_TextContent *text, const CRhinoAnnotation *annotation, const CRhinoObject *top_parent)'],['../class_c_rhino_annotation.html#a0bd24dffd81ef1b288cf6c516b75c77d',1,'CRhinoAnnotation::ParseFields(const ON_TextContent *text, const CRhinoAnnotation *annotation, const CRhinoObject *top_parent, bool forceUpdate)']]],
   ['parseformfeedasleadingwhitespace',['ParseFormFeedAsLeadingWhiteSpace',['../class_o_n___parse_settings.html#acbc7c529e7375bdccc48eaa99aa02f93',1,'ON_ParseSettings']]],
   ['parseformfeedastrailingwhitespace',['ParseFormFeedAsTrailingWhiteSpace',['../class_o_n___parse_settings.html#a60817437f710afaf259a42d72f3acdb0',1,'ON_ParseSettings']]],
   ['parsefullstopasdecimalpoint',['ParseFullStopAsDecimalPoint',['../class_o_n___parse_settings.html#a0fb1e5aa210cdff9e9c2de304c24414a',1,'ON_ParseSettings']]],
