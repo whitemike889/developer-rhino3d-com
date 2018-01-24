@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Getting Started with C/C++, C#</title>
-  <meta name="description" content="This guide aims to get you started using openNURBS in your project.  Using C/C++, C#">
+  <meta name="description" content="This guide explains how to use the openNURBS C++ toolkit in your project.  Using C/C++, C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/opennurbs/getting-started/" />
   <meta property="og:title" content="Getting Started" />
-  <meta property="og:description" content="This guide aims to get you started using openNURBS in your project." />
+  <meta property="og:description" content="This guide explains how to use the openNURBS C++ toolkit in your project." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Getting Started" />
-  <meta name="twitter:description" value="This guide aims to get you started using openNURBS in your project." />
+  <meta name="twitter:description" value="This guide explains how to use the openNURBS C++ toolkit in your project." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -501,7 +501,7 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide aims to get you started using openNURBS in your project.</p>
+          <p>This guide explains how to use the openNURBS C++ toolkit in your project.</p>
 
           <h2 id="prerequisites">Prerequisites</h2>
 
@@ -512,22 +512,18 @@ $(document).ready(function()
 <p>The openNURBS C++ toolkit has been successfully used with the following compilers:</p>
 
 <ul>
-  <li><em>Microsoft Visual Studio 2010</em> (VC 10.0 SP1) (Windows 7 Professional SP1): to build openNURBS and the examples with <em>Visual Studio 2010 SP1</em>, use the solution <em>build_opennurbs_vs2010.sln</em>.</li>
-  <li><em>gcc version 4.2.1</em> (Apple Build 5658): to build openNURBS and the examples with gcc use the makefile.</li>
-  <li><em>Apple Xcode 4.6.3</em> (4H1503) (OSX 10.8.2): To build openNURBS and the examples with <em>Xcode 4.5</em> (or later), use the workspace <em>build_opennurbs_xcode.workspace</em>.</li>
+  <li><em>Microsoft Visual Studio 2015</em> 15.5.3: to build openNURBS and the examples with <em>Visual Studio 2015 SP1</em>, use the solution <em>opennurbs_public.sln</em>.</li>
+  <li><em>Apple Xcode 9.2</em> (9C40b): To build openNURBS and the examples with <em>Xcode 9.2</em> (or later), use the workspace <em>opennurbs_public.xcworkspace</em>.</li>
+  <li><em>Other C++ compilers</em> The compiler must support the C++11 standard. A <em>makefile</em> is provided as a starting point. The openNURBS C++ source code is clean and simple. If you are using a C++ compiler that supports the C++11 standard and run into some toolkit code that causes problems, please <a href="http://discourse.mcneel.com/category/opennurbs">let us know</a>.  We’ll attempt to change the code to accommodate the compiler.</li>
 </ul>
-
-<p>The openNURBS C++ source code is clean and simple.  You should be able to use any good C++ compiler that has 32-bit integers, 32-bit or 64-bit pointers, and <code>wchar_t</code> support.</p>
-
-<p>If you are using a good quality C++ compiler and run into some toolkit code that causes problems, please <a href="http://discourse.mcneel.com/category/opennurbs">let us know</a>.  We’ll attempt to change the code to accommodate the compiler.</p>
 
 <h2 id="read-and-write">Read and Write</h2>
 
-<p>If your goal is to read and write 3DM files, then you may find that the class <code>ONX_Model::Read()</code> and <code>ONX_Model::Write()</code> an easy route.  See <em>example_read.cpp</em> and <em>example_write.cpp</em> for more details.</p>
+<p>Use <code>ONX_Model::Read()</code> and <code>ONX_Model::Write()</code> to add support for reading and writing 3DM files to your application. See <em>example_read.cpp</em> and <em>example_write.cpp</em> for more details.</p>
 
 <ol>
   <li>Compile the openNURBS Toolkit library.  To compile the example programs you must link with the openNURBS Toolkit library.</li>
-  <li>Study <em>example_read\example_read.cpp</em>.  All the openNURBS geometry classes are derived from the <code>ON_Geometry</code> class.  If you need generic attribute information, there is probably an <code>ON_Geometry</code> member function that will answer your query.  See the <code>Dump()</code> function in <em>example_read.cpp</em> for code that demonstrates how to use the <code>Cast()</code> function to get at the actual class definitions.</li>
+  <li>Study <em>example_read\example_read.cpp</em>. All the openNURBS geometry classes are derived from the <code>ON_Geometry</code> class.  If you need generic attribute information, there is probably an <code>ON_Geometry</code> member function that will answer your query.  See the <code>Dump()</code> function in <em>example_read.cpp</em> for code that demonstrates how to use the <code>Cast()</code> function to get at the actual class definitions.</li>
   <li>Study <em>example_write\example_write.cpp</em>.  If you want to write points, meshes, NURBS curves, NURBS surfaces, or trimmed NURBS surfaces, you should be able to cut and paste most of what you need from the functions in <em>example_write.cpp</em>.  If you want to write trimmed surfaces or b-reps, then please study <em>example_brep.cpp</em>.</li>
   <li>Study <em>example_brep\example_brep.cpp</em>.  If you want to write solid models or more general b-reps, then first work through <em>example_write.cpp</em> and then work through <em>example_brep.cpp</em>.</li>
   <li>The comments in the openNURBS Toolkit header files are the primary source of documentation.  I suggest that you use a development environment that has high quality tags capabilities and a good class browser.</li>
@@ -535,16 +531,14 @@ $(document).ready(function()
   <li>Other items to note:
     <ol>
       <li>openNURBS uses UTF-16 to store text in <em>3dm</em> files and provides tools for converting UTF-16 strings to and from UTF-8, UTF-32 and <code>wchar_t</code> strings.  The <code>ON_wString</code> class has <code>wchar_t</code> characters.</li>
-      <li>All memory allocations and frees are done through <code>onmalloc()</code>, <code>onfree()</code>, and <code>onrealloc()</code>.  The source that ships with openNURBS has <code>onmalloc()</code> call <code>malloc()</code> and <code>onfree()</code> call <code>free()</code>.</li>
-      <li>If you want to use Open GL to render openNURBS geometry, you may want to include <em>opennurbs_gl.h</em> after <em>opennurbs.h</em> and add <em>opennurbs_gl.cpp</em> to your openNURBS library.  See <em>example_gl.cpp</em> for details.</li>
-      <li>The openNURBS Toolkit works correctly on both big and little endian CPUs. (Generally, Intel CPUs use little endian byte order and MIPS, Motorola, and Sparc CPUs use big endian byte order.)</li>
+      <li>All memory allocations and frees are done through <code>onmalloc()</code>, <code>onfree()</code>, and <code>onrealloc()</code>.  The source that ships with openNURBS has <code>onmalloc()</code> call <code>malloc()</code> and <code>onfree()</code> call <code>free()</code>.
+     1. If you want to use Open GL to render openNURBS geometry, you may want to include <em>opennurbs_gl.h</em> after <em>opennurbs.h</em> and add <em>opennurbs_gl.cpp</em> to your openNURBS library.  See <em>example_gl.cpp</em> for details.
+     1. The openNURBS Toolkit works correctly on both big and little endian CPUs. (Generally, Intel CPUs use little endian byte order and MIPS, Motorola, and Sparc CPUs use big endian byte order.)</li>
     </ol>
   </li>
 </ol>
 
 <h2 id="3dm-file-versions">3DM File Versions</h2>
-
-<p>The following is brief history of the 3dm file versions…</p>
 
 <ol>
   <li><em>Version 1 3DM files</em>. The openNURBS toolkit will read version 1 files.  Rhino 1 and other applications using the old Rhino I/O toolkit create version 1 files.</li>
@@ -552,7 +546,10 @@ $(document).ready(function()
   <li><em>Version 3 3DM files</em>. The openNURBS toolkit will read and write version 3 files.  Rhino 3 and applications using an openNURBS toolkit released on or after October 2002 create version 3 files.  (Rhino 1 and Rhino 2 will not read version 2 files.)</li>
   <li><em>Version 4 3DM files</em>. The openNURBS toolkit will read and write version 4 files.  Rhino 4 and applications using an openNURBS toolkit released on or after September 2006 create version 4 files.  (Rhino 1, Rhino 2, and Rhino 3 will not read version 4 files.)</li>
   <li><em>Version 5 3DM files</em>. The openNURBS toolkit will read and write version 5 files.  Rhino 5 and applications using an openNURBS toolkit released on or after September 2009 create version 5 files.  (Rhino 1, Rhino 2, Rhino 3 and Rhino 4 will not read version 5 files.)</li>
+  <li><em>Version 6 3DM files</em>. The openNURBS toolkit will read and write version 6 files.  Rhino 6 and applications using an openNURBS toolkit released on or after January 2018 create version 6 files.  (Rhino 1, Rhino 2, Rhino 3, Rhino 4 and Rhino 5 will not read version 6 files.)</li>
 </ol>
+
+<p>Sample 3DM files are availble from <a href="https://www.rhino3d.com/opennurbs">[https://www.rhino3d.com/opennurbs]</a></p>
 
 <h2 id="examples">Examples</h2>
 
@@ -562,6 +559,7 @@ $(document).ready(function()
   <li><em>example_read\example_read.cpp</em>: Create a program by compiling <em>example_read.cpp</em> and statically linking with the openNURBS library.  The code in <em>example_read.cpp</em> illustrates how to read an openNURBS <em>.3dm</em> file.</li>
   <li><em>example_write\example_write.cpp</em>: Create a program by compiling <em>example_write.cpp</em> and linking with the openNURBS library.  The code in <em>example_write.cpp</em> illustrates how to write layers, units system and tolerances, viewports, spotlights, points, meshes, NURBs curves, NURBs surfaces, trimmed NURBs surfaces, texture and bump map information, render material name, and material definitions to an openNURBS <em>.3dm</em> file.</li>
   <li>The bitmap in <em>example_write\example_texture.bmp</em> is used for a rendering material texture in <em>example_write\example_write.cpp</em>.</li>
+  <li><em>example_test\example_test.cpp</em>: Create a program by compiling <em>example_test.cpp</em> and linking with the openNURBS library. The example_test program can be used to validate your opennurbs installation.</li>
   <li><em>example_brep\example_brep.cpp</em>: Create a program by compiling <em>example_brep.cpp</em> and linking with the openNURBS library.  The code in <em>example_write.cpp</em> illustrates how to write a solid model.</li>
   <li><em>example_dump\example_dump.cpp</em>: Create a program by compiling <em>example_dump.cpp</em> and linking with the openNURBS library.  The code in <em>example_dump</em> demonstrates the low level structure of an openNURBS <em>.3dm</em> file.</li>
   <li><em>example_userdata\example_userdata.cpp</em>: Create a program by compiling <em>example_userdata.cpp</em> and linking with the openNURBS library.  The code in <em>example_userdata</em> demonstrates how to create and manage arbitrary user defined information in <em>.3dm</em> files.</li>
