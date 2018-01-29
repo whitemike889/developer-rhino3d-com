@@ -458,7 +458,7 @@ $(document).ready(function()
 <ol>
   <li>In your plugin’s <code>Rhino.PlugIns.PlugIn</code> inherited class, create a new method with the same signature as the <code>Rhino.PlugIns.ValidateProductKeyDelegate</code> delegate.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).</li>
   <li>In your plugin’s <code>Rhino.PlugIns.PlugIn</code> inherited class, create a new method with the same signature as the <code>Rhino.PlugIns.OnLeaseChangedDelegate</code> delegate.  Rhino will call into this function if your product supports Rhino Accounts. When Rhino Accounts gets a new lease, this function is called.</li>
-  <li>In your plugin’s <code>OnLoad</code> method, call <code>Rhino.PlugIns.GetLicense</code> and pass it your licenses’s capabilities (enum), a text mask to assist the user in entering a license, and your two delegate functions.</li>
+  <li>In your plugin’s <code>Rhino.PlugIns.PlugIn.OnLoad</code> override, call <code>Rhino.PlugIns.GetLicense</code> and pass it your licenses’s capabilities (enum), a text mask to assist the user in entering a license, and your two delegate functions.</li>
   <li>Build your plugin.</li>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally sign your plugin</a>.</li>
   <li>Launch Rhino and test your plugin.  When your plugin is loaded for the first time, you will be prompted to enter a license…</li>
@@ -469,8 +469,9 @@ $(document).ready(function()
 <ul>
   <li><a href="/guides/rhinocommon/creating-zoo-plugins">Creating Zoo Plugins</a></li>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/rhinocommon/cs/SampleCsWithLicense">Sample RhinoCommon Plugin Project on GitHub</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/rhinocommon/cs/SampleCsWithLicense">Sample RhinoCommon plugin project (GitHub)</a></li>
 </ul>
+
 
         </article>
 
