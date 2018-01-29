@@ -389,22 +389,6 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#managing-licenses">Managing Licenses</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
               <a href="#related-topics">Related Topics</a>
 
               
@@ -454,21 +438,17 @@ $(document).ready(function()
 
           <h2 id="overview">Overview</h2>
 
-<p>Zoo 5.0 allows 3rd party plugin developers to add licensing support for their products to the Zoo.  RhinoCommon allows developers to write plugins for Rhino that use the Rhino license manager and obtain licenses from Zoo servers.</p>
+<p>The Zoo supports 3rd party plugins. RhinoCommon allows developers to write plugins for Rhino that use the Rhino license manager and obtain licenses from Zoo servers.</p>
+
+<p>When a customer attempts to add a product license to the Zoo, the product’s plugin is called to validate the user’s request.  Upon validation, the plugin will return the product’s licensing information back to the Zoo.  In turn, the Zoo will serialize, maintain, and distribute this license.</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
 
-<p>RhinoCommon plugins are .NET Framework 4.0 assemblies. Thus, to create a RhinoCommon plugin for Rhino 6, you will need one of the following development tools:</p>
+<p>It is presumed you already have the necessary tools installed and are ready to go.  If you are not there yet, see <a href="/guides/rhinocommon/installing-tools-windows">Installing Tools (Windows)</a>.</p>
 
-<ul>
-  <li>Microsoft Visual C# 2017</li>
-  <li>Microsoft Visual Basic .NET 2017</li>
-  <li>RhinoCommon</li>
-</ul>
+<p>Also, all plugins that use the Zoo license system must be signed with an Authenticode certificate issued by McNeel Plugin Security.  These certificates are free, but must be requested by each developer.  Developers must agree to the Terms of Use before a certificate is issued.  For more information on plugin signing, see <a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a>.</p>
 
-<p>Also, all Rhino plugins that use the Rhino license manager to access the Zoo must be signed with an Authenticode certificate issued by McNeel Plugin Security.  These certificates are free, but must be requested by each developer.  Developers must agree to the Terms of Use before a certificate is issued. For more information on plugin signing, see the <a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a> guide.</p>
-
-<p>It is presumed you have a RhinoCommon plugin you wish to add license support to.  See the <a href="/guides/rhinocommon/your-first-plugin-windows/">Your First Plugin (Windows)</a> guide for instructions.</p>
+<p>It is also presumed you have a RhinoCommon plugin you wish to add license support to.  See the <a href="/guides/rhinocommon/your-first-plugin-windows/">Your First Plugin (Windows)</a> guide for instructions.</p>
 
 <h2 id="add-license-support">Add License Support</h2>
 
@@ -476,29 +456,20 @@ $(document).ready(function()
 
 <h4 id="step-by-step">Step-by-Step</h4>
 <ol>
-  <li>In your plugin’s <code>Rhino.PlugIns</code> inherited class, create a new method with the same signature as the <code>Rhino.PlugIns.ValidateProductKeyDelegate</code> delegate.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).  For details, see the <a href="https://github.com/mcneel/Zoo5">Zoo 5 Developer Samples</a>.</li>
-  <li>In your plugin’s <code>OnLoad</code> method, call <code>Rhino.PlugIns.GetLicense</code> and pass it the build type of the license required by your product, and your delegate function.</li>
+  <li>In your plugin’s <code>Rhino.PlugIns.PlugIn</code> inherited class, create a new method with the same signature as the <code>Rhino.PlugIns.ValidateProductKeyDelegate</code> delegate.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).</li>
+  <li>In your plugin’s <code>Rhino.PlugIns.PlugIn</code> inherited class, create a new method with the same signature as the <code>Rhino.PlugIns.OnLeaseChangedDelegate</code> delegate.  Rhino will call into this function if your product supports Rhino Accounts. When Rhino Accounts gets a new lease, this function is called.</li>
+  <li>In your plugin’s <code>OnLoad</code> method, call <code>Rhino.PlugIns.GetLicense</code> and pass it your licenses’s capabilities (enum), a text mask to assist the user in entering a license, and your two delegate functions.</li>
   <li>Build your plugin.</li>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally sign your plugin</a>.</li>
   <li>Launch Rhino and test your plugin.  When your plugin is loaded for the first time, you will be prompted to enter a license…</li>
 </ol>
-
-<p><img src="/images/rhinocommon-zoo-plugins-01.png" alt="License Not Found" /></p>
-
-<h2 id="managing-licenses">Managing Licenses</h2>
-
-<p>Rhino plugins that use the Rhino license manager appear in the Licenses page of the Options dialog.  Here, the user is allowed to view and manage the license…</p>
-
-<p><img src="/images/rhinocommon-zoo-plugins-02.png" alt="License Manager" /></p>
-
-<hr />
 
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
   <li><a href="/guides/rhinocommon/creating-zoo-plugins">Creating Zoo Plugins</a></li>
   <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a></li>
-  <li><a href="https://github.com/mcneel/Zoo5">Zoo 5 Developer Samples</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/rhinocommon/cs/SampleCsWithLicense">Sample RhinoCommon Plugin Project on GitHub</a></li>
 </ul>
 
         </article>
