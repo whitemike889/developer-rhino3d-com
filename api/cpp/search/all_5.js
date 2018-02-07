@@ -607,7 +607,7 @@ var searchData=
   ['extlineplotweight_5fmm',['ExtLinePlotWeight_mm',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa631b74dc2ae51531fcf0cf12b02dec46',1,'ON_DimStyle']]],
   ['extlineplotweightsource',['ExtLinePlotWeightSource',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaaf5c3cbaf51ac1743cb389063bb2c9b9f',1,'ON_DimStyle']]],
   ['extoffset',['ExtOffset',['../class_o_n___dim_style.html#a4e360218d0e9d5c240f0c6983a5e1981',1,'ON_DimStyle']]],
-  ['extra',['Extra',['../class_i_rh_rdk_content_database_event_info.html#a21bf6c657df6ef36e6953f39215a32b2',1,'IRhRdkContentDatabaseEventInfo']]],
+  ['extra',['Extra',['../class_i_rh_rdk_content_database_event_info.html#a21bf6c657df6ef36e6953f39215a32b2',1,'IRhRdkContentDatabaseEventInfo::Extra()'],['../class_i_rh_rdk_content_param_event_info.html#a870e75bf0e2f96ade4161ba38838e532',1,'IRhRdkContentParamEventInfo::Extra()']]],
   ['extra_5fpane',['extra_pane',['../class_c_rhino_app.html#a62e69d47da2be964e47abdf0b3ef45b3aaae7b335941c229f73873e0b436c835b',1,'CRhinoApp']]],
   ['extracondensed',['Extracondensed',['../class_o_n___font.html#a260244d29871bd942706652123d0e2f1a920da9272f05818b88d827ee01890aa4',1,'ON_Font']]],
   ['extractface',['ExtractFace',['../class_o_n___brep.html#a93d598d882f5943153d6ba1897a4cfde',1,'ON_Brep']]],

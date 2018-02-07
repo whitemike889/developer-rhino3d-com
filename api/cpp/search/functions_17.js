@@ -14,6 +14,7 @@ var searchData=
   ['weightfromapplefontweighttrait',['WeightFromAppleFontWeightTrait',['../class_o_n___font.html#a42efc4f7325d372fa4d22151f52b8d9f',1,'ON_Font']]],
   ['weightfromappleweightoffont',['WeightFromAppleWeightOfFont',['../class_o_n___font.html#a4fd0ddbff815671914952457991817e1',1,'ON_Font']]],
   ['weightfromwindowslogfontweight',['WeightFromWindowsLogfontWeight',['../class_o_n___font.html#ab547899ff0b566d8885340b9004f095c',1,'ON_Font']]],
+  ['weighttowidestring',['WeightToWideString',['../class_o_n___font.html#aec085cfac08befc42fd5c32f054a8c2e',1,'ON_Font']]],
   ['westnode',['WestNode',['../class_o_n___surface_tree_node.html#a0cb5078e6d119c2df42f8785e7cd417a',1,'ON_SurfaceTreeNode']]],
   ['whitepoint',['WhitePoint',['../class_c_rh_rdk_tone_mapper___black_white_point.html#af0c6dba9b5f9270ecb5d99365854932f',1,'CRhRdkToneMapper_BlackWhitePoint']]],
   ['wideststring',['WidestString',['../class_c_rhino_ui_popu_up_list_box.html#ae2651348b585dd6c96cd55ddd28ba3ab',1,'CRhinoUiPopuUpListBox']]],

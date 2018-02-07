@@ -394,7 +394,7 @@ var searchData=
   ['extents',['Extents',['../class_o_n___plane_surface.html#a096ebaf2ed57790e48cd0e6d587fff50',1,'ON_PlaneSurface::Extents()'],['../class_o_n___viewport.html#ae48ac9cd35059f9f4d3c8bf6fd86620b',1,'ON_Viewport::Extents(double half_view_angle, const ON_BoundingBox &amp;world_bbox)'],['../class_o_n___viewport.html#a195afee71c9db8f4cbf3e4091583030f',1,'ON_Viewport::Extents(double half_view_angle, const ON_3dPoint &amp;center, double radius)']]],
   ['extextension',['ExtExtension',['../class_o_n___dim_style.html#aecd11e74aaa7376473883b4bc71cb831',1,'ON_DimStyle']]],
   ['extoffset',['ExtOffset',['../class_o_n___dim_style.html#a4e360218d0e9d5c240f0c6983a5e1981',1,'ON_DimStyle']]],
-  ['extra',['Extra',['../class_i_rh_rdk_content_database_event_info.html#a21bf6c657df6ef36e6953f39215a32b2',1,'IRhRdkContentDatabaseEventInfo']]],
+  ['extra',['Extra',['../class_i_rh_rdk_content_database_event_info.html#a21bf6c657df6ef36e6953f39215a32b2',1,'IRhRdkContentDatabaseEventInfo::Extra()'],['../class_i_rh_rdk_content_param_event_info.html#a870e75bf0e2f96ade4161ba38838e532',1,'IRhRdkContentParamEventInfo::Extra()']]],
   ['extractface',['ExtractFace',['../class_o_n___brep.html#a93d598d882f5943153d6ba1897a4cfde',1,'ON_Brep']]],
   ['extractsubkey',['ExtractSubKey',['../class_c_rhino_prop_list_profile_context_iterator.html#a6ed3a10c583283a06fb5fb1c841e6c8b',1,'CRhinoPropListProfileContextIterator::ExtractSubKey()'],['../class_c_rhino_ini_profile_context_iterator.html#af49c059d4863fe786abd983e90149b90',1,'CRhinoIniProfileContextIterator::ExtractSubKey()']]],
   ['extraoptionsatstart',['ExtraOptionsAtStart',['../class_c_args_rhino_get_plane.html#a51d018bb0a14eebf92d35a9c132b0319',1,'CArgsRhinoGetPlane']]],
