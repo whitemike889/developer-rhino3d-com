@@ -374,7 +374,7 @@ $(document).ready(function()
 
           <p>If you are developing software to read .3dm files, you might find that the software only <em>seems</em> to read NURBS data; but render meshes are ignored.  We do provide methods for third-party developers to read render meshes from .3dm files.</p>
 
-<p>An object’s render meshes are stored on that object. For example, the render meshes for <code>ON_Brep</code> and <code>ON_Extrusion</code> objects are stored on that object. The developer can obtain an object’s render meshes from a Brep by calling <code>ON_Brep::GetMesh</code> and <code>ON_MeshCache::Mesh</code> for an Extrusion.</p>
+<p>An object’s render meshes are stored on that object. For example, the render meshes for <code>ON_Brep</code> and <code>ON_Extrusion</code> objects are stored on that object. The developer can obtain an object’s render meshes from a Brep by calling <code>ON_Brep::GetMesh</code> and from an Extrusion by calling <code>ON_MeshCache::Mesh</code>.</p>
 
 <p>If you are referencing the <code>Example_read</code> sample included with the openNURBS toolkit, then after the 3DM file has been read, you can obtain the render meshes from the <code>ONX_Model</code> object as follows:</p>
 
@@ -399,9 +399,9 @@ for (model_component = it.FirstComponent(); nullptr != model_component; model_co
     const ON_Brep* brep = ON_Brep::Cast(model_geometry-&gt;Geometry(nullptr));
     if (nullptr != brep)
     {
-      ON_SimpleArray&lt;const ON_Mesh*&gt; meshes;
+      ON_SimpleArray&lt;const ON_Mesh*&gt; meshes(brep-&gt;m_F.Count());
       const int mesh_count = brep-&gt;GetMesh(ON::render_mesh, meshes);
-      if (mesh_count)
+      if (mesh_count &gt; 0)
       {
         // TODO: do something with the array of ON_Mesh objects...
       }
