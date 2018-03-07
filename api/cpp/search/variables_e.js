@@ -16,6 +16,6 @@ var searchData=
   ['none',['None',['../class_o_n___text_mask.html#a66d3c442508ce2d3f81b105933c20be1',1,'ON_TextMask::None()'],['../class_o_n___length_unit_name.html#a2e83c1fbb64e5aa700886d023b5f7529',1,'ON_LengthUnitName::None()'],['../class_o_n___angle_unit_name.html#a61c8eb5d366762e1755d743d40266fd7',1,'ON_AngleUnitName::None()'],['../class_o_n___unit_system.html#af361b3ba4bac783bf72350aa6ed7e98f',1,'ON_UnitSystem::None()']]],
   ['noneset',['NoneSet',['../class_o_n___component_status.html#ae267cd5d4088c8a033fa348d30227223',1,'ON_ComponentStatus']]],
   ['notcurrent',['NotCurrent',['../class_o_n___aggregate_component_status.html#a2738c1916a9fb5ca17817891d7a749e5',1,'ON_AggregateComponentStatus']]],
-  ['null',['Null',['../class_o_n___text_log.html#a80a6226c6ab14790a0f3da4b45ce43b7',1,'ON_TextLog']]],
+  ['null',['Null',['../class_o_n___sub_d_vertex_ptr.html#aa2a3d2643dbd7cfabe08f07f965f32fb',1,'ON_SubDVertexPtr::Null()'],['../class_o_n___sub_d_edge_ptr.html#aa7df434a8cf517a79e3b9adfe2fc61e3',1,'ON_SubDEdgePtr::Null()'],['../class_o_n___sub_d_face_ptr.html#abe08e4603fa0ecf78d665b287b443684',1,'ON_SubDFacePtr::Null()'],['../class_o_n___sub_d_component_ptr.html#ae0309416fca150bc9e9b1569b9e4d493',1,'ON_SubDComponentPtr::Null()'],['../class_o_n___text_log.html#a80a6226c6ab14790a0f3da4b45ce43b7',1,'ON_TextLog::Null()']]],
   ['nullruntimeserialnumber',['NullRuntimeSerialNumber',['../class_c_rhino_doc.html#a45ac1574cc6702824289f91d1bd2d768',1,'CRhinoDoc']]]
 ];

@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.1</span>
+   &#160;<span id="projectnumber">6.2</span>
    </div>
   </td>
  </tr>
@@ -528,11 +528,13 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 <p>Attach a content to the document by transferring ownership of it to the document. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">c</td><td>is the content to attach. If successful, ownership of the content will be transferred to the document. </td></tr>
+    <tr><td class="paramname">c</td><td>is the content to attach. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>If the content is a child or already attached to this or another document, the method will fail. </dd>
+<dl class="section note"><dt>Note</dt><dd>If successful, ownership of the content will be transferred to the document. If not, ownership will remain with the caller. Failure to attach usually indicates that there is already a content with the same instance id in the document. This situation is not allowed and the new content will be rejected. </dd>
+<dd>
+If the content is a child or already attached to this or another document, the method will fail. </dd>
 <dd>
 This method does not record undo. If you want undo, please use <a class="el" href="class_c_rh_rdk_content_undo.html">CRhRdkContentUndo</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_c_rh_rdk_content_undo.html">CRhRdkContentUndo</a> </dd></dl>
@@ -2563,7 +2565,7 @@ This method does not record undo because undo works on deleting the content, not
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 7 2018 06:19:40 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 7 2018 04:35:34 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

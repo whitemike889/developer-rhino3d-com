@@ -23,6 +23,7 @@ var searchData=
   ['options_5flist_5fctrl_5fstyles',['options_list_ctrl_styles',['../class_c_rhino_ui_options_list_ctrl.html#aa66d7204ee294866b0546aa2c0a5d629',1,'CRhinoUiOptionsListCtrl']]],
   ['options_5flist_5fcursor',['options_list_cursor',['../class_c_rhino_ui_options_list_ctrl.html#a7b0a0e770293788a1cbc1050ceff4bb7',1,'CRhinoUiOptionsListCtrl']]],
   ['orientation',['orientation',['../class_c_rhino_ui_tabbed_sheet_ctrl.html#a1e9c2852b7ff24726bcb29ddadd899dd',1,'CRhinoUiTabbedSheetCtrl::orientation()'],['../class_i_rh_rdk_thumbnails.html#a55da36849ca036790d63cfa74fe99706',1,'IRhRdkThumbnails::orientation()']]],
+  ['origin',['Origin',['../class_o_n___font.html#a59528ef21572a6eaf5038ba1b0d2c3d0',1,'ON_Font']]],
   ['osnap_5fcommand',['osnap_command',['../class_c_rhino_app_settings.html#a80e8eb6716396b6b16a9d57fe63f26ae',1,'CRhinoAppSettings']]],
   ['osnap_5fmode',['osnap_mode',['../class_o_n.html#ac3539c331cc535218838257e63b27ab5',1,'ON::osnap_mode()'],['../class_c_rhino_app_settings.html#aae52e49d8dde091f3927ef6b18b26d88',1,'CRhinoAppSettings::osnap_mode()']]],
   ['output_5fmode',['output_mode',['../class_c_rhino_print_info.html#aba2f85e232956305ecb19b4ef82aa8a3',1,'CRhinoPrintInfo::output_mode()'],['../class_c_rhino_text_out.html#a979fcf1238447c704ce546c56205c6a9',1,'CRhinoTextOut::output_mode()']]]

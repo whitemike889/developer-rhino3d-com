@@ -60,6 +60,7 @@ var searchData=
   ['textiswrapped',['TextIsWrapped',['../class_o_n___text_content.html#a1b72303a25396af78954608bce64814b',1,'ON_TextContent']]],
   ['textlocationfromunsigned',['TextLocationFromUnsigned',['../class_o_n___dim_style.html#ab0e01b354018b8c337416a36ef243b98',1,'ON_DimStyle']]],
   ['textlog',['TextLog',['../class_c_rhino_text_dump.html#a16ac7581b56c4f06ff6968666a580e82',1,'CRhinoTextDump']]],
+  ['textlogsource3dmfilepath',['TextLogSource3dmFilePath',['../class_o_n_x___model_test.html#abe698eb2da12351fc3e574e5b789b824',1,'ONX_ModelTest']]],
   ['textmask',['TextMask',['../class_o_n___dim_style.html#aaf22431a338ff5e6096fff4dc6acdf32',1,'ON_DimStyle']]],
   ['textmode',['TextMode',['../class_i_rh_rdk_custom_curve_ctrl.html#a36300ddc3c06a690f2028e6e17dbebc9',1,'IRhRdkCustomCurveCtrl']]],
   ['textmoveleader',['TextMoveLeader',['../class_o_n___annotation.html#a7f746bb85e1135c58437079311fe3e80',1,'ON_Annotation::TextMoveLeader()'],['../class_o_n___dim_style.html#af8b154c4e13994820b688db1e57a7374',1,'ON_DimStyle::TextMoveLeader()']]],

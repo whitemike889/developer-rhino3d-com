@@ -75,6 +75,7 @@ var searchData=
   ['hastexturecoordinates',['HasTextureCoordinates',['../class_o_n___mesh.html#aba88cd8af101d94fecdf3790a9b23e5e',1,'ON_Mesh']]],
   ['hastransparentcolor',['HasTransparentColor',['../class_c_rh_rdk_simulated_texture.html#a3512762ca9e1289970a75db8ab87f398',1,'CRhRdkSimulatedTexture']]],
   ['hasundorecords',['HasUndoRecords',['../class_c_rhino_doc.html#a7f585c55fc559c031a6d27ba8df851e1',1,'CRhinoDoc']]],
+  ['hasunsetproperties',['HasUnsetProperties',['../class_o_n___font.html#a2a92dd080e57c18bf29ba2591aaef991',1,'ON_Font']]],
   ['hasvaliddecal',['HasValidDecal',['../class_c_rh_rdk_decal_wrapper.html#a8310a5d97d381cd5f7f1f83841c8dc75',1,'CRhRdkDecalWrapper']]],
   ['hasvalidobject',['HasValidObject',['../class_c_rh_rdk_decal_wrapper.html#a7f2bc184234303667bd313ce0ab39855',1,'CRhRdkDecalWrapper']]],
   ['hasvertexcolors',['HasVertexColors',['../class_o_n___mesh.html#acd2df640918669255c222cac7d360332',1,'ON_Mesh']]],

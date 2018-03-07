@@ -1452,7 +1452,7 @@ var searchData=
   ['orthosnap',['OrthoSnap',['../class_c_rhino_get_point.html#a40542ae28a3897f88fafb3616852af1c',1,'CRhinoGetPoint']]],
   ['osnapdialogvisible',['OsnapDialogVisible',['../class_c_rhino_app_settings.html#a387994cc248c31ac311febf8397a9870',1,'CRhinoAppSettings']]],
   ['osnapenabled',['OsnapEnabled',['../class_c_rhino_app_settings.html#a3ac37dffb056987fd15fb37497e9fb8e',1,'CRhinoAppSettings']]],
-  ['osnapmode',['OsnapMode',['../class_c_rhino_app_settings.html#a5a8a630ef230bcfd3136fa41af90dbd7',1,'CRhinoAppSettings::OsnapMode() const'],['../class_c_rhino_app_settings.html#a73e28547872bb1e5223169804e48a1cf',1,'CRhinoAppSettings::OsnapMode(osnap_mode) const'],['../class_o_n.html#a4bf4eed338fdfc06d6ccc55d1c4dfeca',1,'ON::OSnapMode()']]],
+  ['osnapmode',['OSnapMode',['../class_o_n.html#a4bf4eed338fdfc06d6ccc55d1c4dfeca',1,'ON::OSnapMode()'],['../class_c_rhino_app_settings.html#a5a8a630ef230bcfd3136fa41af90dbd7',1,'CRhinoAppSettings::OsnapMode() const'],['../class_c_rhino_app_settings.html#a73e28547872bb1e5223169804e48a1cf',1,'CRhinoAppSettings::OsnapMode(osnap_mode) const']]],
   ['osnapname',['OsnapName',['../class_c_rhino_app.html#a12206a1bd303761713d146c06c4b13a4',1,'CRhinoApp']]],
   ['osnappickboxradius',['OsnapPickboxRadius',['../class_c_rhino_app_settings.html#a34ae69495abd66832e71a482996fe7ea',1,'CRhinoAppSettings']]],
   ['out',['Out',['../class_o_n___base64_encode_stream.html#af17f96269d231fef871ea7c987fa396f',1,'ON_Base64EncodeStream::Out()'],['../class_o_n___compress_stream.html#a8e1c6b600127cf0c67e2309b91b4093b',1,'ON_CompressStream::Out()'],['../class_o_n___uncompress_stream.html#aad640f13ec9fa64c55ddd029084ed6fb',1,'ON_UncompressStream::Out()']]],

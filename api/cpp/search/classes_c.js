@@ -9,5 +9,5 @@ var searchData=
   ['textprops',['TextProps',['../class_o_n___text_builder_1_1_text_props.html',1,'ON_TextBuilder']]],
   ['textrun',['TextRun',['../class_o_n___rtf_first_char_1_1_text_run.html',1,'ON_RtfFirstChar::TextRun'],['../class_o_n___rtf_string_builder_1_1_text_run.html',1,'ON_RtfStringBuilder::TextRun']]],
   ['texturechannelinfo',['TextureChannelInfo',['../class_c_rh_rdk_content_1_1_texture_channel_info.html',1,'CRhRdkContent']]],
-  ['this',['This',['../class_c_item_1_1_this.html',1,'CItem::This'],['../class_i_meta_data_1_1_this.html',1,'IMetaData::This']]]
+  ['this',['This',['../class_i_meta_data_1_1_this.html',1,'IMetaData::This'],['../class_c_item_1_1_this.html',1,'CItem::This']]]
 ];
