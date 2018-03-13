@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -355,28 +368,52 @@ $(document).ready(function()
 
           <p>If you are developing software to read .3dm files, you might find that the software only <em>seems</em> to read NURBS data; but render meshes are ignored.  We do provide methods for third-party developers to read render meshes from .3dm files.</p>
 
-<p>An object’s render meshes are stored on that object. For example, the render meshes for an <code>ON_Brep</code> object are stored on that brep. The developer can obtain an object’s render meshes from a brep by calling <code>ON_Brep:GetMesh</code>.</p>
-
-<p>It should be noted that if the call to <code>ON_Brep:GetMesh</code> does not return any meshes, then the object did not have any render meshes.</p>
+<p>An object’s render meshes are stored on that object. For example, the render meshes for <code>ON_Brep</code> and <code>ON_Extrusion</code> objects are stored on that object. The developer can obtain an object’s render meshes from a Brep by calling <code>ON_Brep::GetMesh</code> and from an Extrusion by calling <code>ON_MeshCache::Mesh</code>.</p>
 
 <p>If you are referencing the <code>Example_read</code> sample included with the openNURBS toolkit, then after the 3DM file has been read, you can obtain the render meshes from the <code>ONX_Model</code> object as follows:</p>
 
-<pre><code class="language-cpp">ONX_Model model = .....
+<pre><code class="language-cpp">ONX_Model model = ...
 
-int i;
-for( i = 0; i &lt; m_object_table.Count(); i++ )
+ONX_ModelComponentIterator it(model, ON_ModelComponent::Type::ModelGeometry);
+const ON_ModelComponent* model_component = nullptr;
+for (model_component = it.FirstComponent(); nullptr != model_component; model_component = it.NextComponent())
 {
- ONX_Model_Object model_object = m_object_table[i];
- ON_Brep* brep = ON_Brep::Cast( model_object-&gt;m_object );
- if( brep )
- {
-   ON_SimpleArray&lt;const ON_Mesh*&gt; meshes;
-   int mesh_count = brep-&gt;GetMesh( ON::render_mesh, meshes );
-   if( mesh_count )
-   {
-      // TODO: do something with the array of meshes..
-   }
- }
+  const ON_ModelGeometryComponent* model_geometry = ON_ModelGeometryComponent::Cast(model_component);
+  if (nullptr != model_geometry)
+  {
+    // Test for mesh object
+    const ON_Mesh* mesh = ON_Mesh::Cast(model_geometry-&gt;Geometry(nullptr));
+    if (nullptr != mesh)
+    {
+      // TODO: do something with ON_Mesh object...
+      continue;
+    }
+
+    // Test for Brep object
+    const ON_Brep* brep = ON_Brep::Cast(model_geometry-&gt;Geometry(nullptr));
+    if (nullptr != brep)
+    {
+      ON_SimpleArray&lt;const ON_Mesh*&gt; meshes(brep-&gt;m_F.Count());
+      const int mesh_count = brep-&gt;GetMesh(ON::render_mesh, meshes);
+      if (mesh_count &gt; 0)
+      {
+        // TODO: do something with array of ON_Mesh objects...
+      }
+      continue;
+    }
+
+    // Test for extrusion object
+    const ON_Extrusion* extrusion = ON_Extrusion::Cast(model_geometry-&gt;Geometry(nullptr));
+    if (nullptr != extrusion)
+    {
+      const ON_Mesh* mesh = extrusion-&gt;m_mesh_cache.Mesh(ON::render_mesh);
+      if (nullptr != mesh)
+      {
+        // TODO: do something with ON_Mesh object...
+      }
+      continue;
+    }
+  }
 }
 </code></pre>
 
@@ -459,18 +496,5 @@ for( i = 0; i &lt; m_object_table.Count(); i++ )
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

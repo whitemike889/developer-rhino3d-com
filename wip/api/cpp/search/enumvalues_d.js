@@ -1,7 +1,7 @@
 var searchData=
 [
   ['n_5fiso',['N_iso',['../class_o_n___surface.html#a7418fb8120619cb5f17bd4283ad37087afeed892fcad04099c847059c6c7d9a3f',1,'ON_Surface']]],
-  ['name',['Name',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa49ee3087348e8d44e1feda1917443987',1,'ON_DimStyle']]],
+  ['name',['Name',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa49ee3087348e8d44e1feda1917443987',1,'ON_DimStyle::Name()'],['../class_i_rh_rdk_content_param_event_info.html#ada2d40ab934df5181c599950356f4715a49ee3087348e8d44e1feda1917443987',1,'IRhRdkContentParamEventInfo::Name()']]],
   ['name_5fcolumn',['name_column',['../class_c_rhino_ui_layer_list_ctrl.html#ab0882855ff69473c5a7cb7ff3f691462a90befd9237e64f71ac3680ad5fbfb178',1,'CRhinoUiLayerListCtrl::name_column()'],['../class_c_rhino_ui_linetype_list_ctrl.html#a45f2af12ad0dc304cdf04e9d7c2dbcaca24a46d460ee2d0d762fb7dca58d5b0fe',1,'CRhinoUiLinetypeListCtrl::name_column()'],['../class_c_rhino_ui_print_width_list_ctrl.html#aa21c2271fd962c1b361e26cb7f481d39a6f2d605ca64ea3c4ddd331ee56ea977e',1,'CRhinoUiPrintWidthListCtrl::name_column()']]],
   ['nameattribute',['NameAttribute',['../class_o_n___model_component.html#ab89963a3ae7d6ebae18eb5e00ca469bca47d61d7caac82519b41a04cc048de2ff',1,'ON_ModelComponent']]],
   ['namedview',['NamedView',['../class_o_n__3dm_render_settings.html#a1348704d250688f24817622f577750bdaf162be429ff0e16fb165312feb60e578',1,'ON_3dmRenderSettings::NamedView()'],['../group___rhino.html#ggaf2392ae606e7fb725ce1de9fea95bf0faf162be429ff0e16fb165312feb60e578',1,'NamedView():&#160;RhinoSdkPages.h']]],
@@ -81,6 +81,7 @@ var searchData=
   ['notdamaged',['NotDamaged',['../group__open_n_u_r_b_s.html#gga05472cdf2c38712122f6a5173f8b399aa2b24c1cd435f4dc89239e7ecf575ce84',1,'opennurbs_compstat.h']]],
   ['notdeleted',['NotDeleted',['../group__open_n_u_r_b_s.html#gga05472cdf2c38712122f6a5173f8b399aaedaab7861927061cf76d53ab44d33072',1,'opennurbs_compstat.h']]],
   ['notequal_5fpasses',['notequal_passes',['../class_o_n___depth_image.html#aec270d61e4ec8c63a8a07730ce7ec7aeaeb0a15fa1acf3154db28ea2676627fcf',1,'ON_DepthImage']]],
+  ['notes',['Notes',['../class_i_rh_rdk_content_param_event_info.html#ada2d40ab934df5181c599950356f4715af4c6f851b00d5518bf888815de279aba',1,'IRhRdkContentParamEventInfo']]],
   ['notes_5ftab',['notes_tab',['../class_c_rhino_document_properties_tabs.html#ad694428c6803d0d664782bce84de7c41a52bdab56183e4694bb67057831fd58be',1,'CRhinoDocumentPropertiesTabs']]],
   ['notfound',['NotFound',['../class_o_n__3dm_archive_table_status.html#ac81b423e380913f798dacded84a89f90a38c300f4fc9ce8a77aad4a30de05cad8',1,'ON_3dmArchiveTableStatus']]],
   ['nothidden',['NotHidden',['../group__open_n_u_r_b_s.html#gga05472cdf2c38712122f6a5173f8b399aa751e270a9a61d854c9f80872df3b0896',1,'opennurbs_compstat.h']]],

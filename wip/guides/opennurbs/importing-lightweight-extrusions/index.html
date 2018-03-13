@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -393,33 +406,31 @@ $(document).ready(function()
 
 <p>In most cases, you will want to convert the extrusion object to a Brep and then just pass the Brep to the Brep handling code that you’ve already written, for example:</p>
 
-<pre><code class="language-cpp">int i = 0;
-for( i = 0; i &lt; model.m_object_table.Count(); i++ )
+<pre><code class="language-cpp">ONX_Model model = ...
+
+ONX_ModelComponentIterator it(model, ON_ModelComponent::Type::ModelGeometry);
+const ON_ModelComponent* model_component = nullptr;
+for (model_component = it.FirstComponent(); nullptr != model_component; model_component = it.NextComponent())
 {
-  const ONX_Model_Object&amp; model_object = model.m_object_table[i];
-  if( 0 == model_object.m_object )
-    continue;
-
-  if( ON::extrusion_object != model_object.m_object-&gt;ObjectType() )
-    continue;
-
-  const ON_Extrusion* extrusion = ON_Extrusion::Cast( model_object.m_object );
-  if( 0 == extrusion )
-    continue;
-
-  ON_Brep* brep = ON_Brep::New();
-  if( 0 == brep )
-    continue;
-
-  if( brep != extrusion-&gt;BrepForm(brep, true) )
+  const ON_ModelGeometryComponent* model_geometry = ON_ModelGeometryComponent::Cast(model_component);
+  if (nullptr != model_geometry)
   {
-    delete brep; // don't leak...
-    continue;
+    // Test for extrusion object
+    const ON_Extrusion* extrusion = ON_Extrusion::Cast(model_geometry-&gt;Geometry(nullptr));
+    if (nullptr != extrusion)
+    {
+      ON_Brep* brep = ON_Brep::New();
+      if (brep != extrusion-&gt;BrepForm(brep, true))
+      {
+        delete brep; // don't leak...
+        continue;
+      }
+
+      // TODO: do something with Brep here...
+
+      delete brep; // don't leak...
+    }
   }
-
-  // TODO: do something with brep here...
-
-  delete brep; // don't leak...
 }
 </code></pre>
 
@@ -502,18 +513,5 @@ for( i = 0; i &lt; model.m_object_table.Count(); i++ )
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

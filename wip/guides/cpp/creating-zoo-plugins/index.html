@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Creating Zoo Plugins with C/C++</title>
-  <meta name="description" content="This guide discusses how to create plugins for Zoo using C/C++  Using C/C++">
+  <title>Creating Plugins that use the Zoo with C/C++</title>
+  <meta name="description" content="This guide discusses how to create C/C++ plugins that can obtain licenses from the Zoo.  Using C/C++">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/cpp/creating-zoo-plugins/" />
-  <meta property="og:title" content="Creating Zoo Plugins" />
-  <meta property="og:description" content="This guide discusses how to create plugins for Zoo using C/C++" />
+  <meta property="og:title" content="Creating Plugins that use the Zoo" />
+  <meta property="og:description" content="This guide discusses how to create C/C++ plugins that can obtain licenses from the Zoo." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Creating Zoo Plugins" />
-  <meta name="twitter:description" value="This guide discusses how to create plugins for Zoo using C/C++" />
+  <meta name="twitter:title" value="Creating Plugins that use the Zoo" />
+  <meta name="twitter:description" value="This guide discusses how to create C/C++ plugins that can obtain licenses from the Zoo." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -339,22 +352,6 @@ $(document).ready(function()
             
             <li>
               <a href="#prerequisites">Prerequisites</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#writing-a-rhino-plugin">Writing a Rhino Plugin</a>
 
               
 
@@ -417,7 +414,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Creating Zoo Plugins</h1>
+          <h1>Creating Plugins that use the Zoo</h1>
 
           <p>
   <span class="guide_byline">
@@ -431,54 +428,38 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide discusses how to create plugins for Zoo using C/C++</p>
+          <p>This guide discusses how to create C/C++ plugins that can obtain licenses from the Zoo.</p>
 
           <h2 id="overview">Overview</h2>
 
-<p>Zoo lets third party plugin developers add licensing support for their products to the Zoo.</p>
-
-<p>The Rhino C/C++ SDK allows developers to write plugins for Rhino that use the Rhino license manager and obtain licenses from Zoo servers.</p>
+<p>The Zoo supports 3rd party plugins. The Rhino C/C++ SDK allows developers to write plugins for Rhino that use the Rhino license manager and obtain licenses from Zoo servers.</p>
 
 <p>When a customer attempts to add a product license to the Zoo, the product’s plugin is called to validate the user’s request.  Upon validation, the plugin will return the product’s licensing information back to the Zoo.  In turn, the Zoo will serialize, maintain, and distribute this license.</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
 
-<p>Rhino C/C++ plugins are MFC dynamic link libraries.  Thus, to create a plugin for Rhino, you will need one of the following development tools:</p>
+<p>It is presumed you already have the necessary tools installed and are ready to go.  If you are not there yet, see <a href="/wip/guides/cpp/installing-tools-windows">Installing Tools (Windows)</a>.</p>
 
-<ol>
-  <li>Microsoft Visual C++ 2017 (required for Rhino 6.0 64-bit)</li>
-  <li>Rhino 6.0 C/C++ SDK</li>
-</ol>
+<p>Also, all plugins that use the Zoo license system must be signed with an Authenticode certificate issued by McNeel Plugin Security.  These certificates are free, but must be requested by each developer.  Developers must agree to the Terms of Use before a certificate is issued.  For more information on plugin signing, see <a href="/wip/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a>.</p>
 
-<p><strong>NOTE</strong>: Express Editions of Microsoft Visual Studio will not work, as they do not include MFC.</p>
-
-<p>Also, all plugins that use the Zoo license system must be signed with an <em>Authenticode</em> certificate issued by <em>McNeel Plugin Security</em>.  These certificates are free, but must be requested by each developer.  Developers must agree to the <em>Terms of Use</em> before a certificate is issued.  For more information on plugin signing, see <a href="/wip/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a>.</p>
-
-<h2 id="writing-a-rhino-plugin">Writing a Rhino Plugin</h2>
-
-<p>The general steps required to create a Rhino plugin are:</p>
-
-<ol>
-  <li>Make sure you have Zoo installed.</li>
-  <li>Make sure you have the Rhino installed.</li>
-  <li>Make sure you have the Rhino C/C++ SDK installed.</li>
-  <li>Launch Microsoft Visual Studio 2017.</li>
-  <li>Create a new project, in C/C++, based on the Rhino 6.0 Plugin project template.</li>
-  <li>Build your plugin.</li>
-  <li>Launch Rhino and use the <em>PlugInManager</em> command to install your plugin (to verify that it was built properly).</li>
-</ol>
+<p>It is also presumed you have a C/C++plugin you wish to add license support to. See the <a href="http://developer.rhino3d.com/guides/cpp/your-first-plugin-windows/">Your First Plugin (Windows)</a> guide for instructions.</p>
 
 <h2 id="adding-licensing-support">Adding Licensing Support</h2>
 
 <p>After you have built and tested your basic plugin, you can add licensing support as follows:</p>
 
+<h4 id="step-by-step">Step-by-Step</h4>
+
 <ol>
   <li>Add a new <em>.cpp</em> file to your project.</li>
   <li>In this <em>.cpp</em> file, declare a new class that is derived from <code>CRhinoLicenseValidator</code>.</li>
   <li>Override the <code>CRhinoLicenseValidator::ProductBuildType</code> virtual function and return the build type of the license that your product requires.</li>
-  <li>Override and implement the <code>CRhinoLicenseValidator::ValidateProductKey</code> virtual function.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).  For details, see the sample Rhino C/C++ plugins in Related Topics below.</li>
-  <li>Create one (and only one) static instance of your object.</li>
-  <li>In your plugin’s <code>CRhinoPlugIn::OnLoadPlugIn</code> member, call <code>CRhinoPlugIn::GetLicense</code> to get a license.</li>
+  <li>Override and implement the <code>CRhinoLicenseValidator::VerifyLicenseKey</code> virtual function.  Rhino will call into this function whenever it needs your plugin to validate a license that is entered by a user, returned by the Rhino license manager (standalone node), or returned from a Zoo server (network node).</li>
+  <li>Override and implement the <code>CRhinoLicenseValidator::VerifyPreviousVersionLicense</code> virtual function.  Rhino will call into this function if a license key from a previous version of your product is required to validate the license key being verified.</li>
+  <li>Override and implement the <code>CRhinoLicenseValidator::OnLeaseChanged</code> virtual function.  Rhino will call into this function if your product supports Rhino Accounts. When Rhino Accounts gets a new lease, this function is called.</li>
+  <li>Create one (and only one) static instance of your <code>CRhinoLicenseValidator</code>-derived object.</li>
+  <li>In your plugin’s <code>CRhinoPlugIn::OnLoadPlugIn</code> member, call <code>CRhinoPlugIn::SetLicenseCapabilities</code> and pass it the required user interface parameters.</li>
+  <li>In your plugin’s <code>CRhinoPlugIn::OnLoadPlugIn</code> member, <code>CRhinoPlugIn::GetLicense</code> to get a license.</li>
   <li>Build your plugin.</li>
   <li><a href="/wip/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally sign your plugin</a>.</li>
   <li>Launch Rhino and test your plugin.  When your plugin is loaded for the first time, you will be prompted to enter a license.</li>
@@ -487,9 +468,11 @@ $(document).ready(function()
 <h2 id="related-topics">Related Topics</h2>
 
 <ul>
+  <li><a href="/wip/guides/rhinocommon/creating-zoo-plugins">Creating Zoo Plugins</a></li>
   <li><a href="/wip/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a></li>
-  <li><a href="https://github.com/mcneel/Zoo5">Sample Zoo Plugin Projects (on GitHub)</a></li>
+  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/cpp/SampleWithLicensing">Sample C/C++ plugin project (on GitHub)</a></li>
 </ul>
+
 
         </article>
 
@@ -570,18 +553,5 @@ $(document).ready(function()
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

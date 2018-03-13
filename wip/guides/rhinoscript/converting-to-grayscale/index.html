@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -511,18 +524,5 @@ End Sub
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

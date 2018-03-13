@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -380,7 +393,7 @@ $(document).ready(function()
 
               
                 
-                  <li class="active">Fundamentals</li>
+                  <li class="active">Advanced</li>
                 
               
           </ol>
@@ -403,7 +416,7 @@ $(document).ready(function()
 
           <h2 id="question">Question</h2>
 
-<p>I have created a sample model this has a parent layer and a sublayer.  If I add objects to each of these two layer and then turn off the parent layer in Rhino, the objects on both layers do not appear.  But, when I read the .3DM file using openNURBS, the objects on the sublayer report as being visible.  How can I correctly detect the visibility of an object?</p>
+<p>I have created a sample model this has a parent layer and a sublayer.  If I add objects to each of these two layer and then turn off the parent layer in Rhino, the objects on both layers do not appear.  But, when I read the .3dm file using openNURBS, the objects on the sublayer report as being visible.  How can I correctly detect the visibility of an object?</p>
 
 <h2 id="answer">Answer</h2>
 
@@ -419,47 +432,57 @@ $(document).ready(function()
 
 <p>The following example code can be used to detect an object’s true visibility when using the openNURBS toolkit:</p>
 
-<pre><code class="language-cpp">static bool IsLayerVisible( const ON_ObjectArray&lt;ON_Layer&gt;&amp; layer_table, int layer_index )
+<pre><code class="language-cpp">static bool IsLayerVisible(const ONX_Model&amp; model, ON_UUID layer_id)
 {
   bool rc = false;
-  // Validate the layer index
-  if( layer_index &gt;= 0 &amp;&amp; layer_index &lt; layer_table.Count() )
+  const ON_ModelComponentReference&amp; model_component_ref = model.ComponentFromId(ON_ModelComponent::Type::Layer, layer_id);
+  if (!model_component_ref.IsEmpty())
   {
-    // Get the layer
-    const ON_Layer&amp; layer = layer_table[layer_index];
-    // Get the layer's visibility
-    rc = layer.IsVisible();
-    // If the layer is visible, see if the layer has a parent. If so,
-    // check to see if the layer's parent is visible. If not, then
-    // the layer is also not visible.
-    if( rc &amp;&amp; ON_UuidIsNotNil(layer.m_parent_layer_id) )
+    const ON_Layer* layer = ON_Layer::Cast(model_component_ref.ModelComponent());
+    if (nullptr != layer)
     {
-      int i, layer_count = layer_table.Count();
-      for( i = 0; i &lt; layer_count; i++ )
-      {
-        if( 0 == ON_UuidCompare(layer.m_parent_layer_id, layer_table[i].m_layer_id) )
-          return IsLayerVisible( layer_table, i ); // recursive
-      }
+      rc = layer-&gt;IsVisible();
+      if (rc &amp;&amp; layer-&gt;ParentIdIsNotNil())
+        return IsLayerVisible(model, layer-&gt;ParentId());
     }
   }
   return rc;
 }
 
-static bool IsModelObjectVisible( const ONX_Model&amp; model, const ONX_Model_Object&amp; model_object )
+static bool IsLayerVisible(const ONX_Model&amp; model, int layer_index)
 {
   bool rc = false;
-  switch( model_object.m_attributes.Mode() )
+  const ON_ModelComponentReference&amp; model_component_ref = model.ComponentFromIndex(ON_ModelComponent::Type::Layer, layer_index);
+  if (!model_component_ref.IsEmpty())
   {
-  case ON::normal_object:
-  case ON::idef_object:
-  case ON::locked_object:
+    const ON_Layer* layer = ON_Layer::Cast(model_component_ref.ModelComponent());
+    if (nullptr != layer)
     {
-      // Get the object's layer
-      int layer_index = model_object.m_attributes.m_layer_index;
-      // See if the layer is visible
-      rc = IsLayerVisible( model.m_layer_table, layer_index );
+      rc = layer-&gt;IsVisible();
+      if (rc &amp;&amp; layer-&gt;ParentIdIsNotNil())
+        return IsLayerVisible(model, layer-&gt;ParentId());
     }
-    break;
+  }
+  return rc;
+}
+
+static bool IsModelGeometryVisible(const ONX_Model&amp; model, const ON_ModelGeometryComponent* model_geometry)
+{
+  bool rc = false;
+  if (nullptr != model_geometry)
+  {
+    const ON_3dmObjectAttributes* attributes = model_geometry-&gt;Attributes(nullptr);
+    if (nullptr != attributes)
+    {
+      switch (attributes-&gt;Mode())
+      {
+      case ON::normal_object:
+      case ON::idef_object:
+      case ON::locked_object:
+        rc = IsLayerVisible(model, attributes-&gt;m_layer_index);
+        break;
+      }
+    }
   }
   return rc;
 }
@@ -467,24 +490,19 @@ static bool IsModelObjectVisible( const ONX_Model&amp; model, const ONX_Model_Ob
 
 <p>You can test the above static functions by adding the following sample code to the <em>Example_Read</em> project included with the openNURBS toolkit:</p>
 
-<pre><code class="language-cpp">// create a text dump of the model
-if ( bVerboseTextDump )
-{
-  //dump-&gt;PushIndent();
-  //model.Dump(*dump);
-  //dump-&gt;PopIndent();
+<pre><code class="language-cpp">ONX_Model model = ...;
 
-  int i, object_count = model.m_object_table.Count();
-  for( i = 0; i &lt; object_count; i++ )
+ONX_ModelComponentIterator it(model, ON_ModelComponent::Type::ModelGeometry);
+const ON_ModelComponent* model_component = nullptr;
+for (model_component = it.FirstComponent(); nullptr != model_component; model_component = it.NextComponent())
+{
+  const ON_ModelGeometryComponent* model_geometry = ON_ModelGeometryComponent::Cast(model_component);
+  if (nullptr != model_geometry)
   {
-    const ONX_Model_Object&amp; model_object = model.m_object_table[i];
-    if( model_object.m_object )
+    bool bVisible = IsModelGeometryVisible(model, model_geometry);
+    if (bVisible)
     {
-      bool bVisible = IsModelObjectVisible( model, model_object );
-      dump-&gt;Print("Object uuid: ");
-      dump-&gt;Print( model_object.m_attributes.m_uuid );
-      dump-&gt;Print(", visible: %s", bVisible ? "true" : "false" );
-      dump-&gt;Print("\n");
+      // TODO...
     }
   }
 }
@@ -569,18 +587,5 @@ if ( bVerboseTextDump )
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

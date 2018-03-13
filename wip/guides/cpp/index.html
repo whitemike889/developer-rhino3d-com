@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -810,6 +823,14 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/whats-new/" title="This brief guide outlines the new and changed features in the Rhino C/C++ SDK.">What's New?</a></li>
       
@@ -875,6 +896,10 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/license-agreement/" title="This guide provides the license agreement of C/C++ SDK.">License Agreement</a></li>
       
+    
+  
+    
+  
     
   
     
@@ -1597,6 +1622,14 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/your-first-plugin-windows/" title="This guide walks you through your first plugin for Rhino for Windows using C/C++ and Visual Studio.">Creating your first C/C++ plugin for Rhino</a></li>
       
@@ -1658,6 +1691,10 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/defining-new-plugin-commands/" title="This guide discusses Rhino commands and how define new commands using C/C++.">Defining New Plugin Commands</a></li>
       
+    
+  
+    
+  
     
   
     
@@ -1914,6 +1951,10 @@ $(document).ready(function()
 <div class="trigger">
   
   <ul>
+  
+    
+  
+    
   
     
   
@@ -2687,6 +2728,14 @@ $(document).ready(function()
   
     
   
+    
+  
+    
+  
+    
+  
+    
+  
   </ul>
 </div>
 
@@ -2926,11 +2975,15 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/creating-sublayers/" title="This brief guide demonstrates how to create sublayers of a parent layer using C/C++.">Creating Sublayers</a></li>
       
-    
-  
     
   
     
@@ -3382,6 +3435,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinocommon/registering-plugins-windows/" title="This guide provides instructions for registering plugins for Windows.">Registering Plugins (Windows)</a></li>
       
@@ -3391,6 +3446,12 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/renaming-layers/" title="This brief guide discusses how to rename a layer using C/C++.">Renaming Layers</a></li>
       
+    
+  
+    
+  
+    
+  
     
   
     
@@ -3465,6 +3526,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/setting-viewport-titles/" title="This brief guide demonstrates how to set the title of a viewport using C/C++.">Setting Viewport Titles</a></li>
       
+    
+  
     
   
     
@@ -3638,6 +3701,8 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/window-selecting/" title="This brief guide demonstrates how to drag a window to select objects.">Window Selecting</a></li>
       
@@ -3655,10 +3720,6 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/writing-to-text-files/" title="This brief guide discuss writing text files using C/C++.">Writing to Text Files</a></li>
       
-    
-  
-    
-  
     
   
     
@@ -3888,11 +3949,15 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/creating-points-from-text-objects/" title="This brief guide demonstrates how to create point objects based on text entities using C/C++.">Creating Points from Text Objects</a></li>
       
-    
-  
     
   
     
@@ -4386,11 +4451,19 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/retreiving-rhino-data-from-clipboard/" title="This guide demonstrates how to access Rhino data from the Windows Clipboard using C/C++.">Retrieving Rhino Data from the Clipboard</a></li>
       
-    
-  
     
   
     
@@ -4465,6 +4538,8 @@ $(document).ready(function()
       
         <li><a class="page-link" href="/wip/guides/cpp/showing-objects-transforming-dynamically/" title="This guide demonstrates how to dynamically draw transforming objects using C/C++.">Showing Objects Transforming Dynamically</a></li>
       
+    
+  
     
   
     
@@ -4650,13 +4725,11 @@ $(document).ready(function()
     
   
     
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/writing-code-for-32-and-64-bit-compilers/" title="This guide outlines some considerations when writing C/C++ code for both 32- and 64-bit compilers.">Writing Code for 32- and 64-bit Compilers</a></li>
       
-    
-  
-    
-  
     
   
     
@@ -5185,6 +5258,14 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/your-first-renderer-plugin-windows/" title="This guide has yet to be authored or ported.">Your First Renderer Plugin (Windows)</a></li>
       
@@ -5295,11 +5376,15 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/cpp/light-attenuation/" title="This brief guide discusses light attenuation in Rhino.">Light Attenuation</a></li>
       
-    
-  
     
   
     
@@ -5794,6 +5879,12 @@ $(document).ready(function()
     
   
     
+  
+    
+  
+    
+  
+    
       
         <li><a class="page-link" href="/wip/guides/rhinocommon/what-is-a-zoo-plugin/" title="This guide describes what a Zoo Plugin is and what is does.">What is a Zoo Plugin?</a></li>
       
@@ -5976,9 +6067,15 @@ $(document).ready(function()
     
   
     
+  
+    
       
-        <li><a class="page-link" href="/wip/guides/cpp/creating-zoo-plugins/" title="This guide discusses how to create plugins for Zoo using C/C++">Creating Zoo Plugins</a></li>
+        <li><a class="page-link" href="/wip/guides/cpp/creating-zoo-plugins/" title="This guide discusses how to create C/C++ plugins that can obtain licenses from the Zoo.">Creating Plugins that use the Zoo</a></li>
       
+    
+  
+    
+  
     
   
     
@@ -6347,18 +6444,5 @@ $(document).ready(function()
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

@@ -237,6 +237,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -286,14 +292,21 @@ $(document).ready(function()
         <!-- Google Search Engine -->
         <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
         <div id="sitesearch">
-            <!-- Google CSE Search Box Begins  -->
-            <!-- Use of this code assumes agreement with the Google Custom Search Terms of Service. -->
-            <!-- The terms of service are available at https://www.google.com/cse/docs/tos.html -->
-            <form id="search-box" action="/wip/search-results.html">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
                 <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
                 <input class="searchBox" type="submit" size="2" value=" " />
             </form>
-        <!-- Google CSE Search Box Ends -->
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>        
+<!-- Google CSE Search Box Ends -->
         </div>
         <!--End of Google Search Engine -->
       </div>
@@ -425,7 +438,7 @@ $(document).ready(function()
 
 <ul>
   <li>A PC running Microsoft Windows 7 or later.</li>
-  <li><a href="https://www.rhino3d.com/download/rhino/wip">The Rhino Work-In-Progress (WIP)</a>.</li>
+  <li><a href="https://www.rhino3d.com/download">Rhino 6 for Windows</a>.</li>
 </ul>
 
 <hr />
@@ -454,7 +467,7 @@ $(document).ready(function()
 
 <ol>
   <li>Exit <strong>Visual Studio</strong>.</li>
-  <li>Download the <strong><a href="https://www.rhino3d.com/download/rhino-sdk/beta">Rhino C/C++ SDK</a></strong>.</li>
+  <li>Download the <strong><a href="https://www.rhino3d.com/download/Rhino-SDK/6.0/release">Rhino C/C++ SDK</a></strong>.</li>
   <li>Run the <strong>SDK installer</strong> you downloaded, in this case <strong><em>rh60sdk_[build_number].msi</em></strong>.</li>
   <li>If the installation is successful, run Visual Studio.</li>
 </ol>
@@ -546,18 +559,5 @@ $(document).ready(function()
         offset: 150 /* fixed header is about 40px high */
     });
     </script>
-    <!--
-    Next block expands Bootstrap Collapse component when linked to it.  Used in rhinoscriptsyntax api docs
-    ex: http://developer.rhino3d.com/api/RhinoScriptSyntax/win/#collapse-PointCompare
-    -->
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if(document.title == 'rhinoscriptsyntax' && location.hash != null && location.hash != ""){
-            $('.collapse').removeClass('in');
-            $('#collapse-' + location.hash.split("-")[1] + '.collapse').collapse('show');
-        }
-    });
-    </script>
   </body>
-
 </html>

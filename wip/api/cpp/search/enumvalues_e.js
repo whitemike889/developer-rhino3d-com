@@ -50,6 +50,7 @@ var searchData=
   ['on_5fspace',['ON_Space',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09af1858999b01b9c94f54bf7231f69a0b2',1,'opennurbs_unicode.h']]],
   ['on_5ftab',['ON_Tab',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09af8eafe4cdbdc818edf2c9dcf7d9e6897',1,'opennurbs_unicode.h']]],
   ['on_5ftraditionalchinesetree',['ON_TraditionalChineseTree',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a1de4844c24fde587a4f4fa72842177f1',1,'opennurbs_unicode.h']]],
+  ['on_5funderscore',['ON_Underscore',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a872189a5207482d6f3445a91635ce671',1,'opennurbs_unicode.h']]],
   ['on_5futf_5f16',['ON_UTF_16',['../group__open_n_u_r_b_s.html#ggace1eaf0d47350b950fe0175b881b282ea0db56cbe4e18d5e844b1ff1622e945a2',1,'opennurbs_unicode.h']]],
   ['on_5futf_5f16be',['ON_UTF_16BE',['../group__open_n_u_r_b_s.html#ggace1eaf0d47350b950fe0175b881b282ea8d9b4f20460d69d3ae45b391bf5b02b6',1,'opennurbs_unicode.h']]],
   ['on_5futf_5f16le',['ON_UTF_16LE',['../group__open_n_u_r_b_s.html#ggace1eaf0d47350b950fe0175b881b282eaa3e5476380b244005d8569d2c69acdcc',1,'opennurbs_unicode.h']]],
