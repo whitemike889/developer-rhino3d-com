@@ -412,9 +412,11 @@ $(document).ready(function()
 
 <ol>
   <li>Packages <strong>must</strong> have a top-level <a href="manifest.md"><code>manifest.yml</code></a> file</li>
-  <li>Any plug-ins (<code>.rhp</code> or <code>.gha</code> files) <strong>must</strong> be in the top-level directory
+  <li>Any plug-ins (<code>.rhp</code>, <code>.gha</code>, <code>.ghpy</code> files) <strong>must</strong> be in the top-level directory
 so that Rhino and Grasshopper can find and load them</li>
-  <li>Each package <strong>must</strong> have only one plug-in (<code>.gha</code> or <code>.rhp</code>)</li>
+  <li>Each package <strong>should</strong> have only one plug-in (<code>.gha</code>, <code>.rhp</code> or <code>.gphy</code>);
+package restore will only work for the plug-in which matches the details in
+the <code>manifest.yml</code> file</li>
   <li>If you’re packaging a <code>.gha</code> plug-in, you <strong>should</strong> ensure that the package
 name and version number in the <code>GH_AssemblyInfo</code> sub-class match those in the
 <code>manifest.yml</code> file, otherwise <a href="/wip/guides/yak/package-restore-in-grasshopper">package restore</a> may not work</li>
