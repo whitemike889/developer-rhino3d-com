@@ -240,6 +240,12 @@ $(document).ready(function()
           
         
           
+            
+              
+            
+          
+        
+          
         
           
             
@@ -493,16 +499,16 @@ $(document).ready(function()
 
           <h2 id="build">Build</h2>
 
-<p><em>Since 0.2</em></p>
+<ul>
+  <li><em>Since 0.2: Command added</em></li>
+  <li><em>Since 0.4: Supports multiple .gha files, .rhp files or anything else for that matter</em></li>
+</ul>
 
 <p>When run in a directory containing a valid <code>manifest.yaml</code> file, creates a package containing all files in the directory.</p>
 
 <pre><code class="language-commandline">yak build
 </code></pre>
 
-<div class="alert alert-info" role="alert">
-  <strong>Note:</strong> Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.
-</div>
 <!-- During the build, the component GUID is extracted to help with searching for the package later. -->
 
 <h2 id="install">Install</h2>
@@ -558,20 +564,18 @@ $(document).ready(function()
 
 <h2 id="spec">Spec</h2>
 
-<p><em>Since 0.2</em></p>
+<ul>
+  <li><em>Since 0.2: Command added</em></li>
+  <li><em>Since 0.4: Adds support for inspecting .rhp files (RhinoCommon only)</em></li>
+</ul>
 
-<p>When run in a directory containing a <code>*.gha</code> file, creates a <code>manifest.yml</code> file populated with metadata from the Grasshopper plug-in.</p>
+<p>Creates a skeleton <code>manifest.yml</code> file based on the contents of the current directory.
+When run in a directory containing a Grasshopper assembly (<code>.gha</code>) or a RhinoCommon
+plug-in (<code>.rhp</code>) the file will be inspected and used to pre-populate the <code>manifest.yml</code>
+file.</p>
 
 <pre><code class="language-commandline">yak spec
 </code></pre>
-
-<div class="alert alert-info" role="alert">
-  <strong>Note:</strong> Currently this only works if there is exactly <strong>one</strong> <code>.gha</code> file in the directory.
-</div>
-
-<div class="alert alert-info" role="alert">
-  <strong>Note:</strong> This command is only useful if you've implemented <code>GH_AssemblyInfo</code> in the Grasshopper plug-in.
-</div>
 
 <h2 id="uninstall">Uninstall</h2>
 
