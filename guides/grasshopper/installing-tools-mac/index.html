@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Installing Tools (Mac) with C#, VB</title>
-  <meta name="description" content="This guide has yet to be authored or ported.  Using C#, VB">
+  <meta name="description" content="This guide covers all the necessary tools required to author Grasshopper components on Mac.  Using C#, VB">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/grasshopper/installing-tools-mac/" />
   <meta property="og:title" content="Installing Tools (Mac)" />
-  <meta property="og:description" content="This guide has yet to be authored or ported." />
+  <meta property="og:description" content="This guide covers all the necessary tools required to author Grasshopper components on Mac." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Installing Tools (Mac)" />
-  <meta name="twitter:description" value="This guide has yet to be authored or ported." />
+  <meta name="twitter:description" value="This guide covers all the necessary tools required to author Grasshopper components on Mac." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -363,6 +363,86 @@ $(document).ready(function()
         
 
         
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#prerequisites">Prerequisites</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#install-visual-studio-for-mac">Install Visual Studio for...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#install-the-rhinocommon-extension">Install the RhinoCommon E...</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#footnotes">Footnotes</a>
+
+              
+
+            </li>
+          
+
+        
     </ul>
 </nav>
 
@@ -400,9 +480,108 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide has yet to be authored or ported.</p>
+          <p>This guide covers all the necessary tools required to author Grasshopper components on Mac.</p>
 
-          
+          <p>By the end of this guide, you should have all the tools installed necessary for authoring, building, and debugging Grasshopper components using RhinoCommon in Rhino for Mac.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>This guide presumes you have an:</p>
+
+<ul>
+  <li><a href="http://store.apple.com/">Apple Mac</a> running <a href="https://www.apple.com/osx/">macOS Sierra</a> (10.12.5) or later.</li>
+  <li><a href="https://www.rhino3d.com/mac">Rhino 5 for Mac</a> (5.1) or later.</li>
+</ul>
+
+<hr />
+
+<h2 id="install-visual-studio-for-mac">Install Visual Studio for Mac</h2>
+
+<p>Visual Studio for Mac (formerly Xamarin Studio, formerly MonoDevelop) is required to build Grasshopper components on macOS.  The core pieces of the Mono platform that are required are the Mono Framework and Visual Studio for Mac.  Please check out the <a href="/guides/rhinocommon/what-are-mono-and-xamarin/">What are Mono and Xamarin?</a> guide for more information.</p>
+
+<h4 id="step-by-step">Step-by-Step</h4>
+
+<ol>
+  <li><em><a href="https://www.visualstudio.com/vs/visual-studio-mac/">Download Visual Studio for Mac</a></em>.</li>
+  <li>Visual Studio for Mac uses an Installer app, which downloads and installs the components that you select.  Once you have downloaded the <em>VisualStudioInstaller.dmg</em>, double-click it to mount the disk image.  Double-click the big <em>Install Visual Studio.app</em> icon to launch the installer.</li>
+  <li>You must accept the Visual Studio Software License Agreement.</li>
+  <li>Visual Studio for Mac can install the following items:
+    <ul>
+      <li>Visual Studio + Profiler (required)</li>
+      <li>Android + Xamarin.Forms<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> (optional)</li>
+      <li>iOS + Xamarin.Forms<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> (optional)</li>
+      <li>macOS - formerly Xamarin.Mac<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> (optional)</li>
+      <li>Workbooks and Inspector (optional)</li>
+    </ul>
+  </li>
+  <li>Verify that <em>Visual Studio + Profiler</em> is checked and click <em>Continue</em>.</li>
+  <li>The installer downloads and installs: <em>Mono Framework</em> and <em>Visual Studio for Mac</em></li>
+  <li>When the installer is finished, click the <em>Launch Visual Studio</em> button.</li>
+  <li><em>Visual Studio</em> - along with the Mono Framework and Profiler are now installed.</li>
+  <li>Visual Studio is installed in your <em>/Applications</em> folder. You will want to <em>drag its icon to your Dock</em> for future use or - if it’s running - right/option-click the icon in the Dock and select <em>Keep in Dock</em>.</li>
+</ol>
+
+<hr />
+
+<h2 id="install-the-rhinocommon-extension">Install the RhinoCommon Extension</h2>
+
+<p>The RhinoCommon AddIn/Extension is required to debug your RhinoCommon plugins and Grasshopper components in an active session of Rhino for Mac.  Additionally, it contains project templates to get you started creating components and plugins quickly.</p>
+
+<h4 id="step-by-step-1">Step-by-Step</h4>
+
+<ol>
+  <li>Launch <em>Visual Studio for Mac</em>.</li>
+  <li>Navigate to <em>Visual Studio</em> &gt; <em>Extensions…</em>…</li>
+  <li>Navigate to the <em>Gallery</em> tab…
+<img src="/images/installing-tools-mac-01.png" alt="Extension Manager" /></li>
+  <li>In the <em>Search</em> field, search for <em>rhino</em>.  This filters the gallery list below.</li>
+  <li>Find <em>RhinoCommon Plugin Support</em> and select it.  <a href="#extension-not-in-the-gallery"><em>Not there?</em></a></li>
+  <li>Click <em>Install</em>.  The plugin should install.</li>
+  <li><em>IMPORTANT</em>: You must <em>Quit</em> and <em>Restart</em> Visual Studio for Mac.</li>
+  <li>Navigate to <em>Visual Studio</em> &gt; <em>Extensions..</em> &gt; <em>Installed</em> tab.  Verify that <em>RhinoCommon Plugin Support</em> exists under the <em>Debugging</em> category.  If it’s there, you have successfully installed the AddIn and you are <em>DONE</em>.</li>
+</ol>
+
+<h4 id="extension-not-in-the-gallery">Extension not in the Gallery?</h4>
+
+<p>If, for some reason, the RhinoCommon Plugin Support extension does not appear in the Visual Studio for Mac extension gallery, you can install the <a href="https://github.com/mcneel/RhinoCommonXamarinStudioAddin/releases">Latest release from the RhinoCommonXamarinStudioAddin project on GitHub</a>…</p>
+
+<ol>
+  <li>Find the <em>Latest release</em> in the <a href="https://github.com/mcneel/RhinoCommonXamarinStudioAddin/releases">list of releases</a>.</li>
+  <li>Download the <em>.mpack</em> file in the list of Downloads on that release.  For example, at the time of this writing, the <em>Latest release</em> download is entitled <em>RhinoXamarinStudioAddIn_7.0.0.0.mpack</em>.</li>
+  <li>Launch <em>Visual Studio for Mac</em> if it not already open.</li>
+  <li>Navigate to <em>Visual Studio</em> &gt; <em>Extensions…</em>…</li>
+  <li>Click the <em>Install from file…</em> button in the lower left-hand corner.</li>
+  <li>Navigate to the <em>.mpack</em> file you downloaded in step 2 above.</li>
+  <li>Click <em>Install</em>.  The plugin should install.</li>
+  <li><em>IMPORTANT</em>: You must <em>Quit</em> and <em>Restart</em> Visual Studio for Mac.</li>
+  <li>Navigate to <em>Extensions Studio</em> &gt; <em>Add-ins..</em> &gt; <em>Installed</em> tab.  Verify that <em>RhinoCommon Plugin Support</em> exists under the <em>Debugging</em> category.  If it’s there, you have successfully installed the Extension and you are <em>DONE</em>.</li>
+</ol>
+
+<hr />
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p><em>Congratulations!</em>  You have all the tools necessary to build a Grasshopper component on macOS.  <em>Now what?</em></p>
+
+<p>Check out the <a href="/guides/grasshopper/your-first-component-mac">Your First Component (Mac)</a> guide for instructions building - your guessed it - your first component.</p>
+
+<hr />
+
+<h2 id="footnotes">Footnotes</h2>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Xamarin.Android is used to build C# .NET applications for Android devices.  This is useful to have installed if you wish to use the RhinoMobile toolkit, but not required for RhinoCommon in Rhino for Mac. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Xamarin.iOS is used to build C# .NET applications for Apple iOS devices.  This is useful to have installed if you wish to use the RhinoMobile toolkit, but not required for RhinoCommon in Rhino for Mac. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>Xamarin.Mac is Xamarin’s proprietary closed-source toolkit build on the open-source MonoMac (aka Mono for macOS).  Xamarin.Mac provides a commercial license of Mono, bindings to additional frameworks, and the ability to create self-contained application bundles that do not require mono.  Rhino for Mac does not currently use Xamarin.Mac. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 
         </article>
 
