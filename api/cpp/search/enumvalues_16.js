@@ -1,6 +1,7 @@
 var searchData=
 [
   ['w_5fiso',['W_iso',['../class_o_n___surface.html#a7418fb8120619cb5f17bd4283ad37087afa931b2cc684b7f087669c55217acce2',1,'ON_Surface']]],
+  ['warning',['warning',['../group__open_n_u_r_b_s.html#gga7396c5ac81bf2400211f68669416178fa7b83d3f08fa392b79e3f553b585971cd',1,'opennurbs_plus.h']]],
   ['warnings',['Warnings',['../class_o_n_x___model_test.html#ae328861044e4cfea661a76a16b0e13e5ae17fdb615452f440c793b5ddad90dd5e',1,'ONX_ModelTest']]],
   ['wcs',['Wcs',['../class_c_rh_rdk_texture.html#a9cd5928ecebd5b17e9210884c3e5ed86afa6bdb8deee0c8dc32008c69d8cbc8ce',1,'CRhRdkTexture::Wcs()'],['../class_c_rh_rdk_texture.html#acd3a1c9f6a8b7213af4b88adb3835a7fabe5f4374ac6c02fd12f1bae419f93e26',1,'CRhRdkTexture::wcs()']]],
   ['wcs_5fbox',['wcs_box',['../class_c_rh_rdk_texture.html#acd3a1c9f6a8b7213af4b88adb3835a7fa4b1b37d3c37be7407ebcd8c562e19b34',1,'CRhRdkTexture']]],
@@ -16,9 +17,7 @@ var searchData=
   ['window_5fpick',['window_pick',['../class_c_rhino_pick_context.html#a0455aaba5f428f7359f64af2c13d65f3aa58cdddf8bc648a4594ef50df1f58586',1,'CRhinoPickContext']]],
   ['windows',['Windows',['../class_o_n.html#ac15804e07d1c7a04a29e38581b20523baaea23489ce3aa9b6406ebb28e0cda430',1,'ON']]],
   ['windows_5fbitmap',['windows_bitmap',['../class_o_n.html#a9bcc7602892675ad7abfee80bc5a3b2fab9519eef966872b953c08b578bdd4324',1,'ON']]],
-  ['windowsdirectwrite',['WindowsDirectWrite',['../class_o_n___font.html#a59528ef21572a6eaf5038ba1b0d2c3d0ae2873d4c6b5c3ff2911a2ba5cf8a4bb8',1,'ON_Font']]],
-  ['windowslogfont',['WindowsLogFont',['../class_o_n___font.html#a59528ef21572a6eaf5038ba1b0d2c3d0a5d4be8dd27341da90c3896756a2d2ebd',1,'ON_Font']]],
-  ['windowslogfontandtextmetric',['WindowsLogFontAndTextMetric',['../class_o_n___font.html#a59528ef21572a6eaf5038ba1b0d2c3d0a79feec1931b411ade840c0121d600cdf',1,'ON_Font']]],
+  ['windowsfont',['WindowsFont',['../class_o_n___font.html#a59528ef21572a6eaf5038ba1b0d2c3d0ab705b1aea44430e0857958092345b245',1,'ON_Font']]],
   ['winmsg',['winmsg',['../class_c_rhino_get.html#afbb1d0091ccb1306d0fe606405f6b886a0e647c2d05005d928ee8f1f0ac113e51',1,'CRhinoGet']]],
   ['wire',['Wire',['../class_o_n___component_attributes.html#a771d8615898e996a98ab39510328b811af527a9c0e116ce442d1d99cbbdaee9f5',1,'ON_ComponentAttributes']]],
   ['wire_5fcurve',['wire_curve',['../class_c_rhino_get_object.html#a2bdaa3986aa68178956dea9d2b6093e3ad3703d0129bf6be3d54d97d20b07d976',1,'CRhinoGetObject']]],

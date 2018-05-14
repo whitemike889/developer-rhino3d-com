@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rhino C++ SDK Help: ON_Curve Class Reference</title>
+<title>Rhino C++ API: ON_Curve Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.2</span>
+   <div id="projectname">Rhino C++ API
+   &#160;<span id="projectnumber">6.4</span>
    </div>
   </td>
  </tr>
@@ -550,7 +550,8 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 <p>Description: Calculate area mass properties of a curve. The curve should be planar. Parameters: base_point - [in] A point on the plane that contians the curve. To get the best results, the point should be in the near the curve's centroid.</p>
 <p>When computing the area, area centroid, or area first moments of a planar area whose boundary is defined by several curves, pass the same base_point and plane_normal to each call to AreaMassProperties. The base_point must be in the plane of the curves.</p>
-<p>When computing the area second moments or area product moments of a planar area whose boundary is defined by several curves, you MUST pass the entire area's centroid as the base_point and the input mp parameter must contain the results of a previous call to AreaMassProperties(mp,true,true,false,false,base_point). In particular, in this case, you need to make two sets of calls; use first set to calculate the area centroid and the second set calculate the second moments and product moments. plane_normal - [in] nonzero unit normal to the plane of integration. If a closed curve has counter clock-wise orientation with respect to this normal, the area will be positive. If the a closed curve has clock-wise orientation with respect to this normal, the area will be negative. mp - [out] bArea - [in] true to calculate volume bFirstMoments - [in] true to calculate area first moments, area, and area centroid. bSecondMoments - [in] true to calculate area second moments. bProductMoments - [in] true to calculate area product moments. Returns: True if successful. </p>
+<p>When computing the area second moments or area product moments of a planar area whose boundary is defined by several curves, you MUST pass the entire area's centroid as the base_point and the input mp parameter must contain the results of a previous call to AreaMassProperties(mp,true,true,false,false,base_point). In particular, in this case, you need to make two sets of calls; use first set to calculate the area centroid and the second set calculate the second moments and product moments. plane_normal - [in] nonzero unit normal to the plane of integration. If a closed curve has counter clock-wise orientation with respect to this normal, the area will be positive. If the a closed curve has clock-wise orientation with respect to this normal, the area will be negative. mp - [out] bArea - [in] true to calculate volume bFirstMoments - [in] true to calculate area first moments, area, and area centroid. bSecondMoments - [in] true to calculate area second moments. bProductMoments - [in] true to calculate area product moments. Notes: Here is an example of using a curve to compute the mass properies of the planar area bounded by the curve.</p>
+<p><a class="el" href="class_o_n___curve.html">ON_Curve</a>&amp; crv = ...; <a class="el" href="class_o_n___plane.html">ON_Plane</a> plane; double tol = .001; <a class="el" href="class_o_n___mass_properties.html">ON_MassProperties</a> mp; if( crv.IsClosed() &amp;&amp; crv.IsPlanar( plane, tol)) ///&lt; ensure curve is closed and planar { if( ON_ClosedCurveOrientation( crv, plane)&lt;0) ///&lt; get correct orientation of plane plane.Flip(); <a class="el" href="class_o_n___bounding_box.html">ON_BoundingBox</a> bbox = crv.BoundingBox(); ///&lt; choose a reasonable base_point <a class="el" href="class_o_n__3d_point.html">ON_3dPoint</a> base_point = plane.ClosestPointTo(bbox.Center()); } if( crv.AreaMassProperties( base_point, plane.Normal(), mp)) { / mp contains area mass properties of planar region bounded crv. } Returns: True if successful. </p>
 
 </div>
 </div>
@@ -3560,7 +3561,7 @@ within  tolerance of m_t[index].
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 7 2018 04:35:38 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue May 8 2018 15:57:37 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

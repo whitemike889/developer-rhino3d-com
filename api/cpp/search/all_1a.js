@@ -34,6 +34,8 @@ var searchData=
   ['zh_5fcn_5flcid',['zh_CN_LCID',['../class_o_n___locale.html#af59f63b95a49c0ca1a26347e833c6510a4a10b0f7992fbfc82dd4aa7af9ab86af',1,'ON_Locale']]],
   ['zh_5ftw_5flcid',['zh_TW_LCID',['../class_o_n___locale.html#af59f63b95a49c0ca1a26347e833c6510a4c77eb4a4c76dcda93d6d55aa1e73f52',1,'ON_Locale']]],
   ['znear_5fclip',['znear_clip',['../class_o_n___depth_image.html#a6eb4d8207f1912079b26e1707f76dde7a5850f5b0d4f53c5ceecb4c9f1a98e54f',1,'ON_DepthImage']]],
+  ['zoomextentsparallelviewborder',['ZoomExtentsParallelViewBorder',['../class_c_rhino_app_view_settings.html#ad86b4c6cdecd51701fb3d7fd52def7ff',1,'CRhinoAppViewSettings']]],
+  ['zoomextentsperspectiveviewborder',['ZoomExtentsPerspectiveViewBorder',['../class_c_rhino_app_view_settings.html#afff26114a916a0a67701557762b57378',1,'CRhinoAppViewSettings']]],
   ['zoomtoextents',['ZoomToExtents',['../class_i_rh_rdk_custom_curve_ctrl.html#ad35afd01873045bd69cb49a6c6696bb2',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtographrect',['ZoomToGraphRect',['../class_i_rh_rdk_custom_curve_ctrl.html#a717ba727b71f512ba7ed696678cb9da0',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtopixelrect',['ZoomToPixelRect',['../class_i_rh_rdk_custom_curve_ctrl.html#ade948a7b818962f7f34a72b75cc14a88',1,'IRhRdkCustomCurveCtrl']]],

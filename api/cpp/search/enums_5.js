@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['facedirectionmode',['FaceDirectionMode',['../class_i_rhino_mesh_extruder.html#a8a034c066da196007e0fb19937cb1194',1,'IRhinoMeshExtruder']]],
   ['field',['field',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65fea',1,'ON_DimStyle']]],
   ['file_5fdialog_5ftype',['file_dialog_type',['../class_c_rhino_get_file_dialog.html#a733afbd2edfc27122aed393c0b1c439b',1,'CRhinoGetFileDialog']]],
   ['file_5fexport_5fplug_5fin_5fproc_5fmessage_5fid',['file_export_plug_in_proc_message_id',['../class_c_rhino_file_export_plug_in.html#af6de3887232bc724cf4ebd7331dde9c0',1,'CRhinoFileExportPlugIn']]],

@@ -15,6 +15,7 @@ var searchData=
   ['on_5fcomponentstate',['ON_ComponentState',['../group__open_n_u_r_b_s.html#ga05472cdf2c38712122f6a5173f8b399a',1,'opennurbs_compstat.h']]],
   ['on_5ffitresult',['ON_FitResult',['../group__open_n_u_r_b_s.html#ga07b06d9e1e6e2628fff11b0c5bcb9d87',1,'opennurbs_surface.h']]],
   ['on_5ffocalblurmodes',['ON_FocalBlurModes',['../group__open_n_u_r_b_s.html#ga286869b78f5da2ac0b9513870aad3b28',1,'opennurbs_3dm_settings.h']]],
+  ['on_5flogmessagetype',['ON_LogMessageType',['../group__open_n_u_r_b_s.html#ga7396c5ac81bf2400211f68669416178f',1,'opennurbs_plus.h']]],
   ['on_5fnumber_5ferror',['on_number_error',['../class_c_rhino_ui_edit.html#a33a21f6a50ba5a832aa908a3a17d4689',1,'CRhinoUiEdit']]],
   ['on_5fstringmapordinaltype',['ON_StringMapOrdinalType',['../group__open_n_u_r_b_s.html#gab65fd8bd984e031483aea362a4405a14',1,'opennurbs_defines.h']]],
   ['on_5fstringmaptype',['ON_StringMapType',['../group__open_n_u_r_b_s.html#ga70823e7a458618bc8e2dc713ef8c542d',1,'opennurbs_defines.h']]],

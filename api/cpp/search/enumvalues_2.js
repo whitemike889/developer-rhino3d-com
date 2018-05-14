@@ -189,6 +189,7 @@ var searchData=
   ['corner_5fconic',['corner_conic',['../class_c_args_rhino_get_plane.html#a9eb0fc984c36b5adf8ce7a35605b642ba915eb536f70561fc3a234300d1599cc4',1,'CArgsRhinoGetPlane']]],
   ['corrupt_5fobject',['corrupt_object',['../class_o_n.html#adc58874a66c578fdab49bbbcc71d292fa7aaf8b24a7b64f85ba31189482476c7c',1,'ON']]],
   ['count',['Count',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaae93f994f01c537c4e2f7d8528c3eb5e9',1,'ON_DimStyle']]],
+  ['coverwalls',['CoverWalls',['../class_i_rhino_mesh_extruder.html#a1497dbfc9aa599b3e7d504ba6186c4daa941bfe46f0c229baa9ebfe8a5fbc2442',1,'IRhinoMeshExtruder']]],
   ['cplane_5fpoint',['cplane_point',['../class_c_rhino_app_model_aid_settings.html#a59fc509a36b95807bc516914683139fba2d830628bf4442566f254281e1b9d443',1,'CRhinoAppModelAidSettings']]],
   ['cpnormalvector',['cpnormalvector',['../class_c_args_rhino_get_line.html#a72e3bb57678d1db3e662a7a7855a4688a61e527df8d03e2c15b92254cdc540712',1,'CArgsRhinoGetLine']]],
   ['crease',['Crease',['../class_o_n___component_attributes.html#a771d8615898e996a98ab39510328b811a30e6d2f2ce05fc24700799973ab11777',1,'ON_ComponentAttributes']]],

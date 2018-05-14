@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['object',['object',['../class_c_rhino_get.html#afbb1d0091ccb1306d0fe606405f6b886aca42e767ad34b4224b5f7326a5e4d72a',1,'CRhinoGet::object()'],['../class_i_rh_rdk_preview_scene_server.html#a640397be9f99678dc3d355a706ef41bcaea83335f7564453465704e0a294b572b',1,'IRhRdkPreviewSceneServer::object()'],['../class_i_rh_rdk_new_content_ctrl.html#ab56e2ad45c2236406465e0d6888bacd1a497031794414a552435f90151ac3b54b',1,'IRhRdkNewContentCtrl::Object()']]],
+  ['object',['Object',['../class_i_rh_rdk_new_content_ctrl.html#ab56e2ad45c2236406465e0d6888bacd1a497031794414a552435f90151ac3b54b',1,'IRhRdkNewContentCtrl::Object()'],['../class_c_rhino_get.html#afbb1d0091ccb1306d0fe606405f6b886aca42e767ad34b4224b5f7326a5e4d72a',1,'CRhinoGet::object()'],['../class_i_rh_rdk_preview_scene_server.html#a640397be9f99678dc3d355a706ef41bcaea83335f7564453465704e0a294b572b',1,'IRhRdkPreviewSceneServer::object()']]],
   ['object_5fmode_5fcount',['object_mode_count',['../class_o_n.html#a8180cd1c5b713d06466dc476c65e3ebbab1d06045433998a240fa6463c4eadfa6',1,'ON']]],
   ['object_5fprop_5fpage',['object_prop_page',['../class_c_rhino_object_properties_modeless_docking_dialog.html#a9c266d8b1b0376667408bf30803e56a1af28e2d57aa7f80ef9c77d4f7e5c10f8d',1,'CRhinoObjectPropertiesModelessDockingDialog']]],
   ['object_5ftable',['object_table',['../group__open_n_u_r_b_s.html#gga6f5c1d4d88bb5eccd2afaacde27f9ef3ac8712eb1f478557764064b65ba195b32',1,'opennurbs_archive.h']]],
@@ -24,6 +24,7 @@ var searchData=
   ['on_5feurosign',['ON_EuroSign',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09af8d5271e21958b4b1226cb8b3297ab96',1,'opennurbs_unicode.h']]],
   ['on_5fformfeed',['ON_FormFeed',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a016be22cfaa114b463f6e5299fd4be0b',1,'opennurbs_unicode.h']]],
   ['on_5fgreekalpha',['ON_GreekAlpha',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a8af51ffb6d6044babd5efb5bf612caf0',1,'opennurbs_unicode.h']]],
+  ['on_5fhyphenminus',['ON_HyphenMinus',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09aed5ca1873924a779e374f9aab7a19aa3',1,'opennurbs_unicode.h']]],
   ['on_5finvalidcodepoint',['ON_InvalidCodePoint',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a4addc25cce62061165dd42a06cb36036',1,'opennurbs_unicode.h']]],
   ['on_5fjapaneserhinoceros',['ON_JapaneseRhinoceros',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a1474eddce6be11527869d38b30fe93c7',1,'opennurbs_unicode.h']]],
   ['on_5fjapanesetree',['ON_JapaneseTree',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09af04f614a0ab23f246ae87bc65f0e1338',1,'opennurbs_unicode.h']]],
