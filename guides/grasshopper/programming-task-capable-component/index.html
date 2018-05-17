@@ -416,15 +416,15 @@ $(document).ready(function()
           <h3 id="overview">Overview</h3>
 <p>Grasshopper for Rhino 6, allows you to develop multi-threaded components by way of the new <code>IGH_TaskCapableComponent</code> interface. Benchmarks have shown that Grasshopper can run significantly faster when using multi-threaded components.  Results may vary, as not all solutions can be computed in parallel.</p>
 
-<p>###More information
-When a component implements the <code>IGH_TaskCapableComponent</code> interface, Grasshopper will notice and potentially call a full enumeration of <code>SolveInstance</code> for the component twice in consecutive passes:</p>
+<h3 id="more-information">More information</h3>
+<p>When a component implements the <code>IGH_TaskCapableComponent</code> interface, Grasshopper will notice and potentially call a full enumeration of <code>SolveInstance</code> for the component twice in consecutive passes:</p>
 <ol>
   <li>The first pass is for collecting data and starting tasks to compute results</li>
   <li>The second pass is for using the results from the tasks to set outputs.</li>
 </ol>
 
-<p>###Example
-In this guide, we will convert a standard component into a task capable component.  In our example, the initial component code looks like this:</p>
+<h3 id="example">Example</h3>
+<p>In this guide, we will convert a standard component into a task capable component.  In our example, the initial component code looks like this:</p>
 
 <pre><code class="language-C#">public class FibonacciComponent : GH_Component
 {
