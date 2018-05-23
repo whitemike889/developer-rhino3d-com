@@ -6,20 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Task capable components with Grasshopper</title>
-  <meta name="description" content="A guide to programming multi-threaded components in Grasshopper  Using Grasshopper">
+  <title>Task Capable Components with C#</title>
+  <meta name="description" content="A guide to programming multi-threaded components in Grasshopper  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/grasshopper/programming-task-capable-component/" />
-  <meta property="og:title" content="Task capable components" />
+  <meta property="og:title" content="Task Capable Components" />
   <meta property="og:description" content="A guide to programming multi-threaded components in Grasshopper" />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Task capable components" />
+  <meta name="twitter:title" value="Task Capable Components" />
   <meta name="twitter:description" value="A guide to programming multi-threaded components in Grasshopper" />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
@@ -31,7 +31,7 @@
   
   
   <meta name="twitter:label2" value="Language(s)" />
-  <meta name="twitter:data2" value="Grasshopper" />
+  <meta name="twitter:data2" value="C#" />
   
 
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -363,6 +363,86 @@ $(document).ready(function()
         
 
         
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#overview">Overview</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-interface">The Interface</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#example">Example</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#separate-methods">Separate Methods</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#implement-the-interface">Implement the Interface</a>
+
+              
+
+            </li>
+          
+
+        
     </ul>
 </nav>
 
@@ -386,7 +466,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Task capable components</h1>
+          <h1>Task Capable Components</h1>
 
           <p>
   <span class="guide_byline">
@@ -413,20 +493,24 @@ $(document).ready(function()
 
           <p>A guide to programming multi-threaded components in Grasshopper</p>
 
-          <h3 id="overview">Overview</h3>
-<p>Grasshopper for Rhino 6, allows you to develop multi-threaded components by way of the new <code>IGH_TaskCapableComponent</code> interface. Benchmarks have shown that Grasshopper can run significantly faster when using multi-threaded components.  Results may vary, as not all solutions can be computed in parallel.</p>
+          <h2 id="overview">Overview</h2>
 
-<h3 id="more-information">More information</h3>
+<p>Grasshopper for Rhino 6 allows you to develop multi-threaded components by way of the new <code>IGH_TaskCapableComponent</code> interface. Benchmarks have shown that Grasshopper can run significantly faster when using multi-threaded components.  Results may vary, as not all solutions can be computed in parallel.</p>
+
+<h2 id="the-interface">The Interface</h2>
+
 <p>When a component implements the <code>IGH_TaskCapableComponent</code> interface, Grasshopper will notice and potentially call a full enumeration of <code>SolveInstance</code> for the component twice in consecutive passes:</p>
+
 <ol>
   <li>The first pass is for collecting data and starting tasks to compute results</li>
   <li>The second pass is for using the results from the tasks to set outputs.</li>
 </ol>
 
-<h3 id="example">Example</h3>
+<h2 id="example">Example</h2>
+
 <p>In this guide, we will convert a standard component into a task capable component.  In our example, the initial component code looks like this:</p>
 
-<pre><code class="language-C#">public class FibonacciComponent : GH_Component
+<pre><code class="language-cs">public class FibonacciComponent : GH_Component
 {
   ...
   protected override void SolveInstance(IGH_DataAccess data)
@@ -469,9 +553,9 @@ $(document).ready(function()
 }
 </code></pre>
 
-<h3 id="separate-calculations-into-separate-methods">Separate calculations into separate methods</h3>
+<h2 id="separate-methods">Separate Methods</h2>
 
-<p>Independent tasks should not be directly accessing <code>IGH_DataAccess</code>, as that interface is not thread safe. Thus, the we will want to break the current flow of a component’s <code>SolveInstance</code> method into three distinct steps:</p>
+<p>Now you need to separate calculations into separate methods.  Independent tasks should not be directly accessing <code>IGH_DataAccess</code>, as that interface is not thread safe. Thus, the we will want to break the current flow of a component’s <code>SolveInstance</code> method into three distinct steps:</p>
 
 <ol>
   <li>Collect input data</li>
@@ -479,11 +563,11 @@ $(document).ready(function()
   <li>Set output data</li>
 </ol>
 
-<p>To implement <strong>Step 2</strong>, we will break out the computation code into its own method.</p>
+<p>To implement <em>Step 2</em>, we will break out the computation code into its own method.</p>
 
 <p>To start, create a public <code>SolveResults</code> class to hold the data for each <code>SolveInstance</code> iteration. For this computation, our definition of <code>SolveInstance</code> is very simple:</p>
 
-<pre><code class="language-C#">public class SolveResults
+<pre><code class="language-cs">public class SolveResults
 {
   public int Value { get; set; }
 }
@@ -491,7 +575,7 @@ $(document).ready(function()
 
 <p>Create a <em>Compute</em> function that takes the input retrieved from <code>IGH_DataAccess</code> and returns an instance of <code>SolveResults</code>.</p>
 
-<pre><code class="language-c#">private static SolveResults ComputeFibonacci(int n)
+<pre><code class="language-cs">private static SolveResults ComputeFibonacci(int n)
 {
   SolveResults result = new SolveResults();
   if (n == 0)
@@ -513,21 +597,21 @@ $(document).ready(function()
 }
 </code></pre>
 
-<h3 id="implement-igh_taskcapablecomponent-interface">Implement IGH_TaskCapableComponent Interface</h3>
+<h2 id="implement-the-interface">Implement the Interface</h2>
 
 <p>Now, we are ready to launch multiple tasks in the component.</p>
 
 <p>Change the component’s inheritance from <code>GH_Component</code> to <code>GH_TaskCapableComponent&lt;T&gt;</code>. In this example, modify the component from this:</p>
 
-<pre><code class="language-c#">public class FibonacciComponent : GH_Component
-</code></pre>
+<p><code>public class FibonacciComponent : GH_Component</code></p>
+
 <p>to this:</p>
-<pre><code class="language-c#">public class FibonacciComponent : GH_TaskCapableComponent&lt;FibonacciComponent.SolveResults&gt;
-</code></pre>
+
+<p><code>public class FibonacciComponent : GH_TaskCapableComponent&lt;FibonacciComponent.SolveResults&gt;</code></p>
 
 <p>Finally, modify <code>SolveInstance</code> to use tasks:</p>
 
-<pre><code class="language-C#">protected override void SolveInstance(IGH_DataAccess data)
+<pre><code class="language-cs">protected override void SolveInstance(IGH_DataAccess data)
 {
   const int max_steps = 46;
 
@@ -543,7 +627,7 @@ $(document).ready(function()
     }
     if (steps &gt; max_steps) // Prevent overflow...
     {
-      AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Steps must be &lt;= {max_steps}."");
+      AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Steps must be &lt;= {max_steps}.");
       return;
     }
 
