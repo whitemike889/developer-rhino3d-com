@@ -26,7 +26,6 @@ var searchData=
   ['contextsfordrawtodc',['ContextsForDrawToDC',['../class_c_display_pipeline_attributes.html#a561a202b6f6f9099b660f19a57437100',1,'CDisplayPipelineAttributes']]],
   ['continue_5fmode',['continue_mode',['../class_c_rhino_dim_linear.html#abf2086cfcc7ec06c3429ded2fe79172c',1,'CRhinoDimLinear']]],
   ['continuity',['continuity',['../class_o_n.html#a7cec8c08d6bc50e082fb9e6507b5f668',1,'ON']]],
-  ['contourpointtype',['ContourPointType',['../class_o_n___font_glyph_outline_point.html#aef12c67de9caa9dd638f8bfe5c874c9e',1,'ON_FontGlyphOutlinePoint']]],
   ['control_5fbar_5fflags',['control_bar_flags',['../class_c_rhino_ui_dock_bar.html#a9b5dfea1a8321b09fedff96be8214ced',1,'CRhinoUiDockBar']]],
   ['control_5ftype',['control_type',['../class_c_rhino_ui_options_list_ctrl_item.html#a3f8c20f45d99674141e2836845a8e97b',1,'CRhinoUiOptionsListCtrlItem']]],
   ['coordinate_5fsystem',['coordinate_system',['../class_o_n.html#a0601f59125faa5f99e9a281d6566978b',1,'ON']]],

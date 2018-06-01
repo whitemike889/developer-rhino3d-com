@@ -5,7 +5,7 @@ var searchData=
   ['quadrant',['Quadrant',['../class_c_args_rhino_get_arc.html#abfb4bf99ea812f8cda0d9bb256a9e9fa',1,'CArgsRhinoGetArc::Quadrant()'],['../class_c_args_rhino_get_ellipse.html#a7ee6fdf759cf5af74a530c7f92cea280',1,'CArgsRhinoGetEllipse::Quadrant()']]],
   ['quadsnaptobezier',['QuadSnapToBezier',['../class_c_rhino_snap_context.html#ad29a7a5a17cfdd18783867e729f8c84e',1,'CRhinoSnapContext']]],
   ['quality',['Quality',['../class_i_rh_rdk_preview_rendered.html#acba548b7ecd48649dc259c706fd02b70',1,'IRhRdkPreviewRendered']]],
-  ['query',['Query',['../class_c_rh_rdk_task.html#a7d8e17af0ca5a1dcb806f90180b6c5bb',1,'CRhRdkTask::Query()'],['../class_c_rh_rdk_single_content_task.html#a8324889782cd578ee380fdbe9f4a1c07',1,'CRhRdkSingleContentTask::Query()'],['../class_c_rh_rdk_multiple_content_task.html#a6b38bd86b6bc83e18b0a942397776086',1,'CRhRdkMultipleContentTask::Query()']]],
+  ['query',['Query',['../class_c_rh_rdk_task.html#a7d8e17af0ca5a1dcb806f90180b6c5bb',1,'CRhRdkTask::Query()'],['../class_c_rh_rdk_single_content_task.html#a8324889782cd578ee380fdbe9f4a1c07',1,'CRhRdkSingleContentTask::Query()'],['../class_c_rh_rdk_multiple_content_task.html#a6b38bd86b6bc83e18b0a942397776086',1,'CRhRdkMultipleContentTask::Query()'],['../class_c_rh_rdk_custom_task.html#a941c023105ad091820bfe630eb1279dd',1,'CRhRdkCustomTask::Query()']]],
   ['query2dpointvalue',['Query2dPointValue',['../class_c_rhino_ui_registry.html#a2ee40190adb96b865d4b5c4dec9124e3',1,'CRhinoUiRegistry']]],
   ['query3dpointvalue',['Query3dPointValue',['../class_c_rhino_ui_registry.html#ac26f65cc06b2446afd4e4735786583d5',1,'CRhinoUiRegistry']]],
   ['query3dvectorvalue',['Query3dVectorValue',['../class_c_rhino_ui_registry.html#a53f62147ee5f22cba29098a423549626',1,'CRhinoUiRegistry']]],

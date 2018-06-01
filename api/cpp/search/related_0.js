@@ -158,5 +158,6 @@ var searchData=
   ['digitizermanager',['DigitizerManager',['../class_c_rhino_digitizer_manager.html#ab87a388e91eeb3a529c99ebe5ca1d985',1,'CRhinoDigitizerManager']]],
   ['hidepopupwindow',['HidePopUpWindow',['../class_c_rhino_ui_combo_box.html#a4b7894093d2604e0e5c049e763864754',1,'CRhinoUiComboBox']]],
   ['ondestroy',['OnDestroy',['../class_c_rhino_ui_dock_bar_manager.html#a9bfdec79d9c9372e67cef8367efe0c4f',1,'CRhinoUiDockBarManager']]],
+  ['pick',['Pick',['../class_c_rhino_get_object.html#a70cb1d776807c75b40a15c58865c7e8d',1,'CRhinoGetObject']]],
   ['postncdestroy',['PostNcDestroy',['../class_c_rhino_ui_dock_bar_manager.html#a0fb0816824fb9934c5522ef8d8452966',1,'CRhinoUiDockBarManager']]]
 ];
