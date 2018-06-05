@@ -29,7 +29,7 @@ If you give your custom RUI file the exact same name as the plugin RHP file and 
 The first time a plugin is loaded, Rhino looks for an RUI file with the same name as the plugin. If it is found, it is copied to the following location and opened:
 
 ```
-%APPDATA%\McNeel\Rhinoceros\<version>\Plug-ins\<plugin_name (plugin_uuid)>\settings
+%APPDATA%\McNeel\Rhinoceros\<version>\UI\Plug-ins\
 ```
 
 It is copied, or staged, to ensure that the file is writable and to provide a way to revert to the original, or default, RUI file if needed.
@@ -68,14 +68,11 @@ protected override LoadReturnCode OnLoad(ref string errorMessage)
       // Build a path to the user's staged RUI file.
       var sb = new StringBuilder();
       sb.Append(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-      sb.Append("\\McNeel\\Rhinoceros\\6.0\\Plug-ins\\");
-      sb.AppendFormat("{0} ({1})", Name, Id);
-      sb.Append("\\settings\\");
+      sb.Append(@"\McNeel\Rhinoceros\6.0\UI\Plug-ins\");
       sb.AppendFormat("{0}.rui", Assembly.GetName().Name);
 
-      var path = sb.ToString();
-
       // Verify the RUI file exists.
+      var path = sb.ToString();
       if (File.Exists(path))
       {
         try
@@ -125,18 +122,15 @@ BOOL CTestPlugIn::OnLoadPlugIn()
 
     ON_wString path;
     CRhinoFileUtilities::GetRhinoRoamingProfileDataFolder(path);
-
-    ON_wString key;
-    key.Format(L"Plug-ins\\%s (%s)\\settings\\", RhinoPlugInName(), RhinoPlugInId());
+    path += L"UI\\Plug-ins\\";
 
     ON_wString plugin;
     GetPlugInFileName(plugin);
 
     ON_wString fname;
-    ON_wString::SplitPath(plugin, 0, 0, &fname, 0);
+    ON_wString::SplitPath(plugin, nullptr, nullptr, &fname, nullptr);
     fname += L".rui";
 
-    path += key;
     path += fname;
 
     // Verify the RUI file exists.

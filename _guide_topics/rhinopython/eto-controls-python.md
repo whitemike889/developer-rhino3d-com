@@ -635,7 +635,7 @@ Creating the `forms.WebView()` is simple by creating the webview, then to set it
 More details can be found in the [Eto WebView API Documentation](http://api.etoforms.picoe.ca/html/T_Eto_Forms_WebView.htm).
 
 
-## Sample dialogs  
+## Sample Dialogs  
 
 Now with some understanding of Eto Dialogs in Python, take a look at some of the Sample dialogs in the [Python Developer Samples Repo](https://github.com/mcneel/rhino-developer-samples/blob/{{ site.git_branch | default: "master" }}/rhinopython):
 
