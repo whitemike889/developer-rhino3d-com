@@ -94,7 +94,7 @@ Help for details of specific Keyword Arguments names can be found in the help ta
 
 At present, there is no way to switch components that have special settings to any alternative. For example the Bounding Box component has a special setting, Union Box:
 
-![{{ site.baseurl }}/images/node-in-code-option.png]({{ site.baseurl }}/images/node-in-code-option.png){: .img-center width="85%"}
+![{{ site.baseurl }}/images/node-in-code-option.png]({{ site.baseurl }}/images/node-in-code-option.png){: .img-center width="65%"}
 
 ### Managing Outputs
 
@@ -146,7 +146,7 @@ This opens up many more methods which are available to rhino.Python. Remember, t
 
 Help for specific component arguments and return values can be found in the help tab at the bottom the the rhino.Python editor while editing the arguments.
 
-![{{ site.baseurl }}/images/node-in-code-option.png]({{ site.baseurl }}/images/node-in-code-option.png){: .img-center width="85%"}
+![{{ site.baseurl }}/images/node-in-code-help.png]({{ site.baseurl }}/images/node-in-code-help.png){: .img-center width="50%"}
 
 
 ---
