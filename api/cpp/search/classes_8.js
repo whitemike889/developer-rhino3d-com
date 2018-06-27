@@ -210,6 +210,8 @@ var searchData=
   ['on_5fearthanchorpoint',['ON_EarthAnchorPoint',['../class_o_n___earth_anchor_point.html',1,'']]],
   ['on_5fellipse',['ON_Ellipse',['../class_o_n___ellipse.html',1,'']]],
   ['on_5fembeddedbitmap',['ON_EmbeddedBitmap',['../class_o_n___embedded_bitmap.html',1,'']]],
+  ['on_5ferrorevent',['ON_ErrorEvent',['../class_o_n___error_event.html',1,'']]],
+  ['on_5ferrorlog',['ON_ErrorLog',['../class_o_n___error_log.html',1,'']]],
   ['on_5fevaluator',['ON_Evaluator',['../class_o_n___evaluator.html',1,'']]],
   ['on_5fextrusion',['ON_Extrusion',['../class_o_n___extrusion.html',1,'']]],
   ['on_5ffacenamekey',['ON_FaceNameKey',['../class_o_n___face_name_key.html',1,'']]],

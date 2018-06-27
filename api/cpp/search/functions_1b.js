@@ -729,6 +729,8 @@ var searchData=
   ['_7eon_5fearthanchorpoint',['~ON_EarthAnchorPoint',['../class_o_n___earth_anchor_point.html#a83a459400519bc817616d2f05e921aa3',1,'ON_EarthAnchorPoint']]],
   ['_7eon_5fellipse',['~ON_Ellipse',['../class_o_n___ellipse.html#adad1bfb1c976ba923044f62ab600476e',1,'ON_Ellipse']]],
   ['_7eon_5fembeddedbitmap',['~ON_EmbeddedBitmap',['../class_o_n___embedded_bitmap.html#aefd201edd1441e691050cbfd972896a1',1,'ON_EmbeddedBitmap']]],
+  ['_7eon_5ferrorevent',['~ON_ErrorEvent',['../class_o_n___error_event.html#aed2e3df8560b95a9650188c60482de46',1,'ON_ErrorEvent']]],
+  ['_7eon_5ferrorlog',['~ON_ErrorLog',['../class_o_n___error_log.html#a30cef8f4cd2707bde90ec3c9efb7d9a7',1,'ON_ErrorLog']]],
   ['_7eon_5fevaluator',['~ON_Evaluator',['../class_o_n___evaluator.html#ae27f0a638112728273fde6156133d463',1,'ON_Evaluator']]],
   ['_7eon_5fextrusion',['~ON_Extrusion',['../class_o_n___extrusion.html#aef6a3f6107ba92451bc2d3a5e1385a7d',1,'ON_Extrusion']]],
   ['_7eon_5ffileiterator',['~ON_FileIterator',['../class_o_n___file_iterator.html#a4d9be2bf6d82bf811d5b46bcc22b2d1e',1,'ON_FileIterator']]],

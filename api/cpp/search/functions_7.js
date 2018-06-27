@@ -751,6 +751,7 @@ var searchData=
   ['getstatus',['GetStatus',['../class_i_rh_rdk_render_session.html#a4a26c5bd3f5c49960e200a278aee42dc',1,'IRhRdkRenderSession']]],
   ['getstatusbar',['GetStatusBar',['../class_c_rhino_ui_progress_bar.html#a12b4b99cdc7f667b28588055b4dff9b0',1,'CRhinoUiProgressBar']]],
   ['getstereoparallax',['GetStereoParallax',['../class_c_rhino_display_engine.html#a1187ab5eb1bd391a0af1fe6418ba3d90',1,'CRhinoDisplayEngine::GetStereoParallax()'],['../class_c_rhino_display_pipeline.html#aaa3a537e99bde42e8e53aba5e48ddb49',1,'CRhinoDisplayPipeline::GetStereoParallax()']]],
+  ['getstereorendercontext',['GetStereoRenderContext',['../class_c_display_pipeline_attributes.html#a352eeff8a84bfbb5c34283d64afbc5d3',1,'CDisplayPipelineAttributes']]],
   ['getstereoseparation',['GetStereoSeparation',['../class_c_rhino_display_engine.html#ae803e51563559f1853f4b06a90db90fe',1,'CRhinoDisplayEngine::GetStereoSeparation()'],['../class_c_rhino_display_pipeline.html#abbd15a7708529569d0228c94aad57afb',1,'CRhinoDisplayPipeline::GetStereoSeparation()']]],
   ['getstoragesize',['GetStorageSize',['../class_c_rhino_dib.html#a031508f642f176dcb5c5ef8a2d854d6c',1,'CRhinoDib']]],
   ['getstoragewidth',['GetStorageWidth',['../class_c_rhino_dib.html#a043884f5c51b7342c839ee44b935f485',1,'CRhinoDib']]],
