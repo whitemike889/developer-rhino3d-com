@@ -486,31 +486,31 @@ $(document).ready(function()
 <p>It is probably best not to call <code>ON_Curve::Write</code> for this very reason.  When serializing anything derived from <code>ON_Object</code>, just use <code>ON_BinaryArchive::WriteObject</code> and <code>ON_BinaryArchive::ReadObject</code>…</p>
 
 <h3 id="write">Write</h3>
-<pre><code class="language-cpp">static bool WriteCurveFile( FILE* fp, const ON_Curve* curve )
+<pre><code class="language-cpp">static bool WriteCurveFile(FILE* fp, const ON_Curve* curve)
 {
-  if( 0 == fp || 0 == curve )
+  if (nullptr == fp || nullptr == curve)
     return false;
 
-  ON_BinaryFile archive( ON::write3dm, fp );
+  ON_BinaryFile archive(ON::archive_mode::write3dm, fp);
 
   int major_version = 1;
   int minor_version = 0;
-  bool rc = archive.BeginWrite3dmChunk( TCODE_ANONYMOUS_CHUNK, major_version, minor_version );
-  if( !rc )
+  bool rc = archive.BeginWrite3dmChunk(TCODE_ANONYMOUS_CHUNK, major_version, minor_version);
+  if (!rc)
     return false;
 
-  for(;;)
+  for (;;)
   {
     // version 1.0 fields
-    rc = ( archive.WriteObject(curve) ? true : false );
-    if( !rc ) break;
+    rc = (archive.WriteObject(curve) ? true : false);
+    if (!rc) break;
 
     // todo...
 
     break;
   }
 
-  if( !archive.EndWrite3dmChunk() )
+  if (!archive.EndWrite3dmChunk())
     rc = false;
 
   return rc;
@@ -519,40 +519,40 @@ $(document).ready(function()
 
 <h3 id="read">Read</h3>
 
-<pre><code class="language-cpp">static bool ReadCurveFile( FILE* fp, ON_Curve*&amp; curve )
+<pre><code class="language-cpp">static bool ReadCurveFile(FILE* fp, ON_Curve*&amp; curve)
 {
-  if( 0 == fp )
+  if (nullptr == fp || nullptr == curve)
     return false;
 
-  ON_BinaryFile archive( ON::read3dm, fp );
+  ON_BinaryFile archive(ON::archive_mode::read3dm, fp);
 
   int major_version = 0;
   int minor_version = 0;
-  bool rc = archive.BeginRead3dmChunk( TCODE_ANONYMOUS_CHUNK, &amp;major_version, &amp;minor_version );
-  if( !rc )
+  bool rc = archive.BeginRead3dmChunk(TCODE_ANONYMOUS_CHUNK, &amp;major_version, &amp;minor_version);
+  if (!rc)
     return false;
 
-  for(;;)
+  for (;;)
   {
-    rc = ( 1 == major_version );
-    if( !rc ) break;
+    rc = (1 == major_version);
+    if (!rc) break;
 
     // version 1.0 fields
     ON_Object* object = 0;
-    rc = ( archive.ReadObject(&amp;object) ? true : false );
-    if( !rc ) break;
+    rc = (archive.ReadObject(&amp;object) ? true : false);
+    if (!rc) break;
 
-    curve = ON_Curve::Cast( object );
+    curve = ON_Curve::Cast(object);
 
     // todo...
 
     break;
   }
 
-  if( !archive.EndRead3dmChunk() )
+  if (!archive.EndRead3dmChunk())
     rc = false;
 
-  return ( rc &amp;&amp; curve );
+  return (rc &amp;&amp; curve);
 }
 </code></pre>
 
@@ -562,40 +562,42 @@ $(document).ready(function()
 
 <pre><code class="language-cpp">bool rc = false;
 
-FILE* fp = ON::OpenFile( filename, L"wb" );
-if( fp )
+FILE* fp = ON::OpenFile(filename, L"wb");
+if (fp)
 {
-  rc = WriteCurveFile( fp, curve );
-  ON::CloseFile( fp );
+  rc = WriteCurveFile(fp, curve);
+  ON::CloseFile(fp);
 }
 
-if( rc )
-  RhinoApp().Print( L"Successfully wrote %s.\n", filename.Array() );
+if (rc)
+  RhinoApp().Print(L"Successfully wrote %s.\n", filename);
 else
-  RhinoApp().Print( L"Errors while writing %s.\n", filename.Array() );
+  RhinoApp().Print(L"Errors while writing %s.\n", filename);
 </code></pre>
 
 <p>and</p>
 
 <pre><code class="language-cpp">bool rc = false;
-ON_Curve* curve = 0
+ON_Curve* curve = nullptr;
 
-FILE* fp = ON::OpenFile( filename, L"rb" );
-if( fp )
+FILE* fp = ON::OpenFile(filename, L"rb");
+if (fp)
 {
-  ReadCurveFile( fp, curve );
-  ON::CloseFile( fp );
+  rc = ReadCurveFile(fp, curve);
+  ON::CloseFile(fp);
 }
 
-if( rc )
+if (rc)
 {
   CRhinoCurveObject* curve_object = new CRhinoCurveObject();
-  curve_object-&gt;SetCurve( curve );
-  context.m_doc.AddObject( curve_object );
+  curve_object-&gt;SetCurve(curve);
+  context.m_doc.AddObject(curve_object);
   context.m_doc.Redraw();
 }
 else
-  RhinoApp().Print( L"Errors while reading %s.\n", filename.Array() );
+{
+  RhinoApp().Print(L"Errors while reading %s.\n", filename);
+}
 </code></pre>
 
         </article>
