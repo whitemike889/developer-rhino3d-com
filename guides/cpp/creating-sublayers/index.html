@@ -456,7 +456,7 @@ $(document).ready(function()
 
 <h2 id="solution">Solution</h2>
 
-<p>All layers have a layer id field, or <code>ON_Layer::m_layer_id</code>, that uniquely identifies that layer.  Also, layers maintain a parent id field, or <code>ON_Layer::m_parent_layer_id</code>, that identifies the layer’s parent.  If a layer’s parent id is a <code>null</code> UUID, then the layer does not have a parent and, thus, is considered a root layer.</p>
+<p>All layers have a layer id field, returned by <code>ON_Layer::Id()</code>, that uniquely identifies that layer. Layers also maintain a parent id field, returned by <code>ON_Layer::ParentLayerId()</code>, that identifies the layer’s parent.  If a layer’s parent id is a <code>null</code> UUID, then the layer does not have a parent and, thus, is considered a root layer.</p>
 
 <h2 id="sample">Sample</h2>
 
@@ -468,23 +468,24 @@ $(document).ready(function()
 
   // Define parent layer
   ON_Layer parent_layer;
-  parent_layer.m_name = L"Parent";
+  parent_layer.SetName(L"Parent");
 
   // Add parent layer
-  int parent_layer_index = layer_table.AddLayer( parent_layer );
-  if( parent_layer_index &gt;= 0 )
+  int parent_layer_index = layer_table.AddLayer(parent_layer);
+  if (parent_layer_index &gt;= 0) 
   {
     // Get the layer we just added
     const CRhinoLayer&amp; layer = layer_table[parent_layer_index];
 
     // Define child layer
     ON_Layer child_layer;
-    child_layer.m_name = L"Child";
+    child_layer.SetName(L"Child");
+
     // Assign parent layer's id as child's parent id
-    child_layer.m_parent_layer_id = layer.m_layer_id;
+    child_layer.SetParentLayerId(layer.Id());
 
     // Add child layer
-    layer_table.AddLayer( child_layer );
+    layer_table.AddLayer(child_layer);
   }
 
   return CRhinoCommand::success;
