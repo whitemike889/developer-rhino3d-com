@@ -463,15 +463,22 @@ $(document).ready(function()
 <h2 id="important-things-to-note">Important Things to Note</h2>
 
 <ol>
-  <li>Packages <strong>must</strong> have a top-level <a href="manifest.md"><code>manifest.yml</code></a> file.  Details about the manifest can be found in the <a href="../the-package-manifest">Manifest Reference Guide</a>.</li>
+  <li>Packages <strong>must</strong> have a top-level <a href="manifest.md"><code>manifest.yml</code></a> file.
+Details about the manifest can be found in the <a href="../the-package-manifest">Manifest Reference Guide</a>.</li>
   <li>Any plug-ins (<code>.rhp</code>, <code>.gha</code>, <code>.ghpy</code> files) <strong>must</strong> be in the top-level directory
 so that Rhino and Grasshopper can find and load them</li>
-  <li>Each package <strong>should</strong> have only one plug-in (<code>.gha</code>, <code>.rhp</code> or <code>.gphy</code>).  The intention is that packages are fairly atomic.  Although combined (<code>.gha</code> and <code>.rhp</code>) packages will work in one package.  Note that restore will only work for the plug-in which matches the details in
-the <code>manifest.yml</code> file, so the both the <code>.gha</code> and <code>.rhp</code> will <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> together if they are distributed together.</li>
-  <li>Version numbering is critical to package management. The version given to the package **must ** adhere to <a href="http://semver.org/spec/v2.0.0.html">SemVer 2.0.0</a>. We’ve adopted SemVer to make ordering straightforward and also for easy identification of pre-release versions – handy when releasing beta plug-ins for limited testing! For questions about versioning, please direct those to the <a href="https://discourse.mcneel.com/c/serengeti/yak">Yak Forum</a></li>
+  <li>Each package <strong>should</strong> have only one plug-in (<code>.gha</code>, <code>.rhp</code> or <code>.ghpy</code>). It
+is possible to combine plug-ins in one package (e.g. <code>.gha</code> and <code>.rhp</code>)
+however <a href="../package-restore-in-grasshopper">package restore</a> will only work
+for the plug-in which matches the details in the <code>manifest.yml</code> file.</li>
+  <li>Versioning is critical to package management. The version number given to the
+package <strong>must</strong> adhere to <a href="http://semver.org/spec/v2.0.0.html">SemVer 2.0.0</a>.
+We’ve adopted SemVer to make ordering straightforward and also for easy
+identification of pre-release versions – handy when releasing beta plug-ins
+for limited testing! Please ask any questions about versioning on the <a href="https://discourse.mcneel.com/c/serengeti/yak">Yak Forum</a>.</li>
   <li>If you’re packaging a <code>.gha</code> plug-in, you <strong>should</strong> ensure that the package
 name and version number in the <code>GH_AssemblyInfo</code> sub-class match those in the
-<code>manifest.yml</code> file, otherwise <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> may not work.</li>
+<code>manifest.yml</code> file, otherwise <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> may not work</li>
 </ol>
 
 <hr />

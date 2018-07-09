@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>What is Yak?(Work in Progress)</title>
-  <meta name="description" content="This guide introduces the Yak package manager.">
+  <title>What is Yak?</title>
+  <meta name="description" content="This guide introduces the Rhino Package Manager (a.k.a. Yak).">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/yak/what-is-yak/" />
-  <meta property="og:title" content="What is Yak?(Work in Progress)" />
-  <meta property="og:description" content="This guide introduces the Yak package manager." />
+  <meta property="og:title" content="What is Yak?" />
+  <meta property="og:description" content="This guide introduces the Rhino Package Manager (a.k.a. Yak)." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="What is Yak?(Work in Progress)" />
-  <meta name="twitter:description" value="This guide introduces the Yak package manager." />
+  <meta name="twitter:title" value="What is Yak?" />
+  <meta name="twitter:description" value="This guide introduces the Rhino Package Manager (a.k.a. Yak)." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -403,6 +403,31 @@ $(document).ready(function()
               <a href="#integrations">Integrations</a>
 
               
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#package-restore-for-grasshopper">Package restore for Grass...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#package-manager-ui">Package Manager UI</a>
+                    </li>
+                  
+
+                </ul>
+              
 
             </li>
           
@@ -463,7 +488,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>What is Yak?(Work in Progress)</h1>
+          <h1>What is Yak?</h1>
 
           <p>
   <span class="guide_byline">
@@ -477,11 +502,18 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide introduces the Yak package manager.</p>
+          <p>This guide introduces the Rhino Package Manager (a.k.a. Yak).</p>
 
-          <h2 id="overview">Overview</h2>
+          <div class="alert alert-info" role="alert">
+<strong>Note:</strong> The Rhino Package Manager is a
+<strong>work-in-progress</strong> and we're adding new features all the time!
+</div>
 
-<p>Yak is a package manager for the Rhino ecosystem. Yak assists in the discovery, installation, and management of Rhino and Grasshopper resources. Examples include plug-ins, components, scripts, and material definitions.</p>
+<h2 id="overview">Overview</h2>
+
+<p>Yak is a package manager for the Rhino ecosystem. Yak assists in the discovery,
+installation, and management of Rhino and Grasshopper resources. Examples
+include plug-ins, components, scripts, and material definitions.</p>
 
 <p>Yak has several goals.</p>
 
@@ -491,7 +523,9 @@ $(document).ready(function()
   <li>Provide simple system administration tools</li>
 </ul>
 
-<p>Not wanting to reinvent the wheel, we’ve taken inspiration from Linux and the software development world. The package management system can be broken down into three main areas.</p>
+<p>Not wanting to reinvent the wheel, we’ve taken inspiration from Linux and the
+software development world. The package management system can be broken down
+into three main areas.</p>
 
 <ol>
   <li><a href="#server">Server</a></li>
@@ -501,24 +535,41 @@ $(document).ready(function()
 
 <h2 id="server">Server</h2>
 
-<p>The package server is the heart of the system. Once packages are created, they must be posted up to a package server.</p>
+<p>The package server is the heart of the system. Once created, packages are pushed
+to the server to share them with others. It keeps the packages organised for its
+clients – the command line tool and Rhino (via integrations).</p>
 
-<p>McNeel &amp; Associates hosts a public package server which is available worldwide. This is the best option to post plugins to the public. The rest of the guides cover using the public server.</p>
-
-<p>In the future a private package server can be hosted almost anywhere and keeps the packages organized for its clients – the command line tool and Rhino (via integrations). We would like to hear of any requests for future Yak feature on the <a href="https://discourse.mcneel.com/c/serengeti/yak">Yak Forum</a>.</p>
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong> Currently the only available package server is our
+<a href="https://yak.rhino3d.com">public server</a>. Self-hosted/private servers
+are on the roadmap however for now all guides will assume you're using the
+public server.
+</div>
 
 <h2 id="integrations">Integrations</h2>
 
-<p>To see how the package manager provides direct access to the package ecosystem from inside of Rhino there are two current integrations.</p>
+<p>Integrations provide direct access to the package ecosystem from inside of
+Rhino. Currently this has been done in two ways; “package restore” for
+Grasshopper and the package manager UI.</p>
 
-<p>Thus far Yak has been integrated into Grasshopper’s “Unrecognized Objects”
-dialog, providing <a href="../package-restore-in-grasshopper">package restore</a> functionality when Grasshopper reads and unknown component from a file.  This will allow the proper plugin to be loaded to run any definition.</p>
+<h3 id="package-restore-for-grasshopper">Package restore for Grasshopper</h3>
 
-<p><img src="/images/yak-gh-restore-guid.gif" alt="Package restore can still operate when the plug-in name doesn't match the package" /></p>
+<p>The Rhino Package Manager has been integrated into Grasshopper’s “Unrecognized
+Objects” dialog, providing <a href="../package-restore-in-grasshopper">package restore</a>
+functionality. When opening a new file which contains components from a plug-in
+not installed on the machine, the user is given the option to check the package
+server for the missing plug-ins and install them directly.</p>
 
-<p>As a In Rhino 6 there is also a test command of a prototype interface:</p>
+<p><img src="/images/yak-gh-restore-guid.gif" alt="Package restore for Grasshopper" /></p>
 
-<p><img src="/images/testpackagemanager-wip.jpg" alt="TestPackageManager in Rhino 6 brings up the interface." /></p>
+<h3 id="package-manager-ui">Package Manager UI</h3>
+
+<p>The package manager UI (work-in-progress) is currently avilable via the
+<code>TestPackageManager</code> command. It provides a NuGet-style interface that allows
+users to search for packages, install them and see if any updates are avilable
+to currently installed packages.</p>
+
+<p><img src="/images/testpackagemanager-wip.jpg" alt="The package manager UI in Rhino 6" /></p>
 
 <h2 id="command-line-tool">Command Line Tool</h2>
 
