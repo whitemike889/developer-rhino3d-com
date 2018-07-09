@@ -400,7 +400,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#related-topics">Related Topics</a>
+              <a href="#next-steps">Next Steps</a>
 
               
 
@@ -463,25 +463,26 @@ $(document).ready(function()
 <h2 id="important-things-to-note">Important Things to Note</h2>
 
 <ol>
-  <li>Packages <strong>must</strong> have a top-level <a href="manifest.md"><code>manifest.yml</code></a> file</li>
+  <li>Packages <strong>must</strong> have a top-level <a href="manifest.md"><code>manifest.yml</code></a> file.  Details about the manifest can be found in the <a href="../the-package-manifest">Manifest Reference Guide</a>.</li>
   <li>Any plug-ins (<code>.rhp</code>, <code>.gha</code>, <code>.ghpy</code> files) <strong>must</strong> be in the top-level directory
 so that Rhino and Grasshopper can find and load them</li>
-  <li>Each package <strong>should</strong> have only one plug-in (<code>.gha</code>, <code>.rhp</code> or <code>.gphy</code>);
-package restore will only work for the plug-in which matches the details in
-the <code>manifest.yml</code> file</li>
+  <li>Each package <strong>should</strong> have only one plug-in (<code>.gha</code>, <code>.rhp</code> or <code>.gphy</code>).  The intention is that packages are fairly atomic.  Although combined (<code>.gha</code> and <code>.rhp</code>) packages will work in one package.  Note that restore will only work for the plug-in which matches the details in
+the <code>manifest.yml</code> file, so the both the <code>.gha</code> and <code>.rhp</code> will <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> together if they are distributed together.</li>
+  <li>Version numbering is critical to package management. The version given to the package **must ** adhere to <a href="http://semver.org/spec/v2.0.0.html">SemVer 2.0.0</a>. We’ve adopted SemVer to make ordering straightforward and also for easy identification of pre-release versions – handy when releasing beta plug-ins for limited testing! For questions about versioning, please direct those to the <a href="https://discourse.mcneel.com/c/serengeti/yak">Yak Forum</a></li>
   <li>If you’re packaging a <code>.gha</code> plug-in, you <strong>should</strong> ensure that the package
 name and version number in the <code>GH_AssemblyInfo</code> sub-class match those in the
-<code>manifest.yml</code> file, otherwise <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> may not work</li>
+<code>manifest.yml</code> file, otherwise <a href="/guides/yak/package-restore-in-grasshopper">package restore</a> may not work.</li>
 </ol>
 
 <hr />
 
-<h2 id="related-topics">Related Topics</h2>
+<h2 id="next-steps">Next Steps</h2>
+
+<p>Now that you’ve have seen what is in a package, why not create a package:</p>
 
 <ul>
-  <li><a href="/guides/yak/">Yak Guides and Tutorials</a></li>
-  <li><a href="/guides/yak/the-package-manifest/">The Package Manifest</a></li>
-  <li><a href="/guides/yak/yak-cli-reference">Yak CLI Reference</a></li>
+  <li><a href="../pushing-a-package-to-the-server">Create a Grasshopper package</a> of your plugin.</li>
+  <li><a href="../pushing-a-package-to-the-server">Create a Rhino package</a> for everyone.</li>
 </ul>
 
         </article>
