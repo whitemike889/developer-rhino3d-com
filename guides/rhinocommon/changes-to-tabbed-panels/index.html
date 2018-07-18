@@ -438,9 +438,9 @@ $(document).ready(function()
 
 <p>Many Rhino controls are contained in tabbed, dockable panels.</p>
 
-<p>You can create tabbed panels in plug-in using WinForms or WPF (Windows) or Eto (Windows and Mac).</p>
+<p>You can create tabbed panels in a plug-in using WinForms(Windows), WPF (Windows) or Eto (Windows and Mac).</p>
 
-<p>You can find sample that demonstrate how to create tabbed panels in the <a href="https://github.com/mcneel/rhino-developer-samples">Developer Samples repository</a> on GitHub.</p>
+<p>You can find a sample that demonstrate how to create tabbed panels in the <a href="https://github.com/mcneel/rhino-developer-samples">Developer Samples repository</a> on GitHub.</p>
 
 <h2 id="details">Details</h2>
 
@@ -449,15 +449,15 @@ $(document).ready(function()
 <h5 id="rhino-5-for-windows-behavior">Rhino 5 for Windows Behavior</h5>
 
 <ul>
-  <li>The registered panel class must be a <code>public</code> class and contain a default constructor that takes no parameters.</li>
-  <li>A panel object is created one time when it is referenced by a visible host container and will survive for the length of a Rhino session.</li>
-  <li>When a panel is moved to a different host container the panel objects parent is changed to the new host and the same panel object is used.</li>
+  <li>The <a href="https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_UI_Panels_RegisterPanel.htm">registered</a>  panel class must be a <code>public</code> class and contain a default constructor that takes no parameters.</li>
+  <li>A panel instance is created the first time it is referenced by a visible host container and will survive for the length of a Rhino session.</li>
+  <li>When a panel is moved to a different host container, the panels parent is changed to the new host and the same panel instance is used.</li>
 </ul>
 
 <h5 id="rhino-6-for-windows-behavior-per-document-panels">Rhino 6 for Windows Behavior (Per-Document Panels)</h5>
 
 <ul>
-  <li>The registered panel class must be a <code>public</code> class and registered as a <code>PanelType.PerDoc</code> panel (the default <code>PanelType</code>).</li>
+  <li>The <a href="https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_UI_Panels_RegisterPanel_1.htm">registered</a> panel class must be a <code>public</code> class and registered as a <code>PanelType.PerDoc</code> panel (the default <a href="https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_UI_PanelType.htm">PanelType</a>).</li>
   <li>Rhino looks for public constructors in the following order:
     <ul>
       <li>Constructor taking a <code>RhinoDoc</code>.</li>
@@ -465,14 +465,14 @@ $(document).ready(function()
       <li>Constructor with no arguments.</li>
     </ul>
   </li>
-  <li>A panel object is created for each time a new document is created, if the panel is in a visible host container, and disposed of when the document closes.</li>
-  <li>When a panel is moved to a different host container, the panel objects parent is changed to the new host and the same panel object is used.</li>
+  <li>A panel instance is created each time a new document is created, if the panel is in a visible host container, and disposed of when the document closes.</li>
+  <li>When a panel is moved to a different host container, the panels parent is changed to the new host and the same panel instance is used.</li>
 </ul>
 
 <h5 id="rhino-6-for-windows-behavior-system-panels">Rhino 6 for Windows Behavior (System Panels)</h5>
 
 <ul>
-  <li>The registered panel class must be a <code>public</code> class and registered as a <code>PanelType.System</code> panel.</li>
+  <li>The <a href="https://developer.rhino3d.com/api/RhinoCommon/html/M_Rhino_UI_Panels_RegisterPanel_1.htm">registered</a> panel class must be a <code>public</code> class and registered as a <code>PanelType.System</code> panel.</li>
   <li>Rhino looks for public constructors in the following order:
     <ul>
       <li>Constructor taking a <code>RhinoDoc</code>.</li>
@@ -480,17 +480,19 @@ $(document).ready(function()
       <li>Constructor with no arguments.</li>
     </ul>
   </li>
-  <li>A panel object is created one time when it is referenced by a visible host container, and it will survive for the length of a Rhino session.</li>
-  <li>When a panel is moved to a different host container, the panel objects parent is changed to the new host and the same panel object is used.</li>
+  <li>A panel instance is created the first time it is referenced by a visible host container and will survive for the length of a Rhino session.</li>
+  <li>When a panel is moved to a different host container, the panels parent is changed to the new host and the same panel instance is used.</li>
 </ul>
+
+<h5 id="rhino-6-for-mac-behavior">Rhino 6 for Mac Behavior</h5>
+
+<p>Rhino for Mac works the same as Rhino for Windows, with the exception that there will be a panel instance per inspector panel that includes the plug-in panel.</p>
 
 <p>##More Information</p>
 
-<p>Rhino for Mac works the same as Rhino for Windows, with the exception that there may be more than one panel instance per document.</p>
+<p>Rhino 6 includes a <a href="https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_UI_IPanel.htm">IPanel</a> interface which can be implemented to determine when a panel is shown, hidden or closed.</p>
 
-<p>Rhino 6 includes a <code>IPanel</code> interface which can be implemented to determine when a panel is shown, hidden or closed.</p>
-
-<p>Static methods on <code>RhinoDoc</code> should be hooked by your panel class when created and unhooked when dispose of in both Rhino 5 and Rhino 6.</p>
+<p>Static events on <code>RhinoDoc</code> should be hooked by your panel class when created and unhooked when disposed of in both Rhino 5 and Rhino 6.</p>
 
 
         </article>
