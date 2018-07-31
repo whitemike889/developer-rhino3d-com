@@ -737,6 +737,7 @@ var searchData=
   ['_7eon_5ffilereference',['~ON_FileReference',['../class_o_n___file_reference.html#a9e5a16b603fa0777a5b8ae44e3f5a225',1,'ON_FileReference']]],
   ['_7eon_5ffixedsizepool',['~ON_FixedSizePool',['../class_o_n___fixed_size_pool.html#a8c014d7b1389567913271d943fbd0b40',1,'ON_FixedSizePool']]],
   ['_7eon_5ffont',['~ON_Font',['../class_o_n___font.html#ad7d7e4fb601bf38823a9a5bc21e883af',1,'ON_Font']]],
+  ['_7eon_5ffontfacequartet',['~ON_FontFaceQuartet',['../class_o_n___font_face_quartet.html#a4bb2a3ffdb99f5a6b78dfec91fd20762',1,'ON_FontFaceQuartet']]],
   ['_7eon_5ffontglyph',['~ON_FontGlyph',['../class_o_n___font_glyph.html#a05a686c95b4901563697ec0039d91862',1,'ON_FontGlyph']]],
   ['_7eon_5ffontlist',['~ON_FontList',['../class_o_n___font_list.html#ae409e599a254035bc02f605190f167ec',1,'ON_FontList']]],
   ['_7eon_5ffontmetrics',['~ON_FontMetrics',['../class_o_n___font_metrics.html#a13bf79253073ac3601d6f9991175261a',1,'ON_FontMetrics']]],

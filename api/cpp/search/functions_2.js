@@ -111,6 +111,8 @@ var searchData=
   ['blue',['Blue',['../class_o_n___color.html#a84f36e7a84e0d97119b2d327313770ef',1,'ON_Color::Blue()'],['../class_c_color_vec.html#a210483b55a4e6a699b0df85d3f913407',1,'CColorVec::Blue()']]],
   ['bluef',['Bluef',['../class_c_color_vec.html#aa6359e4e53b57e263466afab1c48b06b',1,'CColorVec']]],
   ['bold',['Bold',['../class_o_n___text_dot.html#ac6e0326139486e522b3da10d4cd52117',1,'ON_TextDot::Bold()'],['../class_o_n___text_builder.html#a2854e59188abdeeb863730169d9879dd',1,'ON_TextBuilder::Bold()'],['../class_o_n___text_run_builder.html#ab2df7c38ba1741b401accd6173252372',1,'ON_TextRunBuilder::Bold()'],['../class_o_n___rtf_string_builder.html#a09e704d21c76f687515859b94618f293',1,'ON_RtfStringBuilder::Bold()'],['../class_o_n___rtf_first_char.html#a399f84fe21873df6b6f1a302c1a2f775',1,'ON_RtfFirstChar::Bold()'],['../class_c_rhino_text_dot.html#a9057143f95beb3360de15b2cb6ef26d5',1,'CRhinoTextDot::Bold()']]],
+  ['boldface',['BoldFace',['../class_o_n___font_face_quartet.html#a57db79d7e9582bf4823c04b09b36b9b1',1,'ON_FontFaceQuartet']]],
+  ['bolditalicface',['BoldItalicFace',['../class_o_n___font_face_quartet.html#a645837258c4d792a5fbd56a2aa8b2960',1,'ON_FontFaceQuartet']]],
   ['border',['Border',['../class_i_rh_rdk_sdk_content_thumbnail_list.html#af8b704a544194005edf2a54d95b8d62e',1,'IRhRdkSdkContentThumbnailList']]],
   ['bordercolor',['BorderColor',['../class_i_rh_rdk_breadcrumb_ctrl.html#a5b2b93d9793b44aa8abca79641399f7c',1,'IRhRdkBreadcrumbCtrl']]],
   ['borders',['Borders',['../class_c_rhino_ui_expandable_tab_ctrl.html#a8b7412b967eeba119270c4ec7cc4b614',1,'CRhinoUiExpandableTabCtrl::Borders()'],['../class_c_rhino_ui_options_list_ctrl.html#a5fc0e40877f2e92b74a3ee5cf3e78d73',1,'CRhinoUiOptionsListCtrl::Borders()']]],
@@ -176,6 +178,7 @@ var searchData=
   ['bylayerlinetypeid',['ByLayerLinetypeID',['../class_c_rhino_ui_combo_box.html#a55dc515b5a0e461cec72815f41ef3623',1,'CRhinoUiComboBox']]],
   ['byparentlinetypeid',['ByParentLinetypeID',['../class_c_rhino_ui_combo_box.html#ae940ca7233d6eb31b4188227dce21cd3',1,'CRhinoUiComboBox']]],
   ['bypostscriptname',['ByPostScriptName',['../class_o_n___font_list.html#a7846fa006f63f2fec81b29eb6691c286',1,'ON_FontList']]],
+  ['byquartetname',['ByQuartetName',['../class_o_n___font_list.html#af824ead5da1302ec78bec2b2cefb603a',1,'ON_FontList']]],
   ['bytecount',['ByteCount',['../class_o_n___content_hash.html#a3d5536333ff8bbebf6b341355cca1172',1,'ON_ContentHash::ByteCount()'],['../class_o_n___m_d5.html#a475f019d99ce5693aa223dff43ec6772',1,'ON_MD5::ByteCount()'],['../class_o_n___s_h_a1.html#a96d28a9b17ec30cac84d05bd85b057b5',1,'ON_SHA1::ByteCount()'],['../class_o_n___text_hash.html#a8bde663d15a5eff561fac5e1973c6690',1,'ON_TextHash::ByteCount()']]],
   ['byteorder',['ByteOrder',['../class_i_rh_rdk_post_effect_image.html#a20633fd5934c6e399aadfb3f0614b914',1,'IRhRdkPostEffectImage::ByteOrder()'],['../class_c_rh_rdk_post_effect_plug_in.html#a0d610df08f1114347b8ff01a2e33fa8f',1,'CRhRdkPostEffectPlugIn::ByteOrder()']]],
   ['bywindowslogfontname',['ByWindowsLogfontName',['../class_o_n___font_list.html#a8ccb92a0cd0f606155f79e87c07083b4',1,'ON_FontList']]]

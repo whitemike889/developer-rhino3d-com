@@ -33,6 +33,7 @@ var searchData=
   ['bmi',['bmi',['../class_c_rhino_dib_1_1_pixel.html#a08ec947a07fc4092c82c7100b9ef8202',1,'CRhinoDib::Pixel']]],
   ['bmicolors',['bmiColors',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o.html#a9dbbd30174177ebea16daf4cf7615091',1,'ON_WindowsBITMAPINFO']]],
   ['bmiheader',['bmiHeader',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o.html#a49c86a1b0be90b523702920c1d09b433',1,'ON_WindowsBITMAPINFO']]],
+  ['border',['Border',['../class_o_n___linetype.html#ac07a1827a149022274b4ec21973ae247',1,'ON_Linetype']]],
   ['bottom',['bottom',['../class_o_n__4i_rect.html#ad31050ad0af1fe82b406faacc53d0237',1,'ON_4iRect::bottom()'],['../class_o_n__4d_rect.html#a5c19aca7d05a3939188d4a0e0f88a4e1',1,'ON_4dRect::bottom()']]],
   ['breadcrumbctrl',['BreadcrumbCtrl',['../group___r_d_k.html#ga770fc696eac42f491d39df23b12317c5',1,'RhRdkDefinitions.h']]],
   ['brepobjects',['brepObjects',['../group___rhino.html#ga99b8e528edfdbadc2f2469f26b2b2d5f',1,'rhinoSdkUtilities.h']]],
