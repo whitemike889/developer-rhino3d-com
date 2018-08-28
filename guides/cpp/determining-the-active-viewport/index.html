@@ -465,32 +465,35 @@ $(document).ready(function()
 <pre><code class="language-cpp">CRhinoCommand::result CCommandTest::RunCommand( const CRhinoCommandContext&amp; context )
 {
   CRhinoView* view = RhinoApp().ActiveView();
-  if( 0 == view )
+  if (nullptr == view)
     return CRhinoCommand::failure;
 
-  if( view-&gt;IsKindOf(RUNTIME_CLASS(CRhinoPageView)) )
+  CRhinoPageView* page_view = static_cast&lt;CRhinoPageView*&gt;(view);
+  if (page_view)
   {
-    CRhinoPageView* page_view = static_cast&lt;CRhinoPageView*&gt;(view);
-    if( page_view )
+    ON_wString layout_name = page_view-&gt;MainViewport().Name();
+    ON_UUID active_detail_uuid = page_view-&gt;ActiveDetailObject();
+    if (ON_UuidIsNotNil(active_detail_uuid))
     {
-      ON_wString layout_name = page_view-&gt;MainViewport().Name();
-
-      ON_UUID active_detail_uuid = page_view-&gt;ActiveDetailObject();
-      if( ON_UuidIsNotNil(active_detail_uuid) )
-      {
-        ON_wString detail_name = page_view-&gt;ActiveViewport().Name();
-        RhinoApp().Print( L"The detail \"%s\" on layout \"%s\" is active.\n", detail_name, layout_name );
-      }
-      else
-      {
-        RhinoApp().Print( L"The layout \"%s\" is active.\n", layout_name );
-      }
+      ON_wString detail_name = page_view-&gt;ActiveViewport().Name();
+      RhinoApp().Print(L"The detail \"%s\" on layout \"%s\" is active.\n", 
+        static_cast&lt;const wchar_t*&gt;(detail_name), 
+        static_cast&lt;const wchar_t*&gt;(layout_name)
+      );
+    }
+    else
+    {
+      RhinoApp().Print(L"The layout \"%s\" is active.\n", 
+        static_cast&lt;const wchar_t*&gt;(layout_name)
+      );
     }
   }
   else
   {
     ON_wString viewport_name = view-&gt;ActiveViewport().Name();
-    RhinoApp().Print( L"The viewport \"%s\" is active.\n", viewport_name );
+    RhinoApp().Print(L"The viewport \"%s\" is active.\n", 
+      static_cast&lt;const wchar_t*&gt;(viewport_name)
+    );
   }
 
   return CRhinoCommand::success;
