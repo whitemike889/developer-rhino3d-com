@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.7</span>
+   &#160;<span id="projectnumber">6.8</span>
    </div>
   </td>
  </tr>
@@ -116,6 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a986c99d7621702ac6fd72d0456ed6e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa180e7de914aab724dbae5a83ccbb9eb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___plane_equation.html">ON_PlaneEquation</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___hidden_line_drawing.html#aa180e7de914aab724dbae5a83ccbb9eb">GetClippingPlanes</a> (<a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; ON__UINT_PTR &gt; *clip_id) const</td></tr>
 <tr class="separator:aa180e7de914aab724dbae5a83ccbb9eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d2d62e64768b64ed92e30cf31f1fb8"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const class <a class="el" href="class_o_n___h_l_d_point.html">ON_HLDPoint</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___hidden_line_drawing.html#a38d2d62e64768b64ed92e30cf31f1fb8">GetHLDPoints</a> ()</td></tr>
+<tr class="separator:a38d2d62e64768b64ed92e30cf31f1fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29874d47babeec7885dc3dca361a22a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___hidden_line_drawing.html#a29874d47babeec7885dc3dca361a22a2">HasBeenFlattened</a> () const</td></tr>
 <tr class="separator:a29874d47babeec7885dc3dca361a22a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c4f222e1ce85bd7d56bebd9616b767a"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_o_n___xform.html">ON_Xform</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___hidden_line_drawing.html#a8c4f222e1ce85bd7d56bebd9616b767a">HiddenLine2World</a> () const</td></tr>
@@ -390,7 +392,7 @@ Public Attributes</h2></td></tr>
 
 <p>Step IV - Add Objects that are to be drawn. </p>
 <p>Each call to AddObjects with valid geometry will add a corresponding <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a> to the m_object array. Results in the <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a> will then refer back to these <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a> as source objects.</p>
-<p>Parameters: geom - [in] geometry to be drawn. returns -1 if geometry type is not supported by <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a>. xform - [in] If not null this transformation is applied to geom to place it in the world coordinte system. The transform *xform is copied. uuid -[in] This parameter is copied into the <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>. m_id -[in] This parameter is copied into the <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>. Returns: Index into m_object array of the corresponding <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>, or -1 if the geometry type is not supported. Details: The only supported geometry types are <a class="el" href="class_o_n___brep.html">ON_Brep</a>, <a class="el" href="class_o_n___curve.html">ON_Curve</a> and <a class="el" href="class_o_n___mesh.html">ON_Mesh</a>. uuid and m_id are fields for the user to cross-reference the geometry to other information in their application. When using the simple geom pointer it is the users responsibility to ensure the geometry exists for the lifetime of the <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a>. Alternatively, the shr_geom_ptr parameter is a "smart pointer" that will ensure geometry persists untill the <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a> is destroyed. </p>
+<p>Parameters: geom - [in] geometry to be drawn. returns -1 if geometry type is not supported by <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a>. xform - [in] If not null this transformation is applied to geom to place it in the world coordinte system. The transform *xform is copied. uuid -[in] This parameter is copied into the <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>. m_id -[in] This parameter is copied into the <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>. Returns: Index into m_object array of the corresponding <a class="el" href="class_o_n___h_l_d___object.html">ON_HLD_Object</a>, or -1 if the geometry type is not supported. Details: The only supported geometry types are <a class="el" href="class_o_n___brep.html">ON_Brep</a>, <a class="el" href="class_o_n___curve.html">ON_Curve</a>, <a class="el" href="class_o_n___mesh.html">ON_Mesh</a>, <a class="el" href="class_o_n___point.html">ON_Point</a> and <a class="el" href="class_o_n___point_cloud.html">ON_PointCloud</a>. The uuid and m_id are fields for the user to cross-reference the geometry to other information in their application. When using the simple geom pointer it is the users responsibility to ensure the geometry exists for the lifetime of the <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a>. Alternatively, the shr_geom_ptr parameter is a "smart pointer" that will ensure geometry persists untill the <a class="el" href="class_o_n___hidden_line_drawing.html">ON_HiddenLineDrawing</a> is destroyed. </p>
 
 </div>
 </div>
@@ -614,6 +616,23 @@ Public Attributes</h2></td></tr>
           <td class="paramtype"><a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; ON__UINT_PTR &gt; *&#160;</td>
           <td class="paramname"><em>clip_id</em></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38d2d62e64768b64ed92e30cf31f1fb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38d2d62e64768b64ed92e30cf31f1fb8">&#9670;&nbsp;</a></span>GetHLDPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const class <a class="el" href="class_o_n___h_l_d_point.html">ON_HLDPoint</a>*&gt;&amp; ON_HiddenLineDrawing::GetHLDPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -972,7 +991,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Step VI. After Draw the results are available as arrays of <a class="el" href="class_o_n___h_l_d_full_curve.html">ON_HLDFullCurve</a> and <a class="el" href="class_o_n___h_l_d_curve.html">ON_HLDCurve</a>. m_curve and m_full_curve are the results of the draw operation. </p>
+<p>Step VI. After <a class="el" href="class_o_n___hidden_line_drawing.html#a3b34c5e344124631f210f90fdfcf37a1" title="Step V. Draw objects hidden line drawings. ">Draw()</a> the results are available as arrays of <a class="el" href="class_o_n___h_l_d_full_curve.html">ON_HLDFullCurve</a>, <a class="el" href="class_o_n___h_l_d_curve.html">ON_HLDCurve</a> and <a class="el" href="class_o_n___h_l_d_point.html">ON_HLDPoint</a>. m_curve, m_full_curve and <a class="el" href="class_o_n___hidden_line_drawing.html#a38d2d62e64768b64ed92e30cf31f1fb8">GetHLDPoints()</a> are the results of the draw operation. </p>
 
 </div>
 </div>
@@ -995,7 +1014,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Aug 1 2018 09:41:34 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Aug 29 2018 09:55:05 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>
