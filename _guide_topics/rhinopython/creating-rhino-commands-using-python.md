@@ -68,18 +68,18 @@ In the above `__plugin__.py`, the lines mean the following:
 
 With this file in place, you can zip the *contents of the `dev` sub-folder* and rename it to `MyNewPlugIn.rhi`.
 
-<div class="bs-callout bs-callout-danger">
-
-<strong>Note</strong>: It's important that the <code>__plugin__.py</code> file and any <code>*_cmd.py</code> files are in the root of the RHI package. The Rhino Installer Engine will unpack the contents of the RHI into a sub-folder named according to the version found in <code>__plugin__.py</code>, replacing the <code>dev</code> sub-folder used during development.
-
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong> It's important that the <code>__plugin__.py</code> file and any <code>*_cmd.py</code> files are in the root of the RHI package. The Rhino Installer Engine will unpack the contents of the RHI into a sub-folder named according to the version found in <code>__plugin__.py</code>, replacing the <code>dev</code> sub-folder used during development.
 </div>
 
 Double-clicking this `*.rhi` file on another system (with Rhino closed) should install all the files in the correct location for that user.  Rhino should then see the command as a regular command.
 
-<div class="bs-callout bs-callout-danger">
+<div class="alert alert-warning" role="alert">
+<strong>Warning:</strong> Python RHI packages must be installed for <strong>"just me"</strong>, otherwise they won't be loaded by Rhino.
+</div>
 
-<strong>Note</strong>: Sometimes, using this system, Rhino requires that Python be loaded before it can see the new command for the first time in a session - running <code>EditPythonScript</code>, or any other python script should allow the command to work.
-
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong> Sometimes, using this system, Rhino requires that Python be loaded before it can see the new command for the first time in a session - running <code>EditPythonScript</code>, or any other python script should allow the command to work.
 </div>
 
 ## Mac
