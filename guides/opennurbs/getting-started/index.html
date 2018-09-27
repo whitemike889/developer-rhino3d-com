@@ -569,6 +569,22 @@ $(document).ready(function()
 
 <ul>
   <li><em>Microsoft Visual Studio 2017</em>: to build openNURBS and the examples with <em>Visual Studio 2017</em>, use the solution <em>opennurbs_public.sln</em>.</li>
+</ul>
+
+<ol>
+  <li>Open opennurbs_public.sln in VisualStudio, select the platform and configuration, and rebuild all.</li>
+  <li>Create your C++ project that will use opennurbs.</li>
+  <li>In your project’s stdafx.h, put the following lines:
+    <pre><code>// defining OPENNURBS_PUBLIC_INSTALL_DIR enables automatic linking using pragmas
+#define OPENNURBS_PUBLIC_INSTALL_DIR "&lt;MY_INSTALLPATH&gt;"
+// uncomment the next line if you want to use opennurbs as a DLL
+//#define OPENNURBS_IMPORTS
+#include "&lt;MY_INSTALLPATH&gt;/opennurbs_public.h"
+</code></pre>
+  </li>
+</ol>
+
+<ul>
   <li><em>Apple Xcode 9.2</em> (9C40b): To build openNURBS and the examples with <em>Xcode 9.2</em> (or later), use the workspace <em>opennurbs_public.xcworkspace</em>.</li>
   <li><em>Other C++ compilers</em> The compiler must support the C++11 standard. A <em>makefile</em> is provided as a starting point. The openNURBS C++ source code is clean and simple. If you are using a C++ compiler that supports the C++11 standard and run into some toolkit code that causes problems, please <a href="http://discourse.mcneel.com/category/opennurbs">let us know</a>.  We’ll attempt to change the code to accommodate the compiler.</li>
 </ul>
