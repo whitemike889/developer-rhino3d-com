@@ -6,32 +6,32 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Rhino Compute Service (Windows) with C#</title>
-  <meta name="description" content="This guide covers all the necessary tools required to get started with the Rhino Compute Service  Using C#">
+  <title>Rhino Compute Service with C#, JavaScript, Python</title>
+  <meta name="description" content="This guide covers the tools required to get started with the Rhino Compute Service.  Using C#, JavaScript, Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/compute/compute-getting-started/" />
-  <meta property="og:title" content="Rhino Compute Service (Windows)" />
-  <meta property="og:description" content="This guide covers all the necessary tools required to get started with the Rhino Compute Service" />
+  <meta property="og:title" content="Rhino Compute Service" />
+  <meta property="og:description" content="This guide covers the tools required to get started with the Rhino Compute Service." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Rhino Compute Service (Windows)" />
-  <meta name="twitter:description" value="This guide covers all the necessary tools required to get started with the Rhino Compute Service" />
+  <meta name="twitter:title" value="Rhino Compute Service" />
+  <meta name="twitter:description" value="This guide covers the tools required to get started with the Rhino Compute Service." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows" />
+  <meta name="twitter:data1" value="Windows, Mac" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
-  <meta name="twitter:data2" value="C#" />
+  <meta name="twitter:data2" value="C#, JavaScript, Python" />
   
 
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -371,7 +371,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#setting-up-a-compute-project-in-visual-studio">Setting up a Compute Proj...</a>
+              <a href="#setting-up-a-compute-project">Setting up a Compute Project</a>
 
               
 
@@ -387,55 +387,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#the-first-use-of-compute">The first use of Compute</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#seeing-the-results-of-compute">Seeing the results of Com...</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#next-steps">Next Steps</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#footnotes">Footnotes</a>
+              <a href="#support">Support</a>
 
               
 
@@ -466,7 +418,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Rhino Compute Service (Windows)</h1>
+          <h1>Rhino Compute Service</h1>
 
           <p>
   <span class="guide_byline">
@@ -491,301 +443,27 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide covers all the necessary tools required to get started with the Rhino Compute Service</p>
+          <p>This guide covers the tools required to get started with the Rhino Compute Service.</p>
 
-          <p>By the end of this guide, you should have all the tools installed necessary for using the <a href="https://www.rhino3d.com/compute">Rhino Compute Service</a>.</p>
+          <p>Compute is an open-source online advanced geometry extension as a web service based on Rhinoceros 3d’s RhinoCommon API. The Compute services are meant to compliment the Rhino3dm Geometry library. See the <a href="https://www.rhino3d.com/compute">Compute website</a> for more overview information.</p>
 
-<p>This guide presumes you have an:</p>
-
-<ul>
-  <li>A PC running Microsoft Windows 7 or later.</li>
-  <li><a href="http://www.rhino3d.com/download">Rhino for Windows</a></li>
-  <li>One of the IDEs from <a href="https://visualstudio.microsoft.com/">Microsoft Visual Studio</a>
-    <ul>
-      <li><a href="https://code.visualstudio.com/?wt.mc_id=DX_841432">Visual Studio Code 2017</a> - Free, Open Source.</li>
-      <li>Or, <a href="https://visualstudio.microsoft.com/vs/whatsnew/">Visual Studio 2017</a></li>
-    </ul>
-  </li>
-</ul>
-
-<p><strong>note:</strong> It is recommended that you install the <em>Typical</em> installation.</p>
+<p>Compute can be accessed from CPython, JavaScript and C# (.NET).  It runs on many platforms including Windows, OSX, IOS, Unix, All major browsers and Node.JS.</p>
 
 <hr />
 
-<h2 id="setting-up-a-compute-project-in-visual-studio">Setting up a Compute Project in Visual Studio</h2>
+<h2 id="setting-up-a-compute-project">Setting up a Compute Project</h2>
 
-<p>There are a few tools which are essential to communicate with the Compute server. These include:</p>
-
-<ul>
-  <li><a href="https://www.nuget.org/packages/Rhino3dmIO.Desktop">Rhino3dmIO.Desktop</a> -  The Dotnet wrapper for <a href="https://developer.rhino3d.com/guides/opennurbs/">OpenNurbs</a> which contains the functions to read and write Rhino Geometry Objects. This is available as a NuGet package.</li>
-  <li><a href="https://www.nuget.org/packages/Newtonsoft.Json/">NewtonSoft.JSON</a> - The very popular JSON library.  Compute communicates using a JSON format in the body of a REST POST. This is available as a NuGet Package. This package is called directly by RHinoCompute.cs.</li>
-  <li><a href="https://compute.rhino3d.com/sdk/csharp">RhinoCompute.cs</a> - This is a work in progress package which is meant to add classes available in RhinoCommon, but not available through Rhino3dmIO. RhinoCompute makes calls into RhinoCompute for these functions.</li>
-</ul>
-
-<p>Here are step by step instructions to setting up a basic project to use Compute:</p>
-
-<h4 id="file-new">File New</h4>
-
-<ol>
-  <li>If you have not done so already, <em>launch Visual Studio</em> (for the purposes of this guide, we are using Visual Studio 2017 Community Edition and C#).</li>
-  <li>Navigate to <em>File</em> &gt; <em>New</em> &gt; <em>Project</em>…
-<img src="/images/your-first-plugin-windows-01.png" alt="File New Project" /></li>
-  <li>A <em>New Project</em> wizard should appear.  In the left column, find the <em>Installed</em> &gt; <em>Visual C#</em> section.  In the central list, select the <em>Console App (.NET Framework)</em> template…
-<img src="/images/compute-start.png" alt="New Project" /></li>
-  <li>For the purposes of this Guide, we will name our demo plugin <em>TestCompute</em>.  At the bottom of the window, fill in the <em>Name</em> field.  <em>Browse</em> and select a location for this plugin on your disk…</li>
-  <li>Check <em>Create directory for solution</em>.  <em>Note</em>: This is optional depending on how you want to structure your projects.</li>
-  <li>Click the <em>OK</em> button.  <em>Note</em>: You don’t have to add the project to source control for this demo.</li>
-  <li>For the purposes of this guide, we will <em>accept the defaults</em> and click <em>Finish</em>…</li>
-  <li>A <em>new solution</em> called <em>HelloRhinoCommon</em> should open…</li>
-</ol>
-
-<h4 id="steps-to-install-the-nuget-packages">Steps to install the NuGet packages</h4>
-
-<ol>
-  <li><em>Right-click</em> your project file in <em>Solution Explorer</em> and select <em>Manage NuGet Packages …</em>.</li>
-  <li>On the left side of the dialog expand the <em>Online</em> option and select <em>nuget.org</em>.</li>
-  <li>In the top right search box type “Rhino3dmIO” and click on a <em>Rhino3dmIO.Desktop</em> option (there are 3: Rhino3dmIO.Desktop (Windows/macOS), Rhino3dmIO.iOS and Rhino3dmIO.Android) and click on the <em>Install</em> button.</li>
-  <li>Continue by typing in the search box type “Newtonsoft.JSON” and click on a <em>NewtonSoft.JSON</em> option and click on the <em>Install</em> button.</li>
-  <li>Close the <em>Manage NuGet Packages</em> dialog.  The Nuget packages are installed and ready to use.</li>
-</ol>
-
-<p>Changes that were made:</p>
+<p>There are a few tools which are essential to communicate with the Compute server. Select one of the supported languages:</p>
 
 <ul>
-  <li>The <em>Rhino3dmIO.Desktop and NewtonSoft.JSON NuGet packages</em> are installed in your project.</li>
-  <li>The project references the <em>Rhino3dmIO.Desktop</em> and <em>Newtonsoft.JSON</em> assembly.</li>
+  <li><a href="/compute-python-getting-started">Python</a> -  The CPython wrapper for <a href="https://developer.rhino3d.com/guides/opennurbs/">OpenNurbs</a> which contains the functions to read and write Rhino Geometry Objects. This is available as a Pip package.</li>
+  <li><a href="/compute-javascript-getting-started">JavaScript</a> - The Javascript library and web assembly (WASM) to access Compute through any major browser or Node JS.</li>
+  <li><a href="/compute-net-getting-started">C# (.NET)</a> - The nuget packages required to access to the Rhino3dm and Compute API.</li>
 </ul>
 
-<h4 id="include-rhinocomputecs-in-the-project">Include RhinoCompute.cs in the project</h4>
+<h2 id="support">Support</h2>
 
-<p>RhinoCompute.cs is a the package which adds the methods to call into the compute server.  It is organized similar to RhinoCommon calls.</p>
-
-<ol>
-  <li>Download the <a href="https://compute.rhino3d.com/sdk/csharp">RhinoCompute.cs source file</a> from compute.rhino3d.com into the project folder.</li>
-  <li>Using the <em>Project</em> pulldown &gt; <em>Add Existing Item…</em></li>
-  <li>Select the <a href="https://compute.rhino3d.com/sdk/csharp">RhinoCompute.cs source file</a> to add it to the project.</li>
-</ol>
-
-<p>Changes that were made:</p>
-
-<ul>
-  <li>The <a href="https://compute.rhino3d.com/sdk/csharp">RhinoCompute.cs source file</a> are installed in your project.</li>
-  <li>The <a href="https://compute.rhino3d.com/sdk/csharp">RhinoCompute.cs source file</a> helper functions are available to the project.</li>
-</ul>
-
-<h2 id="the-first-use-of-compute">The first use of Compute</h2>
-
-<p>As a place to start, a simple console app shows the standard workflow using Compute. This is the simplest example of using Rhino3DMio locally to read, write and create Rhino geometry.  Then use compute to handle a function that does not exist in Rhino3DMio.</p>
-
-<pre class="line-numbers"><code class="language-C#">using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Rhino.Compute;
-
-namespace TestCompute
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            ComputeServer.ApiToken = "scottd@mcneel.com";
-
-            // Uses standard Rhino3dmIO methods locally to create a sphere.
-            var sphere = new Rhino.Geometry.Sphere(Rhino.Geometry.Point3d.Origin, 12);
-            var sphereAsBrep = sphere.ToBrep();
-
-            // the following function calls compute.rhino3d.com to get access to something not
-            // available in Rhino3dmIO. In this case send a Brep to Compute and get a Mesh back.
-            var meshes = MeshCompute.CreateFromBrep(sphereAsBrep);
-
-            // Use regular Rhino3dmIO local calls to count the vertices in the mesh.
-            Console.WriteLine($"Got {meshes.Length} meshes");
-            for (int i = 0; i &lt; meshes.Length; i++)
-            {
-                Console.WriteLine($"  {i + 1} mesh has {meshes[i].Vertices.Count} vertices");
-            }
-
-            Console.WriteLine("press any key to exit");
-            Console.ReadKey();
-        }
-    }
-}
-</code></pre>
-
-<p>This example above first creates a sphere using Rhino3DMio locally. Then request Compute to mesh that BREP to Compute, the BREP sphere is meshed. Compute then returns the mesh.  Finally using the local Rhino3DMio package to walk through the mesh, the vertices are counted.</p>
-
-<table class="multiline">
-<tr>
-<th>Line</th>
-<th>Description</th>
-</tr>
-<tr>
-<td>5</td>
-<td>Include the Rhino.Compute Assembly from the RhinoCompute.cs Package.</td>
-</tr>
-<tr>
-<td>13</td>
-<td>All calls to the Compute Server must be accompanied by a token. At this time your email is correct token to use.  This is sent with each RhinoCompute.cs Posts.</td>
-</tr>
-<tr>
-<td>21</td>
-<td>Here the OpenNurbs Brep sphere is sent to Compute to convert to a mesh.  The Mesh is returned as a OpenNurbs Mesh.</td>
-</tr>
-</table>
-
-<h2 id="seeing-the-results-of-compute">Seeing the results of Compute</h2>
-
-<p>Many times the intersection of objects may need to be calculated. Intersections are not in OpenNurbs, but are part of Compute. Here is a tutorial on creating two circles, finding their intersection, then converting the circles to an SVG image to display.</p>
-
-<pre><code class="language-C#">using System.Collections.Generic;
-using System.Text;
-using Rhino.Geometry;
-
-namespace CircleIntersection
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Rhino.Compute.ComputeServer.ApiToken = "circleintersectionsample@mcneel.com";
-
-            // create a couple Circles using a local copy of Rhino3dmIo
-            var c1 = new Circle(new Point3d(0, 0, 0), 100);
-            var c2 = new Circle(new Point3d(30, 30, 0), 70);
-
-            // call compute to perform a curve boolean operation
-            var intersectionCurves = Rhino.Compute.CurveCompute.CreateBooleanIntersection(c1.ToNurbsCurve(), c2.ToNurbsCurve());
-            Mesh[] intersectionMeshes = null;
-            if (intersectionCurves != null)
-            {
-                // use local Rhino3dmIo to create a Brep from the curves
-                var brep = Brep.CreateTrimmedPlane(c1.Plane, intersectionCurves);
-
-                // call compute to mesh the Brep
-                intersectionMeshes = Rhino.Compute.MeshCompute.CreateFromBrep(brep, MeshingParameters.FastRenderMesh);
-            }
-
-            // just some helper routines to create an SVG file of the results so we can see what was generated
-            string path = "circle_intersection.svg";
-            WriteSvgFile(path, c1, c2, intersectionMeshes);
-            System.Diagnostics.Process.Start(path);
-        }
-
-
-        /// &lt;summary&gt;
-        /// Very basic SVG file creation routine to make an SVG the displays two circles and a mesh.
-        /// Kept simple just for this sample; there are much better SVG toolkits available that could
-        /// be used for general purpose routines.
-        /// &lt;/summary&gt;
-        /// &lt;param name="path"&gt;&lt;/param&gt;
-        /// &lt;param name="circle1"&gt;&lt;/param&gt;
-        /// &lt;param name="circle2"&gt;&lt;/param&gt;
-        /// &lt;param name="intersectionMeshes"&gt;&lt;/param&gt;
-        static void WriteSvgFile(string path, Circle circle1, Circle circle2, Mesh[] intersectionMeshes)
-        {
-            var doc = new System.Xml.XmlDocument();
-            doc.AppendChild(doc.CreateXmlDeclaration("1.0", "UTF-8", "no"));
-            doc.XmlResolver = null;
-            doc.AppendChild(doc.CreateDocumentType("svg", "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd", null));
-            var svgroot = doc.CreateElement("svg");
-
-            var bbox = circle1.BoundingBox;
-            bbox.Union(circle2.BoundingBox);
-            var length = (bbox.Max - bbox.Min).Length;
-            bbox.Inflate(length * 0.05);
-
-            AppendAttribute(doc, svgroot, "viewBox", $"{bbox.Min.X} {bbox.Min.Y} {bbox.Max.X - bbox.Min.X} {bbox.Max.Y - bbox.Min.Y}");
-            AppendAttribute(doc, svgroot, "version", "1.1");
-            AppendAttribute(doc, svgroot, "xmlns", "http://www.w3.org/2000/svg");
-            doc.AppendChild(svgroot);
-
-            if (intersectionMeshes != null)
-            {
-                foreach (var mesh in intersectionMeshes)
-                {
-                    foreach (var face in mesh.Faces)
-                    {
-                        var elem = doc.CreateElement("polygon");
-                        var attrib = doc.CreateAttribute("fill");
-                        attrib.Value = "#008000"; // green
-                        elem.Attributes.Append(attrib);
-                        attrib = doc.CreateAttribute("stroke");
-                        attrib.Value = "#008000"; // green
-                        elem.Attributes.Append(attrib);
-                        attrib = doc.CreateAttribute("points");
-                        StringBuilder sb = new StringBuilder();
-                        var points = new List&lt;Rhino.Geometry.Point3d&gt;();
-                        points.Add(mesh.Vertices[face.A]);
-                        points.Add(mesh.Vertices[face.B]);
-                        points.Add(mesh.Vertices[face.C]);
-                        if (face.IsQuad)
-                            points.Add(mesh.Vertices[face.D]);
-                        for (int i = 0; i &lt; points.Count; i++)
-                        {
-                            if (i &gt; 0)
-                                sb.Append(", ");
-                            sb.Append($"{points[i].X}, {points[i].Y}");
-                        }
-                        attrib.Value = sb.ToString().Trim();
-                        elem.Attributes.Append(attrib);
-                        svgroot.AppendChild(elem);
-                    }
-                }
-            }
-
-            svgroot.AppendChild(SvgCircle(circle1, doc));
-            svgroot.AppendChild(SvgCircle(circle2, doc));
-
-            doc.Save(path);
-        }
-
-        static void AppendAttribute(System.Xml.XmlDocument doc, System.Xml.XmlElement element, string name, string value)
-        {
-            var attr = doc.CreateAttribute(name);
-            attr.Value = value;
-            element.Attributes.Append(attr);
-        }
-
-        static System.Xml.XmlElement SvgCircle(Rhino.Geometry.Circle c, System.Xml.XmlDocument doc)
-        {
-            var elem = doc.CreateElement("circle");
-            var attrib = doc.CreateAttribute("cx");
-            attrib.Value = $"{c.Center.X}";
-            elem.Attributes.Append(attrib);
-            attrib = doc.CreateAttribute("cy");
-            attrib.Value = $"{c.Center.Y}";
-            elem.Attributes.Append(attrib);
-            attrib = doc.CreateAttribute("r");
-            attrib.Value = $"{c.Radius}";
-            elem.Attributes.Append(attrib);
-            attrib = doc.CreateAttribute("fill-opacity");
-            attrib.Value = "0";
-            elem.Attributes.Append(attrib);
-            attrib = doc.CreateAttribute("stroke");
-            attrib.Value = "#000000";
-            elem.Attributes.Append(attrib);
-            return elem;
-        }
-    }
-}
-</code></pre>
-
-<hr />
-
-<h2 id="next-steps">Next Steps</h2>
-
-<p><em>Congratulations!</em>  You have the tools to use <a href="https://www.rhino3d.com/compute">Rhino Compute server</a>.  <em>Now what?</em></p>
-
-<ol>
-  <li>See a list of the <a href="https://compute.rhino3d.com/sdk">2400+ API calls</a> available for compute.rhino3d.com.</li>
-  <li>Download the <a href="https://github.com/mcneel/compute.rhino3d.samples">Compute Samples repo from GitHub</a>.</li>
-</ol>
-
-<hr />
-
-<h2 id="footnotes">Footnotes</h2>
-
+<p>The libraries are still very new and changing rapidly. Give them a try or get involved. Ask any questions or share what you are working on the <a href="https://discourse.mcneel.com/c/serengeti/compute-rhino3d">Compute Discussion Forum</a></p>
 
         </article>
 
