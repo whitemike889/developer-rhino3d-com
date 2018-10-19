@@ -50,6 +50,7 @@ var searchData=
   ['defaultminneardist',['DefaultMinNearDist',['../class_o_n___viewport.html#adb7273f70e43eb283cd8b0050757e77f',1,'ON_Viewport']]],
   ['defaultminnearoverfar',['DefaultMinNearOverFar',['../class_o_n___viewport.html#a17b0d244683beef463363417e6accd29',1,'ON_Viewport']]],
   ['defaultneardist',['DefaultNearDist',['../class_o_n___viewport.html#a6097c9a9cb5c516f9d28f302d07fbccb',1,'ON_Viewport']]],
+  ['defaultouterorientation',['DefaultOuterOrientation',['../class_o_n___outline.html#a0dfe11635a8a0dfb97ad345594c41039',1,'ON_Outline']]],
   ['defaultperspectiveviewzup',['DefaultPerspectiveViewZUp',['../class_o_n___viewport.html#a80d995607fc005b2ab9581fbc1fb37c2',1,'ON_Viewport']]],
   ['defaults',['Defaults',['../class_c_rhino_create_document_options.html#a716be3b6a5a39b62465a99ed6672b1e6',1,'CRhinoCreateDocumentOptions::Defaults()'],['../class_c_rhino_open_document_options.html#a016d377a91f4bfae6f838bc1a81a7ad0',1,'CRhinoOpenDocumentOptions::Defaults()'],['../class_c_rhino_file_write_options.html#a981fd4508930041fc248cbc619c271c0',1,'CRhinoFileWriteOptions::Defaults()']]],
   ['defaultsettings',['DefaultSettings',['../class_o_n___parse_settings.html#a78b854db519995de6c6a2a3a2757edd8',1,'ON_ParseSettings']]],

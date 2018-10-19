@@ -11,6 +11,7 @@ var searchData=
   ['olc_5flabel_5fwidth',['olc_label_width',['../class_c_rhino_ui_options_list_ctrl.html#a7b0a0e770293788a1cbc1050ceff4bb7a09692258ef1774a676faaf36531ffadf',1,'CRhinoUiOptionsListCtrl']]],
   ['om_5fraster',['om_raster',['../class_c_rhino_print_info.html#aba2f85e232956305ecb19b4ef82aa8a3a7ef345c1cf1d54d565c2f08c35cb43df',1,'CRhinoPrintInfo']]],
   ['om_5fvector',['om_vector',['../class_c_rhino_print_info.html#aba2f85e232956305ecb19b4ef82aa8a3a964619003f79cb9406c6c77de0d5ca99',1,'CRhinoPrintInfo']]],
+  ['omit',['Omit',['../group__open_n_u_r_b_s.html#gga3cb01728f9d1f30473a5f15889dbc551a3f9823fc8c5bf8d5efbb0ad3be5f16c9',1,'Omit():&#160;opennurbs_defines.h'],['../group__open_n_u_r_b_s.html#gga777a193ba4159ff9405092f45906a949a3f9823fc8c5bf8d5efbb0ad3be5f16c9',1,'Omit():&#160;opennurbs_defines.h']]],
   ['on_5fbackslash',['ON_Backslash',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09adea95aaebf838c31d067ff10d5c1a768',1,'opennurbs_unicode.h']]],
   ['on_5fbackspace',['ON_Backspace',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09abb521ec7bf6b9f04d24be4dbc3e71533',1,'opennurbs_unicode.h']]],
   ['on_5fblackrecyclingsymbol',['ON_BlackRecyclingSymbol',['../group__open_n_u_r_b_s.html#gga430f062290196f7f81bf0bf9dda7ba09a823e127e32a964e8a51588f32893f823',1,'opennurbs_unicode.h']]],

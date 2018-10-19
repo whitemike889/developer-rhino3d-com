@@ -59,6 +59,7 @@ var searchData=
   ['on_5fplus_5ffunction_5fnurbssurface_5fmesh',['ON_PLUS_FUNCTION_NurbsSurface_Mesh',['../group__open_n_u_r_b_s.html#ga0ccd51faa86a62be71c3b99d04df29c5',1,'opennurbs_plus_function.h']]],
   ['on_5fplus_5ffunction_5fon_5fnurbscurve_5fremoveknots',['ON_PLUS_FUNCTION_ON_NurbsCurve_RemoveKnots',['../group__open_n_u_r_b_s.html#ga1e134eaeb810065073e1c5c36953271f',1,'opennurbs_plus_function.h']]],
   ['on_5fplus_5ffunction_5fon_5fnurbssurface_5fremoveknots',['ON_PLUS_FUNCTION_ON_NurbsSurface_RemoveKnots',['../group__open_n_u_r_b_s.html#ga50c9623c341971271f5b19b15f6d8410',1,'opennurbs_plus_function.h']]],
+  ['on_5fplus_5ffunction_5foutline_5fgetoutlinemesh',['ON_PLUS_FUNCTION_Outline_GetOutlineMesh',['../group__open_n_u_r_b_s.html#ga99bd49f52f023bfbb4672c30ef065036',1,'opennurbs_plus_function.h']]],
   ['on_5fplus_5ffunction_5fplanesurface_5fmesh',['ON_PLUS_FUNCTION_PlaneSurface_Mesh',['../group__open_n_u_r_b_s.html#ga42071c04c45b5ffd43bbe73d3dac82c7',1,'opennurbs_plus_function.h']]],
   ['on_5fplus_5ffunction_5frevsurface_5fmesh',['ON_PLUS_FUNCTION_RevSurface_Mesh',['../group__open_n_u_r_b_s.html#ga976f38d5710b807bad389732959318f4',1,'opennurbs_plus_function.h']]],
   ['on_5fplus_5ffunction_5fsquishmesh',['ON_PLUS_FUNCTION_SquishMesh',['../group__open_n_u_r_b_s.html#ga812d72fc1df088d770eb85b2bcc61538',1,'opennurbs_plus_function.h']]],
