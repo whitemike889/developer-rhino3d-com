@@ -61,6 +61,7 @@ layout: guide-homepage
 
 ### Additional Properties
 
+- Getting Object Attributes
 - Vectors
 - Matrix Arithmetic
 - User-Data
@@ -70,10 +71,22 @@ layout: guide-homepage
 - Vieports
 - Materials
 
+### Geometry Evaluation
+
+- Transforms
+- Simple Object interaction
+- Matrix Math
+- Spacial Decompensition (R-tree)
+
+
+<!--column-->
+
+<!--the .snagit project for this image can be found next to the image -->
+[<img src="{{ site.baseurl }}/images/rhinopython-guides-col3.png">](http://www.rhino3d.com/download/IronPython/5.0/RhinoPython101)
+
 ### Intermediate
 
 - Brep Loop & Edge Directions
-- Getting Object Attributes
 - Importing Lightweight Extrusions
 - Periodic Curves & Surfaces
 - Reading Render Meshes
@@ -86,11 +99,6 @@ layout: guide-homepage
 - Testing for Object Visibility
 - Developer samples on GitHub
 - Scripting discussions on Discourse
-
-<!--column-->
-
-<!--the .snagit project for this image can be found next to the image -->
-[<img src="{{ site.baseurl }}/images/rhinopython-guides-col3.png">](http://www.rhino3d.com/download/IronPython/5.0/RhinoPython101)
 
 ### Samples
 
