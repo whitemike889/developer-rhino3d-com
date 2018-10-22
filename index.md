@@ -112,7 +112,7 @@ layout: fullwidth-page
     <td><a href="{{ site.baseurl }}/guides/rhino3dm" title="Geomtry Tools for your own applications"> Rhino3dm</a></td>
 	<td><img src="{{ site.baseurl }}/images/win-logo-small.png" alt="Windows" class="index_table_icon" title="Windows"><img src="{{ site.baseurl }}/images/mac-logo-small.png" alt="OS X" class="index_table_icon" title="Mac OS X"><img src="{{ site.baseurl }}/images/android-logo-small.png" alt="Android" class="index_table_icon" title="Android"><img src="{{ site.baseurl }}/images/ios-logo-small.png" alt="iOS" class="index_table_icon" title="Apple iOS"></td>
 	<td><img src="{{ site.baseurl }}/images/cs-logo-small.png" alt="C#" class="index_table_icon" title="C#"><img src="{{ site.baseurl }}/images/python-logo-small.png" alt="Python" class="index_table_icon" title="Python"><img src="{{ site.baseurl }}/images/javascript-logo-small.png" alt="JavaScript" class="index_table_icon" title="JavaScript"></td>
-    <td class="index_table_primary_use">3D mobile application development</td>  
+    <td class="index_table_primary_use">Multi-platform Geometry Library</td>  
   </tr>
   <tr>
     <td><a href="{{ site.baseurl }}/guides/rhinomobile" title="Tools for using 3dm files in mobile applications"> RhinoMobile</a></td>

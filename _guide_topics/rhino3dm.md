@@ -33,12 +33,12 @@ layout: guide-homepage
 
 ### Getting Started
 
-- Your First Python Script in Rhino ([Windows]({{ site.baseurl }}/guides/rhinopython/your-first-python-script-in-rhino-windows), [Mac]({{ site.baseurl }}/guides/rhinopython/your-first-python-script-in-rhino-mac), [Grasshopper]({{ site.baseurl }}/guides/rhinopython/your-first-python-script-in-grasshopper))
-- [Where to get help...]({{ site.baseurl }}/guides/rhinopython/python-where-to-find-help)
-- [Troubleshooting Installation]({{ site.baseurl }}/guides/rhinopython/python-troubleshooting-install)
-- [Developer samples on GitHub](https://github.com/mcneel/rhino-developer-samples)
-- [Scripting discussions on Discourse](https://discourse.mcneel.com/c/scripting)
-
+- Using Rhino3dm.py in CPython(Windows/Mac)
+- Referencing the Rhino3dm.js with JavaScript (all major browsers/node.js)
+- Starting with Rhino3dm.cs using C# (.NET)
+- Developer for mobile usngin RhinoMobile
+- Developer samples on GitHub
+- Scripting discussions on Discourse
 
 
 <!--column-->
@@ -46,14 +46,67 @@ layout: guide-homepage
 <!--the .snagit project for this image can be found next to the image -->
 [<img src="{{ site.baseurl }}/images/rhinopython-guides-col2.png">](https://docs.python.org/2/tutorial/index.html)
 
+### Fundamentals
 
+- The OpenNurbs Kernel
+- Objects in Rhino3DM
+- Points and Pointclouds
+- Lines and Polylines
+- Nurbs-curves
+- Planes
+- Circles, Ellipses and...
+- Meshes
+- Surfaces
+- Poly-surfaces (BREPS)
+
+### Additional Properties
+
+- Vectors
+- Matrix Arithmetic
+- User-Data
+- Document
+- Layers
+- Annotation
+- Vieports
+- Materials
+
+### Intermediate
+
+- Brep Loop & Edge Directions
+- Getting Object Attributes
+- Importing Lightweight Extrusions
+- Periodic Curves & Surfaces
+- Reading Render Meshes
+- Superfluous Knots
+- Traversing Instance Definitions
+- Reading and writing the 3dm file format
+- Using Rhino.Compute
+- Blocks and Instances
+- Reading Per-Face Render Materials
+- Testing for Object Visibility
+- Developer samples on GitHub
+- Scripting discussions on Discourse
 
 <!--column-->
 
 <!--the .snagit project for this image can be found next to the image -->
 [<img src="{{ site.baseurl }}/images/rhinopython-guides-col3.png">](http://www.rhino3d.com/download/IronPython/5.0/RhinoPython101)
 
+### Samples
 
+- Using Rhino3dm.py in CPython(Windows/Mac)
+- Referencing the Rhino3dm.js with JavaScript (all major browsers/node.js)
+- Starting with Rhino3dm.cs using C# (.NET)
+- Developer samples on GitHub
+- Scripting discussions on Discourse
+
+### Other Resources
+
+- Using Rhino3dm.py in CPython(Windows/Mac)
+- Referencing the Rhino3dm.js with JavaScript (all major browsers/node.js)
+- Starting with Rhino3dm.cs using C# (.NET)
+- Developer samples on GitHub
+- Scripting discussions on Discourse
 
 <!--column-->
 

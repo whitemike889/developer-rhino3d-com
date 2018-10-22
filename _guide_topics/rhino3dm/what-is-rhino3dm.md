@@ -15,7 +15,7 @@ TODO: 'first draft, needs editing'
 
 ## What is Rhino3dm?
 
-rhino3dm is a set of standalone libraries based on the [OpenNURBS](https://developer.rhino3d.com/guides/opennurbs/what-is-opennurbs/) geometry library with a ["RhinoCommon"](https://developer.rhino3d.com/guides/rhinocommon/what-is-rhinocommon/) style. This provides the ability to access and manipulate geometry through .NET , Python or JavaScript applications independent of Rhino.  
+rhino3dm is a set of standalone libraries which provide the ability to access and manipulate geometry through .NET , Python or JavaScript applications independent of Rhino.  
 
 Functionality includes
 
