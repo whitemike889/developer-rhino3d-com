@@ -40,6 +40,23 @@ layout: guide-homepage
 - Developer samples on GitHub
 - Scripting discussions on Discourse
 
+### Rhino.Compute
+
+- What is Compute?
+- Getting Started with Compute and Python
+- Using Javascript with Compute.
+- Accessing Compute from C# (.NET)
+- Compute API
+
+### Rhinomobile
+
+- Tools for using 3dm files in mobile applications RhinoMobile
+- [What is RhinoMobile?]({{ site.baseurl }}/guides/rhinomobile/what-is-rhinomobile/)
+- Installing Tools ([Windows]({{ site.baseurl }}/guides/rhinomobile/installing-tools-windows/), [Mac]({{ site.baseurl }}/guides/rhinomobile/installing-tools-mac/))
+- Your First App ([Windows]({{ site.baseurl }}/guides/rhinomobile/your-first-app-windows/), [Mac]({{ site.baseurl }}/guides/rhinomobile/your-first-app-mac/))
+- [Using Simulators]({{ site.baseurl }}/guides/rhinomobile/using-simulators/)
+- [Testing On Devices]({{ site.baseurl }}/guides/rhinomobile/testing-on-devices/)
+
 
 <!--column-->
 
@@ -99,6 +116,12 @@ layout: guide-homepage
 - Testing for Object Visibility
 - Developer samples on GitHub
 - Scripting discussions on Discourse
+
+### Compute Extension
+
+- Meshing
+- Boolean Operations
+- Spacial Subdivision structure
 
 ### Samples
 
