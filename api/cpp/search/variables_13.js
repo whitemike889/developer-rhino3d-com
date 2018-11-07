@@ -8,6 +8,7 @@ var searchData=
   ['saturatedmagenta',['SaturatedMagenta',['../class_o_n___color.html#a5bcadc36cdf3212dba903d841b0620f3',1,'ON_Color']]],
   ['saturatedred',['SaturatedRed',['../class_o_n___color.html#ae31f3c3373a0665b7fc10e258dff774f',1,'ON_Color']]],
   ['saturatedyellow',['SaturatedYellow',['../class_o_n___color.html#a49feed354a1cfca7bcec56dbc75ad9d7',1,'ON_Color']]],
+  ['sc_5fall_5fdraw_5fchannels',['SC_ALL_DRAW_CHANNELS',['../struct_c_support_channels.html#ac0a1ba2459e0e5a30f3dc5ee0cb5d77c',1,'CSupportChannels']]],
   ['sc_5fcalcboundingbox',['SC_CALCBOUNDINGBOX',['../struct_c_support_channels.html#a3544dbd9f72d6ce1604245b70ae97076',1,'CSupportChannels']]],
   ['sc_5fcalcclippingplanes',['SC_CALCCLIPPINGPLANES',['../struct_c_support_channels.html#a35315ac2eb7eccb7963d714ee1f54387',1,'CSupportChannels']]],
   ['sc_5fdrawbackground',['SC_DRAWBACKGROUND',['../struct_c_support_channels.html#aedf33c1d219a2b65fbaa3bae3e8812a5',1,'CSupportChannels']]],

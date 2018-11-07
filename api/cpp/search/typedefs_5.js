@@ -15,7 +15,7 @@ var searchData=
   ['on_5ffontkey',['ON_FontKey',['../group__open_n_u_r_b_s.html#gac6b7045e34a00ab8e342728178a1b48f',1,'opennurbs_textiterator.h']]],
   ['on_5ffontptrcomparefunc',['ON_FontPtrCompareFunc',['../group__open_n_u_r_b_s.html#ga1cc431e5be762f69b6dde3533339e3ba',1,'opennurbs_font.h']]],
   ['on_5fgetfontmetricsfunctype',['ON_GetFontMetricsFuncType',['../class_o_n___font.html#ac2cb089d8a45799de5825031f1c1c58b',1,'ON_Font']]],
-  ['on_5fgetglyphmetricsfunctype',['ON_GetGlyphMetricsFuncType',['../class_o_n___font.html#ae2963412b8189ffbd496e56f5f6731ee',1,'ON_Font']]],
+  ['on_5fgetglyphmetricsfunctype',['ON_GetGlyphMetricsFuncType',['../class_o_n___font.html#ac08a01e684b16eefe7bee2179fd70c3c',1,'ON_Font']]],
   ['on_5fgetglyphoutlinefunctype',['ON_GetGlyphOutlineFuncType',['../class_o_n___font.html#aa11a0ea94c90f01c15223a42aef9f84f',1,'ON_Font']]],
   ['on_5fmemory_5ferror_5fhandler',['ON_memory_error_handler',['../group__open_n_u_r_b_s.html#gab7678c6cf04e09f54e9f9922f8341ff0',1,'opennurbs_memory.h']]],
   ['on_5fplus_5ffunction_5fbendbrepface',['ON_PLUS_FUNCTION_BendBrepFace',['../group__open_n_u_r_b_s.html#gab01a94c4e09cab2d4be1532892f6ab22',1,'opennurbs_plus_function.h']]],

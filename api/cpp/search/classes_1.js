@@ -619,6 +619,7 @@ var searchData=
   ['crhrdkonecolortexturebasecsi',['CRhRdkOneColorTextureBaseCSI',['../class_c_rh_rdk_one_color_texture_base_c_s_i.html',1,'']]],
   ['crhrdkplugin',['CRhRdkPlugIn',['../class_c_rh_rdk_plug_in.html',1,'']]],
   ['crhrdkposteffectplugin',['CRhRdkPostEffectPlugIn',['../class_c_rh_rdk_post_effect_plug_in.html',1,'']]],
+  ['crhrdkposteffectpluginex',['CRhRdkPostEffectPlugInEx',['../class_c_rh_rdk_post_effect_plug_in_ex.html',1,'']]],
   ['crhrdkposteffectpluginfactory',['CRhRdkPostEffectPlugInFactory',['../class_c_rh_rdk_post_effect_plug_in_factory.html',1,'']]],
   ['crhrdkposteffectpluginmanager',['CRhRdkPostEffectPlugInManager',['../class_c_rh_rdk_post_effect_plug_in_manager.html',1,'']]],
   ['crhrdkpreviewappearance',['CRhRdkPreviewAppearance',['../class_c_rh_rdk_preview_appearance.html',1,'']]],

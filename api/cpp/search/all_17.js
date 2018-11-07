@@ -32,7 +32,7 @@ var searchData=
   ['wgs1984',['WGS1984',['../class_o_n.html#a4557b7c658c396a9f2e1b97e4b3fc0cdaf4217e5e782ea2010d86099175a2ffed',1,'ON']]],
   ['whenoneselected',['WhenOneSelected',['../class_i_rh_rdk_custom_curve_ctrl.html#abcbc1c905eaa1772abafc6b21b746bafa4b42b3ffc989464f303ce9d74c6345e0',1,'IRhRdkCustomCurveCtrl']]],
   ['whenselected',['WhenSelected',['../class_i_rh_rdk_custom_curve_ctrl.html#abcbc1c905eaa1772abafc6b21b746bafaafecacd83d0ff42e9a9d746955701f78',1,'IRhRdkCustomCurveCtrl']]],
-  ['white',['white',['../class_c_rh_rdk_color.html#a61d07045c635083fcbd7b4e94b8b41da',1,'CRhRdkColor::white()'],['../class_o_n___color.html#ab8657f1e46506e08a1a32f09d15e12b9',1,'ON_Color::White()']]],
+  ['white',['White',['../class_o_n___color.html#ab8657f1e46506e08a1a32f09d15e12b9',1,'ON_Color::White()'],['../class_c_rh_rdk_color.html#a61d07045c635083fcbd7b4e94b8b41da',1,'CRhRdkColor::white()']]],
   ['white_5fcolor',['white_color',['../class_c_rhino_object_color_combo_box.html#a38d4c83cd87e6e133014a69e1e69251daa8cd812996634078a4d60ffae43cfa6f',1,'CRhinoObjectColorComboBox::white_color()'],['../class_c_rhino_plot_color_combo_box.html#a8d491d63c2b4a762ca55cc02cfbef489a415ce6c33b9d04c67c023ef08dfc452b',1,'CRhinoPlotColorComboBox::white_color()']]],
   ['white_5fon_5fblack_5fosnap_5fcursor',['white_on_black_osnap_cursor',['../class_c_rhino_app_model_aid_settings.html#af4a415cd6630d8f9694cef309f899ecaa8466d62ed0c2d78fe063f82dc1a74f67',1,'CRhinoAppModelAidSettings']]],
   ['whitepoint',['WhitePoint',['../class_c_rh_rdk_tone_mapper___black_white_point.html#af0c6dba9b5f9270ecb5d99365854932f',1,'CRhRdkToneMapper_BlackWhitePoint']]],

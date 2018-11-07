@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.9</span>
+   &#160;<span id="projectnumber">6.10</span>
    </div>
   </td>
  </tr>
@@ -153,6 +153,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac285fba1506b2b9b821e3655582939c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a004ab49490f69fcdc7681919c3837a33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___object.html#a004ab49490f69fcdc7681919c3837a33">GetUserStrings</a> (<a class="el" href="class_o_n___class_array.html">ON_ClassArray</a>&lt; <a class="el" href="class_o_n___user_string.html">ON_UserString</a> &gt; &amp;user_strings) const</td></tr>
 <tr class="separator:a004ab49490f69fcdc7681919c3837a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a266957f93639a598b0e1b6a89e0bb40d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___object.html#a266957f93639a598b0e1b6a89e0bb40d">IsCorrupt</a> (bool bRepair, bool bSilentError, class <a class="el" href="class_o_n___text_log.html">ON_TextLog</a> *text_log) const</td></tr>
+<tr class="separator:a266957f93639a598b0e1b6a89e0bb40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe5367058a90545e81cd79b78103175d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___object.html#afe5367058a90545e81cd79b78103175d">IsKindOf</a> (const <a class="el" href="class_o_n___class_id.html">ON_ClassId</a> *pClassId) const</td></tr>
 <tr class="separator:afe5367058a90545e81cd79b78103175d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7212696724553dc4d365479a10150c0d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___object.html#a7212696724553dc4d365479a10150c0d">IsValid</a> (class <a class="el" href="class_o_n___text_log.html">ON_TextLog</a> *text_log=nullptr) const</td></tr>
@@ -805,6 +807,41 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a266957f93639a598b0e1b6a89e0bb40d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a266957f93639a598b0e1b6a89e0bb40d">&#9670;&nbsp;</a></span>IsCorrupt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ON_Object::IsCorrupt </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bRepair</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bSilentError</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">class <a class="el" href="class_o_n___text_log.html">ON_TextLog</a> *&#160;</td>
+          <td class="paramname"><em>text_log</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description: Check for corrupt data values that are likely to cause crashes. Parameters: bRepair - [in] If true, const_cast&lt;&gt; will be used to change the corrupt data so that crashes are less likely. bSilentError - [in] If true, ON_ERROR will not be called when corruption is detected. text_log - [out] If text_log is not null, then a description of corruption is printed using text_log. Remarks: Ideally, <a class="el" href="class_o_n___object.html#a266957f93639a598b0e1b6a89e0bb40d">IsCorrupt()</a> would be a virtual function on <a class="el" href="class_o_n___object.html">ON_Object</a>, but doing that at this point would break the public SDK. </p>
+
+</div>
+</div>
 <a id="afe5367058a90545e81cd79b78103175d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe5367058a90545e81cd79b78103175d">&#9670;&nbsp;</a></span>IsKindOf()</h2>
 
@@ -911,7 +948,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Description: The <a class="el" href="class_o_n___object.html#ae0674ccb79b6333e4b3c8e95ee10dd73">MemoryRelocate()</a> function is called when an object's location in memory is changed. For example, if an object resides in a chunk of memory that is grown by calling a realloc that has to allocate a new chunk and copy the contents of the old chunk to the new chunk, then the location of the object's memory changes. In practice this happens when classes derived from <a class="el" href="class_o_n___object.html">ON_Object</a> are stored in dynamic arrays, like the default implementation of ON_ObjectArray&lt;&gt;'s that use realloc to grow the dynamic array. </p>
 
-<p>Reimplemented in <a class="el" href="class_o_n___mesh.html#a946263df140cb0a25931db03ed015759">ON_Mesh</a>, <a class="el" href="class_o_n___brep.html#a68391746e3eac8aab93b3ced47038061">ON_Brep</a>, <a class="el" href="class_o_n___morph_control.html#abdf6c9a12c543b676d760946f6c41538">ON_MorphControl</a>, <a class="el" href="class_c_rhino_instance_object.html#a6cf7aa195e62d2507e34eeb1eef06a9d">CRhinoInstanceObject</a>, <a class="el" href="class_c_rhino_point_cloud_object.html#a9bb48735e24607b8940f120907e8fe7d">CRhinoPointCloudObject</a>, <a class="el" href="class_c_rhino_group_object.html#a89c1cf72bfbae6b88399b29270beeb15">CRhinoGroupObject</a>, <a class="el" href="class_c_rhino_object.html#a832e77009f618b2683a6eb787975c845">CRhinoObject</a>, <a class="el" href="class_c_rhino_detail_view_object.html#abe3f94ca5196a64bc05a049049ad5a10">CRhinoDetailViewObject</a>, <a class="el" href="class_o_n___detail_view.html#aca59ebe193fa5e55b49ab32fd2f517ab">ON_DetailView</a>, <a class="el" href="class_c_rhino_clipping_plane_object.html#ab5e97d8096cec153ebb42ed09b1f209e">CRhinoClippingPlaneObject</a>, <a class="el" href="class_c_rhino_light.html#a4f147be5f6a1a44480b7126967c3dbf6">CRhinoLight</a>, and <a class="el" href="class_c_rhino_point_object.html#a30948464f1d46552f38fb99d50a267cd">CRhinoPointObject</a>.</p>
+<p>Reimplemented in <a class="el" href="class_o_n___mesh.html#a946263df140cb0a25931db03ed015759">ON_Mesh</a>, <a class="el" href="class_o_n___morph_control.html#abdf6c9a12c543b676d760946f6c41538">ON_MorphControl</a>, <a class="el" href="class_o_n___brep.html#a68391746e3eac8aab93b3ced47038061">ON_Brep</a>, <a class="el" href="class_c_rhino_instance_object.html#a6cf7aa195e62d2507e34eeb1eef06a9d">CRhinoInstanceObject</a>, <a class="el" href="class_c_rhino_point_cloud_object.html#a9bb48735e24607b8940f120907e8fe7d">CRhinoPointCloudObject</a>, <a class="el" href="class_c_rhino_group_object.html#a89c1cf72bfbae6b88399b29270beeb15">CRhinoGroupObject</a>, <a class="el" href="class_c_rhino_object.html#a832e77009f618b2683a6eb787975c845">CRhinoObject</a>, <a class="el" href="class_c_rhino_detail_view_object.html#abe3f94ca5196a64bc05a049049ad5a10">CRhinoDetailViewObject</a>, <a class="el" href="class_o_n___detail_view.html#aca59ebe193fa5e55b49ab32fd2f517ab">ON_DetailView</a>, <a class="el" href="class_c_rhino_clipping_plane_object.html#ab5e97d8096cec153ebb42ed09b1f209e">CRhinoClippingPlaneObject</a>, <a class="el" href="class_c_rhino_light.html#a4f147be5f6a1a44480b7126967c3dbf6">CRhinoLight</a>, and <a class="el" href="class_c_rhino_point_object.html#a30948464f1d46552f38fb99d50a267cd">CRhinoPointObject</a>.</p>
 
 </div>
 </div>
@@ -1384,7 +1421,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 19 2018 06:36:12 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 6 2018 16:32:22 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -314,6 +314,8 @@ var searchData=
   ['fontfromquartetproperties',['FontFromQuartetProperties',['../class_o_n___font_list.html#a3293719e8e3461d571c6b8eec7be53cf',1,'ON_FontList']]],
   ['fontglyphid',['FontGlyphId',['../class_o_n___font_glyph.html#a30540d013cef30de94984910991c7b9b',1,'ON_FontGlyph']]],
   ['fontglyphidisset',['FontGlyphIdIsSet',['../class_o_n___font_glyph.html#aa6f0de56836fce2173f8e2b76f4c1ba6',1,'ON_FontGlyph']]],
+  ['fontglyphindex',['FontGlyphIndex',['../class_o_n___font_glyph.html#a03bca4f56edfc69f6e6fdaf4d397485e',1,'ON_FontGlyph']]],
+  ['fontglyphindexisset',['FontGlyphIndexIsSet',['../class_o_n___font_glyph.html#a2db3e63b147d305dd5ca023de866d64b',1,'ON_FontGlyph']]],
   ['fontindex',['FontIndex',['../class_o_n___rtf_string_builder_1_1_text_run.html#af96b0104a7d6684e32163bb2bf6c1f8c',1,'ON_RtfStringBuilder::TextRun::FontIndex()'],['../class_o_n___rtf_first_char_1_1_text_run.html#a7d84bdf4d28c8cdda90e82bdc44b9947',1,'ON_RtfFirstChar::TextRun::FontIndex()']]],
   ['fontislocked',['FontIsLocked',['../class_o_n___text_style.html#ad781570c7b457beb4e471f8de5e92a46',1,'ON_TextStyle']]],
   ['fontisset',['FontIsSet',['../class_o_n___text_style.html#a03d40801f7c3ef86e4548284abf16aa8',1,'ON_TextStyle']]],
