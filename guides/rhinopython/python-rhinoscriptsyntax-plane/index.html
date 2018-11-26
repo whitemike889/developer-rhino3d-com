@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Planes in Python with Python</title>
-  <meta name="description" content="This guide provides an overview of a RhinoScriptSyntax Plane Geometry in Python.  Using Python">
+  <meta name="description" content="This guide provides an overview of RhinoScriptSyntax Plane Geometry in Python.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/python-rhinoscriptsyntax-plane/" />
   <meta property="og:title" content="Planes in Python" />
-  <meta property="og:description" content="This guide provides an overview of a RhinoScriptSyntax Plane Geometry in Python." />
+  <meta property="og:description" content="This guide provides an overview of RhinoScriptSyntax Plane Geometry in Python." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Planes in Python" />
-  <meta name="twitter:description" value="This guide provides an overview of a RhinoScriptSyntax Plane Geometry in Python." />
+  <meta name="twitter:description" value="This guide provides an overview of RhinoScriptSyntax Plane Geometry in Python." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -432,18 +432,18 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide provides an overview of a RhinoScriptSyntax Plane Geometry in Python.</p>
+          <p>This guide provides an overview of RhinoScriptSyntax Plane Geometry in Python.</p>
 
           <h2 id="planes">Planes</h2>
 
-<p>Several RhinoscriptSyntax methods either require as an argument or return as a result a plane.  Planes are represented by a <a href="/api/RhinoCommonWin/html/T_Rhino_Geometry_Plane.htm">Plane</a> structure. Plane structures and be thought of as a zero-based,  one-dimensional list containing four elements: the plane’s origin (<a href="/guides/rhinopython/python-rhinoscriptsyntax-points">point3D</a>), the plane’s X axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), the plane’s Y axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), and the plane’s Z axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>).</p>
+<p>Planes are represented by a <a href="/api/RhinoCommonWin/html/T_Rhino_Geometry_Plane.htm">Plane</a> structure.  Planes  can be thought of as a zero-based, one-dimensional list containing four elements: the plane’s origin (<a href="/guides/rhinopython/python-rhinoscriptsyntax-points">point3D</a>), the plane’s X axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), the plane’s Y axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>), and the plane’s Z axis direction (<a href="/guides/rhinopython/python-rhinoscriptsyntax-vectors">vector3d</a>).</p>
 
 <p><img src="/images/primer-planedefinition.svg" class="img-center" width="45%" /></p>
 
 <pre><code>plane contains [pointOrigin, vectorX, vectorY, vectorZ]
 </code></pre>
 
-<p>Note in a Plane, the Y axis is automatically thought as it would be 90-degrees with the original X axis. In fact, the only axis that can really stays easy to defined 100% of the times is the X axis. The Y axis is made orthogonal to the X vector, and the direction of the Z axis is just computed from the cross product of the other two vectors. It is easy to forget that there is a specific geometric relationship between the 3 axis.</p>
+<p>It is easy to forget that there is a specific geometric relationship between the axes.  With Planes, the Y axis is automatically oriented 90-degrees to the X axis.  The X axis is the only axis that can be easily defined.  The Y axis is made orthogonal to the X vector, and the direction of the Z axis is computed from the cross-product of the other two vectors.</p>
 
 <p>Planes can be constructed in a number of ways. One common function is <code>PlaneFromPoints</code>:</p>
 
@@ -458,9 +458,9 @@ print plane[1] # x-axis vector
 print plane[2] # y-axis vector
 </code></pre>
 
-<p>Planes can also be created using the CreatePlane(), <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromFrame">PlaneFromFrame</a>,  <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromNormal">PlaneFromNormal</a>, and <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromPoints">PlaneFromPoints</a> functions.</p>
+<p>Planes can also be created using the <code>CreatePlane()</code>, <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromFrame">PlaneFromFrame</a>,  <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromNormal">PlaneFromNormal</a>, and <a href="/api/RhinoScriptSyntax/win/#collapse-PlaneFromPoints">PlaneFromPoints</a> functions.</p>
 
-<p>Plane also have a number of properties that can be used to get or set the individual values in the Point object.  In the example below the .Origin, .XAxis, .Yaxis, .Zaxis is used.</p>
+<p>Plane also have a number of properties that can be used to get or set the individual values in the Point object.  In the example below the <code>.Origin</code>, <code>.XAxis</code>, <code>.Yaxis</code>, <code>.Zaxis</code> are used:</p>
 
 <pre><code>import rhinoscriptsyntax as rs
 
@@ -477,9 +477,9 @@ print plane.XAxis # x-axis vector
 print plane.YAxis # y-axis vector
 </code></pre>
 
-<p>To change origin of a Plane simply assign a new value to the .Origin property.</p>
+<p>To change origin of a Plane, simply assign a new value to the <code>.Origin</code> property.</p>
 
-<p>Using the Python <code>for</code> function it is quite easy to walk through each point coordinate in succession:</p>
+<p>Use the Python <code>for</code> iterator to walk through each point coordinate in succession:</p>
 
 <pre><code>for p in plane:
     print p
@@ -487,7 +487,7 @@ print plane.YAxis # y-axis vector
 
 <p>RhinoScriptSyntax contains a number of functions to manipulate planes.  See <a href="/guides/rhinopython/python-rhinoscriptsyntax-line-plane-methods">Lines and Planes</a> for details.</p>
 
-<p>Also, read the Python primer <a href="/guides/rhinopython/primer-101/8-geometry/#85-planes">Section 8.5 Planes</a></p>
+<p>Also, please see the Python primer <a href="/guides/rhinopython/primer-101/8-geometry/#85-planes">Section 8.5 Planes</a>.</p>
 
 <hr />
 
