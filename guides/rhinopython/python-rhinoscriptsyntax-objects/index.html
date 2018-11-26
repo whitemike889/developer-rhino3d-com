@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Rhino objects in Python with Python</title>
-  <meta name="description" content="This guide provides an overview of a RhinoScriptSyntax Object Geometry in Python.  Using Python">
+  <meta name="description" content="This guide provides an overview of RhinoScriptSyntax Object Geometry in Python.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/python-rhinoscriptsyntax-objects/" />
   <meta property="og:title" content="Rhino objects in Python" />
-  <meta property="og:description" content="This guide provides an overview of a RhinoScriptSyntax Object Geometry in Python." />
+  <meta property="og:description" content="This guide provides an overview of RhinoScriptSyntax Object Geometry in Python." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Rhino objects in Python" />
-  <meta name="twitter:description" value="This guide provides an overview of a RhinoScriptSyntax Object Geometry in Python." />
+  <meta name="twitter:description" value="This guide provides an overview of RhinoScriptSyntax Object Geometry in Python." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -464,17 +464,17 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide provides an overview of a RhinoScriptSyntax Object Geometry in Python.</p>
+          <p>This guide provides an overview of RhinoScriptSyntax Object Geometry in Python.</p>
 
           <h2 id="objects">Objects</h2>
 
-<p>Rhino can create and manipulate a number of geometric objects, including points, point clouds, curves, surfaces, B-reps, meshes, lights, annotations, and references.  Each object in the Rhino document is identified by a globally unique identifier, or GUID, that is generated and assigned to objects when they are created.  Because identifiers are saved in the 3DM file, an object’s identifier will be the same between editing sessions.</p>
+<p>Rhino can create and manipulate a number of objects, including points, point clouds, curves, surfaces, B-reps, meshes, lights, annotations, and references.  Each object in the Rhino document is identified by a globally unique identifier, or GUID, that is generated and assigned to objects when they are created.  Object identifiers are saved in the 3dm file, so an object’s identifier will be the same between editing sessions.</p>
 
-<p>To view an object’s unique identifier, use Rhino’s Properties command.</p>
+<p>To view an object’s unique identifier, use Rhino’s <code>Properties</code> command.</p>
 
 <p>For convenience, RhinoScriptSyntax returns object identifiers in the form of a string.  For example, an object’s identifier will look something like the following:</p>
 
-<p>F6E01514-3264-4598-8A07-A58BFE739C38</p>
+<p><code>F6E01514-3264-4598-8A07-A58BFE739C38</code></p>
 
 <p>The majority of RhinoScriptSyntax’s object manipulation methods require one or more object identifiers to be acquired before the method can be executed.</p>
 
@@ -482,13 +482,13 @@ $(document).ready(function()
 
 <p>Rhino objects consist of two components: the object’s geometry and the object’s attributes.</p>
 
-<p>The types of geometry support by Rhino include points, point clouds, curves, surfaces, polysurfaces, extrusions, meshes, annotations and dimensions, and other.</p>
+<p>The types of geometry support by Rhino include points, point clouds, curves, surfaces, polysurfaces, extrusions, meshes, annotations and dimensions.</p>
 
-<p>The attributes of an object include such properties as object color, layer, linetype, render material, group membership, and more.</p>
+<p>The attributes of an object include such properties as color, layer, linetype, render material, and group membership, amongst others.</p>
 
 <h2 id="example">Example</h2>
 
-<p>Here is an example using Object IDs to work reference geometry:</p>
+<p>The following example uses Object IDs to create reference geometry:</p>
 
 <pre><code class="language-python">import rhinoscriptsyntax as rs
 
