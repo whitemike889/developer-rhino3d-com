@@ -510,6 +510,22 @@ $(document).ready(function()
             
             
             <li>
+              <a href="#jekyll-plugins">Jekyll Plugins</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
               <a href="#related-topics">Related topics</a>
 
               
@@ -548,7 +564,7 @@ $(document).ready(function()
     
       
       
-        by <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/how-this-site-works.md" target="_blank">25 Aug 2017</a>)
+        by <a href="https://discourse.mcneel.com/users/dan/activity">Dan Belcher</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/how-this-site-works.md" target="_blank">30 Nov 2018</a>)
       
     
   </span>
@@ -601,7 +617,7 @@ $(document).ready(function()
 
 <p>What if you want to just correct a typo in both the <code>master</code> and the stable <code>n</code> versions of the site?</p>
 
-<p>In this case, the fastest and easiest way is to simply correct the typo in both branches on the GitHub site itself.  For example, if you wanted to correct a typo on <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/general/how-this-site-works.md" target="_blank">this very guide</a>, just click the “Edit this file” - the little pencil icon in the upper right-hand corner.  Make your correction, then switch to the <code>wip</code> branch and do the same thing.  For small fixes, this works just as well as a <a href="https://git-scm.com/docs/git-cherry-pick">cherry-picked</a> commit.</p>
+<p>In this case, the fastest and easiest way is to simply correct the typo in both branches on the GitHub site itself.  For example, if you wanted to correct a typo on <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/general/how-this-site-works.md">this very guide</a>, just click the “Edit this file” - the little pencil icon in the upper right-hand corner.  Make your correction, then switch to the <code>wip</code> branch and do the same thing.  For small fixes, this works just as well as a <a href="https://git-scm.com/docs/git-cherry-pick">cherry-picked</a> commit.</p>
 
 <hr />
 
@@ -768,6 +784,19 @@ layout: code-sample-cpp
 
 <p>Much of this site is (or was) ported from a previous location.  The <code>origin</code> yaml field is reserved for a backlink to the original content.  If the <code>origin</code> yaml field is set to a URL - and <code>TODO</code> is set to <code>some value</code> - the content will show up on the <a href="/admin/index.html#todo-list">TODO list</a> as needs porting from the <code>origin</code> URL.</p>
 
+<h2 id="jekyll-plugins">Jekyll Plugins</h2>
+
+<p>In general, we are attempting to stick to those <a href="https://pages.github.com/versions/">Jekyll dependencies that are ship with GitHub Pages</a>.  That said, since we are building this site with Travis CI, we can indeed use Jekyll plugins that are not part of the canonical GitHub pages dependencies.</p>
+
+<p>To add a plugin to the site:</p>
+
+<ol>
+  <li>Verify that it is not in the <a href="https://pages.github.com/versions/">Dependency versions list</a> already.</li>
+  <li>Test the plugin locally on your machine to make sure it does what you want it to do.</li>
+  <li>Add the plugin to the <em>Gemfile</em> on this site.</li>
+  <li>Add the plugin to the the <em>_config.yml</em> list under the <code>plugins:</code> entry.</li>
+</ol>
+
 <hr />
 
 <h2 id="related-topics">Related topics</h2>
@@ -806,7 +835,7 @@ layout: code-sample-cpp
             </p>
             <p class="text">
               
-                Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/how-this-site-works.md" target="_blank">25 Aug 2017</a>
+                Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/how-this-site-works.md" target="_blank">30 Nov 2018</a>
               
             </p>
           </div>
