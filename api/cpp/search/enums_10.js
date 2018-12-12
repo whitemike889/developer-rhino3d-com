@@ -13,6 +13,7 @@ var searchData=
   ['result',['Result',['../class_o_n_x___model_test.html#ae328861044e4cfea661a76a16b0e13e5',1,'ONX_ModelTest::Result()'],['../class_c_rh_rdk_task.html#aba8bfe0abceff830efa72cbd9b68efc1',1,'CRhRdkTask::Result()'],['../class_c_rhino_command.html#adbb5e7e7a2c0f6659abdc77d70860e4d',1,'CRhinoCommand::result()'],['../class_c_rhino_get.html#afbb1d0091ccb1306d0fe606405f6b886',1,'CRhinoGet::result()'],['../class_c_rhino_license_validator.html#ac47de9c581a8307b49107a1510d78161',1,'CRhinoLicenseValidator::result()']]],
   ['rgba_5fbyte_5findex',['RGBA_byte_index',['../class_o_n___color.html#aad1fbe896cda408e4bdab60adc73bb38',1,'ON_Color']]],
   ['rgba_5fshift',['RGBA_shift',['../class_o_n___color.html#a87ebcde089bd7e3df2e614b862165792',1,'ON_Color']]],
+  ['rhdisplacementsweepresolutionformula',['RhDisplacementSweepResolutionFormula',['../group___rhino.html#ga6c073bf85465e4c86ba86176c79d1b45',1,'rhinoSdkMeshUtilities.h']]],
   ['rhino_5fcontrol_5fbar_5fstyles',['RHINO_CONTROL_BAR_STYLES',['../class_c_rhino_ui_dock_bar.html#a87ecff6d2468d06fa7dcfde2762fe69e',1,'CRhinoUiDockBar']]],
   ['rhino_5fdialog_5fflags',['rhino_dialog_flags',['../class_c_rhino_ui_dialog.html#ab8255edaf7d3c7679e92522a5e971b0c',1,'CRhinoUiDialog']]],
   ['rhino_5fidef_5fstatus',['RHINO_IDEF_STATUS',['../group___rhino.html#ga5343207395b08616cf301e3eafd7b0c8',1,'rhinoSdkUtilities.h']]],

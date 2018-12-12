@@ -302,6 +302,7 @@ var searchData=
   ['adjustwidth',['AdjustWidth',['../class_c_rhino_ui_pop_up_list_wnd.html#a05f34abf67263819808891e3b9c85455',1,'CRhinoUiPopUpListWnd']]],
   ['advance',['Advance',['../class_o_n___text_run.html#a99579870294c11ecaeafbaf316074a2c',1,'ON_TextRun']]],
   ['advancedtexturepreview',['AdvancedTexturePreview',['../class_o_n___object_rendering_attributes.html#a7cd561735220c0ac101856c8f0438a8a',1,'ON_ObjectRenderingAttributes']]],
+  ['affineize',['Affineize',['../class_o_n___xform.html#ac0e48e0031cf724aaa1fbd72d01fa446',1,'ON_Xform']]],
   ['afterlayertableaddedtomodel',['AfterLayerTableAddedToModel',['../class_o_n___referenced_component_settings.html#a3f48ff2aa599e4cf7d91cc6bd019d8a2',1,'ON_ReferencedComponentSettings']]],
   ['afterreferencelayertableread',['AfterReferenceLayerTableRead',['../class_o_n___referenced_component_settings.html#a3147f782e4c17a2e5f35acf7b55b4fb8',1,'ON_ReferencedComponentSettings']]],
   ['aggregatecomponentstatus',['AggregateComponentStatus',['../class_o_n___brep.html#ae11df8a76b49c7f4c683ac9a2cddc34d',1,'ON_Brep::AggregateComponentStatus()'],['../class_o_n___object.html#a8a1cfab63437a2d03cc50fdc6734f2a5',1,'ON_Object::AggregateComponentStatus()']]],

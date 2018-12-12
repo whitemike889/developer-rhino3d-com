@@ -35,7 +35,6 @@ var searchData=
   ['tensorproduct',['TensorProduct',['../class_o_n___nurbs_surface.html#aaadeb20fcf980674f010f3242d9697dc',1,'ON_NurbsSurface']]],
   ['terminationrequested',['TerminationRequested',['../class_o_n___terminator.html#ae8da087534f4a36db658a09343375554',1,'ON_Terminator']]],
   ['terminationrequestedexpert',['TerminationRequestedExpert',['../class_o_n___terminator.html#ad2ad4ca8f0f6c0fe5e3f67f782a67dce',1,'ON_Terminator']]],
-  ['testfacecharmaps',['TestFaceCharMaps',['../class_o_n___font_glyph.html#a28778fd7de59895b34293327a5bee3f0',1,'ON_FontGlyph']]],
   ['testforsimplesweep',['TestForSimpleSweep',['../class_c_args_rhino_sweep1.html#a205b93363d42b683f02c42181fcdaa84',1,'CArgsRhinoSweep1::TestForSimpleSweep()'],['../class_c_args_rhino_sweep2.html#ad87d1a3745335cbbc2e3cd791a962228',1,'CArgsRhinoSweep2::TestForSimpleSweep()']]],
   ['testgrips',['TestGrips',['../class_c_rhino_sel_command.html#aeddc9f7b417dd750415ba8941e9b9a69',1,'CRhinoSelCommand']]],
   ['testlights',['TestLights',['../class_c_rhino_sel_command.html#a14eeb308fefd40e78e765bd56b66e4e4',1,'CRhinoSelCommand']]],

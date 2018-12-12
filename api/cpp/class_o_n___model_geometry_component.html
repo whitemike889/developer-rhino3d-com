@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.10</span>
+   &#160;<span id="projectnumber">6.11</span>
    </div>
   </td>
  </tr>
@@ -95,6 +95,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaaf33620ae9b46807b401878be19175f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aa8ad836340ddda12814ffe1d055d82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___model_geometry_component.html#a0aa8ad836340ddda12814ffe1d055d82">Dump</a> (<a class="el" href="class_o_n___text_log.html">ON_TextLog</a> &amp;text_log) const override</td></tr>
 <tr class="separator:a0aa8ad836340ddda12814ffe1d055d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4ad8a7bc16b9e4c298133e7703f8c9a"><td class="memItemLeft" align="right" valign="top">class <a class="el" href="class_o_n__3dm_object_attributes.html">ON_3dmObjectAttributes</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ExclusiveAttributes</a> () const</td></tr>
+<tr class="separator:ab4ad8a7bc16b9e4c298133e7703f8c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f3a0f92a57ac378d3575d732d1349b"><td class="memItemLeft" align="right" valign="top">class <a class="el" href="class_o_n___geometry.html">ON_Geometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ExclusiveGeometry</a> () const</td></tr>
+<tr class="separator:ab5f3a0f92a57ac378d3575d732d1349b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a448111c5099f77c2fe3eec526498ceb2"><td class="memItemLeft" align="right" valign="top">const class <a class="el" href="class_o_n___geometry.html">ON_Geometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___model_geometry_component.html#a448111c5099f77c2fe3eec526498ceb2">Geometry</a> (const class <a class="el" href="class_o_n___geometry.html">ON_Geometry</a> *no_geometry_return_value) const</td></tr>
 <tr class="separator:a448111c5099f77c2fe3eec526498ceb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a270d7d04e84569f47c91c394aac31f40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___model_geometry_component.html#a270d7d04e84569f47c91c394aac31f40">IsEmpty</a> () const</td></tr>
@@ -626,7 +630,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parameters: no_attributes_return_value - [in] This value is returned if no attributes have been set. A good choices for this parameter's value depends on the context. Common options are nullptr, &amp;<a class="el" href="class_o_n__3dm_object_attributes.html#abbaef2423c1d6341f776846fc5797dac">ON_3dmObjectAttributes::Unset</a>, &amp;<a class="el" href="class_o_n__3dm_object_attributes.html#a3d19b2834f1979e33f69055525c67518" title="Initializes all attributes to the default values. ">ON_3dmObjectAttributes::Default</a>, or the model's current default attributes. Returns: The layer, rendering and other attributes for this element, or no_attributes_return_value if the attributes have not been set. </p>
+<p>Description: Get a pointer to attributes. The returned pointer may be shared and should not be used to modify the attributes. Parameters: no_attributes_return_value - [in] This value is returned if no attributes have been set. A good choices for this parameter's value depends on the context. Common options are nullptr, &amp;<a class="el" href="class_o_n__3dm_object_attributes.html#abbaef2423c1d6341f776846fc5797dac">ON_3dmObjectAttributes::Unset</a>, &amp;<a class="el" href="class_o_n__3dm_object_attributes.html#a3d19b2834f1979e33f69055525c67518" title="Initializes all attributes to the default values. ">ON_3dmObjectAttributes::Default</a>, or the model's current default attributes. Returns: The layer, rendering and other attributes for this element, or no_attributes_return_value if the attributes have not been set. See Also: <a class="el" href="class_o_n___model_geometry_component.html#aaaf33620ae9b46807b401878be19175f">ON_ModelGeometryComponent::Attributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#a448111c5099f77c2fe3eec526498ceb2">ON_ModelGeometryComponent::Geometry()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ON_ModelGeometryComponent::ExclusiveAttributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ON_ModelGeometryComponent::ExclusiveGeometry()</a>; ON_ModelComponentRef::ExclusiveModelComponent(); <a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ONX_Model::ComponentFromRuntimeSerialNumber()</a> </p>
 
 </div>
 </div>
@@ -801,6 +805,42 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ab4ad8a7bc16b9e4c298133e7703f8c9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4ad8a7bc16b9e4c298133e7703f8c9a">&#9670;&nbsp;</a></span>ExclusiveAttributes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">class <a class="el" href="class_o_n__3dm_object_attributes.html">ON_3dmObjectAttributes</a>* ON_ModelGeometryComponent::ExclusiveAttributes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description: Get a pointer to attributes that can be used to modify the attributes. The returned pointer is not shared at the time it is returned and will not be shared until a copy of this <a class="el" href="class_o_n___model_geometry_component.html">ON_ModelGeometryComponent</a> is created. Returns: If this <a class="el" href="class_o_n___model_geometry_component.html">ON_ModelGeometryComponent</a> is the only reference to the attributes, then a pointer to the attributes is returned. Otherwise, nullptr is returned. See Also: <a class="el" href="class_o_n___model_geometry_component.html#aaaf33620ae9b46807b401878be19175f">ON_ModelGeometryComponent::Attributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#a448111c5099f77c2fe3eec526498ceb2">ON_ModelGeometryComponent::Geometry()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ON_ModelGeometryComponent::ExclusiveAttributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ON_ModelGeometryComponent::ExclusiveGeometry()</a>; ON_ModelComponentRef::ExclusiveModelComponent(); <a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ONX_Model::ComponentFromRuntimeSerialNumber()</a> </p>
+
+</div>
+</div>
+<a id="ab5f3a0f92a57ac378d3575d732d1349b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5f3a0f92a57ac378d3575d732d1349b">&#9670;&nbsp;</a></span>ExclusiveGeometry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">class <a class="el" href="class_o_n___geometry.html">ON_Geometry</a>* ON_ModelGeometryComponent::ExclusiveGeometry </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description: Get a pointer to geometry that can be used to modify the geometry. The returned pointer is not shared at the time it is returned and will not be shared until a copy of this <a class="el" href="class_o_n___model_geometry_component.html">ON_ModelGeometryComponent</a> is created. Returns: If this <a class="el" href="class_o_n___model_geometry_component.html">ON_ModelGeometryComponent</a> is the only reference to the geometry, then a pointer to the geometry is returned. Otherwise, nullptr is returned. See Also: <a class="el" href="class_o_n___model_geometry_component.html#aaaf33620ae9b46807b401878be19175f">ON_ModelGeometryComponent::Attributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#a448111c5099f77c2fe3eec526498ceb2">ON_ModelGeometryComponent::Geometry()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ON_ModelGeometryComponent::ExclusiveAttributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ON_ModelGeometryComponent::ExclusiveGeometry()</a>; ON_ModelComponentRef::ExclusiveModelComponent(); <a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ONX_Model::ComponentFromRuntimeSerialNumber()</a> </p>
+
+</div>
+</div>
 <a id="a92935dde4dfc4b56f314f9ad8944bf00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92935dde4dfc4b56f314f9ad8944bf00">&#9670;&nbsp;</a></span>FromModelComponentRef()</h2>
 
@@ -852,7 +892,7 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parameters: no_geometry_return_value - [in] This value is returned if no geometric object has been set. A good choices for this parameter's value depends on the context. Common options are nullptr. Returns: The curve, surface, annotation, detail, light, ... geometry, or no_geometry_return_value if the geometry has not been set. If the geometry is a light, then <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return <a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eacadf3900765f8bb524dc2911688c9f835e" title="summary&gt;Hatch pattern.">ON_ModelComponent::Type::RenderLight</a>. If the geometry is set and something besides light, then <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return <a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eacafe7d6ee189ff8d2aaf2267423fdbc05a" title="summary&gt;History record.">ON_ModelComponent::Type::ModelGeometry</a>. Otherwise, <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return ON_ModelComponent::Type::ModelGeometry::Unset. </p>
+<p>Description: Get a pointer to geometry. The returned pointer may be shared and should not be used to modify the geometry. Parameters: no_geometry_return_value - [in] This value is returned if no geometric object has been set. A good choices for this parameter's value depends on the context. Common options are nullptr. Returns: The curve, surface, annotation, detail, light, ... geometry, or no_geometry_return_value if the geometry has not been set. If the geometry is a light, then <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return <a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eacadf3900765f8bb524dc2911688c9f835e" title="summary&gt;Hatch pattern.">ON_ModelComponent::Type::RenderLight</a>. If the geometry is set and something besides light, then <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return <a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eacafe7d6ee189ff8d2aaf2267423fdbc05a" title="summary&gt;History record.">ON_ModelComponent::Type::ModelGeometry</a>. Otherwise, <a class="el" href="class_o_n___model_component.html#a5c5b12c1ef9f94379ecc868034765efa">ComponentType()</a> will return ON_ModelComponent::Type::ModelGeometry::Unset. See Also: <a class="el" href="class_o_n___model_geometry_component.html#aaaf33620ae9b46807b401878be19175f">ON_ModelGeometryComponent::Attributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#a448111c5099f77c2fe3eec526498ceb2">ON_ModelGeometryComponent::Geometry()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ON_ModelGeometryComponent::ExclusiveAttributes()</a> <a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ON_ModelGeometryComponent::ExclusiveGeometry()</a>; ON_ModelComponentRef::ExclusiveModelComponent(); <a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ONX_Model::ComponentFromRuntimeSerialNumber()</a> </p>
 
 </div>
 </div>
@@ -979,7 +1019,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 6 2018 16:32:22 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 11 2018 18:04:17 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

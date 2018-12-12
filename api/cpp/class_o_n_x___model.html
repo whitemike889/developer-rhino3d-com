@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.10</span>
+   &#160;<span id="projectnumber">6.11</span>
    </div>
   </td>
  </tr>
@@ -117,6 +117,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a676b5889af2536a13156631f5a5220a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa5bbbdc3a2a3226dde2eed678cdfa5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n_x___model.html#afa5bbbdc3a2a3226dde2eed678cdfa5f">ComponentFromNameHash</a> (<a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eac">ON_ModelComponent::Type</a> component_type, const <a class="el" href="class_o_n___name_hash.html">ON_NameHash</a> &amp;component_model_name_hash) const</td></tr>
 <tr class="separator:afa5bbbdc3a2a3226dde2eed678cdfa5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc3dcb426504c16faf912f0e3f5c3e9e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ComponentFromRuntimeSerialNumber</a> (<a class="el" href="group__open_n_u_r_b_s.html#ga3c46136e2570983319c47553f753932e">ON__UINT64</a> runtime_serial_number) const</td></tr>
+<tr class="separator:acc3dcb426504c16faf912f0e3f5c3e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad4ee61b3f9801389299ecf0823f8011"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n_x___model.html#aad4ee61b3f9801389299ecf0823f8011">ComponentFromUnsignedIndex</a> (<a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eac">ON_ModelComponent::Type</a> component_type, unsigned int component_model_index) const</td></tr>
 <tr class="separator:aad4ee61b3f9801389299ecf0823f8011"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0d3fefe2a2ad8f700fe13518b601b85"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n_x___model.html#ab0d3fefe2a2ad8f700fe13518b601b85">ComponentIndexLimit</a> (<a class="el" href="class_o_n___model_component.html#a2977d69091b4952cc19b0189a28a0eac">ON_ModelComponent::Type</a> component_type) const</td></tr>
@@ -494,7 +496,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Description: Add a managed model component (<a class="el" href="class_o_n___layer.html">ON_Layer</a>, <a class="el" href="class_o_n___dim_style.html">ON_DimStyle</a>, ...) to this model.</p>
-<p>managed_model_component - [in] managed_model_component must be created by operator new and on the heap. It will be deleted when the model and last <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are destroyed.</p>
+<p>managed_model_component - [in] managed_model_component must be created by operator new and on the heap. It will be deleted when the model and last <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are destroyed.</p>
 <p>bResolveIdAndNameConflicts - [in] If bResolveIdAndNameConflicts is false, then model_component.Id() must be non-nil and not used in this model and model_component.Name() must be correctly set. If bResolveIdAndNameConflicts is true, then id and name will be modified as needed in managed_model_component, the model, and the manifest.</p>
 <p>Returns: A reference to the added model component. If the reference is empty (ON_ModelComponent::IsEmpty() is true) then the input was not valid. </p>
 
@@ -550,8 +552,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Description: Add an copy of the model_geometry and attrbutes to this model.</p>
-<p>Parameters: managed_geometry_object - [in] managed_geometry_object must point to an instance geometric object (curve, surface, brep, mesh, points, ...), a render light, an annotation object, or a detail object created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are destroyed.</p>
-<p>managed_attributes - [in] managed_attributes should be nullptr or point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are destroyed.</p>
+<p>Parameters: managed_geometry_object - [in] managed_geometry_object must point to an instance geometric object (curve, surface, brep, mesh, points, ...), a render light, an annotation object, or a detail object created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are destroyed.</p>
+<p>managed_attributes - [in] managed_attributes should be nullptr or point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are destroyed.</p>
 <p>bResolveIdAndNameConflicts - [in] If bResolveIdAndNameConflicts is false, then managed_attributes must be nullptr or managed_attributes-&gt;m_uuid must be non-nil and not used in this model. If bResolveIdAndNameConflicts is true, then id will be modified as needed.</p>
 <p>Returns: A reference to the added model component. If the reference is empty (ON_ModelComponent::IsEmpty() is true) then the input was not valid. </p>
 
@@ -790,9 +792,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Description: Add geometry and attibutes to this model and control how the instances are managed.</p>
-<p>Parameters: bManageGeometry - [in] If true, geometry_object should point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are destroyed. If false, the expert caller is carefully managing the instance and memory to insure model_geometry is a valid instance while this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and any <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are active.</p>
+<p>Parameters: bManageGeometry - [in] If true, geometry_object should point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are destroyed. If false, the expert caller is carefully managing the instance and memory to insure model_geometry is a valid instance while this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and any <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are active.</p>
 <p>geometry_object - [in] geometry_object should point to a geometric object (curve, surface, brep, mesh, points, ...), a render light, an annotation object, or a detail object.</p>
-<p>bManageAttributes - [in] If true, attributes should be nullptr or point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are destroyed. If false, the expert caller is carefully managing the instance and memory to insure attributes is a valid instance while this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and and <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> are active.</p>
+<p>bManageAttributes - [in] If true, attributes should be nullptr or point to an instance created by operator new and on the heap. It will be deleted when the this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and the last <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are destroyed. If false, the expert caller is carefully managing the instance and memory to insure attributes is a valid instance while this <a class="el" href="class_o_n_x___model.html">ONX_Model</a> and and <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> are active.</p>
 <p>attributes - [in] nullptr if not avaiable.</p>
 <p>bResolveIdAndNameConflicts - [in] If bResolveIdAndNameConflicts is false, then attributes must be nullptr or attributes-&gt;m_uid must be non-nil and not used in this model. If bResolveIdAndNameConflicts is true, then id will be modified as needed.</p>
 <p>Returns: A reference to the added model component. If the reference is empty (ON_ModelComponent::IsEmpty() is true) then the input was not valid. </p>
@@ -914,6 +916,27 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc3dcb426504c16faf912f0e3f5c3e9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc3dcb426504c16faf912f0e3f5c3e9e">&#9670;&nbsp;</a></span>ComponentFromRuntimeSerialNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a>&amp; ONX_Model::ComponentFromRuntimeSerialNumber </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__open_n_u_r_b_s.html#ga3c46136e2570983319c47553f753932e">ON__UINT64</a>&#160;</td>
+          <td class="paramname"><em>runtime_serial_number</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parameters: runtime_serial_number - [in] Value of <a class="el" href="class_o_n___model_component.html#aec107d943b87f00ed57478ccc389ba17">ON_ModelComponent::RuntimeSerialNumber()</a> to search for. Returns: If there is a model component with the specified runtime serial number, then a reference to that component is returned. Otherwise, <a class="el" href="class_o_n___model_component_reference.html#a9278e10e1b398fd7af277345419d7943">ON_ModelComponentReference::Empty</a> is returned. Remarks: <a class="el" href="class_o_n_x___model.html#acc3dcb426504c16faf912f0e3f5c3e9e">ONX_Model::ComponentFromRuntimeSerialNumber()</a> used to get a reference rather than a copy of the model's primary <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a>. This is the function that must be used if a caller is going to use exclusive access funcitons like</p>
+<p>ON_ModelComponent* <a class="el" href="class_o_n___model_component_reference.html#abf36fd4c9075c665e0dead7a010ebd73">ON_ModelComponentReference::ExclusiveModelComponent()</a> ON_3dmObjectAttributes* <a class="el" href="class_o_n___model_geometry_component.html#ab4ad8a7bc16b9e4c298133e7703f8c9a">ON_ModelGeometryComponent::ExclusiveAttributes()</a> ON_Geometry* <a class="el" href="class_o_n___model_geometry_component.html#ab5f3a0f92a57ac378d3575d732d1349b">ON_ModelGeometryComponent::ExclusiveGeometry()</a></p>
+<p>to modify content that is in the <a class="el" href="class_o_n_x___model.html">ONX_Model</a>. The exclusive access functions will only return non-nullptr values when there are no external references to the model component. </p>
 
 </div>
 </div>
@@ -1087,7 +1110,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description: Get a dimension style from its model index. Parameters: dimension_style_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> to the dimension style. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
+<p>Description: Get a dimension style from its model index. Parameters: dimension_style_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> to the dimension style. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
 
 </div>
 </div>
@@ -1542,7 +1565,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description: Get an image from its model index. Parameters: image_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> to the image. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
+<p>Description: Get an image from its model index. Parameters: image_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> to the image. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
 
 </div>
 </div>
@@ -1802,7 +1825,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description: Get a layer from its model index. Parameters: layer_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> to the layer. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
+<p>Description: Get a layer from its model index. Parameters: layer_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> to the layer. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
 
 </div>
 </div>
@@ -1904,7 +1927,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description: Get a line pattern from its model index. Parameters: line_pattern_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html">ON_ModelComponentReference</a> to the line pattern. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
+<p>Description: Get a line pattern from its model index. Parameters: line_pattern_model_index - [in] Returns: An <a class="el" href="class_o_n___model_component_reference.html" title="ON_ModelComponentReference is a persistent reference to a model component. ON_ModelComponentReference...">ON_ModelComponentReference</a> to the line pattern. Remarks: Model index and <a class="el" href="class_o_n_x___model.html#a70eba676014cc0e52d093a8e4206eb16">Manifest()</a> manifest item index are the same. </p>
 
 </div>
 </div>
@@ -2872,7 +2895,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Nov 6 2018 16:32:25 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Dec 11 2018 18:04:20 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

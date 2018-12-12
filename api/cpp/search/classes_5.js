@@ -122,6 +122,7 @@ var searchData=
   ['irhrdkparamtransport',['IRhRdkParamTransport',['../class_i_rh_rdk_param_transport.html',1,'']]],
   ['irhrdkpluginusedcontentnotifier',['IRhRdkPlugInUsedContentNotifier',['../class_i_rh_rdk_plug_in_used_content_notifier.html',1,'']]],
   ['irhrdkposteffectimage',['IRhRdkPostEffectImage',['../class_i_rh_rdk_post_effect_image.html',1,'']]],
+  ['irhrdkposteffectimageex',['IRhRdkPostEffectImageEx',['../class_i_rh_rdk_post_effect_image_ex.html',1,'']]],
   ['irhrdkposteffectpluginfactories',['IRhRdkPostEffectPlugInFactories',['../class_i_rh_rdk_post_effect_plug_in_factories.html',1,'']]],
   ['irhrdkposteffectpluginfactory',['IRhRdkPostEffectPlugInFactory',['../class_i_rh_rdk_post_effect_plug_in_factory.html',1,'']]],
   ['irhrdkpreviewappearancedefaults',['IRhRdkPreviewAppearanceDefaults',['../class_i_rh_rdk_preview_appearance_defaults.html',1,'']]],

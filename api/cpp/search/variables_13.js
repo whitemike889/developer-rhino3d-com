@@ -26,6 +26,7 @@ var searchData=
   ['sc_5fpostprocessframebuffer',['SC_POSTPROCESSFRAMEBUFFER',['../struct_c_support_channels.html#a868d3f9ad68f881a547c94827e61ef49',1,'CSupportChannels']]],
   ['sc_5fpredrawmiddleground',['SC_PREDRAWMIDDLEGROUND',['../struct_c_support_channels.html#a69eac136df65bcfaa50bd74e9c402dbe',1,'CSupportChannels']]],
   ['sc_5fpredrawobjects',['SC_PREDRAWOBJECTS',['../struct_c_support_channels.html#a4693c10e8db665c53cb2ee063de23a04',1,'CSupportChannels']]],
+  ['sc_5fpredrawtransparentobjects',['SC_PREDRAWTRANSPARENTOBJECTS',['../struct_c_support_channels.html#af2c73e2db0d96827ffa033a63680e71e',1,'CSupportChannels']]],
   ['sc_5fpreobjectdraw',['SC_PREOBJECTDRAW',['../struct_c_support_channels.html#ab008200d63102b4efabad805b6d8b9fd',1,'CSupportChannels']]],
   ['sc_5fsetupfrustum',['SC_SETUPFRUSTUM',['../struct_c_support_channels.html#a4e10fc8288f6d34fe40d93ce52a39b97',1,'CSupportChannels']]],
   ['sc_5fsetuplighting',['SC_SETUPLIGHTING',['../struct_c_support_channels.html#acc1667e36e928b41f60250d88e9da210',1,'CSupportChannels']]],
