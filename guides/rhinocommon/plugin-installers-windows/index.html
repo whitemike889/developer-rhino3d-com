@@ -485,7 +485,7 @@ $(document).ready(function()
         
         <a href="/authors/will_pearson">Will Pearson</a>
         
-           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/plugin-installers-windows.md" target="_blank">05 Dec 2018</a>)
+           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/plugin-installers-windows.md" target="_blank">13 Dec 2018</a>)
     
   </span>
 
@@ -500,6 +500,10 @@ $(document).ready(function()
 <h2 id="overview">Overview</h2>
 
 <p>Creating a plugin installer is very easy.  You simply add your compiled plugin to a zip archive and change the extension from <em>.zip</em> to <em>.rhi</em>.  Once this is done, you can double-click the archive and the <a href="/guides/general/rhino-installer-engine">Rhino Installer Engine</a> will begin to install your plugin.  That’s all there is to it!</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong> This is intended to be a quickstart guide. For a more general overview please see the <a href="/guides/general/rhino-installer-engine">Rhino Installer Engine</a> guide.
+</div>
 
 <h2 id="an-example">An Example</h2>
 
@@ -519,7 +523,7 @@ $(document).ready(function()
     <p>Create an “installer image” folder. In this example, the folder is the name of the product – <em>Marmoset</em>. This folder will contain only the files you want to install on the user’s system.</p>
 
     <pre><code> Marmoset/
- ├── Rhino WIP/
+ ├── Rhino 6/
  │   ├── Marmoset.rhp
  │   └── required_wip.dll
  ├── Rhino 5.0/
@@ -534,8 +538,8 @@ $(document).ready(function()
  └── README.txt
 </code></pre>
   </li>
-  <li>Copy the appropriate files into the folders.  Note that all three versions of the plugin can have the same name, so long as they are in different folders.</li>
-  <li>Add all the files inside the “installer image” folder to a new ZIP<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> archive</li>
+  <li>Copy the appropriate files into the folders<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.  Note that all three versions of the plugin can have the same name, so long as they are in different folders.</li>
+  <li>Add all the files inside the “installer image” folder to a new ZIP<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> archive</li>
   <li>Change the extension from <em>.zip</em> to <em>.rhi</em></li>
 </ol>
 
@@ -549,6 +553,7 @@ $(document).ready(function()
 
 <ul>
   <li><a href="/guides/general/rhino-installer-engine">Rhino Installer Engine</a></li>
+  <li><a href="/guides/rhinocommon/plugin-installers-mac">Plugin Installers (Mac)</a></li>
 </ul>
 
 <hr />
@@ -558,7 +563,10 @@ $(document).ready(function()
 <div class="footnotes">
   <ol>
     <li id="fn:1">
-      <p>Other compression algorithms are not supported. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+      <p>Folder names are not important; the <em>.rhp</em> files themselves are inspected to determine for which versions of Rhino they will be installed. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Other compression algorithms are not supported. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
     </li>
   </ol>
 </div>

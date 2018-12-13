@@ -27,7 +27,7 @@
   <meta name="twitter:url" value="http://developer.rhino3d.com" />
   
   <meta name="twitter:label1" value="Platform(s)" />
-  <meta name="twitter:data1" value="Windows, Mac" />
+  <meta name="twitter:data1" value="Windows" />
   
   
   <meta name="twitter:label2" value="Language(s)" />
@@ -394,6 +394,31 @@ $(document).ready(function()
               <a href="#how-it-works">How It Works</a>
 
               
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#file-and-folder-structure">File and folder structure</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#installation-and-compatibility">Installation and compatib...</a>
+                    </li>
+                  
+
+                </ul>
+              
 
             </li>
           
@@ -424,6 +449,22 @@ $(document).ready(function()
             
             <li>
               <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#footnotes">Footnotes</a>
 
               
 
@@ -469,7 +510,7 @@ $(document).ready(function()
         
         <a href="/authors/will_pearson">Will Pearson</a>
         
-           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/rhino-installer-engine.md" target="_blank">05 Dec 2018</a>)
+           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/general/rhino-installer-engine.md" target="_blank">13 Dec 2018</a>)
     
   </span>
 
@@ -477,47 +518,60 @@ $(document).ready(function()
 
           <p>This guide is a brief introduction to the Rhino Installer Engine.</p>
 
-          <h2 id="overview">Overview</h2>
+          <div class="alert alert-info" role="alert">
+<strong>Note:</strong> This guide describes the Rhino Installer Engine that is installed with Rhino for <strong>Windows</strong>. Rhino for Mac also has a method of packaging plug-ins for easy installation, see the <a href="/guides/rhinocommon/plugin-installers-mac">Plugin Installers (Mac)</a> guide.
+</div>
 
-<p>The Rhino Installer Engine simplifies distribution, installation, and updating of plugins for Rhino for Windows (on both 32- and 64-bit) and Rhino for Mac.</p>
+<h2 id="overview">Overview</h2>
+
+<p>The Rhino Installer Engine simplifies distribution, installation and updating of plug-ins for Rhino for Windows.</p>
 
 <h2 id="how-it-works">How It Works</h2>
 
-<p>A Rhino Installer Package is a zip file with an <em>.rhi</em> extension (or a <em>.macrhi</em> extension on Mac).  The <em>rhi</em> file can contain directory structures, and can include more than one version of a plugin (for Windows).</p>
+<h3 id="file-and-folder-structure">File and folder structure</h3>
 
-<p>There are no file structure or naming requirements.</p>
+<p>A Rhino Installer package is a zip file with an <em>.rhi</em> extension. The package can include more than one version of a plug-in however all versions must share the same GUID (i.e. they’re different versions of the <em>same</em> plug-in).</p>
 
-<p>For example…</p>
+<p>There are no file structure or naming requirements. For example the two packages below are functionally equivalent. Both contain versions of “Marmoset” – a fictitious C++ plug-in compiled for Rhino 5 (32-bit and 64-bit) and Rhino 6<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.</p>
 
-<pre><code>Marmoset.rhi/
-├── Rhino WIP/
-│   └── Marmoset.rhp
+<pre><code>Marmoset_tree.rhi/
+├── Rhino 6/
+│   ├── Marmoset.rhp
+│   ├── Marmoset.dll
+│   └── Marmoset.rui
 └── Rhino 5.0/
     ├── x86/
-    │   └── Marmoset.rhp
+    │   ├── Marmoset.rhp
+    │   └── ...
     └── x64/
-        └── Marmoset.rhp
+        ├── Marmoset.rhp
+        └── ...
 </code></pre>
 
-<p>…works just as well as…</p>
-
-<pre><code>Marmoset.rhi/
-├── Marmoset_rhinowip.rhp
+<pre><code>Marmoset_flat.rhi/
+├── Marmoset_rhino6.rhp
 ├── Marmoset_rhino5_x86.rhp
-└── Marmoset_rhino5_x64.rhp
+├── Marmoset_rhino5_x64.rhp
+├── Marmoset_rhino6.dll
+├── ...
+└── Marmoset.rui
 </code></pre>
 
-<p>On Windows, the Rhino Installer Engine examines each plugin and extracts the plugin GUID, Title, Version, and appropriate SDK version numbers.  It also examines each Rhino installed on the computer.</p>
+<p>You can include anything you want in the <em>.rhi</em> package – supporting DLLs, help files, documentation, <a href="/guides/rhinocommon/create-deploy-plugin-toolbar.md">toolbar (<em>.rui</em>) files</a>, etc. The entire contents are unzipped to a directory on the user’s machine.</p>
 
-<p>On Windows, the Rhino Installer Engine supports installing AnyCPU plugins written in .NET and will register them with both 32- and 64-bit Rhino 5.  On Mac, the Rhino Installer Engine - and Rhino itself - only support 64-bit installation.</p>
+<h3 id="installation-and-compatibility">Installation and compatibility</h3>
 
-<p>On Windows, each plugin is compared to each installed version of Rhino.  The newest compatible plugin is registered with the corresponding version of Rhino.</p>
+<p>The Rhino Installer Engine examines each <em>.rhp</em> file and extracts the plugin GUID, Title, Version, the SDK used (e.g. RhinoCommon, C++) and the SDK version. This information is used to determine which version of the plug-in will be installed for which installed version of Rhino for Windows; the newest compatible plugin is registered with the corresponding version of Rhino. RhinoCommon plug-ins compiled as <code>AnyCPU</code> will be installed for both 32- and 64-bit Rhino 5<sup id="fnref:1:1"><a href="#fn:1" class="footnote">1</a></sup>.</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Since Rhino 6:</strong> Where a RhinoCommon plug-in is found that has been compiled against an earlier _major_ version of Rhino than is installed, an in-depth compatibility check will be performed to determine whether the SDK of the installed Rhino still supports the functionality used by the plug-in. If the check is successful then the outdated plug-in will be installed.
+</div>
 
 <h2 id="limitations">Limitations</h2>
 
 <ul>
-  <li>The Rhino Installer Engine will copy files from the <em>rhi</em> archive, and will register the plug ins it finds. No other execution is done.</li>
-  <li>Currently, it is not possible to digitally sign <em>rhi</em> files in order to verify the source of <em>rhi</em> files.</li>
+  <li>The Rhino Installer Engine will copy files from the <em>.rhi</em> archive, and will register the plug-ins it finds. No other execution is done.</li>
+  <li>Currently, it is not possible to digitally sign <em>.rhi</em> files in order to verify the source of <em>.rhi</em> files.</li>
   <li>The Rhino Installer Engine is available with Rhino 5 and later.</li>
 </ul>
 
@@ -529,6 +583,18 @@ $(document).ready(function()
   <li><a href="/guides/rhinocommon/plugin-installers-windows">Plugin Installers (Windows)</a></li>
   <li><a href="/guides/rhinocommon/plugin-installers-mac">Plugin Installers (Mac)</a></li>
 </ul>
+
+<hr />
+
+<h2 id="footnotes">Footnotes</h2>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>Since version 6 Rhino for Windows has been 64-bit only. <a href="#fnref:1" class="reversefootnote">&#8617;</a> <a href="#fnref:1:1" class="reversefootnote">&#8617;<sup>2</sup></a></p>
+    </li>
+  </ol>
+</div>
 
         </article>
 
