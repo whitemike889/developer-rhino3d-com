@@ -507,8 +507,17 @@ $(document).ready(function()
           <p>
   <span class="guide_byline">
     
+    
+    by
       
-      by <a href="/authors/andrew_le_bihan">Andrew le Bihan</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">05 Dec 2018</a>)
+        
+        <a href="/authors/andrew_le_bihan">Andrew le Bihan</a>
+         and
+      
+        
+        <a href="/authors/john_croudy">John Croudy</a>
+        
+           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">19 Dec 2018</a>)
     
   </span>
 
@@ -530,71 +539,79 @@ $(document).ready(function()
 
 <ul>
   <li>Extensible Material, Environment and Texture editor.</li>
-  <li>Frame buffer implementation with post and channel handling.</li>
+  <li>Frame buffer implementation with post-processing and multiple channels.</li>
   <li>Pre-process custom mesh provision interface for third party developers.</li>
+  <li>Built-in material types, including gem, glass, plastic, plaster, metal, paint, picture and custom.</li>
   <li>Built-in procedural textures, including wood, marble, granite, noise generators, perturbs, and so on.</li>
+  <li>Render content can have tags assigned.</li>
   <li>Built-in HDR and OpenEXR support.</li>
   <li>Improved render pipeline that makes it much easier for developers to implement a renderer engine in Rhino.</li>
-  <li>Rhino sun light and sun-angle calculation tools.</li>
+  <li>Sun light and sun angle calculation tools.</li>
   <li>Automatic shader UI support for third party Material/Environment/Texture providers.</li>
   <li>Several utility classes to aid in the development of renderers and visualization related tools.</li>
-  <li>Decal support similar to Flamingo 2.0.</li>
+  <li>Decal support with planar, UV, cylindrical or spherical mapping.</li>
+  <li>Ground Plane support with automatic height, material and texture mapping options.</li>
   <li>360 degree environment preview in the viewport.</li>
+  <li>Extensive library of ready-to-use materials, environments and textures with Library browser.</li>
 </ul>
 
 <h2 id="material-environment--texture-editors">Material, Environment, &amp; Texture Editors</h2>
 
-<p><img src="/images/what-is-the-rdk-03.png" alt="Material Environment and Texture Editors" /></p>
+<p><img src="/images/what-is-the-rdk-03.png" alt="Material Environment and Texture Editors" /> {:style=”float: right; margin-right: 7px; margin-top: 7px;”}</p>
 
-<p>The material editor, environment editor, and texture palettes interact with the enhanced render content system.  All are based on a similar interface with only small functional differences between them.</p>
+<p>The Material Editor, Environment Editor, and Texture Palettes interact with the enhanced render content system. All are based on a similar interface with only small functional differences between them.</p>
 
-<p>Access the editors through the Rhino Render menu, the Rendering toolbar, or the editor commands.</p>
+<ol>
+  <li>Navigation controls similar to those found on a web browser.</li>
+  <li>Resizeable Floating Previews.</li>
+  <li>Configurable thumbnails with multiple sizes and styles.</li>
+  <li>Resizeable preview pane.</li>
+  <li>User interface for editing render content parameters (AKA <em>fields</em>).</li>
+  <li>Breadcrumb navigation control similar to those found on on file explorers.</li>
+  <li>Task menu for performing actions on render contents.</li>
+</ol>
+
+<p>These editors are integrated with Rhino’s tabbed pane system. Access them through the Rhino Render menu, the Rendering toolbar, or the editor commands.</p>
 
 <p>Lists of materials, environments, and textures are stored in the Rhino document.  Each editor displays the relevant render content type as preview thumbnails.</p>
 
-<p>A large button to the left of the editor controls the visibility of the editor side panel which displays a list of common tasks along with the structure of the currently selected material, environment, or texture.</p>
+<p>Contents display an interface below the preview thumbnails in an area reserved for collapsible UI panels. An addition to the basic UI panels, several additional collapsible panels are provided by Rhino within the same area as the content UI. These include the Texture Summary panel, the Notes panel, the Local Mapping panel, Graph panel and the Adjustment panel.  These are described later in the content UI section.</p>
 
-<p>The size of the preview thumbnails area can be adjusted by dragging the handle just below its lowest edge.</p>
-
-<p>Contents display an interface below the preview thumbnails in an area reserved for collapsible UI panels.  An addition to the basic UI panels, several additional collapsible panels are provided by Rhino within the same area as the content UI.  These include the Texture Summary panel, the Notes panel, the Local Mapping panel, Graph panel and the Adjustment panel.  These are described later in the content UI section.</p>
-
-<p>The editor window can be minimized to the caption bar and restored by double clicking on the caption bar.</p>
-
-<p>Each material, environment or texture can have child nodes.  The children can be of any content type, but specific child slots will only support specific types. The most common child type is a texture.  For example, the Texture child for a Basic Material will only support textures, as will the Background image slot on a Basic Environment.</p>
+<p>Each material, environment or texture can have child nodes (AKA texture slots or sub-nodes). The children can be of any content type, but specific child slots will only support specific types. The most common child type is a texture. For example, the <em>Texture</em> child for a Custom Material will only support textures, as will the <em>Background image</em> slot on a Basic Environment.</p>
 
 <h2 id="render-window">Render Window</h2>
 
 <p><img src="/images/what-is-the-rdk-04.png" alt="Render Window" /></p>
 
-<p>The standard render window provides a number of features to renderers, including built in support for scripting, cloning, saving to High-Dynamic-Range formats, post effects, zooming and channel display.</p>
+<p>The standard render window provides a number of features to renderers, including built-in support for scripting, cloning, saving to High-Dynamic-Range formats, post effects, zooming and channel display.</p>
 
-<p>Many renderers call the render window the “frame buffer.”  The terms are nearly interchangeable.</p>
+<p>Many renderers call the render window the <em>frame buffer</em>.  The terms are nearly interchangeable.</p>
 
 <h2 id="hdr-and-exr-support">HDR and EXR Support</h2>
 
-<p><img src="/images/what-is-the-rdk-05.png" alt="HDR and EXR Support" /></p>
+<p><img src="/images/what-is-the-rdk-05.png" alt="HDR and EXR Support" /> {:style=”float: right; margin-right: 7px; margin-top: 7px;”}</p>
 
-<p>An HDR image which provides automatic conversion to a bitmap for non-HDR capable renderers.  This allows the Rhino renderer and viewport display to show HDR environments while providing HDR tools to third-party renderer engines.</p>
+<p>An HDR image which provides automatic conversion to a bitmap for non-HDR capable renderers. This allows the Rhino renderer and viewport display to show HDR environments while providing HDR tools to third-party renderer engines.</p>
 
-<p>The HDR texture also provides projection conversion features.  Most HDRi files come as Light Probe projection.  The Basic Environment requires Spherical (Equirectangular) projection for spherical environments, so the HDR texture defaults to this conversion.  However, several other types are supported.</p>
+<p>The HDR texture also provides projection conversion features. Most HDRi files come as Light Probe projection. The Basic Environment requires Spherical (Equirectangular) projection for spherical environments, so the HDR texture defaults to this conversion. However, several other types are supported.</p>
 
-<p>The LDR exposure determines the brightness of the image when converted to a bitmap image.  This will not affect the rendering when used by a HDR capable renderer.</p>
+<p>The LDR exposure determines the brightness of the image when converted to a bitmap image. This will not affect the rendering when used by a HDR capable renderer.</p>
 
-<p>HDR multiplier is a simple linear multiplier on all values in the image.  This can be used to brighten or dim the image in an HDR capable renderer.</p>
+<p>HDR multiplier is a simple linear multiplier on all values in the image. This can be used to brighten or dim the image in an HDR capable renderer.</p>
 
-<p>The Save As button can be used to convert the image to a bitmap file.  The LDR exposure value is used convert the image during this process.</p>
+<p>The Save As button can be used to convert the image to a bitmap file. The LDR exposure value is used convert the image during this process.</p>
 
 <p>Azimuth and Altitude values modify the way the image is rotated in space during the projection conversion.</p>
 
 <h2 id="sunlight">Sunlight</h2>
 
-<p><img src="/images/what-is-the-rdk-06.png" alt="Sunlight" /></p>
+<p><img src="/images/what-is-the-rdk-06.png" alt="Sunlight" /> {:style=”float: right; margin-right: 7px; margin-top: 7px;”}</p>
 
 <p>Sun tools, including a docking panel to control the document sun, a sunlight preview within the Rendered viewport, a Sunlight command and a number of other scripting and developer tools make sun angle calculations easier.</p>
 
 <h2 id="decals">Decals</h2>
 
-<p><img src="/images/what-is-the-rdk-07.png" alt="Decals" /></p>
+<p><img src="/images/what-is-the-rdk-07.png" alt="Decals" /> {:style=”float: right; margin-right: 7px; margin-top: 7px;”}</p>
 
 <p>Decals are non-repeating textures that are applied to the surface of an object with a given projection.  They are an easy-to-use way of attaching single images or similar textures to objects without going through the complexity of the texture mapping process.</p>
 
@@ -625,8 +642,17 @@ $(document).ready(function()
 
             <p class="text">
               
-                
-                Author: <a href="/authors/andrew_le_bihan">Andrew le Bihan</a>
+                Authors:
+                <ul>
+                  
+                  
+                    
+                    <li><a href="/authors/andrew_le_bihan">Andrew le Bihan</a></li>
+                  
+                    
+                    <li><a href="/authors/john_croudy">John Croudy</a></li>
+                  
+                </ul>
               
             </p>
           </div>
