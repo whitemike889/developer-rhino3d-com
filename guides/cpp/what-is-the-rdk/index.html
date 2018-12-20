@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>What is the RDK? with C/C++</title>
-  <meta name="description" content="This guide describes the Rhino Renderer Development Kit and its features.  Using C/C++">
+  <meta name="description" content="This guide describes the Rhino Renderer Development Kit (AKA _RDK_) and its features.  Using C/C++">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/cpp/what-is-the-rdk/" />
   <meta property="og:title" content="What is the RDK?" />
-  <meta property="og:description" content="This guide describes the Rhino Renderer Development Kit and its features." />
+  <meta property="og:description" content="This guide describes the Rhino Renderer Development Kit (AKA _RDK_) and its features." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="What is the RDK?" />
-  <meta name="twitter:description" value="This guide describes the Rhino Renderer Development Kit and its features." />
+  <meta name="twitter:description" value="This guide describes the Rhino Renderer Development Kit (AKA _RDK_) and its features." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -455,7 +455,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#sunlight">Sunlight</a>
+              <a href="#decals">Decals</a>
 
               
 
@@ -471,7 +471,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#decals">Decals</a>
+              <a href="#sunlight">Sunlight</a>
 
               
 
@@ -523,15 +523,13 @@ $(document).ready(function()
 
 </p>
 
-          <p>This guide describes the Rhino Renderer Development Kit and its features.</p>
+          <p>This guide describes the Rhino Renderer Development Kit (AKA _RDK_) and its features.</p>
 
           <p><img src="/images/what-is-the-rdk-01.png" alt="RDK Logo" /></p>
 
 <h2 id="overview">Overview</h2>
 
-<p>The Rhino Renderer Development Kit (AKA <em>RDK</em>) is a collection of tools that extend the Rhino application platform with visualization-specific capabilities.</p>
-
-<p>The RDK underpins the <a href="http://brazil.mcneel.com/">Brazil for Rhino</a> product, and all of the above features are supported in that product.  However, all of these features are available to third-party developers to integrate their products into Rhino.</p>
+<p>The RDK is a collection of tools that extend the Rhino application platform with visualization-specific capabilities. Third-party developers can use the RDK SDK to integrate their renderers into Rhino.</p>
 
 <h2 id="features">Features</h2>
 
@@ -567,17 +565,17 @@ $(document).ready(function()
   <li>Configurable thumbnails with multiple sizes and styles.</li>
   <li>Resizeable preview pane.</li>
   <li>User interface for editing render content parameters (AKA <em>fields</em>).</li>
-  <li>Breadcrumb navigation control similar to those found on on file explorers.</li>
+  <li>Breadcrumb navigation control similar to those found on file explorers.</li>
   <li>Task menu for performing actions on render contents.</li>
 </ol>
 
-<p>These editors are integrated with Rhino’s tabbed pane system. Access them through the Rhino Render menu, the Rendering toolbar, or the editor commands.</p>
+<p>These editors are integrated with Rhino’s tabbed pane system. Access them through the Rhino Render menu, the Rendering tool bar, or the editor commands.</p>
 
 <p>Lists of materials, environments, and textures are stored in the Rhino document. Each editor displays the relevant render content type as preview thumbnails.</p>
 
-<p>Contents display an interface below the preview thumbnails in an area reserved for collapsible UI panels. An addition to the basic UI panels, several additional collapsible panels are provided by Rhino within the same area as the content UI. These include the Texture Summary panel, the Notes panel, the Local Mapping panel, Graph panel and the Adjustment panel.  These are described later in the content UI section.</p>
+<p>Contents display an interface below the preview thumbnails in an area reserved for collapsible UI panels. An addition to the basic UI panels, several additional collapsible panels are provided by Rhino within the same area as the content UI. These include the Name, Notes, Texture Summary, Local Mapping, Graph and Adjustment panels. These are described later in the content UI section.</p>
 
-<p>Each material, environment or texture can have child nodes (AKA texture slots or sub-nodes). The children can be of any content type, but specific child slots will only support specific types. The most common child type is a texture. For example, the <em>Texture</em> child for a Custom Material will only support textures, as will the <em>Background image</em> slot on a Basic Environment.</p>
+<p>Each material, environment or texture can have child nodes (AKA <em>child slots</em> or <em>sub-nodes</em>). The children can be of any content type, but specific child slots will only support specific types. The most common child type is a texture. For example, the <em>Color</em> child slot for a Custom Material will only support textures, as will the <em>Background image</em> child slot on a Basic Environment.</p>
 
 <h2 id="render-window">Render Window</h2>
 
@@ -603,21 +601,21 @@ $(document).ready(function()
 
 <p>Azimuth and Altitude values modify the way the image is rotated in space during the projection conversion.</p>
 
+<h2 id="decals">Decals</h2>
+
+<p><img src="/images/what-is-the-rdk-07.png" alt="Decals" style="float: right; margin-right: 7px; margin-top: 7px;" /></p>
+
+<p>Decals are non-repeating textures that are applied to the surface of an object with a given projection. They are an easy-to-use way of attaching single images or similar textures to objects without going through the complexity of the texture mapping process.</p>
+
+<p>Decals are textures that are placed directly on a specified area of one or more objects. Use decals to modify a limited part of an object’s color.</p>
+
+<p>Decals consist of a single instance of a texture, rather than being tiled as they are when used in a material.</p>
+
 <h2 id="sunlight">Sunlight</h2>
 
 <p><img src="/images/what-is-the-rdk-06.png" alt="Sunlight" style="float: right; margin-right: 7px; margin-top: 7px;" /></p>
 
 <p>Sun tools, including a docking panel to control the document sun, a sunlight preview within the Rendered viewport, a Sunlight command and a number of other scripting and developer tools make sun angle calculations easier.</p>
-
-<h2 id="decals">Decals</h2>
-
-<p><img src="/images/what-is-the-rdk-07.png" alt="Decals" style="float: right; margin-right: 7px; margin-top: 7px;" /></p>
-
-<p>Decals are non-repeating textures that are applied to the surface of an object with a given projection.  They are an easy-to-use way of attaching single images or similar textures to objects without going through the complexity of the texture mapping process.</p>
-
-<p>Decals are textures that are placed directly on a specified area of one or more objects.  Use decals to modify a limited part of an object’s color.</p>
-
-<p>Decals consist of a single instance of a texture, rather than being tiled as they are when used in a material.</p>
 
         </article>
 
