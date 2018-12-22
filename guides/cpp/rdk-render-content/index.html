@@ -6,20 +6,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Renderer Development Kit with C/C++</title>
+  <title>Render Content with C/C++</title>
   <meta name="description" content="This document describes how to use the RDK render content classes in C/C++.  Using C/C++">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/cpp/rdk-render-content/" />
-  <meta property="og:title" content="Renderer Development Kit" />
+  <meta property="og:title" content="Render Content" />
   <meta property="og:description" content="This document describes how to use the RDK render content classes in C/C++." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Renderer Development Kit" />
+  <meta name="twitter:title" value="Render Content" />
   <meta name="twitter:description" value="This document describes how to use the RDK render content classes in C/C++." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
@@ -367,65 +367,6 @@ $(document).ready(function()
         
 
         
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#what-they-are-and-how-to-use-them">What they are and how to ...</a>
-
-              
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#introduction">Introduction</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#classes">Classes</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#lifetime-and-ownership">Lifetime and ownership</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#modifying-contents">Modifying Contents</a>
-                    </li>
-                  
-
-                </ul>
-              
-
-            </li>
-          
-
-        
     </ul>
 </nav>
 
@@ -449,7 +390,7 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Renderer Development Kit</h1>
+          <h1>Render Content</h1>
 
           <p>
   <span class="guide_byline">
@@ -463,16 +404,15 @@ $(document).ready(function()
 
           <p>This document describes how to use the RDK render content classes in C/C++.</p>
 
-          <h1 id="render-contents">Render Contents</h1>
-<h2 id="what-they-are-and-how-to-use-them">What they are and how to use them</h2>
-
-<p><img src="/images/rdk-met.png" alt="Material Environment and Texture" /></p>
+          <p><img src="/images/rdk-met.png" alt="Material Environment and Texture" /></p>
 
 <h3 id="introduction">Introduction</h3>
-<p>Probably the most important object in the Rhino RDK is the Render Content (AKA ‘Content’) object. This object is an abstraction that represents one of three possible ways of describing something that is going to be drawn (rendered) on the screen. There are three kinds of contents: <em>Materials</em>, <em>Environments</em> and <em>Textures</em>. A material describes how a surface will be rendered. It has properties such as color, glossiness, etc. An environment describes how the surroundings of a model affect its appearance. A texture describes the texture of a surface. In addition to color and glossiness, all real-world surfaces have a detailed appearance such as a wood grain. This appearance is described by RDK textures.</p>
+<p>Probably the most important object in the Rhino RDK is the Render Content (AKA ‘Content’) object. This object is an abstraction that represents one of three possible ways of describing something that is going to be drawn (rendered) on the screen. There are three kinds of contents: <em>Materials</em>, <em>Environments</em> and <em>Textures</em>. A material describes how a surface will be rendered. It has properties such as color, glossiness, etc. An environment describes how the surroundings of a model affect its appearance. A texture describes the texture of a surface. In addition to color and glossiness, all real-world surfaces have a detailed appearance such as a wood grain. This appearance is described by RDK textures. Objects and layers in the document can have a material assigned to them. This material is usually (but not always) associated with an RDK Material. The Ground Plane can also have such a material assigned to it. As you will see later, render contents are actually a tree hierarchy. The assigned RDK material is always the top-level material which means it has no parent. It can, however, have children.</p>
 
 <h3 id="classes">Classes</h3>
-<p>The base class for contents is <em>CRhRdkContent</em>. This is an abstraction that controls the features common to all contents. For example, all contents have a unique identifier called the instance id which identifies each instance of CRhRdkContent. They also have a unique type id which defines their type and an instance name which is the user-defined name that appears on the screen. They can also have any number of children which means that a content is usually considered as a hierarchy – a kind of family tree, because these children can also have children to any depth. This flexibility allows the user to create very complex materials if so desired. All these properties and more are stored in and managed by the base class called CRhRdkContent. This base class has a single immediate subclass called <em>CRhRdkCoreContent</em> which provides default implementations of some of the more complicated functions, mostly to do with the user interface. Derived from this are the three main kinds; <em>CRhRdkMaterial</em>, <em>CRhRdkEnvironment</em> and <em>CRhRdkTexture</em>. It is from these latter three objects that a plug-in should derive its own specialized materials, environments and textures. To do this, it is necessary to choose a base class from one of those three and write a subclass that overrides or implements all the necessary virtual functions, implement a factory class that knows how to create an instance of the class, and register the factory with the RDK. Once this is done, your content will start to appear in the Rhino user interface, specifically in the Material Editor if the content is a material (or the Environment Editor or Texture Palette if it is an environment or texture). You can choose to use the default user interface provided by CRhRdkCoreContent or you can create a custom user interface of your own design.</p>
+<p>The base class for contents is <em>CRhRdkContent</em>. This is an abstraction that controls the features common to all contents. For example, all contents have a unique identifier called the instance id which identifies each instance of CRhRdkContent. They also have a unique type id which defines their type and an instance name which is the user-defined name that appears on the screen. They can also have any number of children which means that a content is usually considered as a hierarchy because these children can also have children to any depth. The hierarchy is therefore a tree structure.</p>
+
+<p>This flexibility allows the user to create very complex materials if so desired. All these properties and more are stored in and managed by the base class called CRhRdkContent. This base class has a single immediate subclass called <em>CRhRdkCoreContent</em> which provides default implementations of some of the more complicated functions, mostly to do with the user interface. Derived from this are the three main kinds; <em>CRhRdkMaterial</em>, <em>CRhRdkEnvironment</em> and <em>CRhRdkTexture</em>. It is from these latter three objects that a plug-in should derive its own specialized materials, environments and textures. To do this, it is necessary to choose a base class from one of those three and write a subclass that overrides or implements all the necessary virtual functions, implement a factory class that knows how to create an instance of the class, and register the factory with the RDK. Once this is done, your content will start to appear in the Rhino user interface, specifically in the Material Editor if the content is a material (or the Environment Editor or Texture Palette if it is an environment or texture). You can choose to use the default user interface provided by CRhRdkCoreContent or you can create a custom user interface of your own design.</p>
 
 <h3 id="lifetime-and-ownership">Lifetime and ownership</h3>
 <p>There are two flavors of content in the RDK – temporary and persistent. It is very important to understand the distinction between a temporary content instance and a persistent content instance, and the fact that a temporary instance (and all its children) can become persistent.</p>
