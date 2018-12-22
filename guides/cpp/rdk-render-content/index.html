@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Renderer Development Kit with C/C++</title>
+  <meta name="description" content="This document describes how to use the RDK render content classes in C/C++.  Using C/C++">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/cpp/rdk-render-content/" />
+  <meta property="og:title" content="Renderer Development Kit" />
+  <meta property="og:description" content="This document describes how to use the RDK render content classes in C/C++." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Renderer Development Kit" />
+  <meta name="twitter:description" value="This document describes how to use the RDK render content classes in C/C++." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C/C++" />
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/cpp/rdk-render-content/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="/images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner">
+
+    
+      
+        
+        
+          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/cpp/rdk-render-content/">Looking for the older Rhino 5 version?</a>
+        
+        
+      
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/5/" + splitPath.splice(1,splitPath.length-1).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("Looking for the older Rhino 5 site?");
+    $aTag.attr("href", "/5/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link active" href="/guides/">Guides</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/api/">API</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/samples/">Samples</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/videos/">Videos</a>
+                    
+                  
+              
+            
+          
+        
+        <a class="page-link" href="https://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/search-results.html">
+                <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
+                <input class="searchBox" type="submit" size="2" value=" " />
+            </form>
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>
+<!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#what-they-are-and-how-to-use-them">What they are and how to ...</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#introduction">Introduction</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#classes">Classes</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#lifetime-and-ownership">Lifetime and ownership</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#modifying-contents">Modifying Contents</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/cpp">C/C++</a></li>
+
+              
+                
+                  <li class="active">RDK</li>
+                
+              
+          </ol>
+
+          <h1>Renderer Development Kit</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">21 Dec 2018</a>)
+    
+  </span>
+
+</p>
+
+          <p>This document describes how to use the RDK render content classes in C/C++.</p>
+
+          <h1 id="render-contents">Render Contents</h1>
+<h2 id="what-they-are-and-how-to-use-them">What they are and how to use them</h2>
+
+<p><img src="/images/rdk-met.png" alt="Material Environment and Texture" /></p>
+
+<h3 id="introduction">Introduction</h3>
+<p>Probably the most important object in the Rhino RDK is the Render Content (AKA ‘Content’) object. This object is an abstraction that represents one of three possible ways of describing something that is going to be drawn (rendered) on the screen. There are three kinds of contents: <em>Materials</em>, <em>Environments</em> and <em>Textures</em>. A material describes how a surface will be rendered. It has properties such as color, glossiness, etc. An environment describes how the surroundings of a model affect its appearance. A texture describes the texture of a surface. In addition to color and glossiness, all real-world surfaces have a detailed appearance such as a wood grain. This appearance is described by RDK textures.</p>
+
+<h3 id="classes">Classes</h3>
+<p>The base class for contents is <em>CRhRdkContent</em>. This is an abstraction that controls the features common to all contents. For example, all contents have a unique identifier called the instance id which identifies each instance of CRhRdkContent. They also have a unique type id which defines their type and an instance name which is the user-defined name that appears on the screen. They can also have any number of children which means that a content is usually considered as a hierarchy – a kind of family tree, because these children can also have children to any depth. This flexibility allows the user to create very complex materials if so desired. All these properties and more are stored in and managed by the base class called CRhRdkContent. This base class has a single immediate subclass called <em>CRhRdkCoreContent</em> which provides default implementations of some of the more complicated functions, mostly to do with the user interface. Derived from this are the three main kinds; <em>CRhRdkMaterial</em>, <em>CRhRdkEnvironment</em> and <em>CRhRdkTexture</em>. It is from these latter three objects that a plug-in should derive its own specialized materials, environments and textures. To do this, it is necessary to choose a base class from one of those three and write a subclass that overrides or implements all the necessary virtual functions, implement a factory class that knows how to create an instance of the class, and register the factory with the RDK. Once this is done, your content will start to appear in the Rhino user interface, specifically in the Material Editor if the content is a material (or the Environment Editor or Texture Palette if it is an environment or texture). You can choose to use the default user interface provided by CRhRdkCoreContent or you can create a custom user interface of your own design.</p>
+
+<h3 id="lifetime-and-ownership">Lifetime and ownership</h3>
+<p>There are two flavors of content in the RDK – temporary and persistent. It is very important to understand the distinction between a temporary content instance and a persistent content instance, and the fact that a temporary instance (and all its children) can become persistent.</p>
+
+<p>Temporary contents get created and deleted very often during the normal operation of the RDK. In fact, just about anything the user clicks on might result in a temporary content being created and deleted again. They are created by the content browser, the preview rendering, and so on. They are ‘free floating’ and are owned by whomever created them. They do not appear in the modeless UI, they do not get saved in the 3dm file, and they can freely be deleted again after use.</p>
+
+<p>Contrast this with persistent contents which are attached to a document. They are always owned by the RDK, appear in the modeless UI and get saved in the 3dm file. You should never store pointers to persistent contents; you should only store their instance ids and look them up again using  CRhRdkDocument::FindContentInstance(). They can be deleted only after detaching them from the document.</p>
+
+<p>This is an example code sequence showing the main stages in the lifetime of a content.</p>
+
+<pre><code class="language-cpp">  // Create a new content owned by you.
+  auto* pContent = new CMyContent;
+
+  // Initialize the content.
+  pContent-&gt;Initialize();
+
+  // Attach the content to a document. The content is now owned by
+  // the document and it will appear in the various user interfaces.
+  rdkDoc.AttachContent(pContent);
+
+  // Detach the content from the document. The content will disappear
+  // from any user interfaces and it is once again owned by you.
+  rdkDoc.DetachContent(pContent);
+
+  // Uninitialize the content to prepare it for deletion.
+  pContent-&gt;Uninitialize();
+
+  // Delete the content. This is possible because the content is owned by you.
+  delete pContent;
+</code></pre>
+
+<p>You can also create a free-floating content that is not attached to a document. This content will not appear in any modeless UIs, but it is possible to edit it in a modal UI by calling the <code>Edit()</code> method.</p>
+
+<pre><code class="language-cpp">
+  auto* pContent = new CMyMaterial;
+
+  // Initialize the content.
+  pContent-&gt;Initialize();
+
+  // Edit the content in the Modal Editor. If the user clicks OK, this returns an edited version
+  // of the content (the original is unaltered) and you own this object as well as the original one.
+  auto* pEdited = pContent-&gt;Edit();
+  if (nullptr != pEdited) // Returns null if the editor is canceled.
+  {
+    // Uninitialize the edited content to prepare it for deletion.
+    pEdited-&gt;Uninitialize();
+
+    // Delete the edited content. This is possible because the content is owned by you.
+    delete pEdited;
+  }
+
+  // Uninitialize the original content to prepare it for deletion.
+  pContent-&gt;Uninitialize();
+
+  // Delete the original content. This is possible because the content is owned by you.
+  delete pContent;
+</code></pre>
+
+<p>In an ideal world, the call to <code>delete</code> would both uninitialize and delete the content. But since <code>Uninitialize()</code> is a virtual function, this is not possible. So every call to <code>delete</code> must be preceded by a call to <code>Uninitialize()</code>. Remember that you can only do this if you own the object. Contents that are owned by a document (attached) cannot be deleted by the client without first being detached.</p>
+
+<p>The most important thing to understand is that if you want to delete a content, you must know who owns it and act accordingly. The RDK tries to enforce good practice by using constness. For example, the function <code>CRhRdkDocument::FindContentInstance()</code> returns a const pointer to the content. This has two implications:</p>
+<ol>
+  <li>This content is not owned by you and you can’t delete it.</li>
+  <li>This content can’t be modified; it’s read-only. See below under Modifying Contents for information on how a const content can be modified.</li>
+</ol>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Who owns it?</th>
+      <th>Procedure for deletion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>You</td>
+      <td>Uninitialize it.<br />Delete it.</td>
+    </tr>
+    <tr>
+      <td>A document</td>
+      <td>Detach it from the document.<br />Uninitialize it.<br />Delete it.</td>
+    </tr>
+    <tr>
+      <td>Unknown</td>
+      <td>You have no right to delete it. Don’t even try.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="modifying-contents">Modifying Contents</h3>
+<p>If a content is owned by you, for example immediately after you create it, then it is generally non-const and you can modify it by calling any non-const method such as <code>SetParameter()</code>. But if the content is const, for example after being found in a document, then you have to open it for modification. This is done by calling <code>BeginChange()</code> which begins a change bracket. BeginChange() takes a parameter called the change context. This is one of the values of the enum <code>RhRdkChangeContext</code>. The most common one used by plug-ins is <code>RhRdkChangeContext::UI</code> which means the change is being done by the user inside some user interface. BeginChange() also returns a non-const reference to the same content, allowing you to call any non-const method such as <code>SetParameter()</code>. It is important to call the <code>Changed()</code> method on the content if you detect that a change to the parameter has occurred. If this is not done, the user interface will not update. More than one parameter can be changed inside the change bracket. When all the desired changes have been made, you must call <code>EndChange()</code>. Calls to BeginChange() and EndChange() can be nested but there must always be exactly one call to EndChange() for every call to BeginChange(). The final call to EndChange() closes the content and sends the events necessary to update the user interface.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                
+                Author: <a href="/authors/john_croudy">John Croudy</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2018 Robert McNeel &amp; Associates<br/>
+          <span class="glyphicon glyphicon-heart-empty"></span>&nbsp;<a href="/authors">Contributions welcome</a>
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+</html>
