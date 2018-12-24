@@ -396,7 +396,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">21 Dec 2018</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">24 Dec 2018</a>)
     
   </span>
 
@@ -413,6 +413,8 @@ $(document).ready(function()
 <p>The base class for contents is <em>CRhRdkContent</em>. This is an abstraction that controls the features common to all contents. For example, all contents have a unique identifier called the instance id which identifies each instance of CRhRdkContent. They also have a unique type id which defines their type and an instance name which is the user-defined name that appears on the screen. They can also have any number of children which means that a content is usually considered as a hierarchy because these children can also have children to any depth. The hierarchy is therefore a tree structure.</p>
 
 <p>This flexibility allows the user to create very complex materials if so desired. All these properties and more are stored in and managed by the base class called CRhRdkContent. This base class has a single immediate subclass called <em>CRhRdkCoreContent</em> which provides default implementations of some of the more complicated functions, mostly to do with the user interface. Derived from this are the three main kinds; <em>CRhRdkMaterial</em>, <em>CRhRdkEnvironment</em> and <em>CRhRdkTexture</em>. It is from these latter three objects that a plug-in should derive its own specialized materials, environments and textures. To do this, it is necessary to choose a base class from one of those three and write a subclass that overrides or implements all the necessary virtual functions, implement a factory class that knows how to create an instance of the class, and register the factory with the RDK. Once this is done, your content will start to appear in the Rhino user interface, specifically in the Material Editor if the content is a material (or the Environment Editor or Texture Palette if it is an environment or texture). You can choose to use the default user interface provided by CRhRdkCoreContent or you can create a custom user interface of your own design.</p>
+
+<p>Code examples showing how to do this can be found in the <a href="https://github.com/mcneel/rhino-developer-samples/tree/6/cpp/SampleRdkMarmalade">SampleRdkMarmalade</a> sample.</p>
 
 <h3 id="lifetime-and-ownership">Lifetime and ownership</h3>
 <p>There are two flavors of content in the RDK – temporary and persistent. It is very important to understand the distinction between a temporary content instance and a persistent content instance, and the fact that a temporary instance (and all its children) can become persistent.</p>
