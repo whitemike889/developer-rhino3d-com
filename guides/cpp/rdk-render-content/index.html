@@ -396,7 +396,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">03 Jan 2019</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-render-content.md" target="_blank">04 Jan 2019</a>)
     
   </span>
 
@@ -538,7 +538,7 @@ protected:
 	virtual ON_wString TypeDescription(void) const override { return L"Demo car paint material"; }
 };
 </code></pre>
-<p>Then override the <code>Bitflags()</code> method and switch on the fields option. This tells the RDK that the material uses fields and allows a lot of automation to take place by default. At the same time we remove the <em>Texture Summary</em> option which would cause our UI to display a panel containing a texture list. Since this material has no child textures, this would not be useful here.</p>
+<p>Then override the <code>BitFlags()</code> method and switch on the fields option. This tells the RDK that the material uses fields and allows a lot of automation to take place by default. At the same time we remove the <em>Texture Summary</em> option which would cause our UI to display a panel containing a texture list. Since this material has no child textures, this would not be useful here.</p>
 <pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
 {
 	...
@@ -547,8 +547,11 @@ protected:
 
 unsigned int CCarPaintMaterial::BitFlags(void) const
 {
-	// Add the fields option to the default options and remove the Texture Summary.
-	return (__super::BitFlags() &amp; ~bfTextureSummary) | bfFields;
+	auto flags = __super::BitFlags(); // Get the default flags.
+ 	flags &amp;= ~bfTextureSummary;       // Remove the Texture Summary option.
+	flags |=  bfFields;               // Add the fields option.
+
+	return flags;
 }
 </code></pre>
 <p>Recall that <code>CRhRdkMaterial</code> is derived from <code>CRhRdkContent</code>. This base class contains a field collection which is accessible by calling the <code>Fields()</code> method to obtain a reference to the <code>CRhRdkContentFields</code> object containing the fields. Each field is implemented by <code>CRhRdkContentField</code> and they must be defined and initialized. They are best defined as members of the class and initialized in the constructor. Let’s add the constructor and field members for the paint properties:</p>
@@ -556,7 +559,6 @@ unsigned int CCarPaintMaterial::BitFlags(void) const
 {
 public:
 	CCarPaintMaterial();
-
 	...
 
 private:
@@ -576,17 +578,23 @@ private:
 	m_GlitterSize  (*this, L"glitter-size",   L"Glitter Size",   L"Glitter Size"),
 	m_GlitterAmount(*this, L"glitter-amount", L"Glitter Amount", L"Glitter Amount")
 {
-	m_PaintColor = CRhRdkColor(28, 122, 230);
-	m_GlossAmount  = 1.0;
+	m_PaintColor   = CRhRdkColor(28, 122, 230);
 	m_GlitterColor = CRhRdkColor(80, 200, 250);
-	m_GlitterSize  = 0.5;
+
+	m_GlossAmount = 1.0;
+	m_GlossAmount.SetLimits(0.0, 1.0);
+
+	m_GlitterSize = 0.5;
+	m_GlitterSize.SetLimits(0.0, 20.0);
+
 	m_GlitterAmount = 0.5;
+	m_GlitterAmount.SetLimits(0.0, 1.0);
 }
 </code></pre>
-<p>In the example above, each field is first constructed and then initialized. The constructor of <code>CRhRdkContentField</code> is quite involved and has many parameters for expert users, but we just set the most important ones here. Every field must have, at the very least, a reference back to the content that owns it, an internal name, a localized name and an English name. If your plug-in does not support localization, you can just repeat the English name as shown above. After construction, the fields are initialized by assigning a value of the required type. This initializes the field to its type and default value. For example, setting the field to be a color is done by assigning a <code>CRhRdkColor</code> to it. Fields can have many types from simple POD types like <code>int</code> to more elaborate types such as <code>ON_Xform</code>. The default values will be changed when the user edits them, but they will be restored if <code>ResetParametersToDefaults()</code> is called. If the material is attached to a document, the fields’ values will be stored in it, referenced by the internal name. For this reason, once a field’s type and internal name have been set, they should never be changed. The English and localized names are free to change if so desired. The localized name will be displayed to the user if you choose to use the automatic UI system.</p>
+<p>In the example above, each field is first constructed and then initialized. The constructor of <code>CRhRdkContentField</code> is quite involved and has many parameters for expert users, but we just set the most important ones here. Every field must have, at the very least, a reference back to the content that owns it, an internal name, a localized name and an English name. If your plug-in does not support localization, you can just repeat the English name as shown above. After construction, the fields are initialized by assigning a value of the required type. This initializes the field to its type and default value. For example, setting the field to be a color is done by assigning a <code>CRhRdkColor</code> to it. Fields can have many types from simple POD types like <code>int</code> to more elaborate types such as <code>ON_Xform</code>. The default values will be changed when the user edits them, but they will be restored whenever <code>ResetParametersToDefaults()</code> is called. If the material is attached to a document, the fields’ values will be stored when the document is saved, referenced by the internal name. For this reason, once a field’s type and internal name have been set, they should never be changed. The English and localized names are free to change if so desired. The localized name will be displayed to the user if you choose to use the automatic UI system. The constructor above also sets some minimum and maximum limits on each field which prevents the user from setting them to nonsensical values.</p>
 
-<p>It is important to understand a few things about this method of using fields. First, the field objects are owned by your material because they are embedded in it. They are constructed and destructed at the same time as your material. These are known as <em>static fields</em>. There is another kind of field called a <em>dynamic field</em>, the use of which is an advanced topic which will be covered in a different article.
-<br /><br /></p>
+<p>It is important to understand a few things about this method of using fields. First, the field objects are owned by your material because they are embedded in it. They are constructed and destructed at the same time as your material. These are known as <em>static fields</em>. There is another kind of field called a <em>dynamic field</em>, the use of which is an advanced topic which will be covered in a different article.</p>
+
 <h4 id="fast-material-copying">Fast material copying</h4>
 <p>When a material is copied the default implementation of <code>MakeCopy()</code> has to assume that the properties are stored in some user-defined way, so it must convert the whole material to XML, copy the XML and convert it back to properties in the copy. This can be very slow. Because we are exclusively using fields to store our material’s properties, we can take advantage of an optimization provided by the RDK. If you override <code>MakeCopy()</code> and have it call <code>FastMakeCopy()</code>, you can make the copying much faster. The default implementation of <code>FastMakeCopy()</code> does the bulk of the work by simply copying the fields.</p>
 <pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
@@ -595,10 +603,9 @@ private:
 	virtual CRhRdkContent* MakeCopy(CopyMethods m) const override { return FastMakeCopy(m); }
 };
 </code></pre>
-<p><br /></p>
 <h4 id="getting-and-setting-material-parameters">Getting and setting material parameters</h4>
-<p>The content user interface displays and allows editing of content parameters (i.e., properties). Although your material could provide methods for getting and setting each parameter, it is not necessary to do this. As long as the UI knows the internal names of the material’s fields, it need call only two methods: <code>GetParameter()</code> and <code>SetParameter()</code>. These methods work with the <code>CRhRdkVariant</code> class to get or set parameters by name. When using the field system, this name <em>is</em> the field’s internal name. The default implementations of these methods usually do everything you need, but it is possible to override and specialize them if necessary.
-<br /><br /></p>
+<p>The content user interface displays and allows editing of content parameters (i.e., properties). Although your material could provide methods for getting and setting each parameter, it is not necessary to do this. As long as the UI knows the internal names of the material’s fields, it need call only two methods: <code>GetParameter()</code> and <code>SetParameter()</code>. These methods work with the <code>CRhRdkVariant</code> class to get or set parameters by name. When using the field system, this name <em>is</em> the field’s internal name. The default implementations of these methods usually do everything you need, but it is possible to override and specialize them if necessary.</p>
+
 <h4 id="the-material-simulation">The material simulation</h4>
 <p>When the RDK displays a material in the Material Editor, it first shows a simple rendition of the material preview using OpenGL. After that it renders the material preview using the current render engine. The OpenGL rendition uses a <em>simulation</em> of the material. This is essentially an <code>ON_Material</code> that has been set up to look as much like your material as possible. For complex materials, it can be difficult to produce a good simulation, but the most important properties to get right are the diffuse color and the glossiness. So we must implement an override of <code>CRhRdkMaterial::SimulateMaterial()</code> as follows:</p>
 <pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
@@ -621,8 +628,8 @@ void CCarPaintMaterial::SimulateMaterial(ON_Material&amp; matOut, CRhRdkTexture:
 	matOut.SetShine(gloss * ON_Material::MaxShine);
 }
 </code></pre>
-<p>In the above example, only the output material <code>matOut</code> is used. The other parameters are for more advanced use and will not be covered here.
-<br /><br /></p>
+<p>In the above example, only the output material <code>matOut</code> is used. The other parameters are for more advanced use and will not be covered here.</p>
+
 <h4 id="the-material-shader">The material shader</h4>
 <p>In order for your render engine to render using your material, the material must provide a <em>shader</em>. Typically, when rendering an object, a render engine will get the material being used by the object and call <code>GetShader()</code> to get the material’s shader object. It will then use the shader for rendering. The reason that the return value is a <code>void*</code> is because the RDK does not know anything about the shader; it’s an internal render-engine object, but the material interface must have a method for getting it. The render engine will cast the returned pointer to the correct type before use.</p>
 <pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
@@ -632,7 +639,6 @@ void CCarPaintMaterial::SimulateMaterial(ON_Material&amp; matOut, CRhRdkTexture:
 	                       { return _the_shader_; }
 };
 </code></pre>
-<p><br /></p>
 <h4 id="the-material-factory">The material factory</h4>
 <p>The RDK uses the factory pattern to allow render plug-ins to provide custom render content. This means that in order to have our new car paint material show up in the Material Editor’s list of available materials, we must create a factory object that knows how to create an instance of the material. Because the factory produces materials, it must be derived from <code>CRhRdkMaterialFactory</code>. It must also implement the <code>NewMaterial()</code> method to create the material instance:</p>
 <pre><code class="language-cpp">class CCarPaintMaterialFactory : public CRhRdkMaterialFactory
@@ -649,12 +655,11 @@ protected:
 	...
 }
 </code></pre>
-<h3 id="creating-the-user-interface">Creating the user interface.</h3>
-
+<h3 id="creating-the-user-interface">Creating the user interface</h3>
 <p><img src="/images/car-paint-example1.png" alt="CarPaint1" style="float: right; margin-left: 12px;" />
 The above code is enough to get us a car paint material that the user can choose and create in the editor. But this is not very useful because we haven’t provided a user interface, so the only things the user can edit are the material’s name and notes. In order to edit the actual material properties, we need to supply a UI. This can be done (on Windows, at least) by creating an MFC dialog with an IDD and a resource in the usual way. This can be a lot of work. Sometimes it’s enough to just be able to see and edit the parameters, for example when prototyping, and sometimes even for the final product. We will do this for our car paint material by using the RDK’s Automatic UI system.</p>
 
-<p>In order to create a UI for your material, you must override <code>CRhRdkCoreContent::AddUISections()</code>. This is true in almost all cases, except when you want to create a completely customized user interface. To use the automatic UI, you must call <code>AddAutomaticUISection()</code> in your override. This will get you an automatic UI section (AKA roll-up) in the user interface, but it will be blank because it is necessary to tell the RDK which fields you want to display. The automatic UI uses an object called a <em>param block</em> which is accessed through the <code>IRhRdkParamBlock</code> interface. This param block contains the information about what parameters to display in the user interface and it accepts the changes made by the user. It can be thought of as a conduit that enables the transfer of the parameters between the render content and the user interface. When using fields, it’s easy to get all of this functionality. You just have to override <code>AddAutoParameters()</code> and have the fields add themselves to the param block. When the user changes a value in the UI, it is necessary for your material to accept to change and modify the relevent field. All you need do is override <code>GetAutoParameters()</code> and have the fields load themselves from the param block.</p>
+<p>In order to create a UI for your material, you must override <code>CRhRdkCoreContent::AddUISections()</code>. This is true in almost all cases, except when you want to create a completely customized user interface. To use the automatic UI, you must call <code>AddAutomaticUISection()</code> in your override. This will get you an automatic UI section (AKA roll-up) in the user interface, but it will be blank because it is necessary to tell the RDK which fields you want to display. The automatic UI uses an object called a <em>param block</em> which is accessed through the <code>IRhRdkParamBlock</code> interface. This param block contains the information about what parameters to display in the user interface and it accepts the changes made by the user. It can be thought of as a conduit that enables the transfer of the parameters between the render content and the user interface. When using fields, it’s easy to get all of this functionality. You just have to override <code>AddAutoParameters()</code> and have the fields add themselves to the param block. When the user changes a value in the UI, it is necessary for your material to accept to change and modify the relevent field. All you need do is override <code>GetAutoParameters()</code> and have the fields load themselves from the param block. You can also sort the parameters according to either their internal (field) name or their display name. This is commonly done in <code>AddAutoParameters()</code> just after adding them.</p>
 
 <p style="clear:both;">The following code will get us a working automatic UI for the entire car paint material:</p>
 <pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
@@ -676,6 +681,8 @@ void CCarPaintMaterial::AddUISections(IRhRdkExpandableContentUI&amp; ui)
 void CCarPaintMaterial::AddAutoParameters(IRhRdkParamBlock&amp; paramBlock, int id) const
 {
 	Fields().AddValuesToParamBlock(paramBlock, id);
+
+	paramBlock.Sort(IRhRdkParamBlock::SortBy::DisplayName);
 }
 
 void CCarPaintMaterial::GetAutoParameters(const IRhRdkParamBlock&amp; paramBlock, int id)
@@ -683,6 +690,75 @@ void CCarPaintMaterial::GetAutoParameters(const IRhRdkParamBlock&amp; paramBlock
 	Fields().GetValuesFromParamBlock(paramBlock, id);
 }
 </code></pre>
+<h4 id="using-multiple-automatic-sections">Using multiple automatic sections</h4>
+<p>Our car paint material only has a few fields, but some customized materials will have many more. If you don’t want all the fields to appear in the same UI section, you can have the automatic UI distribute the fields between multiple sections. To do this, you first decide which fields should appear together and give them the same identifier. This is one of the constructor parameters, <code>sectionId</code> which defaults to zero. In this example we will put the color fields on one section and the other fields on a different section. The color fields are given the id <em>1</em> and the others <em>2</em>. The <code>sectionId</code> parameter appears after two other ‘filter’ parameters that are not relevant to this example, so we will fill them in as the default value, <code>CRhRdkContentField::Filter::All</code>:</p>
+<pre><code class="language-cpp">static const int idColor = 1;
+static const int idOther = 2;
+static const auto f = CRhRdkContentField::Filter::All;
+
+CCarPaintMaterial::CCarPaintMaterial()
+	:
+	m_PaintColor   (*this, L"paint-color",    L"Paint Color",    L"Paint Color"    , f, f, idColor),
+	m_GlossAmount  (*this, L"gloss-amount",   L"Gloss Amount",   L"Gloss Amount"   , f, f, idOther),
+	m_GlitterColor (*this, L"glitter-color",  L"Glitter Color",  L"Glitter Color"  , f, f, idColor),
+	m_GlitterSize  (*this, L"glitter-size",   L"Glitter Size",   L"Glitter Size"   , f, f, idOther),
+	m_GlitterAmount(*this, L"glitter-amount", L"Glitter Amount", L"Glitter Amount" , f, f, idOther)
+	...
+</code></pre>
+<p>Now that the fields have been separated by this id, we just have to add a second section to the UI and specify which id appears on which section:</p>
+<pre><code class="language-cpp">void CCarPaintMaterial::AddUISections(IRhRdkExpandableContentUI&amp; ui)
+{
+	const wchar_t* wsz1 = L"Car paint color settings";
+	AddAutomaticUISection(ui, wsz1, wsz1, idColor);
+
+	const wchar_t* wsz2 = L"Car paint other settings";
+	AddAutomaticUISection(ui, wsz2, wsz2, idOther);
+
+	__super::AddUISections(ui);
+}
+</code></pre>
+<h4 id="extra-requirements">Extra requirements</h4>
+<p>It is possible to enhance the automatic UI a little more by making use of <em>extra requirements</em>. These are essentially a set of special options that can applied to the parameters so their display can be tweaked. Let’s demonstrate this by changing one of the parameters, <em>Glitter Amount</em> to show its value as a percentage. Any float or double value that has a nominal range of 0 to 1 can be displayed as 0% to 100% by adding the <code>RDK_NUMBER_EDIT_TWEAKS</code> extra requirement and then specifying its <code>RDK_PERCENTILE</code> option. The requirement is specified when parameters are added to the param block.</p>
+<pre><code class="language-cpp">void CCarPaintMaterial::AddAutoParameters(IRhRdkParamBlock&amp; paramBlock, int id) const
+{
+	Fields().AddValuesToParamBlock(paramBlock, id, RDK_NUMBER_EDIT_TWEAKS);
+	...
+}
+</code></pre>
+<p>After this is done, all the parameters will support this extra requirement, but it won’t have any effect until you specify an option within the scope of that requirement. In this case, the <code>RDK_PERCENTILE</code> option must be specified. To do this, your material needs to override <code>GetExtraRequirementParameter()</code> as follows:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual bool GetExtraRequirementParameter(const wchar_t* wszParamName,
+	                                          const wchar_t* wszExtraReqName,
+	                                          CRhRdkVariant&amp; vValueOut) const override;
+};
+
+bool CCarPaintMaterial::GetExtraRequirementParameter(
+                                const wchar_t* wszParamName,
+                                const wchar_t* wszExtraReqName, CRhRdkVariant&amp; vValueOut) const
+{
+	if (__super::GetExtraRequirementParameter(wszParamName, wszExtraReqName, vValueOut))
+		return true;
+
+	if (0 == _wcsicmp(L"glitter-amount", wszParamName))
+	{
+		if (0 == _wcsicmp(RDK_PERCENTILE, wszExtraReqName))
+		{
+			vValueOut = true;
+			return true;
+		}
+	}
+
+	return false;
+}
+</code></pre>
+<p>This is how the user interface appears after the above changes have been made. It is possible to have as many fields as you need split among as many sections as you need, limited only by available computer resources.
+<br /><br />
+<img src="/images/car-paint-example2.png" alt="CarPaint2" /></p>
+
+<h3 id="summary">Summary</h3>
+<p>This article introduced render contents and covered the most important aspects of using them in your render plug-in. It explained ownership, modification, copying, and showed how to create a customized material and a simple user interface for it.</p>
 
         </article>
 

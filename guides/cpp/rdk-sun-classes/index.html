@@ -460,7 +460,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-sun-classes.md" target="_blank">21 Dec 2018</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-sun-classes.md" target="_blank">04 Jan 2019</a>)
     
   </span>
 
@@ -475,7 +475,6 @@ $(document).ready(function()
 <h2 id="crhrdksun">CRhRdkSun</h2>
 <p><a name="CRhRdkSun"></a>
 <em>CRhRdkSun</em> is a simple sun object that can be placed on the stack or used as a class member. It can be used as a temporary ‘working’ sun and it provides access to an underlying implementation of IRhRdkSun. You can use this to do sun angle calculations without affecting the document sun. This might be useful, for example, to create an ephemeris or some other table of sun information.</p>
-
 <pre><code class="language-cpp">  // Make a temporary sun and set some properties.
   CRhRdkSun s;
   auto&amp; sun = s.Sun();
@@ -491,7 +490,6 @@ $(document).ready(function()
   auto light = sun.Light();
   ...
 </code></pre>
-
 <h2 id="crhrdksundialog">CRhRdkSunDialog</h2>
 <p><a name="CRhRdkSunDialog"></a>
 <em>CRhRdkSunDialog</em> is a wrapper around a sun UI. TODO: data source.</p>
@@ -499,7 +497,6 @@ $(document).ready(function()
 <p><a name="DocumentSun"></a></p>
 <h2 id="the-rdk-document-sun">The RDK Document Sun</h2>
 <p>The <em>RDK Document Sun</em> is a document-resident sun which affects viewports and renderings. If you have a Rhino document, you can read and write that document’s sun through the document’s IRhRdkSun interface. Any changes you make will appear in the main sun UI and will also be stored in the 3dm file. Getting the sun from a document always returns a const reference. To write to the sun, you must begin a batch of write operations and afterwards end the batch. This is done using the RDK’s standard BeginChange / EndChange system.</p>
-
 <pre><code class="language-cpp">  // Read some information from the document sun.
   const auto&amp; sun = pDoc-&gt;Sun();
   const bool b = sun.EnableOn();
