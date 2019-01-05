@@ -367,70 +367,6 @@ $(document).ready(function()
         
 
         
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#overview">Overview</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#features">Features</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#material-environment-and-texture-editors">Material, Environment and...</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#hdr-and-exr-support">HDR and EXR Support</a>
-
-              
-
-            </li>
-          
-
-        
     </ul>
 </nav>
 
@@ -469,7 +405,7 @@ $(document).ready(function()
         
         <a href="/authors/john_croudy">John Croudy</a>
         
-           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">03 Jan 2019</a>)
+           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">04 Jan 2019</a>)
     
   </span>
 
@@ -477,15 +413,13 @@ $(document).ready(function()
 
           <p>This guide describes the Rhino Renderer Development Kit (AKA RDK) and its features.</p>
 
-          <p><img src="/images/what-is-the-rdk-01.png" alt="RDK Logo" /></p>
+          <p><img src="/images/rdk-what-is-the-rdk-01.png" alt="RDK Logo" /></p>
 
-<h2 id="overview">Overview</h2>
-
+<h3 id="overview">Overview</h3>
 <p>The RDK is a collection of tools that extend the Rhino application platform with visualization-specific capabilities. Third-party developers can use the RDK SDK to integrate their renderers into Rhino.</p>
 
-<h2 id="features">Features</h2>
-
-<p><img src="/images/what-is-the-rdk-02.png" alt="RDK Features Banner" /></p>
+<h3 id="features">Features</h3>
+<p><img src="/images/rdk-what-is-the-rdk-02.png" alt="RDK Features Banner" /></p>
 
 <ul>
   <li>Extensible Material, Environment and Texture editors which display and edit Materials, Environments and Textures (AKA <em>Render Content</em>).</li>
@@ -505,39 +439,24 @@ $(document).ready(function()
   <li>Extensive library of ready-to-use materials, environments and textures with Library browser.</li>
 </ul>
 
-<h2 id="material-environment-and-texture-editors">Material, Environment and Texture Editors</h2>
+<h3 id="material-environment-and-texture-editors">Material, Environment and Texture Editors</h3>
+<p><img src="/images/rdk-what-is-the-rdk-03.png" alt="MET editors" style="float: right; margin-left: 12px; margin-right: 80px;" />
+The Material, Environment, and Texture Editors display objects called <em>Render Contents</em> and allow the user to edit them. These editors are all based on a similar interface with only small functional differences between them. Render Contents are the foundation of the RDK and one of the most important objects it provides. The RDK SDK provides an extensive system that allows render engine developers to create their own custom render contents. The editors then allow users to create, edit and manage these specialized contents as well as the ones bundled with the RDK and apply them to objects in the scene.</p>
 
-<p>The Material, Environment, and Texture Editors display objects called <em>Render Contents</em> and allow the user to edit them. These editors are all based on a similar interface with only small functional differences between them. Render Contents are the foundation of the RDK core and one of the most important objects it provides. Please see <a href="/guides/cpp/rdk-render-content">Render Content</a> for more information. The Texture Editor is known to users as the Texture <em>Palette</em> but programmatically it is an editor just like the other two.</p>
+<p>Main articles:</p>
 
-<p><img src="/images/what-is-the-rdk-03.png" alt="Material Environment and Texture Editors" style="float: right; margin-left: 12px;" /></p>
+<ul>
+  <li><a href="/guides/cpp/material-environment-and-texture-editors">Material, Environment, and Texture Editors</a></li>
+  <li><a href="/guides/cpp/rdk-render-content">Render Content</a></li>
+</ul>
 
-<ol>
-  <li>Navigation controls similar to those found on a web browser.</li>
-  <li>Resizeable Floating Previews.</li>
-  <li>Configurable thumbnails with multiple sizes and styles.</li>
-  <li>Resizeable preview pane.</li>
-  <li>User interface for editing render content parameters (AKA <em>fields</em>).</li>
-  <li>Breadcrumb navigation control similar to those found on file explorers.</li>
-  <li>Task menu for performing actions on render contents and setting editor options.</li>
-</ol>
-
-<p>These editors are integrated with Rhino’s tabbed pane system. You can access them through the Rhino Render menu, the Rendering tool bar, or the editor commands.</p>
-
-<p>Lists of materials, environments, and textures are stored in the Rhino document. Each editor displays the relevant render content type as preview thumbnails.</p>
-
-<p>Contents display an interface below the preview thumbnails in an area reserved for collapsible UI panels. An addition to the basic UI panels, several additional collapsible panels are provided by Rhino within the same area as the content UI. These include the Name, Notes, Texture Summary, Local Mapping, Graph and Adjustment panels. These are described later in the content UI section.</p>
-
-<p>Each material, environment or texture can have child nodes (AKA <em>child slots</em> or <em>sub-nodes</em>). The children can be of any content type, but specific child slots will only support specific types. The most common child type is a texture. For example, the <em>Color</em> child slot for a Custom Material will only support textures, as will the <em>Background image</em> child slot on a Basic Environment.</p>
-
-<h2 style="clear:both;" id="render-window">Render Window</h2>
-
-<p><img src="/images/what-is-the-rdk-04.png" alt="Render Window" /></p>
+<h3 style="clear:both;" id="render-window">Render Window</h3>
+<p><img src="/images/rdk-what-is-the-rdk-04.png" alt="Render Window" /></p>
 
 <p>A user thinks of the Render Window as the window that appears on the screen when one renders a model (see the picture above). However, the render window object used by developers corresponds more to the actual <em>frame buffer</em>. It contains information about the channels and pixels that make up the rendered image. The standard render window provides a number of features to renderers, including built-in support for scripting, cloning, saving to high dynamic-range formats, post effects, zooming and channel display.</p>
 
-<h2 id="hdr-and-exr-support">HDR and EXR Support</h2>
-
-<p><img src="/images/what-is-the-rdk-05.png" alt="HDR and EXR Support" style="float: right; margin-left: 12px;" /></p>
+<h3 id="hdr-and-exr-support">HDR and EXR Support</h3>
+<p><img src="/images/rdk-what-is-the-rdk-05.png" alt="HDR and EXR Support" style="float: right; margin-left: 12px;" /></p>
 
 <p>An HDR image which provides automatic conversion to a bitmap for non-HDR capable renderers. This allows the Rhino renderer and viewport display to show HDR environments while providing HDR tools to third-party renderer engines.</p>
 
@@ -551,19 +470,17 @@ $(document).ready(function()
 
 <p>Azimuth and Altitude values modify the way the image is rotated in space during the projection conversion.</p>
 
-<h2 style="clear:both;" id="decals">Decals</h2>
-
-<p><img src="/images/what-is-the-rdk-07.png" alt="Decals" style="float: right; margin-left: 12px;" /></p>
+<h3 style="clear:both;" id="decals">Decals</h3>
+<p><img src="/images/rdk-what-is-the-rdk-07.png" alt="Decals" style="float: right; margin-left: 12px;" /></p>
 
 <p>Decals are non-repeating textures that are applied to the surface of an object with a given projection. They are an easy-to-use way of attaching single images or similar textures to objects without going through the complexity of the texture mapping process.</p>
 
 <p>Decals are textures that are placed directly on a specified area of one or more objects. They consist of a single instance of a texture, rather than being tiled as they are when used in a material. Users use decals to modify a limited part of an object’s color.</p>
 
-<p><img src="/images/what-is-the-rdk-08.jpg" alt="Decals2" /></p>
+<p><img src="/images/rdk-what-is-the-rdk-08.jpg" alt="Decals2" /></p>
 
-<h2 style="clear:both;" id="sun">Sun</h2>
-
-<p><img src="/images/what-is-the-rdk-06.png" alt="Sun" style="float: right; margin-left: 12px;" /></p>
+<h3 style="clear:both;" id="sun">Sun</h3>
+<p><img src="/images/rdk-what-is-the-rdk-06.png" alt="Sun" style="float: right; margin-left: 12px;" /></p>
 
 <p>The RDK provides easy-to-use sun tools, including a docking panel to control the <a href="/guides/cpp/rdk-sun-classes/#DocumentSun">document sun</a>, a sunlight preview within the Rendered viewport, a Sunlight command and a number of other scripting and developer tools to make sun-angle calculations easy.</p>
 
@@ -575,6 +492,13 @@ $(document).ready(function()
   <li><a href="/guides/cpp/rdk-sun-classes/#CRhRdkSunDialog">CRhRdkSunDialog</a></li>
 </ul>
 
+<h3 style="clear:both;" id="summary">Summary</h3>
+<p>This article introduced the RDK and described some of its main features. Each feature is explained in more detail in a different article.</p>
+
+<!--
+### Automatic UI
+The RDK provides an automatic UI system to make it easy to quickly develop user interfaces in your plug-in. See the main article here: [Automatic UI](/guides/cpp/rdk-raw-auto-ui).
+-->
 
         </article>
 
