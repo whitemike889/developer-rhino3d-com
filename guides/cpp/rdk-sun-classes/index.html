@@ -396,7 +396,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-sun-classes.md" target="_blank">07 Jan 2019</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-sun-classes.md" target="_blank">09 Jan 2019</a>)
     
   </span>
 
@@ -404,10 +404,30 @@ $(document).ready(function()
 
           <p>This document describes how to use the RDK sun classes in C/C++.</p>
 
-          <h3 id="irhrdksun">IRhRdkSun</h3>
+          <h3 id="introduction">Introduction</h3>
+<p>The angle and color of sunlight at various times of the day changes drastically with the location on Earth, the time of day and the time of year. When rendering an outdoor scene, the angle and color of the sunlight can be a very important part of the result. Buildings and other objects might be designed and placed to look aesthetically pleasing or have certain highlights at certain times of the day or year. To facilitate this kind of visualization, the RDK provides a comprehensive set of sun tools which allow the plug-in developer to do sun calculations and display a sun user interface.</p>
+
+<p><img src="/images/rdk-sun-buildings.jpg" alt="Buildings" />
+<small><small>Costa Mesa, CA. Turku Castle, Finland, Downtown Austin, TX. Photos by John Croudy.</small></small></p>
+
+<h3 id="irhrdksun">IRhRdkSun</h3>
 <p><a name="IRhRdkSun"></a>
 <em>IRhRdkSun</em> is an abstract sun interface. It provides access to all the properties of a sun. It can be used to modify the RDK Document Sun or any temporary ‘working’ sun you might have access to.</p>
 
+<p><a name="DocumentSun"></a></p>
+<h3 id="the-rdk-document-sun">The RDK Document Sun</h3>
+<p>The <em>RDK Document Sun</em> is a document-resident sun which affects viewports and renderings. If you have a Rhino document, you can read and write that document’s sun through the document’s IRhRdkSun interface. Any changes you make will appear in the main sun UI and will also be stored in the 3dm file. Getting the sun from a document always returns a const reference. To write to the sun, you must begin a batch of write operations and afterwards end the batch. This is done using the RDK’s standard BeginChange / EndChange system:</p>
+<pre><code class="language-cpp">// Read some information from the document sun.
+const auto&amp; sun = pDoc-&gt;Sun();
+const bool b = sun.EnableOn();
+... // Read other properties here.
+
+// Change some properties of the document sun.
+auto&amp; write_sun = sun.BeginChange(RhRdkChangeContext::Program);
+write_sun.SetEnableOn(true);
+... // Set other properties here.
+write_sun.EndChange();
+</code></pre>
 <h3 id="crhrdksun">CRhRdkSun</h3>
 <p><a name="CRhRdkSun"></a>
 <em>CRhRdkSun</em> is a simple sun object that can be placed on the stack or used as a class member. It can be used as a temporary ‘working’ sun and it provides access to an underlying implementation of IRhRdkSun. You can use this to do sun angle calculations without affecting the document sun. This might be useful, for example, to create an ephemeris or some other table of sun information. The following is a test command that uses CRhRdkSun to generate a display of the monthly sun position for the year 2025 at Seattle, Washington, USA.</p>
@@ -470,21 +490,30 @@ CRhinoCommand::result CTestSunEphemeris::RunCommand(const CRhinoCommandContext&a
 </code></pre>
 <h3 id="crhrdksundialog">CRhRdkSunDialog</h3>
 <p><a name="CRhRdkSunDialog"></a>
-<em>CRhRdkSunDialog</em> is a wrapper around a sun UI. TODO: data source.</p>
+<em>CRhRdkSunDialog</em> is a wrapper around a sun UI. This dialog works with a <em>data source</em>, which is a platform-independent way of getting and setting the back-end data that a UI displays and edits. To make it easier to use without getting too deeply into data sources, the RDK provides <code>CRhRdkSimpleSunDataSource</code> which can be used with this dialog. The following code shows how to use the dialog to edit a temporary sun on the stack:</p>
+<pre><code class="language-cpp">CRhRdkSun s; // Temporary working sun.
+auto&amp; sun = s.Sun(); // Get temporary IRhRdkSun.
 
-<p><a name="DocumentSun"></a></p>
-<h3 id="the-rdk-document-sun">The RDK Document Sun</h3>
-<p>The <em>RDK Document Sun</em> is a document-resident sun which affects viewports and renderings. If you have a Rhino document, you can read and write that document’s sun through the document’s IRhRdkSun interface. Any changes you make will appear in the main sun UI and will also be stored in the 3dm file. Getting the sun from a document always returns a const reference. To write to the sun, you must begin a batch of write operations and afterwards end the batch. This is done using the RDK’s standard BeginChange / EndChange system.</p>
-<pre><code class="language-cpp">  // Read some information from the document sun.
-  const auto&amp; sun = pDoc-&gt;Sun();
-  const bool b = sun.EnableOn();
-  ... // Read other properties here.
+// You can edit any non-const instance of IRhRdkSun.
+CRhRdkSimpleSunDataSource ds;
 
-  // Change some properties of the document sun.
-  auto&amp; write_sun = sun.BeginChange(RhRdkChangeContext::Program);
-  write_sun.SetEnableOn(true);
-  ... // Set other properties here.
-  write_sun.EndChange();
+// Copy working sun data to the data source.
+ds.Sun().CopyFrom(sun);
+
+// Set up a controller with this data source attached.
+const auto con = IRhinoUiController::make_shared(new CRhRdkGenericController);
+con-&gt;AddDataSource(ds);
+
+// Launch the dialog using the controller.
+CRhRdkSunDialog dlg;
+dlg.SetController(con);
+if (IDOK != dlg.DoModal())
+	return cancel; // User cancelled.
+
+// Copy edited sun back to the working sun.
+sun.CopyFrom(ds.Sun());
+
+... // Do something with the edited sun here.
 </code></pre>
 
         </article>
