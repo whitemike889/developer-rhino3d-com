@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>What is the RDK? with C/C++</title>
-  <meta name="description" content="This guide describes the Rhino Renderer Development Kit (AKA RDK) and its features.  Using C/C++">
+  <title>RDK Dithering with C/C++</title>
+  <meta name="description" content="This document describes how to use the RDK dithering classes in C/C++.  Using C/C++">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="/guides/cpp/what-is-the-rdk/" />
-  <meta property="og:title" content="What is the RDK?" />
-  <meta property="og:description" content="This guide describes the Rhino Renderer Development Kit (AKA RDK) and its features." />
+  <meta property="og:url" content="/guides/cpp/rdk-dithering-classes/" />
+  <meta property="og:title" content="RDK Dithering" />
+  <meta property="og:description" content="This document describes how to use the RDK dithering classes in C/C++." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="What is the RDK?" />
-  <meta name="twitter:description" value="This guide describes the Rhino Renderer Development Kit (AKA RDK) and its features." />
+  <meta name="twitter:title" value="RDK Dithering" />
+  <meta name="twitter:description" value="This document describes how to use the RDK dithering classes in C/C++." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -53,7 +53,7 @@
   <!-- Bootstrap override -->
   <link rel="stylesheet" href="/css/bootstrap-override.css">
 
-  <link rel="canonical" href="http://developer.rhino3d.com/guides/cpp/what-is-the-rdk/">
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/cpp/rdk-dithering-classes/">
   <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
 
   <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
@@ -121,7 +121,7 @@
       
         
         
-          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/cpp/what-is-the-rdk/">Looking for the older Rhino 5 version?</a>
+          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/cpp/rdk-dithering-classes/">Looking for the older Rhino 5 version?</a>
         
         
       
@@ -398,125 +398,68 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>What is the RDK?</h1>
+          <h1>RDK Dithering</h1>
 
           <p>
   <span class="guide_byline">
     
-    
-    by
       
-        
-        <a href="/authors/andrew_le_bihan">Andrew le Bihan</a>
-         and
-      
-        
-        <a href="/authors/john_croudy">John Croudy</a>
-        
-           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">11 Jan 2019</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-dithering-classes.md" target="_blank">11 Jan 2019</a>)
     
   </span>
 
 </p>
 
-          <p>This guide describes the Rhino Renderer Development Kit (AKA RDK) and its features.</p>
+          <p>This document describes how to use the RDK dithering classes in C/C++.</p>
 
-          <p><img src="/images/rdk-what-is-the-rdk-01.png" alt="RDK Logo" /></p>
+          <h3 id="introduction">Introduction</h3>
+<p><em>Dithering</em> is a</p>
 
-<h3 id="overview">Overview</h3>
-<p>The RDK is a collection of tools that extend the Rhino application platform with visualization-specific capabilities. Third-party developers can use the RDK SDK to integrate their renderers into Rhino.</p>
+<p><img src="/images/rdk-dithering.jpg" alt="Road" /></p>
 
-<h3 id="features">Features</h3>
-<p><img src="/images/rdk-what-is-the-rdk-02.png" alt="RDK Features Banner" /></p>
+<h3 id="the-document-dithering-settings">The Document Dithering Settings</h3>
+<p>The <em>RDK Document Dithering settings</em> is a document-resident dithering object which affects renderings. If you have a Rhino document, you can read and write that document’s dithering settings through the document’s <a href="/api/cpp/class_i_rh_rdk_dithering.html">IRhRdkDithering</a> interface. Any changes you make will appear in the Dithering and Color Adjustment section of the Rendering panel and will also be stored in the 3dm file. Getting the dithering settings from a document always returns a const reference. To write to the settings, you must begin a batch of write operations and afterwards end the batch. This is done using the RDK’s standard BeginChange / EndChange system. The following is an example of how to access and change the document dithering settings:</p>
+<pre><code class="language-cpp">static class CDitheringExampleCommand : public CRhinoTestCommand
+{
+protected:
+	virtual UUID CommandUUID() override { static const UUID uuid = your_uuid_here; return uuid; }
+	virtual const wchar_t* EnglishCommandName() override { return RHSTR_LIT(L"DitheringExample"); }
+	virtual CRhinoCommand::result RunCommand(const CRhinoCommandContext&amp; context) override;
+}
+theDitheringExampleCommand;
 
-<ul>
-  <li>Extensible Material, Environment and Texture editors which display and edit Materials, Environments and Textures (AKA <em>Render Content</em>).</li>
-  <li>Render content can have tags assigned.</li>
-  <li>Frame buffer implementation with post-processing and multiple channels.</li>
-  <li>Pre-process custom mesh provision interface for third party developers.</li>
-  <li>Built-in material types, including gem, glass, plastic, plaster, metal, paint, picture and custom.</li>
-  <li>Built-in procedural textures, including wood, marble, granite, noise generators, perturbs, and so on.</li>
-  <li>Built-in HDR and OpenEXR support.</li>
-  <li>Improved render pipeline that makes it much easier for developers to implement a renderer engine in Rhino.</li>
-  <li>Sun light and sun angle calculation tools.</li>
-  <li><a href="/guides/cpp/rdk-skylight-classes/">Skylight</a> support.</li>
-  <li><a href="/guides/cpp/rdk-safe-frame-classes/">Safe Frame</a> support.</li>
-  <li>Gamma, Linear Workflow and <a href="/guides/cpp/rdk-dithering-classes/">Dithering</a> support.</li>
-  <li>Automatic shader UI support for third party Material/Environment/Texture providers.</li>
-  <li>Several utility classes to aid in the development of renderers and visualization related tools.</li>
-  <li>Decal support with planar, UV, cylindrical or spherical mapping.</li>
-  <li><a href="/guides/cpp/rdk-ground-plane-classes/">Ground Plane</a> support with automatic height, material and texture mapping options.</li>
-  <li>360 degree <a href="/guides/cpp/rdk-current-environment-classes/">environment</a> preview in the viewport.</li>
-  <li>Extensive library of ready-to-use materials, environments and textures with Library browser.</li>
-</ul>
+using DM = IRhRdkDithering::Methods;
 
-<h3 id="material-environment-and-texture-editors">Material, Environment and Texture Editors</h3>
-<p><img src="/images/rdk-what-is-the-rdk-03.png" alt="MET editors" style="float: right; margin-left: 12px; margin-right: 80px;" />
-The Material, Environment, and Texture Editors display objects called <em>Render Contents</em> and allow the user to edit them. These editors are all based on a similar interface with only small functional differences between them. Render Contents are the foundation of the RDK and one of the most important objects it provides. The RDK SDK provides an extensive system that allows render engine developers to create their own custom render contents. The editors then allow users to create, edit and manage these specialized contents as well as the ones bundled with the RDK and apply them to objects in the scene.</p>
+static const wchar_t* StringFromDitheringMethod(DM dm)
+{
+	switch (dm)
+	{
+	case DM::FloydSteinberg: return L"Floyd-Steinberg"; break;
+	case DM::SimpleNoise:    return L"Simple noise"; break;
+	}
 
-<p>Main articles:</p>
+	return L"None";
+}
 
-<ul>
-  <li><a href="/guides/cpp/material-environment-and-texture-editors">Material, Environment, and Texture Editors</a></li>
-  <li><a href="/guides/cpp/rdk-render-content">Render Content</a></li>
-</ul>
+CRhinoCommand::result CDitheringExampleCommand::RunCommand(const CRhinoCommandContext&amp; context)
+{
+	auto* pDoc = context.Document();
+	if (nullptr == pDoc)
+		return failure;
 
-<h3 style="clear:both;" id="render-window">Render Window</h3>
-<p><img src="/images/rdk-what-is-the-rdk-04.png" alt="Render Window" /></p>
+	const auto&amp; dither = pDoc-&gt;Dithering();
 
-<p>A user thinks of the Render Window as the window that appears on the screen when one renders a model (see the picture above). However, the render window object used by developers corresponds more to the actual <em>frame buffer</em>. It contains information about the channels and pixels that make up the rendered image. The standard render window provides a number of features to renderers, including built-in support for scripting, cloning, saving to high dynamic-range formats, post effects, zooming and channel display.</p>
+	RhinoApp().Print(L"Dithering before: %s\n", StringFromDitheringMethod(dither.Method()));
 
-<h3 id="hdr-and-exr-support">HDR and EXR Support</h3>
-<p><img src="/images/rdk-what-is-the-rdk-05.png" alt="HDR and EXR Support" style="float: right; margin-left: 12px;" /></p>
+	auto&amp; write_dither = dither.BeginChange(RhRdkChangeContext::Program);
+	write_dither.SetMethod(DM::FloydSteinberg);
+	write_dither.EndChange();
 
-<p>An HDR image which provides automatic conversion to a bitmap for non-HDR capable renderers. This allows the Rhino renderer and viewport display to show HDR environments while providing HDR tools to third-party renderer engines.</p>
+	RhinoApp().Print(L"Dithering after: %s\n", StringFromDitheringMethod(dither.Method()));
 
-<p>The HDR texture also provides projection conversion features. Most HDRi files come as Light Probe projection. The Basic Environment requires Spherical (Equirectangular) projection for spherical environments, so the HDR texture defaults to this conversion. However, several other types are supported.</p>
-
-<p>The LDR exposure determines the brightness of the image when converted to a bitmap image. This will not affect the rendering when used by a HDR capable renderer.</p>
-
-<p>HDR multiplier is a simple linear multiplier on all values in the image. This can be used to brighten or dim the image in an HDR capable renderer.</p>
-
-<p>The Save As button can be used to convert the image to a bitmap file. The LDR exposure value is used convert the image during this process.</p>
-
-<p>Azimuth and Altitude values modify the way the image is rotated in space during the projection conversion.</p>
-
-<h3 style="clear:both;" id="decals">Decals</h3>
-<p><img src="/images/rdk-what-is-the-rdk-07.png" alt="Decals" style="float: right; margin-left: 12px;" /></p>
-
-<p>Decals are non-repeating textures that are applied to the surface of an object with a given projection. They are an easy-to-use way of attaching single images or similar textures to objects without going through the complexity of the texture mapping process.</p>
-
-<p>Decals are textures that are placed directly on a specified area of one or more objects. They consist of a single instance of a texture, rather than being tiled as they are when used in a material. Users use decals to modify a limited part of an object’s color.</p>
-
-<p><img src="/images/rdk-what-is-the-rdk-08.jpg" alt="Decals2" /></p>
-
-<p style="clear:both;">The following classes can be used to access decal features:</p>
-
-<ul>
-  <li><a href="/guides/cpp/rdk-decal-classes/#IRhRdkDecal">IRhRdkDecal</a></li>
-  <li><a href="/guides/cpp/rdk-decal-classes/#CRhRdkObjectDataAccess">CRhRdkObjectDataAccess</a></li>
-</ul>
-
-<h3 id="sun">Sun</h3>
-<p><img src="/images/rdk-what-is-the-rdk-06.png" alt="Sun" style="float: right; margin-left: 12px;" /></p>
-
-<p>The RDK provides easy-to-use sun tools, including a docking panel to control the <a href="/guides/cpp/rdk-sun-classes/#DocumentSun">document sun</a>, a sunlight preview within the Rendered viewport, a Sunlight command and a number of other scripting and developer tools to make sun-angle calculations easy.</p>
-
-<p>The following classes can be used to access sun features:</p>
-
-<ul>
-  <li><a href="/guides/cpp/rdk-sun-classes/#IRhRdkSun">IRhRdkSun</a></li>
-  <li><a href="/guides/cpp/rdk-sun-classes/#CRhRdkSun">CRhRdkSun</a></li>
-  <li><a href="/guides/cpp/rdk-sun-classes/#CRhRdkSunDialog">CRhRdkSunDialog</a></li>
-</ul>
-
-<h3 style="clear:both;" id="summary">Summary</h3>
-<p>This article introduced the RDK and described some of its main features. Each feature is explained in more detail in a different article.</p>
-
-<!--
-### Automatic UI
-The RDK provides an automatic UI system to make it easy to quickly develop user interfaces in your plug-in. See the main article here: [Automatic UI](/guides/cpp/rdk-raw-auto-ui).
--->
+	return success;
+}
+</code></pre>
 
         </article>
 
@@ -541,17 +484,8 @@ The RDK provides an automatic UI system to make it easy to quickly develop user 
 
             <p class="text">
               
-                Authors:
-                <ul>
-                  
-                  
-                    
-                    <li><a href="/authors/andrew_le_bihan">Andrew le Bihan</a></li>
-                  
-                    
-                    <li><a href="/authors/john_croudy">John Croudy</a></li>
-                  
-                </ul>
+                
+                Author: <a href="/authors/john_croudy">John Croudy</a>
               
             </p>
           </div>
@@ -561,7 +495,7 @@ The RDK provides an automatic UI system to make it easy to quickly develop user 
                 <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
               </svg>
             </span>
-            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/cpp/what-is-the-rdk.md" target="_blank">Edit page on GitHub</a>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/cpp/rdk-dithering-classes.md" target="_blank">Edit page on GitHub</a>
           </div>
             <div class="col-md-4">
               <span class="pull-right">
