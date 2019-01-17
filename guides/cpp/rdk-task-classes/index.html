@@ -404,7 +404,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-task-classes.md" target="_blank">16 Jan 2019</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-task-classes.md" target="_blank">17 Jan 2019</a>)
     
   </span>
 
@@ -476,8 +476,8 @@ CRhRdkTask::Result CExampleCustomTask::Execute(const IRhRdkTaskOrigin&amp; origi
 	origin.GetSelection(aContent);
 	for (int i = 0; i &lt; aContent.Count(); i++)
 	{
-		const wchar_t* wszName = aContent[i]-&gt;InstanceName();
-		RhinoApp().Print(L"Selected %s\n", wszName);
+		const auto sName = aContent[i]-&gt;InstanceName();
+		RhinoApp().Print(L"Selected: %s\n", static_cast&lt;const wchar_t*&gt;(sName));
 	}
 
 	return Result::Success;
