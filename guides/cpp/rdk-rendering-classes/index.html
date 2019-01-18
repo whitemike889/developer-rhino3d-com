@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>RDK Rendering with C/C++</title>
+  <meta name="description" content="This document describes how to use the RDK's rendering classes in C/C++.  Using C/C++">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/cpp/rdk-rendering-classes/" />
+  <meta property="og:title" content="RDK Rendering" />
+  <meta property="og:description" content="This document describes how to use the RDK's rendering classes in C/C++." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="RDK Rendering" />
+  <meta name="twitter:description" value="This document describes how to use the RDK's rendering classes in C/C++." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C/C++" />
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/cpp/rdk-rendering-classes/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="/images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner">
+
+    
+      
+        
+        
+          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/cpp/rdk-rendering-classes/">Looking for the older Rhino 5 version?</a>
+        
+        
+      
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/5/" + splitPath.splice(1,splitPath.length-1).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("Looking for the older Rhino 5 site?");
+    $aTag.attr("href", "/5/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link active" href="/guides/">Guides</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/api/">API</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/samples/">Samples</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/videos/">Videos</a>
+                    
+                  
+              
+            
+          
+        
+        <a class="page-link" href="https://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/search-results.html">
+                <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
+                <input class="searchBox" type="submit" size="2" value=" " />
+            </form>
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>
+<!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/cpp">C/C++</a></li>
+
+              
+                
+                  <li class="active">RDK</li>
+                
+              
+          </ol>
+
+          <h1>RDK Rendering</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-rendering-classes.md" target="_blank">18 Jan 2019</a>)
+    
+  </span>
+
+</p>
+
+          <p>This document describes how to use the RDK's rendering classes in C/C++.</p>
+
+          <h3 id="introduction">Introduction</h3>
+<p>Even before the RDK existed, Rhino had a rendering pipeline and a <em>Render</em> command which would allow the current render engine (e.g., Rhino Render or Flamingo) to render the scene. The RDK builds on and enhances this system to provide the following features:</p>
+
+<ul>
+  <li>An extensible Render Window UI.</li>
+  <li>A frame buffer with both built-in and customizable channels.</li>
+  <li>An extensible post effect system.</li>
+  <li>Exposure and color adjustment controls.</li>
+  <li>Asynchronous rendering.</li>
+</ul>
+
+<p>In addition to the built-in functionality, plug-in developers have the ability to add their own UI panes, custom channels, and post effects. The asynchronous rendering feature frees users from being locked out of Rhino while rendering proceeds and actually allows multiple renders to run at the same time using different render engines, if so desired.</p>
+
+<h3 id="the-many-faces-of-a-render-window">The many faces of a render window.</h3>
+<p>The term <em>render window</em> can be a source of confusion, because there are several different objects in the RDK that could be called by that name:</p>
+
+<ul>
+  <li>The physical render window that the user sees on the screen.</li>
+  <li>The data and structures that lie behind the <code>IRhRdkRenderWindow</code> interface.</li>
+  <li>The <code>RenderWindow()</code> SDK method (on <code>CRhinoSdkRender</code> and <code>CRhRdkSdkRender</code>).</li>
+  <li>The RenderWindow command.</li>
+</ul>
+
+<p>In order to avoid confusion, the physical render window will be called the <em>render frame</em> in this article. Elsewhere, the phrase ‘render window’ will mean the <code>IRhRdkRenderWindow</code> interface. If the method is mentioned, it will be written in this form: <code>RenderWindow()</code> including the parentheses. The command will be referred to as the RenderWindow <em>command</em>.</p>
+
+<h3 id="getting-started">Getting started</h3>
+<p>Let’s start at the top and follow the <em>synchronous</em> rendering process from the moment the user presses the Render button until the render frame is closed. You must first create a subclass of <code>CRhRdkSdkRender</code>:</p>
+<pre><code class="language-cpp">class CExampleSdkRender : public CRhRdkSdkRender
+{
+public:
+	CExampleSdkRender(const CRhinoCommandContext&amp; context, CRhinoRenderPlugIn&amp; plugIn,
+	                  bool bPreview, const ON_wString&amp; sCaption, UINT uIconId);
+
+	virtual CRhinoSdkRender::RenderReturnCodes Render(const ON_2iSize&amp; sizeImage) override;
+	virtual CRhinoSdkRender::RenderReturnCodes RenderWindow(CRhinoView* pView,
+	                         const LPRECT pRect, bool bInPopupWindow) override;
+	...
+};
+</code></pre>
+<p>The first thing you’ll notice are the <code>Render()</code> and <code>RenderWindow()</code> methods. These will be called in response to the <em>Render</em> and <em>RenderWindow</em> commands respectively. In the following discussion, when we refer to the Render command or the <code>Render()</code> method, we are also referring to the RenderWindow command and the <code>RenderWindow()</code> method, depending on which one the user chose.</p>
+
+<p>In the constructor of CExampleSdkRender you do your basic initialization. This may include adding channels to the render window.</p>
+<pre><code class="language-cpp">CExampleSdkRender::CExampleSdkRender(const CRhinoCommandContext&amp; context, CRhinoRenderPlugIn&amp; plugIn,
+                                     const ON_wString&amp; sCaption, UINT uIconId, bool bPreview)
+	:
+	CRhRdkSdkRender(context, plugIn, sCaption, uIconId)
+{
+	// The RDK only adds the red, green, blue and alpha channels by default,
+	// but it provides several other built-in channels. Let's add some.
+
+	// First, get the render window.
+	auto&amp; rw = GetRenderWindow();
+
+	// If this render window is being reused, remove any non-fixed channels
+	// that were added last time.
+	rw.ClearChannels();
+
+	// Add a channel for use as a z-buffer.
+	rw.AddChannel(IRhRdkRenderWindow::chanDistanceFromCamera, sizeof(float));
+
+	// Add channels for normals (X, Y, Z).
+	rw.AddChannel(IRhRdkRenderWindow::chanNormalX, sizeof(float));
+	rw.AddChannel(IRhRdkRenderWindow::chanNormalY, sizeof(float));
+	rw.AddChannel(IRhRdkRenderWindow::chanNormalZ, sizeof(float));
+}
+</code></pre>
+<p>In the code example above, getting the render window for the first time will cause it to be created. This also causes the creation of a <em>render session</em> which is an object that the RDK uses to keep track of rendering progress for each render window. As rendering proceeds, the render session goes through a set of states, defined by the <code>IRhRdkRenderSession::Status</code> enum. This includes states such as <em>Initializing</em>, <em>Rendering</em> and <em>Completed</em>, among others. As long as the user sees a render frame on the screen, the render session and render window objects will exist and be associated with the render frame. When the user closes the render frame, the render session will become <em>disposed</em>. In this state, the session is waiting in a list to be deleted at the end of the command. This system prevents problems causes by deleting the session while the plug-in may still be using it, perhaps from a worker thread. At the end of the command, all disposed sessions will be deleted.</p>
+
+<h3 id="the-rendering-process">The rendering process</h3>
+<p>Being a Rhino render engine, your plug-in must include a class derived from CRhinoRenderPlugIn. When the user runs the Render command, if yours is the current render engine, Rhino will call your plug-in’s <code>Render()</code> method. Your implementation of this method must instantiate your CExampleSdkRender object on the stack as a local variable and call its <code>Render()</code> method, passing the desired image size. This size can be obtained by calling the base sdkRender’s <code>RenderSize()</code> method. This will return the size according to the user’s settings in the Rendering panel:</p>
+<pre><code class="language-cpp">CRhinoCommand::result CExampleRhinoPlugIn::Render(const CRhinoCommandContext&amp; context, bool bPreview)
+{
+	const auto* pDoc = context.Document();
+	if (nullptr == pDoc)
+		return CRhinoCommand::failure;
+
+	// If you need to check for a valid license, do that first.
+	if (!CheckLicense())
+		return CRhinoCommand::failure;
+
+	// Instantiate your SDK Render object.
+	CExampleSdkRender sdkRender(context, *this, L"Example", IDI_EXAMPLE, bPreview);
+
+	// Get the size of the image to render.
+	const auto size = sdkRender.RenderSize(*pDoc, true);
+
+	// Do the rendering.
+	const auto result = sdkRender.Render(size);
+
+	if (CRhinoSdkRender::render_ok == result)
+		return CRhinoCommand::success;
+
+	return CRhinoCommand::failure;
+</code></pre>
+<!--*This comment fixes Atom's syntax highlighter after the lone asterisk above*-->
+<p><code>CExampleSdkRender::Render()</code> can do some more ‘heavy’ initialization that was not done in the constructor, such as creating render meshes or opening a progress window. After that, it calls <code>CRhRdkSdkRender::Render()</code> to do the actual rendering:</p>
+<pre><code class="language-cpp">CRhinoSdkRender::RenderReturnCodes CExampleSdkRender::Render(const ON_2iSize&amp; sizeImage)
+{
+	auto* pView = RhinoApp().ActiveView(); // This is old and wrong. Ask Andy.
+	if (nullptr == pView)
+		return CRhinoSdkRender::render_no_active_view;
+
+	// Force render meshes to be created on the main thread.
+	const auto&amp; vp = pView-&gt;ActiveViewport().VP();
+	auto* pIterator = NewRenderMeshIterator(vp, true, false);
+	pIterator-&gt;EnsureRenderMeshesCreated();
+
+	// You can now use this iterator to get all of the meshes in the scene.
+	// While the iterator is alive, all meshes are guaranteed to be available
+	// which means you don't need to copy them during the rendering process.
+	CRhRdkRenderMesh rm;
+	pIterator-&gt;Reset();
+	while (pIterator-&gt;Next(rm))
+	{
+		// TODO: Use the mesh. This might be the point at which you create
+		// your acceleration structure or, if you are writing a renderer
+		// that uses its own mesh representation, you might do the
+ 		// conversion here. One thing to remember - the
+ 		// IRhRdkSdkRenderMeshIterator::Next function is not, at this time,
+		// thread safe, so please don't pass the iterator's pointer into
+		// multiple render threads and use it to query the mesh list.
+		// In any case, it's not really optimized for in-render access.
+	}
+
+	// Once everything is set up, do the actual rendering.
+	// By keeping the iterator alive, we ensure the meshes
+	// don't get deleted.
+	const auto result = __super::Render(sizeImage);
+
+	// After rendering, delete the iterator and the render meshes.
+	delete pIterator;
+
+	return result;
+}
+</code></pre>
+<p>The call to <code>__super::Render(sizeImage)</code> above does the actual rendering using the Rhino render pipeline. This works by calling into virtual functions on your CExampleSdkRender object at various stages of the process. When Rhino calls the various functions on the SDK Render object, the RDK gets in between and forwards some of the calls directly to you; other calls it processes itself. The calls that are directly forwarded are the original render pipeline functions that have been in Rhino since the beginning:</p>
+<ul>
+  <li><code>NeedToProcessLightTable()</code></li>
+  <li><code>AddLightToScene()</code></li>
+  <li><code>NeedToProcessGeometryTable()</code></li>
+  <li><code>IgnoreRhinoObject()</code></li>
+  <li><code>AddRenderMeshToScene()</code></li>
+  <li><code>RenderSceneWithNoMeshes()</code></li>
+  <li><code>RenderPreCreateWindow()</code></li>
+  <li><code>StartRendering()</code></li>
+  <li><code>RenderEnterModalLoop()</code></li>
+  <li><code>RenderContinueModal()</code></li>
+  <li><code>RenderExitModalLoop()</code></li>
+</ul>
+
+<p>The first override to be called is <code>NeedToProcessLightTable()</code>. This generally returns true unless you have implemented a light cache or other optimization. Then, for each light in the scene, Rhino will call your override of <code>AddLightToScene()</code> in which you will set up your light structures for the rendering process to use. Next, Rhino calls <code>NeedToProcessGeometryTable()</code>. If you return true, Rhino will call <code>AddRenderMeshToScene()</code> for each object. If your renderer needs to set up any structures, it can do that now. If not, it does not need to override that function, but be aware that if you want rendering to proceed, you must override <code>RenderSceneWithNoMeshes()</code> (which is called next) to return true. Note that if Rhino encounters an object that is not meshable (e.g., a point or curve), it will call <code>IgnoreRhinoObject()</code>. If your renderer knows how to render objects without meshes, you can return false. Otherwise it’s a good idea to return true so that the object is skipped.</p>
+
+<p>After lights and meshes have been processed, Rhino creates the render frame on the screen, but just before it does, it calls <code>RenderPreCreateWindow()</code>. This is probably not useful but was kept for backward compatibility. Now Rhino creates the render frame on the screen and calls <code>StartRendering()</code>. In this override, you should create one or more worker threads to do the actual rendering.</p>
+
+<p>Because Rhino itself is not aware of the asynchronous option (it’s an RDK concept), it calls <code>RenderEnterModalLoop()</code> to ask if you want to go into a loop while waiting for rendering to finish. Unless there has been some kind of error, you must always return true (even in the asynchronous case), otherwise Rhino will abort. After that, Rhino will enter a loop calling <code>RenderContinueModal()</code> until it returns false. This is the point where synchronous and asynchronous renderers use different logic. Synchronous renderers will return true until rendering finishes, but asynchronous renderers will return false because they don’t want to go into a modal loop, they want the pipeline to exit leaving the render frame open on the screen so that rendering can proceed in the background. Finally, Rhino will call <code>RenderExitModalLoop()</code> and generally your override will return true in order for Rhino to return a successful result code.</p>
+
+<h3 id="rendering-pausing-resuming-and-canceling">Rendering, pausing, resuming and canceling</h3>
+<p>In the synchronous case, rendering proceeds in one or more worker threads while Rhino sits in the modal loop pumping messages and keeping the UI alive. During this time, the user can use the menu and tool bars in the render frame. The RDK calls the <code>SupportsPause()</code> method on your sdkRender object to determine if the pause button should be enabled on the screen. If you return true, you will be expected to also implement <code>PauseRendering()</code> and <code>ResumeRendering()</code>. These functions can be as simple as setting and clearing a flag which the render threads check periodically. Pausing is most useful when the renderer is asynchronous because the user can continue using Rhino while rendering is paused and continue rendering later.</p>
+
+<p>If the user chooses the <em>Stop</em> option, <code>StopRendering()</code> will be called on your sdkRender object. Your override should take whatever action is necessary to immediately stop rendering. It should tell any render threads to abort and wait for them to exit before returning. If a thread continues after this function returns, Rhino may crash because it assumes that the client is no longer using any of the rendering objects or meshes.</p>
+
+<h3 id="asynchronous-rendering">Asynchronous rendering</h3>
+<p>We touched on the differences between synchronous and asynchronous rendering above, but now we will examine them in more detail. One of the main differences with asynchronous rendering is the existence of an object called an <em>async render context</em>. This is represented by the <code>IRhRdkAsyncRenderContext</code> interface. It is an object that takes over the role of the sdkRender object after that object goes off the stack. Recall that as soon as asynchronous rendering begins, the renderer asks Rhino to <em>not</em> continue the modal loop. This causes Rhino to exit the render pipeline and the sdkRender object goes off the stack and is deleted. The async render context persists, owned by the associated render session and enables communication between the RDK and the render engine, allowing requests such as pause, resume and stop to pass to the renderer in the absence of the sdkRender object.</p>
+
+<p>The async render context should be created in your sdkRender constructor, before any access to the render session or render window. It is the call to <code>SetAsyncRenderContext()</code> that establishes the render session as being asynchronous rather than synchronous.</p>
+<pre><code class="language-cpp">CExampleSdkRender::CExampleSdkRender(const CRhinoCommandContext&amp; context, CRhinoRenderPlugIn&amp; plugIn,
+                                     const ON_wString&amp; sCaption, UINT uIconId, bool bPreview)
+	:
+	CRhRdkSdkRender(context, plugIn, sCaption, id)
+{
+	// It is critical that the render context is created first, before any calls to GetRenderWindow().
+	SetAsyncRenderContext(new CExampleAsyncRenderContext(...));
+
+	// Get the render window.
+	auto&amp; rw = GetRenderWindow(); // Note: GetRenderWindow() uses the async render context set above.
+
+	...
+}
+</code></pre>
+<p>The implementation of <code>IRhRdkAsyncRenderContext</code> is usually fairly simple. An example is shown below. You just have to handle a few functions for pausing, resuming and stopping rendering. This Windows-centric example assumes you have a single thread and you have stored its handle in <code>m_hRenderThread</code>.</p>
+<pre><code class="language-cpp">class CExampleAsyncRenderContext : public IRhRdkAsyncRenderContext
+{
+public:
+	CExampleAsyncRenderContext(...);
+	virtual ~CExampleAsyncRenderContext();
+
+public: // Implement IRhRdkAsyncRenderContext.
+	virtual void StopRendering(void) override;
+	virtual bool SupportsPause(void) const override { return true; }
+	virtual void PauseRendering(void) override { m_bPause = true; }
+	virtual void ResumeRendering(void) override { m_bPause = false; }
+	virtual void OnQuietRenderFinished(const IRhRdkRenderSession&amp; session) override;
+	virtual void DeleteThis(void) override { delete this; }
+	virtual void* EVF(const wchar_t*, void*) override { return nullptr; }
+
+private:
+	HANDLE m_hRenderThread = NULL;
+	bool m_bPause = false;
+	bool m_bCancel = false;
+};
+
+void CExampleAsyncRenderContext::StopRendering(void)
+{
+	// Because the cancel flag is in this object, the render thread(s)
+	// will need access to the object so they can check the flag.
+
+	// If rendering is in progress, cancel it and wait for it to stop.
+	if (NULL != m_hRenderThread)
+	{
+		m_bCancel = true;
+
+		::WaitForSingleObject(m_hRenderThread, INFINITE);
+		::CloseHandle(m_hRenderThread);
+		m_hRenderThread = NULL;
+	}
+}
+</code></pre>
+<p>When rendering ends, the render frame remains on the screen. The user can choose to save the rendering, view the different channels, apply exposure or post-effects, or close the render frame. The render session associated with this render frame is now in one of the following states:</p>
+
+<ul>
+  <li><em>Completed</em> ~ Rendering has completed successfully.</li>
+  <li><em>Canceled</em>  ~ Rendering was canceled by the user.</li>
+  <li><em>Aborted</em>   ~ Rendering was aborted. Happens when an async render aborts because the document is closed.</li>
+  <li><em>Failed</em>    ~ Rendering failed (but not because it was canceled).</li>
+</ul>
+
+<p>The user can also choose to clone the render frame. What this means under the hood is that the render session will be cloned and a new render frame will be opened for that session. This allows the user to compare the renderings while viewing different channels or using different exposures or post-effects.</p>
+
+<p>Eventually, the user will close the render frame (or close Rhino, which will, of course, close all render frames). When the render frame is closed, the render session goes into the ‘Disposed’ state, ready to be deleted at the end of the next command. If the user closes the render frame while rendering is underway, <code>StopRendering()</code> will be called before the render frame is closed.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                
+                Author: <a href="/authors/john_croudy">John Croudy</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/cpp/rdk-rendering-classes.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2019 Robert McNeel &amp; Associates<br/>
+          <span class="glyphicon glyphicon-heart-empty"></span>&nbsp;<a href="/authors">Contributions welcome</a>
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+</html>
