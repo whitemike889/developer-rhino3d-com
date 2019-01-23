@@ -404,7 +404,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-rendering-classes.md" target="_blank">18 Jan 2019</a>)
+      by <a href="/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/rdk-rendering-classes.md" target="_blank">22 Jan 2019</a>)
     
   </span>
 
@@ -438,7 +438,7 @@ $(document).ready(function()
 <p>In order to avoid confusion, the physical render window will be called the <em>render frame</em> in this article. Elsewhere, the phrase ‘render window’ will mean the <code>IRhRdkRenderWindow</code> interface. If the method is mentioned, it will be written in this form: <code>RenderWindow()</code> including the parentheses. The command will be referred to as the RenderWindow <em>command</em>.</p>
 
 <h3 id="getting-started">Getting started</h3>
-<p>Let’s start at the top and follow the <em>synchronous</em> rendering process from the moment the user presses the Render button until the render frame is closed. You must first create a subclass of <code>CRhRdkSdkRender</code>:</p>
+<p>Let’s start at the top and follow the rendering process from the moment the user presses the Render button until the render frame is closed. You must first create a subclass of <code>CRhRdkSdkRender</code>:</p>
 <pre><code class="language-cpp">class CExampleSdkRender : public CRhRdkSdkRender
 {
 public:
@@ -478,7 +478,7 @@ public:
 	rw.AddChannel(IRhRdkRenderWindow::chanNormalZ, sizeof(float));
 }
 </code></pre>
-<p>In the code example above, getting the render window for the first time will cause it to be created. This also causes the creation of a <em>render session</em> which is an object that the RDK uses to keep track of rendering progress for each render window. As rendering proceeds, the render session goes through a set of states, defined by the <code>IRhRdkRenderSession::Status</code> enum. This includes states such as <em>Initializing</em>, <em>Rendering</em> and <em>Completed</em>, among others. As long as the user sees a render frame on the screen, the render session and render window objects will exist and be associated with the render frame. When the user closes the render frame, the render session will become <em>disposed</em>. In this state, the session is waiting in a list to be deleted at the end of the command. This system prevents problems causes by deleting the session while the plug-in may still be using it, perhaps from a worker thread. At the end of the command, all disposed sessions will be deleted.</p>
+<p>In the code example above, getting the render window for the first time will cause it to be created. This also causes the creation of a <em>render session</em> which is an object that the RDK uses to keep track of rendering progress for each render window. As rendering proceeds, the render session goes through a set of states, defined by the <code>IRhRdkRenderSession::Status</code> enum. This includes states such as <em>Initializing</em>, <em>Rendering</em> and <em>Completed</em>, among others. As long as the user sees a render frame on the screen, the render session and render window objects will exist and be associated with the render frame. When the user closes the render frame, the render session will become <em>disposed</em>. In this state, the session is waiting in a list to be deleted at the end of the command. This system prevents problems caused by deleting the session while the plug-in may still be using it, perhaps from a worker thread. At the end of the command, all disposed sessions will be deleted.</p>
 
 <h3 id="the-rendering-process">The rendering process</h3>
 <p>Being a Rhino render engine, your plug-in must include a class derived from CRhinoRenderPlugIn. When the user runs the Render command, if yours is the current render engine, Rhino will call your plug-in’s <code>Render()</code> method. Your implementation of this method must instantiate your CExampleSdkRender object on the stack as a local variable and call its <code>Render()</code> method, passing the desired image size. This size can be obtained by calling the base sdkRender’s <code>RenderSize()</code> method. This will return the size according to the user’s settings in the Rendering panel:</p>
@@ -603,7 +603,7 @@ public: // Implement IRhRdkAsyncRenderContext.
 	virtual bool SupportsPause(void) const override { return true; }
 	virtual void PauseRendering(void) override { m_bPause = true; }
 	virtual void ResumeRendering(void) override { m_bPause = false; }
-	virtual void OnQuietRenderFinished(const IRhRdkRenderSession&amp; session) override;
+	virtual void OnQuietRenderFinished(const IRhRdkRenderSession&amp;) override { } // Not currently used.
 	virtual void DeleteThis(void) override { delete this; }
 	virtual void* EVF(const wchar_t*, void*) override { return nullptr; }
 
