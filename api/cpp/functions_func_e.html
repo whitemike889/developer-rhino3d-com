@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.11</span>
+   &#160;<span id="projectnumber">6.12</span>
    </div>
   </td>
  </tr>
@@ -121,6 +121,9 @@ $(function() {
 : <a class="el" href="class_c_rhino_poly_edge.html#a7ea8de62a0aa4c24044b160f23bbcfb7">CRhinoPolyEdge</a>
 , <a class="el" href="class_o_n___poly_edge_curve.html#a0a7f229795bf79835ad2e8f381810320">ON_PolyEdgeCurve</a>
 </li>
+<li>EdgeChainNeighbor()
+: <a class="el" href="class_o_n___sub_d_edge_ptr.html#a88d0b93e390cac29219330c62535f35d">ON_SubDEdgePtr</a>
+</li>
 <li>EdgeCount()
 : <a class="el" href="class_o_n___brep_vertex.html#a15847657a2ec83cc675899405e398dca">ON_BrepVertex</a>
 , <a class="el" href="class_o_n___x_mesh.html#af3fa8a0d816e176a4415104e843c25df">ON_XMesh</a>
@@ -170,7 +173,7 @@ $(function() {
 </li>
 <li>Edges()
 : <a class="el" href="class_o_n___x_mesh_component.html#aa4a0ebcbad4dfe974ddc92d3746af2cd">ON_XMeshComponent</a>
-, <a class="el" href="class_o_n___x_mesh_edge.html#af64258ee76f70c7c5dfd6dd5d5763ae8">ON_XMeshEdge</a>
+, <a class="el" href="class_o_n___x_mesh_edge.html#ac0d628295ef0d83c5643c36fc92ca8ca">ON_XMeshEdge</a>
 , <a class="el" href="class_o_n___x_mesh_face.html#aa0b20610f1706cfb76be2096f6778fb7">ON_XMeshFace</a>
 , <a class="el" href="class_o_n___x_mesh_vertex.html#a1f130a60404b2a427f23b94ab8214801">ON_XMeshVertex</a>
 </li>
@@ -234,6 +237,7 @@ $(function() {
 </li>
 <li>ElapsedTime()
 : <a class="el" href="class_c_rhino_sdk_render.html#a255c7c3d1e093e36c2926ce212e4019b">CRhinoSdkRender</a>
+, <a class="el" href="class_o_n___stop_watch.html#a7e0cf8c28bad554f623ee9d6314d98f1">ON_StopWatch</a>
 </li>
 <li>Element()
 : <a class="el" href="class_o_n___fixed_size_pool.html#ab23bc8f7379187a60621be143ba59c61">ON_FixedSizePool</a>
@@ -244,6 +248,9 @@ $(function() {
 </li>
 <li>ElementFromId()
 : <a class="el" href="class_o_n___fixed_size_pool.html#a9deb1bdc66640e2a95b19f51af9bed49">ON_FixedSizePool</a>
+</li>
+<li>ElementIdIsIncreasing()
+: <a class="el" href="class_o_n___fixed_size_pool.html#a6f0b24aa36896b81b056c8432884933a">ON_FixedSizePool</a>
 </li>
 <li>ElementIndex()
 : <a class="el" href="class_o_n___fixed_size_pool.html#a37d7012aaeddd359d200ae9fcee404c8">ON_FixedSizePool</a>
@@ -328,6 +335,7 @@ $(function() {
 : <a class="el" href="class_c_rh_rdk_basic_material.html#adf174a86cd719c96a71f8a3450337d77">CRhRdkBasicMaterial</a>
 , <a class="el" href="class_c_rh_rdk_basic_material_c_c_i.html#a9c9fad9406bd4cd42a56c5de9c029e3c">CRhRdkBasicMaterialCCI</a>
 , <a class="el" href="class_o_n___material.html#afa63e3e0fc12c2f4c22a8c96474ead02">ON_Material</a>
+, <a class="el" href="class_o_n___physically_based_material_1_1_parameters_names.html#a8eff34265f04dcd7a78ca688a4a65b3d">ON_PhysicallyBasedMaterial::ParametersNames</a>
 </li>
 <li>Empty()
 : <a class="el" href="class_c_rhino_string_dictionary.html#aa771494e6e72c65a4a3e4ab5cc0bd13f">CRhinoStringDictionary</a>
@@ -897,9 +905,6 @@ $(function() {
 <li>EndDir()
 : <a class="el" href="class_c_args_rhino_get_spiral.html#a95ad0279da52e45d0b90272ae3e960b6">CArgsRhinoGetSpiral</a>
 </li>
-<li>EndDragImageList()
-: <a class="el" href="class_c_rhino_drop_target.html#ad564716e97723277335c0ee7ccaee85a">CRhinoDropTarget</a>
-</li>
 <li>EndEdit()
 : <a class="el" href="class_c_rhino_ui_tabbed_sheet_ctrl.html#a908b58fe5e998ff7b3b1fa236ea0d21b">CRhinoUiTabbedSheetCtrl</a>
 </li>
@@ -1162,10 +1167,10 @@ $(function() {
 </li>
 <li>Equal()
 : <a class="el" href="class_o_n___string.html#a800984c304afe916c670834df4d5b62c">ON_String</a>
-, <a class="el" href="class_o_n__w_string.html#a27d9e0486ddb67c464a1ef9da0eddd8f">ON_wString</a>
+, <a class="el" href="class_o_n__w_string.html#acba7228d1c708d8e403cf6442f26fc26">ON_wString</a>
 </li>
 <li>EqualAttributeName()
-: <a class="el" href="class_o_n___string.html#ad2a68db7fa0ecd111d2e0610f49e645d">ON_String</a>
+: <a class="el" href="class_o_n___string.html#a75982739b00aeb140227bf8d6a6260bc">ON_String</a>
 , <a class="el" href="class_o_n__w_string.html#a5d2f0c9e0254114a1548db7932fb6a58">ON_wString</a>
 </li>
 <li>EqualContent()
@@ -1185,8 +1190,8 @@ $(function() {
 : <a class="el" href="class_o_n___font.html#a471757250c48983f63a1c082de215385">ON_Font</a>
 </li>
 <li>EqualOrdinal()
-: <a class="el" href="class_o_n___string.html#a43e2fa835ab3fa951bf0a92744f8d93f">ON_String</a>
-, <a class="el" href="class_o_n__w_string.html#a867483b8ce8baee0948892b8d0cb253a">ON_wString</a>
+: <a class="el" href="class_o_n___string.html#a1b85a20b9a351cfe19e55ddd166b2d28">ON_String</a>
+, <a class="el" href="class_o_n__w_string.html#a1c099c6739f4295459338ab571a89cd8">ON_wString</a>
 </li>
 <li>EqualPath()
 : <a class="el" href="class_o_n___string.html#ac43be95af1c27165b4c0c14df6cc7f3b">ON_String</a>
@@ -1315,7 +1320,7 @@ $(function() {
 , <a class="el" href="class_o_n___surface_proxy.html#ac229e520c42a00099bc81509849eee99">ON_SurfaceProxy</a>
 , <a class="el" href="class_o_n___surface_tree_node.html#a7ed9388a41d920100c1d126a4d3bf06b">ON_SurfaceTreeNode</a>
 , <a class="el" href="class_o_n___tensor_product.html#a86429e599cb980bc348a58f7d9d751d5">ON_TensorProduct</a>
-, <a class="el" href="class_o_n___texture_mapping.html#ac24bdf7e091dd0db8b96f0b60dbefda4">ON_TextureMapping</a>
+, <a class="el" href="class_o_n___texture_mapping.html#a585d55bec1eb924681c70f722f8785fe">ON_TextureMapping</a>
 </li>
 <li>EvaluateBoxMapping()
 : <a class="el" href="class_o_n___texture_mapping.html#a72617f0835a94276990850841c6b914e">ON_TextureMapping</a>
@@ -1380,7 +1385,7 @@ $(function() {
 <li>Event()
 : <a class="el" href="class_c_rhino_event_watcher.html#aef5915ac484681e7db8572d0aa2fdc37">CRhinoEventWatcher</a>
 , <a class="el" href="class_o_n___error_log.html#a4dd7269e952d6b34d7a8621c0377c8c1">ON_ErrorLog</a>
-, <a class="el" href="class_o_n___x_mesh_component.html#a43d12a0facd13a20f987b686119023d1">ON_XMeshComponent</a>
+, <a class="el" href="class_o_n___x_mesh_component.html#a4c81efdb8c642cd4ed239ca1faf7de70">ON_XMeshComponent</a>
 , <a class="el" href="class_o_n___x_mesh_f_f.html#ae133e408c1bbdb567755df5aa987afda">ON_XMeshFF</a>
 , <a class="el" href="class_rh_rdk_1_1_realtime_1_1_change_queue_1_1_light.html#aca21bd83875a3f4934d6995b3e8214d6">RhRdk::Realtime::ChangeQueue::Light</a>
 </li>
@@ -1578,7 +1583,7 @@ $(function() {
 , <a class="el" href="class_rh_rdk_1_1_realtime_1_1_i_signal_update.html#a02447b60afaa75ab68ed6a1c36a4d16f">RhRdk::Realtime::ISignalUpdate</a>
 </li>
 <li>EvNormal()
-: <a class="el" href="class_o_n___surface.html#aa85e2a07c4992d2ab09080c373a04554">ON_Surface</a>
+: <a class="el" href="class_o_n___surface.html#a164690f0923e8d1916e094f5f6632356">ON_Surface</a>
 , <a class="el" href="class_o_n___triangle_mesh.html#a521cda3a059de5cdd48edf69ec420a3a">ON_TriangleMesh</a>
 </li>
 <li>EvPoint()
@@ -1588,7 +1593,7 @@ $(function() {
 , <a class="el" href="class_o_n___triangle_mesh.html#af749fafd1439917bd88694c3c734d3ea">ON_TriangleMesh</a>
 </li>
 <li>EvPointAndNormal()
-: <a class="el" href="class_o_n___triangle_mesh.html#a1eb2efff2f308a6af9df079813cbcf84">ON_TriangleMesh</a>
+: <a class="el" href="class_o_n___triangle_mesh.html#a0c9ba20ad4231a1f917a5f6767abb85f">ON_TriangleMesh</a>
 </li>
 <li>EvSrfDerivatives()
 : <a class="el" href="class_c_rhino_poly_edge.html#affd561b981386dd114b2916f2d45ccec">CRhinoPolyEdge</a>
@@ -1628,7 +1633,7 @@ $(function() {
 </li>
 <li>Execute()
 : <a class="el" href="class_c_rh_rdk_action.html#a96f076af91fbdd2eb1bec1242ae796ac">CRhRdkAction</a>
-, <a class="el" href="class_c_rh_rdk_create_new.html#a3d6490f79c71cfd92fd981a7b5f7424c">CRhRdkCreateNew</a>
+, <a class="el" href="class_c_rh_rdk_create_new.html#adafe1cfaebef3d8a46bce710d1dedb0d">CRhRdkCreateNew</a>
 , <a class="el" href="class_c_rh_rdk_import_from_file.html#aaf3e44372d39e2166d4cad7136ae32f1">CRhRdkImportFromFile</a>
 , <a class="el" href="class_c_rh_rdk_request_task.html#a7fd00fe0e30a76dc6471590781edfcb4">CRhRdkRequestTask</a>
 , <a class="el" href="class_c_rh_rdk_task.html#aa8335b6b5e3d0b37632044ebfcea2e09">CRhRdkTask</a>
@@ -1675,7 +1680,7 @@ $(function() {
 <li>ExpandItem()
 : <a class="el" href="class_c_rhino_ui_expandable_tab_ctrl.html#a75027bae14d9bb3470edfd5323ef2a8d">CRhinoUiExpandableTabCtrl</a>
 , <a class="el" href="class_c_rhino_ui_expandable_tab_ctrl___new.html#acfb65ab456bffe71ac9d994fe21cd39b">CRhinoUiExpandableTabCtrl_New</a>
-, <a class="el" href="class_c_rhino_ui_options_list_ctrl.html#a84e83578d4508e18170449c1b5d28da2">CRhinoUiOptionsListCtrl</a>
+, <a class="el" href="class_c_rhino_ui_options_list_ctrl.html#a26989438902e7226277ac75da1c9b9a0">CRhinoUiOptionsListCtrl</a>
 </li>
 <li>ExpandSection()
 : <a class="el" href="class_i_rhino_ui_holder.html#a5efde65cf4a150db6ab0546e954e228f">IRhinoUiHolder</a>
@@ -1754,7 +1759,7 @@ $(function() {
 </li>
 <li>Extents()
 : <a class="el" href="class_o_n___plane_surface.html#a096ebaf2ed57790e48cd0e6d587fff50">ON_PlaneSurface</a>
-, <a class="el" href="class_o_n___viewport.html#ae48ac9cd35059f9f4d3c8bf6fd86620b">ON_Viewport</a>
+, <a class="el" href="class_o_n___viewport.html#a195afee71c9db8f4cbf3e4091583030f">ON_Viewport</a>
 </li>
 <li>ExtExtension()
 : <a class="el" href="class_o_n___dim_style.html#aecd11e74aaa7376473883b4bc71cb831">ON_DimStyle</a>
@@ -1800,7 +1805,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 17 2018 12:29:25 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 29 2019 16:33:57 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

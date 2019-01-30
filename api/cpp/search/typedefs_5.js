@@ -12,6 +12,8 @@ var searchData=
   ['on_5f_5fuint8',['ON__UINT8',['../group__open_n_u_r_b_s.html#ga3b6aca42cfeb22b5315f542d04ba024c',1,'opennurbs_system.h']]],
   ['on_5fbuffer_5ferrorhandler',['ON_Buffer_ErrorHandler',['../group__open_n_u_r_b_s.html#ga4e885f9d5c08e77ee4eb4ad00cc0a4f3',1,'opennurbs_archive.h']]],
   ['on_5fcrt_5flocale_5ft',['ON_CRT_locale_t',['../group__open_n_u_r_b_s.html#ga93b3c737fda0da820af55e837a236bfd',1,'opennurbs_locale.h']]],
+  ['on_5fcurveregion',['ON_CurveRegion',['../group__open_n_u_r_b_s.html#ga843dcf411d64e7d2128c3ba37902914a',1,'opennurbs_hatch.h']]],
+  ['on_5fcurveregionboundary',['ON_CurveRegionBoundary',['../group__open_n_u_r_b_s.html#ga6eb12bba64f5862e83e082e222309dd2',1,'opennurbs_hatch.h']]],
   ['on_5ffontkey',['ON_FontKey',['../group__open_n_u_r_b_s.html#gac6b7045e34a00ab8e342728178a1b48f',1,'opennurbs_textiterator.h']]],
   ['on_5ffontptrcomparefunc',['ON_FontPtrCompareFunc',['../group__open_n_u_r_b_s.html#ga1cc431e5be762f69b6dde3533339e3ba',1,'opennurbs_font.h']]],
   ['on_5fgetfontmetricsfunctype',['ON_GetFontMetricsFuncType',['../class_o_n___font.html#ac2cb089d8a45799de5825031f1c1c58b',1,'ON_Font']]],

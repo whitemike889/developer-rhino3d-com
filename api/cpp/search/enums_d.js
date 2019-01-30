@@ -12,6 +12,7 @@ var searchData=
   ['obsolete_5fdistancedisplaymode',['OBSOLETE_DistanceDisplayMode',['../class_o_n.html#af2d0972587d99b8aa1e17fafd68237f5',1,'ON']]],
   ['obsolete_5flength_5fformat',['OBSOLETE_length_format',['../class_o_n___dim_style.html#aeece0b5c27a6d625454cdeb931352840',1,'ON_DimStyle']]],
   ['on_5f3dmarchivetabletype',['ON_3dmArchiveTableType',['../group__open_n_u_r_b_s.html#ga6f5c1d4d88bb5eccd2afaacde27f9ef3',1,'opennurbs_archive.h']]],
+  ['on_5fchaindirection',['ON_ChainDirection',['../group__open_n_u_r_b_s.html#gae8a05bed50b6494cabcc8115689037ee',1,'opennurbs_defines.h']]],
   ['on_5fcomponentstate',['ON_ComponentState',['../group__open_n_u_r_b_s.html#ga05472cdf2c38712122f6a5173f8b399a',1,'opennurbs_compstat.h']]],
   ['on_5fdateformat',['ON_DateFormat',['../group__open_n_u_r_b_s.html#ga3cb01728f9d1f30473a5f15889dbc551',1,'opennurbs_defines.h']]],
   ['on_5ffitresult',['ON_FitResult',['../group__open_n_u_r_b_s.html#ga07b06d9e1e6e2628fff11b0c5bcb9d87',1,'opennurbs_surface.h']]],

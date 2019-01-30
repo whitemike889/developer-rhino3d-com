@@ -268,6 +268,8 @@ var searchData=
   ['lofttype',['LoftType',['../class_c_args_rhino_loft.html#adf17df4d31127b38b072e92905be6c39',1,'CArgsRhinoLoft']]],
   ['log',['Log',['../class_o_n___quaternion.html#a55c2d9a6d39ab2b518c603a7e05e25d8',1,'ON_Quaternion']]],
   ['logfontcharset',['LogfontCharSet',['../class_o_n___font.html#a5efdde4334deea2bb78b881b47468781',1,'ON_Font']]],
+  ['logicaland',['LogicalAnd',['../class_o_n___component_status.html#ad7491299b7124619eb049a4e80605380',1,'ON_ComponentStatus']]],
+  ['logicalor',['LogicalOr',['../class_o_n___component_status.html#a7834f141ffdbfff7655c4c7a615def27',1,'ON_ComponentStatus']]],
   ['lonend',['LonEnd',['../class_i_rh_rdk_decal.html#a7bd86a1941fe10f6221aa0aba0a5447b',1,'IRhRdkDecal']]],
   ['longitude',['Longitude',['../class_o_n___earth_anchor_point.html#ae442ee60b48527543085358a2217a299',1,'ON_EarthAnchorPoint::Longitude() const'],['../class_o_n___earth_anchor_point.html#a5fb776b3e229dc88e08461fb57794c63',1,'ON_EarthAnchorPoint::Longitude(double unset_longitude) const'],['../class_o_n__3dm_animation_properties.html#a2d13d77c3e452b8f1fcab6c824efdd99',1,'ON_3dmAnimationProperties::Longitude()'],['../class_i_rh_rdk_sun_r_o.html#a6ae2921240373f847a3ac623af102e95',1,'IRhRdkSunRO::Longitude()'],['../class_c_rh_rdk_city.html#ab9e2d130415258f48d344e759e47320f',1,'CRhRdkCity::Longitude()'],['../class_c_rh_rdk_sun_storage.html#a889caedace5f385ca7296c4d17d7fc47',1,'CRhRdkSunStorage::Longitude()'],['../class_c_rh_rdk_time_zone.html#ac86a60000ca8927e2f6c0a83f41493b5',1,'CRhRdkTimeZone::Longitude()']]],
   ['longitudedegrees',['LongitudeDegrees',['../class_o_n___sphere.html#a13945450b4234b7ac94ffaccd75b1275',1,'ON_Sphere']]],

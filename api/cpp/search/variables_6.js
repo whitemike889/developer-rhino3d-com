@@ -61,7 +61,6 @@ var searchData=
   ['feet',['Feet',['../class_o_n___unit_system.html#a5487b1bf0a77c968668cc038654dd64e',1,'ON_UnitSystem']]],
   ['fi',['fi',['../struct_o_n___mesh_part.html#afcd3f2790e06c5ac02cac5321e17bed4',1,'ON_MeshPart']]],
   ['finemeshid',['FineMeshId',['../class_o_n___mesh_cache.html#a39195f9cf96aeea7bd61fe5991b14870',1,'ON_MeshCache']]],
-  ['fiveseconds',['FiveSeconds',['../class_o_n___sleep_lock.html#ab125fdd622692b2971e05a9569449526',1,'ON_SleepLock']]],
   ['flip_5fy',['flip_y',['../struct_rh_rdk_1_1_realtime_1_1_display_mode_1_1_f_r_a_m_e___b_u_f_f_e_r___i_n_f_o___o_u_t_p_u_t_s.html#a3f400462f9d39d842577e0df190f5b80',1,'RhRdk::Realtime::DisplayMode::FRAME_BUFFER_INFO_OUTPUTS']]],
   ['floatingpreview',['FloatingPreview',['../group___r_d_k.html#ga02dea65d7a969f59d4e58c61755f0257',1,'RhRdkDefinitions.h']]],
   ['forlayermatch',['ForLayerMatch',['../group___r_d_k.html#gabb04c73a017de851161fff9915a07410',1,'RhRdkDefinitions.h']]],

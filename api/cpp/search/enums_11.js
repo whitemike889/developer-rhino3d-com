@@ -20,6 +20,7 @@ var searchData=
   ['stack_5fformat',['stack_format',['../class_o_n___dim_style.html#a7053bff4d563c4cbd90fcb44f0cc88c0',1,'ON_DimStyle']]],
   ['stacked',['Stacked',['../class_o_n___text_run.html#a392044cb867ef50e5566176525928114',1,'ON_TextRun']]],
   ['stackstyle',['StackStyle',['../class_o_n___stacked_text.html#aba8182015b90d4a98f3d4a874c0409a1',1,'ON_StackedText']]],
+  ['state',['State',['../class_o_n___stop_watch.html#a74d41dad0ab74d15ce6f0b40346ae684',1,'ON_StopWatch']]],
   ['state_5fimages',['state_images',['../class_c_rhino_ui_layer_list_ctrl.html#ae2930506b2dc7e951360e7002b942f53',1,'CRhinoUiLayerListCtrl']]],
   ['status',['Status',['../class_o_n___file_reference.html#ae6dad3944d37be0da31bc0504cc71b46',1,'ON_FileReference::Status()'],['../class_i_rh_rdk_render_session.html#a00e5c3650cf8951c3615f11e8ce122f1',1,'IRhRdkRenderSession::Status()']]],
   ['statusbarcomponent',['StatusBarComponent',['../class_rh_rdk_1_1_realtime_1_1_display_mode.html#a098f9e6ea807dbc68eda8ba74c5385d3',1,'RhRdk::Realtime::DisplayMode']]],

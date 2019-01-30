@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.11</span>
+   &#160;<span id="projectnumber">6.12</span>
    </div>
   </td>
  </tr>
@@ -1712,6 +1712,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga46fe610951ae84f986c418c70d1b8b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4c99fed36bf383117d7560cb501a09b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#ga4c99fed36bf383117d7560cb501a09b1">RhinoCurve2View</a> (const <a class="el" href="class_o_n___curve.html">ON_Curve</a> &amp;C0, const <a class="el" href="class_o_n___curve.html">ON_Curve</a> &amp;C1, <a class="el" href="class_o_n__3d_vector.html">ON_3dVector</a> D0, <a class="el" href="class_o_n__3d_vector.html">ON_3dVector</a> D1, <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;output_curves, double tol, double angle_tol)</td></tr>
 <tr class="separator:ga4c99fed36bf383117d7560cb501a09b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabc7162edc740fe0f79a2c995e4e23bae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#gabc7162edc740fe0f79a2c995e4e23bae">RhinoCurveBoolean</a> (const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;InCurves, const <a class="el" href="class_o_n___plane.html">ON_Plane</a> &amp;plane, const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n__3d_point.html">ON_3dPoint</a> &gt; &amp;InPoints, bool bAllRegions, bool bCombineRegions, double tolerance, <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;PlanarCurves, <a class="el" href="class_o_n___class_array.html">ON_ClassArray</a>&lt; <a class="el" href="group__open_n_u_r_b_s.html#ga843dcf411d64e7d2128c3ba37902914a">ON_CurveRegion</a> &gt; &amp;OutRegions)</td></tr>
+<tr class="separator:gabc7162edc740fe0f79a2c995e4e23bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga02b6e2d078585a1f42bf63eb1343dbd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#ga02b6e2d078585a1f42bf63eb1343dbd2">RhinoCurveBooleanDifference</a> (const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *crvA, const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *crvB, double tolerance, <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;OutCurves)</td></tr>
 <tr class="separator:ga02b6e2d078585a1f42bf63eb1343dbd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1fa82910461b38b4493bdf94edd86acf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#ga1fa82910461b38b4493bdf94edd86acf">RhinoCurveBooleanIntersection</a> (const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *crvA, const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *crvB, double tolerance, <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;OutCurves)</td></tr>
@@ -9199,6 +9201,85 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Description: Creates a third curve from two curves that are planar in different construction planes. The new curve looks the same as each of the original curves when viewed in each plane. Parameter: C0 [in] - The first curve. C1 [in] - The second curve. D0 [in] - A vector defining the normal direction of the plane which the first curve is drawn upon. D1 [in] - A vector defining the normal direction of the plane which the second curve is drawn upon. tol [in] - The tolerance for the operation. angle_tol [in] - The angle tolerance for the operation. output_curves [out] - An array containing one or more curves if successful. Return: </p>
+
+</div>
+</div>
+<a id="gabc7162edc740fe0f79a2c995e4e23bae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabc7162edc740fe0f79a2c995e4e23bae">&#9670;&nbsp;</a></span>RhinoCurveBoolean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> bool RhinoCurveBoolean </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;&#160;</td>
+          <td class="paramname"><em>InCurves</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_o_n___plane.html">ON_Plane</a> &amp;&#160;</td>
+          <td class="paramname"><em>plane</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n__3d_point.html">ON_3dPoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>InPoints</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bAllRegions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>bCombineRegions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; <a class="el" href="class_o_n___curve.html">ON_Curve</a> *&gt; &amp;&#160;</td>
+          <td class="paramname"><em>PlanarCurves</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_o_n___class_array.html">ON_ClassArray</a>&lt; <a class="el" href="group__open_n_u_r_b_s.html#ga843dcf411d64e7d2128c3ba37902914a">ON_CurveRegion</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>OutRegions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Moved to ON_CurveRegion /Part of a boundary. An element has a curve subdomain and a flag to say /whether that piece of curve should be reversed class RHINO_SDK_CLASS CRhinoCurveRegionBoundaryElement { public : CRhinoCurveRegionBoundaryElement(); CRhinoCurveRegionBoundaryElement(const CRhinoCurveRegionBoundaryElement&amp; src); ~CRhinoCurveRegionBoundaryElement(); CRhinoCurveRegionBoundaryElement&amp; operator=(const CRhinoCurveRegionBoundaryElement&amp; src); int m_curve_id; <a class="el" href="class_o_n___interval.html">ON_Interval</a> m_subdomain; bool m_bReversed; };</p>
+<p>/A list of curve subdomains that form a closed boundary with active space on the left. typedef ON_ClassArray&lt;CRhinoCurveRegionBoundaryElement&gt; CRhinoCurveRegionBoundary;</p>
+<p>/A list of region boundaries that bound a single connected region of the plane. /The first boundary is always the outer boundary. typedef ON_ClassArray&lt;CRhinoCurveRegionBoundary&gt; CRhinoCurveRegion; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">InCurves</td><td>Any NULL will trigger false. </td></tr>
+    <tr><td class="paramname">plane</td><td>Regions will be found in the projection of the curves to this plane </td></tr>
+    <tr><td class="paramname">InPoints</td><td>These points will be projected to plane. All regions that </td></tr>
+    <tr><td class="paramname">bAllRegions</td><td>contain at least one of these points will be found.InPoints will be ignored. All regions will be found </td></tr>
+    <tr><td class="paramname">bCombineRegions</td><td>If true, then adjecent regions will be combined. </td></tr>
+    <tr><td class="paramname">PlanarCurves</td><td>Empty on input. Caller responsible for deletion </td></tr>
+    <tr><td class="paramname">OutRegions</td><td>Indices and parameters are for members of PlanarCurves. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -22967,7 +23048,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 17 2018 12:29:06 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 29 2019 16:33:34 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

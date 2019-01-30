@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.11</span>
+   &#160;<span id="projectnumber">6.12</span>
    </div>
   </td>
  </tr>
@@ -862,6 +862,8 @@ Friends</h2></td></tr>
 <tr class="separator:aa934a007795d44d74f841ba575dd52da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae25bc108b2f762f70aa0030d3ed91fc2"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___brep.html#ae25bc108b2f762f70aa0030d3ed91fc2">ON_BrepRegion</a></td></tr>
 <tr class="separator:ae25bc108b2f762f70aa0030d3ed91fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d68ad8584ea472af56286e7450911b1"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___brep.html#a3d68ad8584ea472af56286e7450911b1">ON_SleepLockGuard</a></td></tr>
+<tr class="separator:a3d68ad8584ea472af56286e7450911b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad15be7a9fb0632a42c0330f7e69af7e4"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_o_n___brep.html#ad15be7a9fb0632a42c0330f7e69af7e4">ON_V5_BrepRegionTopologyUserData</a></td></tr>
 <tr class="separator:ad15be7a9fb0632a42c0330f7e69af7e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -8742,6 +8744,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a3d68ad8584ea472af56286e7450911b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d68ad8584ea472af56286e7450911b1">&#9670;&nbsp;</a></span>ON_SleepLockGuard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="class_o_n___sleep_lock_guard.html">ON_SleepLockGuard</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Not ideal - used in debug/dev testing bool GetLock(); bool GetLockOrReturnFalse(); bool ReturnLock(); In calculations where multiple threads are using a brep and calling functions that may modify content, the calling code can use use <a class="el" href="class_o_n___sleep_lock_guard.html">ON_SleepLockGuard</a> guard(Mutex) or similar techniques to make the calculations thread safe. Because Mutex is a public resource, it must be used with great care to prevent lock contention. </p>
+
+</div>
+</div>
 <a id="ad15be7a9fb0632a42c0330f7e69af7e4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad15be7a9fb0632a42c0330f7e69af7e4">&#9670;&nbsp;</a></span>ON_V5_BrepRegionTopologyUserData</h2>
 
@@ -9008,7 +9033,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 17 2018 12:29:18 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 29 2019 16:33:49 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

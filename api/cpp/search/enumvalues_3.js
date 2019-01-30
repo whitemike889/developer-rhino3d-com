@@ -28,7 +28,7 @@ var searchData=
   ['defaultdimstylecount',['DefaultDimStyleCount',['../class_c_rhino_dim_style_table.html#a16a1e7479fa533c29f50bde38152b43da57924dbf7795b41c689fc40d7ecb2ab3',1,'CRhinoDimStyleTable']]],
   ['defaulthatchpatterncount',['DefaultHatchPatternCount',['../class_c_rhino_hatch_pattern_table.html#afbb2b0a4251109b623a29b716512e148a28da490e5a584022cdf35c90f1f90278',1,'CRhinoHatchPatternTable']]],
   ['defaultlockedvalue',['DefaultLockedValue',['../class_o_n___lock.html#a4f2a7bc0117c61e9dd13aa89d38e37e5abb37cec5885d90d89d8cc6e2a2775e76',1,'ON_Lock']]],
-  ['defaultwaitinterval',['DefaultWaitInterval',['../class_o_n___sleep_lock.html#a6e8d387c3e3d86a6665e8c2d476ef282a9d3ecddd9c6c8f132b5869a27f3cb121',1,'ON_SleepLock']]],
+  ['defaultwaitinterval',['DefaultWaitInterval',['../class_o_n___sleep_lock.html#abf656c6bda866b3cfab9ffdfa3cf0f07a9d3ecddd9c6c8f132b5869a27f3cb121',1,'ON_SleepLock']]],
   ['degenerate',['degenerate',['../class_o_n___depth_image.html#a6eb4d8207f1912079b26e1707f76dde7a807715908222cfe6e387d39780dc4738',1,'ON_DepthImage::degenerate()'],['../class_o_n___component_attributes.html#a771d8615898e996a98ab39510328b811afb87049d435134dd5b02e640f9e2fd6a',1,'ON_ComponentAttributes::Degenerate()']]],
   ['degminsec',['DegMinSec',['../class_o_n___dim_style.html#ab37fcb6f81e976b22b4175cabb031d7da8e0da8bcf4c7b519d67ef384738cd7ad',1,'ON_DimStyle']]],
   ['degrees',['Degrees',['../class_o_n.html#afa8c376acc027e2d9642e6b8fe404ecfa9ef125630442bb42e2e367e0cf70d892',1,'ON']]],

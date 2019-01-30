@@ -24,8 +24,6 @@ var searchData=
   ['on_5fyz_5fplane',['ON_yz_plane',['../group__open_n_u_r_b_s.html#ga86daede525cacd85a70553b488cedb34',1,'opennurbs_plane.h']]],
   ['on_5fzx_5fplane',['ON_zx_plane',['../group__open_n_u_r_b_s.html#gaf315602e16a7ba17acf81e0b51a69507',1,'opennurbs_plane.h']]],
   ['onemillimeterline',['OneMillimeterLine',['../class_o_n___linetype_segment.html#a5fa5141a9c0600dcd1c9106acf73021a',1,'ON_LinetypeSegment']]],
-  ['oneminute',['OneMinute',['../class_o_n___sleep_lock.html#a30a200ea7115f4eb86a53aa8394b5b32',1,'ON_SleepLock']]],
-  ['onesecond',['OneSecond',['../class_o_n___sleep_lock.html#a2b9d06fd976d9c90de9c03b01074fbc8',1,'ON_SleepLock']]],
   ['onetoone',['OneToOne',['../class_o_n___scale_value.html#a755c8ef829c96061566e1321c86c9984',1,'ON_ScaleValue']]],
   ['openmodeldefaults',['OpenModelDefaults',['../class_c_rhino_file_read_options.html#ac9e9e1b5392b18bcd33e0528e49b86f1',1,'CRhinoFileReadOptions']]],
   ['opentemplatedefaults',['OpenTemplateDefaults',['../class_c_rhino_file_read_options.html#a04f029a5d23ba33417c7fca89b46ffee',1,'CRhinoFileReadOptions']]],

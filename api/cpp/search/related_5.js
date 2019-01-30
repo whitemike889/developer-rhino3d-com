@@ -33,6 +33,7 @@ var searchData=
   ['on_5fparticlesystem',['ON_ParticleSystem',['../class_o_n___particle_system_1_1_o_n___particle.html#a51e28e1b69c78fdbccbaf5b98eb015a3',1,'ON_ParticleSystem::ON_Particle::ON_ParticleSystem()'],['../class_o_n___particle_system_1_1_o_n___force.html#a51e28e1b69c78fdbccbaf5b98eb015a3',1,'ON_ParticleSystem::ON_Force::ON_ParticleSystem()']]],
   ['on_5fpolyedgecurve',['ON_PolyEdgeCurve',['../class_o_n___poly_edge_segment.html#a1196d23b6ea1827d4bdc2146fb60d5a6',1,'ON_PolyEdgeSegment']]],
   ['on_5fsetbinaryarchiveopennurbsversion',['ON_SetBinaryArchiveOpenNURBSVersion',['../class_o_n___binary_archive.html#a931a495a16d483c03f0366ce6772fc42',1,'ON_BinaryArchive']]],
+  ['on_5fsleeplockguard',['ON_SleepLockGuard',['../class_o_n___brep.html#a3d68ad8584ea472af56286e7450911b1',1,'ON_Brep']]],
   ['on_5fstackedtext',['ON_StackedText',['../class_o_n___text_run.html#adfee1eb3585d79bd4329f2d68ec4e107',1,'ON_TextRun']]],
   ['on_5ftext',['ON_Text',['../class_o_n___text_content.html#aecef035d1177d6969ff745bef6593482',1,'ON_TextContent']]],
   ['on_5ftextbuilder',['ON_TextBuilder',['../class_o_n___text_run.html#a0f58ba1e822f70ab7633f3191f138f41',1,'ON_TextRun']]],
