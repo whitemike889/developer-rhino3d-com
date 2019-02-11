@@ -436,7 +436,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/dan_belcher">Dan Belcher</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/debug-rhinowip-mac.md" target="_blank">05 Dec 2018</a>)
+      by <a href="/authors/dan_belcher">Dan Belcher</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/debug-rhinowip-mac.md" target="_blank">11 Feb 2019</a>)
     
   </span>
 
@@ -472,22 +472,22 @@ $(document).ready(function()
   <li>Use Visual Studio for Mac’s <em>Search</em> &gt; <em>Replace</em> function to find <em>\Applications\Rhinoceros.app</em> and replace it with <em>\Applications\RhinoWIP.app</em>…
 <img src="/images/debug-rhinowip-mac-03.png" alt="Search and Replace" /></li>
   <li>
-    <p>Verify that these changes are only happening with the <code>&lt;ItemGroup&gt;</code> that contains <code>&lt;Reference&gt;</code> entries.  Accept your <em>\Applications\RhinoWIP.app</em> replacements to make the change…</p>
+    <p>Verify that these changes are only happening with the <code>&lt;ItemGroup&gt;</code> that contains <code>&lt;Reference&gt;</code> entries.  Accept your <em>\Applications\RhinoWIP.app</em> replacements to make the change.  If you are not using Nuget packages, you will also need to add some changes to the default hint paths so they search the proper location within the app bundle:</p>
 
     <pre><code> &lt;ItemGroup&gt;
    &lt;Reference Include="System" /&gt;
    &lt;Reference Include="System.Core" /&gt;
    &lt;Reference Include="System.Drawing" /&gt;
    &lt;Reference Include="RhinoCommon"&gt;
-     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Resources\RhinoCommon.dll&lt;/HintPath&gt;
+     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Frameworks\RhCore.framework\Resources\RhinoCommon.dll&lt;/HintPath&gt;
      &lt;Private&gt;False&lt;/Private&gt;
    &lt;/Reference&gt;
    &lt;Reference Include="Rhino.UI"&gt;
-     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Resources\Rhino.UI.dll&lt;/HintPath&gt;
+     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Frameworks\RhCore.framework\Resources\Rhino.UI.dll&lt;/HintPath&gt;
      &lt;Private&gt;False&lt;/Private&gt;
    &lt;/Reference&gt;
    &lt;Reference Include="Eto"&gt;
-     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Resources\Eto.dll&lt;/HintPath&gt;
+     &lt;HintPath&gt;..\..\Applications\RhinoWIP.app\Contents\Frameworks\RhCore.framework\Resources\Eto.dll&lt;/HintPath&gt;
      &lt;Private&gt;False&lt;/Private&gt;
    &lt;/Reference&gt;
  &lt;/ItemGroup&gt;
