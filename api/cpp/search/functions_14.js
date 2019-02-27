@@ -200,6 +200,7 @@ var searchData=
   ['topology',['Topology',['../class_o_n___mesh.html#af24a886d37eb19d3525530480e1f18e7',1,'ON_Mesh']]],
   ['topologyexists',['TopologyExists',['../class_o_n___mesh.html#ad0112c37f50a593ea418e7b98a83697e',1,'ON_Mesh']]],
   ['toprenderframe',['TopRenderFrame',['../class_i_rhino_sdk_render_frame.html#ac18cf68a64e289b276c55afd6fa579bb',1,'IRhinoSdkRenderFrame']]],
+  ['topvertexcomponentindex',['TopVertexComponentIndex',['../class_o_n___mesh_topology.html#a8889c9c7b5a9f728c1a84beb708537cd',1,'ON_MeshTopology']]],
   ['topvertexcount',['TopVertexCount',['../class_o_n___mesh_topology.html#ac56b6a8f656b1e7e53967ee90549f016',1,'ON_MeshTopology']]],
   ['topvertexishidden',['TopVertexIsHidden',['../class_o_n___mesh_topology.html#a8869fab93617fd9b5243710b143d11f2',1,'ON_MeshTopology']]],
   ['topvertexpoint',['TopVertexPoint',['../class_o_n___mesh_topology.html#a3b0e645c7e31edfd60a298b6567c722f',1,'ON_MeshTopology']]],

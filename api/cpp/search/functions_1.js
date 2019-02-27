@@ -270,6 +270,7 @@ var searchData=
   ['addtodrawcache',['AddToDrawCache',['../class_c_rhino_widget_geometry.html#aa3f975868d7ce2284ead53bc49e22c99',1,'CRhinoWidgetGeometry::AddToDrawCache()'],['../class_c_rhino_widget.html#a8b23b251b3127743d0388baa2834ad3f',1,'CRhinoWidget::AddToDrawCache()'],['../class_c_rh_rdk_decal_widget_geometry.html#a94ba27b2707fb030b72d78b7f18e05e9',1,'CRhRdkDecalWidgetGeometry::AddToDrawCache()'],['../class_c_rh_rdk_decal_widget.html#a7eb5697b2d6716a10f44b0272b9fc864',1,'CRhRdkDecalWidget::AddToDrawCache()']]],
   ['addtogroup',['AddToGroup',['../class_o_n__3dm_object_attributes.html#a97b32ca65287bb87495601c2e3249429',1,'ON_3dmObjectAttributes']]],
   ['addtohelpmenu',['AddToHelpMenu',['../class_c_rhino_plug_in_record.html#a0788e932abfee3423caa44d5139da351',1,'CRhinoPlugInRecord']]],
+  ['addtolist',['AddToList',['../class_o_n___unique_tester.html#a6cb073e27c63137c2c0383ad02b9d2ae',1,'ON_UniqueTester']]],
   ['addtomru',['AddToMRU',['../class_c_rhino_open_document_options.html#a598b9dc837282f784c8f7e35d11a6fe8',1,'CRhinoOpenDocumentOptions']]],
   ['addtopluginhelpmenu',['AddToPlugInHelpMenu',['../class_c_rhino_plug_in.html#a6886617fdb15fb2e6b57c88b83fed12b',1,'CRhinoPlugIn']]],
   ['addtransparentbackgroundcontrol',['AddTransparentBackgroundControl',['../class_c_rhino_get_file_dialog.html#a6662e2c53087d762ce3a417ba340cd52',1,'CRhinoGetFileDialog']]],
