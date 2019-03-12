@@ -407,7 +407,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#how-to">How To</a>
+              <a href="#more-information">More information</a>
 
               
 
@@ -444,7 +444,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/getting-units-of-active-document.md" target="_blank">05 Dec 2018</a>)
+      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/cpp/getting-units-of-active-document.md" target="_blank">12 Mar 2019</a>)
     
   </span>
 
@@ -454,35 +454,35 @@ $(document).ready(function()
 
           <h2 id="overview">Overview</h2>
 
-<p>There are two unit systems associated with a document, model and page units.  The <code>ON_UnitSystem</code> class makes it easy to work with custom units.  The Rhino document class contains two functions:</p>
+<p>There are two unit systems associated with a document, model and page units. The <code>ON_UnitSystem</code> class makes it easy to work with custom units. The Rhino document class contains two functions to return these unit systems:</p>
 
 <ol>
-  <li><code>const ON_UnitSystem&amp; ModelUnits() const;</code> and…</li>
-  <li><code>const ON_UnitSystem&amp; PageUnits() const;</code></li>
+  <li><code>const ON_UnitSystem&amp; CRhinoDoc::ModelUnits() const;</code></li>
+  <li><code>const ON_UnitSystem&amp; CRhinoDoc::PageUnits() const;</code></li>
 </ol>
 
-<h2 id="how-to">How To</h2>
+<h2 id="more-information">More information</h2>
 
 <p>The unit system of the active document is stored on an <code>ON_3dmUnitsAndTolerances</code> class that is located on the <code>CRhinoDoc</code> object.</p>
 
 <p>If you inside of a <code>CRhinoCommand</code>-derived object’s <code>RunCommand()</code> member, you can get the current units system as follows:</p>
 
 <pre><code class="language-cpp">const CRhinoDocProperties&amp; doc_props = context.m_doc.Properties();
-const ON_3dmUnitsAndTolerances&amp; units = doc_props.ModelUnitsAndTolerances();
-ON::unit_system units_system = units.m_unit_system;
+const ON_3dmUnitsAndTolerances&amp; units_tolerances = doc_props.ModelUnitsAndTolerances();
+ON::LengthUnitSystem units_system = units_tolerances.m_unit_system;
 </code></pre>
 
 <p>As a shortcut, you can do the following:</p>
 
-<pre><code class="language-cpp">ON::unit_system units_system = context.m_doc.UnitSystem();
+<pre><code class="language-cpp">ON::LengthUnitSystem units_system = context.m_doc.UnitSystem();
 </code></pre>
 
 <p>If you outside of a <code>CRhinoCommand</code>-derived object’s <code>RunCommand()</code> member, you can get the current units system as follows:</p>
 
 <pre><code class="language-cpp">CRhinoDoc* doc = RhinoApp().ActiveDoc();
-if( doc )
+if (nullptr != doc)
 {
-  ON::unit_system units_system = doc-&gt;UnitSystem();
+  ON::LengthUnitSystem units_system = doc-&gt;UnitSystem();
 }
 </code></pre>
 
