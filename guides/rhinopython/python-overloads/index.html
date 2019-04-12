@@ -391,7 +391,23 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#overview">Overview</a>
+              <a href="#problem">Problem</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#more-information">More Information</a>
 
               
 
@@ -444,7 +460,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/python-overloads.md" target="_blank">10 Apr 2019</a>)
+      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/python-overloads.md" target="_blank">12 Apr 2019</a>)
     
   </span>
 
@@ -452,46 +468,21 @@ $(document).ready(function()
 
           <p>This guide discusses calling overloaded methods with IronPython.</p>
 
-          <h2 id="overview">Overview</h2>
+          <h2 id="problem">Problem</h2>
+
+<p>When you run a script that calls a RhinoCommon method that has <a href="https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/member-overloading">overloads</a> , you might see the following error:</p>
+<pre><code>Message: Multiple targets could match
+</code></pre>
+
+<h2 id="more-information">More Information</h2>
 
 <p>.NET supports <a href="https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/member-overloading">overloading methods</a> by both number of arguments and type of arguments.</p>
 
 <p>When <a href="https://ironpython.net/">IronPython</a> code calls an overloaded method, it tries to select one of the overloads at runtime based on the number and type of arguments passed to the method, and also names of any keyword arguments.</p>
 
-<p>In most cases, the expected overload gets selected. Selecting an overload is easy when the argument types are an exact match with one of the overload signatures:</p>
+<p>In most cases, the expected overload gets selected. However, <a href="https://ironpython.net/">IronPython</a> will raise a <code>TypeError</code> if there are conversions to more than one of the overloads:</p>
 
-<pre><code>from System.Collections import BitArray
-ba = BitArray(5)       # calls __new__(System.Int32)
-ba = BitArray(5, True) # calls __new__(System.Int32, System.Boolean)
-ba = BitArray(ba)      # calls __new__(System.Collections.BitArray)
-</code></pre>
-
-<p>The argument types do not have be an exact match with the method signature. IronPython will try to convert the arguments if an unambiguous conversion exists to one of the overload signatures.</p>
-
-<p>The following code calls <code>__new__(System.Int32)</code> even though there are two constructors which take one argument, and neither of them accept a float as an argument:</p>
-
-<pre><code>from System.Collections import BitArray
-ba = BitArray(5.0)
-</code></pre>
-
-<p>However, note that IronPython will raise a <code>TypeError</code> if there are conversions to more than one of the overloads:</p>
-
-<pre><code>from System.Collections import BitArray
-ba = BitArray((1, 2, 3))
---
-Message: Multiple targets could match: 
-  BitArray(Array[Byte]), 
-  BitArray(Array[bool]), 
-  BitArray(Array[int])
-</code></pre>
-
-<p>If you want to control the exact overload that gets called, you can use the <strong>Overloads</strong> method on <em>method</em> objects:</p>
-
-<pre><code>from System.Collections import BitArray
-int_bool_new = BitArray.__new__.Overloads[int, type(True)]
-ba = int_bool_new(BitArray, 5, True)    # calls __new__(System.Int32, System.Boolean)
-ba = int_bool_new(BitArray, 5, "hello") # converts "hello" to a System.Boolan
-</code></pre>
+<p>To control the exact overload that gets called, use the <strong>Overloads</strong> method on <em>method</em> objects:</p>
 
 <h2 id="example">Example</h2>
 
@@ -513,9 +504,31 @@ public Brep[] Split(Brep splitter, double intersectionTolerance, out bool tolera
 public Brep[] Split(IEnumerable&lt;GeometryBase&gt; cutters, Vector3d normal, bool planView, double intersectionTolerance)
 </code></pre>
 
+<p>If you run the following example code, which should split a <code>Brep</code> with one or more cutting <code>Breps</code>:</p>
+
+<pre><code>import Rhino
+import scriptcontext as sc
+import rhinoscriptsyntax as rs
+
+id = rs.GetObject("Select Brep to split", filter = 8+16, preselect = True)
+brep = rs.coercebrep(id)
+
+ids = rs.GetObjects("Select cutting Breps", filter = 8+16,)
+cutters = [rs.coercebrep(item) for item in ids]
+
+tol = sc.doc.ModelAbsoluteTolerance
+out_breps = brep.Split(cutters, tol)
+new_ids = [sc.doc.Objects.AddBrep(brep) for brep in out_breps]
+</code></pre>
+
+<p>You will receive the following error:</p>
+
+<pre><code>Message: Multiple targets could match: Split(IEnumerable[Curve], float), Split(IEnumerable[Brep], float)
+</code></pre>
+
 <p>To use the second overload, use the <strong>Overloads</strong> method in this manner:</p>
 
-<pre><code class="language-python">out = brep.Split.Overloads[IEnumerable[Rhino.Geometry.Brep], System.Double](cutters, tol)
+<pre><code class="language-python">out_breps = brep.Split.Overloads[IEnumerable[Rhino.Geometry.Brep], System.Double](cutters, tol)
 </code></pre>
 <p>Here is the full working sample:</p>
 
@@ -525,26 +538,15 @@ import Rhino
 import rhinoscriptsyntax as rs
 import scriptcontext as sc
 
-def SplitItUp():
+id = rs.GetObject("Select Brep to split", filter = 8+16, preselect = True)
+brep = rs.coercebrep(id)
 
-   id = rs.GetObject("Select Brep to split", filter = 8+16, preselect = True)
-   if not id: return
-   brep = rs.coercebrep(id)
-
-   ids = rs.GetObjects("Select cutting Breps", filter = 8+16,)
-   if not ids: return
-   cutters = [rs.coercebrep(item) for item in ids]
+ids = rs.GetObjects("Select cutting Breps", filter = 8+16,)
+cutters = [rs.coercebrep(item) for item in ids]
     
-   tol = sc.doc.ModelAbsoluteTolerance
-   out = brep.Split.Overloads[IEnumerable[Rhino.Geometry.Brep], System.Double](cutters, tol)
-   
-   rs.DeleteObject(id)
-   
-   for item in out:
-       sc.doc.Objects.AddBrep(item)
-   sc.doc.Views.Redraw()
-
-SplitItUp()
+tol = sc.doc.ModelAbsoluteTolerance
+out_breps = brep.Split.Overloads[IEnumerable[Rhino.Geometry.Brep], System.Double](cutters, tol)
+new_ids = [sc.doc.Objects.AddBrep(brep) for brep in out_breps]
 </code></pre>
 
         </article>
