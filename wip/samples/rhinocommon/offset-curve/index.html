@@ -408,30 +408,29 @@ from scriptcontext import doc
 import rhinoscriptsyntax as rs
 
 def RunCommand():
-  rs, obj_ref = RhinoGet.GetOneObject("Select Curve", False, ObjectType.Curve)
-  if rs &lt;&gt; Result.Success:
-    return rs
-  curve = obj_ref.Curve()
-  if curve == None:
-    return Result.Nothing
+    rs, obj_ref = RhinoGet.GetOneObject("Select Curve", False, ObjectType.Curve)
+    if rs != Result.Success:
+        return rs
+    curve = obj_ref.Curve()
+    if curve == None:
+        return Result.Nothing
 
-  rs, point = RhinoGet.GetPoint("Select Side", False)
-  if rs &lt;&gt; Result.Success:
-    return rs
-  if point == Point3d.Unset:
-    return Result.Nothing
+    rs, point = RhinoGet.GetPoint("Select Side", False)
+    if rs != Result.Success:
+        return rs
+    if point == Point3d.Unset:
+        return Result.Nothing
 
-  curves = curve.Offset(point, Vector3d.ZAxis, 1.0,
-    doc.ModelAbsoluteTolerance, CurveOffsetCornerStyle.None)
+    curves = curve.Offset(point, Vector3d.ZAxis, 1.0, doc.ModelAbsoluteTolerance, CurveOffsetCornerStyle.None)
 
-  for offset-curve in curves:
-    doc.Objects.AddCurve(offset-curve)
+    for offset-curve in curves:
+        doc.Objects.AddCurve(offset-curve)
 
-  doc.Views.Redraw()
-  return Result.Success
+    doc.Views.Redraw()
+    return Result.Success
 
 if __name__ == "__main__":
-  RunCommand()
+    RunCommand()
 </code></pre>
 
 </div>
@@ -471,7 +470,7 @@ if __name__ == "__main__":
         </div>
 
         <div class="row text-center">
-          © 1997 - 2018 Robert McNeel &amp; Associates
+          © 1997 - 2019 Robert McNeel &amp; Associates
         </div>
 
       
