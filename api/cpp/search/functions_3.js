@@ -980,6 +980,7 @@ var searchData=
   ['crhinodimstylecombobox',['CRhinoDimStyleComboBox',['../class_c_rhino_dim_style_combo_box.html#a9081b4233eb0e30de5e910bc7ba21e0c',1,'CRhinoDimStyleComboBox']]],
   ['crhinodimstylecontext',['CRhinoDimStyleContext',['../class_c_rhino_dim_style_context.html#a8d155facdafeea47daa68d0ff6bfca51',1,'CRhinoDimStyleContext']]],
   ['crhinodimstyletable',['CRhinoDimStyleTable',['../class_c_rhino_dim_style_table.html#a4868a914b93bc3f965b133f1a9fbb96e',1,'CRhinoDimStyleTable']]],
+  ['crhinodirectionanalysissettings',['CRhinoDirectionAnalysisSettings',['../class_c_rhino_direction_analysis_settings.html#aa22d87340b26c1dc6dfa5d9a4a285549',1,'CRhinoDirectionAnalysisSettings']]],
   ['crhinodisplayconduit',['CRhinoDisplayConduit',['../class_c_rhino_display_conduit.html#a274db82f8d6ed37683096d9add704def',1,'CRhinoDisplayConduit::CRhinoDisplayConduit(CSupportChannels channel_mask, bool enable)'],['../class_c_rhino_display_conduit.html#ae21665f572fe71c6f05fc6e203148ffe',1,'CRhinoDisplayConduit::CRhinoDisplayConduit(CSupportChannels channel_mask)']]],
   ['crhinodisplayengine',['CRhinoDisplayEngine',['../class_c_rhino_display_engine.html#a607a1f88d9dd6ba28f8f839f9068309e',1,'CRhinoDisplayEngine']]],
   ['crhinodisplayengine_5fgdi',['CRhinoDisplayEngine_GDI',['../class_c_rhino_display_engine___g_d_i.html#a995e013f23f9aab9ea5f5a89f62ac219',1,'CRhinoDisplayEngine_GDI::CRhinoDisplayEngine_GDI()'],['../class_c_rhino_display_engine___g_d_i.html#a468ea042dd40427519df75e1049f0211',1,'CRhinoDisplayEngine_GDI::CRhinoDisplayEngine_GDI(class CRhVectorEngine *)']]],

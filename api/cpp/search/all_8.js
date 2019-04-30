@@ -225,6 +225,7 @@ var searchData=
   ['hittest',['HitTest',['../class_c_rhino_ui_dock_bar_caption_button.html#a1c57cf69a09f8e282adf722ca9028173',1,'CRhinoUiDockBarCaptionButton::HitTest()'],['../class_c_rhino_ui_expandable_tab_ctrl_item.html#ab75e5cc040a618b29d07b7c29172e73c',1,'CRhinoUiExpandableTabCtrlItem::HitTest()'],['../class_c_rhino_ui_expandable_tab_ctrl.html#ab827a2c6c7c820c7bda53730f4c45ef8',1,'CRhinoUiExpandableTabCtrl::HitTest()'],['../class_c_rhino_ui_options_list_ctrl.html#a80ab942243de48b2d487bbbaf2232c8b',1,'CRhinoUiOptionsListCtrl::HitTest()']]],
   ['hive',['Hive',['../class_o_n___reg_key.html#a8ebbb21b1cf369f2271ccc6b11e28dc3',1,'ON_RegKey']]],
   ['holder',['Holder',['../class_i_rh_rdk_content_u_i.html#a1cb2421aba3cc4a0bacbb2a16b8c56d5',1,'IRhRdkContentUI::Holder()'],['../class_i_rh_rdk_automatic_u_i.html#a06802f1608652905aca4d32223c38963',1,'IRhRdkAutomaticUI::Holder()']]],
+  ['holds',['Holds',['../class_rh_r_dk_1_1_realtime_1_1_change_queue_1_1_dynamic_object_1_1_holds.html',1,'RhRDk::Realtime::ChangeQueue::DynamicObject']]],
   ['home',['home',['../class_c_rhino_app_shortcut_keys.html#a8f303eb52e92d4804f6d88ac9cb19a73a9d3cd14bdcce1bc42002ed41661e14ae',1,'CRhinoAppShortcutKeys']]],
   ['homedirectory',['HomeDirectory',['../class_o_n___file_system_path.html#ae6a9483116ab6d025cfdf11161e19485a907d753a198260589dc11dfef9b4bca3',1,'ON_FileSystemPath']]],
   ['homogeneous_5frational',['homogeneous_rational',['../class_o_n.html#a1af757a677e208531c0cae0d8a4f6a56a64a1b3f7fa363121c1894d0d4507b96b',1,'ON']]],
