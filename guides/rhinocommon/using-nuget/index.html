@@ -535,7 +535,7 @@ $(document).ready(function()
         
         <a href="/authors/will_pearson">Will Pearson</a>
         
-           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/using-nuget.md" target="_blank">05 Dec 2018</a>)
+           (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/using-nuget.md" target="_blank">17 May 2019</a>)
     
   </span>
 
@@ -543,13 +543,7 @@ $(document).ready(function()
 
           <p>This guide describes how developers can use the NuGet packages available for RhinoCommon and Grasshopper.</p>
 
-          <div class="bs-callout bs-callout-danger">
-
-<strong>Warning</strong>: Here be dragons! This is work-in-progress. We have some ideas as to how NuGet packages for <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> and <a href="https://www.nuget.org/packages/grasshopper">Grasshopper</a> might be useful, but we need developers like yourself to use them and figure out if and how they can improve your development workflows. Currently we're publishing NuGet packages for each Rhino release.
-
-</div>
-
-<h2 id="why-nuget">Why NuGet?</h2>
+          <h2 id="why-nuget">Why NuGet?</h2>
 
 <p>In <a href="/guides/rhinocommon/your-first-plugin-windows/">previous</a> <a href="/guides/rhinocommon/your-first-plugin-mac/">guides</a> you’ve seen how to set up a project to develop a RhinoCommon Plugin or Grasshopper component.  These guides relied on the Visual Studio Project Wizards that we publish to quickly get you going on plugin development.  The wizards automatically reference the necessary assemblies to make RhinoCommon and Grasshopper SDKs available in your Visual Studio project.  While this project setup should be fine for a number of cases, there might be some reasons to switch the RhinoCommon and Grasshopper assembly references to those which are published by <a href="https://www.nuget.org/profiles/McNeel">McNeel on NuGet</a>…</p>
 
@@ -581,7 +575,7 @@ $(document).ready(function()
 
 </div>
 
-<p>You can install the RhinoCommon package like you would any other, with one caveat – when searching for the package make sure you check “include prerelease”. We’re publishing packages for each Rhino WIP for Windows release, and as such all the packages are marked with the <code>-wip</code> suffix which NuGet interprets as “prerelease”.</p>
+<p>We have a few NuGet packages available and you can install them like you would any other.</p>
 
 <p>The <a href="https://www.nuget.org/packages/rhinocommon">RhinoCommon</a> package includes</p>
 
@@ -597,6 +591,12 @@ $(document).ready(function()
   <li><em>Grasshopper.dll</em></li>
   <li><em>GH_IO.dll</em></li>
 </ul>
+
+<p>We also have a <a href="https://www.nuget.org/packages/RhinoWindows">RhinoWindows</a> package.</p>
+
+<p>We’re currently publishing new package versions for every public release of Rhino for Windows, including preleases (WIP, release candidate and beta). If you’re developing for Rhino WIP for Mac, choose the latest 6.* package – RhinoCommon and Grasshopper are cross-platform!</p>
+
+<p>If you’re searching for a version of one of our packages that corresponds to a prerelease version of Rhino then make sure you check “include prerelease”. These packages are marked with a prerelease suffix in the version number, such as <code>-wip</code> or <code>-rc</code>.</p>
 
 <h3 id="step-by-step-windows">Step-by-Step (Windows)</h3>
 
