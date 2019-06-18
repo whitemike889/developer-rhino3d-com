@@ -3,7 +3,7 @@ var searchData=
   ['z',['z',['../class_o_n__3f_point.html#a89e074581e7d60708cf3e241e0274f0b',1,'ON_3fPoint::z()'],['../class_o_n__4f_point.html#a2ed87d501a404f675ae7ba68eccadaed',1,'ON_4fPoint::z()'],['../class_o_n__3f_vector.html#ab56933aa84a25e722c10ef5fa158664f',1,'ON_3fVector::z()'],['../class_o_n__3d_point.html#a0db4b6cd3acac1403b872ed5a87ba880',1,'ON_3dPoint::z()'],['../class_o_n__4d_point.html#a42d427fc4b25824fe8ea6db63a3073e1',1,'ON_4dPoint::z()'],['../class_o_n__3d_vector.html#a81ec6c73d7a9f8f8b5dc8c1c32f1b0a0',1,'ON_3dVector::z()'],['../class_o_n___plane_equation.html#aa3c776cd68ad4de9a003fba1b032dde9',1,'ON_PlaneEquation::z()']]],
   ['z_5ffield',['z_field',['../class_c_rhino_ui_point_edit.html#aecec343d4f52c48a415f9ddc575ac161afd69759888fa23dea786be17b6026b65',1,'CRhinoUiPointEdit']]],
   ['z_5fprefix',['Z_PREFIX',['../group__open_n_u_r_b_s.html#ga9aea4d2b612b2c4d15fb0de968a353b0',1,'opennurbs_zlib.h']]],
-  ['zaxis',['ZAxis',['../class_o_n__3f_vector.html#a054af42dbc93311578c287f07c06c543',1,'ON_3fVector::ZAxis()'],['../class_o_n__3d_vector.html#a305804c8d5718508924347c8759bace1',1,'ON_3dVector::ZAxis()'],['../class_o_n___plane.html#ac6fca85c16426515d92d0fd14f3f8c11',1,'ON_Plane::zaxis()']]],
+  ['zaxis',['zaxis',['../class_o_n___plane.html#ac6fca85c16426515d92d0fd14f3f8c11',1,'ON_Plane::zaxis()'],['../class_o_n__3f_vector.html#a054af42dbc93311578c287f07c06c543',1,'ON_3fVector::ZAxis()'],['../class_o_n__3d_vector.html#a305804c8d5718508924347c8759bace1',1,'ON_3dVector::ZAxis()']]],
   ['zbehind_5fclip',['zbehind_clip',['../class_o_n___depth_image.html#a6eb4d8207f1912079b26e1707f76dde7a1b2478b5e5ea2d955abe234d761522bf',1,'ON_DepthImage']]],
   ['zbiasdistance',['ZBiasDistance',['../class_c_rhino_display_engine.html#ad6cb47cf9d635b446a6677f45993b13d',1,'CRhinoDisplayEngine']]],
   ['zbiaslevel',['ZBiasLevel',['../class_c_rhino_display_engine.html#a56e08877f81ebf0f17d4375395de6b48',1,'CRhinoDisplayEngine']]],
@@ -40,5 +40,8 @@ var searchData=
   ['zoomtographrect',['ZoomToGraphRect',['../class_i_rh_rdk_custom_curve_ctrl.html#a717ba727b71f512ba7ed696678cb9da0',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtopixelrect',['ZoomToPixelRect',['../class_i_rh_rdk_custom_curve_ctrl.html#ade948a7b818962f7f34a72b75cc14a88',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtoscreenrect',['ZoomToScreenRect',['../class_o_n___viewport.html#a7c7a2bf051880c72616c95b35b1419ad',1,'ON_Viewport']]],
-  ['zvalue',['ZValue',['../class_c_rhino_z_buffer.html#adfa9518d376f532d625cb92d5be61e31',1,'CRhinoZBuffer']]]
+  ['zvalue',['ZValue',['../class_c_rhino_z_buffer.html#adfa9518d376f532d625cb92d5be61e31',1,'CRhinoZBuffer']]],
+  ['zvaluemax',['ZValueMax',['../class_c_rhino_z_buffer.html#a1c03af057cee5911e4d0471c7011d37c',1,'CRhinoZBuffer']]],
+  ['zvaluemin',['ZValueMin',['../class_c_rhino_z_buffer.html#a61c8599a29ff35c0bba5cd065a9f9503',1,'CRhinoZBuffer']]],
+  ['zvalueminmax',['ZValueMinMax',['../class_c_rhino_z_buffer.html#a983e9ed27e7a1f2e857d8c9a49ad1876',1,'CRhinoZBuffer']]]
 ];

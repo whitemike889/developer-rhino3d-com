@@ -67,7 +67,7 @@ var searchData=
   ['rendered',['Rendered',['../class_o_n___standard_display_mode_id.html#a378bfab9e5a9a57890847da9877b1ca8',1,'ON_StandardDisplayModeId']]],
   ['renderedshadows',['RenderedShadows',['../class_o_n___standard_display_mode_id.html#ac68b1db9d760e45e296d396c10c57da7',1,'ON_StandardDisplayModeId']]],
   ['rendermeshid',['RenderMeshId',['../class_o_n___mesh_cache.html#a3da6fd9a11b2d47e485010a54785de46',1,'ON_MeshCache']]],
-  ['reserved',['reserved',['../class_c_rhino_zebra_analysis_settings.html#a2b65f4aa71894c89c529913731d8b180',1,'CRhinoZebraAnalysisSettings::reserved()'],['../group___r_d_k.html#ga223d8525505b3a69097399e4b3d0d938',1,'Reserved():&#160;RhRdkDefinitions.h']]],
+  ['reserved',['reserved',['../class_c_rhino_zebra_analysis_settings.html#a2b65f4aa71894c89c529913731d8b180',1,'CRhinoZebraAnalysisSettings::reserved()'],['../class_c_rhino_dib_1_1_pixel.html#acaf0b132608978a7f1b498bdd6d4a99e',1,'CRhinoDib::Pixel::reserved()'],['../group___r_d_k.html#ga223d8525505b3a69097399e4b3d0d938',1,'Reserved():&#160;RhRdkDefinitions.h']]],
   ['rgbblue',['rgbBlue',['../struct_o_n___windows_r_g_b_q_u_a_d.html#aaf807d4576200b3b65d9ce7c88d8ba6e',1,'ON_WindowsRGBQUAD']]],
   ['rgbgreen',['rgbGreen',['../struct_o_n___windows_r_g_b_q_u_a_d.html#a473bd9f70741f5cb019e267bf81a7a2c',1,'ON_WindowsRGBQUAD']]],
   ['rgbred',['rgbRed',['../struct_o_n___windows_r_g_b_q_u_a_d.html#a6c374e9dcfc618f439b65c6bd550403d',1,'ON_WindowsRGBQUAD']]],

@@ -63,7 +63,6 @@ var searchData=
   ['deleted',['Deleted',['../class_o_n___component_status.html#a8d2729d77307d60f239d6d120a079cfc',1,'ON_ComponentStatus']]],
   ['dhorzsweepend',['dHorzSweepEnd',['../struct_c_rhino_widget_geometry_1_1_c_sweep_1_1_c_angles.html#a108287851ff84af57cd2b0f9a5766609',1,'CRhinoWidgetGeometry::CSweep::CAngles']]],
   ['dhorzsweepsta',['dHorzSweepSta',['../struct_c_rhino_widget_geometry_1_1_c_sweep_1_1_c_angles.html#a5e7a2bc9cdb032d83b5667fdaed4006e',1,'CRhinoWidgetGeometry::CSweep::CAngles']]],
-  ['dib_5fbits',['dib_bits',['../class_c_rhino_dib_1_1_pixel.html#a143c27b406fea7a7a83bd12467c66731',1,'CRhinoDib::Pixel']]],
   ['directoryseparator',['DirectorySeparator',['../class_o_n___file_system_path.html#aae9819121b9ebd432e557564cbf544a6',1,'ON_FileSystemPath']]],
   ['directoryseparatoraschar',['DirectorySeparatorAsChar',['../class_o_n___file_system_path.html#ab6bb6fa41402f20e8ffeec11dc5828f2',1,'ON_FileSystemPath']]],
   ['disttolerance',['distTolerance',['../group___rhino.html#ga51942d9825e438d89735d77396411a76',1,'rhinoSdkUtilities.h']]],

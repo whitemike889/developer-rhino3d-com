@@ -592,7 +592,6 @@ var searchData=
   ['crhrdkfiletype',['CRhRdkFileType',['../class_c_rh_rdk_file_type.html',1,'']]],
   ['crhrdkfloatingpreviewtaskorigin',['CRhRdkFloatingPreviewTaskOrigin',['../class_c_rh_rdk_floating_preview_task_origin.html',1,'']]],
   ['crhrdkgenericcontroller',['CRhRdkGenericController',['../class_c_rh_rdk_generic_controller.html',1,'']]],
-  ['crhrdkgroundplane',['CRhRdkGroundPlane',['../class_c_rh_rdk_ground_plane.html',1,'']]],
   ['crhrdkhdrfiledialogfilter',['CRhRdkHDRFileDialogFilter',['../class_c_rh_rdk_h_d_r_file_dialog_filter.html',1,'']]],
   ['crhrdkimageadjust',['CRhRdkImageAdjust',['../class_c_rh_rdk_image_adjust.html',1,'']]],
   ['crhrdkimagefiledialogfilter',['CRhRdkImageFileDialogFilter',['../class_c_rh_rdk_image_file_dialog_filter.html',1,'']]],

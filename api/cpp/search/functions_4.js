@@ -39,6 +39,7 @@ var searchData=
   ['decomposerigid',['DecomposeRigid',['../class_o_n___xform.html#a05e731360854b263b2db047e0de906c6',1,'ON_Xform']]],
   ['decomposesimilarity',['DecomposeSimilarity',['../class_o_n___xform.html#a720f72579cd5fbe2b5a4ffb6d5fd95af',1,'ON_Xform']]],
   ['decomposesymmetric',['DecomposeSymmetric',['../class_o_n___xform.html#a42ecaf4be436fbb1207fecfd82b252ae',1,'ON_Xform']]],
+  ['decrementfakeworkerthreads',['DecrementFakeWorkerThreads',['../class_c_rhino_worker_thread.html#a9617f5b50e3a97ebade60d83f804ec5b',1,'CRhinoWorkerThread']]],
   ['decrementproxyreferencecount',['DecrementProxyReferenceCount',['../class_o_n___obj_ref.html#a28085af6bac22cc5b2be0d717e82a42e',1,'ON_ObjRef']]],
   ['decrementreferencecount',['DecrementReferenceCount',['../class_c_rhino_obj_ref.html#a85fa2084983963f9d38f61d057936fce',1,'CRhinoObjRef']]],
   ['decrementusecount',['DecrementUseCount',['../class_c_rh_rdk_content.html#ac66734dd2c204a4c51f20f4eab3ec83c',1,'CRhRdkContent']]],

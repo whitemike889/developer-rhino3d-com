@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.14</span>
+   &#160;<span id="projectnumber">6.15</span>
    </div>
   </td>
  </tr>
@@ -145,6 +145,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adfa9518d376f532d625cb92d5be61e31"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_z_buffer.html#adfa9518d376f532d625cb92d5be61e31">ZValue</a> (int x, int y)</td></tr>
 <tr class="memdesc:adfa9518d376f532d625cb92d5be61e31"><td class="mdescLeft">&#160;</td><td class="mdescRight">capture area...  <a href="#adfa9518d376f532d625cb92d5be61e31">More...</a><br /></td></tr>
 <tr class="separator:adfa9518d376f532d625cb92d5be61e31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c03af057cee5911e4d0471c7011d37c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_z_buffer.html#a1c03af057cee5911e4d0471c7011d37c">ZValueMax</a> (int x, int y, int r)</td></tr>
+<tr class="separator:a1c03af057cee5911e4d0471c7011d37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61c8599a29ff35c0bba5cd065a9f9503"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_z_buffer.html#a61c8599a29ff35c0bba5cd065a9f9503">ZValueMin</a> (int x, int y, int r)</td></tr>
+<tr class="separator:a61c8599a29ff35c0bba5cd065a9f9503"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a983e9ed27e7a1f2e857d8c9a49ad1876"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_z_buffer.html#a983e9ed27e7a1f2e857d8c9a49ad1876">ZValueMinMax</a> (int x, int y, int r, float &amp;min_z, float &amp;max_z)</td></tr>
+<tr class="separator:a983e9ed27e7a1f2e857d8c9a49ad1876"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aac8b07e5639c2be9196ca0ba46abfeeb"></a>
@@ -739,6 +745,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieves zbuffer value at (x,y) in world coordinates... </p>
+<p>Retrieves the smallest and largest (i.e. closest and most distant) Z value within a square of radius 'r' centered at (x, y). </p>
 
 </div>
 </div>
@@ -773,10 +780,126 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a1c03af057cee5911e4d0471c7011d37c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c03af057cee5911e4d0471c7011d37c">&#9670;&nbsp;</a></span>ZValueMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float CRhinoZBuffer::ZValueMax </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Retrieves the largest (i.e. most distant) Z value within a square of radius 'r' centered at (x, y). </p>
+
+</div>
+</div>
+<a id="a61c8599a29ff35c0bba5cd065a9f9503"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61c8599a29ff35c0bba5cd065a9f9503">&#9670;&nbsp;</a></span>ZValueMin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float CRhinoZBuffer::ZValueMin </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Retrieves the smallest (i.e. closest) Z value within a square of radius 'r' centered at (x, y). </p>
+
+</div>
+</div>
+<a id="a983e9ed27e7a1f2e857d8c9a49ad1876"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a983e9ed27e7a1f2e857d8c9a49ad1876">&#9670;&nbsp;</a></span>ZValueMinMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CRhinoZBuffer::ZValueMinMax </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>min_z</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &amp;&#160;</td>
+          <td class="paramname"><em>max_z</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 30 2019 16:28:41 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 18 2019 14:23:20 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

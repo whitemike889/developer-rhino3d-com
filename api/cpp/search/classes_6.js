@@ -34,6 +34,7 @@ var searchData=
   ['irhinopropertiespanelpagehost',['IRhinoPropertiesPanelPageHost',['../class_i_rhino_properties_panel_page_host.html',1,'']]],
   ['irhinosdkrenderframe',['IRhinoSdkRenderFrame',['../class_i_rhino_sdk_render_frame.html',1,'']]],
   ['irhinosdkrenderframeex',['IRhinoSdkRenderFrameEx',['../class_i_rhino_sdk_render_frame_ex.html',1,'']]],
+  ['irhinosdkrenderframeex2',['IRhinoSdkRenderFrameEx2',['../class_i_rhino_sdk_render_frame_ex2.html',1,'']]],
   ['irhinosnapshotsclient',['IRhinoSnapshotsClient',['../class_i_rhino_snapshots_client.html',1,'']]],
   ['irhinouicontroller',['IRhinoUiController',['../class_i_rhino_ui_controller.html',1,'']]],
   ['irhinouicontrollereventwatcher',['IRhinoUiControllerEventWatcher',['../class_i_rhino_ui_controller_event_watcher.html',1,'']]],
