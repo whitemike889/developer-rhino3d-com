@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Creating Plugins that use Cloud Zoo with unset</title>
-  <meta name="description" content="This guide discusses all the steps needed to create RhinoCommon plugins that support Cloud Zoo.  Using unset">
+  <title>Modify Plug-In licensing code to support Cloud Zoo with C#</title>
+  <meta name="description" content="This guide discusses all the steps needed to have a Plug-In support Cloud Zoo.  Using C#">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinocommon/cloudzoo/cloudzoo-modify-plugin-licensing-code/" />
-  <meta property="og:title" content="Creating Plugins that use Cloud Zoo" />
-  <meta property="og:description" content="This guide discusses all the steps needed to create RhinoCommon plugins that support Cloud Zoo." />
+  <meta property="og:title" content="Modify Plug-In licensing code to support Cloud Zoo" />
+  <meta property="og:description" content="This guide discusses all the steps needed to have a Plug-In support Cloud Zoo." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Creating Plugins that use Cloud Zoo" />
-  <meta name="twitter:description" value="This guide discusses all the steps needed to create RhinoCommon plugins that support Cloud Zoo." />
+  <meta name="twitter:title" value="Modify Plug-In licensing code to support Cloud Zoo" />
+  <meta name="twitter:description" value="This guide discusses all the steps needed to have a Plug-In support Cloud Zoo." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -31,7 +31,7 @@
   
   
   <meta name="twitter:label2" value="Language(s)" />
-  <meta name="twitter:data2" value="unset" />
+  <meta name="twitter:data2" value="C#" />
   
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -391,7 +391,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#overview">Overview</a>
+              <a href="#important-information">Important Information</a>
 
               
 
@@ -423,23 +423,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#register-as-an-issuer-in-cloud-zoo">Register as an Issuer in ...</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#add-products-to-cloud-zoo">Add products to Cloud Zoo</a>
+              <a href="#implement-onleasechangeddelegate">Implement OnLeaseChangedD...</a>
 
               
                 <ul class="nav nav-stacked">
@@ -452,16 +436,7 @@ $(document).ready(function()
                     
                     
                     <li>
-                        <a href="#endpoint-conventions">Endpoint Conventions</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#endpoints">Endpoints</a>
+                        <a href="#example">Example:</a>
                     </li>
                   
 
@@ -480,83 +455,8 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#implement-https-callbacks">Implement HTTPS callbacks</a>
+              <a href="#call-getlicense">Call GetLicense</a>
 
-              
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#callback-conventions">Callback Conventions</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#callbacks">Callbacks</a>
-                    </li>
-                  
-
-                </ul>
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#cloud-zoo-endpoints-optional">Cloud Zoo Endpoints (</a>
-
-              
-                <ul class="nav nav-stacked">
-                  
-
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#endpoint-conventions-1">Endpoint Conventions</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#endpoints-1">Endpoints</a>
-                    </li>
-                  
-                    
-                    
-                    
-                    
-                    
-                    <li>
-                        <a href="#related-topics">Related Topics</a>
-                    </li>
-                  
-
-                </ul>
               
 
             </li>
@@ -581,523 +481,86 @@ $(document).ready(function()
 
               
                 
-                  <li class="active">Zoo</li>
+                  <li class="active">CloudZoo</li>
                 
               
           </ol>
 
-          <h1>Creating Plugins that use Cloud Zoo</h1>
+          <h1>Modify Plug-In licensing code to support Cloud Zoo</h1>
 
           <p>
   <span class="guide_byline">
     
       
-      by <a href="/authors/aj">Andrés Jacobo</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/cloudzoo/cloudzoo-modify-plugin-licensing-code.md" target="_blank">20 Jun 2019</a>)
+      by <a href="/authors/aj">Andrés Jacobo</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/cloudzoo/cloudzoo-modify-plugin-licensing-code.md" target="_blank">25 Jun 2019</a>)
     
   </span>
 
 </p>
 
-          <p>This guide discusses all the steps needed to create RhinoCommon plugins that support Cloud Zoo.</p>
+          <p>This guide discusses all the steps needed to have a Plug-In support Cloud Zoo.</p>
 
-          <h2 id="overview">Overview</h2>
+          <h2 id="important-information">Important Information</h2>
 
-<p>Add Cloud Zoo support to your Plug-In by following the steps below. Cloud Zoo allows Rhino users to add their license keys to their personal Rhino account or to a team composed of multiple Rhino accounts. The users may then login from any computer that has Rhino installed and run Rhino. Cloud Zoo enforces license restrictions by making sure that users can only run concurrently in as many computers as there are licenses for a specific product. This allows individual users to run Rhino and other Plug-Ins on any machine. In a team scenario, members can be anywhere in the world and have access to a license.</p>
+<p>Supporting Cloud Zoo within your plugin’s code is easy, but it is important to understand that Cloud Zoo licensing behaves differently from other licensing methods in Rhino. With Cloud Zoo, your plugin (and Rhino itself) will <em>not</em> receive a license key entered by the user or a local Zoo server, but rather a cryptographically verified token called a <em>License Lease</em>. The License Lease is authored by Cloud Zoo and handed to Rhino when a license for your plugin is first requested, and at regular intervals thereafter. A License Lease expires every few weeks, so Rhino will automatically negotiate a new lease with Cloud Zoo and hand it to your plugin so that the lease is always a few weeks from expiring.</p>
 
-<p>Cloud Zoo does not require users to have a constant internet connection—only an occasional one every couple of weeks. This is possible because Cloud Zoo employs license lease mechanism wherein a lease–not a license itself–is issued by Cloud Zoo to a client running Rhino. A lease usually expires within a few weeks, but a new lease is frequently issued between Rhino and Cloud Zoo while a client is online. This allows for a buffer of a few weeks in case the computer is offline for extended periods of time. This design allows Rhino and other Plug-Ins to run reliably even in environments with poor internet connections. Cloud Zoo can also void a lease at any point in time. For example, when a license is removed by a user or by the developer (Such as when a customer returns a license for a refund), Cloud Zoo immediately voids all related leases, effectively ending the user’s ability to use the software the license is intended for.</p>
-
-<p>Under certain scenarios, such as when adding or removing a license, Cloud Zoo will contact your server to make sure you allow such operations to succeed. Your server is not required to interact with the license lease process.</p>
-
-<p>AJ TODO INSERT IMAGE HERE!!!</p>
+<p>In addition, note that expiration is not the only way a license lease can voided. Rhino can inform your plugin that a lease has been voided for a variety of reasons (For example, the license was removed from Cloud Zoo by the user or the user starting Rhino on a different computer).</p>
 
 <h2 id="required-steps">Required Steps</h2>
 
-<p>To have your Plug-In support Cloud Zoo, you must:</p>
-<ol>
-  <li>Register as an Issuer in Cloud Zoo.</li>
-  <li>Implement the required HTTPS callbacks.</li>
-  <li>Add products to Cloud Zoo.</li>
-  <li>Modify Plug-In licensing code to support Cloud Zoo.</li>
-  <li>(<em>Optional</em>) Take advantage of Cloud Zoo endpoints for querying and modifying licenses in Cloud Zoo.</li>
-</ol>
-
-<h2 id="register-as-an-issuer-in-cloud-zoo">Register as an Issuer in Cloud Zoo</h2>
-
-<p>In Cloud Zoo, an <em>issuer</em> represents a vendor of products with license keys. If you want your plugin to use Cloud Zoo, you must register to be an issuer by emailing <a href="mailto:aj@mcneel.com">aj@mcneel.com</a>. You will be provided with an issuer id and a secret that will uniquely identify you as a product vendor and will allow you to implement the required HTTPS callbacks.</p>
-
-<h2 id="add-products-to-cloud-zoo">Add products to Cloud Zoo</h2>
-
-<p>Once you are registered as an issuer, you can add, view, and modify products in Cloud Zoo using the endpoints described below.</p>
-
-<h3 id="endpoint-conventions">Endpoint Conventions</h3>
-
-<p>Unless noted, the following conventions apply to <em>all</em> product endpoints available to registered issuers in Cloud Zoo.</p>
-
-<h4 id="endpoint-location">Endpoint Location</h4>
-<p>All requests should be made to the following location: <code>https://cloudzoo.rhino3d.com/v1</code>.</p>
-
-<h4 id="json">JSON</h4>
-
-<p>All payload to and from endpoints happens in <a href="https://www.json.org">JSON format</a>. To make this explicit, every response to an endpoint will have the  header <code>Content-Type: application/json</code> present in the HTTPS response.</p>
-
-<h4 id="authentication">Authentication</h4>
-
-<p>All endpoints in Cloud Zoo or on the issuer use <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic Authentication</a>. To receive a successful response from an endpoint, you must include an <code>Authorization</code> header like so:</p>
-
-<pre><code>Authorization: Basic BASE64ENCODEDSTRING Where `BASE64ENCODEDSTRING` is a base64 (AJ TODO LINK!!!) encoded string containing your issuer id and your issuer secret:
-
-BASE64ENCODEDSTRING = b64.encode(issuer_id + ":" + issuer_secret)
-</code></pre>
-
-<h4 id="non-successful-responses">Non-successful responses</h4>
-
-<p>All unsuccessful responses from endpoints will have an HTTP status code greater or equal to <code>400</code>. If the status code is also less than <code>500</code>, the payload will include the following JSON:</p>
-
-<pre><code>{
-    "Error": "SomeErrorCode"
-	"Description": "A description about the error message",
-	"Details": "More details about the error"
-}
-</code></pre>
-
-<ul>
-  <li>The <code>Error</code> field contains a specific error code that can be used by the issuer to recognize a specific error, such as incorrect credentials.</li>
-  <li>The <code>Description</code> field contains a description of the error.</li>
-  <li>The <code>Details</code> field contains details of the error, possibly suggesting how to fix it.</li>
-</ul>
-
-<p>If the status code is greater or equal to <code>500</code>, the response may not be JSON and may be empty.</p>
-
-<h3 id="endpoints">Endpoints</h3>
-
-<h4 id="post-product">POST <code>/product</code></h4>
-
-<p>Adds a product to Cloud Zoo registered under the authenticating issuer.</p>
-
-<h5 id="example-request">Example Request</h5>
-
-<pre><code>POST /product
-
-{
-    "id": "06bb1e79-5456-47a1-ad6d-104518cd894b",
-    "version": "12",
-    "platforms": [
-        "Windows"
-    ],
-    "picture": "https://elisapi.mcneel.com/media/2",
-    "downloadUrl": 	"https://www.rhino3d.com/download/new_product",
-    "titles": {
-        "en": "New Product Name",
-        "es": "Nuevo Producto",
-        "ja": "新製品"
-    },
-    "format": {
-		"example": "MA7B-XXXX-XXXX-XXXX-XXXX-XXXX",
-		"prefix": "MA7B",
-		"length": {"min": 24, "max": 24}
-	}
-}
-</code></pre>
-
-<p>The payload should be a Product object [AJ TODO LINK].</p>
-
-<h5 id="response">Response</h5>
-
-<p>A successful response (The product was created):</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: The newly created Product object [AJ TODO LINK].</li>
-</ul>
-
-<p>A non-successful (error) response (The product could not be created):</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h4 id="put-productproduct_id">PUT <code>/product/{product_id}</code></h4>
-
-<p>Modifies an existing product with the given <code>product_id</code>. Note that some properties of a product cannot be modified after creation, including but not limited to its unique id.</p>
-
-<h5 id="example-request-1">Example Request</h5>
-
-<pre><code>PUT /product/06bb1e79-5456-47a1-ad6d-104518cd894b
-
-{
-    "platforms": [
-        "Windows", "Mac"
-    ],
-    "picture": "https://elisapi.mcneel.com/media/new_icon_url"
-}
-</code></pre>
-
-<h5 id="response-1">Response</h5>
-
-<p>A successful response (The product was modified):</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: The newly updated Product object [AJ TODO LINK].</li>
-</ul>
-
-<p>A non-successful (error) response (The product could not be modified):</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h4 id="get-productproduct_id">GET <code>/product/{product_id}</code></h4>
-
-<p>Gets an existing product with the given <code>product_id</code>.</p>
-
-<h5 id="example-request-2">Example Request</h5>
-
-<pre><code>GET /product/06bb1e79-5456-47a1-ad6d-104518cd894b
-</code></pre>
-
-<h5 id="response-2">Response</h5>
-
-<p>A successful response:</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: A Product object [AJ TODO LINK].</li>
-</ul>
-
-<p>A non-successful (error) response:</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h2 id="implement-https-callbacks">Implement HTTPS callbacks</h2>
-
-<p>As an issuer, you must implement four HTTPS endpoints to answer basic questions Cloud Zoo requires to function. We provide a ready-to-deploy solution [AJ TODO LINK!!!] in our Github repository you can use as a template to implement these callbacks, or if you’re experienced with HTTP rest APIs, you can roll your own from scratch. Regardless of the path you choose, the issuer must answer the following questions:</p>
-
-<ul>
-  <li>Can a license be added to an entity? The issuer is asked this question when a user tries to add a license to their account or a team. You may request further information from the user, accept the request, or deny the request.</li>
-  <li>Can a license be removed from an entity? The issuer is asked this question when a user tries to remove a license from their account or a team.</li>
-  <li>What are the details of a specific license key? This is used to display the license information to the user.</li>
-</ul>
-
-<p>For each of these questions, you MUST implement the following 3 callbacks:</p>
+<p>To support Cloud Zoo in your plugin, the following must be done in your plugin’s code:</p>
 
 <ol>
-  <li>GET <code>/get_license</code></li>
-  <li>POST <code>/add_license</code></li>
-  <li>POST <code>/remove_license</code></li>
+  <li>Implement <code>OnLeaseChangedDelegate</code> method.</li>
+  <li>Call <code>GetLicense</code> within your plugin.</li>
 </ol>
 
-<p>Note that all the callbacks listed above follow the conventions listed below.</p>
+<h2 id="implement-onleasechangeddelegate">Implement OnLeaseChangedDelegate</h2>
 
-<h3 id="callback-conventions">Callback Conventions</h3>
-
-<p>Unless noted, the following conventions apply to <em>all</em> callbacks implemented by an issuer.</p>
-
-<h4 id="json-1">JSON</h4>
-
-<p>All payload to and from callbacks happens in <a href="https://www.json.org">JSON format</a>. To make this explicit, every request to a callback will have the  header <code>Content-Type: application/json</code> present in the HTTPS request.</p>
-
-<h4 id="localization">Localization</h4>
-
-<p>In some circumstances, such as when additional input is required from a user when adding a license to an account, a localized response SHOULD be returned by the issuer in the user’s locale. To make this possible, every request to a callback will have an <code>Accept-Language</code> header present like so:</p>
-
-<pre><code>Accept-Language: fr-CH; fr;q=0.9, en;q=0.8, *;q=0.5
-</code></pre>
-
-<p>The header encodes the languages preferred by the user currently interacting with Cloud Zoo. If none of the languages specified in the header are available, English SHOULD be used.</p>
-
-<h4 id="authentication-1">Authentication</h4>
-
-<p>All endpoints in Cloud Zoo or on the issuer use <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic Authentication</a> using the issuer’s id and the corresponding secret shared between Cloud Zoo and the respective issuer. You MUST make sure that the secret matches verbatim before processing any callback request on any endpoint to prevent a security breach. For example, on the issuer’s end:</p>
-
-<pre><code>from flask import request, Response
-
-ISSUER_ID = "issuer_1"
-ISSUER_SECRET = "my_secret"
-
-def check_auth(username, password):
-    """This function is called to check if a username password combination is valid."""
-    return username == ISSUER_ID and password == ISSUER_SECRET
-
-@app.route("/add_license", methods=["POST"])  
-def add_license()
-	"""See if a license can be added to an entity or whether we should ask more information, 
-	or whether we should deny the request."""  
-	auth = request.authorization
-    
-    if not auth or not check_auth(auth.username, auth.password):
-        return Response(
-		    'Could not verify your access level for that URL.\n'
-		    'You have to authenticate with proper credentials', 401,
-		    {'WWW-Authenticate': 'Basic realm="Credentials Required"'})
-	else:
-		pass #Continue processing the request HERE
-</code></pre>
-
-<h4 id="non-successful-responses-1">Non-successful responses</h4>
-
-<p>If returning a response with an HTTP status code greater or equal to <code>400</code>, the issuer SHOULD include the following JSON in the payload as well:</p>
-
-<pre><code>{
-	"description": "The license cannot be removed from Cloud Zoo because [Marley](https://example.com) says so.",
-	"details": "request id 239231203123212"
-}
-</code></pre>
-
+<p>This method is called by Rhino after a license lease changes. This can happen in the following situations:</p>
 <ul>
-  <li>The <code>description</code> field is user facing, and SHOULD be localized.  In addition, the description string may have markdown style links as in the example above. The links can be used to help the user navigate and solve the issue.</li>
-  <li>The <code>details</code> field is not user-facing, but may be logged for troubleshooting purposes. You MUST NOT include sensitive data in the details string.</li>
+  <li>A license lease is successfully negotiated after you call <code>GetLicense</code>.</li>
+  <li>A new license lease is negotiated automatically by Rhino to keep it from expiring.</li>
+  <li>The current license lease expires (The lease received is null).</li>
+  <li>The current license lease is voided by Cloud Zoo (The lease received is null).</li>
 </ul>
 
-<h3 id="callbacks">Callbacks</h3>
+<p>When <code>LicenseLeaseChangedEventArgs.Lease</code> is null, you should assume the user does not have a valid license and disable functionality accordingly.</p>
 
-<h4 id="get-get_license">GET <code>/get_license</code></h4>
+<h3 id="example">Example:</h3>
 
-<p>Return information about a specific license so users can see details about the license.</p>
-
-<h4 id="example-request-3">Example Request</h4>
-
-<pre><code>GET /get_license?aud=PRODUCT_ID&amp;key=A_LICENSE_KEY
-</code></pre>
-
-<ul>
-  <li><code>aud</code>: The product id of the license whose information is to be returned.</li>
-  <li><code>key</code>:  The license key of the license whose information is to be returned.</li>
-</ul>
-
-<h5 id="required-response">Required Response</h5>
-<p>The response will vary depending on the issuer’s decision as described below:</p>
-
-<p>A successful response:</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: A license object (AJ TODO LINK!!!). See an actual example in our GitHub example (AJ TODO LINK!!!)</li>
-</ul>
-
-<p>A non-successful (error) response:</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h4 id="post-add_license">POST <code>/add_license</code></h4>
-
-<p>See if a license can be added to an entity or whether an issuer should ask more information, or whether we should<br />
-deny the request. This callback is invoked whenever a license is about to be added to an entity.</p>
-
-<h5 id="example-request-4">Example Request</h5>
-
-<pre><code>POST /add_license
-{
-    "entityId": "9304194021213-|-Group",
-    "entityType": "Group",
-    "license": {
-		   "key": "RH50-ABCD-EFGZ-HIJK-LMNO",
-		   "aud": "PRODUCT-ID-HERE"
-	   },
-    "userInfo": {
-	    "sub": "43190412048124",
-	    "email": "marley_the_dog@mcneel.com",
-	    "com.rhino3d.accounts.emails": [
-		    "marley_the_dog@mcneel.com",
-		    "marleyz121@gmail.com"
-	    ],
-	    "com.rhino3d.accounts.member_groups": [
-		    {
-			    "id": "9304194021213",
-			    "name": "Marley’s Friends LLC"
-			}
-	    ],
-	    "com.rhino3d.accounts.admin_groups": [],
-	    "com.rhino3d.accounts.owner_groups": [],
-	    "name": "Marley",
-	    "locale": "en-gb",
-		"picture": "http://marley.the.dog.com/images/coolpic.png"
-     },    
-    "precondition": "RH40-ABCD-EFGZ-HIJK-LMNO"
-}
-</code></pre>
-
-<ul>
-  <li><code>entityId</code>: The id of the entity whom the license will be added to. Entities can be individual users or groups as defined in Rhino Accounts.</li>
-  <li><code>userInfo</code>: The decoded JWT representing the user’s OpenID Token who wants to add the license to the specified entity. See <a href="https://docs.google.com/document/d/1-U0FYt6iQAM3UA6Rio4z0sDVXBSdc0kQk5e4zumnKig/edit#heading=h.qctsih4c0ctd">Rhino Accounts OpenID Tokens</a> for details. The user is always a privileged member of the entity or is the entity itself in case <code>entityType</code> is <code>User</code>. Additional fields could be present and MAY be used but SHOULD NOT be assumed to be present.</li>
-  <li><code>license</code>: The license that is to be added. This field is a simplified License object (AJ TODO LINK!!!) with the license key and product id of the license.</li>
-  <li><code>precondition</code>: This field is optional. If provided, it is a string string containing a precondition that was requested by the issuer (see response details below for more details on this field).</li>
-</ul>
-
-<h5 id="required-response-1">Required Response</h5>
-<p>The response will vary depending on the issuer’s decision as described below:</p>
-
-<p>If the license <em>can</em> be added to an entity:</p>
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: A License Cluster object representing the license(s) to be added. See an actual example in our GitHub example (AJ TODO LINK!!!)</li>
-</ul>
-
-<p>If more information (<code>precondition</code>) is required:</p>
-<ul>
-  <li>HTTP Status Code: <code>428 (Precondition Required)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!). The <code>description</code> field will be used to describe what input is required from the user, such as a previous license key or a secret code. See an actual example (AJ TODO LINK!!!).</li>
-</ul>
-
-<p>If the additional information (<code>precondition</code>) is incorrect:</p>
-<ul>
-  <li>HTTP Status Code: <code>412 (Precondition Failed)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!). See an actual example (AJ TODO LINK!!!)</li>
-</ul>
-
-<p>If the license <em>cannot</em> be added to an entity:</p>
-<ul>
-  <li>HTTP Status Code: <code>409 (Conflict)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!). See an actual example (AJ TODO LINK!!!)</li>
-</ul>
-
-<h5 id="remarks">Remarks</h5>
-
-<p>This callback MUST be idempotent, meaning that it MUST consistently return the same result given a set of arguments. This is because the callback may be called more than one time with the same arguments by the system as part of a transaction that could be retried.</p>
-
-<h4 id="post-remove_license">POST <code>/remove_license</code></h4>
-
-<p>See if a license can be removed from an entity. This callback is invoked right before a license is removed from an entity. Issuers SHOULD make sure to note that a license is no longer in the entity.</p>
-
-<h5 id="example-request-5">Example Request</h5>
-
-<pre><code>POST /remove_license
-{
-	"entityId": "9304194021213-|-Group",
-	"entityType": "Group",
-	"userInfo": {
-			"sub": "43190412048124",
-			"email": "marley_the_dog@mcneel.com",
-			"name": "Marley",
-			"locale": "en-gb",
-			"picture":"http://marley.the.dog.com/images/coolpic.png"
-		}
-	"licenseCluster": {
-		"licenses":[ ONE OR MORE LICENSE OBJECTS ... ]
+<pre><code class="language-c#">	/// &lt;summary&gt;
+	/// Called by Rhino to signal that a lease from Cloud Zoo has changed. 
+	/// If LicenseLeaseChangedEventArgs.Lease is null, then the server has signaled
+	/// that this product is no longer licensed. Your plug-in must change behavior 
+	/// to behave appropriately.
+	/// &lt;/summary&gt;
+	/// &lt;param name="args"&gt;Data passed by Rhino when the lease changes&lt;/param&gt;
+	/// &lt;param name="icon"&gt;Icon to be displayed in Tools &gt; Options &gt; Licenses for this lease.&lt;/param&gt;
+	private static void OnLeaseChanged(LicenseLeaseChangedEventArgs args, out System.Drawing.Icon icon)
+	{
+	  icon = ProductIcon;
+	
+	  // This sample does not support Rhino accounts.
+	
+	  if (null == args.Lease)
+	  {
+	    // Lease has been voided; this product should behave as if it has no
+	    // license. It is up to the plug-in to determine what that looks like.
+	  }
+	
+	  // Verify that args.Lease.ProductId is correct
+	  // Verify that args.Lease.ProductEdition is correct
+	  // Verify that args.Lease.ProductVersion is correct
+	  // Verify thatargs.Lease.IsExpired() is false
 	}
-}
 </code></pre>
 
-<ul>
-  <li><code>entityId</code>: The id of the entity whom the license will be removed from. Entities can be individual users or groups as defined in <a href="https://accounts.rhino3d.com/help">Rhino Accounts</a>.</li>
-  <li><code>entityType</code>:  Entities can be individual users (<code>User</code>) or groups (<code>Group</code>) as defined in <a href="https://accounts.rhino3d.com/help">Rhino Accounts</a>.</li>
-  <li><code>userInfo</code>: The decoded JWT representing the user’s OpenID Token who wants to add the license to the specified entity. See <a href="https://docs.google.com/document/d/1-U0FYt6iQAM3UA6Rio4z0sDVXBSdc0kQk5e4zumnKig/edit#heading=h.qctsih4c0ctd">Rhino Accounts OpenID Tokens</a> for details. The user is always a privileged member of the entity or is the entity itself in case <code>entityType</code> is <code>User</code>. Additional fields could be present and MAY be used but SHOULD NOT be assumed to be present.</li>
-  <li><code>licenseCluster</code>: The License Cluster to be removed. AJ TODO LINK!!!!</li>
-</ul>
+<p><a href="https://github.com/mcneel/rhino-developer-samples/blob/e24bb79e8e3954952826111185db4ce7f96ecd65/rhinocommon/cs/SampleCsWithLicense/SampleCsWithLicensePlugIn.cs#L166">See an example in GitHub</a></p>
 
-<h5 id="required-response-2">Required Response</h5>
-<p>The response will vary depending on the issuer’s decision as described below:</p>
+<h2 id="call-getlicense">Call GetLicense</h2>
 
-<p>A successful response (The license can be removed):</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: Empty. See an actual example in our GitHub example (AJ TODO LINK!!!)</li>
-</ul>
-
-<p>A non-successful (error) response (The license cannot be removed):</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h5 id="remarks-1">Remarks</h5>
-
-<p>This callback MUST be idempotent, meaning that it MUST consistently return the same result given a set of arguments. This is because the callback may be called more than one time with the same arguments by the system as part of a transaction that could be retried.</p>
-
-<h2 id="cloud-zoo-endpoints-optional">Cloud Zoo Endpoints (<em>Optional</em>)</h2>
-
-<p>It is possible to query and modify licensing data stored in Cloud Zoo by a registered issuer. This can be useful when a customer returns a license for a refund, as well as other scenarios. It is not required that you interact with these endpoints, but you may find them useful given your business requirements.</p>
-
-<h3 id="endpoint-conventions-1">Endpoint Conventions</h3>
-
-<p>Unless noted, the following conventions apply to <em>all</em> endpoints available to registered issuers in Cloud Zoo.</p>
-
-<h4 id="endpoint-location-1">Endpoint Location</h4>
-<p>All endpoint requests should be made to All calls are to made to <code>https://cloudzoo.rhino3d.com/v1</code>.</p>
-
-<h4 id="json-2">JSON</h4>
-
-<p>All payload to and from endpoints happens in <a href="https://www.json.org">JSON format</a>. To make this explicit, every response to an endpoint will have the  header <code>Content-Type: application/json</code> present in the HTTPS response.</p>
-
-<h4 id="authentication-2">Authentication</h4>
-
-<p>All endpoints in Cloud Zoo or on the issuer use <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic Authentication</a>. To receive a successful response from an endpoint, you must include an <code>Authorization</code> header like so:</p>
-
-<pre><code>Authorization: Basic BASE64ENCODEDSTRING Where `BASE64ENCODEDSTRING` is a base64 (AJ TODO LINK!!!) encoded string containing your issuer id and your issuer secret:
-
-BASE64ENCODEDSTRING = b64.encode(issuer_id + ":" + issuer_secret)
-</code></pre>
-
-<h4 id="non-successful-responses-2">Non-successful responses</h4>
-
-<p>All unsuccessful responses from endpoints will have an HTTP status code greater or equal to <code>400</code>. If the status code is also less than <code>500</code>, the payload will include the following JSON:</p>
-
-<pre><code>{
-    "Error": "SomeErrorCode"
-	"Description": "A description about the error message",
-	"Details": "More details about the error"
-}
-</code></pre>
-
-<ul>
-  <li>The <code>Error</code> field contains a specific error code that can be used by the issuer to recognize a specific error, such as incorrect credentials.</li>
-  <li>The <code>Description</code> field contains a description of the error.</li>
-  <li>The <code>Details</code> field contains details of the error, possibly suggesting how to fix it.</li>
-</ul>
-
-<p>If the status code is greater or equal to <code>500</code>, the response may not be JSON and may be empty.</p>
-
-<h3 id="endpoints-1">Endpoints</h3>
-
-<h4 id="delete-license">DELETE <code>/license</code></h4>
-
-<p>Removes a license from Cloud Zoo. This method deletes the entire License Cluster (AJ TODO LINK!!!)  the license is in. If the License Cluster the license belongs to contains additional licenses, they will be removed as well.</p>
-
-<h5 id="example-request-6">Example Request</h5>
-
-<pre><code>DELETE /license?licenseId=LICENSE_ID&amp;productId=PRODUCT_ID&amp;entityId=ENTITY_ID
-</code></pre>
-
-<ul>
-  <li><code>entityId</code>: The id of the entity the license belongs to.</li>
-  <li><code>productId</code>: The id of the product the license represents. This is a GUID.</li>
-  <li><code>licenseId</code>: The license id that identifies a unique license within the product id domain.</li>
-</ul>
-
-<h5 id="response-3">Response</h5>
-
-<p>A successful response (The license was removed):</p>
-
-<ul>
-  <li>HTTP Status Code: <code>200 (OK)</code></li>
-  <li>Response Payload: Empty.</li>
-</ul>
-
-<p>A non-successful (error) response (The license cannot be removed):</p>
-
-<ul>
-  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
-  <li>Response Payload: A non-successful response (AJ TODO LINK!!!)</li>
-</ul>
-
-<h3 id="related-topics">Related Topics</h3>
-
-<ul>
-  <li><a href="/guides/rhinocommon/creating-zoo-plugins">Creating Zoo Plugins</a></li>
-  <li><a href="/guides/rhinocommon/digitally-signing-plugins-for-zoo">Digitally Signing Plugins for Zoo</a></li>
-  <li><a href="https://github.com/mcneel/rhino-developer-samples/tree/6/rhinocommon/cs/SampleCsWithLicense">Sample RhinoCommon plugin project (GitHub)</a></li>
-</ul>
-
+<p>Like other licensing methods, you should call <code>GetLicense</code> when your plugin is loaded. The only difference is that you must pass the <code>OnLeaseChanged</code> delegate you implemented in the previous step and add <code>SupportsRhinoAccounts</code> to the <code>LicenseCapabilities</code> argument so that Rhino can know that you support Cloud Zoo and so that Rhino can know which delegate to call when a license lease change occurs.</p>
 
         </article>
 
