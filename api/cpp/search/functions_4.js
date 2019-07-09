@@ -660,6 +660,7 @@ var searchData=
   ['drawwithgdi',['DrawWithGDI',['../class_c_rhino_print_info.html#ad1b5fd78b2f451c3cd548ad81eebbc99',1,'CRhinoPrintInfo']]],
   ['drawwithvectorengine',['DrawWithVectorEngine',['../class_c_rhino_print_info.html#abd044708fc0281fc5c28cb8c6d129b8d',1,'CRhinoPrintInfo']]],
   ['drawworldaxes',['DrawWorldAxes',['../class_c_rhino_display_engine.html#a874ec38008dba395ec7feafa0cf5f3af',1,'CRhinoDisplayEngine']]],
+  ['drawzebrapreview',['DrawZebraPreview',['../class_c_rhino_display_pipeline.html#af6e36160e1ae7a209963680e5b377f87',1,'CRhinoDisplayPipeline']]],
   ['dsxarrowsize',['DSxArrowSize',['../class_c_rhino_dim_style.html#a3e5e37a99e51f26ac909b7a65641c661',1,'CRhinoDimStyle']]],
   ['dsxcentermark',['DSxCenterMark',['../class_c_rhino_dim_style.html#aab0a97cfaecc2b977c8705c0f916d11b',1,'CRhinoDimStyle']]],
   ['dsxdimextension',['DSxDimExtension',['../class_c_rhino_dim_style.html#ac31a3ecdd1a02a688bd18016f087fafd',1,'CRhinoDimStyle']]],

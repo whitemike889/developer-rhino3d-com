@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.15</span>
+   &#160;<span id="projectnumber">6.16</span>
    </div>
   </td>
  </tr>
@@ -389,6 +389,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aefc78ae5f28611991f79cea3445119cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3be03a928605ced20fb38334be069a5d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_display_pipeline.html#a3be03a928605ced20fb38334be069a5d">DrawWireframeMesh</a> (const <a class="el" href="class_o_n___mesh.html">ON_Mesh</a> &amp;mesh, const <a class="el" href="class_o_n___color.html">ON_Color</a> &amp;color, <a class="el" href="class_c_rhino_cache_handle.html">CRhinoCacheHandle</a> *cache=nullptr)</td></tr>
 <tr class="separator:a3be03a928605ced20fb38334be069a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6e36160e1ae7a209963680e5b377f87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_display_pipeline.html#af6e36160e1ae7a209963680e5b377f87">DrawZebraPreview</a> (const <a class="el" href="class_o_n___brep.html">ON_Brep</a> *brep, const <a class="el" href="class_c_rhino_zebra_analysis_settings.html">CRhinoZebraAnalysisSettings</a> &amp;zas, const <a class="el" href="class_o_n___mesh_parameters.html">ON_MeshParameters</a> &amp;mp, const <a class="el" href="class_o_n___color.html">ON_Color</a> &amp;color, <a class="el" href="class_c_rhino_cache_handle.html">CRhinoCacheHandle</a> *cache)</td></tr>
+<tr class="separator:af6e36160e1ae7a209963680e5b377f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2386db62a7accf789b7fa4f59d5bac60"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rhino_display_pipeline.html#a2386db62a7accf789b7fa4f59d5bac60">DynamicDisplayDowngradeEnabled</a> () const</td></tr>
 <tr class="memdesc:a2386db62a7accf789b7fa4f59d5bac60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 'true' if display degradation is enabled, 'false' otherwise.  <a href="#a2386db62a7accf789b7fa4f59d5bac60">More...</a><br /></td></tr>
 <tr class="separator:a2386db62a7accf789b7fa4f59d5bac60"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -7632,6 +7634,53 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="af6e36160e1ae7a209963680e5b377f87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6e36160e1ae7a209963680e5b377f87">&#9670;&nbsp;</a></span>DrawZebraPreview()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CRhinoDisplayPipeline::DrawZebraPreview </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_o_n___brep.html">ON_Brep</a> *&#160;</td>
+          <td class="paramname"><em>brep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_c_rhino_zebra_analysis_settings.html">CRhinoZebraAnalysisSettings</a> &amp;&#160;</td>
+          <td class="paramname"><em>zas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_o_n___mesh_parameters.html">ON_MeshParameters</a> &amp;&#160;</td>
+          <td class="paramname"><em>mp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_o_n___color.html">ON_Color</a> &amp;&#160;</td>
+          <td class="paramname"><em>color</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_c_rhino_cache_handle.html">CRhinoCacheHandle</a> *&#160;</td>
+          <td class="paramname"><em>cache</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description: Draws a shaded Brep with Zebra stripe preview. Parameters: bre s [in] - Brep to draw. zas [in] - Zebra analysis settings. mp [in] - Analysis meshing parameters. color [in] - Object color. cache [in/out] - Optional. If not nullptr, the display may use this to attempt to draw the brep faster. Make sure to ALWAYS pass the same cache for a given Brep. If you pass the same cache for different Brep, performance of the display code will not be as good. </p>
+
+</div>
+</div>
 <a id="a2386db62a7accf789b7fa4f59d5bac60"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2386db62a7accf789b7fa4f59d5bac60">&#9670;&nbsp;</a></span>DynamicDisplayDowngradeEnabled()</h2>
 
@@ -14812,7 +14861,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jun 18 2019 14:23:14 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 9 2019 10:52:03 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

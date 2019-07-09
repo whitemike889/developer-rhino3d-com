@@ -673,6 +673,7 @@ var searchData=
   ['isnewline',['IsNewline',['../class_o_n___text_run.html#a5c4588ccc6e9f2e49a1f7110ddb39790',1,'ON_TextRun']]],
   ['isnil',['IsNil',['../class_c_rh_rdk_uuid.html#a6c664dd98ced8e8a47f1fbb62f07a0f4',1,'CRhRdkUuid']]],
   ['isnormal',['IsNormal',['../class_c_rhino_object.html#a7a162d482ace7e47eb0b4035dd728d21',1,'CRhinoObject']]],
+  ['isnormalmap',['IsNormalMap',['../class_c_rhino_dib.html#a6d61ed6b3ef240d1ebf3f331edb9b3f0',1,'CRhinoDib::IsNormalMap()'],['../class_c_rh_rdk_texture.html#a93a7795a869aed92f9528be34f1e512c',1,'CRhRdkTexture::IsNormalMap()']]],
   ['isnormalweight',['IsNormalWeight',['../class_o_n___font.html#a02144a9b0fb0ac5fa49ed653033f7665',1,'ON_Font']]],
   ['isnotapplefontname',['IsNotAppleFontName',['../class_o_n___font.html#a86b7418cf59c4434bdb7bc07f8e4a8d7',1,'ON_Font']]],
   ['isnotclear',['IsNotClear',['../class_o_n___component_status.html#af9dd57da8044fb3cf2c1d69ead368908',1,'ON_ComponentStatus']]],

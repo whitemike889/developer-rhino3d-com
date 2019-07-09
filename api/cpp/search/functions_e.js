@@ -157,7 +157,7 @@ var searchData=
   ['ngonmap',['NgonMap',['../class_o_n___mesh.html#ae6c65cf1ecadb5491a096ce442fd9337',1,'ON_Mesh::NgonMap() const'],['../class_o_n___mesh.html#af3f84a9e00b59d6d477fda0a951ed1ce',1,'ON_Mesh::NgonMap(bool bCreateIfMissing)']]],
   ['ngons',['Ngons',['../class_o_n___mesh.html#afb6a483824f7ae427d454a14059608ed',1,'ON_Mesh']]],
   ['ngonunsignedcount',['NgonUnsignedCount',['../class_o_n___mesh.html#a90c3f81acd22e891e91c68ce4cf9a77b',1,'ON_Mesh']]],
-  ['nocancleonmainframeclose',['NoCancleOnMainFrameClose',['../class_c_rhino_app.html#abcd4e8c723116e76bd87973ae1572796',1,'CRhinoApp']]],
+  ['nocancelonmainframeclose',['NoCancelOnMainFrameClose',['../class_c_rhino_app.html#add617d31d53ce98fd1c7399988f94c4a',1,'CRhinoApp']]],
   ['nodetype',['NodeType',['../class_c_rhino_app.html#a8572a2755ac2a9ebee919853ba9e68b1',1,'CRhinoApp']]],
   ['noequalstates',['NoEqualStates',['../class_o_n___component_status.html#a11cd0456b03a737acdd78f4c2b7fec14',1,'ON_ComponentStatus']]],
   ['nonconstoperation',['NonConstOperation',['../class_c_rhino_dib.html#ab0104d292bf21fcf4847a0962d33b710',1,'CRhinoDib']]],
