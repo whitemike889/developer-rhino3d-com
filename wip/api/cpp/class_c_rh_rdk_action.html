@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rhino C++ SDK Help: CRhRdkAction Class Reference</title>
+<title>Rhino C++ API: CRhRdkAction Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.2</span>
+   <div id="projectname">Rhino C++ API
+   &#160;<span id="projectnumber">6.16</span>
    </div>
   </td>
  </tr>
@@ -100,8 +100,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2b088de4e2179ff99fc85b717fd44ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e2746a50989754eb28ac53fad6ecd90"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rh_rdk_action.html#a4e2746a50989754eb28ac53fad6ecd90">Icon</a> (const <a class="el" href="class_o_n__2i_size.html">ON_2iSize</a> &amp;size, <a class="el" href="class_c_rhino_dib.html">CRhinoDib</a> &amp;dibOut) const =0</td></tr>
 <tr class="separator:a4e2746a50989754eb28ac53fad6ecd90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af013103d0955565ece31a75a24818a29"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rh_rdk_action.html#af013103d0955565ece31a75a24818a29">SetActions</a> (<a class="el" href="class_c_rh_rdk_actions.html">CRhRdkActions</a> *)</td></tr>
-<tr class="separator:af013103d0955565ece31a75a24818a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e1d29f22b9e57060f3c45355fe7b75b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rh_rdk_action.html#a2e1d29f22b9e57060f3c45355fe7b75b">SetActions</a> (class <a class="el" href="class_c_rh_rdk_actions.html">CRhRdkActions</a> *)</td></tr>
+<tr class="separator:a2e1d29f22b9e57060f3c45355fe7b75b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14e47183bb69be6652e0997b92db278c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rh_rdk_action.html#a14e47183bb69be6652e0997b92db278c">SetChecked</a> (bool bCheck)</td></tr>
 <tr class="separator:a14e47183bb69be6652e0997b92db278c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33b7890bc2ce8dc573b5d3e3d54ec71f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_rh_rdk_action.html#a33b7890bc2ce8dc573b5d3e3d54ec71f">SetEnabled</a> (bool bEnable)</td></tr>
@@ -133,11 +133,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a29bbbc69f7287b72a3624ad29aa41f64 inherit pub_static_methods_class_c_rh_rdk_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class allows RDK clients to add their own custom menus (and possible future tool buttons) to the RDK content editor dialog. Each action is identified by a UUID. Actions handle the functionality of a UI item (menu item or future tool button); UI items refer to the action that they represent. This allows the same action to be carried out from different UI items without implementing the action in each place. An action can be enabled or disabled, checked or unchecked; this is reflected in the associated UI item. Actions also have a caption, an icon and a tooltip (not currently used). When the associated UI item is clicked by the user, if the action is enabled its <a class="el" href="class_c_rh_rdk_action.html#a96f076af91fbdd2eb1bec1242ae796ac">Execute()</a> method is called. Actions can be grouped by setting their group value. These cause their associated UI items to act like radio buttons. Group zero is the default and means that the action is not in a group.</p>
-<p>To use this feature clients should override the relevant methods in <a class="el" href="class_c_rh_rdk_plug_in.html">CRhRdkPlugIn</a>. </p><pre class="fragment">\see IRhRdkMenu
-\see CRhRdkPlugIn::AddCustomEditorActions()
-\see CRhRdkPlugIn::UpdateCustomEditorActions()
-\see CRhRdkPlugIn::AddCustomEditorMenu()</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<div class="textblock"><p>This class is deprecated in favor of <a class="el" href="class_c_rh_rdk_custom_task.html">CRhRdkCustomTask</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aaaca166689b52af4ab072ac0ad3846c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaaca166689b52af4ab072ac0ad3846c1">&#9670;&nbsp;</a></span>CRhRdkAction()</h2>
 
@@ -205,7 +202,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The caption to display for the action. </dd></dl>
 
 </div>
 </div>
@@ -232,7 +228,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The action's check state. </dd></dl>
 
 </div>
 </div>
@@ -311,7 +306,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The action's enable state. </dd></dl>
 
 </div>
 </div>
@@ -338,7 +332,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Execute the action. </p><dl class="section return"><dt>Returns</dt><dd><em>true</em> if successful, else <em>false</em>. </dd></dl>
 
 </div>
 </div>
@@ -365,7 +358,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Override this method to put the action in a group. </p>
 
 </div>
 </div>
@@ -402,19 +394,11 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates imagery (AKA 'an icon') to represent the action. Not currently used; included for future compatibility. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">size</td><td>is the size of the imagery required. </td></tr>
-    <tr><td class="paramname">dibOut</td><td>is a DIB that accepts the created imagery. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><em>true</em> if successful, else <em>false</em>. </dd></dl>
 
 </div>
 </div>
-<a id="af013103d0955565ece31a75a24818a29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af013103d0955565ece31a75a24818a29">&#9670;&nbsp;</a></span>SetActions()</h2>
+<a id="a2e1d29f22b9e57060f3c45355fe7b75b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e1d29f22b9e57060f3c45355fe7b75b">&#9670;&nbsp;</a></span>SetActions()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -425,7 +409,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual void CRhRdkAction::SetActions </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_c_rh_rdk_actions.html">CRhRdkActions</a> *&#160;</td>
+          <td class="paramtype">class <a class="el" href="class_c_rh_rdk_actions.html">CRhRdkActions</a> *&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -462,7 +446,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set the action's check state. </p>
 
 </div>
 </div>
@@ -489,7 +472,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Set the action's enable state. </p>
 
 </div>
 </div>
@@ -516,7 +498,6 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The tooltip to display for the action. </dd></dl>
 
 </div>
 </div>
@@ -543,14 +524,13 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The unique identifier of the action. </dd></dl>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 7 2018 04:35:30 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 9 2019 10:52:11 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

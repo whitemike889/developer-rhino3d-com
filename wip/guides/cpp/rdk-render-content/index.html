@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>RDK Render Content with C/C++</title>
+  <meta name="description" content="This document describes how to use the RDK render content class in C/C++.  Using C/C++">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/cpp/rdk-render-content/" />
+  <meta property="og:title" content="RDK Render Content" />
+  <meta property="og:description" content="This document describes how to use the RDK render content class in C/C++." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="RDK Render Content" />
+  <meta name="twitter:description" value="This document describes how to use the RDK render content class in C/C++." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="C/C++" />
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/cpp/rdk-render-content/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="/wip/images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/cpp/rdk-render-content/">View the current version instead.</a>
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link active" href="/wip/guides/">Guides</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/api/">API</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/samples/">Samples</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/videos/">Videos</a>
+                    
+                  
+              
+            
+          
+        
+        <a class="page-link" href="https://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
+                <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
+                <input class="searchBox" type="submit" size="2" value=" " />
+            </form>
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>
+<!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/cpp">C/C++</a></li>
+
+              
+                
+                  <li class="active">RDK</li>
+                
+              
+          </ol>
+
+          <h1>RDK Render Content</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      by <a href="/wip/authors/john_croudy">John Croudy</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/master/_guide_topics/cpp/rdk-render-content.md" target="_blank">16 Jan 2019</a>)
+    
+  </span>
+
+</p>
+
+          <p>This document describes how to use the RDK render content class in C/C++.</p>
+
+          <p><img src="/wip/images/rdk-met.png" alt="Material Environment and Texture" /></p>
+
+<h3 id="introduction">Introduction</h3>
+<p>Probably the most important object in the Rhino RDK is the Render Content (AKA ‘Content’) object. This object is an abstraction that represents one of three possible ways of describing something that is going to be drawn (rendered) on the screen. There are three kinds of contents: <em>Materials</em>, <em>Environments</em> and <em>Textures</em>. A material describes how a surface will be rendered. It has properties such as color, glossiness, etc. An environment describes how the surroundings of a model affect its appearance. A texture describes the texture of a surface. In addition to color and glossiness, all real-world surfaces have a detailed appearance such as a wood grain. This appearance is described by RDK textures. Objects and layers in the document can have a material assigned to them. This material is usually (but not always) associated with an RDK Material. The Ground Plane can also have such a material assigned to it. As you will see later, render contents are actually a tree hierarchy. The assigned RDK material is always the top-level material which means it has no parent. It can, however, have children.</p>
+
+<h3 id="classes">Classes</h3>
+<p>The base class for contents is <em>CRhRdkContent</em>. This is an abstraction that controls the features common to all contents. For example, all contents have a unique identifier called the instance id which identifies each instance of CRhRdkContent. They also have a unique type id which defines their type and an instance name which is the user-defined name that appears on the screen. They can also have any number of children which means that a content is usually considered as a hierarchy because these children can also have children to any depth. The hierarchy is therefore a tree structure.</p>
+
+<p>This flexibility allows the user to create very complex materials if so desired. All these properties and more are stored in and managed by the base class called CRhRdkContent. This base class has a single immediate subclass called <em>CRhRdkCoreContent</em> which provides default implementations of some of the more complicated functions, mostly to do with the user interface. Derived from this are the three main <em>content kinds</em>; <em>CRhRdkMaterial</em>, <em>CRhRdkEnvironment</em> and <em>CRhRdkTexture</em>. It is from these latter three objects that a plug-in should derive its own specialized materials, environments and textures. To do this, it is necessary to choose a base class from one of those three and write a subclass that overrides or implements all the necessary virtual functions, implement a factory class that knows how to create an instance of the class, and register the factory with the RDK. Once this is done, your content will start to appear in the Rhino user interface, specifically in the Material Editor if the content is a material (or the Environment Editor or Texture Palette if it is an environment or texture). You can choose to use the default user interface provided by CRhRdkCoreContent or you can create a custom user interface of your own design. You can also avoid having to create a user interface at all by using the RDK’s built-in <em>Automatic UI</em> system.</p>
+
+<p>Code examples showing how to do this can be found in the <a href="https://github.com/mcneel/rhino-developer-samples/tree/6/cpp/SampleRdkMarmalade">SampleRdkMarmalade</a> sample.</p>
+
+<h3 id="lifetime-and-ownership">Lifetime and ownership</h3>
+<p>There are two flavors of content in the RDK – temporary and persistent. It is very important to understand the distinction between a temporary content instance and a persistent content instance, and the fact that a temporary instance (and all its children) can become persistent.</p>
+
+<p>Temporary contents get created and deleted very often during the normal operation of the RDK. In fact, just about anything the user clicks on might result in a temporary content being created and deleted again. They are created by the content browser, the preview rendering, and so on. They are ‘free floating’ and are owned by whomever created them. They do not appear in the modeless UI, they do not get saved in the 3dm file, and they can freely be deleted again after use.</p>
+
+<p>Contrast this with persistent contents which are attached to a document. They are always owned by the RDK, appear in the modeless UI and get saved in the 3dm file. You should never store pointers to persistent contents; you should only store their instance ids and look them up again using  CRhRdkDocument::FindContentInstance(). They can be deleted only after detaching them from the document. The preferred way to access document-resident contents is by using the <a href="/guides/cpp/rdk-contents-classes">document contents interface</a>.</p>
+
+<p>This is an example code sequence showing the main stages in the lifetime of a content.</p>
+
+<pre><code class="language-cpp">  // Create a new content owned by you.
+  auto* pContent = new CMyContent;
+
+  // Initialize the content.
+  pContent-&gt;Initialize();
+
+  // Attach the content to a document. The content is now owned by
+  // the document and it will appear in the various user interfaces.
+  doc.Contents().Attach(*pContent);
+
+  // Detach the content from the document. The content will disappear
+  // from any user interfaces and it is once again owned by you.
+  doc.Contents().Detach(*pContent);
+
+  // Uninitialize the content to prepare it for deletion.
+  pContent-&gt;Uninitialize();
+
+  // Delete the content. This is possible because the content is owned by you.
+  delete pContent;
+</code></pre>
+
+<p>You can also create a free-floating content that is not attached to a document. This content will not appear in any modeless UIs, but it is possible to edit it in a modal UI by calling the <code>Edit()</code> method.</p>
+
+<pre><code class="language-cpp">
+  auto* pContent = new CMyMaterial;
+
+  // Initialize the content.
+  pContent-&gt;Initialize();
+
+  // Edit the content in the Modal Editor. If the user clicks OK, this returns an edited version
+  // of the content (the original is unaltered) and you own this object as well as the original one.
+  auto* pEdited = pContent-&gt;Edit();
+  if (nullptr != pEdited) // Returns null if the editor is canceled.
+  {
+    // Uninitialize the edited content to prepare it for deletion.
+    pEdited-&gt;Uninitialize();
+
+    // Delete the edited content. This is possible because the content is owned by you.
+    delete pEdited;
+  }
+
+  // Uninitialize the original content to prepare it for deletion.
+  pContent-&gt;Uninitialize();
+
+  // Delete the original content. This is possible because the content is owned by you.
+  delete pContent;
+</code></pre>
+
+<p>In an ideal world, the call to <code>delete</code> would both uninitialize and delete the content. But since <code>Uninitialize()</code> is a virtual function, this is not possible. So every call to <code>delete</code> must be preceded by a call to <code>Uninitialize()</code>. Remember that you can only do this if you own the object. Contents that are owned by a document (attached) cannot be deleted by the client without first being detached.</p>
+
+<p>The most important thing to understand is that if you want to delete a content, you must know who owns it and act accordingly. The RDK tries to enforce good practice by using constness. For example, the function <code>CRhRdkDocument::FindContentInstance()</code> returns a const pointer to the content. This has two implications:</p>
+<ol>
+  <li>This content is not owned by you and you can’t delete it.</li>
+  <li>This content can’t be modified; it’s read-only. See below under Modifying Contents for information on how a const content can be modified.</li>
+</ol>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Who owns it?</th>
+      <th>Procedure for deletion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>You</td>
+      <td>Uninitialize it.<br />Delete it.</td>
+    </tr>
+    <tr>
+      <td>A document</td>
+      <td>Detach it from the document.<br />Uninitialize it.<br />Delete it.</td>
+    </tr>
+    <tr>
+      <td>Unknown</td>
+      <td>You have no right to delete it. Doing so will most likely crash Rhino.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="modifying-contents">Modifying Contents</h3>
+<p>If a content is owned by you, for example immediately after you create it, then it is generally non-const and you can modify it by calling any non-const method such as <code>SetParameter()</code>. But if the content is const, for example after being found in a document, then you have to open it for modification. This is done by calling <code>BeginChange()</code> which begins a change bracket. BeginChange() takes a parameter called the change context. This is one of the values of the enum <code>RhRdkChangeContext</code>. The most common one used by plug-ins is <code>RhRdkChangeContext::UI</code> which means the change is being done by the user inside some user interface. BeginChange() also returns a non-const reference to the same content, allowing you to call any non-const method such as <code>SetParameter()</code>. It is important to call the <code>Changed()</code> method on the content if you detect that a change to the parameter has occurred. If this is not done, the user interface will not update. More than one parameter can be changed inside the change bracket. When all the desired changes have been made, you must call <code>EndChange()</code>. Calls to BeginChange() and EndChange() can be nested but there must always be exactly one call to EndChange() for every call to BeginChange(). The final call to EndChange() closes the content and sends the events necessary to update the user interface.</p>
+
+<h3 id="creating-your-own-specialized-material">Creating your own specialized material</h3>
+<p>The most commonly specialized render content is probably the material. When creating your own render content, most of the steps that apply to materials also apply to the other two kinds.</p>
+
+<p>Rhino is commonly used for designing things. Whether these things are phones, boats, jewelry or dinosaurs makes very little difference to the bulk of the plug-in developer’s work. But where it does make a difference is in the creation of the specialized materials and textures. If your plug-in is intended for designing cars for example, it will need materials and textures that describe what a car looks like. In the real world, the look of a car is heavily influenced by the kind of paint used on the car’s body. In this discussion, we will assume you are writing a render plug-in for designing cars and we will show how to create a car paint material.</p>
+
+<p>The first thing we notice when looking at a painted surface is likely to be the color of the paint. After that, we notice that the paint is either gloss or matte. In the case of car paint, there is also sometimes a glittery texture and often a candied appearance. Sometimes the color of the surface changes depending on the viewing angle. These properties of the car paint material will be defined by <em>fields</em> in the material. We will create a simple car paint material with the following fields:</p>
+
+<ul>
+  <li>Paint color</li>
+  <li>Gloss amount</li>
+  <li>Glitter color</li>
+  <li>Glitter size</li>
+  <li>Glitter amount</li>
+</ul>
+
+<p>This will allow our car paint to have a basic paint color and some glitter. Other more advanced features such as candy color could be added but this will be left as an exercise for the reader (as will writing the actual car paint shader).</p>
+
+<p>As mentioned earlier, every render content has the ability to host any number of fields which describe the properties of the content. It is possible to ignore the fields and just provide one’s own data members, but this is more difficult and requires more work than using fields, because when fields are used, a lot of the functionality is provided automatically by the RDK. So using fields is highly recommended for all kinds of content.</p>
+
+<p>First let’s define the class for our new car paint material. Because it is a material, it should be derived from <code>CRhRdkMaterial</code>. The first thing to do is implement some important virtual functions:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+protected:
+	virtual UUID TypeId(void) const override { return _unique_type_id_ }
+	virtual UUID PlugInId(void) const override { return _unique_plug_in_id_; }
+	virtual UUID RenderEngineId(void) const override { return _unique_render_engine_id_; }
+	virtual ON_wString InternalName(void) const override { return L"car-paint-material"; }
+	virtual ON_wString TypeName(void) const override { return L"Car Paint"; }
+	virtual ON_wString TypeDescription(void) const override { return L"Demo car paint material"; }
+};
+</code></pre>
+<p>Then override the <code>BitFlags()</code> method and switch on the fields option. This tells the RDK that the material uses fields and allows a lot of automation to take place by default. At the same time we remove the <em>Texture Summary</em> option which would cause our UI to display a panel containing a texture list. Since this material has no child textures, this would not be useful here.</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual unsigned int BitFlags(void) const override;
+};
+
+unsigned int CCarPaintMaterial::BitFlags(void) const
+{
+	auto flags = __super::BitFlags(); // Get the default flags.
+ 	flags &amp;= ~bfTextureSummary;       // Remove the Texture Summary option.
+	flags |=  bfFields;               // Add the fields option.
+
+	return flags;
+}
+</code></pre>
+<p>Recall that <code>CRhRdkMaterial</code> is derived from <code>CRhRdkContent</code>. This base class contains a field collection which is accessible by calling the <code>Fields()</code> method to obtain a reference to the <code>CRhRdkContentFields</code> object containing the fields. Each field is implemented by <code>CRhRdkContentField</code> and they must be defined and initialized. They are best defined as members of the class and initialized in the constructor. Let’s add the constructor and field members for the paint properties:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+public:
+	CCarPaintMaterial();
+	...
+
+private:
+	CRhRdkContentField m_PaintColor;
+	CRhRdkContentField m_GlossAmount;
+	CRhRdkContentField m_GlitterColor;
+	CRhRdkContentField m_GlitterSize;
+	CRhRdkContentField m_GlitterAmount;
+};
+</code></pre>
+<p>Notice that this says nothing about the <em>type</em> of the fields. Some will need to be colors and others may be floats or doubles. This is defined when the fields are initialized in the material constructor. Let’s do that now:</p>
+<pre><code class="language-cpp">CCarPaintMaterial::CCarPaintMaterial()
+	:
+	m_PaintColor   (*this, L"paint-color",    L"Paint Color",    L"Paint Color"),
+	m_GlossAmount  (*this, L"gloss-amount",   L"Gloss Amount",   L"Gloss Amount"),
+	m_GlitterColor (*this, L"glitter-color",  L"Glitter Color",  L"Glitter Color"),
+	m_GlitterSize  (*this, L"glitter-size",   L"Glitter Size",   L"Glitter Size"),
+	m_GlitterAmount(*this, L"glitter-amount", L"Glitter Amount", L"Glitter Amount")
+{
+	m_PaintColor   = CRhRdkColor(28, 122, 230);
+	m_GlitterColor = CRhRdkColor(80, 200, 250);
+
+	m_GlossAmount = 1.0;
+	m_GlossAmount.SetLimits(0.0, 1.0);
+
+	m_GlitterSize = 0.5;
+	m_GlitterSize.SetLimits(0.0, 20.0);
+
+	m_GlitterAmount = 0.5;
+	m_GlitterAmount.SetLimits(0.0, 1.0);
+}
+</code></pre>
+<p>In the example above, each field is first constructed and then initialized. The constructor of <code>CRhRdkContentField</code> is quite involved and has many parameters for expert users, but we just set the most important ones here. Every field must have, at the very least, a reference back to the content that owns it, an internal name, a localized name and an English name. If your plug-in does not support localization, you can just repeat the English name as shown above. After construction, the fields are initialized by assigning a value of the required type. This initializes the field to its type and default value. For example, setting the field to be a color is done by assigning a <code>CRhRdkColor</code> to it. Fields can have many types from simple POD types like <code>int</code> to more elaborate types such as <code>ON_Xform</code>. The default values will be changed when the user edits them, but they will be restored whenever <code>ResetParametersToDefaults()</code> is called. If the material is attached to a document, the fields’ values will be stored when the document is saved, referenced by the internal name. For this reason, once a field’s type and internal name have been set, they should never be changed. The English and localized names are free to change if so desired. The localized name will be displayed to the user if you choose to use the automatic UI system. The constructor above also sets some minimum and maximum limits on each field which prevents the user from setting them to nonsensical values.</p>
+
+<p>It is important to understand a few things about this method of using fields. First, the field objects are owned by your material because they are embedded in it. They are constructed and destructed at the same time as your material. These are known as <em>static fields</em>. There is another kind of field called a <em>dynamic field</em>, the use of which is an advanced topic which will be covered in a different article.</p>
+
+<h4 id="fast-material-copying">Fast material copying</h4>
+<p>When a material is copied the default implementation of <code>MakeCopy()</code> has to assume that the properties are stored in some user-defined way, so it must convert the whole material to XML, copy the XML and convert it back to properties in the copy. This can be very slow. Because we are exclusively using fields to store our material’s properties, we can take advantage of an optimization provided by the RDK. If you override <code>MakeCopy()</code> and have it call <code>FastMakeCopy()</code>, you can make the copying much faster. The default implementation of <code>FastMakeCopy()</code> does the bulk of the work by simply copying the fields.</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual CRhRdkContent* MakeCopy(CopyMethods m) const override { return FastMakeCopy(m); }
+};
+</code></pre>
+<h4 id="getting-and-setting-material-parameters">Getting and setting material parameters</h4>
+<p>The content user interface displays and allows editing of content parameters (i.e., properties). Although your material could provide methods for getting and setting each parameter, it is not necessary to do this. As long as the UI knows the internal names of the material’s fields, it need call only two methods: <code>GetParameter()</code> and <code>SetParameter()</code>. These methods work with the <code>CRhRdkVariant</code> class to get or set parameters by name. When using the field system, this name <em>is</em> the field’s internal name. The default implementations of these methods usually do everything you need, but it is possible to override and specialize them if necessary.</p>
+
+<h4 id="the-material-simulation">The material simulation</h4>
+<p>All render contents must provide a method for other renderers, including the standard Rhino display, to represent them visually. This method is called <em>simulation</em>. Without simulation, the rendered mode in Rhino would not update to reflect your custom definitions. In addition, simulation makes it possible for users to render objects with your content objects attached without having your plug-in installed. Furthermore, when the RDK displays a material in the Material Editor, it first shows a simple rendition of the material preview using OpenGL. After that it renders the material preview using the current render engine. The OpenGL rendition uses the simulation of the material. This is essentially an <code>ON_Material</code> that has been set up to look as much like your material as possible. For complex materials, it can be difficult to produce a good simulation, but the most important properties to get right are the diffuse color and the glossiness. So we must implement an override of <code>CRhRdkMaterial::SimulateMaterial()</code> as follows:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual void SimulateMaterial(ON_Material&amp; matOut, CRhRdkTexture::TextureGeneration tg,
+	                              int iSimulatedTextureSize, const CRhinoObject* pObject) const
+	                              override;
+};
+
+void CCarPaintMaterial::SimulateMaterial(ON_Material&amp; matOut, CRhRdkTexture::TextureGeneration tg,
+                                        int iSimulatedTextureSize, const CRhinoObject* pObject) const
+{
+	__super::SimulateMaterial(matOut, tg, iSimulatedTextureSize, pObject);
+
+	const auto col = m_PaintColor.Value().AsOnColor();
+	matOut.SetDiffuse(col);
+
+	const auto gloss = m_GlossAmount.Value().AsDouble();
+	matOut.SetShine(gloss * ON_Material::MaxShine);
+}
+</code></pre>
+<p>In the above example, only the output material <code>matOut</code> is used. The other parameters are for more advanced use and will not be covered here.</p>
+
+<h4 id="the-material-shader">The material shader</h4>
+<p>Most render engines have custom binary definitions for their materials, environments and textures. Usually these will be instances of classes with filled in “parameter blocks” initialized from the data in a content object. Sometimes they will simply be strings pointing to files or locations in a library. These objects are termed <em>shaders</em> in the RDK. When an object needs to be rendered by your render engine, you will need to access these objects. As part of your content object implementation you should override <code>CRhRdkContent::GetShader()</code> to return a pointer to this object. The reason the return value is <code>void*</code> is because the RDK does not know anything about the shader; it’s an internal render-engine object, but the material interface must have a method for getting it. The render engine will cast the returned pointer to the correct type before use. Since you are both the provider and client of this function, how you implement it is up to you. The data is private and its type and allocation details are also completely up to you. However, you must check the incoming render engine id to ensure that you can render shaders of that type. Usually you will call <code>IsCompatible()</code> passing the id and only proceed if it returns <code>true</code>.</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual void* GetShader(const UUID&amp; uuidRenderEngine, void* pvData) const override;
+};
+
+void* CCarPaintMaterial::GetShader(const UUID&amp; uuidRenderEngine, void* pvData) const
+{
+	if (!IsCompatible(uuidRenderEngine))
+		return nullptr;
+
+	void* pShader = nullptr;
+
+	// TODO: Get a pointer to the shader used to render this material.
+
+	return pShader;
+}
+</code></pre>
+<h4 id="the-material-factory">The material factory</h4>
+<p>The RDK uses the factory pattern to allow render plug-ins to provide custom render content. This means that in order to have our new car paint material show up in the Material Editor’s list of available materials, we must create a factory object that knows how to create an instance of the material. Because the factory produces materials, it must be derived from <code>CRhRdkMaterialFactory</code>. It must also implement the <code>NewMaterial()</code> method to create the material instance:</p>
+<pre><code class="language-cpp">class CCarPaintMaterialFactory : public CRhRdkMaterialFactory
+{
+protected:
+	virtual CRhRdkMaterial* NewMaterial(void) const override { return new CCarPaintMaterial; }
+};
+</code></pre>
+<p>Finally, we register the factory with the RDK in our override of <code>CRhRdkRenderPlugIn::RegisterExtensions()</code>:</p>
+<pre><code class="language-cpp">void CCarDesignerPlugIn::RegisterExtensions(void) const
+{
+	...
+	AddExtension(new CCarPaintMaterialFactory);
+	...
+}
+</code></pre>
+<p><a name="UI"></a></p>
+<h3 id="creating-the-user-interface">Creating the user interface</h3>
+<p><img src="/wip/images/car-paint-example1.png" alt="CarPaint1" style="float: right; margin-left: 12px;" />
+The above code is enough to get us a car paint material that the user can choose and create in the editor. But this is not very useful because we haven’t provided a user interface, so the only things the user can edit are the material’s name and notes. In order to edit the actual material properties, we need to supply a UI. This can be done (on Windows, at least) by creating an MFC dialog with an IDD and a resource in the usual way. This can be a lot of work. Sometimes it’s enough to just be able to see and edit the parameters, for example when prototyping, and sometimes even for the final product. We will do this for our car paint material by using the RDK’s Automatic UI system.</p>
+
+<p>In order to create a UI for your material, you must override <code>CRhRdkCoreContent::AddUISections()</code>. This is true in almost all cases, except when you want to create a completely customized user interface. To use the automatic UI, you must call <code>AddAutomaticUISection()</code> in your override. This will get you an automatic UI section (AKA roll-up) in the user interface, but it will be blank because it is necessary to tell the RDK which fields you want to display. The automatic UI uses an object called a <em>param block</em> which is accessed through the <code>IRhRdkParamBlock</code> interface. This param block contains the information about what parameters to display in the user interface and it accepts the changes made by the user. It can be thought of as a conduit that enables the transfer of the parameters between the render content and the user interface. When using fields, it’s easy to get all of this functionality. You just have to override <code>AddAutoParameters()</code> and have the fields add themselves to the param block. When the user changes a value in the UI, it is necessary for your material to accept to change and modify the relevent field. All you need do is override <code>GetAutoParameters()</code> and have the fields load themselves from the param block. You can also sort the parameters according to either their internal (field) name or their display name. This is commonly done in <code>AddAutoParameters()</code> just after adding them.</p>
+
+<p style="clear:both;">The following code will get us a working automatic UI for the entire car paint material:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual void AddUISections(IRhRdkExpandableContentUI&amp; ui) override;
+	virtual void AddAutoParameters(IRhRdkParamBlock&amp; paramBlock, int id) const override;
+	virtual void GetAutoParameters(const IRhRdkParamBlock&amp; paramBlock, int id) override;
+};
+
+void CCarPaintMaterial::AddUISections(IRhRdkExpandableContentUI&amp; ui)
+{
+	const wchar_t* wsz = L"Car paint settings";
+	AddAutomaticUISection(ui, wsz, wsz, 0);
+
+	__super::AddUISections(ui);
+}
+
+void CCarPaintMaterial::AddAutoParameters(IRhRdkParamBlock&amp; paramBlock, int id) const
+{
+	Fields().AddValuesToParamBlock(paramBlock, id);
+
+	paramBlock.Sort(IRhRdkParamBlock::SortBy::DisplayName);
+}
+
+void CCarPaintMaterial::GetAutoParameters(const IRhRdkParamBlock&amp; paramBlock, int id)
+{
+	Fields().GetValuesFromParamBlock(paramBlock, id);
+}
+</code></pre>
+<h4 id="using-multiple-automatic-sections">Using multiple automatic sections</h4>
+<p>Our car paint material only has a few fields, but some customized materials will have many more. If you don’t want all the fields to appear in the same UI section, you can have the automatic UI distribute the fields between multiple sections. To do this, you first decide which fields should appear together and give them the same identifier. This is one of the constructor parameters, <code>sectionId</code> which defaults to zero. In this example we will put the color fields on one section and the other fields on a different section. The color fields are given the id <em>1</em> and the others <em>2</em>. The <code>sectionId</code> parameter appears after two other ‘filter’ parameters that are not relevant to this example, so we will fill them in as the default value, <code>CRhRdkContentField::Filter::All</code>:</p>
+<pre><code class="language-cpp">static const int idColor = 1;
+static const int idOther = 2;
+static const auto f = CRhRdkContentField::Filter::All;
+
+CCarPaintMaterial::CCarPaintMaterial()
+	:
+	m_PaintColor   (*this, L"paint-color",    L"Paint Color",    L"Paint Color"    , f, f, idColor),
+	m_GlossAmount  (*this, L"gloss-amount",   L"Gloss Amount",   L"Gloss Amount"   , f, f, idOther),
+	m_GlitterColor (*this, L"glitter-color",  L"Glitter Color",  L"Glitter Color"  , f, f, idColor),
+	m_GlitterSize  (*this, L"glitter-size",   L"Glitter Size",   L"Glitter Size"   , f, f, idOther),
+	m_GlitterAmount(*this, L"glitter-amount", L"Glitter Amount", L"Glitter Amount" , f, f, idOther)
+	...
+</code></pre>
+<p>Now that the fields have been separated by this id, we just have to add a second section to the UI and specify which id appears on which section:</p>
+<pre><code class="language-cpp">void CCarPaintMaterial::AddUISections(IRhRdkExpandableContentUI&amp; ui)
+{
+	const wchar_t* wsz1 = L"Car paint color settings";
+	AddAutomaticUISection(ui, wsz1, wsz1, idColor);
+
+	const wchar_t* wsz2 = L"Car paint other settings";
+	AddAutomaticUISection(ui, wsz2, wsz2, idOther);
+
+	__super::AddUISections(ui);
+}
+</code></pre>
+<h4 id="extra-requirements">Extra requirements</h4>
+<p>It is possible to enhance the automatic UI a little more by making use of <em>extra requirements</em>. These are essentially a set of special options that can applied to the parameters so their display can be tweaked. Let’s demonstrate this by changing one of the parameters, <em>Glitter Amount</em> to show its value as a percentage. Any float or double value that has a nominal range of 0 to 1 can be displayed as 0% to 100% by adding the <code>RDK_NUMBER_EDIT_TWEAKS</code> extra requirement and then specifying its <code>RDK_PERCENTILE</code> option. The requirement is specified when parameters are added to the param block.</p>
+<pre><code class="language-cpp">void CCarPaintMaterial::AddAutoParameters(IRhRdkParamBlock&amp; paramBlock, int id) const
+{
+	Fields().AddValuesToParamBlock(paramBlock, id, RDK_NUMBER_EDIT_TWEAKS);
+	...
+}
+</code></pre>
+<p>After this is done, all the parameters will support this extra requirement, but it won’t have any effect until you specify an option within the scope of that requirement. In this case, the <code>RDK_PERCENTILE</code> option must be specified. To do this, your material needs to override <code>GetExtraRequirementParameter()</code> as follows:</p>
+<pre><code class="language-cpp">class CCarPaintMaterial : public CRhRdkMaterial
+{
+	...
+	virtual bool GetExtraRequirementParameter(const wchar_t* wszParamName,
+	                                          const wchar_t* wszExtraReqName,
+	                                          CRhRdkVariant&amp; vValueOut) const override;
+};
+
+bool CCarPaintMaterial::GetExtraRequirementParameter(
+                                const wchar_t* wszParamName,
+                                const wchar_t* wszExtraReqName, CRhRdkVariant&amp; vValueOut) const
+{
+	if (__super::GetExtraRequirementParameter(wszParamName, wszExtraReqName, vValueOut))
+		return true;
+
+	if (0 == _wcsicmp(L"glitter-amount", wszParamName))
+	{
+		if (0 == _wcsicmp(RDK_PERCENTILE, wszExtraReqName))
+		{
+			vValueOut = true;
+			return true;
+		}
+	}
+
+	return false;
+}
+</code></pre>
+<p>This is how the user interface appears after the above changes have been made. It is possible to have as many fields as you need split among as many sections as you need, limited only by available computer resources.
+<br /><br />
+<img src="/wip/images/car-paint-example2.png" alt="CarPaint2" /></p>
+
+<h3 id="summary">Summary</h3>
+<p>This article introduced render contents and covered the most important aspects of using them in your render plug-in. It explained ownership, modification, copying, and showed how to create a customized material and a simple user interface for it.</p>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                
+                Author: <a href="/wip/authors/john_croudy">John Croudy</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/cpp/rdk-render-content.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2019 Robert McNeel &amp; Associates<br/>
+          <span class="glyphicon glyphicon-heart-empty"></span>&nbsp;<a href="/wip/authors">Contributions welcome</a>
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+</html>

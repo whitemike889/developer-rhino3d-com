@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rhino C++ SDK Help: ON_BinaryArchive Class Reference</title>
+<title>Rhino C++ API: ON_BinaryArchive Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.2</span>
+   <div id="projectname">Rhino C++ API
+   &#160;<span id="projectnumber">6.16</span>
    </div>
   </td>
  </tr>
@@ -2493,7 +2493,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Tools for dictionary IO (used in .NET) Description: Begins writing a dictionary. Parameters: dictionary_id - [in] version - [in] It is suggested that you use <a class="el" href="group__open_n_u_r_b_s.html#gaa5e1c0243fc157e51ee124c8f5354f2e">ON_VersionNumberConstruct()</a> to create a version number. dictionary_name - [in] You may pass nullptr. Remarks: Begins a new chunk with tcode TCODE_DICTIONARY and then writes a TCODE_DICTIONARY_ID chunk containing the id, version and name. After calling this function, you may either write entries by calling <a class="el" href="class_o_n___binary_archive.html#a67f5d0c4118c1b2e48fe0c09cb690bd3">BeginWriteDictionaryEntry()</a>; write entry definition... <a class="el" href="class_o_n___binary_archive.html#a5dd9403c96ff2b1d89dbe401f9a371ad">EndWriteDictionaryEntry()</a>; or you may finish writing the dictionay by calling <a class="el" href="class_o_n___binary_archive.html#a904563c87b1643fddd706f43ed2d72cd">EndWriteDictionary()</a>; </p>
+<p>Tools for dictionary IO (used in .NET) Description: Begins writing a dictionary. Parameters: dictionary_id - [in] version - [in] It is suggested that you use <a class="el" href="group__open_n_u_r_b_s.html#ga5e9e4be76fbe9aafe482cb02ebf12e8c">ON_VersionNumberConstruct()</a> to create a version number. dictionary_name - [in] You may pass nullptr. Remarks: Begins a new chunk with tcode TCODE_DICTIONARY and then writes a TCODE_DICTIONARY_ID chunk containing the id, version and name. After calling this function, you may either write entries by calling <a class="el" href="class_o_n___binary_archive.html#a67f5d0c4118c1b2e48fe0c09cb690bd3">BeginWriteDictionaryEntry()</a>; write entry definition... <a class="el" href="class_o_n___binary_archive.html#a5dd9403c96ff2b1d89dbe401f9a371ad">EndWriteDictionaryEntry()</a>; or you may finish writing the dictionay by calling <a class="el" href="class_o_n___binary_archive.html#a904563c87b1643fddd706f43ed2d72cd">EndWriteDictionary()</a>; </p>
 
 </div>
 </div>
@@ -3581,6 +3581,7 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Remarks: In some unusual situations when reading old or damaged files, a read may fail. Call MaskReadError( ON__UINT64 sizeof_request, ON__UINT64 sizeof_read ) before calling <a class="el" href="group__open_n_u_r_b_s.html#gaf0a1a145d1eca936aad3c8a9ce43e025">ON_ERROR()</a>. </p>
 
 <p>Implemented in <a class="el" href="class_o_n___write3dm_buffer_archive.html#af24355173fada709b57028addd3e3a6a">ON_Write3dmBufferArchive</a>, <a class="el" href="class_o_n___read3dm_buffer_archive.html#a2dde5f127b16214ad84a307c7d8fe6cb">ON_Read3dmBufferArchive</a>, <a class="el" href="class_o_n___binary_archive_buffer.html#a509feb77a9f08376ff397074275b1421">ON_BinaryArchiveBuffer</a>, and <a class="el" href="class_o_n___binary_file.html#a9c05219aa3039259c055d486a5e77595">ON_BinaryFile</a>.</p>
 
@@ -7833,7 +7834,7 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Description: If Read3dmAnaonymousUserTable() was used to read <a class="el" href="class_o_n__3dm_goo.html">ON_3dmGoo</a> because a plug-in was not present, then use <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a> to put than information back into the archive. <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a> writes the entire record. Do NOT call <a class="el" href="class_o_n___binary_archive.html#aa31330c08b1412ca423092d445f386c3">BeginWrite3dmUserTable()</a> / <a class="el" href="class_o_n___binary_archive.html#a2163e23d7bdc80fd10fefa389b62508c">EndWrite3dmUserTable()</a> when using <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a>. Parameters: plugin_id - [in] goo_version - [in] The version of the archive (1,2,3,4,5,50,...) that was used when the plug-in wrote the user table. goo_opennurbs_version - [in] The version of opennurbs ( YYYMMDDN ) that was used when the plug-in wrote the user table. goo - [in] Returns: True if the goo was written or skipped because it could not be robustly saved. False if a catastrophic IO error occured. </p>
+<p>Description: If Read3dmAnaonymousUserTable() was used to read <a class="el" href="class_o_n__3dm_goo.html">ON_3dmGoo</a> because a plug-in was not present, then use <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a> to put than information back into the archive. <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a> writes the entire record. Do NOT call <a class="el" href="class_o_n___binary_archive.html#aa31330c08b1412ca423092d445f386c3">BeginWrite3dmUserTable()</a> / <a class="el" href="class_o_n___binary_archive.html#a2163e23d7bdc80fd10fefa389b62508c">EndWrite3dmUserTable()</a> when using <a class="el" href="class_o_n___binary_archive.html#aff409b2d92c1b8cc2e8ab92bce0b19bf">Write3dmAnonymousUserTableRecord()</a>. Parameters: plugin_id - [in] goo_version - [in] The version of the archive (1,2,3,4,5,50,...) that was used when the plug-in wrote the user table. goo_opennurbs_version - [in] The version of opennurbs ( YYYMMDDN ) that was used when the plug-in wrote the user table. goo - [in] Returns: True if the goo was written. False if skipped because it could not be robustly saved. </p>
 
 </div>
 </div>
@@ -10799,7 +10800,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 7 2018 04:35:37 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 9 2019 10:52:17 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

@@ -13,9 +13,14 @@ var searchData=
   ['zerosuppressfromunsigned',['ZeroSuppressFromUnsigned',['../class_o_n___dim_style.html#a8a8413cbcc4592b5f21fe43bde7bb20b',1,'ON_DimStyle']]],
   ['zerosuppressmatcheslengthdisplay',['ZeroSuppressMatchesLengthDisplay',['../class_o_n___dim_style.html#a017ecc0f3b6879eae07cc07013a9218f',1,'ON_DimStyle']]],
   ['zerotolerance',['ZeroTolerance',['../class_o_n___plane_equation.html#a67b3091b481b3c28cff24b186d68e687',1,'ON_PlaneEquation']]],
+  ['zoomextentsparallelviewborder',['ZoomExtentsParallelViewBorder',['../class_c_rhino_app_view_settings.html#ad86b4c6cdecd51701fb3d7fd52def7ff',1,'CRhinoAppViewSettings']]],
+  ['zoomextentsperspectiveviewborder',['ZoomExtentsPerspectiveViewBorder',['../class_c_rhino_app_view_settings.html#afff26114a916a0a67701557762b57378',1,'CRhinoAppViewSettings']]],
   ['zoomtoextents',['ZoomToExtents',['../class_i_rh_rdk_custom_curve_ctrl.html#ad35afd01873045bd69cb49a6c6696bb2',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtographrect',['ZoomToGraphRect',['../class_i_rh_rdk_custom_curve_ctrl.html#a717ba727b71f512ba7ed696678cb9da0',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtopixelrect',['ZoomToPixelRect',['../class_i_rh_rdk_custom_curve_ctrl.html#ade948a7b818962f7f34a72b75cc14a88',1,'IRhRdkCustomCurveCtrl']]],
   ['zoomtoscreenrect',['ZoomToScreenRect',['../class_o_n___viewport.html#a7c7a2bf051880c72616c95b35b1419ad',1,'ON_Viewport']]],
-  ['zvalue',['ZValue',['../class_c_rhino_z_buffer.html#adfa9518d376f532d625cb92d5be61e31',1,'CRhinoZBuffer']]]
+  ['zvalue',['ZValue',['../class_c_rhino_z_buffer.html#adfa9518d376f532d625cb92d5be61e31',1,'CRhinoZBuffer']]],
+  ['zvaluemax',['ZValueMax',['../class_c_rhino_z_buffer.html#a1c03af057cee5911e4d0471c7011d37c',1,'CRhinoZBuffer']]],
+  ['zvaluemin',['ZValueMin',['../class_c_rhino_z_buffer.html#a61c8599a29ff35c0bba5cd065a9f9503',1,'CRhinoZBuffer']]],
+  ['zvalueminmax',['ZValueMinMax',['../class_c_rhino_z_buffer.html#a983e9ed27e7a1f2e857d8c9a49ad1876',1,'CRhinoZBuffer']]]
 ];

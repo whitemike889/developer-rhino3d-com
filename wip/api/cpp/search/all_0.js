@@ -7,7 +7,6 @@ var searchData=
   ['_5fgetfontlistindex',['_GetFontListIndex',['../class_c_rhino_ui_font_combo_box.html#add2d57a21de92155db7046e28a4c44f3',1,'CRhinoUiFontComboBox']]],
   ['_5fgnu_5fsource',['_GNU_SOURCE',['../group__open_n_u_r_b_s.html#ga369266c24eacffb87046522897a570d5',1,'opennurbs_system_compiler.h']]],
   ['_5finternalsetazialt',['_InternalSetAziAlt',['../class_i_rh_rdk_sun.html#ab99ee68f4d57a214352d8fec46149e1f',1,'IRhRdkSun::_InternalSetAziAlt()'],['../class_c_rh_rdk_sun_storage.html#ac6722e3f831d5bccb10ec27509ad0b8b',1,'CRhRdkSunStorage::_InternalSetAziAlt()']]],
-  ['_5finternaluuid',['_InternalUuid',['../class_c_rh_rdk_section_base___m_f_c.html#a99a2456cd01c59d89739e85486b0f09d',1,'CRhRdkSectionBase_MFC']]],
   ['_5flinkto',['_LinkTo',['../class_c_rhino_ui_slider_ctrl.html#aee8f7c0460a6271f46256db0ec4379d2',1,'CRhinoUiSliderCtrl']]],
   ['_5fsetdlgitemtooltip',['_SetDlgItemToolTip',['../class_c_rhino_ui_dialog.html#ac223cd27d5312d40e47291be5142712b',1,'CRhinoUiDialog']]],
   ['_5fsetlink',['_SetLink',['../class_c_rhino_ui_slider_ctrl.html#a23b5b0292a7500861142d4f9e7cd9317',1,'CRhinoUiSliderCtrl']]],

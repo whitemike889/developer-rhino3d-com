@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rhino C++ SDK Help: CSupportChannels Struct Reference</title>
+<title>Rhino C++ API: CSupportChannels Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.2</span>
+   <div id="projectname">Rhino C++ API
+   &#160;<span id="projectnumber">6.16</span>
    </div>
   </td>
  </tr>
@@ -83,6 +83,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:ac0a1ba2459e0e5a30f3dc5ee0cb5d77c"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#ac0a1ba2459e0e5a30f3dc5ee0cb5d77c">SC_ALL_DRAW_CHANNELS</a> = <a class="el" href="struct_c_support_channels.html#a4693c10e8db665c53cb2ee063de23a04">SC_PREDRAWOBJECTS</a> | <a class="el" href="struct_c_support_channels.html#a7d1adcdfcef059649259b9a04c639e31">SC_DRAWOBJECT</a> | <a class="el" href="struct_c_support_channels.html#a461bed51219d42580a06d324747e1bd9">SC_POSTDRAWOBJECTS</a> | <a class="el" href="struct_c_support_channels.html#ab008200d63102b4efabad805b6d8b9fd">SC_PREOBJECTDRAW</a> | <a class="el" href="struct_c_support_channels.html#aeac3415189821e84e8f44800fd61f32e">SC_POSTOBJECTDRAW</a></td></tr>
+<tr class="separator:ac0a1ba2459e0e5a30f3dc5ee0cb5d77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3544dbd9f72d6ce1604245b70ae97076"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#a3544dbd9f72d6ce1604245b70ae97076">SC_CALCBOUNDINGBOX</a> = 0x00000008</td></tr>
 <tr class="separator:a3544dbd9f72d6ce1604245b70ae97076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35315ac2eb7eccb7963d714ee1f54387"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#a35315ac2eb7eccb7963d714ee1f54387">SC_CALCCLIPPINGPLANES</a> = 0x00000010</td></tr>
@@ -117,6 +119,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a69eac136df65bcfaa50bd74e9c402dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4693c10e8db665c53cb2ee063de23a04"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#a4693c10e8db665c53cb2ee063de23a04">SC_PREDRAWOBJECTS</a> = 0x00000080</td></tr>
 <tr class="separator:a4693c10e8db665c53cb2ee063de23a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c73e2db0d96827ffa033a63680e71e"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#af2c73e2db0d96827ffa033a63680e71e">SC_PREDRAWTRANSPARENTOBJECTS</a> = 0x00080000</td></tr>
+<tr class="separator:af2c73e2db0d96827ffa033a63680e71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab008200d63102b4efabad805b6d8b9fd"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#ab008200d63102b4efabad805b6d8b9fd">SC_PREOBJECTDRAW</a> = 0x00008000</td></tr>
 <tr class="separator:ab008200d63102b4efabad805b6d8b9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e10fc8288f6d34fe40d93ce52a39b97"><td class="memItemLeft" align="right" valign="top">static const UINT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_support_channels.html#a4e10fc8288f6d34fe40d93ce52a39b97">SC_SETUPFRUSTUM</a> = 0x00000002</td></tr>
@@ -133,6 +137,9 @@ Static Public Attributes</h2></td></tr>
 <p>The display pipeline calls conduits during specific phases of drawing (channels) During the drawing of a single frame the channels are called in the following order</p>
 <p>[Begin Drawing of a Frame] SC_CALCBOUNDINGBOX SC_CALCCLIPPINGPLANES SC_SETUPFRUSTUM SC_SETUPLIGHTING SC_INITFRAMEBUFFER SC_DRAWBACKGROUND If this is a layout and detail objects exist the channels are called in the same order for each detail object (drawn as a nested viewport) SC_PREDRAWMIDDLEGROUND SC_PREDRAWOBJECTS</p>
 <p>For Each Visible Non Highlighted Object SC_OBJECTDISPLAYATTRS SC_PREOBJECTDRAW SC_DRAWOBJECT SC_POSTOBJECTDRAW Next Object</p>
+<p>Here Rhino draws highlighted objects</p>
+<p>SC_PREDRAWTRANSPARENTOBJECTS</p>
+<p>Here Rhino draws transparent objects (sorted)</p>
 <p>SC_POSTDRAWOBJECTS SC_DRAWFOREGROUND</p>
 <p>For Each Visible Highlighted Object SC_OBJECTDISPLAYATTRS SC_PREOBJECTDRAW SC_DRAWOBJECT SC_POSTOBJECTDRAW Next Object</p>
 <p>SC_POSTPROCESSFRAMEBUFFER - If a conduit exists that requires this SC_DRAWOVERLAY - If Rhino is in a feedback mode [End of Drawing of a Frame]</p>
@@ -243,6 +250,28 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac0a1ba2459e0e5a30f3dc5ee0cb5d77c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0a1ba2459e0e5a30f3dc5ee0cb5d77c">&#9670;&nbsp;</a></span>SC_ALL_DRAW_CHANNELS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const UINT CSupportChannels::SC_ALL_DRAW_CHANNELS = <a class="el" href="struct_c_support_channels.html#a4693c10e8db665c53cb2ee063de23a04">SC_PREDRAWOBJECTS</a> | <a class="el" href="struct_c_support_channels.html#a7d1adcdfcef059649259b9a04c639e31">SC_DRAWOBJECT</a> | <a class="el" href="struct_c_support_channels.html#a461bed51219d42580a06d324747e1bd9">SC_POSTDRAWOBJECTS</a> | <a class="el" href="struct_c_support_channels.html#ab008200d63102b4efabad805b6d8b9fd">SC_PREOBJECTDRAW</a> | <a class="el" href="struct_c_support_channels.html#aeac3415189821e84e8f44800fd61f32e">SC_POSTOBJECTDRAW</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a3544dbd9f72d6ce1604245b70ae97076"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3544dbd9f72d6ce1604245b70ae97076">&#9670;&nbsp;</a></span>SC_CALCBOUNDINGBOX</h2>
 
@@ -350,7 +379,7 @@ Static Public Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>const static UINT SC_RESERVED_CHANNEL = 0x00080000; const static UINT SC_RESERVED_CHANNEL = 0x00100000; const static UINT SC_RESERVED_CHANNEL = 0x00200000; const static UINT SC_RESERVED_CHANNEL = 0x00400000; const static UINT SC_RESERVED_CHANNEL = 0x00800000; const static UINT SC_RESERVED_CHANNEL = 0x01000000; const static UINT SC_RESERVED_CHANNEL = 0x02000000; const static UINT SC_RESERVED_CHANNEL = 0x04000000; const static UINT SC_RESERVED_CHANNEL = 0x08000000; const static UINT SC_RESERVED_CHANNEL = 0x10000000; const static UINT SC_RESERVED_CHANNEL = 0x20000000; const static UINT SC_RESERVED_CHANNEL = 0x40000000; const static UINT SC_RESERVED_CHANNEL = 0x80000000;Helper masks that make some things a little easier... Note: These are not channels, but a combination of different channels...You should always use the specific channels above when defining or referring to channel values. </p>
+<p>const static UINT SC_RESERVED_CHANNEL = 0x00100000; const static UINT SC_RESERVED_CHANNEL = 0x00200000; const static UINT SC_RESERVED_CHANNEL = 0x00400000; const static UINT SC_RESERVED_CHANNEL = 0x00800000; const static UINT SC_RESERVED_CHANNEL = 0x01000000; const static UINT SC_RESERVED_CHANNEL = 0x02000000; const static UINT SC_RESERVED_CHANNEL = 0x04000000; const static UINT SC_RESERVED_CHANNEL = 0x08000000; const static UINT SC_RESERVED_CHANNEL = 0x10000000; const static UINT SC_RESERVED_CHANNEL = 0x20000000; const static UINT SC_RESERVED_CHANNEL = 0x40000000; const static UINT SC_RESERVED_CHANNEL = 0x80000000;Helper masks that make some things a little easier... Note: These are not channels, but a combination of different channels...You should always use the specific channels above when defining or referring to channel values. </p>
 
 </div>
 </div>
@@ -618,6 +647,28 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af2c73e2db0d96827ffa033a63680e71e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2c73e2db0d96827ffa033a63680e71e">&#9670;&nbsp;</a></span>SC_PREDRAWTRANSPARENTOBJECTS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const UINT CSupportChannels::SC_PREDRAWTRANSPARENTOBJECTS = 0x00080000</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab008200d63102b4efabad805b6d8b9fd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab008200d63102b4efabad805b6d8b9fd">&#9670;&nbsp;</a></span>SC_PREOBJECTDRAW</h2>
 
@@ -709,7 +760,7 @@ Static Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 7 2018 04:35:35 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 9 2019 10:52:14 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

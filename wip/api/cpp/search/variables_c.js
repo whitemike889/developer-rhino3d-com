@@ -1,6 +1,8 @@
 var searchData=
 [
   ['l',['l',['../class_o_n__4dex.html#ac33c34dfb81d9044caae2ba47de03922',1,'ON_4dex::l()'],['../class_o_n__4udex.html#a11614a811239db1529aab8a1c3e02654',1,'ON_4udex::l()']]],
+  ['lastresortmetrics',['LastResortMetrics',['../class_o_n___font_metrics.html#a267fec427e090482419e663716cb97e4',1,'ON_FontMetrics']]],
+  ['lastresortnormalizedmetrics',['LastResortNormalizedMetrics',['../class_o_n___font_metrics.html#a05f17bab9c8dd32d8dce8de91993668f',1,'ON_FontMetrics']]],
   ['layer',['Layer',['../group___r_d_k.html#gaf90e122cbfab5162a93357be721917f2',1,'RhRdkDefinitions.h']]],
   ['left',['left',['../class_o_n__4i_rect.html#a6f75e994b1112a47290a96fc1d6e4561',1,'ON_4iRect::left()'],['../class_o_n__4d_rect.html#a5e2995b2fed93ad185642aa96f0bb7ef',1,'ON_4dRect::left()']]],
   ['lightyears',['LightYears',['../class_o_n___unit_system.html#a1cb7325279d41fca540ac374307963a2',1,'ON_UnitSystem']]],

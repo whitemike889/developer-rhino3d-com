@@ -8,6 +8,7 @@ var searchData=
   ['hectometers',['Hectometers',['../class_o_n___unit_system.html#a531deab6c1dafc70b583f3b96d73cc9e',1,'ON_UnitSystem']]],
   ['height',['height',['../class_o_n___cone.html#ab12d6d30cd21a14dacbc54b4e12004f1',1,'ON_Cone::height()'],['../class_o_n___cylinder.html#a944bf6b90eabe3095e346b6a6e9172fb',1,'ON_Cylinder::height()']]],
   ['heightofcapitalcodepoint',['HeightOfCapitalCodePoint',['../class_o_n___font_metrics.html#a09a14df60aa3a72ffa0580f2dc86fac1',1,'ON_FontMetrics']]],
-  ['hidden',['Hidden',['../class_o_n___component_status.html#a7f7db902d174154175d572f729247694',1,'ON_ComponentStatus']]],
-  ['highlighted',['Highlighted',['../class_o_n___component_status.html#aac2ce8562ffb52a2205d4e116285c61c',1,'ON_ComponentStatus']]]
+  ['hidden',['Hidden',['../class_o_n___component_status.html#a7f7db902d174154175d572f729247694',1,'ON_ComponentStatus::Hidden()'],['../class_o_n___linetype.html#aa38afe5d494c06db0f48415905a108e9',1,'ON_Linetype::Hidden()']]],
+  ['highlighted',['Highlighted',['../class_o_n___component_status.html#aac2ce8562ffb52a2205d4e116285c61c',1,'ON_ComponentStatus']]],
+  ['hyphenminus',['HyphenMinus',['../class_o_n___string.html#a6c0782c382d44f6c7b7d3a0727dc914a',1,'ON_String::HyphenMinus()'],['../class_o_n__w_string.html#a62679c8e5bf956d1dc1c19506902a109',1,'ON_wString::HyphenMinus()']]]
 ];

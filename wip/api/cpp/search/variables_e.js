@@ -5,6 +5,8 @@ var searchData=
   ['nanboundingbox',['NanBoundingBox',['../class_o_n___bounding_box.html#a638a489b986da528eccc0d252662ee7e',1,'ON_BoundingBox']]],
   ['nanline',['NanLine',['../class_o_n___line.html#ae20679652aace7da3b465829b8df8ec4',1,'ON_Line']]],
   ['nanometers',['Nanometers',['../class_o_n___unit_system.html#a246eacda313ca21aaf4ca685cec2a79a',1,'ON_UnitSystem']]],
+  ['nanplane',['NanPlane',['../class_o_n___plane.html#a830a83c4ce675ebdc0058d321f5c41dd',1,'ON_Plane']]],
+  ['nanplaneequation',['NanPlaneEquation',['../class_o_n___plane_equation.html#a26d15552d9f47b1cf6f1b2afeba3650d',1,'ON_PlaneEquation']]],
   ['nanpoint',['NanPoint',['../class_o_n__2f_point.html#aca0217425843178e12fdbf1484b38e52',1,'ON_2fPoint::NanPoint()'],['../class_o_n__3f_point.html#a4829a2380f1b71096fdb4a21eb445a0b',1,'ON_3fPoint::NanPoint()'],['../class_o_n__2d_point.html#a6089662dacc78d960b5b09bc08c559f5',1,'ON_2dPoint::NanPoint()'],['../class_o_n__3d_point.html#a431f63a983b61e62251c3ebb37d851ff',1,'ON_3dPoint::NanPoint()']]],
   ['nantriangle',['NanTriangle',['../class_o_n___triangle.html#a3493f70880a69e59ef3785baec1b1443',1,'ON_Triangle']]],
   ['nanvector',['NanVector',['../class_o_n__2f_vector.html#a2691540bf722b22f919f09f31dbe0412',1,'ON_2fVector::NanVector()'],['../class_o_n__3f_vector.html#a491ca7e79d404bd888bf0645f65b8964',1,'ON_3fVector::NanVector()'],['../class_o_n__2d_vector.html#ac7d1bb1746fa0363cb9a5a24cb1cc1cb',1,'ON_2dVector::NanVector()'],['../class_o_n__3d_vector.html#a2bb705b5d7458947109344fe28460228',1,'ON_3dVector::NanVector()']]],

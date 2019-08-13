@@ -1,6 +1,7 @@
 var searchData=
 [
   ['caption_5fbutton_5fhit_5ftest',['caption_button_hit_test',['../class_c_rhino_ui_dock_bar.html#a60c991903bcb2b65ea36eaeca4dedeea',1,'CRhinoUiDockBar']]],
+  ['capturetypes',['CaptureTypes',['../class_o_n__3dm_animation_properties.html#aad93159e72957f8d83d79dea1b7dee9a',1,'ON_3dmAnimationProperties']]],
   ['centermark_5fstyle',['centermark_style',['../class_o_n___dim_style.html#a0d3eaa7ef1060745bdf091b808d5b84b',1,'ON_DimStyle']]],
   ['change_5fmode',['change_mode',['../class_c_rhino_ui_combo_box.html#a91cb4653e4ecef386bd555aab1440d17',1,'CRhinoUiComboBox']]],
   ['channel',['Channel',['../class_c_rh_rdk_texture_graph_info.html#a2751607ba7ebf395333923bfcd6b1b71',1,'CRhRdkTextureGraphInfo']]],
@@ -18,14 +19,13 @@ var searchData=
   ['compareresult',['CompareResult',['../class_o_n___content_hash.html#a5a6e077d6893727a93e91d3f1c9e847d',1,'ON_ContentHash']]],
   ['componentnameconflictresolution',['ComponentNameConflictResolution',['../class_o_n.html#af19c7a76e741f0a60d00c967c6d63da7',1,'ON']]],
   ['componentorder',['ComponentOrder',['../group___r_d_k.html#ga76db87c0658e96e63e7238cb2415f74f',1,'IRhRdkRenderWindow.h']]],
-  ['componentptrtype',['ComponentPtrType',['../class_o_n___sub_d_component_ptr.html#a53912c536cfa1443e87b8b85b801d039',1,'ON_SubDComponentPtr']]],
+  ['componentorders',['ComponentOrders',['../class_c_rhino_dib.html#a1c2ee3c132c0035a38c2dff6cd2250ba',1,'CRhinoDib']]],
   ['constants',['Constants',['../class_o_n___font.html#ab55ead78e0fc5501a58ba69cc1f5d023',1,'ON_Font']]],
   ['contentanglestyle',['ContentAngleStyle',['../class_o_n___dim_style.html#aab395c064cdabd418332e0ccc04c1f14',1,'ON_DimStyle']]],
   ['context_5flocation',['context_location',['../class_c_rhino_profile_context.html#af806d013c223149975387d8159dd0601',1,'CRhinoProfileContext']]],
   ['contextsfordrawtodc',['ContextsForDrawToDC',['../class_c_display_pipeline_attributes.html#a561a202b6f6f9099b660f19a57437100',1,'CDisplayPipelineAttributes']]],
   ['continue_5fmode',['continue_mode',['../class_c_rhino_dim_linear.html#abf2086cfcc7ec06c3429ded2fe79172c',1,'CRhinoDimLinear']]],
   ['continuity',['continuity',['../class_o_n.html#a7cec8c08d6bc50e082fb9e6507b5f668',1,'ON']]],
-  ['contourpointtype',['ContourPointType',['../class_o_n___font_glyph_outline_point.html#aef12c67de9caa9dd638f8bfe5c874c9e',1,'ON_FontGlyphOutlinePoint']]],
   ['control_5fbar_5fflags',['control_bar_flags',['../class_c_rhino_ui_dock_bar.html#a9b5dfea1a8321b09fedff96be8214ced',1,'CRhinoUiDockBar']]],
   ['control_5ftype',['control_type',['../class_c_rhino_ui_options_list_ctrl_item.html#a3f8c20f45d99674141e2836845a8e97b',1,'CRhinoUiOptionsListCtrlItem']]],
   ['coordinate_5fsystem',['coordinate_system',['../class_o_n.html#a0601f59125faa5f99e9a281d6566978b',1,'ON']]],

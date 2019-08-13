@@ -4,6 +4,7 @@ var searchData=
   ['keeparray',['KeepArray',['../group__open_n_u_r_b_s.html#gafff693cde3bcf58c12392bc286204962',1,'ON_SimpleArray::KeepArray()'],['../group__open_n_u_r_b_s.html#gac8ea996fc990ee251d88b324bc8b08f2',1,'ON_ClassArray::KeepArray()']]],
   ['keepfile',['KeepFile',['../class_o_n___workspace.html#a900ccd355d813f2bddec3529271f1f7f',1,'ON_Workspace']]],
   ['keepmemory',['KeepMemory',['../class_o_n___workspace.html#ab21c61bec3d3ef472abe7c04c5c65257',1,'ON_Workspace']]],
+  ['keeporiginalfaces',['KeepOriginalFaces',['../class_i_rhino_mesh_extruder.html#a2911843d98c18071797e7aaa33fc0652',1,'IRhinoMeshExtruder']]],
   ['keeprunning',['KeepRunning',['../class_c_rhino_worker_thread.html#a188530b09c59bb302aad88f8de8695ef',1,'CRhinoWorkerThread']]],
   ['key',['Key',['../class_c_rhino_directory_manager.html#ab25c55ba2b33d3d167bace42c25f991b',1,'CRhinoDirectoryManager::Key()'],['../class_c_rhino_string_dictionary.html#a0f96f1ffd37277f0e336e82932c62c21',1,'CRhinoStringDictionary::Key()']]],
   ['keycount',['KeyCount',['../class_c_rhino_ui_registry.html#a9ef36bdb4063fad13d949d05ba12d84f',1,'CRhinoUiRegistry']]],

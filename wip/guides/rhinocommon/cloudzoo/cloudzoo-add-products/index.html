@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Add Products to Cloud Zoo with unset</title>
+  <meta name="description" content="Once you are registered as an issuer, you can add, view, and modify products in Cloud Zoo using the endpoints described below.  Using unset">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinocommon/cloudzoo/cloudzoo-add-products/" />
+  <meta property="og:title" content="Add Products to Cloud Zoo" />
+  <meta property="og:description" content="Once you are registered as an issuer, you can add, view, and modify products in Cloud Zoo using the endpoints described below." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Add Products to Cloud Zoo" />
+  <meta name="twitter:description" value="Once you are registered as an issuer, you can add, view, and modify products in Cloud Zoo using the endpoints described below." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="unset" />
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/wip/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/wip/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/wip/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/wip/guides/rhinocommon/cloudzoo/cloudzoo-add-products/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/wip/feed.xml" />
+
+  <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/wip/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/wip/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/wip/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/wip/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/wip/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/wip/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/wip/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/wip/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="/wip/images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <meta name="robots" content="noindex" />
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner version-banner-warning">
+
+    
+      <strong>WARNING:</strong> You're viewing the <strong>Rhino WIP</strong> version of this page! <a href="/guides/rhinocommon/cloudzoo/cloudzoo-add-products/">View the current version instead.</a>
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/" + splitPath.splice(2,splitPath.length-2).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("View the current site instead.");
+    $aTag.attr("href", "/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/wip/"><img src="/wip/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/wip/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/wip/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/wip/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link active" href="/wip/guides/">Guides</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/api/">API</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/samples/">Samples</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/wip/videos/">Videos</a>
+                    
+                  
+              
+            
+          
+        
+        <a class="page-link" href="https://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/wip/search-results.html">
+                <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
+                <input class="searchBox" type="submit" size="2" value=" " />
+            </form>
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>
+<!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#endpoint-conventions">Endpoint Conventions</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#endpoint-location">Endpoint Location</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#json">JSON</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#authentication">Authentication</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#non-successful-responses">Non-successful responses</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#endpoints">Endpoints</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#post-product">POST /product</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#put-productproduct_id">PUT /product/{product_id}</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#get-productproduct_id">GET /product/{product_id}</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/wip/guides/rhinocommon">RhinoCommon</a></li>
+
+              
+                
+                  <li class="active">CloudZoo</li>
+                
+              
+          </ol>
+
+          <h1>Add Products to Cloud Zoo</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      by <a href="/wip/authors/aj">Andrés Jacobo</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/master/_guide_topics/rhinocommon/cloudzoo/cloudzoo-add-products.md" target="_blank">25 Jun 2019</a>)
+    
+  </span>
+
+</p>
+
+          <p>Once you are registered as an issuer, you can add, view, and modify products in Cloud Zoo using the endpoints described below.</p>
+
+          <h2 id="endpoint-conventions">Endpoint Conventions</h2>
+
+<p>Unless noted, the following conventions apply to <em>all</em> product endpoints available to registered issuers in Cloud Zoo.</p>
+
+<h3 id="endpoint-location">Endpoint Location</h3>
+<p>All requests should be made to the following location: <code>https://cloudzoo.rhino3d.com/v1</code>.</p>
+
+<h3 id="json">JSON</h3>
+
+<p>All payload to and from endpoints happens in <a href="https://www.json.org">JSON format</a>. To make this explicit, every response to an endpoint will have the  header <code>Content-Type: application/json</code> present in the HTTPS response.</p>
+
+<h3 id="authentication">Authentication</h3>
+
+<p>All endpoints in Cloud Zoo or on the issuer use <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">Basic Authentication</a>. To receive a successful response from an endpoint, you must include an <code>Authorization</code> header like so:</p>
+
+<pre><code>Authorization: Basic BASE64ENCODEDSTRING
+</code></pre>
+
+<p>where <code>BASE64ENCODEDSTRING</code> is a <a href="https://en.wikipedia.org/wiki/Base64">base64</a> encoded string containing your issuer id and your issuer secret:</p>
+
+<pre><code class="language-python">	BASE64ENCODEDSTRING = b64.encode(issuer_id + ":" + issuer_secret)
+</code></pre>
+
+<h3 id="non-successful-responses">Non-successful responses</h3>
+
+<p>All unsuccessful responses from endpoints will have an HTTP status code greater or equal to <code>400</code>. If the status code is also less than <code>500</code>, the payload will include the following JSON:</p>
+
+<pre><code>{
+    "Error": "SomeErrorCode"
+	"Description": "A description about the error message",
+	"Details": "More details about the error"
+}
+</code></pre>
+
+<ul>
+  <li>The <code>Error</code> field contains a specific error code that can be used by the issuer to recognize a specific error, such as incorrect credentials.</li>
+  <li>The <code>Description</code> field contains a description of the error.</li>
+  <li>The <code>Details</code> field contains details of the error, possibly suggesting how to fix it.</li>
+</ul>
+
+<p>If the status code is greater or equal to <code>500</code>, the response may not be JSON and may be empty.</p>
+
+<h2 id="endpoints">Endpoints</h2>
+
+<h3 id="post-product">POST /product</h3>
+
+<p>Adds a product to Cloud Zoo registered under the authenticating issuer.</p>
+
+<h4 id="example-request">Example Request</h4>
+
+<pre><code>POST /product
+
+{
+    "id": "06bb1e79-5456-47a1-ad6d-104518cd894b",
+    "version": "12",
+    "platforms": [
+        "Windows"
+    ],
+    "picture": "https://elisapi.mcneel.com/media/2",
+    "downloadUrl": 	"https://www.rhino3d.com/download/new_product",
+    "titles": {
+        "en": "New Product Name",
+        "es": "Nuevo Producto",
+        "ja": "新製品"
+    },
+    "format": {
+		"example": "MA7B-XXXX-XXXX-XXXX-XXXX-XXXX",
+		"prefix": "MA7B",
+		"length": {"min": 24, "max": 24}
+	}
+}
+</code></pre>
+
+<p>The payload should be a <a href="/wip/guides/rhinocommon/cloudzoo/cloudzoo-product">Product object</a>.</p>
+
+<h4 id="response">Response</h4>
+
+<p>A successful response (The product was created):</p>
+
+<ul>
+  <li>HTTP Status Code: <code>200 (OK)</code></li>
+  <li>Response Payload: The newly created <a href="/wip/guides/rhinocommon/cloudzoo/cloudzoo-product">Product object</a>.</li>
+</ul>
+
+<p>A non-successful (error) response (The product could not be created):</p>
+
+<ul>
+  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
+  <li>Response Payload: <a href="#non-successful-responses">A non-successful response</a></li>
+</ul>
+
+<h3 id="put-productproduct_id">PUT /product/{product_id}</h3>
+
+<p>Modifies an existing product with the given <code>product_id</code>. Note that some properties of a product cannot be modified after creation, including but not limited to its unique id.</p>
+
+<h4 id="example-request-1">Example Request</h4>
+
+<pre><code>PUT /product/06bb1e79-5456-47a1-ad6d-104518cd894b
+
+{
+    "platforms": [
+        "Windows", "Mac"
+    ],
+    "picture": "https://elisapi.mcneel.com/media/new_icon_url"
+}
+</code></pre>
+
+<h4 id="response-1">Response</h4>
+
+<p>A successful response (The product was modified):</p>
+
+<ul>
+  <li>HTTP Status Code: <code>200 (OK)</code></li>
+  <li>Response Payload: The newly updated <a href="/wip/guides/rhinocommon/cloudzoo/cloudzoo-product">Product object</a>.</li>
+</ul>
+
+<p>A non-successful (error) response (The product could not be modified):</p>
+
+<ul>
+  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
+  <li>Response Payload: <a href="#non-successful-responses">A non-successful response</a></li>
+</ul>
+
+<h3 id="get-productproduct_id">GET /product/{product_id}</h3>
+
+<p>Gets an existing product with the given <code>product_id</code>.</p>
+
+<h4 id="example-request-2">Example Request</h4>
+
+<pre><code>GET /product/06bb1e79-5456-47a1-ad6d-104518cd894b
+</code></pre>
+
+<h4 id="response-2">Response</h4>
+
+<p>A successful response:</p>
+
+<ul>
+  <li>HTTP Status Code: <code>200 (OK)</code></li>
+  <li>Response Payload: A <a href="/wip/guides/rhinocommon/cloudzoo/cloudzoo-product">Product object</a>.</li>
+</ul>
+
+<p>A non-successful (error) response:</p>
+
+<ul>
+  <li>HTTP Status Code: A code greater or equal to <code>400 (Bad Request)</code></li>
+  <li>Response Payload: <a href="#non-successful-responses">A non-successful response</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                
+                Author: <a href="/wip/authors/aj">Andrés Jacobo</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/master/_guide_topics/rhinocommon/cloudzoo/cloudzoo-add-products.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/wip/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2019 Robert McNeel &amp; Associates<br/>
+          <span class="glyphicon glyphicon-heart-empty"></span>&nbsp;<a href="/wip/authors">Contributions welcome</a>
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+</html>

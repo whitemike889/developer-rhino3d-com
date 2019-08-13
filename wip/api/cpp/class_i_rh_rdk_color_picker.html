@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rhino C++ SDK Help: IRhRdkColorPicker Class Reference</title>
+<title>Rhino C++ API: IRhRdkColorPicker Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Rhino C++ SDK Help
-   &#160;<span id="projectnumber">6.2</span>
+   <div id="projectname">Rhino C++ API
+   &#160;<span id="projectnumber">6.16</span>
    </div>
   </td>
  </tr>
@@ -84,7 +84,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad7e5daccb40240048b1f7ab4d76cb971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47a609d6a670fef2283e8bba171843be"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_rh_rdk_color_picker.html#a47a609d6a670fef2283e8bba171843be">SetButtonColor</a> (const <a class="el" href="class_c_rh_rdk_color.html">CRhRdkColor</a> &amp;col) const =0</td></tr>
 <tr class="separator:a47a609d6a670fef2283e8bba171843be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23f5570edf66ede3ed33b31baeb1ede6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group___r_d_k.html#gaf141e0bb1bad5b4f381f9de023f904ad">RDK_DEPRECATED</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_rh_rdk_color_picker.html#a23f5570edf66ede3ed33b31baeb1ede6">ShowPicker</a> (<a class="el" href="class_c_rh_rdk_color.html">CRhRdkColor</a> &amp;colInOut, HWND pParent, class <a class="el" href="class_c_rh_rdk_color_button.html">CRhRdkColorButton</a> *pButton)</td></tr>
+<tr class="memitem:a23f5570edf66ede3ed33b31baeb1ede6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="group___r_d_k.html#gaf141e0bb1bad5b4f381f9de023f904ad">RDK_DEPRECATED</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_rh_rdk_color_picker.html#a23f5570edf66ede3ed33b31baeb1ede6">ShowPicker</a> (<a class="el" href="class_c_rh_rdk_color.html">CRhRdkColor</a> &amp;colInOut, HWND pParent, class CRhRdkColorButton *pButton)</td></tr>
 <tr class="separator:a23f5570edf66ede3ed33b31baeb1ede6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69a1c55ffc77734d7115b9f1cf741e9d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_rh_rdk_color_picker.html#a69a1c55ffc77734d7115b9f1cf741e9d">ShowPicker</a> (<a class="el" href="class_c_rh_rdk_color.html">CRhRdkColor</a> &amp;colInOut, HWND pParent)=0</td></tr>
 <tr class="separator:a69a1c55ffc77734d7115b9f1cf741e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -95,7 +95,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a37c121d53a6e0e149495b5c140024ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This interface allows you to provide a customized color picker to use with <a class="el" href="class_c_rh_rdk_color_button.html">CRhRdkColorButton</a>. The implementation of this interface is not the picker window itself, but it instead creates and manages the picker window. </p>
+<div class="textblock"><p>This interface allows you to provide a customized color picker to use with CRhRdkColorButton. The implementation of this interface is not the picker window itself, but it instead creates and manages the picker window. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a37c121d53a6e0e149495b5c140024ca4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37c121d53a6e0e149495b5c140024ca4">&#9670;&nbsp;</a></span>~IRhRdkColorPicker()</h2>
@@ -324,7 +324,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">class <a class="el" href="class_c_rh_rdk_color_button.html">CRhRdkColorButton</a> *&#160;</td>
+          <td class="paramtype">class CRhRdkColorButton *&#160;</td>
           <td class="paramname"><em>pButton</em>&#160;</td>
         </tr>
         <tr>
@@ -383,7 +383,7 @@ Protected Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>To update the color button during picking, you should call <a class="el" href="group___r_d_k.html#ga0d4982ef12e58b6d49fe78d5cb1a0cae">RhRdkGetActiveColorButton()</a>, check for null, and update the returned button if not null. This replaces the color button pointer in the deprecated version because there is a danger that the button can be deleted during the time the picker is displayed. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>To update the color button during picking, you should call RhRdkGetActiveColorButton(), check for null, and update the returned button if not null. This replaces the color button pointer in the deprecated version because there is a danger that the button can be deleted during the time the picker is displayed. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd><em>true</em> if a new color was chosen, else <em>false</em>. </dd></dl>
 
 </div>
@@ -391,7 +391,7 @@ Protected Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 7 2018 04:35:36 for Rhino C++ SDK Help by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 9 2019 10:52:15 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

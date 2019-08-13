@@ -5,5 +5,5 @@ var searchData=
   ['view_5farea',['view_area',['../class_c_rhino_print_info.html#a0df827b4b7cbf31b743da81b89d4aea6',1,'CRhinoPrintInfo']]],
   ['view_5fprojection',['view_projection',['../class_o_n.html#a55c47f5241c289586d8e8415b6f1a75e',1,'ON']]],
   ['view_5ftype',['view_type',['../class_o_n.html#a2dafb3795977579badb110f474671ae2',1,'ON::view_type()'],['../class_c_rhino_ui_block_preview.html#a921a95a02de8d21eee42eea7bac34eda',1,'CRhinoUiBlockPreview::view_type()'],['../class_c_rhino_view.html#aebe94c94ba76a826c1d9d8b284795955',1,'CRhinoView::view_type()']]],
-  ['visibility',['VISIBILITY',['../class_o_n___h_l_d_curve.html#ae31b1f2093ed6a54c742a5666d485209',1,'ON_HLDCurve::VISIBILITY()'],['../class_o_n___depth_image.html#ac39bf0746c32366b4949c11b74c87fd1',1,'ON_DepthImage::VISIBILITY()']]]
+  ['visibility',['VISIBILITY',['../class_o_n___h_l_d_curve.html#ae31b1f2093ed6a54c742a5666d485209',1,'ON_HLDCurve::VISIBILITY()'],['../class_o_n___h_l_d_point.html#a2c92bcf09996e8808e3f06a3f291698e',1,'ON_HLDPoint::VISIBILITY()'],['../class_o_n___depth_image.html#ac39bf0746c32366b4949c11b74c87fd1',1,'ON_DepthImage::VISIBILITY()']]]
 ];
