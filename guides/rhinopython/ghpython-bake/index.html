@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Custom GhPython Baking Component with Python</title>
+  <meta name="description" content="Use GhPython to create custom baking components.  Using Python">
+
+  <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="/guides/rhinopython/ghpython-bake/" />
+  <meta property="og:title" content="Custom GhPython Baking Component" />
+  <meta property="og:description" content="Use GhPython to create custom baking components." />
+  <meta property=”og:site_name” content="developer.rhino3d.com"/>
+  <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
+
+  <!-- twitter card tags additive with the og: tags -->
+  <meta name="twitter:domain" value="developer.rhino3d.com" />
+  <meta name="twitter:title" value="Custom GhPython Baking Component" />
+  <meta name="twitter:description" value="Use GhPython to create custom baking components." />
+  
+    <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
+  
+  <meta name="twitter:url" value="http://developer.rhino3d.com" />
+  
+  <meta name="twitter:label1" value="Platform(s)" />
+  <meta name="twitter:data1" value="Windows, Mac, Grasshopper" />
+  
+  
+  <meta name="twitter:label2" value="Language(s)" />
+  <meta name="twitter:data2" value="Python" />
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/vbnet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="/node_modules/highlightjs-line-numbers.js/dist/highlightjs-line-numbers.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>hljs.initLineNumbersOnLoad();</script>
+
+  <!-- Overridden theme -->
+  <link rel="stylesheet" href="/css/main.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+  <!-- Bootstrap override -->
+  <link rel="stylesheet" href="/css/bootstrap-override.css">
+
+  <link rel="canonical" href="http://developer.rhino3d.com/guides/rhinopython/ghpython-bake/">
+  <link rel="alternate" type="application/rss+xml" title="Rhino Developer Docs" href="http://developer.rhino3d.com/feed.xml" />
+
+  <link rel="shortcut icon" href="https://developer.rhino3d.com/favicon.ico?v=2" />
+  <!-- Saving bookmarks to mobile devices -->
+  <!-- For non-Retina (@1× display) iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png"><!-- 57×57px -->
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+  <!-- For the iPad mini and the first- and second-generation iPad (@1× display) on iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/images/apple-touch-icon-76x76-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+  <!-- For iPhone with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/apple-touch-icon-120x120-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≤ 6: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+  <!-- For iPad with @2× display running iOS ≥ 7: -->
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/apple-touch-icon-152x152-precomposed.png">
+  <!-- For iPhone 6 Plus with @3× display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/images/apple-touch-icon-180x180-precomposed.png">
+  <!-- For Chrome for Android: -->
+  <link rel="icon" sizes="192x192" href="/images/touch-icon-192x192.png">
+
+  <!-- Diable crawling until this version is the stable version -->
+  <!--<meta name="robots" content="noindex" />-->
+</head>
+
+
+  <body>
+
+    <!-- Google Tag Manager **This belongs right after the <body> tag**-->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MWMDKN"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MWMDKN');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+    
+
+<!-- The following are "casts" from the string to number using math filters... -->
+
+
+
+<!-- ...but we need to check to see if the original branches were numbers or not... -->
+
+
+
+
+
+
+
+
+
+  <div class="version-banner">
+
+    
+      
+        
+        
+          <strong>NEW:</strong> Welcome to the <strong>Rhino 6</strong> version of this page! <a href="/5/guides/rhinopython/ghpython-bake/">Looking for the older Rhino 5 version?</a>
+        
+        
+      
+    
+</div>
+
+<!-- Check the version banner for broken links and remove the link if found -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function()
+{
+  var splitPath = window.location.pathname.split("/");
+  var linkURL = "/5/" + splitPath.splice(1,splitPath.length-1).join("/");
+
+  $.get(linkURL).fail(function ()
+  {
+    var $aTag = $("div.version-banner > a");
+    $aTag.text("Looking for the older Rhino 5 site?");
+    $aTag.attr("href", "/5/");
+  });
+});
+</script>
+
+
+    <div class="container">
+
+      <header class="site-header">
+
+
+    <a class="site-title" href="/"><img src="/images/rhinodevlogo148x128.png" alt="Rhino Developer Docs" height="48" width="56"></a><a class="site-title" href="/">Rhino Developer Docs</a>
+
+    <nav class="site-nav">
+      <img class="menu-icon" src="/images/gi.svg">
+      
+      <div class="trigger">
+      	<!--<a class="page-link" href="/">Welcome</a>-->
+        <!-- get current page title and "collection" to figure out which nav
+             link should be "active" -->
+        
+        
+        
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+            
+              
+                
+              
+            
+          
+        
+          
+        
+          
+            
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link active" href="/guides/">Guides</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/api/">API</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/samples/">Samples</a>
+                    
+                  
+              
+            
+          
+        
+          
+            
+          
+        
+          
+            
+              
+                
+                  
+                    <a class="page-link" href="/videos/">Videos</a>
+                    
+                  
+              
+            
+          
+        
+        <a class="page-link" href="https://discourse.mcneel.com/c/rhino-developer">Forums</a>
+        <!-- Google Search Engine -->
+        <!-- TODO Move to this site back into the Mcneel search, or use a simple site only search for results -->
+        <div id="sitesearch">
+            <!-- CSE Search Box Begins  -->
+            <form id="search-box" name="search-box" onsubmit="sitesearchFunction()" action="/search-results.html">
+                <input id="searchtext" type="search" name="q" size="24" value="" placeholder="Search" />
+                <input class="searchBox" type="submit" size="2" value=" " />
+            </form>
+			<script type="text/javascript">
+			function sitesearchFunction(){
+				var form_id = document.getElementById("search-box");
+				var form_action = form_id.action;
+                var form_sb = document.getElementById("searchtext");
+				var query_src = form_sb.value + " site:developer.rhino3d.com";
+				form_sb.value = query_src.toString();
+			}
+			</script>
+<!-- Google CSE Search Box Ends -->
+        </div>
+        <!--End of Google Search Engine -->
+      </div>
+    </nav>
+
+</header>
+
+
+      <div class="page-content">
+        <!--div class="wrapper"-->
+          <div class="container-fluid">
+
+<div class="row-fluid">
+    <!--Nav Bar -->
+    <nav class="col-xs-0 col-md-3 bs-docs-sidebar">
+    <ul id="sidebar" class="nav nav-stacked fixed">
+        <!-- Find the h2 group and any h3 subgroups -->
+        
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#basic-ghpython-component">Basic GHPython Component</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#the-python-code">The Python code</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#advanced-options-for-baking">Advanced Options for Baking</a>
+
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#baking-colors-materials-and-other-properties">Baking colors materials a...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#adding-key-value-text-to-the-object">Adding Key-Value text to ...</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#changing-object-attributes">Changing Object Attributes:</a>
+                    </li>
+                  
+
+                </ul>
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#next-steps">Next Steps</a>
+
+              
+
+            </li>
+          
+
+        
+          
+
+          
+            
+            
+            
+            
+            <li>
+              <a href="#related-topics">Related Topics</a>
+
+              
+
+            </li>
+          
+
+        
+    </ul>
+</nav>
+
+
+    <!--Main Content -->
+    <div class="col-xs-12 col-md-9">
+      <!--<div class="post">-->
+
+        <article class="post-content">
+
+          <ol class="breadcrumb">
+              
+              
+              
+              <li><a href="/guides/rhinopython">RhinoPython</a></li>
+
+              
+                
+                  <li class="active">GhPython</li>
+                
+              
+          </ol>
+
+          <h1>Custom GhPython Baking Component</h1>
+
+          <p>
+  <span class="guide_byline">
+    
+      
+      by <a href="/authors/scott_davidson">Scott Davidson</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/ghpython-bake.md" target="_blank">14 Aug 2019</a>)
+    
+  </span>
+
+</p>
+
+          <p>Use GhPython to create custom baking components.</p>
+
+          <p>Many times it is useful to create a custom component in Grasshopper to bake both geometry and other properties into Rhino in the same component. This guide will cover the varying calls to create these custom components using GhPython.</p>
+
+<p>There are a few different ways to approach baking.  This guide set’s up the simplest approach. At the end of this guide is a section on some of the variations possible to fit other bake situations.</p>
+
+<p>For more details  any of the concepts in this guide, more details can be found in:</p>
+
+<ol>
+  <li><a href="https://developer.rhino3d.com/guides/rhinopython/ghpython-component/">GHPython editor basics guide</a></li>
+  <li><a href="http://developer.rhino3d.com/guides/rhinopython/">RhinoScriptSyntax and Python Guide</a></li>
+  <li>RhinoCommon API please refer to the <a href="http://developer.rhino3d.com/guides/rhinocommon">McNeel RhinoCommon Developer site</a>.</li>
+</ol>
+
+<h2 id="basic-ghpython-component">Basic GHPython Component</h2>
+
+<p>Start with a standard <a href="https://developer.rhino3d.com/guides/rhinopython/ghpython-component/">GHPython Component</a>.</p>
+
+<p><img src="/images/ghpython-bake.png" alt="/images/ghpython-bake.png" class="img-center" width="60%" /></p>
+
+<p>In this case we use 3 inputs. Change the names of input and output and the Type hint by right clicking on each input:</p>
+
+<ul>
+  <li><code>G</code>: Geometry to bake (GUIID)</li>
+  <li><code>L</code>: Layer name to bake to (String).</li>
+  <li><code>B</code>: Activate toggle to bake (bool)</li>
+</ul>
+
+<p>To test this component. the Box Param is the easiest geometry type to use for testing.  Add a Layer name using a panel as input.  Use a Button or a Switch to toggle <code>True</code> and <code>False</code>.</p>
+
+<h2 id="the-python-code">The Python code</h2>
+
+<p>Here is the code for this component.  In this case, the geometry is baked to Rhino on the default layer, then through Python we switch the layer to the one input.</p>
+
+<pre class="line-numbers"><code class="language-python">"""Provides a scripting component.
+    Inputs:
+        G: Geometry to bake
+        L: Layer name for bake
+        B: Bake Activate
+    Output:
+        a: The a output variable"""
+
+__author__ = "ScottD"
+__version__ = "2019.08.10"
+
+import rhinoscriptsyntax as rs
+import scriptcontext
+import Rhino
+
+
+scriptcontext.doc = ghdoc
+
+
+if B:
+    
+    print(type(G)) #debug message to Python output
+    
+    #we obtain the reference in the Rhino doc
+    doc_object = rs.coercerhinoobject(G, True, True)
+    
+    print(type(doc_object)) #debug message to Python output
+    
+    attributes = doc_object.Attributes
+    print('the type of attributes is: ' + str(type(attributes))) #debug message to Python output
+    geometry = doc_object.Geometry
+    print('the type of geometry is: ' + str(type(doc_object))) #debug message to Python output
+    
+    #we change the scriptcontext
+    scriptcontext.doc = Rhino.RhinoDoc.ActiveDoc
+    
+    #we add both the geometry and the attributes to the Rhino doc
+    rhino_brep = scriptcontext.doc.Objects.Add(geometry, attributes)
+    print('the Rhino doc ID is: ' + str(rhino_brep)) #debug message to Python output
+    
+    #we can for example change color in Rhino...
+    # rs.ObjectColor(rhino_line, color)
+    if not rs.IsLayer(L): 
+        rs.AddLayer(L)
+    rs.ObjectLayer(rhino_brep, L)
+    
+    #we put back the original Grasshopper document as default
+    scriptcontext.doc = ghdoc
+    a = rhino_brep
+</code></pre>
+
+<p>There are various key lines of code to be understand:</p>
+
+<table class="multiline">
+<tr>
+<th>Line</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>17</td>
+<td>Grasshopper has it's own document.  Rhino has its own document also.  This line makes sure the current scripting context is in the Grasshopper document.</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Standard <code>if</code> statement to activate the bake once the <code>B</code> is set to <code>TRUE</code>.</td>
+</tr>
+<tr>
+<td>25</td>
+<td>The coercerhinoobject method will attempt to take anything input and convert the results a Rhino Geoemtry Object.  There are many coerce methods for various input types.</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Split the coerced object into its Attributes.  The attributes of an object include such properties as color, layer, linetype, render material, and group membership, amongst others. The Advanced section below covers object attributes some more.</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Split the coerced object into its Geometry object. Used when baking the object into Rhino.</td>
+</tr>
+<tr>
+<td>35</td>
+<td>Make sure the script is talking to the Rhino Document for the following functions.</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Add the object to the Rhino document. This is the actual Bake.  Take note that if it has been baked previous, there will now be two objects.</td>
+</tr>
+<tr>
+<td>39-40</td>
+<td>Check to see if the layer name exists in Rhino.  If it does not, then create a new layer with that name.</td>
+</tr>
+<tr>
+<td>41</td>
+<td>Change the Rhino object's layer to the requested layer name.</td>
+</tr>
+<tr>
+<td>44</td>
+<td>Switch the script context back to the Grasshopper document.</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Pass the original component input object to the component output if it is needed in any downstream processes.</td>
+</tr>
+</table>
+
+<p>Hopefully this code will serve as a template in taking objects from Grasshopper into Rhino.  There are a multitude of variations on this theme. The following section looks at various ways to use more advanced options to better fit the situation.</p>
+
+<h2 id="advanced-options-for-baking">Advanced Options for Baking</h2>
+
+<p>Beyond simply changing an objects layer after adding the new object to Rhino.  There are many other properties that can be changed.  Here is a discussion of some of the possibilities.</p>
+
+<h3 id="baking-colors-materials-and-other-properties">Baking colors materials and other properties</h3>
+
+<p>In the sample above using the layername to specify where the object ultimately lands is quite simple. Here are some other properties that may want to be changed:</p>
+
+<table>
+<tr>
+<td>ObjectName</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectName">rs.ObjectName(object-id, name)</a></td>
+</tr>
+<tr>
+<td>Display Color</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectColorSource">rs.ObjectColorSource(object_ids, source=None)</a><br /><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectColor">rs.ObjectColor(object_ids, color=None)</a></td>
+</tr>
+<tr>
+<td>Print Color</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectPrintColorSource">rs.ObjectPrintColorSource(object_ids, source=None)</a><br /><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectPrintColor">rs.ObjectPrintColor(object_ids, color=None)</a></td>
+</tr>
+<tr>
+<td>UnlockObject</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-UnlockObject">rs.UnlockObject(object_id)</a></td>
+</tr>
+<tr>
+<td>LockObject</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-LockObject">rs.LockObject(object_id)</a></td>
+</tr>
+<tr>
+<td>HideObject</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-HideObject">rs.HideObject(object_id)</a></td>
+</tr>
+<tr>
+<td>Material</td>
+<td><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectMaterialSource">rs.ObjectMaterialSource(object_ids, source=None)</a><br />
+<a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectMaterialIndex">rs.ObjectMaterialIndex(object_id, material_index=None)</a>
+</td>
+</tr>
+</table>
+
+<h3 id="adding-key-value-text-to-the-object">Adding Key-Value text to the object</h3>
+
+<p>Additional text data can be stored as a Key:Value pair on the Rhino object.  THe Keys and Values can be retrieved later in Rhino.</p>
+
+<p><a href="https://developer.rhino3d.com/api/RhinoScriptSyntax/#object-ObjectMaterialSource">rs.SetUserText(object_id, key, value=None, attach_to_geometry=False)</a></p>
+
+<p>For more information on <a href="https://developer.rhino3d.com/api/rhinoscript/user_data_methods/user_data_methods.htm">RhinoScript User Text help topic</a>.</p>
+
+<h3 id="changing-object-attributes">Changing Object Attributes:</h3>
+
+<p>Through the RhinoCommon functions, the attributes of an object can be set.  See the <a href="https://developer.rhino3d.com/api/RhinoCommon/html/T_Rhino_DocObjects_ObjectAttributes.htm">Object Attribute Class for more details….</a></p>
+
+<h2 id="next-steps">Next Steps</h2>
+
+<p>That lays out the basics of the GhPython component.  Next is a look into the component Python editor for Grasshopper.</p>
+
+<hr />
+
+<h2 id="related-topics">Related Topics</h2>
+
+<ul>
+  <li><a href="/guides/rhinopython/what-are-python-rhinoscript">Your first script with Python in Grasshopper</a></li>
+  <li><a href="/guides/rhinopython/what-are-python-rhinoscript">What is Python and RhinoScript?</a></li>
+  <li><a href="/guides/rhinopython/python-loading-scripts">Editing Python in Grasshopper</a></li>
+  <li><a href="/guides/rhinopython/">Python Guide for Rhino</a></li>
+</ul>
+
+        </article>
+
+      <!--</div>-->
+
+    </div>
+</div>
+</div>
+
+        <!--/div-->
+      </div>
+
+      <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+      
+        <div class="row">
+          <div class="col-md-4">
+
+            <p class="text">
+              
+                
+                Author: <a href="/authors/scott_davidson">Scott Davidson</a>
+              
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <span class="icon  icon--github">
+              <svg viewBox="0 0 16 16">
+                <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <a href="https://github.com/mcneel/developer-rhino3d-com/blob/6/_guide_topics/rhinopython/ghpython-bake.md" target="_blank">Edit page on GitHub</a>
+          </div>
+            <div class="col-md-4">
+              <span class="pull-right">
+                <span class="glyphicon glyphicon-cog"></span>&nbsp;<a href="/admin">Admin</a>
+              </span>
+            </div>
+        </div>
+
+        <div class="row text-center">
+          © 1997 - 2019 Robert McNeel &amp; Associates<br/>
+          <span class="glyphicon glyphicon-heart-empty"></span>&nbsp;<a href="/authors">Contributions welcome</a>
+        </div>
+
+      
+
+    </div>
+
+  </div>
+
+  <script>
+    if (navigator.appVersion.indexOf("Win")!=-1)
+    {
+      var body = document.getElementsByTagName("body");
+      body[0].style.fontWeight = '400';
+    }
+  </script>
+
+</footer>
+
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- MathJax -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/javascript">
+    $('body').scrollspy({
+        target: '.bs-docs-sidebar',
+        offset: 150 /* fixed header is about 40px high */
+    });
+    </script>
+  </body>
+</html>
