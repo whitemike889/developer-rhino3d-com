@@ -359,7 +359,7 @@ var searchData=
   ['diametermode',['DiameterMode',['../class_c_args_rhino_get_spiral.html#ad59efd7d4a0711d014a70b3c077aa2f3',1,'CArgsRhinoGetSpiral']]],
   ['diameterprompt',['DiameterPrompt',['../class_c_args_rhino_get_circle.html#a0cb6cb9f7039140c0e25e8aacd4c6087',1,'CArgsRhinoGetCircle::DiameterPrompt()'],['../class_c_args_rhino_get_spiral.html#a4f3b8a5fe33627e7481025ba0786fb5e',1,'CArgsRhinoGetSpiral::DiameterPrompt()']]],
   ['diamond_5fswatch',['diamond_swatch',['../class_c_rhino_ui_combo_box.html#a4b945fffd9bc73eb6a881d5c44660be2a1d85d155e1b7e89efdfd45b12ab5125d',1,'CRhinoUiComboBox']]],
-  ['dib',['Dib',['../class_c_rhino_bitmap.html#ae99f09d121ae3499f092cbe1baf20f2c',1,'CRhinoBitmap::Dib()'],['../class_i_rh_rdk_preview_rendered.html#a6b6cf31d716f0dd8db0af018bb214365',1,'IRhRdkPreviewRendered::Dib()']]],
+  ['dib',['Dib',['../class_c_rhino_bitmap.html#ae99f09d121ae3499f092cbe1baf20f2c',1,'CRhinoBitmap::Dib()'],['../class_c_rhino_dib_1_1_c_fast_pixel_access.html#a835e241f81e05dbce047f18a62ee3921',1,'CRhinoDib::CFastPixelAccess::Dib()'],['../class_i_rh_rdk_preview_rendered.html#a6b6cf31d716f0dd8db0af018bb214365',1,'IRhRdkPreviewRendered::Dib()']]],
   ['dibcolordepth',['DIBColorDepth',['../group___rhino_u_i.html#ga1cf9fc43a850945023ba2e7fb3b5ee42',1,'RhinoSdkUiRmaPort.h']]],
   ['dibcopy',['DIBCopy',['../group___rhino_u_i.html#ga05891b074203c785fe25b43a47e4379e',1,'RhinoSdkUiRmaPort.h']]],
   ['dibcopytoclipboard',['DIBCopyToClipboard',['../group___rhino_u_i.html#ga1a8c9a55f721f99b08a06bb8a5c031d3',1,'RhinoSdkUiRmaPort.h']]],
