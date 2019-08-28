@@ -6,21 +6,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Calling Grasshopper components from Python. with Python</title>
-  <meta name="description" content="Is it possible to call the functions of a Grasshopper component from inside a Python script?  Using Python">
+  <title>Node in Code from Python. with Python</title>
+  <meta name="description" content="It is possible to call a Grasshopper component from inside a Python.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/ghpython-call-components/" />
-  <meta property="og:title" content="Calling Grasshopper components from Python." />
-  <meta property="og:description" content="Is it possible to call the functions of a Grasshopper component from inside a Python script?" />
+  <meta property="og:title" content="Node in Code from Python." />
+  <meta property="og:description" content="It is possible to call a Grasshopper component from inside a Python." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
-  <meta name="twitter:title" value="Calling Grasshopper components from Python." />
-  <meta name="twitter:description" value="Is it possible to call the functions of a Grasshopper component from inside a Python script?" />
+  <meta name="twitter:title" value="Node in Code from Python." />
+  <meta name="twitter:description" value="It is possible to call a Grasshopper component from inside a Python." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -391,8 +391,33 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#converting-datatrees-to-python-lists">Converting DataTrees to P...</a>
+              <a href="#components-as-functions-from-ghpython">Components As functions f...</a>
 
+              
+                <ul class="nav nav-stacked">
+                  
+
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#configuring-inputs">Configuring inputs:</a>
+                    </li>
+                  
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="#managing-outputs">Managing Outputs</a>
+                    </li>
+                  
+
+                </ul>
               
 
             </li>
@@ -407,71 +432,7 @@ $(document).ready(function()
             
             
             <li>
-              <a href="#input-parameters">Input parameters</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#output-parameters">Output parameters</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#out-parameter">Out parameter</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#advanced-input-properties">Advanced Input Properties</a>
-
-              
-
-            </li>
-          
-
-        
-          
-
-          
-            
-            
-            
-            
-            <li>
-              <a href="#next-steps">Next Steps</a>
+              <a href="#node-in-code-from-rhinopython">Node in code from rhino.P...</a>
 
               
 
@@ -518,132 +479,145 @@ $(document).ready(function()
               
           </ol>
 
-          <h1>Calling Grasshopper components from Python.</h1>
+          <h1>Node in Code from Python.</h1>
 
           <p>
   <span class="guide_byline">
     
       
-      by <a href="/authors/scott_davidson">Scott Davidson</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/ghpython-call-components.md" target="_blank">05 Dec 2018</a>)
+      by <a href="/authors/"></a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/ghpython-call-components.md" target="_blank">28 Aug 2019</a>)
     
   </span>
 
 </p>
 
-          <p>Is it possible to call the functions of a Grasshopper component from inside a Python script?</p>
+          <p>It is possible to call a Grasshopper component from inside a Python.</p>
 
-          <p>http://www.grasshopper3d.com/forum/topics/is-it-possible-to-call-the-functions-of-a-grasshopper-component</p>
+          <p><strong>Node-in-Code™</strong>: almost every Grasshopper component is now callable as a function in other places in Rhino.  Grasshopper components may be called in ghPython (on the Gh canvas) and from rhino.Python (off the canvas). This adds few thousand new functions accessible to ghPython. Functions are also available thru 3rd party components.  Along with the new functionality that this provides, the technique can be used to simplifying existing gh definition files by simply lumping together a bunch of related components into a single python script.</p>
 
-<p>https://stevebaer.wordpress.com/2013/12/11/ghpython-node-in-code/</p>
+<p>There is a module in <code>ghpythonlib.components</code> which attempts to make every component available in python in the form of an easy to call function.</p>
 
-<p>https://stevebaer.wordpress.com/2013/12/12/ghpython-outside-the-canvas/</p>
+<h2 id="components-as-functions-from-ghpython">Components As functions from ghPython</h2>
 
-<h2 id="converting-datatrees-to-python-lists">Converting DataTrees to Python Lists.</h2>
+<p>In this example we can make a new ghPhython component that combines the standard Grasshopper Voronoi component and the Grasshopper Area components.  Within one ghPython component the voronoi curves are created and the cell centroid points are output.</p>
 
-<p>The GhPython component can be found on the Math &gt; Script toolbar:</p>
+<p><img src="/images/node-in-code-voronoi.png" alt="/images/node-in-code-voronoi.png" class="img-center" width="25%" /></p>
 
-<p><img src="/images/ghpython-installed.png" alt="/images/ghpython-installed.png" class="img-center" width="95%" /></p>
+<p>Use a ghPython component with these inputs:</p>
 
-<p>Drag and drop the component onto the canvas:</p>
+<p><img src="/images/nod-in-code-sample.png" alt="/images/nod-in-code-sample.png" class="img-center" width="95%" />
+Node in Code sample file</p>
 
-<p><img src="/images/ghpython-component-detail.png" alt="/images/ghpython-component-detail.png" class="img-center" width="95%" /></p>
+<p>Before entering code in the ghPython component it to review the input properties to make sure the correc Type hint is used.  In this case the points input has a Point3D hint amd a List Access level set.  Do this by right clicking on the ghPython component input.</p>
 
-<p>The default script component has two inputs and two outputs. The user can change the names of input and output, the data type and data structure of the input and also add more inputs and outputs parameters or remove them.</p>
+<p>Enter this code into the ghPython component:</p>
 
-<ul>
-  <li>x: first input of a .NET type (object).</li>
-  <li>y: second input of a .NET type (object).</li>
-  <li>Out: output string with compiling messages.</li>
-  <li>A: Returned output of type object.</li>
-</ul>
-
-<p>To edit the Python script in the component, simply double-click the component:</p>
-
-<p><img src="/images/ghpython-blankeditor.png" alt="/images/ghpython-blankeditor.png" class="img-center" width="75%" /></p>
-
-<p>Simple type in the Python code, clicking on OK will save the code in the component.</p>
-
-<h2 id="input-parameters">Input parameters</h2>
-
-<p>By default, there are two input parameters named x and y.  It is possible to edit parameters names, delete or add new ones. By zooming into a component new controls will appear on the component:</p>
-
-<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
-
-<p>Use <em>+</em> and <em>-</em> buttons to add and subtract inputs.</p>
-
-<p><img src="/images/ghpython-removeinput.png" alt="/images/ghpython-removeinput.png" class="img-center" width="35%" /></p>
-
-<p>You can also right-click on a parameter to change its name. The name is also the variable name in the Python script.</p>
-
-<p><img src="/images/ghpython-rename-input.png" alt="/images/ghpython-rename-input.png" class="img-center" width="35%" /></p>
-
-<p>Please note that the names of the parameters must follow <a href="https://docs.python.org/2/reference/lexical_analysis.html#identifiers">Python identifier naming</a> . Just make sure that these names are reflective of what the parameter is, and that they also do not contain white spaces or special characters.</p>
-
-<p>The inputs will show up in the GhPython editor as global variables.  For instance, here is a simple definition:</p>
-
-<p><img src="/images/ghpython-input.png" alt="/images/ghpython-input.png" class="img-center" width="80%" /></p>
-
-<p>The code to process the <code>x</code> input is as follows:</p>
-
-<pre><code class="language-python">if x:
-    print("x is true.")
-else:
-    print("x is false.")
+<pre><code class="language-python">import ghpythonlib.components as ghcomp
+curves = ghcomp.Voronoi(points) # call the Grasshopper Voronoi component
+centroids = ghcomp.Area(curves).centroid # call Grasshopper Area component with curves from Voronoi
 </code></pre>
 
-<p>As the Boolean toggle is changed, the <code>x</code> value changes.  The <code>print</code> method will out put a string to the out of the component.</p>
+<p>Of course you can mix in other python to perform calculations on the results of the component function calls. I tweaked the above example to find the curve generated from Voronoi that has the largest area.</p>
 
-<h2 id="output-parameters">Output parameters</h2>
+<pre><code class="language-python">import ghpythonlib.components as ghcomp
 
-<p>Like the inputs, you can define as many outputs or returns as you need when you “zoom in” and push the “+” sign.  Unlike input parameters, there are no default datatypes associated with output.  The output datatype will be assigned inside your script.</p>
-
-<p>To actually send information to the output from the script, simply assign the value(s) to the output variable name.  For instance, in this case the output is <em>a</em>:</p>
-
-<p><img src="/images/ghpython-component.png" alt="/images/ghpython-component.png" class="img-center" width="30%" /></p>
-
-<p>To send the information out to <em>a</em> enter this line in the editor:</p>
-
-<pre><code class="language-python">a = "This string will be sent to the output"
+curves = ghcomp.Voronoi(points)
+areas = ghcomp.Area(curves).area
+#find the biggest curve in the set
+max_area = -1
+max_curve = None
+for i, curve in enumerate(curves):
+    if areas[i] &gt; max_area:
+        max_area = areas[i]
+        max_curve = curve
 </code></pre>
 
-<p><img src="/images/ghpython-output.png" alt="/images/ghpython-output.png" class="img-center" width="80%" /></p>
+<p>Remember, this can be done for almost every component in Grasshopper (including every installed add-on component.) I use the term almost because there are cases where the function call doesn’t make sense. These cases are for things like Kangaroo or timers where the state of the component is important between iterations. Fortunately this is pretty rare.</p>
 
-<p>Each time Grasshopper recalculates the definition, the Python component will run and send out the value(s) to the output.</p>
+<h3 id="configuring-inputs">Configuring inputs:</h3>
 
-<h2 id="out-parameter">Out parameter</h2>
+<p>There are a few techniques that can make working with <code>ghpythonlib.components</code> easier.
+It is quite helpful and simplifies the code greatly if the proper <a href="/guides/rhinopython/ghpython-component/#advanced-input-properties">Type Hint</a> is set on the Input of the Python component. Setting the Type Hint to a specific data type will give the script direct access to the objects.   Without the Type Hint a lot more data checking and conversion may be necessary. For instance in a case where <code>points</code> are expected as input, set Type Hint &gt; Point3D.  This assures the ghPython components passes in actual point objects to python. This is especially important for any inputs expecting geometry objects.</p>
 
-<p>Out parameter is there by default to provide some useful information about your code. I often find myself connecting the out parameter to a panel component to be able to read the information directly without having to hover over the out parameter.</p>
+<p>Inputs also should be set properly for <a href="/guides/rhinopython/ghpython-component/#advanced-input-properties">Object Access, List Access, or Tree Access</a>.  Setting the Object vs List level access is important for make sure the ghPython code gets objects one at a time, or as a whole list of objects all at once.</p>
 
-<p><img src="/images/ghpython-outerror.png" alt="/images/ghpython-outerror.png" class="img-center" width="80%" /></p>
+<p>Working with multiple inputs and outputs from component methods is like working with any other Python functions.  Inputs can be passed to the function through a list of arguments.  For instance the Divide Curve component has multiple inputs (Curve, Number, Kinks)</p>
 
-<p>There are two types of messages that you can get in the out parameter.</p>
+<p><img src="/images/divide-comp.png" alt="/images/divide-comp.png" class="img-center" width="25%" /></p>
 
-<ul>
-  <li>The compile-time messages. Those include errors and warning about your code that prevent your component from running or can potentially give incorrect results. These are very helpful information to help point you to the lines in code that the compiler is having trouble with so that you can make appropriate adjustments.</li>
-  <li>The run-time messages.  You can send bits of text to the out parameter. You can use those to track information generated by your code as it is running.</li>
-</ul>
+<p>To pass these arguments, use a sequential list:</p>
 
-<h2 id="advanced-input-properties">Advanced Input Properties</h2>
+<pre><code class="language-python">results = ghcomp.DivideCurve(C, N, K)
+</code></pre>
 
-<p><img src="/images/ghpython-inputoptions.png" alt="/images/ghpython-inputoptions.png" class="float-img-right" width="300" /></p>
+<p>Inputs may also are still optional and can be left off the end. Arguments left out will use their built in defaults:</p>
 
-<p>For most basic work, the instructions above are all that are needed.  But, there are a few advanced options that can be set on the GhPython inputs that can be useful in certain situations.</p>
+<pre><code class="language-python">results  = ghcomp.DivideCurve(C, N)
+</code></pre>
 
-<p>To access the input options, right-click on any of the inputs.</p>
+<p>Inputs may also be passed as Keyword arguments <code>(**kwargs)</code>.  In this way options do not need to be assigned sequentially and certain optional inputs can be skipped:</p>
 
-<p>The top entry is the Parameter or variable name: you can click on it and type a new name.</p>
+<pre><code class="language-python">results  = ghcomp.DivideCurve(Curves = C, Kinks = K)
+</code></pre>
 
-<p>The next section is the general attributes or functions common to most GH components.</p>
+<p>In the case above the missing input Number of divisions the default value of (10) is used.  Be careful on relying on default values.  It is possible default values can change in the future.</p>
 
-<p>Then is a section to input data directly to the component and to manage that data.</p>
+<p>Help for details of specific Keyword Arguments names can be found in the help tab at the bottom the the ghPython editor while editing the arguments:</p>
 
-<p>The third section is most powerful to use the <em>Type hint</em>. Input parameters are set by default to the .NET type “object”. Sometimes is best to specify a datatype on input to make the code more readable and efficient. Types can be primitive such as integers or doubles, or geometry specific RhinoCommon types that are used only in Rhino such as “Point3d” or a “Curve”. You need to select the appropriate type for each input.</p>
+<p><img src="/images/node-in-code-help.png" alt="/images/node-in-code-help.png" class="img-center" width="50%" /></p>
 
-<p>The rhinoscriptsyntax Type Hint is special: when it is selected, any geometry will be added to the Grasshopper document, and then its ID (Guid) inside it will be passed in the variable. With the rest of the hints, GhPython will call into Grasshopper and perform the same type of operations that Grasshopper does when it requires a special data type. This conversion is costly. If you want to make things as quick as possible, choose ‘No Type Hint’. However, users of your component will benefit greatly from using a meaningfully-set and appropriate type hint.</p>
+<p>At present, there is no way to switch components that have special settings to any alternative. For example the Bounding Box component has a special setting, Union Box:</p>
 
-<h2 id="next-steps">Next Steps</h2>
+<p><img src="/images/node-in-code-option.png" alt="/images/node-in-code-option.png" class="img-center" width="65%" /></p>
 
-<p>That lays out the basics of the GhPython component.  Next is a look into the component Python editor for Grasshopper.</p>
+<h3 id="managing-outputs">Managing Outputs</h3>
+
+<p>Components with multiple outputs will pass back a list or results corresponding to the sequential order of outputs for the component. Outputs come out of  ghpythonlib.components as sequential lists of lists.  In the case of (Points, Tangent Vectors, Parameters(t))</p>
+
+<pre><code class="language-Python">results  = ghcomp.DivideCurve(C, N, K)
+results[0] # List of points from Divide
+results[1] # List of Tangent Vectors
+Results[2] # List of Pameters on the curve
+</code></pre>
+
+<p>A nice Python trick can be used to separate the output into separate lists for each output return values:</p>
+
+<pre><code class="language-python">P, T, t  = ghcomp.DivideCurve(C, N, K)
+</code></pre>
+<p>Now each variable contains an already separate list of values that can be used in subsequent functions in the script.</p>
+
+<h2 id="node-in-code-from-rhinopython">Node in code from rhino.Python</h2>
+
+<p>In addition to <a href="#components-as-functions-from-ghpython">calling Grasshopper components as functions from the ghPython code</a>, the Grasshopper components are also outside of the Grasshopper canvas through rhino.python.</p>
+
+<p>While the Grasshopper canvas will not be visible during this operation, it is worth noting that Grasshopper will load up the first time you call into the <code>ghpythonlib</code> assembly.  This can take a couple seconds the first time you run the script in Rhino.</p>
+
+<p>As an example her is a script that calls into Grasshopper to use the Voronoi component to create voronoi cells around a few selected points.</p>
+
+<pre><code class="language-python">import rhinoscriptsyntax as rs
+import ghpythonlib.components as ghcomp
+import scriptcontext
+
+points = rs.GetPoints(True, True)
+if points:
+    curves = ghcomp.Voronoi(points)
+    for curve in curves:
+        scriptcontext.doc.Objects.AddCurve(curve)
+    for point in points:
+        scriptcontext.doc.Objects.AddPoint(point)
+    scriptcontext.doc.Views.Redraw()
+</code></pre>
+<p>The key is the ghpythonlib modules are available in the standard python editor in Rhino. Behind the scenes things are running through Grasshopper code, but you don’t have to use a canvas to do your work.</p>
+
+<p>This also lets you work in a slightly different way where you can get points in Rhino using rhinoscriptsyntax “get input” type functions and pass those points (or curves or breps) into the Grasshopper component code.</p>
+
+<p><img src="/images/node-in-code-rhino-python.png" alt="/images/node-in-code-rhino-python.png" class="img-center" width="90%" /></p>
+
+<p>This opens up many more methods which are available to rhino.Python. Remember, this can be done for almost every component in Grasshopper (including every installed add-on component.) I use the term almost because there are cases where the function call doesn’t make sense. These cases are for things like Kangaroo or timers where the state of the component is important between iterations. Fortunately this is pretty rare.</p>
+
+<p>Help for specific component arguments and return values can be found in the help tab at the bottom the the rhino.Python editor while editing the arguments.</p>
+
+<p><img src="/images/node-in-code-help.png" alt="/images/node-in-code-help.png" class="img-center" width="50%" /></p>
 
 <hr />
 
@@ -680,7 +654,7 @@ else:
             <p class="text">
               
                 
-                Author: <a href="/authors/scott_davidson">Scott Davidson</a>
+                Author: <a href="/authors/"></a>
               
             </p>
           </div>
