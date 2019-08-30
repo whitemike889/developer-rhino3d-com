@@ -36,6 +36,7 @@ var searchData=
   ['_7ecchildslotiterator',['~CChildSlotIterator',['../class_c_rh_rdk_content_1_1_c_child_slot_iterator.html#ae6daa1bc94532a76144759db71327135',1,'CRhRdkContent::CChildSlotIterator']]],
   ['_7ecdisplayattributematerial',['~CDisplayAttributeMaterial',['../class_c_display_attribute_material.html#af1144024e975433c36e49bb085700907',1,'CDisplayAttributeMaterial']]],
   ['_7ecdisplaypipelineattributes',['~CDisplayPipelineAttributes',['../class_c_display_pipeline_attributes.html#a1d72abd4e12615a79df59000a09d2db5',1,'CDisplayPipelineAttributes']]],
+  ['_7ecfastpixelaccess',['~CFastPixelAccess',['../class_c_rhino_dib_1_1_c_fast_pixel_access.html#a0b2910fc4dd9f81888db122b766d7878',1,'CRhinoDib::CFastPixelAccess']]],
   ['_7ecgetrhinoprofilecontextiterator',['~CGetRhinoProfileContextIterator',['../class_c_get_rhino_profile_context_iterator.html#adf76cf96bfe2c355692d120b65c93c71',1,'CGetRhinoProfileContextIterator']]],
   ['_7echange',['~Change',['../class_c_rh_rdk_content_1_1_change.html#a694dab9394baa806c5be8c5ac0ef915e',1,'CRhRdkContent::Change']]],
   ['_7echangequeue',['~ChangeQueue',['../class_rh_rdk_1_1_realtime_1_1_change_queue.html#a2c338a70356353d4de2d055a39fd7a35',1,'RhRdk::Realtime::ChangeQueue']]],

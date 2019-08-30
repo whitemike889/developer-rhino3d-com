@@ -926,7 +926,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/wip/authors/rajaa_issa">Rajaa Issa</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/master/_guide_topics/general/essential-mathematics/parametric-curves-surfaces.md" target="_blank">15 May 2019</a>)
+      by <a href="/wip/authors/rajaa_issa">Rajaa Issa</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/master/_guide_topics/general/essential-mathematics/parametric-curves-surfaces.md" target="_blank">14 Aug 2019</a>)
     
   </span>
 
@@ -1130,6 +1130,13 @@ Where:<br />
    <figcaption> Figure (36): Non-uniform rational B-splines and their control structure.</figcaption>
 </figure>
 
+<p>There are many books and references for those of you interested in an in-depth reading about NURBS. A basic understanding of NURBS is however necessary to help use a NURBS modeler more effectively. There are four main attributes define the NURBS curve: degree, control points, knots, and evaluation rules.</p>
+
+<ol>
+  <li><a href="http://en.wikipedia.org/wiki/De_Boor's_algorithm">Wikipedia: De Boor’s algorithm</a></li>
+  <li><a href="http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/de-Boor.html">Michigan Tech, Department of Computer Science, De Boor’s algorithm</a></li>
+</ol>
+
 <h3 id="degree">Degree</h3>
 
 <p>Curve degree is a whole positive number. Rhino allows working with any degree curve starting with 1. Degrees 1, 2, 3, and 5 are the most useful but the degrees 4 and those above 5 are not used much in the real world. Following are a few examples of curves and their degree:</p>
@@ -1165,7 +1172,7 @@ Where:<br />
 <td><img src="/wip/images/math-image132.png" /></td>  
 </tr>  
 <tr style="border-bottom: 1px solid #ccc;">  
-<td>Control points of degree‑3 curves do not usually touch the curve, except at end points in open curves. In a degree‑3 NURBS curve, four (degree+1) control points define each span. Using five control points, the curve has two spans </td>  
+<td>Control points of degree‑3 curves do not usually touch the curve, except at the end points in open curves. In a degree‑3 NURBS curve, four (degree+1) control points define each span. Using five control points, the curve has two spans </td>  
 <td> <img src="/wip/images/math-image134.png" /></td>  
 </tr>  
 </table>
@@ -1174,13 +1181,31 @@ Where:<br />
 
 <p>Each control point has an associated number called <em>weight</em>. With a few exceptions, weights are positive numbers. When all control points have the same weight, usually 1, the curve is called non-rational. Intuitively, you can think of weights as the amount of gravity each control point has. The higher the relative weight a control point has, the closer the curve is pulled towards that control point.</p>
 
+<table>
+  <tbody>
+    <tr>
+      <td>knots</td>
+      <td>=</td>
+      <td>CVs</td>
+      <td>+ Degree - 1</td>
+    </tr>
+  </tbody>
+</table>
+
 <p>It is worth noting that it is best to avoid changing curve weights. Changing weights rarely gives desired result while it introduces a lot of calculation challenges in operations such as intersections. The only good reason for using rational curves is to represent curves that cannot otherwise be drawn, such as circles and ellipses.</p>
 
 <figure>
-   <img src="/wip/images/math-image135.png" width="500px" />
-   <figcaption>Figure (37): The effect of varying weights of control points on the result curve.
-The left curve is non-rational with uniform control point weights.
-The circle on the right is a rational curve with corner control points having weights less than 1.</figcaption>
+   <img src="/wip/images/figure-38a.png" width="500px" />
+   <figcaption>Figure (38-A): There are degree-1 more knots than control points. If the number of control points=7, and curve degree=3, then number of knots is 9.
+   Knots values are parameters that evaluate to points on the 3D curve.</figcaption>
+</figure>
+
+<p>Scaling a knot list does not affect the 3D curve. If you change the domain of the curve in the above example from “0 to 4” to “0 to 1”, knot list get scaled, but the 3D curve does not change.</p>
+
+<figure>
+   <img src="/wip/images/figure-38a.png" width="500px" />
+   <figcaption>Figure (38-A): There are degree-1 more knots than control points. If the number of control points=7, and curve degree=3, then number of knots is 9.
+   Knots values are parameters that evaluate to points on the 3D curve.</figcaption>
 </figure>
 
 <h3 id="knots">Knots</h3>
@@ -1189,11 +1214,12 @@ The circle on the right is a rational curve with corner control points having we
 
 <h3 id="knots-are-parameter-values">Knots are parameter values</h3>
 
-<p>Knots are a non-decreasing list of parameter values. In Rhino, there is a degree-1 more knots than control points. Usually, for non-periodic curves, the first degree many knots are the same and the last degree many are the same. The domain of the curve is between these two extreme knot values at start and end.</p>
+<p>Knots are a non-decreasing list of parameter values that lie within the curve domain. In Rhino, there is degree-1 more knots than control points. That is the number of knots equals the
+number of control points plus curve degree minus 1:</p>
 
-<p>For example, the knots of an open degree-3 NURBS curve with seven control points and a domain between 0 and 6 may look like the following:</p>
+<p>Usually, for non-periodic curves, the first degree many knots are equal to the domain minimum, and the last degree many knots are equal to the domain maximum.</p>
 
-<p>Knots= &lt;0, 0, 0, 1, 2, 3, 4, 5, 6, 6, 6&gt;</p>
+<p>For example, the knots of an open degree-3 NURBS curve with 7 control points and a domain between 0 and 4 may look like &lt;0, 0, 0, 1, 2, 3, 4, 4, 4&gt;.</p>
 
 <figure>
    <img src="/wip/images/math-image136.png" width="500px" />
