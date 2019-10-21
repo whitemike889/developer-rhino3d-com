@@ -492,7 +492,7 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/creating-a-skin.md" target="_blank">05 Dec 2018</a>)
+      by <a href="/authors/dale_fugier">Dale Fugier</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinocommon/creating-a-skin.md" target="_blank">21 Oct 2019</a>)
     
   </span>
 
@@ -517,7 +517,10 @@ $(document).ready(function()
   <li>In the new Class Library project, add a reference to <em>RhinoCommon.dll</em>, which is found in Rhino’s <em>System</em> folder. Note: make sure, after adding the reference, to set the properties of the reference to <em>Copy Local = False</em>.</li>
   <li>Create a new class that inherits from <code>Rhino.Runtime.Skin</code>.</li>
   <li>Add a post build event to the project to rename the assembly from <em>.dll</em> to <em>.rhs</em>:
-<code>(TargetPath)" "$(TargetDir)$(ProjectName).rhs" Erase "$(TargetPath)"</code></li>
+    <pre><code>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).rhs"
+Erase "$(TargetPath)"
+</code></pre>
+  </li>
 </ol>
 
 <h2 id="skin-class">Skin Class</h2>
