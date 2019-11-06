@@ -7,20 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Node in Code from Python. with Python</title>
-  <meta name="description" content="It is possible to call a Grasshopper component from inside a Python.  Using Python">
+  <meta name="description" content="It is possible to call a Grasshopper component from inside a Python script.  Using Python">
 
   <!-- OpenGraph for Facebook, Twitter, Slack unfurling -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="/guides/rhinopython/ghpython-call-components/" />
   <meta property="og:title" content="Node in Code from Python." />
-  <meta property="og:description" content="It is possible to call a Grasshopper component from inside a Python." />
+  <meta property="og:description" content="It is possible to call a Grasshopper component from inside a Python script." />
   <meta property=”og:site_name” content="developer.rhino3d.com"/>
   <meta property=”og:image” content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png"/>
 
   <!-- twitter card tags additive with the og: tags -->
   <meta name="twitter:domain" value="developer.rhino3d.com" />
   <meta name="twitter:title" value="Node in Code from Python." />
-  <meta name="twitter:description" value="It is possible to call a Grasshopper component from inside a Python." />
+  <meta name="twitter:description" value="It is possible to call a Grasshopper component from inside a Python script." />
   
     <meta name="twitter:image" content="http://developer.rhino3d.com/images/rhinodev-logo-unfurl.png" />
   
@@ -485,17 +485,17 @@ $(document).ready(function()
   <span class="guide_byline">
     
       
-      by <a href="/authors/"></a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/ghpython-call-components.md" target="_blank">25 Oct 2019</a>)
+      by <a href="/authors/scott_davidson">Scott Davidson</a> (Last modified: <a href="https://github.com/mcneel/developer-rhino3d-com/commits/6/_guide_topics/rhinopython/ghpython-call-components.md" target="_blank">06 Nov 2019</a>)
     
   </span>
 
 </p>
 
-          <p>It is possible to call a Grasshopper component from inside a Python.</p>
+          <p>It is possible to call a Grasshopper component from inside a Python script.</p>
 
-          <p><strong>Node-in-Code™</strong>: almost every Grasshopper component is now callable as a function in other places in Rhino.  Grasshopper components may be called in GhPython (on the Gh canvas) and from rhino.Python (off the canvas). This adds few thousand new functions accessible to GhPython. Functions are also available thru 3rd party components.  Along with the new functionality that this provides, the technique can be used to simplifying existing gh definition files by simply lumping together a bunch of related components into a single python script.</p>
+          <p><strong>Node-in-Code™</strong>: almost every Grasshopper component is now callable as a function in other places in Rhino.  Grasshopper components may be called in GhPython (on the Gh canvas) and from rhino.Python (off the canvas). This adds few thousand new functions accessible to GhPython. Functions are also available through 3rd party components.  Along with the new functionality that this provides, the technique can be used to simplify existing gh definition files by simply lumping together a bunch of related components into a single ‘scott_davidson’ script.</p>
 
-<p>There is a module in <code>ghpythonlib.components</code> which attempts to make every component available in python in the form of an easy to call function.</p>
+<p>There is a module in <code>ghpythonlib.components</code> which attempts to make every component available in Python in the form of an easy to call function.</p>
 
 <h2 id="components-as-functions-from-ghpython">Components As functions from GhPython</h2>
 
@@ -508,7 +508,7 @@ $(document).ready(function()
 <p><img src="/images/nod-in-code-sample.png" alt="/images/nod-in-code-sample.png" class="img-center" width="95%" />
 Node in Code sample file</p>
 
-<p>Before entering code in the GhPython component it to review the input properties to make sure the correc Type hint is used.  In this case the points input has a Point3D hint amd a List Access level set.  Do this by right clicking on the GhPython component input.</p>
+<p>Before entering code in the GhPython component it to review the input properties to make sure the correct Type hint is used.  In this case the points input has a Point3D hint and a List Access level set.  Do this by right clicking on the GhPython component input.</p>
 
 <p>Enter this code into the GhPython component:</p>
 
@@ -517,7 +517,7 @@ curves = ghcomp.Voronoi(points) # call the Grasshopper Voronoi component
 centroids = ghcomp.Area(curves).centroid # call Grasshopper Area component with curves from Voronoi
 </code></pre>
 
-<p>Of course you can mix in other python to perform calculations on the results of the component function calls. I tweaked the above example to find the curve generated from Voronoi that has the largest area.</p>
+<p>Of course you can mix in other Python to perform calculations on the results of the component function calls. I tweaked the above example to find the curve generated from Voronoi that has the largest area.</p>
 
 <pre><code class="language-python">import ghpythonlib.components as ghcomp
 
@@ -537,7 +537,7 @@ for i, curve in enumerate(curves):
 <h3 id="configuring-inputs">Configuring inputs:</h3>
 
 <p>There are a few techniques that can make working with <code>ghpythonlib.components</code> easier.
-It is quite helpful and simplifies the code greatly if the proper <a href="/guides/rhinopython/ghpython-component/#advanced-input-properties">Type Hint</a> is set on the Input of the Python component. Setting the Type Hint to a specific data type will give the script direct access to the objects.   Without the Type Hint a lot more data checking and conversion may be necessary. For instance in a case where <code>points</code> are expected as input, set Type Hint &gt; Point3D.  This assures the GhPython components passes in actual point objects to python. This is especially important for any inputs expecting geometry objects.</p>
+It is quite helpful and simplifies the code greatly if the proper <a href="/guides/rhinopython/ghpython-component/#advanced-input-properties">Type Hint</a> is set on the Input of the Python component. Setting the Type Hint to a specific data type will give the script direct access to the objects.   Without the Type Hint a lot more data checking and conversion may be necessary. For instance in a case where <code>points</code> are expected as input, set Type Hint &gt; Point3D.  This assures the GhPython components passes in actual point objects to Python. This is especially important for any inputs expecting geometry objects.</p>
 
 <p>Inputs also should be set properly for <a href="/guides/rhinopython/ghpython-component/#advanced-input-properties">Object Access, List Access, or Tree Access</a>.  Setting the Object vs List level access is important for make sure the GhPython code gets objects one at a time, or as a whole list of objects all at once.</p>
 
@@ -607,7 +607,7 @@ if points:
         scriptcontext.doc.Objects.AddPoint(point)
     scriptcontext.doc.Views.Redraw()
 </code></pre>
-<p>The key is the ghpythonlib modules are available in the standard python editor in Rhino. Behind the scenes things are running through Grasshopper code, but you don’t have to use a canvas to do your work.</p>
+<p>The key is the ghpythonlib modules are available in the standard Python editor in Rhino. Behind the scenes things are running through Grasshopper code, but you don’t have to use a canvas to do your work.</p>
 
 <p>This also lets you work in a slightly different way where you can get points in Rhino using rhinoscriptsyntax “get input” type functions and pass those points (or curves or breps) into the Grasshopper component code.</p>
 
@@ -654,7 +654,7 @@ if points:
             <p class="text">
               
                 
-                Author: <a href="/authors/"></a>
+                Author: <a href="/authors/scott_davidson">Scott Davidson</a>
               
             </p>
           </div>
