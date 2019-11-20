@@ -97,5 +97,5 @@ var searchData=
   ['it_5fincludeproxies',['it_IncludeProxies',['../class_c_rh_rdk_document.html#afab93656b063549daa508b75f6c56ddaa082529fd71befb84f5dcd92f73522139',1,'CRhRdkDocument']]],
   ['it_5fit_5flcid',['it_IT_LCID',['../class_o_n___locale.html#af59f63b95a49c0ca1a26347e833c6510adce096f73b31709c6da14cf9782da85c',1,'ON_Locale']]],
   ['it_5fnormal',['it_Normal',['../class_c_rh_rdk_document.html#afab93656b063549daa508b75f6c56ddaa2ca87a2f265fb0200cc4d83aae730c80',1,'CRhRdkDocument']]],
-  ['italic',['Italic',['../class_o_n___font.html#a620a36120633b9420686f76ec405f277a1d874710ccdcd46b95397049d2e7500c',1,'ON_Font::Italic()'],['../class_c_rhino_ui_paint_manager.html#a5a65262c990cf2ca509dba6810b1f0f9a1d874710ccdcd46b95397049d2e7500c',1,'CRhinoUiPaintManager::Italic()']]]
+  ['italic',['Italic',['../class_o_n___font_face_quartet.html#a2976911b04f10e392daee169aa7bf9a0a1d874710ccdcd46b95397049d2e7500c',1,'ON_FontFaceQuartet::Italic()'],['../class_o_n___font.html#a620a36120633b9420686f76ec405f277a1d874710ccdcd46b95397049d2e7500c',1,'ON_Font::Italic()'],['../class_c_rhino_ui_paint_manager.html#a5a65262c990cf2ca509dba6810b1f0f9a1d874710ccdcd46b95397049d2e7500c',1,'CRhinoUiPaintManager::Italic()']]]
 ];

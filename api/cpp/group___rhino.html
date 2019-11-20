@@ -22,7 +22,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Rhino C++ API
-   &#160;<span id="projectnumber">6.18</span>
+   &#160;<span id="projectnumber">6.20</span>
    </div>
   </td>
  </tr>
@@ -1907,6 +1907,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga252b195e06ad13a30ec9ba2ec75ae142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae3e869cf8c16cf51daa1a9b3d758986d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#gae3e869cf8c16cf51daa1a9b3d758986d">RhinoGetPlugInCommandList</a> (const class <a class="el" href="class_c_rhino_plug_in.html">CRhinoPlugIn</a> *plug_in, <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const class <a class="el" href="class_c_rhino_command.html">CRhinoCommand</a> *&gt; &amp;cmd_list)</td></tr>
 <tr class="separator:gae3e869cf8c16cf51daa1a9b3d758986d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4799a92f4719c0d85cfa1dcd4b60a465"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#ga4799a92f4719c0d85cfa1dcd4b60a465">RhinoGetPointInSolidBrep</a> (const <a class="el" href="class_o_n___brep.html">ON_Brep</a> &amp;brep, double tolerance, <a class="el" href="class_o_n__3d_point.html">ON_3dPoint</a> &amp;point)</td></tr>
+<tr class="separator:ga4799a92f4719c0d85cfa1dcd4b60a465"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9222aa33a90b7d2482f750976e42d45a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#ga9222aa33a90b7d2482f750976e42d45a">RhinoGetPointOnMesh</a> (const <a class="el" href="class_c_rhino_mesh_object.html">CRhinoMeshObject</a> *mesh_object, const wchar_t *sPrompt, BOOL bAcceptNothing, <a class="el" href="class_o_n___m_e_s_h___p_o_i_n_t.html">ON_MESH_POINT</a> &amp;output_point, <a class="el" href="class_c_rhino_history.html">CRhinoHistory</a> *history=NULL)</td></tr>
 <tr class="separator:ga9222aa33a90b7d2482f750976e42d45a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab9407da66984ed938733be80b2745528"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___rhino.html#gab9407da66984ed938733be80b2745528">RhinoGetRenderMeshes</a> (const <a class="el" href="class_o_n___simple_array.html">ON_SimpleArray</a>&lt; const <a class="el" href="class_c_rhino_object.html">CRhinoObject</a> * &gt; &amp;objects, <a class="el" href="class_o_n___class_array.html">ON_ClassArray</a>&lt; <a class="el" href="class_c_rhino_obj_ref.html">CRhinoObjRef</a> &gt; &amp;render_meshes, bool bOkToCreate, bool bReturnAllObjects, bool bSkipHiddenObjects)</td></tr>
@@ -13253,6 +13255,41 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="ga4799a92f4719c0d85cfa1dcd4b60a465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4799a92f4719c0d85cfa1dcd4b60a465">&#9670;&nbsp;</a></span>RhinoGetPointInSolidBrep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group___rhino.html#gae0ca1c334125e1735d6bf07ae91bbb66">RHINO_SDK_FUNCTION</a> bool RhinoGetPointInSolidBrep </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_o_n___brep.html">ON_Brep</a> &amp;&#160;</td>
+          <td class="paramname"><em>brep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_o_n__3d_point.html">ON_3dPoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>point</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Description: Finds a point inside of a solid Brep. Parameters: brep - [in] The Brep to search. tolerance - [in] Used for intersecting rays and is not necessarily related to the distance from the brep to the found point. When in doubt, use the document's model absolute tolerance. point - [out] A point inside of the solid Brep. Returns: Returns false if the input is not solid and manifold, if the Brep's bounding box is less than 2.0 * tolerance wide, or if no point could be found due to ray shooting or other errors. See Also: RhinoIsPointInBrep </p>
+
+</div>
+</div>
 <a id="ga9222aa33a90b7d2482f750976e42d45a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9222aa33a90b7d2482f750976e42d45a">&#9670;&nbsp;</a></span>RhinoGetPointOnMesh()</h2>
 
@@ -23875,7 +23912,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 24 2019 17:24:00 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 19 2019 16:23:50 for Rhino C++ API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.13
 </small></address>

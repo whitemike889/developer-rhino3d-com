@@ -5,6 +5,7 @@ var searchData=
   ['masktype',['MaskType',['../class_o_n___text_mask.html#a7d60c00ecd4e154a98677676f94cbb2b',1,'ON_TextMask']]],
   ['material_5fevent',['material_event',['../class_c_rhino_event_watcher.html#aeb664de3c8f91ab2ef75d2795f94165f',1,'CRhinoEventWatcher']]],
   ['measureddirection',['MeasuredDirection',['../class_o_n___dim_ordinate.html#a8a3077b5c88a37d30c1244637a255fba',1,'ON_DimOrdinate']]],
+  ['member',['Member',['../class_o_n___font_face_quartet.html#a2976911b04f10e392daee169aa7bf9a0',1,'ON_FontFaceQuartet']]],
   ['menutype',['MenuType',['../class_c_rh_rdk_custom_render_frame_menu.html#a42e2929e13ed7ee97cd10fdaed503963',1,'CRhRdkCustomRenderFrameMenu']]],
   ['mesh_5fparameter_5fid',['MESH_PARAMETER_ID',['../class_o_n___mesh_parameters.html#ae3534a8bc15e264688b12003087b3b0a',1,'ON_MeshParameters']]],
   ['mesh_5fstyle',['MESH_STYLE',['../class_o_n___mesh_parameters.html#a707dd7580e0141baa2585e539502e732',1,'ON_MeshParameters']]],

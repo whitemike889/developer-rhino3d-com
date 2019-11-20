@@ -159,9 +159,12 @@ var searchData=
   ['arrowblockid2',['ArrowBlockId2',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa63380f3c603387e1ae24a3ad4074df54',1,'ON_DimStyle']]],
   ['arrowcolor',['ArrowColor',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa74b2a73398c3493c705271b1cc04296f',1,'ON_DimStyle']]],
   ['arrowcolorsource',['ArrowColorSource',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaaf9651cfad43baafc46706391c42b5392',1,'ON_DimStyle']]],
+  ['arrowfit',['ArrowFit',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa2e53b59f30de356294477c993e0961cb',1,'ON_DimStyle']]],
   ['arrowplotcolor',['ArrowPlotColor',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaaff32be7b5bdb0492442abe0b65660a09',1,'ON_DimStyle']]],
   ['arrowplotcolorsource',['ArrowPlotColorSource',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa346488613a156506dc48632836c90232',1,'ON_DimStyle']]],
+  ['arrowsinside',['ArrowsInside',['../class_o_n___dim_style.html#a12f4e82869715348eb003fe589dad0dea98eaeac4d61e827dc6fc6a556b69d5bd',1,'ON_DimStyle']]],
   ['arrowsize',['Arrowsize',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa6332ab65dded3bd0b898ab4249d40378',1,'ON_DimStyle']]],
+  ['arrowsoutside',['ArrowsOutside',['../class_o_n___dim_style.html#a12f4e82869715348eb003fe589dad0dea1b455a1f29c2dfd4f4b1977ed0505790',1,'ON_DimStyle']]],
   ['arrowtype1',['ArrowType1',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaafe97bfb5018bfe0e56dd3160c4030c51',1,'ON_DimStyle']]],
   ['arrowtype2',['ArrowType2',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaacf527dd0aa5e38d85900b5b2fb8bd4cb',1,'ON_DimStyle']]],
   ['assert',['Assert',['../class_o_n___error_event.html#a568f7644dae0683098a9f864e2319750ad530f9d1b94f864f2238775b0e19e48c',1,'ON_ErrorEvent::Assert()'],['../group__open_n_u_r_b_s.html#gga7396c5ac81bf2400211f68669416178fae44e4612f62d2fb8f8738bab118a9850',1,'assert():&#160;opennurbs_plus.h']]],
@@ -171,8 +174,9 @@ var searchData=
   ['attach',['Attach',['../class_c_rh_rdk_event_watcher.html#a4faad5bbd99403bbb4b5221ebef7c6eba7193518e6f5f0076ef05680742323f9c',1,'CRhRdkEventWatcher']]],
   ['attach_5fdialog',['attach_dialog',['../class_c_rhino_get_file_dialog.html#a733afbd2edfc27122aed393c0b1c439badbfa62eebecaf5cd04a4681afceddefc',1,'CRhinoGetFileDialog']]],
   ['attached',['Attached',['../class_i_rh_rdk_content_database_event_info.html#ac3e8e3b1af5c70a1b611b10cd8e946c0a41f0e4643baa1a38c319cb96c9deaa99',1,'IRhRdkContentDatabaseEventInfo']]],
-  ['auto',['Auto',['../class_o_n___dimension.html#aaf71a5ff7330fd5eccd1ff42609f60b4a06b9281e396db002010bde1de57262eb',1,'ON_Dimension::Auto()'],['../class_o_n___dimension.html#a83b4f6dfb47ffa6d41016280f9b28010a06b9281e396db002010bde1de57262eb',1,'ON_Dimension::Auto()']]],
+  ['auto',['Auto',['../class_o_n___dimension.html#aaf71a5ff7330fd5eccd1ff42609f60b4a06b9281e396db002010bde1de57262eb',1,'ON_Dimension::Auto()'],['../class_o_n___dimension.html#a83b4f6dfb47ffa6d41016280f9b28010a06b9281e396db002010bde1de57262eb',1,'ON_Dimension::Auto()'],['../class_o_n___dim_style.html#a12f4e82869715348eb003fe589dad0dea06b9281e396db002010bde1de57262eb',1,'ON_DimStyle::Auto()'],['../class_o_n___dim_style.html#a55665b232fe704c3b43959e6bdb26cfca06b9281e396db002010bde1de57262eb',1,'ON_DimStyle::Auto()']]],
   ['automatic',['Automatic',['../class_c_rh_rdk_simulated_environment.html#a4eb61f65d1f76070f6081363b4031404a086247a9b57fde6eefee2a0c4752242d',1,'CRhRdkSimulatedEnvironment::Automatic()'],['../class_c_rh_rdk_texture.html#ad980bd4d23b11425c41a940a06295933a086247a9b57fde6eefee2a0c4752242d',1,'CRhRdkTexture::Automatic()'],['../class_c_rh_rdk_simulated_environment.html#ae30439f340a546678fb71786f153f534a51af319220706a25145374e235a16656',1,'CRhRdkSimulatedEnvironment::automatic()'],['../group__open_n_u_r_b_s.html#gga286869b78f5da2ac0b9513870aad3b28a086247a9b57fde6eefee2a0c4752242d',1,'Automatic():&#160;opennurbs_3dm_settings.h']]],
+  ['autorenameincoming',['AutoRenameIncoming',['../group___r_d_k.html#gga3a8cdb0bf94b34ab09bd99b0b89a1552ada5b6a068451d78e317cf6d29108776f',1,'RhRdkRendererSupportOptions.h']]],
   ['available',['available',['../group___rhino.html#gga5ae70bd9d1931dac828fec21e6d2a643a5d20e160566f0b85357fd5a3c87a985e',1,'rhinoSdkDoc.h']]],
   ['average',['Average',['../group___r_d_k.html#gga72eb72b8b6ccac733cd7b686997c7432ab1897515d548a960afe49ecf66a29021',1,'RhRdkFieldStrings.h']]]
 ];

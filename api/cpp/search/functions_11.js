@@ -7,6 +7,7 @@ var searchData=
   ['quality',['Quality',['../class_i_rh_rdk_preview_rendered.html#acba548b7ecd48649dc259c706fd02b70',1,'IRhRdkPreviewRendered']]],
   ['quartetfromquartetname',['QuartetFromQuartetName',['../class_o_n___font_list.html#af1b0570de035a505eb2bf5bcf18a3817',1,'ON_FontList']]],
   ['quartetlist',['QuartetList',['../class_o_n___font_list.html#a351d3b291d08d648e6b6ebafcb48574e',1,'ON_FontList']]],
+  ['quartetmember',['QuartetMember',['../class_o_n___font_face_quartet.html#a214609bf919216469f9d8fbbca39dab0',1,'ON_FontFaceQuartet']]],
   ['quartetname',['QuartetName',['../class_o_n___font_face_quartet.html#a235cc1261caf400d8ff6372e1326df71',1,'ON_FontFaceQuartet::QuartetName()'],['../class_o_n___font.html#a8e6f0ea0eb76af4ef5f371e7b5499c5c',1,'ON_Font::QuartetName(ON_Font::NameLocale name_locale) const'],['../class_o_n___font.html#a0864fe47cd94f53b22732bdab6037c1c',1,'ON_Font::QuartetName() const']]],
   ['query',['Query',['../class_c_rh_rdk_task.html#a7d8e17af0ca5a1dcb806f90180b6c5bb',1,'CRhRdkTask::Query()'],['../class_c_rh_rdk_single_content_task.html#a8324889782cd578ee380fdbe9f4a1c07',1,'CRhRdkSingleContentTask::Query()'],['../class_c_rh_rdk_multiple_content_task.html#a6b38bd86b6bc83e18b0a942397776086',1,'CRhRdkMultipleContentTask::Query()'],['../class_c_rh_rdk_custom_task.html#a941c023105ad091820bfe630eb1279dd',1,'CRhRdkCustomTask::Query()']]],
   ['query2dpointvalue',['Query2dPointValue',['../class_c_rhino_ui_registry.html#a2ee40190adb96b865d4b5c4dec9124e3',1,'CRhinoUiRegistry']]],

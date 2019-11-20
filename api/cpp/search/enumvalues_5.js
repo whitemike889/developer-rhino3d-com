@@ -113,6 +113,7 @@ var searchData=
   ['force_5f32bit_5fsize',['force_32bit_size',['../class_c_rhino_command_context.html#ae24cc2544e96b3c6614d0bece5751745aca09cb3d302f113686ca98e281cf493b',1,'CRhinoCommandContext']]],
   ['force_5f32bit_5ftimers',['force_32bit_timers',['../class_c_rhino_ui_tabbed_sheet_ctrl.html#a5fe7ab52240d0dd880fbd9cc98a43e77aaeea5b608d66101d58caf3d9c4a28480',1,'CRhinoUiTabbedSheetCtrl']]],
   ['force_5f32bit_5ftracking_5fmode',['force_32bit_tracking_mode',['../class_c_rhino_ui_options_list_ctrl.html#a5e0df9d23e1fcb45315d7f323389da3fa681934ff0c502e84bf78c33c5d9cfb85',1,'CRhinoUiOptionsListCtrl']]],
+  ['forcedimline',['ForceDimLine',['../class_o_n___dim_style.html#a21c2db7d069250b9932240ca61d65feaa200d58e0f9b8b50575762023f102b644',1,'ON_DimStyle']]],
   ['forcontent',['ForContent',['../class_i_rh_rdk_automatic_u_i.html#a0fa8c17409157add437f0faa510f3b66a7f8db4bc2d08325a45846d07233de87e',1,'IRhRdkAutomaticUI']]],
   ['four_5fpoint',['four_point',['../class_c_args_rhino_get_line.html#a72e3bb57678d1db3e662a7a7855a4688a10f93ed0fdbd6a1167c786f3c40f0fb6',1,'CArgsRhinoGetLine']]],
   ['fr_5ffr_5flcid',['fr_FR_LCID',['../class_o_n___locale.html#af59f63b95a49c0ca1a26347e833c6510a68c8aab68c2436a22337f8a346814048',1,'ON_Locale']]],

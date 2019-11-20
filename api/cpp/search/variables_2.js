@@ -29,7 +29,7 @@ var searchData=
   ['biwidth',['biWidth',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o_h_e_a_d_e_r.html#afa2f96a3b452b9546b423c40ac974fe0',1,'ON_WindowsBITMAPINFOHEADER']]],
   ['bixpelspermeter',['biXPelsPerMeter',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o_h_e_a_d_e_r.html#aa8338c6e91d6ae1266822cdb06c9d61c',1,'ON_WindowsBITMAPINFOHEADER']]],
   ['biypelspermeter',['biYPelsPerMeter',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o_h_e_a_d_e_r.html#a1109ebd02b818a1b31784eece95cbea6',1,'ON_WindowsBITMAPINFOHEADER']]],
-  ['black',['black',['../class_c_rh_rdk_color.html#acf0de65636bace32c98fa2bd1fa1fbeb',1,'CRhRdkColor::black()'],['../class_o_n___color.html#ac6ba2ef917571bc4ebbe292eb138ec86',1,'ON_Color::Black()']]],
+  ['black',['Black',['../class_o_n___color.html#ac6ba2ef917571bc4ebbe292eb138ec86',1,'ON_Color::Black()'],['../class_c_rh_rdk_color.html#acf0de65636bace32c98fa2bd1fa1fbeb',1,'CRhRdkColor::black()']]],
   ['bmi',['bmi',['../class_c_rhino_dib_1_1_pixel.html#a08ec947a07fc4092c82c7100b9ef8202',1,'CRhinoDib::Pixel']]],
   ['bmicolors',['bmiColors',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o.html#a9dbbd30174177ebea16daf4cf7615091',1,'ON_WindowsBITMAPINFO']]],
   ['bmiheader',['bmiHeader',['../struct_o_n___windows_b_i_t_m_a_p_i_n_f_o.html#a49c86a1b0be90b523702920c1d09b433',1,'ON_WindowsBITMAPINFO']]],

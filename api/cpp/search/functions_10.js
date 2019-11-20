@@ -43,7 +43,7 @@ var searchData=
   ['parentcontenthash',['ParentContentHash',['../class_o_n___dim_style.html#a255d5fb0253b7983ece0f49d47e245b7',1,'ON_DimStyle']]],
   ['parentdimensionstyle',['ParentDimensionStyle',['../class_c_rhino_annotation.html#a2ba3fba67892f02cfc6b2a2e27e6879b',1,'CRhinoAnnotation']]],
   ['parentdimensionstyleid',['ParentDimensionStyleId',['../class_c_rhino_annotation.html#a601891265b7e26aa8949361a004420e5',1,'CRhinoAnnotation']]],
-  ['parentdimstyle',['ParentDimstyle',['../class_c_rhino_dim_style.html#a35f9edd360d34512ce6f69eabe9aec87',1,'CRhinoDimStyle::ParentDimstyle()'],['../class_o_n__3dm_annotation_context.html#abff7176d6f26376a829779935388ac18',1,'ON_3dmAnnotationContext::ParentDimStyle()']]],
+  ['parentdimstyle',['ParentDimStyle',['../class_o_n__3dm_annotation_context.html#abff7176d6f26376a829779935388ac18',1,'ON_3dmAnnotationContext::ParentDimStyle()'],['../class_c_rhino_dim_style.html#a35f9edd360d34512ce6f69eabe9aec87',1,'CRhinoDimStyle::ParentDimstyle()']]],
   ['parentdimstyleid',['ParentDimStyleId',['../class_o_n__3dm_annotation_context.html#a5b754940f3cab7e3f2b97ac6550056ee',1,'ON_3dmAnnotationContext']]],
   ['parenthesesdepth',['ParenthesesDepth',['../class_o_n___arithmetic_calculator.html#aba2ccb02d41e8c17fbb481e9d6594409',1,'ON_ArithmeticCalculator']]],
   ['parentid',['ParentId',['../class_o_n___model_component.html#ab7e0be5af010061d9e32dd74cfcf8315',1,'ON_ModelComponent::ParentId()'],['../class_o_n___name_hash.html#a54e051aadf72814c699405b0905895c9',1,'ON_NameHash::ParentId()']]],

@@ -41,6 +41,7 @@ var searchData=
   ['rhrdkpreviewquality',['RhRdkPreviewQuality',['../group___r_d_k.html#ga45a904b45469885769ea19e640964bc5',1,'RhRdkRenderQuality.h']]],
   ['rhrdkrcpresult',['RhRdkRCPResult',['../group___r_d_k.html#ga234c75411c05c7ace4310e4ba45440ef',1,'RhRdkUiSdk.h']]],
   ['rhrdkrendermeshprimitivetypes',['RhRdkRenderMeshPrimitiveTypes',['../group___r_d_k.html#gae009bb548af4c3651e39048eb4f3b943',1,'IRhRdkCustomRenderMeshManager.h']]],
+  ['rhrdksmartmergechoice',['RhRdkSmartMergeChoice',['../group___r_d_k.html#ga3a8cdb0bf94b34ab09bd99b0b89a1552',1,'RhRdkRendererSupportOptions.h']]],
   ['rhrdkwavetype',['RhRdkWaveType',['../group___r_d_k.html#gad5b0f2007ff7367e6887e2a0c5d4fd93',1,'RhRdkFieldStrings.h']]],
   ['rotate_5fto_5fview',['rotate_to_view',['../class_c_rhino_app_view_settings.html#a28212f0e76eb452a282c7987a3d9239b',1,'CRhinoAppViewSettings']]],
   ['rotation_5fmode',['rotation_mode',['../class_c_rhino_dim_linear.html#a5f05a4db27cbec01ccd8b0c1cedae023',1,'CRhinoDimLinear']]],

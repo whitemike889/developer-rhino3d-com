@@ -8,6 +8,7 @@ var searchData=
   ['on_5fbrepregiontopology',['ON_BrepRegionTopology',['../class_o_n___brep_face_side.html#a45b90c7f89dc7e855aad3e0135c4472c',1,'ON_BrepFaceSide::ON_BrepRegionTopology()'],['../class_o_n___brep_region.html#a45b90c7f89dc7e855aad3e0135c4472c',1,'ON_BrepRegion::ON_BrepRegionTopology()']]],
   ['on_5fclassarray_3c_20crhinolight_20_3e',['ON_ClassArray&lt; CRhinoLight &gt;',['../class_c_rhino_light.html#ac1090a895bd72adaa25fec95c908313d',1,'CRhinoLight']]],
   ['on_5fcomponentmanifestimpl',['ON_ComponentManifestImpl',['../class_o_n___component_manifest_item.html#aaff060366c74e4702a0659fb8540671e',1,'ON_ComponentManifestItem']]],
+  ['on_5fdimension',['ON_Dimension',['../class_o_n___annotation.html#a577a024b26306bad47969ba0a341f095',1,'ON_Annotation']]],
   ['on_5ferrorlog',['ON_ErrorLog',['../class_o_n___error_event.html#a935fe85051b341268c1f180fa0d48fec',1,'ON_ErrorEvent']]],
   ['on_5ffixedsizepooliterator',['ON_FixedSizePoolIterator',['../class_o_n___fixed_size_pool.html#a6b3a440f8ac861a8d7731be18603eb84',1,'ON_FixedSizePool']]],
   ['on_5ffont',['ON_Font',['../class_o_n___font_glyph.html#a003e28c4b7e4c4ced7fbe3fa422074ec',1,'ON_FontGlyph::ON_Font()'],['../class_o_n___glyph_map.html#a003e28c4b7e4c4ced7fbe3fa422074ec',1,'ON_GlyphMap::ON_Font()']]],
